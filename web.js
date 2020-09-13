@@ -25,8 +25,6 @@ bot.once("spawn", () => {
 })
 
 bot.loadPlugin(require('mineflayer-pathfinder').pathfinder);
-const Movements = require('mineflayer-pathfinder').Movements
-const { GoalNear } = require('mineflayer-pathfinder').goals
 
 const {
     globalSettings,
@@ -57,12 +55,6 @@ bot.once("spawn", () => {
     const bed = bot.findBlock({
         matching: block => bot.isABed(block)
     })
-
-    const bedPosition = {}
-    bedPosition.position = {}
-    bedPosition.position.x = bed.position.x;
-    bedPosition.position.y = bed.position.y;
-    bedPosition.position.z = bed.position.z;
 
     const checkIsNight = new checkNight(bot);
     const goToBed = new BehaviorMoveTo(bot, bed);
@@ -184,7 +176,7 @@ bot.once("spawn", () => {
             parent: goSleep,
             child: idleState,
             shouldTransition: () => {
-                if (checkIsNight.isNight() == false && goSleep.isInBed() == true)
+                if (!checkIsNight.isNight() && goSleep.isInBed())
                     return true
             },
             name: "15 CLick to Sleep",
@@ -208,7 +200,7 @@ bot.once("spawn", () => {
 
 
     bot.on("chat", (username, message) => {
-        if (message === "hi") {
+        if (message === "hi " + bot.username) {
             transitions[1].trigger();   // parent: idleState,               child: getClosestPlayer,
         }
 
@@ -245,9 +237,9 @@ const checkNight = (function () {
         this.stateName = 'checkIsNight';
         this.night = false;
     }
-
     checkNight.prototype.check = function () {
-        if ((bot.time.timeOfDay >= 0 && bot.time.timeOfDay <= 12040) || (bot.time.timeOfDay >= 23961 && bot.time.timeOfDay <= 24000)) {
+        let timeOfDay = this.bot.time.timeOfDay
+        if ((timeOfDay >= 0 && timeOfDay <= 12040) || (timeOfDay >= 23961 && timeOfDay <= 24000)) {
             this.night = false;
         } else {
             this.night = true;
@@ -269,13 +261,24 @@ const goBedAction = (function () {
         this.actionFinished = false;
     }
     goBedAction.prototype.onStateEntered = function () {
+        setTimeout(() => {
+            this.sleep();
+        }, 2000);
+
+    };
+    goBedAction.prototype.sleep = function () {
+        let canSleep = false;
         this.bot.sleep(this.bed, (err) => {
             if (err) {
                 this.bot.chat(`I can't sleep: ${err.message}`)
+                setTimeout(() => {
+                    this.sleep();
+                }, 2000);
+            } else {
+                this.actionFinished = true;
             }
         })
-        this.actionFinished = true;
-    };
+    }
     goBedAction.prototype.isInBed = function () {
         return this.actionFinished;
     }
