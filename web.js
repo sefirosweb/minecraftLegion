@@ -263,7 +263,7 @@ const goBedAction = (function () {
     goBedAction.prototype.onStateEntered = function () {
         setTimeout(() => {
             this.sleep();
-        }, 2000);
+        }, 500);
 
     };
     goBedAction.prototype.sleep = function () {
@@ -273,7 +273,7 @@ const goBedAction = (function () {
                 this.bot.chat(`I can't sleep: ${err.message}`)
                 setTimeout(() => {
                     this.sleep();
-                }, 2000);
+                }, 10000);
             } else {
                 this.actionFinished = true;
             }
