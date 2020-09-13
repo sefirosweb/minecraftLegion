@@ -43,11 +43,11 @@ const {
     NestedStateMachine,
     BehaviorMoveTo
 } = require("mineflayer-statemachine");
-    
+    /*
 function goBase()
 {
     console.log("GO")
-    /*
+    
     const mcData = require('minecraft-data')(bot.version)
     const defaultMove = new Movements(bot, mcData)
 
@@ -57,9 +57,9 @@ function goBase()
     p.z = -3;
 
     bot.pathfinder.setMovements(defaultMove)
-    bot.pathfinder.setGoal(new GoalNear(p.x, p.y, p.z, 1))*/
+    bot.pathfinder.setGoal(new GoalNear(p.x, p.y, p.z, 1))
 }
-
+*/
 bot.once("spawn", () =>
 {
     // This targets object is used to pass data between different states. It can be left empty.
@@ -69,7 +69,25 @@ bot.once("spawn", () =>
     console.log(bot.player.entity.position)
     
     // Create our states
+    /*
+    const mcData = require('minecraft-data')(bot.version)
+    const defaultMove = new Movements(bot, mcData)
 
+    const p = {};
+    p.x = -20;
+    p.y = 93;
+    p.z = -13;
+
+    const goal = new GoalNear(p.x, p.y, p.z, 1)
+    const goBase = new BehaviorMoveTo(bot, targets);
+    */
+    const p = {};
+    p.position = {}
+    p.position.x = -20;
+    p.position.y = 93;
+    p.position.z = -13;
+
+    const goBase = new BehaviorMoveTo(bot, p);
     const printServerStates = new BehaviorPrintServerStats(bot);
     const idleState = new BehaviorIdle();
     const followPlayer = new BehaviorFollowEntity(bot, targets);
@@ -77,14 +95,13 @@ bot.once("spawn", () =>
     const lookAtFollowTarget = new BehaviorLookAtEntity(bot, targets);
     const lookAtPlayersState = new BehaviorLookAtEntity(bot, targets);
 
-    // const goBase = goBase();
 
     // Create our transitions
     const transitions = [
 
         new StateTransition({ // 0
             parent: printServerStates,
-            child: idleState,
+            child: goBase,
             shouldTransition: () => true
         }),
 
@@ -155,6 +172,23 @@ bot.once("spawn", () =>
             child: lookAtPlayersState,
             name: 'player says "stay"',
         }),    
+
+        new StateTransition({ // 11
+            parent: goBase,
+            child: idleState,
+            name: 'Near base',
+            shouldTransition: () => goBase.distanceToTarget() < 2,
+            onTransition: () => {
+                bot.chat("I go basee!")
+            },
+        }),
+
+        new StateTransition({ // 12
+            parent: idleState,
+            child: goBase,
+            name: 'player says "sleep"',
+        }),
+
         
     ];
 
@@ -164,30 +198,29 @@ bot.once("spawn", () =>
     bot.on("chat", (username, message) =>
     {
         if (message === "hi")
-            transitions[1].trigger();   // parent: idleState,             child: getClosestPlayer,
+            transitions[1].trigger();   // parent: idleState,               child: getClosestPlayer,
 
         if (message === "bye")
         {
-            transitions[3].trigger();   // parent: lookAtPlayersState,    child: idleState,
-            transitions[6].trigger();   // parent: followPlayer,          child: idleState,
-            transitions[9].trigger();   // parent: lookAtFollowTarget,    child: idleState,
+            transitions[3].trigger();   // parent: lookAtPlayersState,      child: idleState,
+            transitions[6].trigger();   // parent: followPlayer,            child: idleState,
+            transitions[9].trigger();   // parent: lookAtFollowTarget,      child: idleState,
         }
 
         if (message === "come")
-            transitions[4].trigger();   // parent: lookAtPlayersState,    child: followPlayer,
+            transitions[4].trigger();   // parent: lookAtPlayersState,      child: followPlayer,
 
         if (message === "stay")
         {
-            transitions[5].trigger();   // parent: followPlayer,          child: lookAtPlayersState,
-            transitions[10].trigger();  // parent: lookAtFollowTarget,    child: lookAtPlayersState,
+            transitions[5].trigger();   // parent: followPlayer,            child: lookAtPlayersState,
+            transitions[10].trigger();  // parent: lookAtFollowTarget,      child: lookAtPlayersState,
         }
 
-        
         if (message === "sleep")
         {
-            transitions[5].trigger();   // parent: followPlayer,          child: lookAtPlayersState,
-            transitions[10].trigger();  // parent: lookAtFollowTarget,    child: lookAtPlayersState,
+            transitions[12].trigger();  // parent: idleState,               child: goBase
         }
+
     });
 
     const stateMachine = new BotStateMachine(bot, root);
