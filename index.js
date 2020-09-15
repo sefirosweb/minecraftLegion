@@ -47,11 +47,23 @@ const {
 bot.once("spawn", () => {
     const targets = {};
 
+    /*
+
     const base = {};
     base.position = {}
     base.position.x = -88;
     base.position.y = 58;
     base.position.z = -251;
+
+    */
+    const base = {
+        position: {
+            x: -88,
+            y: 58,
+            z: -251
+        }
+    };
+
     const goBase = new BehaviorMoveTo(bot, base);
 
     const checkIsNight = new checkNight(bot);
@@ -238,9 +250,11 @@ bot.once("spawn", () => {
 const checkNight = (function () {
     function checkNight(bot) {
         this.bot = bot;
+        this.active = true;
         this.stateName = 'checkIsNight';
         this.night = false;
         this.bed = false;
+
     }
     checkNight.prototype.check = function () {
         let timeOfDay = this.bot.time.timeOfDay
