@@ -12,11 +12,6 @@ const bot = mineflayer.createBot({
     port: PORT
 })
 
-bot.once('spawn', function(){
-    bot.chat('/login ' + AUTOLOGIN)
-    bot.chat('Im in!')
-})
-
 bot.on('kicked', (reason, loggedIn) => {
     reasonDecoded = JSON.parse(reason)
     console.log(reasonDecoded)
@@ -24,69 +19,270 @@ bot.on('kicked', (reason, loggedIn) => {
 
 bot.on('error', err => console.log(err))
 
+bot.once("spawn", () => {
+    bot.chat('/login ' + AUTOLOGIN)
+    bot.chat('Im in!')
+})
 
 bot.loadPlugin(require('mineflayer-pathfinder').pathfinder);
 
 const {
+    globalSettings,
     StateTransition,
     BotStateMachine,
+    StateMachineWebserver,
     EntityFilters,
+    BehaviorIdle,
+    BehaviorPrintServerStats,
     BehaviorFollowEntity,
     BehaviorLookAtEntity,
     BehaviorGetClosestEntity,
-    NestedStateMachine 
+    NestedStateMachine,
+    BehaviorMoveTo
 } = require("mineflayer-statemachine");
-    
 
-bot.once("spawn", () =>
-{
-    // This targets object is used to pass data between different states. It can be left empty.
+bot.once("spawn", () => {
     const targets = {};
 
-    // Create our states
-    const getClosestPlayer = new BehaviorGetClosestEntity(bot, targets, EntityFilters().PlayersOnly);
-    const followPlayer = new BehaviorFollowEntity(bot, targets);
-    const lookAtPlayer = new BehaviorLookAtEntity(bot, targets);
+    const base = {};
+    base.position = {}
+    base.position.x = -88;
+    base.position.y = 58;
+    base.position.z = -251;
+    const goBase = new BehaviorMoveTo(bot, base);
 
-    console.log(getClosestPlayer)
-    console.log(targets)
- 
+    // Movet o night timer
+    const bed = bot.findBlock({
+        matching: block => bot.isABed(block)
+    })
+
+    const checkIsNight = new checkNight(bot);
+    const goToBed = new BehaviorMoveTo(bot, bed);
+    const goSleep = new goBedAction(bot, bed);
+
+    const printServerStates = new BehaviorPrintServerStats(bot);
+    const idleState = new BehaviorIdle();
+    const followPlayer = new BehaviorFollowEntity(bot, targets);
+    const getClosestPlayer = new BehaviorGetClosestEntity(bot, targets, EntityFilters().PlayersOnly);
+    const lookAtFollowTarget = new BehaviorLookAtEntity(bot, targets);
+    const lookAtPlayersState = new BehaviorLookAtEntity(bot, targets);
+
+
+
     // Create our transitions
     const transitions = [
 
-        // We want to start following the player immediately after finding them.
-        // Since getClosestPlayer finishes instantly, shouldTransition() should always return true.
-        new StateTransition({
+        new StateTransition({ // 0
+            parent: printServerStates,
+            child: goBase,
+            name: '0 Starts',
+            shouldTransition: () => true
+        }),
+
+        new StateTransition({ // 1
+            parent: idleState,
+            child: getClosestPlayer,
+            name: '1 player says "hi"',
+            onTransition: () => bot.chat("Hi master!")
+        }),
+
+        new StateTransition({ // 2
             parent: getClosestPlayer,
-            child: followPlayer,
-            name: 'followPlayer',
+            child: lookAtPlayersState,
+            name: '2 get close entity',
             shouldTransition: () => true,
-            onTransition: () => console.log("followPlayer")
         }),
 
-        // If the distance to the player is less than two blocks, switch from the followPlayer
-        // state to the lookAtPlayer state.
-        new StateTransition({
-            parent: followPlayer,
-            child: lookAtPlayer,
-            shouldTransition: () => followPlayer.distanceToTarget() < 2,
-            onTransition: () => console.log("lookAtPlayer")
+        new StateTransition({ // 3
+            parent: lookAtPlayersState,
+            child: idleState,
+            name: '3 player says "bye"',
+            onTransition: () => bot.chat("Good bye master!")
         }),
 
-        // If the distance to the player is more than two blocks, switch from the lookAtPlayer
-        // state to the followPlayer state.
-        new StateTransition({
-            parent: lookAtPlayer,
+        new StateTransition({ // 4
+            parent: lookAtPlayersState,
             child: followPlayer,
-            shouldTransition: () => lookAtPlayer.distanceToTarget() >= 2,
-            onTransition: () => console.log("followPlayer")
+            name: '5 player says "come"',
+            onTransition: () => bot.chat("Yes sr!")
         }),
+
+        new StateTransition({ // 5
+            parent: followPlayer,
+            child: lookAtPlayersState,
+            name: '5 player says "stay"',
+            onTransition: () => bot.chat("Yes sr!!")
+        }),
+
+        new StateTransition({ //  6
+            parent: followPlayer,
+            child: idleState,
+            name: '6 player says "bye"',
+            onTransition: () => bot.chat("GB sr!")
+        }),
+
+        new StateTransition({ // 7
+            parent: followPlayer,
+            child: lookAtFollowTarget,
+            name: '7 closeToTarget',
+            shouldTransition: () => followPlayer.distanceToTarget() < 2,
+        }),
+
+        new StateTransition({ // 8
+            parent: lookAtFollowTarget,
+            child: followPlayer,
+            name: '8 farFromTarget',
+            shouldTransition: () => lookAtFollowTarget.distanceToTarget() >= 2,
+        }),
+
+        new StateTransition({ // 9
+            parent: lookAtFollowTarget,
+            child: idleState,
+            name: '9 player says "bye"',
+            onTransition: () => bot.chat("goodbye")
+        }),
+
+        new StateTransition({ // 10
+            parent: lookAtFollowTarget,
+            child: lookAtPlayersState,
+            name: '10 player says "stay"',
+        }),
+
+        new StateTransition({ // 11
+            parent: goBase,
+            child: idleState,
+            name: '11 Near base',
+            shouldTransition: () => goBase.distanceToTarget() < 2,
+            onTransition: () => {
+                bot.chat("Im are on base!")
+            },
+        }),
+
+        new StateTransition({ // 12
+            parent: checkIsNight,
+            child: goToBed,
+            name: '12 Move To Bed when is night',
+            shouldTransition: () => true,
+        }),
+
+        new StateTransition({ // 13
+            parent: goToBed,
+            child: goSleep,
+            shouldTransition: () => goToBed.distanceToTarget() < 2,
+            name: "13 Join into bed",
+        }),
+
+        new StateTransition({ // 15
+            parent: goSleep,
+            child: idleState,
+            shouldTransition: () => {
+                if (!checkIsNight.isNight() && goSleep.isInBed())
+                    return true
+            },
+            name: "15 CLick to Sleep",
+        }),
+
+        new StateTransition({ // 16
+            parent: idleState,
+            child: checkIsNight,
+            shouldTransition: () => checkIsNight.isNight(),
+            name: "16 Check is night",
+        }),
+
     ];
 
-    // Now we just wrap our transition list in a nested state machine layer. We want the bot
-    // to start on the getClosestPlayer state, so we'll specify that here.
-    const rootLayer = new NestedStateMachine(transitions, getClosestPlayer);
-    
-    // We can start our state machine simply by creating a new instance.
-    new BotStateMachine(bot, rootLayer);
+    const root = new NestedStateMachine(transitions, printServerStates);
+    root.name = "main";
+
+    bot.on('death', function () {
+        bot.chat('Omg im dead');
+    })
+
+
+    bot.on("chat", (username, message) => {
+        if (message === "hi " + bot.username) {
+            transitions[1].trigger();   // parent: idleState,               child: getClosestPlayer,
+        }
+
+        if (message === "bye") {
+            transitions[3].trigger();   // parent: lookAtPlayersState,      child: idleState,
+            transitions[6].trigger();   // parent: followPlayer,            child: idleState,
+            transitions[9].trigger();   // parent: lookAtFollowTarget,      child: idleState,
+        }
+
+        if (message === "come")
+            transitions[4].trigger();   // parent: lookAtPlayersState,      child: followPlayer,
+
+        if (message === "stay") {
+            transitions[5].trigger();   // parent: followPlayer,            child: lookAtPlayersState,
+            transitions[10].trigger();  // parent: lookAtFollowTarget,      child: lookAtPlayersState,
+        }
+
+    });
+
+    bot.on('time', () => {
+        checkIsNight.check()
+    });
+
+    const stateMachine = new BotStateMachine(bot, root);
+    const webserver = new StateMachineWebserver(bot, stateMachine);
+    webserver.startServer();
 });
+
+
+const checkNight = (function () {
+    function checkNight(bot) {
+        this.bot = bot;
+        this.active = false;
+        this.stateName = 'checkIsNight';
+        this.night = false;
+    }
+    checkNight.prototype.check = function () {
+        let timeOfDay = this.bot.time.timeOfDay
+        if ((timeOfDay >= 0 && timeOfDay <= 12040) || (timeOfDay >= 23961 && timeOfDay <= 24000)) {
+            this.night = false;
+        } else {
+            this.night = true;
+        }
+    }
+    checkNight.prototype.isNight = function () {
+        return this.night;
+    }
+    return checkNight;
+}());
+
+
+const goBedAction = (function () {
+    function goBedAction(bot, bed) {
+        this.bot = bot;
+        this.bed = bed;
+        this.active = false;
+        this.stateName = 'goBedAction';
+        this.actionFinished = false;
+    }
+    goBedAction.prototype.onStateEntered = function () {
+        setTimeout(() => {
+            this.sleep();
+        }, 500);
+
+    };
+    goBedAction.prototype.sleep = function () {
+        let canSleep = false;
+        this.bot.sleep(this.bed, (err) => {
+            if (err) {
+                this.bot.chat(`I can't sleep: ${err.message}`)
+                setTimeout(() => {
+                    this.sleep();
+                }, 10000);
+            } else {
+                this.actionFinished = true;
+            }
+        })
+    }
+    goBedAction.prototype.isInBed = function () {
+        return this.actionFinished;
+    }
+    return goBedAction;
+}());
+
+
