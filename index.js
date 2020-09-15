@@ -6,6 +6,8 @@ const PORT = process.env.PORT
 
 console.log("Bot: " + USERNAME + " Conecting to:" + SERVER)
 const mineflayer = require("mineflayer");
+const inventoryViewer = require('mineflayer-web-inventory')
+
 const bot = mineflayer.createBot({
     username: USERNAME,
     host: SERVER,
@@ -22,6 +24,7 @@ bot.on('error', err => console.log(err))
 bot.once("spawn", () => {
     bot.chat('/login ' + AUTOLOGIN)
     bot.chat('Im in!')
+    inventoryViewer(bot)
 })
 
 bot.loadPlugin(require('mineflayer-pathfinder').pathfinder);
@@ -40,6 +43,7 @@ const {
     NestedStateMachine,
     BehaviorMoveTo
 } = require("mineflayer-statemachine");
+
 
 bot.once("spawn", () => {
     const targets = {};
@@ -176,7 +180,7 @@ bot.once("spawn", () => {
             parent: goSleep,
             child: idleState,
             shouldTransition: () => {
-                if (!checkIsNight.isNight() && goSleep.isInBed())
+                if (!checkIsNight.getIsNight() && goSleep.getIsInBed())
                     return true
             },
             name: "15 CLick to Sleep",
@@ -185,7 +189,7 @@ bot.once("spawn", () => {
         new StateTransition({ // 16
             parent: idleState,
             child: checkIsNight,
-            shouldTransition: () => checkIsNight.isNight(),
+            shouldTransition: () => checkIsNight.getIsNight(),
             name: "16 Check is night",
         }),
 
@@ -229,11 +233,11 @@ bot.once("spawn", () => {
     webserver.startServer();
 });
 
+/***** custom_behaviors ****/
 
 const checkNight = (function () {
     function checkNight(bot) {
         this.bot = bot;
-        this.active = false;
         this.stateName = 'checkIsNight';
         this.night = false;
     }
@@ -245,20 +249,18 @@ const checkNight = (function () {
             this.night = true;
         }
     }
-    checkNight.prototype.isNight = function () {
+    checkNight.prototype.getIsNight = function () {
         return this.night;
     }
     return checkNight;
 }());
 
-
 const goBedAction = (function () {
     function goBedAction(bot, bed) {
         this.bot = bot;
         this.bed = bed;
-        this.active = false;
         this.stateName = 'goBedAction';
-        this.actionFinished = false;
+        this.isInBed = false;
     }
     goBedAction.prototype.onStateEntered = function () {
         setTimeout(() => {
@@ -267,7 +269,6 @@ const goBedAction = (function () {
 
     };
     goBedAction.prototype.sleep = function () {
-        let canSleep = false;
         this.bot.sleep(this.bed, (err) => {
             if (err) {
                 this.bot.chat(`I can't sleep: ${err.message}`)
@@ -275,14 +276,12 @@ const goBedAction = (function () {
                     this.sleep();
                 }, 10000);
             } else {
-                this.actionFinished = true;
+                this.isInBed = true;
             }
         })
     }
-    goBedAction.prototype.isInBed = function () {
-        return this.actionFinished;
+    goBedAction.prototype.getIsInBed = function () {
+        return this.isInBed;
     }
     return goBedAction;
 }());
-
-
