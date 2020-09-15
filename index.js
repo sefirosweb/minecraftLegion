@@ -244,7 +244,7 @@ const checkNight = (function () {
     }
     checkNight.prototype.check = function () {
         let timeOfDay = this.bot.time.timeOfDay
-        if ((timeOfDay >= 0 && timeOfDay <= 12040) || (timeOfDay >= 23961 && timeOfDay <= 24000)) {
+        if ((timeOfDay >= 0 && timeOfDay <= 12040)) {
             this.night = false;
         } else {
             this.night = true;
