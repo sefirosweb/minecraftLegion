@@ -22,7 +22,6 @@ bot.on('kicked', (reason, loggedIn) => {
 bot.on('error', err => console.log(err))
 
 bot.once("spawn", () => {
-    bot.chat('/login ' + AUTOLOGIN)
     bot.chat('Im in!')
     inventoryViewer(bot)
 })
@@ -55,14 +54,9 @@ bot.once("spawn", () => {
     base.position.z = -251;
     const goBase = new BehaviorMoveTo(bot, base);
 
-    // Movet o night timer
-    const bed = bot.findBlock({
-        matching: block => bot.isABed(block)
-    })
-
     const checkIsNight = new checkNight(bot);
-    const goToBed = new BehaviorMoveTo(bot, bed);
-    const goSleep = new goBedAction(bot, bed);
+    const goToBed = new BehaviorMoveTo(bot);
+    const goSleep = new goBedAction(bot);
 
     const printServerStates = new BehaviorPrintServerStats(bot);
     const idleState = new BehaviorIdle();
@@ -174,6 +168,9 @@ bot.once("spawn", () => {
             child: goSleep,
             shouldTransition: () => goToBed.distanceToTarget() < 2,
             name: "13 Join into bed",
+            onTransition: () => {
+                goSleep.bed = goToBed.targets
+            },
         }),
 
         new StateTransition({ // 15
@@ -189,8 +186,11 @@ bot.once("spawn", () => {
         new StateTransition({ // 16
             parent: idleState,
             child: checkIsNight,
-            shouldTransition: () => checkIsNight.getIsNight(),
+            shouldTransition: () => checkIsNight.getIsNight() && checkIsNight.getBed !== false,
             name: "16 Check is night",
+            onTransition: () => {
+                goToBed.targets = checkIsNight.bed
+            },
         }),
 
     ];
@@ -240,6 +240,7 @@ const checkNight = (function () {
         this.bot = bot;
         this.stateName = 'checkIsNight';
         this.night = false;
+        this.bed = false;
     }
     checkNight.prototype.check = function () {
         let timeOfDay = this.bot.time.timeOfDay
@@ -247,11 +248,31 @@ const checkNight = (function () {
             this.night = false;
         } else {
             this.night = true;
+            this.checkNearBed();
         }
     }
     checkNight.prototype.getIsNight = function () {
         return this.night;
     }
+
+    checkNight.prototype.getBed = function () {
+        return this.bed;
+    }
+
+    checkNight.prototype.checkNearBed = function () {
+        const bed = this.bot.findBlock({
+            matching: block => this.bot.isABed(block)
+        });
+
+        if (bed === null) {
+            this.bed = false;
+        } else {
+            this.bed = bed;
+        }
+    }
+
+
+
     return checkNight;
 }());
 
