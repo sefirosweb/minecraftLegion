@@ -41,6 +41,7 @@ bot.once("spawn", () => {
             parent: idleState,
             child: patrolTheTownS,
             shouldTransition: () => true,
+            onTransition: () => bot.chat('Starting Patrol!'),
         }),
 
         new StateTransition({
@@ -70,38 +71,48 @@ function patrolTheTown() {
     const enter = new BehaviorIdle();
     const exit = new BehaviorIdle();
 
-    const point_1 = {
+    let points = [];
+
+    let nextStep = {
         position: {
             x: -94,
             y: 60,
             z: -296
         }
     }
+    points.push(nextStep);
 
-    const point_2 = {
+    nextStep = {
         position: {
             x: -95,
             y: 61,
             z: -316
         }
     }
+    points.push(nextStep);
 
-    const point_3 = {
+
+    nextStep = {
         position: {
-            x: -120,
+            x: -105,
             y: 61,
             z: -316
         }
     }
+    points.push(nextStep);
 
-    let points = [];
-    points.push(point_1);
-    points.push(point_2);
-    points.push(point_3);
+
+    nextStep = {
+        position: {
+            x: -105,
+            y: 61,
+            z: -300
+        }
+    }
+    points.push(nextStep);
 
 
     const patrol = new BehaviorMoveToArray(bot, points);
-    //const patrol = new BehaviorMoveTo(bot, point_1);
 
     const transitions = [
 
@@ -113,17 +124,15 @@ function patrolTheTown() {
 
         new StateTransition({
             parent: patrol,
-            child: exit,
-            shouldTransition: () => patrol.distanceToTarget() <= 2,
-            // onTransition: () => patrol.goNext(),
+            child: patrol,
+            shouldTransition: () => patrol.distanceToTarget() <= 2 && patrol.endPatrol == false,
         }),
-        /*
-                new StateTransition({
-                    parent: patrol,
-                    child: exit,
-                    shouldTransition: () => patrol.isFinished(),
-                }),
-                */
+
+        new StateTransition({
+            parent: patrol,
+            child: exit,
+            shouldTransition: () => patrol.getEndPatrol(),
+        }),
 
     ];
 
@@ -142,10 +151,11 @@ const BehaviorMoveToArray = (function () {
         this.isFinished = false;
 
         this.currentPosition = 0;
-
+        this.endPatrol = false;
         this.active = false;
         this.distance = 0;
         this.patrol = patrol
+
         this.bot = bot;
         const mcData = require('minecraft-data')(bot.version);
         this.movements = new mineflayer_pathfinder_1.Movements(bot, mcData);
@@ -163,13 +173,25 @@ const BehaviorMoveToArray = (function () {
 
     BehaviorMoveToArray.prototype.onStateEntered = function () {
         this.targets = this.patrol[this.currentPosition];
+        this.currentPosition++;
+
+        if (this.currentPosition > this.patrol.length) {
+            this.currentPosition = 0;
+            this.endPatrol = true
+            this.targets = this.patrol[this.currentPosition];
+        } else {
+            this.endPatrol = false
+        }
+
         this.startMoving();
     };
 
     BehaviorMoveToArray.prototype.onStateExited = function () {
-        this.currentPosition++;
-        console.log(this.currentPosition)
         this.stopMoving();
+    };
+
+    BehaviorMoveToArray.prototype.getEndPatrol = function () {
+        return this.endPatrol;
     };
 
     BehaviorMoveToArray.prototype.setMoveTarget = function (position) {
@@ -191,8 +213,8 @@ const BehaviorMoveToArray = (function () {
             return;
         }
 
-        console.log("[MoveTo] Moving from " + this.bot.entity.position + " to " + position);
-     
+        // console.log("[MoveTo] Moving from " + this.bot.entity.position + " to " + position);
+
         const pathfinder = this.bot.pathfinder;
         let goal;
         if (this.distance === 0)
