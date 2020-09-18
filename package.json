@@ -22,6 +22,7 @@
     "mineflayer-pathfinder": "^1.0.10",
     "mineflayer-statemachine": "^1.5.1",
     "mineflayer-web-inventory": "^1.1.2",
-    "minimist": "^1.2.5"
+    "minimist": "^1.2.5",
+    "nodemon": "^2.0.4"
   }
 }
