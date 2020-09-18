@@ -15,13 +15,11 @@ router.get('/message', function (req, res) {
 })
 
 router.post('/message', function (req, res) {
-    response.error(req, res, 'Post')
+    response.error(req, res, 'Post', 500, 'Simulacion de logs')
 })
 
-/*
-app.use('/', function (req, res) {
-    res.send('Hola eq eq eq');
-});
-*/
+
+app.use('/app', express.static('public'))
+
 
 app.listen(4000);
