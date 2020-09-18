@@ -28,7 +28,7 @@ const BehaviorMoveToArray = (function () {
 
     BehaviorMoveToArray.prototype.onStateEntered = function () {
         this.targets = this.patrol[this.currentPosition];
-        console.log('Go to:', this.patrol[this.currentPosition]);
+        //console.log('Go to:', this.patrol[this.currentPosition]);
         this.currentPosition++;
 
         if (this.currentPosition > this.patrol.length) {
