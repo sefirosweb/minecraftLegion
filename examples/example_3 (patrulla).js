@@ -64,7 +64,6 @@ bot.once("spawn", () => {
 
 
 function patrolTheTown() {
-    const targets = {};
     const enter = new BehaviorIdle();
     const exit = new BehaviorIdle();
 

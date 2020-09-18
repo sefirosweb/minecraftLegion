@@ -3,10 +3,20 @@ const BehaviorGoToBed = (function () {
         this.bot = bot;
         this.bed = bed;
         this.stateName = 'goToBed';
+
         this.isInBed = false;
+        this.wake = false;
+
+        this.bot.on('wake', () => {
+            setTimeout(() => {
+                this.wake = true;
+                this.isInBed = false;
+            }, 1000);
+        });
     }
     BehaviorGoToBed.prototype.onStateEntered = function () {
-        console.log('BehaviorGoToBed')
+        this.wake = false;
+        this.isInBed = false;
         setTimeout(() => {
             this.sleep();
         }, 500);
@@ -26,6 +36,9 @@ const BehaviorGoToBed = (function () {
     }
     BehaviorGoToBed.prototype.getIsInBed = function () {
         return this.isInBed;
+    }
+    BehaviorGoToBed.prototype.getWake = function () {
+        return this.wake;
     }
     return BehaviorGoToBed;
 }());

@@ -50,17 +50,15 @@ bot.once("spawn", () => {
     const targets = {};
     const base = {
         position: {
-            x: -100,
+            x: -85,
             y: 64,
-            z: 100
+            z: 90
         }
     };
 
     const goBase = new BehaviorMoveTo(bot, base);
 
-    const checkIsNight = new BehaviorIsNight(bot);
-    const goToBed = new BehaviorMoveTo(bot);
-    const goSleep = new BehaviorGoToBed(bot);
+    const isNight = new BehaviorIsNight(bot);
 
     const printServerStates = new BehaviorPrintServerStats(bot);
     const idleState = new BehaviorIdle();
@@ -68,6 +66,8 @@ bot.once("spawn", () => {
     const getClosestPlayer = new BehaviorGetClosestEntity(bot, targets, EntityFilters().PlayersOnly);
     const lookAtFollowTarget = new BehaviorLookAtEntity(bot, targets);
     const lookAtPlayersState = new BehaviorLookAtEntity(bot, targets);
+
+    const goSleep = new goSleepFunction()
 
 
 
@@ -160,42 +160,34 @@ bot.once("spawn", () => {
             },
         }),
 
-        new StateTransition({ // 12
-            parent: checkIsNight,
-            child: goToBed,
-            name: '12 Move To Bed when is night',
-            shouldTransition: () => true,
-        }),
-
-        new StateTransition({ // 13
-            parent: goToBed,
-            child: goSleep,
-            shouldTransition: () => goToBed.distanceToTarget() < 2,
-            name: "13 Join into bed",
+        new StateTransition({
+            parent: idleState,
+            child: isNight,
+            shouldTransition: () => isNight.getIsNight() && isNight.getBed() !== false,
+            name: "idleState -> isNight",
             onTransition: () => {
-                goSleep.bed = goToBed.targets
+                goSleep.targets = isNight.bed;
             },
         }),
 
-        new StateTransition({ // 15
+        new StateTransition({
+            parent: isNight,
+            child: goSleep,
+            shouldTransition: () => true,
+            name: "isNight -> goSleep",
+            onTransition: () => {
+                goSleep.targets = isNight.bed
+                //console.log(goSleep)
+            },
+        }),
+
+        new StateTransition({
             parent: goSleep,
             child: idleState,
-            shouldTransition: () => {
-                if (!checkIsNight.getIsNight() && goSleep.getIsInBed())
-                    return true
-            },
-            name: "15 CLick to Sleep",
+            shouldTransition: () => goSleep.isFinished(),
+            name: "goSleep -> idleState",
         }),
 
-        new StateTransition({ // 16
-            parent: idleState,
-            child: checkIsNight,
-            shouldTransition: () => checkIsNight.getIsNight() && checkIsNight.getBed !== false,
-            name: "16 Check is night",
-            onTransition: () => {
-                goToBed.targets = checkIsNight.bed
-            },
-        }),
 
     ];
 
@@ -229,7 +221,7 @@ bot.once("spawn", () => {
     });
 
     bot.on('time', () => {
-        checkIsNight.check()
+        isNight.check()
     });
 
     const stateMachine = new BotStateMachine(bot, root);
@@ -238,3 +230,45 @@ bot.once("spawn", () => {
 });
 
 
+function goSleepFunction() {
+    const enter = new BehaviorIdle();
+    const exit = new BehaviorIdle();
+
+    const moveToBed = new BehaviorMoveTo(bot);
+    const goSleep = new BehaviorGoToBed(bot);
+    const isNight = new BehaviorIsNight(bot)
+
+    const transitions = [
+
+        new StateTransition({
+            parent: enter,
+            child: moveToBed,
+            name: 'Move To Bed when is night',
+            shouldTransition: () => true,
+            onTransition: () => {
+                isNight.checkNearBed();
+                moveToBed.targets = isNight.getBed()
+            },
+        }),
+
+        new StateTransition({
+            parent: moveToBed,
+            child: goSleep,
+            shouldTransition: () => moveToBed.distanceToTarget() < 2,
+            name: "Click Sleep on Bed",
+            onTransition: () => goSleep.bed = moveToBed.targets,
+        }),
+
+        new StateTransition({
+            parent: goSleep,
+            child: exit,
+            shouldTransition: () => goSleep.getWake(),
+            name: "Finished Sleep",
+        }),
+
+    ];
+
+    const goSleepFunction = new NestedStateMachine(transitions, enter, exit);
+    goSleepFunction.stateName = 'goSleep'
+    return goSleepFunction;
+}
