@@ -10,7 +10,6 @@ const DB_PORT = config.DB_PORT
 
 const MONGO_URI = `mongodb+srv://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}?retryWrites=true&w=majority`;
 
-console.log(MONGO_URI)
 class MongoLib {
     constructor() {
         this.client = new MongoClient(MONGO_URI, { useNewUrlParser: true })
