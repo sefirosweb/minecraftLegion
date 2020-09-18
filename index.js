@@ -42,33 +42,25 @@ const {
     NestedStateMachine,
     BehaviorMoveTo
 } = require("mineflayer-statemachine");
+const BehaviorIsNight = require("./BehaviorModules/BehaviorIsNight");
+const BehaviorGoToBed = require('./BehaviorModules/BehaviorGoToBed')
 
 
 bot.once("spawn", () => {
     const targets = {};
-
-    /*
-
-    const base = {};
-    base.position = {}
-    base.position.x = -88;
-    base.position.y = 58;
-    base.position.z = -251;
-
-    */
     const base = {
         position: {
-            x: -88,
-            y: 58,
-            z: -251
+            x: -100,
+            y: 64,
+            z: 100
         }
     };
 
     const goBase = new BehaviorMoveTo(bot, base);
 
-    const checkIsNight = new checkNight(bot);
+    const checkIsNight = new BehaviorIsNight(bot);
     const goToBed = new BehaviorMoveTo(bot);
-    const goSleep = new goBedAction(bot);
+    const goSleep = new BehaviorGoToBed(bot);
 
     const printServerStates = new BehaviorPrintServerStats(bot);
     const idleState = new BehaviorIdle();
@@ -245,78 +237,4 @@ bot.once("spawn", () => {
     webserver.startServer();
 });
 
-/***** custom_behaviors ****/
 
-const checkNight = (function () {
-    function checkNight(bot) {
-        this.bot = bot;
-        this.active = true;
-        this.stateName = 'checkIsNight';
-        this.night = false;
-        this.bed = false;
-
-    }
-    checkNight.prototype.check = function () {
-        let timeOfDay = this.bot.time.timeOfDay
-        if ((timeOfDay >= 0 && timeOfDay <= 12040)) {
-            this.night = false;
-        } else {
-            this.night = true;
-            this.checkNearBed();
-        }
-    }
-    checkNight.prototype.getIsNight = function () {
-        return this.night;
-    }
-
-    checkNight.prototype.getBed = function () {
-        return this.bed;
-    }
-
-    checkNight.prototype.checkNearBed = function () {
-        const bed = this.bot.findBlock({
-            matching: block => this.bot.isABed(block)
-        });
-
-        if (bed === null) {
-            this.bed = false;
-        } else {
-            this.bed = bed;
-        }
-    }
-
-
-
-    return checkNight;
-}());
-
-const goBedAction = (function () {
-    function goBedAction(bot, bed) {
-        this.bot = bot;
-        this.bed = bed;
-        this.stateName = 'goBedAction';
-        this.isInBed = false;
-    }
-    goBedAction.prototype.onStateEntered = function () {
-        setTimeout(() => {
-            this.sleep();
-        }, 500);
-
-    };
-    goBedAction.prototype.sleep = function () {
-        this.bot.sleep(this.bed, (err) => {
-            if (err) {
-                this.bot.chat(`I can't sleep: ${err.message}`)
-                setTimeout(() => {
-                    this.sleep();
-                }, 10000);
-            } else {
-                this.isInBed = true;
-            }
-        })
-    }
-    goBedAction.prototype.getIsInBed = function () {
-        return this.isInBed;
-    }
-    return goBedAction;
-}());
