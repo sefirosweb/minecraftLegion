@@ -32,9 +32,9 @@ function getMessage(id) {
 }
 
 
-function getMessages() {
+function getMessages(filterUser) {
     return new Promise((resolve, reject) => {
-        resolve(store.list())
+        resolve(store.list(filterUser))
     });
 }
 

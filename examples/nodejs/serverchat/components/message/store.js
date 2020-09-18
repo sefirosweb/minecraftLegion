@@ -15,8 +15,13 @@ async function addMessage(message) {
         });
 }
 
-function getMessages() {
-    return db.getAll('message')
+function getMessages(filterUser) {
+    let filter = {};
+    if (filterUser !== null) {
+        filter = { user: filterUser }
+    }
+
+    return db.getAll('message', filter)
         .then(result => {
             return result
         })
