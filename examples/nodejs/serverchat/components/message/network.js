@@ -37,8 +37,8 @@ router.post('/', function (req, res) {
 
 router.patch('/:id', function (req, res) {
     controller.updateMessage(req.body.user, req.body.message, req.params.id)
-        .then((fullMessage) => {
-            response.success(req, res, fullMessage)
+        .then(() => {
+            response.success(req, res, `Usuario ${req.params.id} eliminado`)
         })
         .catch(e => {
             response.error(req, res, 'Informacion Invalida', 500, '[message network] No se ha insertado usuario o contraseña o id')
@@ -47,8 +47,8 @@ router.patch('/:id', function (req, res) {
 
 router.delete('/:id', function (req, res) {
     controller.deleteMessage(req.params.id)
-        .then((fullMessage) => {
-            response.success(req, res, fullMessage)
+        .then(() => {
+            response.success(req, res, `Usuario ${req.params.id} eliminado`)
         })
         .catch(e => {
             response.error(req, res, 'Informacion Invalida', 500, '[message network] No se ha insertado id')
