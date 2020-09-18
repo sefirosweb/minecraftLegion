@@ -5,7 +5,13 @@ const router = express.Router();
 
 
 router.get('/', function (req, res) {
-    response.success(req, res, 'Lista de mensaje')
+    controller.getMessages()
+        .then((messageList) => {
+            response.success(req, res, messageList)
+        })
+        .catch(e => {
+            response.error(req, res, 'Error interno', 500, '[message network] Error desconocido')
+        });
 })
 
 router.post('/', function (req, res) {
@@ -14,7 +20,7 @@ router.post('/', function (req, res) {
             response.success(req, res, fullMessage)
         })
         .catch(e => {
-            response.error(req, res, 'Informacion Invalida', 500, 'No se ha insertado usuario o contraseña')
+            response.error(req, res, 'Informacion Invalida', 500, '[message network] No se ha insertado usuario o contraseña')
         });
 })
 
