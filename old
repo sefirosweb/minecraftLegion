@@ -1,0 +1,9 @@
+USER=Guard1
+AUTOLOGIN=
+PORT=60200
+SERVER=
+DB_USER=db_user
+DB_PASSWORD=HU3iodO9tJHvNkot
+DB_HOST=cluster0.jot89.mongodb.net
+DB_PORT=
+DB_NAME=minecraftlegion_db
