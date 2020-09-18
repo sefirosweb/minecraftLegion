@@ -53,10 +53,16 @@ bot.once("spawn", () => {
     const baseCommands = baseFunction(bot)
 
     const transitions = [
-        new StateTransition({
+        new StateTransition({ // 0
             parent: idleState,
             child: baseCommands,
             name: 'Chat listener',
+        }),
+        new StateTransition({ // 1
+            parent: baseCommands,
+            child: printServerStates,
+            shouldTransition: () => false,
+            name: "Restart when players die",
         }),
         new StateTransition({
             parent: baseCommands,
@@ -103,10 +109,12 @@ bot.once("spawn", () => {
             shouldTransition: () => goSleep.isFinished(),
             name: "goSleep -> idleState",
         }),
+
     ];
 
     bot.on('death', function () {
         bot.chat('Omg im dead');
+        transitions[1].trigger();
     })
 
     bot.on('time', () => {

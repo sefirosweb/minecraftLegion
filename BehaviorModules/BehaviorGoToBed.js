@@ -11,7 +11,7 @@ const BehaviorGoToBed = (function () {
             setTimeout(() => {
                 this.wake = true;
                 this.isInBed = false;
-            }, 1000);
+            }, 2000);
         });
     }
     BehaviorGoToBed.prototype.onStateEntered = function () {

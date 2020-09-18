@@ -9,7 +9,7 @@ const BehaviorIsNight = (function () {
     }
     BehaviorIsNight.prototype.check = function () {
         let timeOfDay = this.bot.time.timeOfDay
-        if ((timeOfDay >= 0 && timeOfDay <= 12040)) {
+        if ((timeOfDay >= 100 && timeOfDay <= 12040)) {
             this.night = false;
         } else {
             this.night = true;
