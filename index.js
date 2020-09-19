@@ -4,14 +4,11 @@ const config = require('./config')
 console.log("Bot: " + config.username + " Conecting to:" + config.server)
 const mineflayer = require("mineflayer");
 
-
 const bot = mineflayer.createBot({
     username: config.username,
     host: config.server,
     port: config.port
 })
-
-
 
 bot.on('kicked', (reason, loggedIn) => {
     reasonDecoded = JSON.parse(reason)
@@ -27,18 +24,6 @@ bot.once("spawn", () => {
     bot.chat('Im in!')
     inventoryViewer(bot)
     prismarineViewer.start(bot);
-    // map.start(bot, 5000)
-    /*
-    mineflayerViewer(bot, { port: 4000 })
-    const path = [bot.entity.position.clone()]
-    bot.on('move', () => {
-        if (path[path.length - 1].distanceTo(bot.entity.position) > 1) {
-            path.push(bot.entity.position.clone())
-            bot.viewer.drawLine('path', path)
-        }
-    })
-    */
-
 })
 
 
