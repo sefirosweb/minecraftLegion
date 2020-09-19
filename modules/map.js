@@ -13,18 +13,20 @@ function start(bot) {
 
     bot.on('time', () => {
 
+
+
         bot.findBlock({
             point: bot.entity.position,
             matching: 1,
             maxDistance: 5,
-            count: 1,
+            useExtraInfo: true
         }, function(err, blocks) {
             if (err) {
                 bot.chat('Error trying to find Diamond Ore: ' + err);
                 return;
             }
 
-            console.log(blocks)
+            let position = blocks[0].position
         });
 
 
