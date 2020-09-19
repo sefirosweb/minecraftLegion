@@ -29,6 +29,7 @@ bot.once("spawn", () => {
     bot.chat('Im in!')
     inventoryViewer(bot)
 
+    /*
     mineflayerViewer(bot, { port: 4001 })
     const path = [bot.entity.position.clone()]
     console.log("port", port)
@@ -38,6 +39,7 @@ bot.once("spawn", () => {
             bot.viewer.drawLine('path', path)
         }
     })
+    */
 
 
 })
