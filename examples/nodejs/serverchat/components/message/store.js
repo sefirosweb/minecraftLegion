@@ -32,7 +32,6 @@ function getMessages(data) {
                 resolve(populated)
             })*/
             .then(result => {
-                console.log(result)
                 return result
             })
             .catch(err => {
