@@ -11,7 +11,7 @@ router.get('/', function (req, res) {
             response.success(req, res, result)
         })
         .catch(e => {
-            response.error(req, res, 'Error interno', 500, '[message network] Error desconocido')
+            response.error(req, res, 'Error interno', 500, '[message network] Error desconocido => ' + e)
         });
 })
 
@@ -21,7 +21,7 @@ router.get('/:id', function (req, res) {
             response.success(req, res, result)
         })
         .catch(e => {
-            response.error(req, res, 'Error interno', 500, '[message network] Error desconocido')
+            response.error(req, res, 'Error interno', 500, '[message network] Error desconocido => ' + e)
         });
 })
 
@@ -31,7 +31,7 @@ router.post('/', function (req, res) {
             response.success(req, res, result)
         })
         .catch(e => {
-            response.error(req, res, 'Informacion Invalida', 500, '[message network] No se ha insertado usuario o contraseña')
+            response.error(req, res, 'Informacion Invalida', 500, '[message network] No se ha insertado usuario o contraseña => ' + e)
         });
 })
 
@@ -41,7 +41,7 @@ router.patch('/:id', function (req, res) {
             response.success(req, res, `Usuario ${req.params.id} eliminado`)
         })
         .catch(e => {
-            response.error(req, res, 'Informacion Invalida', 500, '[message network] No se ha insertado usuario o contraseña o id')
+            response.error(req, res, 'Informacion Invalida', 500, '[message network] No se ha insertado usuario o contraseña o id => ' + e)
         });
 })
 
@@ -51,7 +51,7 @@ router.delete('/:id', function (req, res) {
             response.success(req, res, `Usuario ${req.params.id} eliminado`)
         })
         .catch(e => {
-            response.error(req, res, 'Informacion Invalida', 500, '[message network] No se ha insertado id')
+            response.error(req, res, 'Informacion Invalida', 500, '[message network] No se ha insertado id => ' + e)
         });
 })
 

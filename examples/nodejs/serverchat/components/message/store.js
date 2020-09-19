@@ -16,18 +16,31 @@ async function addMessage(message) {
 }
 
 function getMessages(data) {
-    let filter = {};
-    if (data !== null) {
-        filter = { user: data }
-    }
+    return new Promise((resolve, reject) => {
+        let filter = {};
+        if (data !== null) {
+            filter = { user: data }
+        }
 
-    return db.getAll('message', filter)
-        .then(result => {
-            return result
-        })
-        .catch(err => {
-            return err;
-        })
+        const messages = db.getAll('message', filter)
+            //.populate('user')
+            /*.exec((error, populated) => {
+                if (error) {
+                    reject(error)
+                    return false;
+                }
+                resolve(populated)
+            })*/
+            .then(result => {
+                console.log(result)
+                return result
+            })
+            .catch(err => {
+                reject(err);
+            })
+
+        resolve(messages);
+    })
 }
 
 function getMessage(id) {
