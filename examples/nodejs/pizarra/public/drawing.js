@@ -10,8 +10,8 @@ function init() {
     socket.on('drawline', data => {
         context.beginPath();
         context.lineWith = 2;
-        context.moveTo(data.x, data.y)
-        context.lineTo(data.pre_x, data.pre_y);
+        context.moveTo(data.x, data.y - 65)
+        context.lineTo(data.pre_x, data.pre_y - 65);
         context.stroke();
     });
 
@@ -39,6 +39,8 @@ function init() {
 
     canvas.addEventListener('mousedown', (e) => {
         mouse.click = true;
+        mouse.pos_prev.x = e.clientX;
+        mouse.pos_prev.y = e.clientY;
     });
 
     canvas.addEventListener('mouseup', (e) => {
@@ -68,7 +70,7 @@ function init() {
 
         }
 
-        setTimeout(mainLoop, 10);
+        setTimeout(mainLoop, 20);
     }
 
     mainLoop()

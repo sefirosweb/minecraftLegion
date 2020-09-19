@@ -14,16 +14,13 @@ function connect(server) {
             socket.emit('drawline', line_history[i]);
         }
 
-
-
         socket.on('drawline', data => {
-            line_history.push(data)
-            console.log(data);
+            line_history.push(data);
             socket.emit('drawline', data);
+            socket.broadcast.emit('drawline', data);
         });
 
     });
-
 }
 
 
