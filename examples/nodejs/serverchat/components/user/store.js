@@ -15,10 +15,10 @@ async function addUser(User) {
         });
 }
 
-function getUsers(filterUser) {
+function getUsers(data) {
     let filter = {};
-    if (filterUser !== null) {
-        filter = { user: filterUser }
+    if (data !== null) {
+        filter = { user: data }
     }
 
     return db.getAll('User', filter)

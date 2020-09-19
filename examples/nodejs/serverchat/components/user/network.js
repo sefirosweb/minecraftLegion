@@ -4,8 +4,8 @@ const controller = require('./controller')
 const router = express.Router();
 
 router.get('/', function (req, res) {
-    const filterUsers = req.query.user || null;
-    controller.getUsers(filterUsers)
+    const filter = req.query.user || null;
+    controller.getUsers(filter)
         .then((result) => {
             response.success(req, res, result)
         })

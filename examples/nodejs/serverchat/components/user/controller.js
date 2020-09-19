@@ -3,7 +3,7 @@ const store = require('./store');
 function addUser(user) {
     return new Promise((resolve, reject) => {
         if (!user) {
-            console.error('[user controller] No hay usuario o mensaje');
+            console.error('[user controller] No hay usuario');
             reject('Los datos son incorrectos');
             return false;
         }
@@ -21,14 +21,13 @@ function addUser(user) {
 function getUser(id) {
     return new Promise((resolve, reject) => {
         if (!id) {
-            console.error('[user controller] No hay usuario o mensaje o id');
+            console.error('[user controller] No hay id');
             reject('Los datos son incorrectos');
             return false;
         }
         resolve(store.get(id))
     });
 }
-
 
 function getUsers(filter) {
     return new Promise((resolve, reject) => {
@@ -39,7 +38,7 @@ function getUsers(filter) {
 function updateUser(user, id) {
     return new Promise((resolve, reject) => {
         if (!user || !id) {
-            console.error('[user controller] No hay usuario o mensaje o id');
+            console.error('[user controller] No hay usuario o id');
             reject('Los datos son incorrectos');
             return false;
         }
@@ -57,7 +56,7 @@ function updateUser(user, id) {
 function deleteUser(id) {
     return new Promise((resolve, reject) => {
         if (!id) {
-            console.error('[user controller] No hay usuario o mensaje o id');
+            console.error('[user controller] No hay id');
             reject('Los datos son incorrectos');
             return false;
         }
@@ -66,6 +65,7 @@ function deleteUser(id) {
         resolve(result);
     });
 }
+
 module.exports = {
     getUser,
     addUser,

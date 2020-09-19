@@ -15,10 +15,10 @@ async function addMessage(message) {
         });
 }
 
-function getMessages(filterUser) {
+function getMessages(data) {
     let filter = {};
-    if (filterUser !== null) {
-        filter = { user: filterUser }
+    if (data !== null) {
+        filter = { user: data }
     }
 
     return db.getAll('message', filter)
@@ -39,7 +39,6 @@ function getMessage(id) {
             return err;
         })
 }
-
 
 function updateMessage(id, message) {
     return db.update('message', id, message)

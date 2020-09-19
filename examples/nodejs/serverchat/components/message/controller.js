@@ -3,19 +3,18 @@ const store = require('./store');
 function addMessage(user, message) {
     return new Promise((resolve, reject) => {
         if (!user || !message) {
-            console.error('[messageController] No hay usuario o mensaje');
+            console.error('[message controller] No hay usuario o mensaje');
             reject('Los datos son incorrectos');
             return false;
         }
 
-
-        const fullMessage = {
+        const data = {
             user: user,
             message: message,
             date: new Date(),
         }
 
-        const id = store.add(fullMessage);
+        const id = store.add(data);
         resolve(id);
     });
 }
@@ -23,7 +22,7 @@ function addMessage(user, message) {
 function getMessage(id) {
     return new Promise((resolve, reject) => {
         if (!id) {
-            console.error('[messageController] No hay usuario o mensaje o id');
+            console.error('[message controller] No hay id');
             reject('Los datos son incorrectos');
             return false;
         }
@@ -32,27 +31,27 @@ function getMessage(id) {
 }
 
 
-function getMessages(filterUser) {
+function getMessages(filter) {
     return new Promise((resolve, reject) => {
-        resolve(store.list(filterUser))
+        resolve(store.list(filter))
     });
 }
 
 function updateMessage(user, message, id) {
     return new Promise((resolve, reject) => {
         if (!user || !message || !id) {
-            console.error('[messageController] No hay usuario o mensaje o id');
+            console.error('[message controller] No hay usuario o mensaje o id');
             reject('Los datos son incorrectos');
             return false;
         }
 
-        const fullMessage = {
+        const data = {
             user: user,
             message: message,
             date: new Date(),
         }
 
-        const result = store.update(id, fullMessage);
+        const result = store.update(id, data);
         resolve(result);
     });
 }
@@ -60,7 +59,7 @@ function updateMessage(user, message, id) {
 function deleteMessage(id) {
     return new Promise((resolve, reject) => {
         if (!id) {
-            console.error('[messageController] No hay usuario o mensaje o id');
+            console.error('[message controller] No hay id');
             reject('Los datos son incorrectos');
             return false;
         }
@@ -69,6 +68,7 @@ function deleteMessage(id) {
         resolve(result);
     });
 }
+
 module.exports = {
     getMessage,
     addMessage,

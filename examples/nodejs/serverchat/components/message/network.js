@@ -5,10 +5,10 @@ const router = express.Router();
 
 
 router.get('/', function (req, res) {
-    const filterMessages = req.query.user || null;
-    controller.getMessages(filterMessages)
-        .then((messageList) => {
-            response.success(req, res, messageList)
+    const filter = req.query.user || null;
+    controller.getMessages(filter)
+        .then((result) => {
+            response.success(req, res, result)
         })
         .catch(e => {
             response.error(req, res, 'Error interno', 500, '[message network] Error desconocido')
@@ -17,8 +17,8 @@ router.get('/', function (req, res) {
 
 router.get('/:id', function (req, res) {
     controller.getMessage(req.params.id)
-        .then((messageList) => {
-            response.success(req, res, messageList)
+        .then((result) => {
+            response.success(req, res, result)
         })
         .catch(e => {
             response.error(req, res, 'Error interno', 500, '[message network] Error desconocido')
@@ -27,8 +27,8 @@ router.get('/:id', function (req, res) {
 
 router.post('/', function (req, res) {
     controller.addMessage(req.body.user, req.body.message)
-        .then((fullMessage) => {
-            response.success(req, res, fullMessage)
+        .then((result) => {
+            response.success(req, res, result)
         })
         .catch(e => {
             response.error(req, res, 'Informacion Invalida', 500, '[message network] No se ha insertado usuario o contraseña')
