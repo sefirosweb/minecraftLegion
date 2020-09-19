@@ -7,6 +7,8 @@ console.log("Bot: " + USERNAME + " Conecting to:" + SERVER)
 const mineflayer = require("mineflayer");
 const inventoryViewer = require('mineflayer-web-inventory')
 
+const websocket = require('./web');
+
 const bot = mineflayer.createBot({
     username: USERNAME,
     host: SERVER,
@@ -23,6 +25,7 @@ bot.on('error', err => console.log(err))
 bot.once("spawn", () => {
     bot.chat('Im in!')
     inventoryViewer(bot)
+    websocket.socket.io.emit('mensaje', "Bot spawned: " + bot.username);
 })
 
 bot.loadPlugin(require('mineflayer-pathfinder').pathfinder);
@@ -43,7 +46,7 @@ const baseFunction = require('./NestedStateModules/baseFunction');
 
 bot.once("spawn", () => {
     const targets = {};
-    const base = { position: { x: -85, y: 64, z: 90 } };
+    const base = { position: { x: -60, y: 80, z: 125 } };
 
     const goBase = new BehaviorMoveTo(bot, base);
     const isNight = new BehaviorIsNight(bot);
@@ -72,7 +75,8 @@ bot.once("spawn", () => {
         }),
         new StateTransition({
             parent: printServerStates,
-            child: goBase,
+            //child: goBase,
+            child: idleState,
             name: '0 Starts',
             shouldTransition: () => true
         }),
@@ -112,7 +116,7 @@ bot.once("spawn", () => {
 
     ];
 
-    bot.on('death', function () {
+    bot.on('death', function() {
         bot.chat('Omg im dead');
         transitions[1].trigger();
     })
@@ -133,4 +137,3 @@ bot.once("spawn", () => {
     const webserver = new StateMachineWebserver(bot, stateMachine);
     webserver.startServer();
 });
-
