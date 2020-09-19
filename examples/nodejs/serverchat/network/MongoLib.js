@@ -58,6 +58,18 @@ class MongoLib {
             });
     }
 
+    createBatch(collection, data) {
+        return this.connect()
+            .then(db => {
+                return db.collection(collection).insertMany(data);
+
+            })
+            .then(result => {
+                // TDO no si el return funciona
+                return result.insertedCount
+            });
+    }
+
     update(collection, id, data) {
         return this.connect()
             .then(db => {
