@@ -14,7 +14,7 @@ const bot = mineflayer.createBot({
 })
 
 
-const map = require('./modules/map')(bot)
+// const map = require('./modules/viewer')(bot, 5000)
 
 bot.on('kicked', (reason, loggedIn) => {
     reasonDecoded = JSON.parse(reason)
@@ -23,9 +23,23 @@ bot.on('kicked', (reason, loggedIn) => {
 
 bot.on('error', err => console.log(err))
 
+const mineflayerViewer = require('prismarine-viewer').mineflayer
+
 bot.once("spawn", () => {
     bot.chat('Im in!')
     inventoryViewer(bot)
+
+    mineflayerViewer(bot, { port: 4001 })
+    const path = [bot.entity.position.clone()]
+    console.log("port", port)
+    bot.on('move', () => {
+        if (path[path.length - 1].distanceTo(bot.entity.position) > 1) {
+            path.push(bot.entity.position.clone())
+            bot.viewer.drawLine('path', path)
+        }
+    })
+
+
 })
 
 bot.loadPlugin(require('mineflayer-pathfinder').pathfinder);
