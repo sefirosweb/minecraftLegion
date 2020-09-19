@@ -11,12 +11,14 @@ function init() {
     })
 
     socket.on('drawline', data => {
+        console.log(data);
+        context.clearRect(0, 0, widht, height);
         context.beginPath();
         //context.linewidht = 2;
         //context.moveTo(data.x, data.y)
         //context.lineTo(data.pre_x, data.pre_y);
-        context.fillStyle = "#FFFFFF";
-        context.fillRect(20, 20, 40, 40);
+        context.fillStyle = "red";
+        context.fillRect(data.x_from, data.y_from, data.x_to, data.y_to);
         context.stroke();
     });
 

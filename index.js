@@ -7,13 +7,14 @@ console.log("Bot: " + USERNAME + " Conecting to:" + SERVER)
 const mineflayer = require("mineflayer");
 const inventoryViewer = require('mineflayer-web-inventory')
 
-const websocket = require('./web');
-
 const bot = mineflayer.createBot({
     username: USERNAME,
     host: SERVER,
     port: PORT
 })
+
+
+const map = require('./modules/map')(bot)
 
 bot.on('kicked', (reason, loggedIn) => {
     reasonDecoded = JSON.parse(reason)
@@ -25,7 +26,6 @@ bot.on('error', err => console.log(err))
 bot.once("spawn", () => {
     bot.chat('Im in!')
     inventoryViewer(bot)
-    websocket.socket.io.emit('mensaje', "Bot spawned: " + bot.username);
 })
 
 bot.loadPlugin(require('mineflayer-pathfinder').pathfinder);
