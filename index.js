@@ -18,12 +18,16 @@ const baseFunction = require('./NestedStateModules/baseFunction');
 const { start } = require('repl');
 
 const botsToStart = [
-    { username: "Guard1" },
-    { username: "Guard2" },
-    { username: "Archer1" },
-    { username: "Archer2" },
-    { username: "Archer3" },
-    { username: "Archer4" },
+    { username: "Guard1", portBotStateMachine: null, portPrismarineViewer: null, portInventory: null },
+    /*
+    { username: "Guard2", portBotStateMachine: null, portPrismarineViewer: null, portInventory: null },
+    { username: "Guard3", portBotStateMachine: null, portPrismarineViewer: null, portInventory: null },
+    { username: "Archer1", portBotStateMachine: null, portPrismarineViewer: null, portInventory: null },
+    { username: "Archer2", portBotStateMachine: null, portPrismarineViewer: null, portInventory: null },
+    { username: "Archer3", portBotStateMachine: null, portPrismarineViewer: null, portInventory: null },
+    { username: "Archer4", portBotStateMachine: null, portPrismarineViewer: null, portInventory: null },
+    */
+
 ];
 
 let i = 0;
@@ -32,9 +36,9 @@ let totalBots = botsToStart.length;
 function startBots() {
     botToStart = botsToStart[i];
     i++;
-    if (i < totalBots) {
+    if (i <= totalBots) {
         setTimeout(() => {
-            createNewBot(botToStart.username)
+            createNewBot(botToStart.username, botToStart.portBotStateMachine, botToStart.portPrismarineViewer, botToStart.portInventory)
             startBots()
         }, 500)
     }
@@ -61,7 +65,7 @@ function createNewBot(botName, portBotStateMachine = null, portPrismarineViewer 
 
     bot.once("spawn", () => {
         bot.chat('Im in!')
-        if (portInventory !== portInventory) {
+        if (portInventory !== null) {
             inventoryViewer(bot, { port: portInventory })
         }
         if (portPrismarineViewer !== null) {
@@ -110,9 +114,7 @@ function createNewBot(botName, portBotStateMachine = null, portPrismarineViewer 
                 child: idleState,
                 name: '11 Near base',
                 shouldTransition: () => goBase.distanceToTarget() < 2,
-                onTransition: () => {
-                    bot.chat("Im are on base!")
-                },
+                onTransition: () => bot.chat("Im are on base!"),
             }),
             new StateTransition({
                 parent: idleState,
@@ -151,16 +153,17 @@ function createNewBot(botName, portBotStateMachine = null, portPrismarineViewer 
         });
 
         bot.on("chat", (username, message) => {
-            if (message === "hi " + bot.username) {
+            if (message === "hi " + bot.username || message === "hi all") {
                 transitions[0].trigger();
+                baseCommands.targets = username;
             }
         });
 
-        const root = new NestedStateMachine(transitions, goBase);
+        const root = new NestedStateMachine(transitions, idleState);
         root.name = "main";
         const stateMachine = new BotStateMachine(bot, root);
         if (portBotStateMachine !== null) {
-            const webserver = new StateMachinefserver(bot, stateMachine, portBotStateMachine);
+            const webserver = new StateMachineWebserver(bot, stateMachine, portBotStateMachine);
             webserver.startServer();
         }
     });

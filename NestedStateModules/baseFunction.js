@@ -9,7 +9,7 @@ const {
 } = require("mineflayer-statemachine");
 
 
-let baseFunction = (function (bot) {
+let baseFunction = (function(bot) {
     targets = {}
     const enter = new BehaviorIdle();
     const exit = new BehaviorIdle();
@@ -27,6 +27,7 @@ let baseFunction = (function (bot) {
             child: getClosestPlayer,
             name: 'enter -> getClosestPlayer',
             shouldTransition: () => true,
+            onTransition: () => console.log(enter),
         }),
         new StateTransition({ // 1
             parent: getClosestPlayer,
