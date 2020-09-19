@@ -1,4 +1,5 @@
 const store = require('./store');
+const socket = require('../../socket').socket;
 
 function addMessage(user, message) {
     return new Promise((resolve, reject) => {
@@ -15,6 +16,9 @@ function addMessage(user, message) {
         }
 
         const id = store.add(data);
+
+        socket.io.emit('mensaje', data)
+
         resolve(id);
     });
 }

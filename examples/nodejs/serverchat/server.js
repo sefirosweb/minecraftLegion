@@ -12,6 +12,13 @@ app.use('/app', express.static('public'))
 socket.connect(server);
 router(app);
 
+/*
+const websocket = socket.socket;
+setInterval(function () {
+    websocket.io.emit('mensaje', 'Hola, a dasdasdas')
+}, 3000);
+*/
+
 server.listen(4000, function () {
     console.log('Public /APP Iniciado')
 });
