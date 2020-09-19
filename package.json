@@ -9,6 +9,8 @@
   "dependencies": {
     "dotenv": "^8.2.0",
     "mineflayer": "^2.28.1",
+    "mineflayer-pathfinder": "^1.0.10",
+    "mineflayer-statemachine": "^1.5.1",
     "prismarine-viewer": "^1.4.0"
   },
   "devDependencies": {},
