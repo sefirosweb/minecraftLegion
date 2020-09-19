@@ -1,18 +1,15 @@
 require('dotenv').config()
-const USERNAME = process.env.USER
-const SERVER = process.env.SERVER
-const PORT = process.env.PORT
+const config = require('./config')
 
-console.log("Bot: " + USERNAME + " Conecting to:" + SERVER)
+console.log("Bot: " + config.username + " Conecting to:" + config.server)
 const mineflayer = require("mineflayer");
 const inventoryViewer = require('mineflayer-web-inventory')
 
 const bot = mineflayer.createBot({
-    username: USERNAME,
-    host: SERVER,
-    port: PORT
+    username: config.username,
+    host: config.server,
+    port: config.port
 })
-
 
 // const map = require('./modules/viewer')(bot, 5000)
 
@@ -30,19 +27,19 @@ bot.once("spawn", () => {
     inventoryViewer(bot)
 
     /*
-    mineflayerViewer(bot, { port: 4001 })
-    const path = [bot.entity.position.clone()]
-    console.log("port", port)
-    bot.on('move', () => {
-        if (path[path.length - 1].distanceTo(bot.entity.position) > 1) {
-            path.push(bot.entity.position.clone())
-            bot.viewer.drawLine('path', path)
-        }
-    })
+        mineflayerViewer(bot, { port: 4001 })
+        const path = [bot.entity.position.clone()]
+        console.log("port", port)
+        bot.on('move', () => {
+            if (path[path.length - 1].distanceTo(bot.entity.position) > 1) {
+                path.push(bot.entity.position.clone())
+                bot.viewer.drawLine('path', path)
+            }
+        })
     */
 
-
 })
+
 
 bot.loadPlugin(require('mineflayer-pathfinder').pathfinder);
 
