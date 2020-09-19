@@ -12,17 +12,16 @@ function init() {
 
     socket.on('drawline', data => {
         context.beginPath();
-        context.lineWith = 2;
-        context.moveTo(data.x, data.y)
-        context.lineTo(data.pre_x, data.pre_y);
+        //context.linewidht = 2;
+        //context.moveTo(data.x, data.y)
+        //context.lineTo(data.pre_x, data.pre_y);
+        context.fillStyle = "#FFFFFF";
+        context.fillRect(20, 20, 40, 40);
         context.stroke();
     });
 
-    const widht = "400";
-    const height = "400";
-
-    canvas.widht = widht;
-    canvas.height = height;
+    const widht = canvas.clientHeight;
+    const height = canvas.clientWidth;
 }
 
 
