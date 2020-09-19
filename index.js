@@ -3,7 +3,7 @@ const config = require('./config')
 
 console.log("Bot: " + config.username + " Conecting to:" + config.server)
 const mineflayer = require("mineflayer");
-const inventoryViewer = require('mineflayer-web-inventory')
+
 
 const bot = mineflayer.createBot({
     username: config.username,
@@ -11,7 +11,7 @@ const bot = mineflayer.createBot({
     port: config.port
 })
 
-// const map = require('./modules/viewer')(bot, 5000)
+
 
 bot.on('kicked', (reason, loggedIn) => {
     reasonDecoded = JSON.parse(reason)
@@ -20,11 +20,15 @@ bot.on('kicked', (reason, loggedIn) => {
 
 bot.on('error', err => console.log(err))
 
-const mineflayerViewer = require('prismarine-viewer').mineflayer
+const inventoryViewer = require('mineflayer-web-inventory')
+const prismarineViewer = require('./modules/viewer')
 
 bot.once("spawn", () => {
     bot.chat('Im in!')
     inventoryViewer(bot)
+    prismarineViewer.start(bot);
+    // map.start(bot, 5000)
+    /*
     mineflayerViewer(bot, { port: 4000 })
     const path = [bot.entity.position.clone()]
     bot.on('move', () => {
@@ -33,6 +37,7 @@ bot.once("spawn", () => {
             bot.viewer.drawLine('path', path)
         }
     })
+    */
 
 })
 
