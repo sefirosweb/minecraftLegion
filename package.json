@@ -7,6 +7,7 @@
     "example": "examples"
   },
   "dependencies": {
+    "dotenv": "^8.2.0",
     "mineflayer": "^2.28.1",
     "prismarine-viewer": "^1.4.0"
   },
