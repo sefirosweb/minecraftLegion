@@ -11,22 +11,30 @@ const {
     BehaviorPrintServerStats,
     NestedStateMachine,
     BehaviorMoveTo
+
+    ,
+    BehaviorFollowEntity,
+    BehaviorGetClosestEntity,
+    EntityFilters,
+    BehaviorLookAtEntity
 } = require("mineflayer-statemachine");
 const BehaviorIsNight = require("./BehaviorModules/BehaviorIsNight");
+const BehaviorGetPlayer = require("./BehaviorModules/BehaviorGetPlayer");
+
 const goSleepFunction = require('./NestedStateModules/goSleepFunction');
-const baseFunction = require('./NestedStateModules/baseFunction');
-const { start } = require('repl');
+// const baseFunction = require('./NestedStateModules/baseFunction');
+
+// const { start } = require('repl');
 
 const botsToStart = [
-    { username: "Guard1", portBotStateMachine: null, portPrismarineViewer: null, portInventory: null },
-    /*
+    { username: "Guard1", portBotStateMachine: 4000, portPrismarineViewer: null, portInventory: null },
     { username: "Guard2", portBotStateMachine: null, portPrismarineViewer: null, portInventory: null },
-    { username: "Guard3", portBotStateMachine: null, portPrismarineViewer: null, portInventory: null },
-    { username: "Archer1", portBotStateMachine: null, portPrismarineViewer: null, portInventory: null },
-    { username: "Archer2", portBotStateMachine: null, portPrismarineViewer: null, portInventory: null },
-    { username: "Archer3", portBotStateMachine: null, portPrismarineViewer: null, portInventory: null },
-    { username: "Archer4", portBotStateMachine: null, portPrismarineViewer: null, portInventory: null },
-    */
+    // { username: "Guard3", portBotStateMachine: null, portPrismarineViewer: null, portInventory: null },
+    // { username: "Archer1", portBotStateMachine: null, portPrismarineViewer: null, portInventory: null },
+    // { username: "Archer2", portBotStateMachine: null, portPrismarineViewer: null, portInventory: null },
+    // { username: "Archer3", portBotStateMachine: null, portPrismarineViewer: null, portInventory: null },
+    // { username: "Archer4", portBotStateMachine: null, portPrismarineViewer: null, portInventory: null },
+
 
 ];
 
@@ -40,11 +48,13 @@ function startBots() {
         setTimeout(() => {
             createNewBot(botToStart.username, botToStart.portBotStateMachine, botToStart.portPrismarineViewer, botToStart.portInventory)
             startBots()
-        }, 500)
+        }, 150)
     }
 };
 startBots();
 
+let targets = {};
+let playerName = {};
 
 
 function createNewBot(botName, portBotStateMachine = null, portPrismarineViewer = null, portInventory = null) {
@@ -74,7 +84,6 @@ function createNewBot(botName, portBotStateMachine = null, portPrismarineViewer 
     })
 
     bot.once("spawn", () => {
-        const targets = {};
         const base = { position: { x: -81, y: 68, z: 96 } };
 
         const goBase = new BehaviorMoveTo(bot, base);
@@ -154,8 +163,8 @@ function createNewBot(botName, portBotStateMachine = null, portPrismarineViewer 
 
         bot.on("chat", (username, message) => {
             if (message === "hi " + bot.username || message === "hi all") {
+                playerName = username;
                 transitions[0].trigger();
-                baseCommands.targets = username;
             }
         });
 
@@ -168,4 +177,100 @@ function createNewBot(botName, portBotStateMachine = null, portPrismarineViewer 
         }
     });
 
+}
+
+
+function baseFunction(bot) {
+    const enter = new BehaviorIdle();
+    const exit = new BehaviorIdle();
+    const idleState = new BehaviorIdle();
+
+    // const targets = {}
+
+    const followPlayer = new BehaviorFollowEntity(bot, targets);
+    const getClosestPlayer = new BehaviorGetClosestEntity(bot, targets, EntityFilters().AllEntities);
+    const lookAtFollowTarget = new BehaviorLookAtEntity(bot, targets);
+    const lookAtPlayersState = new BehaviorLookAtEntity(bot, targets);
+
+    const playerEntity = new BehaviorGetPlayer(bot, targets)
+
+    const transitions = [
+        new StateTransition({ // 0
+            parent: enter,
+            child: playerEntity,
+            name: 'enter -> playerEntity',
+            shouldTransition: () => true,
+            onTransition: () => playerEntity.getPlayerEntity(playerName),
+        }),
+        new StateTransition({ // 1
+            parent: playerEntity,
+            child: lookAtPlayersState,
+            name: 'playerEntity -> lookAtPlayersState',
+            onTransition: () => {
+                lookAtPlayersState.targets = playerEntity.targets
+                bot.chat("Hello " + playerEntity.targets.entity.username + "!");
+            },
+            shouldTransition: () => true,
+        }),
+        new StateTransition({ // 2
+            parent: lookAtPlayersState,
+            name: 'Player say: bye',
+            child: exit,
+            shouldTransition: () => false,
+        }),
+        new StateTransition({ // 3
+            parent: lookAtPlayersState,
+            child: followPlayer,
+            name: 'Player say: come',
+            onTransition: () => {
+                followPlayer.targets = lookAtPlayersState.targets
+                bot.chat("Hello sr!");
+            },
+            shouldTransition: () => false,
+        }),
+        new StateTransition({ // 4
+            parent: followPlayer,
+            child: lookAtFollowTarget,
+            name: 'The player is too far',
+            shouldTransition: () => followPlayer.distanceToTarget() < 2,
+            onTransition: () => lookAtFollowTarget.targets = followPlayer.targets,
+        }),
+        new StateTransition({ // 5
+            parent: lookAtFollowTarget,
+            child: followPlayer,
+            name: 'The player is too close',
+            shouldTransition: () => lookAtFollowTarget.distanceToTarget() >= 2,
+            onTransition: () => followPlayer.targets = lookAtFollowTarget.targets,
+        }),
+        new StateTransition({ // 6
+            parent: lookAtFollowTarget,
+            child: exit,
+            name: 'Player say: bye',
+        }),
+        new StateTransition({ // 7
+            parent: followPlayer,
+            child: exit,
+            name: 'Player say: bye',
+        }),
+    ];
+
+
+    bot.on("chat", (username, message) => {
+        switch (true) {
+            case (message === "bye"):
+                bot.chat("Bye Master!");
+                transitions[2].trigger();
+                transitions[6].trigger();
+                transitions[7].trigger();
+                break;
+            case (message === "come"):
+                transitions[3].trigger();
+                break;
+        }
+    });
+
+
+    const baseFunction = new NestedStateMachine(transitions, enter, exit);
+    baseFunction.stateName = 'baseFunction'
+    return baseFunction;
 }
