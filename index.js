@@ -224,7 +224,7 @@ function baseFunction(bot) {
             name: 'Player say: come',
             onTransition: () => {
                 followPlayer.targets = lookAtPlayersState.targets
-                bot.chat("Hello sr!");
+                bot.chat("Yes sr!");
             },
             shouldTransition: () => false,
         }),
