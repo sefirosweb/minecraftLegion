@@ -29,11 +29,11 @@ const goSleepFunction = require('./NestedStateModules/goSleepFunction');
 const botsToStart = [
     { username: "Guard1", portBotStateMachine: 4000, portPrismarineViewer: null, portInventory: null },
     { username: "Guard2", portBotStateMachine: null, portPrismarineViewer: null, portInventory: null },
-    // { username: "Guard3", portBotStateMachine: null, portPrismarineViewer: null, portInventory: null },
-    // { username: "Archer1", portBotStateMachine: null, portPrismarineViewer: null, portInventory: null },
-    // { username: "Archer2", portBotStateMachine: null, portPrismarineViewer: null, portInventory: null },
-    // { username: "Archer3", portBotStateMachine: null, portPrismarineViewer: null, portInventory: null },
-    // { username: "Archer4", portBotStateMachine: null, portPrismarineViewer: null, portInventory: null },
+    { username: "Guard3", portBotStateMachine: null, portPrismarineViewer: null, portInventory: null },
+    { username: "Archer1", portBotStateMachine: null, portPrismarineViewer: null, portInventory: null },
+    { username: "Archer2", portBotStateMachine: null, portPrismarineViewer: null, portInventory: null },
+    { username: "Archer3", portBotStateMachine: null, portPrismarineViewer: null, portInventory: null },
+    { username: "Archer4", portBotStateMachine: null, portPrismarineViewer: null, portInventory: null },
 
 
 ];
@@ -46,14 +46,13 @@ function startBots() {
     i++;
     if (i <= totalBots) {
         setTimeout(() => {
-            createNewBot(botToStart.username, botToStart.portBotStateMachine, botToStart.portPrismarineViewer, botToStart.portInventory)
+            createNewBot(botToStart.username, botToStart.pwortBotStateMachine, botToStart.portPrismarineViewer, botToStart.portInventory)
             startBots()
-        }, 150)
+        }, 500)
     }
 };
 startBots();
 
-let targets = {};
 let playerName = {};
 
 
@@ -84,6 +83,8 @@ function createNewBot(botName, portBotStateMachine = null, portPrismarineViewer 
     })
 
     bot.once("spawn", () => {
+        const targets = {};
+
         const base = { position: { x: -81, y: 68, z: 96 } };
 
         const goBase = new BehaviorMoveTo(bot, base);
@@ -101,7 +102,7 @@ function createNewBot(botName, portBotStateMachine = null, portPrismarineViewer 
             }),
             new StateTransition({ // 1
                 parent: baseCommands,
-                child: printServerStates,
+                child: idleState,
                 shouldTransition: () => false,
                 name: "Restart when players die",
             }),
@@ -181,11 +182,10 @@ function createNewBot(botName, portBotStateMachine = null, portPrismarineViewer 
 
 
 function baseFunction(bot) {
+    const targets = {};
     const enter = new BehaviorIdle();
     const exit = new BehaviorIdle();
     const idleState = new BehaviorIdle();
-
-    // const targets = {}
 
     const followPlayer = new BehaviorFollowEntity(bot, targets);
     const getClosestPlayer = new BehaviorGetClosestEntity(bot, targets, EntityFilters().AllEntities);
