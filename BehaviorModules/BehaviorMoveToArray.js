@@ -1,6 +1,6 @@
 const mineflayer_pathfinder_1 = require("mineflayer-pathfinder");
 
-const BehaviorMoveToArray = (function () {
+const BehaviorMoveToArray = (function() {
     function BehaviorMoveToArray(bot, patrol) {
         this.bot = bot;
         this.stateName = 'BehaviorMoveToArray';
@@ -26,7 +26,7 @@ const BehaviorMoveToArray = (function () {
 
     }
 
-    BehaviorMoveToArray.prototype.onStateEntered = function () {
+    BehaviorMoveToArray.prototype.onStateEntered = function() {
         this.targets = this.patrol[this.currentPosition];
         //console.log('Go to:', this.patrol[this.currentPosition]);
         this.currentPosition++;
@@ -42,27 +42,27 @@ const BehaviorMoveToArray = (function () {
         this.startMoving();
     };
 
-    BehaviorMoveToArray.prototype.onStateExited = function () {
+    BehaviorMoveToArray.prototype.onStateExited = function() {
         this.stopMoving();
     };
 
-    BehaviorMoveToArray.prototype.getEndPatrol = function () {
+    BehaviorMoveToArray.prototype.getEndPatrol = function() {
         return this.endPatrol;
     };
 
-    BehaviorMoveToArray.prototype.setMoveTarget = function (position) {
+    BehaviorMoveToArray.prototype.setMoveTarget = function(position) {
         if (this.targets.position == position)
             return;
         this.targets.position = position;
         this.restart();
     };
 
-    BehaviorMoveToArray.prototype.stopMoving = function () {
+    BehaviorMoveToArray.prototype.stopMoving = function() {
         const pathfinder = this.bot.pathfinder;
         pathfinder.setGoal(null);
     };
 
-    BehaviorMoveToArray.prototype.startMoving = function () {
+    BehaviorMoveToArray.prototype.startMoving = function() {
         const position = this.targets.position;
         if (!position) {
             console.log("[MoveTo] Target not defined. Skipping.");
@@ -81,20 +81,20 @@ const BehaviorMoveToArray = (function () {
         pathfinder.setGoal(goal);
     };
 
-    BehaviorMoveToArray.prototype.restart = function () {
+    BehaviorMoveToArray.prototype.restart = function() {
         if (!this.active)
             return;
         this.stopMoving();
         this.startMoving();
     };
 
-    BehaviorMoveToArray.prototype.isFinished = function () {
+    BehaviorMoveToArray.prototype.isFinished = function() {
         const pathfinder = this.bot.pathfinder;
         return !pathfinder.isMoving();
     };
 
 
-    BehaviorMoveToArray.prototype.distanceToTarget = function () {
+    BehaviorMoveToArray.prototype.distanceToTarget = function() {
         let position = this.targets.position;
         if (!position)
             return 0;

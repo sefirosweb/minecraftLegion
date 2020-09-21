@@ -8,18 +8,12 @@ const {
     BotStateMachine,
     StateMachineWebserver,
     BehaviorIdle,
-    BehaviorPrintServerStats,
     NestedStateMachine,
-    BehaviorMoveTo
-
-    ,
-    BehaviorFollowEntity,
-    BehaviorGetClosestEntity,
-    EntityFilters,
-    BehaviorLookAtEntity
+    BehaviorMoveTo,
 } = require("mineflayer-statemachine");
 const BehaviorIsNight = require("./BehaviorModules/BehaviorIsNight");
 const BehaviorGetPlayer = require("./BehaviorModules/BehaviorGetPlayer");
+const BehaviorMoveToArray = require("./BehaviorModules/BehaviorMoveToArray");
 
 const goSleepFunction = require('./NestedStateModules/goSleepFunction');
 const baseFunction = require('./NestedStateModules/baseFunction');
@@ -28,14 +22,13 @@ const baseFunction = require('./NestedStateModules/baseFunction');
 
 const botsToStart = [
     { username: "Guard1", portBotStateMachine: 4000, portPrismarineViewer: null, portInventory: null },
-    { username: "Guard2", portBotStateMachine: null, portPrismarineViewer: null, portInventory: null },
-    /*
-        { username: "Guard3", portBotStateMachine: null, portPrismarineViewer: null, portInventory: null },
-        { username: "Archer1", portBotStateMachine: null, portPrismarineViewer: null, portInventory: null },
-        { username: "Archer2", portBotStateMachine: null, portPrismarineViewer: null, portInventory: null },
-        { username: "Archer3", portBotStateMachine: null, portPrismarineViewer: null, portInventory: null },
-        { username: "Archer4", portBotStateMachine: null, portPrismarineViewer: null, portInventory: null },
-        */
+    // { username: "Guard2", portBotStateMachine: null, portPrismarineViewer: null, portInventory: null },
+    // { username: "Guard3", portBotStateMachine: null, portPrismarineViewer: null, portInventory: null },
+    // { username: "Archer1", portBotStateMachine: null, portPrismarineViewer: null, portInventory: null },
+    // { username: "Archer2", portBotStateMachine: null, portPrismarineViewer: null, portInventory: null },
+    // { username: "Archer3", portBotStateMachine: null, portPrismarineViewer: null, portInventory: null },
+    // { username: "Archer4", portBotStateMachine: null, portPrismarineViewer: null, portInventory: null },
+
 
 
 ];
@@ -91,24 +84,62 @@ function createNewBot(botName, portBotStateMachine = null, portPrismarineViewer 
         const baseCommands = baseFunction(bot, targets)
         const playerEntity = new BehaviorGetPlayer(bot, targets)
 
+        let moveToArray = [];
+        let nextStep = {
+            position: {
+                x: 150,
+                y: 4,
+                z: -200
+            }
+        }
+        moveToArray.push(nextStep);
+        nextStep = {
+            position: {
+                x: 170,
+                y: 4,
+                z: -200
+            }
+        }
+        moveToArray.push(nextStep);
+        nextStep = {
+            position: {
+                x: 170,
+                y: 4,
+                z: -220
+            }
+        }
+        moveToArray.push(nextStep);
+        nextStep = {
+            position: {
+                x: 150,
+                y: 4,
+                z: -220
+            }
+        }
+        moveToArray.push(nextStep);
+
+
+        const patrol = new BehaviorMoveToArray(bot, moveToArray);
+
         const transitions = [
             new StateTransition({ // Trigger -> 0
                 parent: idleState,
                 child: playerEntity,
-                shouldTransition: () => playerEntity.playerFound(),
                 name: 'Chat listener',
+                shouldTransition: () => playerEntity.playerFound(),
+                onTransition: () => playerEntity.playerIsFound = false,
             }),
             new StateTransition({
                 parent: playerEntity,
                 child: baseCommands,
-                shouldTransition: () => true,
                 name: 'Transfer to sub nestered commands',
+                shouldTransition: () => true,
             }),
             new StateTransition({
                 parent: baseCommands,
                 child: idleState,
-                shouldTransition: () => false,
                 name: "Restart when players die",
+                shouldTransition: () => false,
             }),
             new StateTransition({
                 parent: baseCommands,
@@ -127,8 +158,8 @@ function createNewBot(botName, portBotStateMachine = null, portPrismarineViewer 
             new StateTransition({
                 parent: idleState,
                 child: isNight,
-                shouldTransition: () => isNight.getIsNight() && isNight.getBed() !== false,
                 name: "idleState -> isNight",
+                shouldTransition: () => isNight.getIsNight() && isNight.getBed() !== false,
                 onTransition: () => {
                     goSleep.targets = isNight.bed;
                 },
@@ -147,6 +178,27 @@ function createNewBot(botName, portBotStateMachine = null, portPrismarineViewer 
                 child: idleState,
                 shouldTransition: () => goSleep.isFinished(),
                 name: "goSleep -> idleState",
+            }),
+
+            new StateTransition({
+                parent: idleState,
+                child: patrol,
+                name: "idleState -> patrol",
+                shouldTransition: () => true,
+            }),
+
+            new StateTransition({
+                parent: patrol,
+                child: patrol,
+                name: "patrol bucle",
+                shouldTransition: () => patrol.distanceToTarget() <= 2 && patrol.endPatrol == false,
+            }),
+
+            new StateTransition({
+                parent: patrol,
+                child: idleState,
+                shouldTransition: () => patrol.getEndPatrol(),
+                name: "patrol -> idleState",
             }),
 
         ];
