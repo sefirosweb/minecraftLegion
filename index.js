@@ -29,11 +29,13 @@ const goSleepFunction = require('./NestedStateModules/goSleepFunction');
 const botsToStart = [
     { username: "Guard1", portBotStateMachine: 4000, portPrismarineViewer: null, portInventory: null },
     { username: "Guard2", portBotStateMachine: null, portPrismarineViewer: null, portInventory: null },
-    { username: "Guard3", portBotStateMachine: null, portPrismarineViewer: null, portInventory: null },
-    { username: "Archer1", portBotStateMachine: null, portPrismarineViewer: null, portInventory: null },
-    { username: "Archer2", portBotStateMachine: null, portPrismarineViewer: null, portInventory: null },
-    { username: "Archer3", portBotStateMachine: null, portPrismarineViewer: null, portInventory: null },
-    { username: "Archer4", portBotStateMachine: null, portPrismarineViewer: null, portInventory: null },
+    /*
+        { username: "Guard3", portBotStateMachine: null, portPrismarineViewer: null, portInventory: null },
+        { username: "Archer1", portBotStateMachine: null, portPrismarineViewer: null, portInventory: null },
+        { username: "Archer2", portBotStateMachine: null, portPrismarineViewer: null, portInventory: null },
+        { username: "Archer3", portBotStateMachine: null, portPrismarineViewer: null, portInventory: null },
+        { username: "Archer4", portBotStateMachine: null, portPrismarineViewer: null, portInventory: null },
+        */
 
 
 ];
@@ -46,7 +48,7 @@ function startBots() {
     i++;
     if (i <= totalBots) {
         setTimeout(() => {
-            createNewBot(botToStart.username, botToStart.pwortBotStateMachine, botToStart.portPrismarineViewer, botToStart.portInventory)
+            createNewBot(botToStart.username, botToStart.portBotStateMachine, botToStart.portPrismarineViewer, botToStart.portInventory)
             startBots()
         }, 500)
     }
@@ -182,10 +184,11 @@ function createNewBot(botName, portBotStateMachine = null, portPrismarineViewer 
 
 
 function baseFunction(bot) {
+
     const targets = {};
     const enter = new BehaviorIdle();
+
     const exit = new BehaviorIdle();
-    const idleState = new BehaviorIdle();
 
     const followPlayer = new BehaviorFollowEntity(bot, targets);
     const getClosestPlayer = new BehaviorGetClosestEntity(bot, targets, EntityFilters().AllEntities);

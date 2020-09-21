@@ -2,9 +2,13 @@ const BehaviorGetPlayer = (function() {
     function BehaviorGetPlayer(bot, targets) {
         this.bot = bot;
         this.targets = targets;
-        this.stateName = 'goToBed';
+        this.stateName = 'BehaviorGetPlayer';
     }
-    // BehaviorGetPlayer.prototype.onStateEntered = function() {}
+    BehaviorGetPlayer.prototype.onStateEntered = function(playerName) {
+        /*this.targets = {
+            entity: this.checkPlayer(this.playerName) || undefined
+        }*/
+    }
     BehaviorGetPlayer.prototype.getPlayerEntity = function(playerName) {
         this.targets = {
             entity: this.checkPlayer(playerName) || undefined
