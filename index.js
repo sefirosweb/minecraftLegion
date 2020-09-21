@@ -90,19 +90,26 @@ function createNewBot(botName, portBotStateMachine = null, portPrismarineViewer 
         const base = { position: { x: -81, y: 68, z: 96 } };
 
         const goBase = new BehaviorMoveTo(bot, base);
-        const isNight = new BehaviorIsNight(bot);
-        const printServerStates = new BehaviorPrintServerStats(bot);
-        const idleState = new BehaviorIdle();
-        const goSleep = goSleepFunction(bot)
-        const baseCommands = baseFunction(bot)
+        const isNight = new BehaviorIsNight(bot, targets);
+        const idleState = new BehaviorIdle(targets);
+        const goSleep = goSleepFunction(bot, targets)
+        const baseCommands = baseFunction(bot, targets)
+        const playerEntity = new BehaviorGetPlayer(bot, targets)
 
         const transitions = [
-            new StateTransition({ // 0
+            new StateTransition({ // Trigger -> 0
                 parent: idleState,
-                child: baseCommands,
+                child: playerEntity,
+                shouldTransition: () => playerEntity.playerFound(),
                 name: 'Chat listener',
             }),
-            new StateTransition({ // 1
+            new StateTransition({
+                parent: playerEntity,
+                child: baseCommands,
+                shouldTransition: () => true,
+                name: 'Transfer to sub nestered commands',
+            }),
+            new StateTransition({
                 parent: baseCommands,
                 child: idleState,
                 shouldTransition: () => false,
@@ -113,13 +120,7 @@ function createNewBot(botName, portBotStateMachine = null, portPrismarineViewer 
                 child: idleState,
                 name: 'Finish Command',
                 shouldTransition: () => baseCommands.isFinished(),
-            }),
-            new StateTransition({
-                parent: printServerStates,
-                child: goBase,
-                //child: idleState,
-                name: '0 Starts',
-                shouldTransition: () => true
+                onTransition: () => playerEntity.playerIsFound = false,
             }),
             new StateTransition({
                 parent: goBase,
@@ -157,7 +158,7 @@ function createNewBot(botName, portBotStateMachine = null, portPrismarineViewer 
 
         bot.on('death', function() {
             bot.chat('Omg im dead');
-            transitions[1].trigger();
+            transitions[3].trigger();
         })
 
         bot.on('time', () => {
@@ -166,7 +167,7 @@ function createNewBot(botName, portBotStateMachine = null, portPrismarineViewer 
 
         bot.on("chat", (username, message) => {
             if (message === "hi " + bot.username || message === "hi all") {
-                playerName = username;
+                playerEntity.getPlayerEntity(username);
                 transitions[0].trigger();
             }
         });
@@ -183,95 +184,70 @@ function createNewBot(botName, portBotStateMachine = null, portPrismarineViewer 
 }
 
 
-function baseFunction(bot) {
+function baseFunction(bot, targets) {
 
-    const targets = {};
-    const enter = new BehaviorIdle();
-
-    const exit = new BehaviorIdle();
+    const enter = new BehaviorIdle(targets);
+    const exit = new BehaviorIdle(targets);
 
     const followPlayer = new BehaviorFollowEntity(bot, targets);
-    const getClosestPlayer = new BehaviorGetClosestEntity(bot, targets, EntityFilters().AllEntities);
     const lookAtFollowTarget = new BehaviorLookAtEntity(bot, targets);
     const lookAtPlayersState = new BehaviorLookAtEntity(bot, targets);
 
-    const playerEntity = new BehaviorGetPlayer(bot, targets)
-
     const transitions = [
-        new StateTransition({ // 0
-            parent: enter,
-            child: playerEntity,
-            name: 'enter -> playerEntity',
-            shouldTransition: () => true,
-            onTransition: () => playerEntity.getPlayerEntity(playerName),
-        }),
-        new StateTransition({ // 1
-            parent: playerEntity,
-            child: lookAtPlayersState,
-            name: 'playerEntity -> lookAtPlayersState',
-            onTransition: () => {
-                lookAtPlayersState.targets = playerEntity.targets
-                bot.chat("Hello " + playerEntity.targets.entity.username + "!");
-            },
-            shouldTransition: () => true,
-        }),
-        new StateTransition({ // 2
+        new StateTransition({
             parent: lookAtPlayersState,
-            name: 'Player say: bye',
             child: exit,
-            shouldTransition: () => false,
+            name: 'Player say: bye',
         }),
-        new StateTransition({ // 3
+        new StateTransition({
+            parent: followPlayer,
+            child: exit,
+            name: 'Player say: bye',
+        }),
+        new StateTransition({
+            parent: lookAtFollowTarget,
+            child: exit,
+            name: 'Player say: bye',
+        }),
+        new StateTransition({
             parent: lookAtPlayersState,
             child: followPlayer,
             name: 'Player say: come',
-            onTransition: () => {
-                followPlayer.targets = lookAtPlayersState.targets
-                bot.chat("Yes sr!");
-            },
-            shouldTransition: () => false,
+            onTransition: () => bot.chat("Yes sr!"),
         }),
-        new StateTransition({ // 4
+        new StateTransition({
             parent: followPlayer,
             child: lookAtFollowTarget,
             name: 'The player is too far',
             shouldTransition: () => followPlayer.distanceToTarget() < 2,
-            onTransition: () => lookAtFollowTarget.targets = followPlayer.targets,
         }),
-        new StateTransition({ // 5
+        new StateTransition({
             parent: lookAtFollowTarget,
             child: followPlayer,
             name: 'The player is too close',
             shouldTransition: () => lookAtFollowTarget.distanceToTarget() >= 2,
-            onTransition: () => followPlayer.targets = lookAtFollowTarget.targets,
         }),
-        new StateTransition({ // 6
-            parent: lookAtFollowTarget,
-            child: exit,
-            name: 'Player say: bye',
-        }),
-        new StateTransition({ // 7
-            parent: followPlayer,
-            child: exit,
-            name: 'Player say: bye',
+        new StateTransition({
+            parent: enter,
+            child: lookAtPlayersState,
+            name: 'Enter to nested',
+            shouldTransition: () => true,
         }),
     ];
-
 
     bot.on("chat", (username, message) => {
         switch (true) {
             case (message === "bye"):
                 bot.chat("Bye Master!");
+                transitions[0].trigger();
+                transitions[1].trigger();
                 transitions[2].trigger();
-                transitions[6].trigger();
-                transitions[7].trigger();
                 break;
             case (message === "come"):
                 transitions[3].trigger();
                 break;
         }
     });
-
 
     const baseFunction = new NestedStateMachine(transitions, enter, exit);
     baseFunction.stateName = 'baseFunction'
