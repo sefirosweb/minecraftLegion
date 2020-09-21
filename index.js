@@ -119,7 +119,7 @@ function createNewBot(botName, portBotStateMachine = null, portPrismarineViewer 
         moveToArray.push(nextStep);
 
 
-        const patrol = new BehaviorMoveToArray(bot, moveToArray);
+        const patrol = new BehaviorMoveToArray(bot, targets, moveToArray);
 
         const transitions = [
             new StateTransition({ // Trigger -> 0

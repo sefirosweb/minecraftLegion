@@ -1,11 +1,12 @@
 const mineflayer_pathfinder_1 = require("mineflayer-pathfinder");
 
-const BehaviorMoveToArray = (function() {
-    function BehaviorMoveToArray(bot, patrol) {
+class BehaviorMoveToArray {
+    constructor(bot, targets, patrol) {
         this.bot = bot;
+        this.targets = targets;
         this.stateName = 'BehaviorMoveToArray';
-        this.isFinished = false;
 
+        this.isFinished = false;
         this.currentPosition = 0;
         this.endPatrol = false;
         this.active = false;
@@ -26,9 +27,8 @@ const BehaviorMoveToArray = (function() {
 
     }
 
-    BehaviorMoveToArray.prototype.onStateEntered = function() {
+    onStateEntered() {
         this.targets = this.patrol[this.currentPosition];
-        //console.log('Go to:', this.patrol[this.currentPosition]);
         this.currentPosition++;
 
         if (this.currentPosition > this.patrol.length) {
@@ -40,37 +40,34 @@ const BehaviorMoveToArray = (function() {
         }
 
         this.startMoving();
-    };
+    }
 
-    BehaviorMoveToArray.prototype.onStateExited = function() {
+    onStateExited = function() {
         this.stopMoving();
     };
 
-    BehaviorMoveToArray.prototype.getEndPatrol = function() {
+    getEndPatrol = function() {
         return this.endPatrol;
     };
 
-    BehaviorMoveToArray.prototype.setMoveTarget = function(position) {
+    setMoveTarget = function(position) {
         if (this.targets.position == position)
             return;
         this.targets.position = position;
         this.restart();
     };
 
-    BehaviorMoveToArray.prototype.stopMoving = function() {
+    stopMoving = function() {
         const pathfinder = this.bot.pathfinder;
         pathfinder.setGoal(null);
     };
 
-    BehaviorMoveToArray.prototype.startMoving = function() {
+    startMoving = function() {
         const position = this.targets.position;
         if (!position) {
             console.log("[MoveTo] Target not defined. Skipping.");
             return;
         }
-
-        // console.log("[MoveTo] Moving from " + this.bot.entity.position + " to " + position);
-
         const pathfinder = this.bot.pathfinder;
         let goal;
         if (this.distance === 0)
@@ -81,30 +78,25 @@ const BehaviorMoveToArray = (function() {
         pathfinder.setGoal(goal);
     };
 
-    BehaviorMoveToArray.prototype.restart = function() {
+    restart = function() {
         if (!this.active)
             return;
         this.stopMoving();
         this.startMoving();
     };
 
-    BehaviorMoveToArray.prototype.isFinished = function() {
+    isFinished = function() {
         const pathfinder = this.bot.pathfinder;
         return !pathfinder.isMoving();
     };
 
-
-    BehaviorMoveToArray.prototype.distanceToTarget = function() {
+    distanceToTarget = function() {
         let position = this.targets.position;
         if (!position)
             return 0;
         let distance = this.bot.entity.position.distanceTo(position);
-        // console.log(distance)
         return distance;
     };
 
-
-    return BehaviorMoveToArray;
-}());
-
+}
 module.exports = BehaviorMoveToArray
