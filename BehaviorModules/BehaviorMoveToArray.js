@@ -20,25 +20,9 @@ class BehaviorMoveToArray {
             if (r.status === 'noPath')
                 console.log("[MoveTo] No path to target!");
         });
-
-        bot.on('goal_reached', () => {
-            console.log("[MoveTo] Target reached.");
-        });
-
     }
 
     onStateEntered() {
-        this.targets = this.patrol[this.currentPosition];
-        this.currentPosition++;
-
-        if (this.currentPosition > this.patrol.length) {
-            this.currentPosition = 0;
-            this.endPatrol = true
-            this.targets = this.patrol[this.currentPosition];
-        } else {
-            this.endPatrol = false
-        }
-
         this.startMoving();
     }
 
@@ -47,7 +31,17 @@ class BehaviorMoveToArray {
     };
 
     getEndPatrol = function() {
-        return this.endPatrol;
+        console.log(this.distanceToTarget(), this.endPatrol);
+        if (this.distanceToTarget() <= 2 && this.endPatrol == false) {
+            this.startMoving();
+            return false;
+        }
+
+        if (this.endPatrol) {
+            return true;
+        }
+
+        return false;
     };
 
     setMoveTarget = function(position) {
@@ -63,6 +57,18 @@ class BehaviorMoveToArray {
     };
 
     startMoving = function() {
+        this.targets = this.patrol[this.currentPosition];
+        console.log("Next point", this.target)
+        this.currentPosition++;
+
+        if (this.currentPosition > this.patrol.length) {
+            this.currentPosition = 0;
+            this.endPatrol = true
+            this.targets = this.patrol[this.currentPosition];
+        } else {
+            this.endPatrol = false
+        }
+
         const position = this.targets.position;
         if (!position) {
             console.log("[MoveTo] Target not defined. Skipping.");
@@ -99,4 +105,5 @@ class BehaviorMoveToArray {
     };
 
 }
+module.exports = BehaviorMoveToArray
 module.exports = BehaviorMoveToArray

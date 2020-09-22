@@ -189,16 +189,12 @@ function createNewBot(botName, portBotStateMachine = null, portPrismarineViewer 
 
             new StateTransition({
                 parent: patrol,
-                child: patrol,
-                name: "patrol bucle",
-                shouldTransition: () => patrol.distanceToTarget() <= 2 && patrol.endPatrol == false,
-            }),
-
-            new StateTransition({
-                parent: patrol,
                 child: idleState,
                 shouldTransition: () => patrol.getEndPatrol(),
                 name: "patrol -> idleState",
+                onTransition: () => {
+                    bot.chat('Finished patrol');
+                },
             }),
 
         ];
