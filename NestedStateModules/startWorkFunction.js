@@ -6,8 +6,11 @@ const {
     NestedStateMachine,
     BehaviorGetClosestEntity,
     EntityFilters,
+
 } = require("mineflayer-statemachine");
 const BehaviorAttack = require("./../BehaviorModules/BehaviorAttack");
+
+//const prismarineEntity = require('prismarine-entity')
 
 
 
@@ -15,16 +18,16 @@ const BehaviorAttack = require("./../BehaviorModules/BehaviorAttack");
 function startWorkFunction(bot, targets) {
 
     function distanceFilter(entity) {
-        console.log(entity);
-        return entity.player.entity.position.distanceTo(entity.position) <= 5 &&
-            (EntityFilters().MobsOnly || EntityFilters().PlayersOnly);
+        return entity.position.distanceTo(this.bot.player.entity.position) <= 10 &&
+            (entity.type === 'mob' || entity.type === 'player');
     }
+
 
     const enter = new BehaviorIdle(targets);
     const exit = new BehaviorIdle(targets);
     const attack = new BehaviorAttack(bot, targets);
 
-    const getClosestMob = new BehaviorGetClosestEntity(bot, targets, EntityFilters().PlayersOnly);
+    const getClosestMob = new BehaviorGetClosestEntity(bot, targets, distanceFilter);
 
     const followMob = new BehaviorFollowEntity(bot, targets);
 
