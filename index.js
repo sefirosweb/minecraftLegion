@@ -76,9 +76,7 @@ function createNewBot(botName, portBotStateMachine = null, portPrismarineViewer 
                 parent: death,
                 child: idleState,
                 name: 'if bot die then restarts',
-                shouldTransition: () => false,
             }),
-
         ];
 
         bot.on('death', function() {

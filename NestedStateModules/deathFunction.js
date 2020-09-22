@@ -28,21 +28,19 @@ function deathFunction(bot, targets) {
             parent: enter,
             child: playerEntity,
             name: 'Player say: hi',
-            shouldTransition: () => false,
         }),
 
         new StateTransition({
             parent: startWork,
             child: playerEntity,
             name: 'Player say: hi',
-            shouldTransition: () => false,
         }),
 
         new StateTransition({
             parent: playerEntity,
             child: commands,
             name: 'Transfer to sub nestered commands',
-            shouldTransition: () => true,
+            shouldTransition: () => commands.isFinished(),
             onTransition: () => bot.chat("Hi " + playerEntity.targets.entity.username),
         }),
 
@@ -51,6 +49,7 @@ function deathFunction(bot, targets) {
             child: startWork,
             name: 'Commands finished',
             shouldTransition: () => commands.isFinished(),
+            onTransition: () => bot.look(bot.player.entity.yaw, 0),
         }),
     ];
 
