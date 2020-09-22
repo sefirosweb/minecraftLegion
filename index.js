@@ -21,7 +21,7 @@ const baseFunction = require('./NestedStateModules/baseFunction');
 // const { start } = require('repl');
 
 const botsToStart = [
-    { username: "Guard1", portBotStateMachine: 4000, portPrismarineViewer: null, portInventory: null },
+    { username: "Guard1", portBotStateMachine: null, portPrismarineViewer: null, portInventory: null },
     // { username: "Guard2", portBotStateMachine: null, portPrismarineViewer: null, portInventory: null },
     // { username: "Guard3", portBotStateMachine: null, portPrismarineViewer: null, portInventory: null },
     // { username: "Archer1", portBotStateMachine: null, portPrismarineViewer: null, portInventory: null },
@@ -119,7 +119,7 @@ function createNewBot(botName, portBotStateMachine = null, portPrismarineViewer 
         moveToArray.push(nextStep);
 
 
-        const patrol = new BehaviorMoveToArray(bot, targets, moveToArray);
+        const patrol = new BehaviorMoveToArray(bot, targets, moveToArray, true);
 
         const transitions = [
             new StateTransition({ // Trigger -> 0

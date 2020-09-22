@@ -1,7 +1,7 @@
 const mineflayer_pathfinder_1 = require("mineflayer-pathfinder");
 
 class BehaviorMoveToArray {
-    constructor(bot, targets, patrol) {
+    constructor(bot, targets, patrol, startNearestPoint) {
         this.bot = bot;
         this.targets = targets;
         this.stateName = 'BehaviorMoveToArray';
@@ -12,6 +12,7 @@ class BehaviorMoveToArray {
         this.active = false;
         this.distance = 0;
         this.patrol = patrol
+        this.startNearestPoint = startNearestPoint
 
         const mcData = require('minecraft-data')(this.bot.version);
         this.movements = new mineflayer_pathfinder_1.Movements(bot, mcData);
@@ -20,6 +21,10 @@ class BehaviorMoveToArray {
             if (r.status === 'noPath')
                 console.log("[MoveTo] No path to target!");
         });
+
+        if (this.startNearestPoint === true) {
+            this.sortPatrol();
+        }
     }
 
     onStateEntered() {
@@ -30,8 +35,22 @@ class BehaviorMoveToArray {
         this.stopMoving();
     };
 
+    sortPatrol() {
+        let nearestDistance = false;
+        let nearestPoint = 0;
+        let currentPoint = 0;
+        this.patrol.forEach(location => {
+            let distance = this.getDistance(location.position);
+            if (distance < nearestDistance || !nearestDistance) {
+                nearestDistance = distance;
+                nearestPoint = currentPoint;
+            }
+            currentPoint++;
+        });
+        this.currentPosition = nearestPoint;
+    }
+
     getEndPatrol = function() {
-        console.log(this.distanceToTarget(), this.endPatrol);
         if (this.distanceToTarget() <= 2 && this.endPatrol == false) {
             this.startMoving();
             return false;
@@ -58,7 +77,6 @@ class BehaviorMoveToArray {
 
     startMoving = function() {
         this.targets = this.patrol[this.currentPosition];
-        console.log("Next point", this.target)
         this.currentPosition++;
 
         if (this.currentPosition > this.patrol.length) {
@@ -98,12 +116,14 @@ class BehaviorMoveToArray {
 
     distanceToTarget = function() {
         let position = this.targets.position;
-        if (!position)
-            return 0;
-        let distance = this.bot.entity.position.distanceTo(position);
-        return distance;
+        return this.getDistance(position)
     };
 
+    getDistance(position) {
+        if (!position)
+            return 0;
+        return this.bot.entity.position.distanceTo(position);
+    }
+
 }
-module.exports = BehaviorMoveToArray
 module.exports = BehaviorMoveToArray
