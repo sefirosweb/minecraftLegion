@@ -55,9 +55,10 @@ function deathFunction(bot, targets) {
 
     bot.on("chat", (username, message) => {
         if (message === "hi " + bot.username || message === "hi all") {
-            playerEntity.getPlayerEntity(username);
-            transitions[1].trigger();
-            transitions[2].trigger();
+            if (playerEntity.getPlayerEntity(username)) {
+                transitions[1].trigger();
+                transitions[2].trigger();
+            }
         }
     });
 

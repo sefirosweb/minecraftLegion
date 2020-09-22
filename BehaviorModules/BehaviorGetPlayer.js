@@ -15,6 +15,7 @@ class BehaviorGetPlayer {
     getPlayerEntity = function(playerName) {
         this.targets.entity = this.checkPlayer(playerName) || undefined
         this.playerIsFound = this.targets.entity !== undefined
+        return this.playerIsFound;
     }
 
     checkPlayer = function(playerName) {
