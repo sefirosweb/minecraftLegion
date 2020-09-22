@@ -10,23 +10,15 @@ const {
 } = require("mineflayer-statemachine");
 const BehaviorAttack = require("./../BehaviorModules/BehaviorAttack");
 
-//const prismarineEntity = require('prismarine-entity')
-
-
-
-
 function startWorkFunction(bot, targets) {
+    const enter = new BehaviorIdle(targets);
+    const exit = new BehaviorIdle(targets);
+    const attack = new BehaviorAttack(bot, targets);
 
     function distanceFilter(entity) {
         return entity.position.distanceTo(this.bot.player.entity.position) <= 10 &&
             (entity.type === 'mob' || entity.type === 'player');
     }
-
-
-    const enter = new BehaviorIdle(targets);
-    const exit = new BehaviorIdle(targets);
-    const attack = new BehaviorAttack(bot, targets);
-
     const getClosestMob = new BehaviorGetClosestEntity(bot, targets, distanceFilter);
 
     const followMob = new BehaviorFollowEntity(bot, targets);
