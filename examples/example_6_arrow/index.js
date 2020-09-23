@@ -7,12 +7,12 @@ const ObjectsToCsv = require('objects-to-csv')
 // Need 2 bots first one is too far away for get entitys can check
 const bot = mineflayer.createBot({
     username: 'Guard1',
-    port: 50278
+    port: 54758
 })
 bot.loadPlugin(pathfinder)
 const botChecker = mineflayer.createBot({
     username: 'Guard2',
-    port: 50278
+    port: 54758
 })
 botChecker.loadPlugin(pathfinder)
 
@@ -41,8 +41,9 @@ bot.once("spawn", () => {
     bot.pathfinder.setGoal(new GoalNear(0, 3, 0, 1)); // Go to Start point
 });
 
-let grades = 0;
+let grades = 500;
 let reportedArrow = false;
+let arrowSave = {};
 
 // This bot Fires arrow
 bot.on('goal_reached', () => {
@@ -84,7 +85,6 @@ botChecker.on('goal_reached', () => {
 
     let currentArrows = [];
     let currentArrow = null;
-    let arrowSave = {};
     let lastPositionArrow = {};
     let counPosition = 0;
     let timeToImpact = 0;
@@ -132,7 +132,7 @@ botChecker.on('goal_reached', () => {
                     };
                     let dataArray = [];
                     dataArray.push(data);
-                    console.log("Arrow Impacted! ", data.id, data.grade, data.timeToImpact);
+                    console.log("Arrow Impacted! ", data.id, "Grade:", data.grade / 10, "Time to impact", data.timeToImpact);
                     const csv = new ObjectsToCsv(dataArray)
                     csv.toDisk('./bigData.csv', { append: true })
                     counPosition = 0;
