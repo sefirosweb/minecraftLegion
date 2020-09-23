@@ -55,7 +55,7 @@ bot.on('goal_reached', () => {
         // bot.lookAt(headTo); <-- don't use this no have enough accuracy
         // Look by Yaw & Pitch /* Pitch == Radians */ 
         // 3.1385715147451663 => default look to Z
-        bot.look(degrees_to_radians(180), degrees_to_radians(grades));
+        bot.look(degrees_to_radians(180), degrees_to_radians(grades / 10));
 
         const currentTime = Date.now();
 
@@ -68,9 +68,10 @@ bot.on('goal_reached', () => {
         if (currentTime - chargeBowTimer > 1000 && reportedArrow || currentTime - chargeBowTimer > 8000) {
             reportedArrow = false;
             bot.deactivateItem();
+            arrowSave.time = Date.now();
             bowIsCharged = false;
             grades++;
-            if (grades > 90) {
+            if (grades > 900) {
                 grades = 0;
             }
         }
@@ -86,6 +87,7 @@ botChecker.on('goal_reached', () => {
     let arrowSave = {};
     let lastPositionArrow = {};
     let counPosition = 0;
+    let timeToImpact = 0;
 
 
     botChecker.on('physicTick', function() {
@@ -98,13 +100,10 @@ botChecker.on('goal_reached', () => {
                 arrowSave.x = currentArrow.position.x;
                 arrowSave.y = currentArrow.position.y;
                 arrowSave.z = currentArrow.position.z;
-                arrowSave.time = Date.now();
 
                 lastPositionArrow.x = currentArrow.position.x;
                 lastPositionArrow.y = currentArrow.position.y;
                 lastPositionArrow.z = currentArrow.position.z;
-
-                counPosition = 0; // Verify X times the position
 
                 reportedArrow = false;
                 return true;
@@ -119,9 +118,7 @@ botChecker.on('goal_reached', () => {
                 lastPositionArrow.y == currentArrow.position.y &&
                 lastPositionArrow.z == currentArrow.position.z
             ) {
-                if (counPosition >= 20) {
-                    let timeToImpact = Date.now();
-                    timeToImpact -= arrowSave.time;
+                if (counPosition >= 20 && !reportedArrow) {
                     const data = {
                         id: currentArrow.id,
                         grade: grades - 1,
@@ -135,11 +132,14 @@ botChecker.on('goal_reached', () => {
                     };
                     let dataArray = [];
                     dataArray.push(data);
-                    console.log("Arrow Impacted! ", data);
+                    console.log("Arrow Impacted! ", data.id, data.grade, data.timeToImpact);
                     const csv = new ObjectsToCsv(dataArray)
                     csv.toDisk('./bigData.csv', { append: true })
+                    counPosition = 0;
                     reportedArrow = true;
-
+                }
+                if (counPosition === 0) {
+                    timeToImpact = Date.now() - arrowSave.time;
                 }
                 counPosition++;
             } else {
