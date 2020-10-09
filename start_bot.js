@@ -67,6 +67,7 @@ function createNewBot(botName, portBotStateMachine = null, portPrismarineViewer 
         ];
 
         bot.on('death', function() {
+            bot.removeListener('chat', botChatCommandFunctionListener);
             transitions[1].trigger();
             bot.chat('Omg im dead');
         })

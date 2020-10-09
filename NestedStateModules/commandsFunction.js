@@ -70,15 +70,15 @@ function commandsFunction(bot, targets) {
             parent: enter,
             child: lookAtPlayersState,
             name: 'Enter to nested',
-            onTransition: () => bot.on("chat", botChatListener),
+            onTransition: () => bot.on("chat", botChatCommandFunctionListener),
             shouldTransition: () => true,
         }),
     ];
 
-    botChatListener = function(username, message) {
+    botChatCommandFunctionListener = function(username, message) {
         switch (true) {
             case (message === "bye"):
-                bot.removeListener('chat', botChatListener);
+                bot.removeListener('chat', botChatCommandFunctionListener);
                 transitions[0].trigger();
                 transitions[1].trigger();
                 transitions[2].trigger();
