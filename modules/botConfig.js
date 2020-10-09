@@ -8,6 +8,7 @@ function getConn(botName) {
         name: botName,
         job: 'guard', // guard, archer, farmer
         mode: 'none', // none, pve, pvp
+        distance: 10,
         help_friends: false,
         patrol: []
     };
@@ -21,13 +22,36 @@ function setJob(botName, job) {
     db.set('config.job', job).write()
 }
 
-function loadJob(botName) {
+function getJob(botName) {
     const db = getConn(botName);
-    const job = db.get('config.job').value();
-    return job;
+    return db.get('config.job').value();
+}
+
+function setMode(botName, mode) {
+    const db = getConn(botName);
+    db.set('config.mode', mode).write()
+}
+
+function getMode(botName) {
+    const db = getConn(botName);
+    return db.get('config.mode').value();
+}
+
+function setDistance(botName, distance) {
+    const db = getConn(botName);
+    db.set('config.distance', distance).write()
+}
+
+function getDistance(botName) {
+    const db = getConn(botName);
+    return db.get('config.distance').value();
 }
 
 module.exports = {
     setJob,
-    loadJob
+    getJob,
+    setMode,
+    getMode,
+    setDistance,
+    getDistance,
 }

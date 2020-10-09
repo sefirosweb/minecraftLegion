@@ -4,7 +4,7 @@ const {
     NestedStateMachine,
 } = require("mineflayer-statemachine");
 
-const BehaviorloadJob = require("./../BehaviorModules/BehaviorLoadJob");
+const BehaviorLoadConfig = require("./../BehaviorModules/BehaviorLoadConfig");
 
 function startWorkFunction(bot, targets) {
     const enter = new BehaviorIdle(targets);
@@ -12,36 +12,36 @@ function startWorkFunction(bot, targets) {
     const guardJob = new require('./guardJobFunction')(bot, targets);
     const archerJob = new require('./archerJobFunction')(bot, targets);
     const farmerJob = new require('./farmerJobFunction')(bot, targets);
-    const loadJob = new BehaviorloadJob(bot, targets);
+    const loadConfig = new BehaviorLoadConfig(bot, targets);
 
 
     const transitions = [
         new StateTransition({
             parent: enter,
-            child: loadJob,
-            name: 'enter -> loadJob',
+            child: loadConfig,
+            name: 'enter -> loadConfig',
             shouldTransition: () => true,
         }),
 
         new StateTransition({
-            parent: loadJob,
+            parent: loadConfig,
             child: guardJob,
-            name: 'loadJob -> guardJob',
-            shouldTransition: () => loadJob.getJob() === 'guard',
+            name: 'loadConfig -> guardJob',
+            shouldTransition: () => loadConfig.getJob() === 'guard',
         }),
 
         new StateTransition({
-            parent: loadJob,
+            parent: loadConfig,
             child: archerJob,
-            name: 'loadJob -> archerJob',
-            shouldTransition: () => loadJob.getJob() === 'archer',
+            name: 'loadConfig -> archerJob',
+            shouldTransition: () => loadConfig.getJob() === 'archer',
         }),
 
         new StateTransition({
-            parent: loadJob,
+            parent: loadConfig,
             child: farmerJob,
-            name: 'loadJob -> farmerJob',
-            shouldTransition: () => loadJob.getJob() === 'farmer',
+            name: 'loadConfig -> farmerJob',
+            shouldTransition: () => loadConfig.getJob() === 'farmer',
         }),
 
     ];

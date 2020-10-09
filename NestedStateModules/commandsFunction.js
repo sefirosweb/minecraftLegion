@@ -91,9 +91,19 @@ function commandsFunction(bot, targets) {
                 transitions[5].trigger();
                 break;
             default:
-                if (message.match(/your job.*/)) {
+                if (message.match(/set job.*/)) {
                     var msg = message.split(" ");
                     saveJob(msg[2]);
+                }
+
+                if (message.match(/set mode.*/)) {
+                    var msg = message.split(" ");
+                    saveMode(msg[2]);
+                }
+
+                if (message.match(/set distance.*/)) {
+                    var msg = message.split(" ");
+                    saveDistance(msg[2]);
                 }
         }
     }
@@ -110,6 +120,32 @@ function commandsFunction(bot, targets) {
             default:
                 bot.chat("Master, I don't know how to do this job");
                 break;
+        }
+    }
+
+    function saveMode(mode) {
+        switch (true) {
+            case (mode === "none"):
+            case (mode === "pvp"):
+            case (mode === "pve"):
+                bot.chat("I understood the conflict");
+                const botConfig = require('../modules/botConfig');
+                botConfig.setMode(bot.username, mode);
+                break;
+            default:
+                bot.chat("Master, I don't know what you means mode");
+                break;
+        }
+    }
+
+    function saveDistance(distance) {
+        distance = parseInt(distance);
+        if (!isNaN(distance)) {
+            bot.chat("I take a look!");
+            const botConfig = require('../modules/botConfig');
+            botConfig.setDistance(bot.username, distance);
+        } else {
+            bot.chat("I dont understood the distance");
         }
     }
 

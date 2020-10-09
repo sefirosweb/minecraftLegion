@@ -1,0 +1,32 @@
+const botConfig = require('../modules/botConfig');
+
+class BehaviorLoadConfig {
+    constructor(bot, targets) {
+        this.bot = bot;
+        this.targets = targets;
+        this.stateName = 'BehaviorLoadConfig';
+        this.job = false;
+        this.mode = 'none';
+        this.distance = 10;
+    }
+
+    onStateEntered = function() {
+        this.job = botConfig.getJob(this.bot.username);
+        this.mode = botConfig.getMode(this.bot.username);
+        this.distance = botConfig.getDistance(this.bot.username);
+    };
+
+    getJob = function() {
+        return this.job;
+    };
+
+    getMode = function() {
+        return this.mode;
+    }
+
+    getDistance = function() {
+        return this.distance;
+    }
+
+}
+module.exports = BehaviorLoadConfig
