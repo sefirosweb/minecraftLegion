@@ -4,33 +4,44 @@ const {
     NestedStateMachine,
 } = require("mineflayer-statemachine");
 
+const BehaviorloadJob = require("./../BehaviorModules/BehaviorLoadJob");
+
 function startWorkFunction(bot, targets) {
     const enter = new BehaviorIdle(targets);
     const exit = new BehaviorIdle(targets);
     const guardJob = new require('./guardJobFunction')(bot, targets);
     const archerJob = new require('./archerJobFunction')(bot, targets);
     const farmerJob = new require('./farmerJobFunction')(bot, targets);
+    const loadJob = new BehaviorloadJob(bot, targets);
+
 
     const transitions = [
         new StateTransition({
             parent: enter,
+            child: loadJob,
+            name: 'enter -> loadJob',
+            shouldTransition: () => true,
+        }),
+
+        new StateTransition({
+            parent: loadJob,
             child: guardJob,
-            name: 'enter -> guardJob',
-            shouldTransition: () => true, // TODO pending function for select JOB
+            name: 'loadJob -> guardJob',
+            shouldTransition: () => loadJob.getJob() === 'guard',
         }),
 
         new StateTransition({
-            parent: enter,
+            parent: loadJob,
             child: archerJob,
-            name: 'enter -> archerJob',
-            // shouldTransition: () => true, // TODO pending function for select JOB
+            name: 'loadJob -> archerJob',
+            shouldTransition: () => loadJob.getJob() === 'archer',
         }),
 
         new StateTransition({
-            parent: enter,
+            parent: loadJob,
             child: farmerJob,
-            name: 'enter -> farmerJob',
-            // shouldTransition: () => true, // TODO pending function for select JOB
+            name: 'loadJob -> farmerJob',
+            shouldTransition: () => loadJob.getJob() === 'farmer',
         }),
 
     ];
