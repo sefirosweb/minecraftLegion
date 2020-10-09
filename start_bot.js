@@ -26,6 +26,7 @@ function createNewBot(botName, portBotStateMachine = null, portPrismarineViewer 
         host: config.server,
         port: config.port
     });
+    bot.loadPlugin(require('mineflayer-pathfinder').pathfinder);
     bot.on('kicked', (reason) => {
         reasonDecoded = JSON.parse(reason)
         console.log(reasonDecoded)

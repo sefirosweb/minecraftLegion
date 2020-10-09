@@ -33,15 +33,6 @@ function startWorkFunction(bot, targets) {
             // shouldTransition: () => true, // TODO pending function for select JOB
         }),
 
-
-
-        new StateTransition({
-            parent: enter,
-            child: farmerJob,
-            name: 'enter -> guardJob',
-            // shouldTransition: () => true, // TODO pending function for select JOB
-        }),
-
     ];
 
     const startWorkFunction = new NestedStateMachine(transitions, enter, exit);

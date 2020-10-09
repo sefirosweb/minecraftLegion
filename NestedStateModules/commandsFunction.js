@@ -5,10 +5,8 @@ const {
     BehaviorLookAtEntity,
     NestedStateMachine
 } = require("mineflayer-statemachine");
-const Vec3 = require('vec3').Vec3
 
 function commandsFunction(bot, targets) {
-    bot.loadPlugin(require('mineflayer-pathfinder').pathfinder);
     const enter = new BehaviorIdle(targets);
     const exit = new BehaviorIdle(targets);
     const followPlayer = new BehaviorFollowEntity(bot, targets);
@@ -72,13 +70,15 @@ function commandsFunction(bot, targets) {
             parent: enter,
             child: lookAtPlayersState,
             name: 'Enter to nested',
+            onTransition: () => bot.on("chat", botChatListener),
             shouldTransition: () => true,
         }),
     ];
 
-    bot.on("chat", (username, message) => {
+    botChatListener = function(username, message) {
         switch (true) {
             case (message === "bye"):
+                bot.removeListener('chat', botChatListener);
                 transitions[0].trigger();
                 transitions[1].trigger();
                 transitions[2].trigger();
@@ -90,8 +90,26 @@ function commandsFunction(bot, targets) {
                 transitions[4].trigger();
                 transitions[5].trigger();
                 break;
+            default:
+                if (message.match(/your job.*/)) {
+                    var msg = message.split(" ");
+                    saveJob(msg[2]);
+                }
         }
-    });
+    }
+
+    function saveJob(job) {
+        switch (true) {
+            case (job === "guard"):
+            case (job === "archer"):
+            case (job === "farmer"):
+                bot.chat("I will fulfill this job");
+                break;
+            default:
+                bot.chat("Master, I don't know how to do this job");
+                break;
+        }
+    }
 
     const commandsFunction = new NestedStateMachine(transitions, enter, exit);
     commandsFunction.stateName = 'commandsFunction'
