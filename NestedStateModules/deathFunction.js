@@ -1,19 +1,15 @@
 const {
     StateTransition,
     BehaviorIdle,
-    BehaviorFollowEntity,
-    BehaviorLookAtEntity,
     NestedStateMachine
 } = require("mineflayer-statemachine");
 const BehaviorGetPlayer = require("./../BehaviorModules/BehaviorGetPlayer");
-const startWorkFunction = require('./startWorkFunction');
-const commandsFunction = require('./commandsFunction');
 
 function deathFunction(bot, targets) {
     const enter = new BehaviorIdle(targets);
     const exit = new BehaviorIdle(targets);
-    const startWork = new startWorkFunction(bot, targets);
-    const commands = new commandsFunction(bot, targets);
+    const startWork = new require('./startWorkFunction')(bot, targets);
+    const commands = new require('./commandsFunction')(bot, targets);
     const playerEntity = new BehaviorGetPlayer(bot, targets)
 
     const transitions = [

@@ -5,6 +5,9 @@ const config = {
     port: '',
     server: '',
 
+    cluster_webhook_address: '',
+    cluster_webhook_port: '',
+
     db_user: '',
     db_password: '',
     db_host: '',

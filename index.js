@@ -2,11 +2,11 @@ const cp = require('child_process');
 const { stdout, stdin } = require('process');
 
 const botsToStart = [
-    { username: "Guard1", portBotStateMachine: null, portPrismarineViewer: null, portInventory: null },
+    { username: "Guard1", portBotStateMachine: 12121, portPrismarineViewer: '', portInventory: '' },
+    { username: "Archer1", portBotStateMachine: '', portPrismarineViewer: '', portInventory: '' },
     /*
         { username: "Guard2", portBotStateMachine: null, portPrismarineViewer: null, portInventory: null },
         { username: "Guard3", portBotStateMachine: null, portPrismarineViewer: null, portInventory: null },
-        { username: "Archer1", portBotStateMachine: null, portPrismarineViewer: null, portInventory: null },
         { username: "Archer2", portBotStateMachine: null, portPrismarineViewer: null, portInventory: null },
         { username: "Archer3", portBotStateMachine: null, portPrismarineViewer: null, portInventory: null },
         { username: "Archer4", portBotStateMachine: null, portPrismarineViewer: null, portInventory: null },*/
@@ -20,7 +20,7 @@ function startBots() {
     i++;
     if (i <= totalBots) {
         setTimeout(() => {
-            let command = 'node start_guard ' + botToStart.username;
+            let command = 'node start_bot ' + botToStart.username + ' ' + botToStart.portBotStateMachine;
             console.log(command);
             cp.exec(command, (err, stdout, stderr) => {
                 if (err) {
@@ -37,8 +37,9 @@ function startBots() {
                 }
             });
             startBots();
-        }, 900)
+        }, 1500)
 
     }
 };
+
 startBots();

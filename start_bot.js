@@ -1,4 +1,3 @@
-require('dotenv').config()
 const config = require('./config')
 const mineflayer = require("mineflayer");
 
@@ -9,18 +8,15 @@ const {
     BehaviorIdle,
     NestedStateMachine,
 } = require("mineflayer-statemachine");
-const deathFunction = require('./NestedStateModules/deathFunction');
 
 if (process.argv.length < 3 || process.argv.length > 4) {
     console.log('Usage : node block_entity.js <botName> <portBotStateMachine> <portPrismarineViewer> <portInventory>')
-
     createNewBot('Guard1');
 } else {
     const botName = process.argv[2];
     const portBotStateMachine = process.argv[3] ? process.argv[3] : null;
     const portPrismarineViewer = process.argv[4] ? process.argv[4] : null;
     const portInventory = process.argv[6] ? process.argv[5] : null;
-
     createNewBot(botName, portBotStateMachine, portPrismarineViewer, portInventory);
 }
 
@@ -30,11 +26,15 @@ function createNewBot(botName, portBotStateMachine = null, portPrismarineViewer 
         host: config.server,
         port: config.port
     });
-    bot.on('kicked', (reason, loggedIn) => {
+    bot.on('kicked', (reason) => {
         reasonDecoded = JSON.parse(reason)
         console.log(reasonDecoded)
+        process.exit();
     });
-    bot.on('error', err => console.log(err));
+    bot.on('error', (err) => {
+        console.log(err)
+        process.exit();
+    });
     bot.once("spawn", () => {
         bot.chat('Im in!')
         if (portInventory !== null) {
@@ -45,12 +45,10 @@ function createNewBot(botName, portBotStateMachine = null, portPrismarineViewer 
             const prismarineViewer = require('./modules/viewer')
             prismarineViewer.start(bot, portPrismarineViewer);
         }
-    });
 
-    bot.once("spawn", () => {
         const targets = {};
         const idleState = new BehaviorIdle(targets);
-        const death = deathFunction(bot, targets)
+        const death = require('./NestedStateModules/deathFunction')(bot, targets)
 
         const transitions = [
             new StateTransition({
