@@ -1,7 +1,7 @@
 const mineflayer_pathfinder_1 = require("mineflayer-pathfinder");
 
 class BehaviorMoveToArray {
-    constructor(bot, targets, patrol, startNearestPoint) {
+    constructor(bot, targets, patrol = [], startNearestPoint = false) {
         this.bot = bot;
         this.targets = targets;
         this.stateName = 'BehaviorMoveToArray';
@@ -13,6 +13,7 @@ class BehaviorMoveToArray {
         this.distance = 0;
         this.patrol = patrol
         this.startNearestPoint = startNearestPoint
+        this.position;
 
         const mcData = require('minecraft-data')(this.bot.version);
         this.movements = new mineflayer_pathfinder_1.Movements(bot, mcData);
@@ -22,7 +23,7 @@ class BehaviorMoveToArray {
                 console.log("[MoveTo] No path to target!");
         });
 
-        if (this.startNearestPoint === true) {
+        if (this.startNearestPoint === true && this.patrol !== undefined) {
             this.sortPatrol();
         }
     }
@@ -39,8 +40,8 @@ class BehaviorMoveToArray {
         let nearestDistance = false;
         let nearestPoint = 0;
         let currentPoint = 0;
-        this.patrol.forEach(location => {
-            let distance = this.getDistance(location.position);
+        this.patrol.forEach(position => {
+            let distance = this.getDistance(position);
             if (distance < nearestDistance || !nearestDistance) {
                 nearestDistance = distance;
                 nearestPoint = currentPoint;
@@ -63,31 +64,24 @@ class BehaviorMoveToArray {
         return false;
     };
 
-    setMoveTarget = function(position) {
-        if (this.targets.position == position)
-            return;
-        this.targets.position = position;
-        this.restart();
-    };
-
     stopMoving = function() {
         const pathfinder = this.bot.pathfinder;
         pathfinder.setGoal(null);
     };
 
     startMoving = function() {
-        this.targets = this.patrol[this.currentPosition];
+        this.position = this.patrol[this.currentPosition];
         this.currentPosition++;
 
         if (this.currentPosition > this.patrol.length) {
             this.currentPosition = 0;
             this.endPatrol = true
-            this.targets = this.patrol[this.currentPosition];
+            this.position = this.patrol[this.currentPosition];
         } else {
             this.endPatrol = false
         }
 
-        const position = this.targets.position;
+        const position = this.position;
         if (!position) {
             console.log("[MoveTo] Target not defined. Skipping.");
             return;
@@ -115,7 +109,7 @@ class BehaviorMoveToArray {
     };
 
     distanceToTarget = function() {
-        let position = this.targets.position;
+        let position = this.position;
         return this.getDistance(position)
     };
 
@@ -123,6 +117,13 @@ class BehaviorMoveToArray {
         if (!position)
             return 0;
         return this.bot.entity.position.distanceTo(position);
+    }
+
+    setPatrol(patrol, startNearestPoint = false) {
+        this.patrol = patrol;
+        if (startNearestPoint === true && this.patrol !== undefined) {
+            this.sortPatrol();
+        }
     }
 
 }

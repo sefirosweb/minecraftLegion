@@ -105,6 +105,15 @@ function commandsFunction(bot, targets) {
                     var msg = message.split(" ");
                     saveDistance(msg[2]);
                 }
+
+                if (message.match(/set start patrol.*/)) {
+                    var msg = message.split(" ");
+                    startPatrol(msg[3]);
+                }
+
+                if (message.match(/set end patrol.*/)) {
+                    savePatrol();
+                }
         }
     }
 
@@ -146,6 +155,42 @@ function commandsFunction(bot, targets) {
             botConfig.setDistance(bot.username, distance);
         } else {
             bot.chat("I dont understood the distance");
+        }
+    }
+
+    let patrol = [];
+    let prevPos;
+    let distancePatrol;
+
+    function startPatrol(distance) {
+        distance = parseInt(distance);
+        if (isNaN(distance)) {
+            bot.chat("I dont understood the distance for patrol");
+            return false;
+        }
+        bot.chat("Ok, tell me what is the patrol");
+
+        distancePatrol = distance;
+
+        const pos = bot.entity.position;
+        patrol = [];
+        patrol.push(pos);
+        prevPos = pos;
+
+        bot.on('move', patrolNextPointListener);
+    }
+
+    function savePatrol() {
+        bot.removeListener('move', patrolNextPointListener);
+        const botConfig = require('../modules/botConfig');
+        botConfig.setPatrol(bot.username, patrol);
+        bot.chat("Ok, I memorized the patrol");
+    }
+
+    function patrolNextPointListener(pos) {
+        if (pos.distanceTo(prevPos) > distancePatrol) {
+            patrol.push(pos);
+            prevPos = pos;
         }
     }
 

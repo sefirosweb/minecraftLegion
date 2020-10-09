@@ -47,6 +47,17 @@ function getDistance(botName) {
     return db.get('config.distance').value();
 }
 
+function setPatrol(botName, patrol) {
+    const db = getConn(botName);
+    db.set('config.patrol', patrol).write()
+}
+
+function getPatrol(botName) {
+    const db = getConn(botName);
+    return db.get('config.patrol').value();
+}
+
+
 module.exports = {
     setJob,
     getJob,
@@ -54,4 +65,6 @@ module.exports = {
     getMode,
     setDistance,
     getDistance,
+    setPatrol,
+    getPatrol,
 }

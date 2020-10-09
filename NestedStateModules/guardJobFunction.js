@@ -2,20 +2,20 @@ const {
     StateTransition,
     BehaviorIdle,
     BehaviorFollowEntity,
-    BehaviorLookAtEntity,
     NestedStateMachine,
     BehaviorGetClosestEntity,
-    EntityFilters,
 
 } = require("mineflayer-statemachine");
 const BehaviorAttack = require("./../BehaviorModules/BehaviorAttack");
 const BehaviorLoadConfig = require("./../BehaviorModules/BehaviorLoadConfig");
+const BehaviorMoveToArray = require("./../BehaviorModules/BehaviorMoveToArray");
 
 function guardJobFunction(bot, targets) {
     const enter = new BehaviorIdle(targets);
     const exit = new BehaviorIdle(targets);
     const attack = new BehaviorAttack(bot, targets);
     const loadConfig = new BehaviorLoadConfig(bot, targets);
+    const moveToArray = new BehaviorMoveToArray(bot, targets);
 
     function distanceFilter(entity) {
         if (loadConfig.getMode() === 'pvp')
@@ -41,9 +41,25 @@ function guardJobFunction(bot, targets) {
 
         new StateTransition({
             parent: loadConfig,
+            child: moveToArray,
+            name: 'loadConfig -> moveToArray',
+            onTransition: () => moveToArray.setPatrol(loadConfig.getPatrol(), true),
+            shouldTransition: () => true,
+        }),
+
+        new StateTransition({
+            parent: moveToArray,
+            child: moveToArray,
+            name: 'moveToArray -> moveToArray',
+            onTransition: () => console.log('next'),
+            shouldTransition: () => moveToArray.getEndPatrol(),
+        }),
+
+        new StateTransition({
+            parent: moveToArray,
             child: getClosestMob,
             name: 'loadConfig -> getClosestEntity',
-            shouldTransition: () => true,
+            // shouldTransition: () => true,
         }),
 
         new StateTransition({
