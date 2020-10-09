@@ -1,4 +1,3 @@
-const config_env = require('dotenv').config({ path: __dirname + '/.env' })
 const config = {
     username: process.env.USER,
     password: process.env.PASSWORD,

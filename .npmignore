@@ -1,0 +1,5 @@
+examples/
+unused/
+.vscode/
+.env/
+config.js

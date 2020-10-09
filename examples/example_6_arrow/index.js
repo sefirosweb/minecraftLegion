@@ -18,10 +18,8 @@ botChecker.loadPlugin(pathfinder)
 
 /* Notes 
 Please give to bot a bow:
-/give Guard1 bow{Enchantments:[{id:unbreaking,lvl:100}]} 1
-
-And arrows
-/give Guard1 minecraft:arrow 6000
+/give Archer bow{Enchantments:[{id:unbreaking,lvl:100}]} 1
+/give Archer minecraft:arrow 6000
 */
 
 // Go to Start Point (center of map)
