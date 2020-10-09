@@ -3,3 +3,6 @@ unused/
 .vscode/
 .env/
 config.js
+
+# Exclude bot configurations
+botConfig/*.json
