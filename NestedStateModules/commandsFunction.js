@@ -104,6 +104,8 @@ function commandsFunction(bot, targets) {
             case (job === "archer"):
             case (job === "farmer"):
                 bot.chat("I will fulfill this job");
+                const botConfig = require('../modules/botConfig');
+                botConfig.setJob(bot.username, job);
                 break;
             default:
                 bot.chat("Master, I don't know how to do this job");
