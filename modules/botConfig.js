@@ -10,6 +10,7 @@ function getConn(botName) {
         mode: 'none', // none, pve, pvp
         distance: 10,
         help_friends: false,
+        chest: false,
         patrol: []
     };
 
@@ -57,6 +58,16 @@ function getPatrol(botName) {
     return db.get('config.patrol').value();
 }
 
+function setChest(botName, chest) {
+    const db = getConn(botName);
+    db.set('config.chest', chest).write()
+}
+
+function getChest(botName) {
+    const db = getConn(botName);
+    return db.get('config.chest').value();
+}
+
 
 module.exports = {
     setJob,
@@ -67,4 +78,6 @@ module.exports = {
     getDistance,
     setPatrol,
     getPatrol,
+    setChest,
+    getChest
 }

@@ -114,6 +114,10 @@ function commandsFunction(bot, targets) {
                 if (message.match(/set end patrol.*/)) {
                     savePatrol();
                 }
+
+                if (message.match(/set chest.*/)) {
+                    saveChest();
+                }
         }
     }
 
@@ -192,6 +196,13 @@ function commandsFunction(bot, targets) {
             patrol.push(pos);
             prevPos = pos;
         }
+    }
+
+    function saveChest() {
+        const pos = bot.entity.position;
+        const botConfig = require('../modules/botConfig');
+        botConfig.setChest(bot.username, pos);
+        bot.chat("Oooh my treasure");
     }
 
     const commandsFunction = new NestedStateMachine(transitions, enter, exit);

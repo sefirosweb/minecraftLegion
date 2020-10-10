@@ -17,6 +17,7 @@ class BehaviorLoadConfig {
         this.mode = botConfig.getMode(this.bot.username);
         this.distance = botConfig.getDistance(this.bot.username);
         this.patrol = botConfig.getPatrol(this.bot.username);
+        this.chest = botConfig.getChest(this.bot.username);
     };
 
     getJob = function() {
