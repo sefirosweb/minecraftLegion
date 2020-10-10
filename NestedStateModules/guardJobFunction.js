@@ -3,32 +3,29 @@ const {
     BehaviorIdle,
     BehaviorFollowEntity,
     NestedStateMachine,
-    BehaviorGetClosestEntity,
 
 } = require("mineflayer-statemachine");
 const BehaviorAttack = require("./../BehaviorModules/BehaviorAttack");
 const BehaviorLoadConfig = require("./../BehaviorModules/BehaviorLoadConfig");
 const BehaviorMoveToArray = require("./../BehaviorModules/BehaviorMoveToArray");
+const BehaviorGetClosestEnemy = require("./../BehaviorModules/BehaviorGetClosestEnemy");
+
+
+const mineflayer_pathfinder = require("mineflayer-pathfinder");
 
 function guardJobFunction(bot, targets) {
+    const mcData = require('minecraft-data')(bot.version);
+    const movementsForAttack = new mineflayer_pathfinder.Movements(bot, mcData);
+    movementsForAttack.digCost = 100;
+
     const enter = new BehaviorIdle(targets);
     const exit = new BehaviorIdle(targets);
     const attack = new BehaviorAttack(bot, targets);
+
     const loadConfig = new BehaviorLoadConfig(bot, targets);
     const moveToArray = new BehaviorMoveToArray(bot, targets);
 
-    function distanceFilter(entity) {
-        if (loadConfig.getMode() === 'pvp')
-            return entity.position.distanceTo(this.bot.player.entity.position) <= loadConfig.getDistance() &&
-                (entity.type === 'mob' || entity.type === 'player');
-        if (loadConfig.getMode() === 'pve')
-            return entity.position.distanceTo(this.bot.player.entity.position) <= loadConfig.getDistance() &&
-                (entity.type === 'mob');
-
-        return false;
-    }
-
-    const getClosestMob = new BehaviorGetClosestEntity(bot, targets, distanceFilter);
+    const getClosestMob = new BehaviorGetClosestEnemy(bot, targets);
     const followMob = new BehaviorFollowEntity(bot, targets);
 
     const transitions = [
@@ -43,13 +40,18 @@ function guardJobFunction(bot, targets) {
             parent: loadConfig,
             child: moveToArray,
             name: 'loadConfig -> moveToArray',
-            onTransition: () => moveToArray.setPatrol(loadConfig.getPatrol(), true),
+            onTransition: () => {
+                targets.entity = undefined;
+                moveToArray.setPatrol(loadConfig.getPatrol(), true);
+                getClosestMob.mode = loadConfig.getMode();
+                getClosestMob.distance = loadConfig.getDistance();
+            },
             shouldTransition: () => true,
         }),
 
         new StateTransition({
             parent: moveToArray,
-            child: getClosestMob,
+            child: followMob,
             name: 'moveToArray -> try getClosestMob',
             shouldTransition: () => {
                 getClosestMob.onStateEntered();
@@ -62,29 +64,6 @@ function guardJobFunction(bot, targets) {
             child: moveToArray,
             name: 'moveToArray -> moveToArray',
             shouldTransition: () => moveToArray.getEndPatrol(),
-        }),
-
-
-        new StateTransition({
-            parent: getClosestMob,
-            child: followMob,
-            name: 'Found a mob',
-            shouldTransition: () => targets.entity !== undefined,
-            onTransition: () => {
-                if (targets.entity.type === 'mob') {
-                    bot.chat("Attack mob! " + targets.entity.displayName)
-                }
-                if (targets.entity.type === 'player') {
-                    bot.chat("Kill " + targets.entity.username)
-                }
-            },
-        }),
-
-        new StateTransition({
-            parent: getClosestMob,
-            child: moveToArray,
-            name: 'Return to patrol',
-            shouldTransition: () => targets.entity === undefined,
         }),
 
         new StateTransition({
@@ -101,7 +80,6 @@ function guardJobFunction(bot, targets) {
             shouldTransition: () => followMob.distanceToTarget() > 2 && targets.entity.isValid,
         }),
 
-
         new StateTransition({
             parent: attack,
             child: attack,
@@ -111,18 +89,19 @@ function guardJobFunction(bot, targets) {
 
         new StateTransition({
             parent: attack,
-            child: getClosestMob,
+            child: moveToArray,
             name: 'Mob is dead',
+            onTransition: () => targets.entity = undefined,
             shouldTransition: () => targets.entity.isValid === false
         }),
 
         new StateTransition({
             parent: followMob,
-            child: getClosestMob,
+            child: moveToArray,
             name: 'Mob is dead',
+            onTransition: () => targets.entity = undefined,
             shouldTransition: () => targets.entity.isValid === false
         }),
-
     ];
 
     const guardJobFunction = new NestedStateMachine(transitions, enter, exit);

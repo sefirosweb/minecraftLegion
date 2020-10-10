@@ -1,4 +1,4 @@
-const mineflayer_pathfinder_1 = require("mineflayer-pathfinder");
+const mineflayer_pathfinder = require("mineflayer-pathfinder");
 
 class BehaviorMoveToArray {
     constructor(bot, targets, patrol = [], startNearestPoint = false) {
@@ -6,21 +6,20 @@ class BehaviorMoveToArray {
         this.targets = targets;
         this.stateName = 'BehaviorMoveToArray';
 
-        this.isFinished = false;
+        this.isFinished = false; // TODO revisar creo que no se usa
         this.currentPosition = 0;
         this.endPatrol = false;
         this.active = false;
-        this.distance = 0;
         this.patrol = patrol
         this.startNearestPoint = startNearestPoint
         this.position;
 
         const mcData = require('minecraft-data')(this.bot.version);
-        this.movements = new mineflayer_pathfinder_1.Movements(bot, mcData);
+        this.movements = new mineflayer_pathfinder.Movements(bot, mcData);
 
         bot.on('path_update', (r) => {
             if (r.status === 'noPath') {
-                console.log("[MoveTo] No path to target!");
+                this.endPatrol = true;
             }
         });
 
@@ -30,11 +29,6 @@ class BehaviorMoveToArray {
     }
 
     onStateEntered() {
-        /*
-        setTimeout(() => {
-            this.startMoving();
-        }, 8000);
-        */
         this.startMoving();
     }
 
@@ -55,8 +49,6 @@ class BehaviorMoveToArray {
             currentPoint++;
         });
         this.currentPosition = nearestPoint;
-        console.log(nearestPoint);
-        console.log(this.patrol[nearestPoint]);
     }
 
     getEndPatrol = function() {
@@ -96,11 +88,7 @@ class BehaviorMoveToArray {
         }
 
         const pathfinder = this.bot.pathfinder;
-        let goal;
-        if (this.distance === 0)
-            goal = new mineflayer_pathfinder_1.goals.GoalBlock(position.x, position.y, position.z);
-        else
-            goal = new mineflayer_pathfinder_1.goals.GoalNear(position.x, position.y, position.z, this.distance);
+        let goal = new mineflayer_pathfinder.goals.GoalBlock(position.x, position.y, position.z);
         pathfinder.setMovements(this.movements);
         pathfinder.setGoal(goal);
     };
@@ -110,7 +98,7 @@ class BehaviorMoveToArray {
         this.startMoving();
     };
 
-    isFinished = function() {
+    isFinished = function() { // TODO revisar creo que no se usa
         const pathfinder = this.bot.pathfinder;
         return !pathfinder.isMoving();
     };

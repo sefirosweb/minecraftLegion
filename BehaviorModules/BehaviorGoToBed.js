@@ -1,4 +1,4 @@
-const BehaviorGoToBed = (function () {
+const BehaviorGoToBed = (function() {
     function BehaviorGoToBed(bot, bed) {
         this.bot = bot;
         this.bed = bed;
@@ -14,7 +14,7 @@ const BehaviorGoToBed = (function () {
             }, 2000);
         });
     }
-    BehaviorGoToBed.prototype.onStateEntered = function () {
+    BehaviorGoToBed.prototype.onStateEntered = function() {
         this.wake = false;
         this.isInBed = false;
         setTimeout(() => {
@@ -22,7 +22,7 @@ const BehaviorGoToBed = (function () {
         }, 500);
 
     };
-    BehaviorGoToBed.prototype.sleep = function () {
+    BehaviorGoToBed.prototype.sleep = function() {
         this.bot.sleep(this.bed, (err) => {
             if (err) {
                 this.bot.chat(`I can't sleep: ${err.message}`)
@@ -34,10 +34,10 @@ const BehaviorGoToBed = (function () {
             }
         })
     }
-    BehaviorGoToBed.prototype.getIsInBed = function () {
+    BehaviorGoToBed.prototype.getIsInBed = function() {
         return this.isInBed;
     }
-    BehaviorGoToBed.prototype.getWake = function () {
+    BehaviorGoToBed.prototype.getWake = function() {
         return this.wake;
     }
     return BehaviorGoToBed;

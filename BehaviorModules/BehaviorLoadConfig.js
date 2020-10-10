@@ -5,9 +5,11 @@ class BehaviorLoadConfig {
         this.bot = bot;
         this.targets = targets;
         this.stateName = 'BehaviorLoadConfig';
+
         this.job = false;
         this.mode = 'none';
         this.distance = 10;
+        this.patrol = [];
     }
 
     onStateEntered = function() {
