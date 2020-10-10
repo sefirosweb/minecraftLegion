@@ -37,7 +37,7 @@ function deathFunction(bot, targets) {
             child: commands,
             name: 'Transfer to sub nestered commands',
             shouldTransition: () => commands.isFinished(),
-            onTransition: () => bot.chat("Hi " + playerEntity.targets.entity.username),
+            onTransition: () => bot.chat("Hi " + playerEntity.getPlayerName()),
         }),
 
         new StateTransition({
@@ -51,7 +51,9 @@ function deathFunction(bot, targets) {
 
     bot.on("chat", (username, message) => {
         if (message === "hi " + bot.username || message === "hi all") {
-            if (playerEntity.getPlayerEntity(username)) {
+            const player = playerEntity.getPlayerEntity(username);
+            if (player) {
+                console.log(player);
                 transitions[1].trigger();
                 transitions[2].trigger();
             }
@@ -62,6 +64,5 @@ function deathFunction(bot, targets) {
     deathFunction.stateName = 'deathFunction'
     return deathFunction;
 }
-
 
 module.exports = deathFunction;

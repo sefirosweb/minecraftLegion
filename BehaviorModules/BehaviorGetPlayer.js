@@ -4,17 +4,19 @@ class BehaviorGetPlayer {
         this.targets = targets;
         this.stateName = 'BehaviorGetPlayer';
         this.playerIsFound = false;
+        this.playername;
     }
 
-    /*
-    onStateExited() {
-        this.targets.targetEntity = bot.nearestEntity(() => true)
+    onStateEntered() {
+        this.getPlayerEntity(this.playerName);
     }
-    */
 
     getPlayerEntity = function(playerName) {
         this.targets.entity = this.checkPlayer(playerName) || undefined
         this.playerIsFound = this.targets.entity !== undefined
+        if (this.playerIsFound) {
+            this.playerName = playerName;
+        }
         return this.playerIsFound;
     }
 
@@ -33,6 +35,10 @@ class BehaviorGetPlayer {
 
     playerFound = function() {
         return this.playerIsFound;
+    }
+
+    getPlayerName = function() {
+        return this.playerName;
     }
 
 }

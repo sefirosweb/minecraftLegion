@@ -49,18 +49,22 @@ function guardJobFunction(bot, targets) {
 
         new StateTransition({
             parent: moveToArray,
+            child: getClosestMob,
+            name: 'moveToArray -> try getClosestMob',
+            shouldTransition: () => {
+                getClosestMob.onStateEntered();
+                return targets.entity !== undefined;
+            }
+        }),
+
+        new StateTransition({
+            parent: moveToArray,
             child: moveToArray,
             name: 'moveToArray -> moveToArray',
             onTransition: () => console.log('next'),
             shouldTransition: () => moveToArray.getEndPatrol(),
         }),
 
-        new StateTransition({
-            parent: moveToArray,
-            child: getClosestMob,
-            name: 'loadConfig -> getClosestEntity',
-            // shouldTransition: () => true,
-        }),
 
         new StateTransition({
             parent: getClosestMob,
@@ -72,8 +76,8 @@ function guardJobFunction(bot, targets) {
 
         new StateTransition({
             parent: getClosestMob,
-            child: getClosestMob,
-            name: 'Re search found a mob',
+            child: moveToArray,
+            name: 'Return to patrol',
             shouldTransition: () => targets.entity === undefined,
         }),
 
@@ -112,8 +116,6 @@ function guardJobFunction(bot, targets) {
             name: 'Mob is dead',
             shouldTransition: () => targets.entity.isValid === false
         }),
-
-
 
     ];
 
