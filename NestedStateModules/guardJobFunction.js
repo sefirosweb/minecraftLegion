@@ -61,7 +61,6 @@ function guardJobFunction(bot, targets) {
             parent: moveToArray,
             child: moveToArray,
             name: 'moveToArray -> moveToArray',
-            onTransition: () => console.log('next'),
             shouldTransition: () => moveToArray.getEndPatrol(),
         }),
 
@@ -71,7 +70,14 @@ function guardJobFunction(bot, targets) {
             child: followMob,
             name: 'Found a mob',
             shouldTransition: () => targets.entity !== undefined,
-            onTransition: () => bot.chat("Attack mob! " + targets.entity.displayName),
+            onTransition: () => {
+                if (targets.entity.type === 'mob') {
+                    bot.chat("Attack mob! " + targets.entity.displayName)
+                }
+                if (targets.entity.type === 'player') {
+                    bot.chat("Kill " + targets.entity.username)
+                }
+            },
         }),
 
         new StateTransition({

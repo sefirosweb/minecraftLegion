@@ -19,8 +19,9 @@ class BehaviorMoveToArray {
         this.movements = new mineflayer_pathfinder_1.Movements(bot, mcData);
 
         bot.on('path_update', (r) => {
-            if (r.status === 'noPath')
+            if (r.status === 'noPath') {
                 console.log("[MoveTo] No path to target!");
+            }
         });
 
         if (this.startNearestPoint === true && this.patrol !== undefined) {
@@ -29,6 +30,11 @@ class BehaviorMoveToArray {
     }
 
     onStateEntered() {
+        /*
+        setTimeout(() => {
+            this.startMoving();
+        }, 8000);
+        */
         this.startMoving();
     }
 
@@ -49,6 +55,8 @@ class BehaviorMoveToArray {
             currentPoint++;
         });
         this.currentPosition = nearestPoint;
+        console.log(nearestPoint);
+        console.log(this.patrol[nearestPoint]);
     }
 
     getEndPatrol = function() {
@@ -86,6 +94,7 @@ class BehaviorMoveToArray {
             console.log("[MoveTo] Target not defined. Skipping.");
             return;
         }
+
         const pathfinder = this.bot.pathfinder;
         let goal;
         if (this.distance === 0)
@@ -97,8 +106,6 @@ class BehaviorMoveToArray {
     };
 
     restart = function() {
-        if (!this.active)
-            return;
         this.stopMoving();
         this.startMoving();
     };

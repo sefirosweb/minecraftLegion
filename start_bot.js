@@ -67,10 +67,18 @@ function createNewBot(botName, portBotStateMachine = null, portPrismarineViewer 
         ];
 
         bot.on('death', function() {
-            bot.removeListener('chat', botChatCommandFunctionListener);
-            bot.removeListener('move', patrolNextPointListener);
-            transitions[1].trigger();
             bot.chat('Omg im dead');
+
+            bot.removeListener('chat', botChatCommandFunctionListener);
+
+            try {
+                bot.removeListener('move', patrolNextPointListener);
+            } catch (e) {
+                // console.log('patrolNextPointListener no inicializado');
+            }
+
+            transitions[1].trigger();
+
         })
 
         const root = new NestedStateMachine(transitions, idleState);
