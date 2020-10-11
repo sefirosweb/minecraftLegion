@@ -3,12 +3,17 @@ const {
     BehaviorIdle,
     BehaviorFollowEntity,
     NestedStateMachine,
+    BehaviorFindBlock,
+    BehaviorFindInteractPosition,
 
 } = require("mineflayer-statemachine");
 const BehaviorAttack = require("./../BehaviorModules/BehaviorAttack");
 const BehaviorLoadConfig = require("./../BehaviorModules/BehaviorLoadConfig");
 const BehaviorMoveToArray = require("./../BehaviorModules/BehaviorMoveToArray");
 const BehaviorGetClosestEnemy = require("./../BehaviorModules/BehaviorGetClosestEnemy");
+const BehaviorGetReadyForPatrol = require("./../BehaviorModules/BehaviorGetReadyForPatrol");
+const BehaviorGetItemsAndEquip = require("./../BehaviorModules/BehaviorGetItemsAndEquip");
+
 
 
 const mineflayer_pathfinder = require("mineflayer-pathfinder");
@@ -19,14 +24,29 @@ function guardJobFunction(bot, targets) {
     movementsForAttack.digCost = 100;
 
     const enter = new BehaviorIdle(targets);
+    enter.stateName = 'enter';
     const exit = new BehaviorIdle(targets);
+    exit.stateName = 'exit';
+
     const attack = new BehaviorAttack(bot, targets);
+    attack.stateName = 'Attack';
 
     const loadConfig = new BehaviorLoadConfig(bot, targets);
-    const moveToArray = new BehaviorMoveToArray(bot, targets);
+    const patrol = new BehaviorMoveToArray(bot, targets);
+    patrol.stateName = 'Patrol';
 
     const getClosestMob = new BehaviorGetClosestEnemy(bot, targets);
     const followMob = new BehaviorFollowEntity(bot, targets);
+    followMob.stateName = 'Follow Enemy';
+
+    const getReadyForPatrol = new BehaviorGetReadyForPatrol(bot, targets);
+    getReadyForPatrol.stateName = 'Get Ready for Patrol';
+
+    const goChest = new BehaviorMoveToArray(bot, targets);
+    goChest.stateName = 'Go Chest';
+
+    const getItemsAndEquip = new BehaviorGetItemsAndEquip(bot, targets);
+    getItemsAndEquip.stateName = 'Get items and equip';
 
     const transitions = [
         new StateTransition({
@@ -38,11 +58,12 @@ function guardJobFunction(bot, targets) {
 
         new StateTransition({
             parent: loadConfig,
-            child: moveToArray,
-            name: 'loadConfig -> moveToArray',
+            child: getReadyForPatrol,
+            name: 'loadConfig -> patrol',
             onTransition: () => {
                 targets.entity = undefined;
-                moveToArray.setPatrol(loadConfig.getPatrol(), true);
+                patrol.setPatrol(loadConfig.getPatrol(), true);
+                goChest.setPatrol(loadConfig.getChest());
                 getClosestMob.mode = loadConfig.getMode();
                 getClosestMob.distance = loadConfig.getDistance();
             },
@@ -50,9 +71,9 @@ function guardJobFunction(bot, targets) {
         }),
 
         new StateTransition({
-            parent: moveToArray,
+            parent: patrol,
             child: followMob,
-            name: 'moveToArray -> try getClosestMob',
+            name: 'patrol -> try getClosestMob',
             shouldTransition: () => {
                 getClosestMob.onStateEntered();
                 return targets.entity !== undefined;
@@ -60,10 +81,39 @@ function guardJobFunction(bot, targets) {
         }),
 
         new StateTransition({
-            parent: moveToArray,
-            child: moveToArray,
-            name: 'moveToArray -> moveToArray',
-            shouldTransition: () => moveToArray.getEndPatrol(),
+            parent: patrol,
+            child: getReadyForPatrol,
+            name: 'patrol -> getReadyForPatrol',
+            shouldTransition: () => patrol.getEndPatrol(),
+        }),
+
+
+        new StateTransition({
+            parent: getReadyForPatrol,
+            child: patrol,
+            name: 'getReadyForPatrol -> patrol',
+            shouldTransition: () => getReadyForPatrol.getReady(),
+        }),
+
+        new StateTransition({
+            parent: getReadyForPatrol,
+            child: goChest,
+            name: 'getReadyForPatrol -> goChest',
+            shouldTransition: () => !getReadyForPatrol.getReady(),
+        }),
+
+        new StateTransition({
+            parent: goChest,
+            child: getItemsAndEquip,
+            name: 'getReadyForPatrol -> goChest',
+            shouldTransition: () => goChest.getEndPatrol(),
+        }),
+
+        new StateTransition({
+            parent: getItemsAndEquip,
+            child: getReadyForPatrol,
+            name: 'getItemsAndEquip -> getReadyForPatrol',
+            shouldTransition: () => getItemsAndEquip.getIsFinished(),
         }),
 
         new StateTransition({
@@ -89,7 +139,7 @@ function guardJobFunction(bot, targets) {
 
         new StateTransition({
             parent: attack,
-            child: moveToArray,
+            child: patrol,
             name: 'Mob is dead',
             onTransition: () => targets.entity = undefined,
             shouldTransition: () => targets.entity.isValid === false
@@ -97,7 +147,7 @@ function guardJobFunction(bot, targets) {
 
         new StateTransition({
             parent: followMob,
-            child: moveToArray,
+            child: patrol,
             name: 'Mob is dead',
             onTransition: () => targets.entity = undefined,
             shouldTransition: () => targets.entity.isValid === false

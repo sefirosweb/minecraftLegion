@@ -36,5 +36,9 @@ class BehaviorLoadConfig {
         return this.patrol;
     }
 
+    getChest = function() {
+        return this.chest;
+    }
+
 }
 module.exports = BehaviorLoadConfig
