@@ -106,6 +106,14 @@ function guardCombatJobFunction(bot, targets) {
         }),
 
         new StateTransition({
+            parent: longRangeAttack,
+            child: exit,
+            name: 'Mob is dead',
+            onTransition: () => targets.entity = undefined,
+            shouldTransition: () => targets.entity.isValid === false
+        }),
+
+        new StateTransition({
             parent: followMob,
             child: exit,
             name: 'Mob is dead',
