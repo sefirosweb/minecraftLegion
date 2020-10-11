@@ -10,9 +10,9 @@ const BehaviorLongAttack = require("./../BehaviorModules/BehaviorLongAttack");
 function guardCombatJobFunction(bot, targets) {
     const range_exitIsToFarAway = 100;
 
-    const range_maxLongRangeAttack = 40;
-    const range_minDistanceAttack = 2;
-    const range_followToShortAttack = 6;
+    const rango_bow = 40;
+    const range_sword = 3;
+    const range_followToShortAttack = 5;
 
 
     const enter = new BehaviorIdle(targets);
@@ -43,7 +43,7 @@ function guardCombatJobFunction(bot, targets) {
             parent: attack,
             child: followMob,
             name: 'Mob is too far',
-            shouldTransition: () => followMob.distanceToTarget() > 2 && followMob.distanceToTarget() < 6 && targets.entity.isValid,
+            shouldTransition: () => followMob.distanceToTarget() > range_sword && followMob.distanceToTarget() < range_followToShortAttack && targets.entity.isValid,
         }),
 
         // Long Range Attack 
@@ -51,35 +51,35 @@ function guardCombatJobFunction(bot, targets) {
             parent: attack,
             child: longRangeAttack,
             name: 'Mob is too far',
-            shouldTransition: () => followMob.distanceToTarget() > 6 && targets.entity.isValid,
+            shouldTransition: () => followMob.distanceToTarget() > range_followToShortAttack && targets.entity.isValid,
         }),
 
         new StateTransition({
             parent: followMob,
             child: longRangeAttack,
             name: 'Mob is too far',
-            shouldTransition: () => followMob.distanceToTarget() < 40 && followMob.distanceToTarget() > 6 && targets.entity.isValid,
+            shouldTransition: () => followMob.distanceToTarget() < rango_bow && followMob.distanceToTarget() > range_followToShortAttack && targets.entity.isValid,
         }),
 
         new StateTransition({
             parent: longRangeAttack,
             child: longRangeAttack,
             name: 'Mob is too far',
-            shouldTransition: () => followMob.distanceToTarget() < 40 && followMob.distanceToTarget() > 6 && longRangeAttack.nextAttack() && targets.entity.isValid,
+            shouldTransition: () => followMob.distanceToTarget() < rango_bow && followMob.distanceToTarget() > range_followToShortAttack && longRangeAttack.nextAttack() && targets.entity.isValid,
         }),
 
         new StateTransition({
             parent: longRangeAttack,
             child: followMob,
             name: 'Mob is too far',
-            shouldTransition: () => (followMob.distanceToTarget() < 6 && targets.entity.isValid) || !longRangeAttack.getCanTarget(),
+            shouldTransition: () => (followMob.distanceToTarget() < range_followToShortAttack && targets.entity.isValid),
         }),
 
         new StateTransition({
             parent: longRangeAttack,
             child: followMob,
             name: 'Mob is too far',
-            shouldTransition: () => followMob.distanceToTarget() > 40 && targets.entity.isValid,
+            shouldTransition: () => followMob.distanceToTarget() > rango_bow && targets.entity.isValid,
         }),
         // END ************* Long Range Attack 
 
@@ -87,14 +87,14 @@ function guardCombatJobFunction(bot, targets) {
             parent: followMob,
             child: attack,
             name: 'Mob is near',
-            shouldTransition: () => followMob.distanceToTarget() < 2 && attack.nextAttack() && targets.entity.isValid,
+            shouldTransition: () => followMob.distanceToTarget() < range_sword && attack.nextAttack() && targets.entity.isValid,
         }),
 
         new StateTransition({
             parent: attack,
             child: attack,
             name: 'Mob still near continue attack',
-            shouldTransition: () => followMob.distanceToTarget() < 2 && attack.nextAttack() && targets.entity.isValid,
+            shouldTransition: () => followMob.distanceToTarget() < range_sword && attack.nextAttack() && targets.entity.isValid,
         }),
 
         new StateTransition({
