@@ -72,7 +72,7 @@ function guardCombatJobFunction(bot, targets) {
             parent: longRangeAttack,
             child: followMob,
             name: 'Mob is too far',
-            shouldTransition: () => followMob.distanceToTarget() < 6 && targets.entity.isValid,
+            shouldTransition: () => (followMob.distanceToTarget() < 6 && targets.entity.isValid) || !longRangeAttack.getCanTarget(),
         }),
 
         new StateTransition({
