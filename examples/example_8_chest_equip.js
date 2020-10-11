@@ -20,9 +20,7 @@ bot.once('inject_allowed', () => {
 bot.on('spawn', openChest);
 
 function openChest() {
-    let chestToOpen;
-
-    chestToOpen = bot.findBlock({
+    let chestToOpen = bot.findBlock({
         matching: ['chest', 'ender_chest', 'trapped_chest'].map(name => mcData.blocksByName[name].id),
         maxDistance: 6
     });
@@ -36,59 +34,116 @@ function openChest() {
     const chest = bot.openChest(chestToOpen);
 
     chest.on('open', () => {
-        let item;
-        item = chest.items().find(item => item.name.includes('sword'));
-
-        withdrawItem(item, 1)
+        getItemsFromChest()
             .then(() => {
-                item = chest.items().find(item => item.name.includes('helmet'));
-                return withdrawItem(item, 1);
-            })
-            .then(() => {
-                item = chest.items().find(item => item.name.includes('chest'));
-                return withdrawItem(item, 1);
-            })
-            .then(() => {
-                item = chest.items().find(item => item.name.includes('leggings'));
-                return withdrawItem(item, 1);
-            })
-            .then(() => {
-                item = chest.items().find(item => item.name.includes('boots'));
-                return withdrawItem(item, 1);
-            })
-            .then(() => {
-                item = chest.items().find(item => item.name.includes('shield'));
-                return withdrawItem(item, 1);
-            }).then(() => {
-                return new Promise((resolve, reject) => {
-                    setTimeout(() => {
-                        chest.close();
-                    }, 1000);
-                    setTimeout(() => {
-                        resolve();
-                    }, 2000);
-                });
-            })
-            .then(() => {
-                return equipItem('helmet');
-            })
-            .then(() => {
-                return equipItem('chest');
-            })
-            .then(() => {
-                return equipItem('leggings');
-            })
-            .then(() => {
-                return equipItem('boots');
-            })
-            .then(() => {
-                return equipItem('shield');
+                chest.close();
             })
     })
 
+
+    chest.on('close', () => {
+        setTimeout(() => {
+            equipAllItems()
+                .then(() => {
+                    bot.chat('Ready to fight!');
+                })
+        }, 1000);
+    })
+
+    function checkImReady() {
+        /*
+                .then(() => {
+                    return withdrawItem('helmet', 1);
+                })
+                .then(() => {
+                    return withdrawItem('chest', 1);
+                })
+                .then(() => {
+                    return withdrawItem('leggings', 1);
+                })
+                .then(() => {
+                    return withdrawItem('boots', 1);
+                })
+                .then(() => {
+                    return withdrawItem('shield', 1);
+                })
+                .then(() => {
+                    return withdrawItem('bow', 1);
+                })
+                .then(() => {
+                    return withdrawItem('arrow', 128);
+                }).then(() => {
+                    setTimeout(() => {
+                        resolve();
+                    }, 1000);*/
+    }
+
+    function getItemsFromChest() {
+        return new Promise((resolve, reject) => {
+            withdrawItem('sword', 1)
+                .then(() => {
+                    return withdrawItem('helmet', 1);
+                })
+                .then(() => {
+                    return withdrawItem('chest', 1);
+                })
+                .then(() => {
+                    return withdrawItem('leggings', 1);
+                })
+                .then(() => {
+                    return withdrawItem('boots', 1);
+                })
+                .then(() => {
+                    return withdrawItem('shield', 1);
+                })
+                .then(() => {
+                    return withdrawItem('bow', 1);
+                })
+                .then(() => {
+                    return withdrawItem('arrow', 128);
+                }).then(() => {
+                    setTimeout(() => {
+                        resolve();
+                    }, 1000);
+                })
+        });
+    }
+
+    function equipAllItems() {
+        return new Promise((resolve, reject) => {
+            equipItem('helmet')
+                .then(() => {
+                    return equipItem('chest');
+                })
+                .then(() => {
+                    return equipItem('leggings');
+                })
+                .then(() => {
+                    return equipItem('boots');
+                })
+                .then(() => {
+                    return equipItem('shield');
+                })
+                .then(() => {
+                    resolve();
+                })
+        });
+    }
+
     function equipItem(itemArmor) {
         return new Promise((resolve, reject) => {
+            if (checkItemEquiped(itemArmor)) {
+                resolve();
+                return;
+            }
+
             let armor = bot.inventory.items().find(item => item.name.includes(itemArmor));
+
+            if (!armor) {
+                resolve();
+                return;
+            }
+
             let location;
             switch (itemArmor) {
                 case 'helmet':
@@ -116,12 +171,70 @@ function openChest() {
         });
     }
 
-    function withdrawItem(item, amount, cb) {
+    function withdrawItem(item, amount) {
         return new Promise((resolve, reject) => {
-            chest.withdraw(item.type, null, amount, () => {
+            const currentItems = countItemsInInventoryOrEquipped(item);
+            console.log(item, currentItems);
+            amount -= currentItems;
+            if (amount <= 0) {
+                resolve();
+                return;
+            }
+
+            let foundItem = chest.items().find(itemtoFind => itemtoFind.name.includes(item));
+            if (!foundItem) {
+                bot.chat('No item ' + item + ' in chest!');
+                resolve();
+                return;
+            }
+
+            chest.withdraw(foundItem.type, null, amount, () => {
                 resolve();
             })
+
         });
     }
 
+
+    function countItemsInInventoryOrEquipped(item) {
+        let currentItems = 0;
+
+        if (checkItemEquiped(item)) {
+            currentItems++;
+        }
+
+        currentItems += countItemsInInventory(item);
+        return currentItems;
+    }
+
+    function countItemsInInventory(itemToCount) {
+        let currentItems = bot.inventory.items().filter(item => item.name.includes(itemToCount));
+        currentItems = currentItems.map(x => x['count']);
+        currentItems = currentItems.reduce((total, num) => { return total + num }, 0);
+        return currentItems
+    }
+
+    function checkItemEquiped(itemArmor) {
+        let slotID;
+        switch (itemArmor) {
+            case 'helmet':
+                slotID = 5;
+                break
+            case 'chest':
+                slotID = 6;
+                break
+            case 'leggings':
+                slotID = 7;
+                break
+            case 'boots':
+                slotID = 8;
+                break
+            case 'shield':
+                slotID = 45;
+                break
+            default:
+                return false;
+        }
+        return bot.inventory.slots[slotID] !== null;
+    }
 }
