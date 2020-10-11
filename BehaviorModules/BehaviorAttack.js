@@ -8,7 +8,7 @@ class BehaviorAttack {
     }
 
     onStateEntered = function() {
-        this.bot.lookAt(this.targets.entity.position);
+        this.bot.lookAt(this.targets.entity.position.offset(0, 1, 0));
         this.bot.attack(this.targets.entity, true)
     };
 
