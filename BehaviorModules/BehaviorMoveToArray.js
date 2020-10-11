@@ -6,7 +6,6 @@ class BehaviorMoveToArray {
         this.targets = targets;
         this.stateName = 'BehaviorMoveToArray';
 
-        this.isFinished = false; // TODO revisar creo que no se usa
         this.currentPosition = 0;
         this.endPatrol = false;
         this.active = false;
@@ -17,9 +16,9 @@ class BehaviorMoveToArray {
         const mcData = require('minecraft-data')(this.bot.version);
         this.movements = new mineflayer_pathfinder.Movements(bot, mcData);
 
-        bot.on('path_update', (r) => {
+        this.bot.on('path_update', (r) => {
             if (r.status === 'noPath') {
-                this.endPatrol = true;
+                // this.endPatrol = true;
             }
         });
 
@@ -96,11 +95,6 @@ class BehaviorMoveToArray {
     restart = function() {
         this.stopMoving();
         this.startMoving();
-    };
-
-    isFinished = function() { // TODO revisar creo que no se usa
-        const pathfinder = this.bot.pathfinder;
-        return !pathfinder.isMoving();
     };
 
     distanceToTarget = function() {

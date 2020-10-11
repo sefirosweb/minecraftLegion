@@ -63,7 +63,7 @@ function guardJobFunction(bot, targets) {
             onTransition: () => {
                 targets.entity = undefined;
                 patrol.setPatrol(loadConfig.getPatrol(), true);
-                goChest.setPatrol(loadConfig.getChest());
+                goChest.setPatrol(loadConfig.getChest(), true);
                 getClosestMob.mode = loadConfig.getMode();
                 getClosestMob.distance = loadConfig.getDistance();
             },

@@ -12,14 +12,20 @@ class BehaviorGetItemsAndEquip {
 
     onStateEntered() {
         this.isFinished = false;
-        this.openChest();
+        this.getAndEquip();
+    }
+
+    onStateExited() {
+        try {
+            this.chest.removeAllListeners();
+        } catch (e) {}
     }
 
     getIsFinished() {
         return this.isFinished;
     }
 
-    openChest() {
+    getAndEquip() {
         const mcData = require('minecraft-data')(this.bot.version);
 
         const chestToOpen = this.bot.findBlock({
@@ -29,7 +35,6 @@ class BehaviorGetItemsAndEquip {
 
         if (!chestToOpen) {
             this.bot.chat('no chest found')
-            setTimeout(openChest, 2000);
             return;
         }
 
@@ -40,7 +45,7 @@ class BehaviorGetItemsAndEquip {
                 .then(() => {
                     this.chest.close();
                 })
-        })
+        });
 
 
         this.chest.on('close', () => {
@@ -51,7 +56,7 @@ class BehaviorGetItemsAndEquip {
                         this.isFinished = true;
                     })
             }, 1000);
-        })
+        });
     }
 
     getItemsFromChest() {
