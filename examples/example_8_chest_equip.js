@@ -31,51 +31,48 @@ function openChest() {
         return;
     }
 
-    const chest = bot.openChest(chestToOpen);
+    let chest;
+    if (!checkImReady()) {
+        chest = bot.openChest(chestToOpen);
 
-    chest.on('open', () => {
-        getItemsFromChest()
-            .then(() => {
-                chest.close();
-            })
-    })
-
-
-    chest.on('close', () => {
-        setTimeout(() => {
-            equipAllItems()
+        chest.on('open', () => {
+            getItemsFromChest()
                 .then(() => {
-                    bot.chat('Ready to fight!');
+                    chest.close();
                 })
-        }, 1000);
-    })
+        })
+
+
+        chest.on('close', () => {
+            setTimeout(() => {
+                equipAllItems()
+                    .then(() => {
+                        bot.chat('Ready to fight!');
+                    })
+            }, 1000);
+        })
+    }
 
     function checkImReady() {
-        /*
-                .then(() => {
-                    return withdrawItem('helmet', 1);
-                })
-                .then(() => {
-                    return withdrawItem('chest', 1);
-                })
-                .then(() => {
-                    return withdrawItem('leggings', 1);
-                })
-                .then(() => {
-                    return withdrawItem('boots', 1);
-                })
-                .then(() => {
-                    return withdrawItem('shield', 1);
-                })
-                .then(() => {
-                    return withdrawItem('bow', 1);
-                })
-                .then(() => {
-                    return withdrawItem('arrow', 128);
-                }).then(() => {
-                    setTimeout(() => {
-                        resolve();
-                    }, 1000);*/
+        if (countItemsInInventoryOrEquipped('sword') == 0)
+            return false
+        if (countItemsInInventoryOrEquipped('shield') == 0)
+            return false
+        if (countItemsInInventoryOrEquipped('bow') == 0)
+            return false
+        if (countItemsInInventoryOrEquipped('arrow') <= 64)
+            return false
+
+        if (countItemsInInventoryOrEquipped('helmet') == 0)
+            return false
+        if (countItemsInInventoryOrEquipped('chest') == 0)
+            return false
+        if (countItemsInInventoryOrEquipped('leggings') == 0)
+            return false
+        if (countItemsInInventoryOrEquipped('boots') == 0)
+            return false
+
+        return true;
     }
 
     function getItemsFromChest() {
@@ -174,7 +171,6 @@ function openChest() {
     function withdrawItem(item, amount) {
         return new Promise((resolve, reject) => {
             const currentItems = countItemsInInventoryOrEquipped(item);
-            console.log(item, currentItems);
             amount -= currentItems;
             if (amount <= 0) {
                 resolve();
