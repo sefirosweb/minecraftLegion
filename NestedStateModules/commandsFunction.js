@@ -108,14 +108,18 @@ function commandsFunction(bot, targets) {
 
                 if (message.match(/set start patrol.*/)) {
                     var msg = message.split(" ");
-                    startPatrol(msg[3]);
+                    startGetPoints(msg[3]);
                 }
 
                 if (message.match(/set end patrol.*/)) {
                     savePatrol();
                 }
 
-                if (message.match(/set chest.*/)) {
+                if (message.match(/set start chest.*/)) {
+                    startGetPoints();
+                }
+
+                if (message.match(/set end chest.*/)) {
                     saveChest();
                 }
         }
@@ -162,46 +166,46 @@ function commandsFunction(bot, targets) {
         }
     }
 
-    let patrol = [];
-    let prevPos;
+    let point = [];
+    let prevPoint;
     let distancePatrol;
 
-    function startPatrol(distance) {
+    function nextPointListener(point) {
+        if (point.distanceTo(prevPoint) > distancePatrol) {
+            patrol.push(point);
+            prevPoint = point;
+        }
+    }
+
+    function startGetPoints(distance = 2) {
         distance = parseInt(distance);
         if (isNaN(distance)) {
-            bot.chat("I dont understood the distance for patrol");
+            bot.chat("I dont understood the distance");
             return false;
         }
-        bot.chat("Ok, tell me what is the patrol");
+        bot.chat("Ok, tell me the way");
 
         distancePatrol = distance;
 
-        const pos = bot.entity.position;
+        const point = bot.entity.position;
         patrol = [];
-        patrol.push(pos);
-        prevPos = pos;
+        patrol.push(point);
+        prevPoint = point;
 
-        bot.on('move', patrolNextPointListener);
+        bot.on('move', nextPointListener);
     }
 
     function savePatrol() {
-        bot.removeListener('move', patrolNextPointListener);
+        bot.removeListener('move', nextPointListener);
         const botConfig = require('../modules/botConfig');
         botConfig.setPatrol(bot.username, patrol);
         bot.chat("Ok, I memorized the patrol");
     }
 
-    function patrolNextPointListener(pos) {
-        if (pos.distanceTo(prevPos) > distancePatrol) {
-            patrol.push(pos);
-            prevPos = pos;
-        }
-    }
-
     function saveChest() {
-        const pos = bot.entity.position;
+        bot.removeListener('move', nextPointListener);
         const botConfig = require('../modules/botConfig');
-        botConfig.setChest(bot.username, pos);
+        botConfig.setChest(bot.username, patrol);
         bot.chat("Oooh my treasure");
     }
 
