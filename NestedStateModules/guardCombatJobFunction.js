@@ -1,49 +1,31 @@
 const {
     StateTransition,
     BehaviorIdle,
-    BehaviorFollowEntity,
-    BehaviorLookAtEntity,
     NestedStateMachine,
-    BehaviorGetClosestEntity,
-    EntityFilters,
-
+    BehaviorFollowEntity,
 } = require("mineflayer-statemachine");
-const BehaviorAttack = require("../BehaviorModules/BehaviorAttack");
+const BehaviorAttack = require("./../BehaviorModules/BehaviorAttack");
 
-function archerJobFunction(bot, targets) {
+function guardCombatJobFunction(bot, targets) {
     const enter = new BehaviorIdle(targets);
-    const exit = new BehaviorIdle(targets);
-    const attack = new BehaviorAttack(bot, targets);
+    enter.stateName = 'Enter';
 
-    function distanceFilter(entity) {
-        return entity.position.distanceTo(this.bot.player.entity.position) <= 10 &&
-            (entity.type === 'mob' || entity.type === 'player');
-    }
-    const getClosestMob = new BehaviorGetClosestEntity(bot, targets, distanceFilter);
+    const exit = new BehaviorIdle(targets);
+    exit.stateName = 'Exit';
+
+    const attack = new BehaviorAttack(bot, targets);
+    attack.stateName = 'Attack';
 
     const followMob = new BehaviorFollowEntity(bot, targets);
+    followMob.stateName = 'Follow Enemy';
+
 
     const transitions = [
         new StateTransition({
             parent: enter,
-            child: getClosestMob,
-            name: 'enter -> getClosestEntity',
-            shouldTransition: () => true,
-        }),
-
-        new StateTransition({
-            parent: getClosestMob,
             child: followMob,
-            name: 'Found a mob',
-            shouldTransition: () => targets.entity !== undefined,
-            onTransition: () => bot.chat("Attack mob! " + targets.entity.displayName),
-        }),
-
-        new StateTransition({
-            parent: getClosestMob,
-            child: getClosestMob,
-            name: 'Re search found a mob',
-            shouldTransition: () => targets.entity === undefined,
+            name: 'enter -> followMob',
+            shouldTransition: () => true,
         }),
 
         new StateTransition({
@@ -60,7 +42,6 @@ function archerJobFunction(bot, targets) {
             shouldTransition: () => followMob.distanceToTarget() > 2 && targets.entity.isValid,
         }),
 
-
         new StateTransition({
             parent: attack,
             child: attack,
@@ -70,26 +51,24 @@ function archerJobFunction(bot, targets) {
 
         new StateTransition({
             parent: attack,
-            child: getClosestMob,
+            child: exit,
             name: 'Mob is dead',
+            onTransition: () => targets.entity = undefined,
             shouldTransition: () => targets.entity.isValid === false
         }),
 
         new StateTransition({
             parent: followMob,
-            child: getClosestMob,
+            child: exit,
             name: 'Mob is dead',
+            onTransition: () => targets.entity = undefined,
             shouldTransition: () => targets.entity.isValid === false
         }),
-
-
-
     ];
 
-    const archerJobFunction = new NestedStateMachine(transitions, enter, exit);
-    archerJobFunction.stateName = 'Archer Job'
-    return archerJobFunction;
+    const guardCombatJobFunction = new NestedStateMachine(transitions, enter, exit);
+    guardCombatJobFunction.stateName = 'Guard Combat'
+    return guardCombatJobFunction;
 }
 
-
-module.exports = archerJobFunction;
+module.exports = guardCombatJobFunction;

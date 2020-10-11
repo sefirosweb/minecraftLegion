@@ -8,10 +8,20 @@ const {
 
 function commandsFunction(bot, targets) {
     const enter = new BehaviorIdle(targets);
+    enter.stateName = 'Enter';
+
     const exit = new BehaviorIdle(targets);
+    exit.stateName = 'Exit';
+
     const followPlayer = new BehaviorFollowEntity(bot, targets);
+    followPlayer.stateName = 'Follow Player';
+
     const lookAtFollowTarget = new BehaviorLookAtEntity(bot, targets);
+    lookAtFollowTarget.stateName = 'Look Player';
+
     const lookAtPlayersState = new BehaviorLookAtEntity(bot, targets);
+    lookAtPlayersState.stateName = 'Stay In Position'
+
 
     const transitions = [
         new StateTransition({ // 0
@@ -210,7 +220,7 @@ function commandsFunction(bot, targets) {
     }
 
     const commandsFunction = new NestedStateMachine(transitions, enter, exit);
-    commandsFunction.stateName = 'commandsFunction'
+    commandsFunction.stateName = 'Commands Bot'
     return commandsFunction;
 }
 

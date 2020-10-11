@@ -49,7 +49,8 @@ function createNewBot(botName, portBotStateMachine = null, portPrismarineViewer 
 
         const targets = {};
         const idleState = new BehaviorIdle(targets);
-        const death = require('./NestedStateModules/deathFunction')(bot, targets)
+        idleState.stateName = 'Start';
+        const death = require('./NestedStateModules/deathFunction')(bot, targets);
 
         const transitions = [
             new StateTransition({

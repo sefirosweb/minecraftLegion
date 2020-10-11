@@ -18,7 +18,7 @@ function farmerJobFunction(bot, targets) {
     ];
 
     const farmerJobFunction = new NestedStateMachine(transitions, enter, exit);
-    farmerJobFunction.stateName = 'farmerJobFunction'
+    farmerJobFunction.stateName = 'Farmer Job'
     return farmerJobFunction;
 }
 

@@ -7,7 +7,7 @@ const {
 const BehaviorGoToBed = require('../BehaviorModules/BehaviorGoToBed')
 const BehaviorIsNight = require("../BehaviorModules/BehaviorIsNight");
 
-let goSleepFunction = (function (bot) {
+let goSleepFunction = (function(bot) {
     const enter = new BehaviorIdle();
     const exit = new BehaviorIdle();
 
@@ -46,7 +46,7 @@ let goSleepFunction = (function (bot) {
     ];
 
     const goSleepFunction = new NestedStateMachine(transitions, enter, exit);
-    goSleepFunction.stateName = 'goSleep'
+    goSleepFunction.stateName = 'Go Sleep'
     return goSleepFunction;
 });
 

@@ -8,11 +8,13 @@ const BehaviorLoadConfig = require("./../BehaviorModules/BehaviorLoadConfig");
 
 function startWorkFunction(bot, targets) {
     const enter = new BehaviorIdle(targets);
-    const exit = new BehaviorIdle(targets);
+    enter.stateName = 'Enter';
+
     const guardJob = new require('./guardJobFunction')(bot, targets);
     const archerJob = new require('./archerJobFunction')(bot, targets);
     const farmerJob = new require('./farmerJobFunction')(bot, targets);
     const loadConfig = new BehaviorLoadConfig(bot, targets);
+    loadConfig.stateName = 'Load Bot Config';
 
 
     const transitions = [
@@ -46,7 +48,7 @@ function startWorkFunction(bot, targets) {
 
     ];
 
-    const startWorkFunction = new NestedStateMachine(transitions, enter, exit);
+    const startWorkFunction = new NestedStateMachine(transitions, enter);
     startWorkFunction.stateName = 'startWorkFunction'
     return startWorkFunction;
 }

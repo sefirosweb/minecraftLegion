@@ -7,10 +7,12 @@ const BehaviorGetPlayer = require("./../BehaviorModules/BehaviorGetPlayer");
 
 function deathFunction(bot, targets) {
     const enter = new BehaviorIdle(targets);
-    const exit = new BehaviorIdle(targets);
+    enter.stateName = 'Enter'
+
     const startWork = new require('./startWorkFunction')(bot, targets);
     const commands = new require('./commandsFunction')(bot, targets);
     const playerEntity = new BehaviorGetPlayer(bot, targets)
+    playerEntity.stateName = 'Search Player';
 
     const transitions = [
         new StateTransition({
@@ -60,8 +62,8 @@ function deathFunction(bot, targets) {
         }
     });
 
-    const deathFunction = new NestedStateMachine(transitions, enter, exit);
-    deathFunction.stateName = 'deathFunction'
+    const deathFunction = new NestedStateMachine(transitions, enter);
+    deathFunction.stateName = 'After death function'
     return deathFunction;
 }
 

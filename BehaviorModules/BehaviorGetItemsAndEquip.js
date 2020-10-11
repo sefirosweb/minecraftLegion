@@ -52,7 +52,6 @@ class BehaviorGetItemsAndEquip {
             setTimeout(() => {
                 this.equipAllItems()
                     .then(() => {
-                        this.bot.chat('Ready to fight!');
                         this.isFinished = true;
                     })
             }, 1000);
