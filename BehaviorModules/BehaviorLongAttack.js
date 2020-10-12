@@ -15,6 +15,8 @@ class BehaviorLongAttack {
         this.prevTime;
 
         this.canTarget = true;
+
+        this.bot.loadPlugin(hawkEye);
     }
 
     nextAttack = function() {
@@ -73,7 +75,7 @@ class BehaviorLongAttack {
         }
 
 
-        const infoShot = hawkEye.getMasterGrade(this.bot, this.targets.entity, speed);
+        const infoShot = this.bot.hawkEye.getMasterGrade(this.bot, this.targets.entity, speed);
 
         console.clear();
         console.log(speed)
