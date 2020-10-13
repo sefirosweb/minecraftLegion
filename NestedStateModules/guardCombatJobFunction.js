@@ -8,6 +8,7 @@ const BehaviorAttack = require("./../BehaviorModules/BehaviorAttack");
 const BehaviorLongAttack = require("./../BehaviorModules/BehaviorLongAttack");
 
 function guardCombatJobFunction(bot, targets) {
+    inventory = require('../modules/inventoryModule')(bot);
     const hawkEye = require("minecrafthawkeye");
     bot.loadPlugin(hawkEye);
 
@@ -36,13 +37,44 @@ function guardCombatJobFunction(bot, targets) {
 
 
     let targetGrade = false;
+    let prevPlayerPositions = [];
 
     function getGrades() {
-        if (targets.entity) {
-            targetGrade = bot.hawkEye.getMasterGrade(targets.entity);
-        } else {
-            targetGrade = false;
+        if (!targets.entity) {
+            return false;
         }
+        if (prevPlayerPositions.length > 10) {
+            prevPlayerPositions.shift();
+        }
+        const position = {
+            x: targets.entity.position.x,
+            y: targets.entity.position.y,
+            z: targets.entity.position.z
+        }
+        prevPlayerPositions.push(position);
+
+        let speed = {
+            x: 0,
+            y: 0,
+            z: 0
+        };
+
+        for (let i = 1; i < prevPlayerPositions.length; i++) {
+            const pos = prevPlayerPositions[i];
+            const prevPos = prevPlayerPositions[i - 1];
+            speed.x += pos.x - prevPos.x;
+            speed.y += pos.y - prevPos.y;
+            speed.z += pos.z - prevPos.z;
+        }
+
+        speed.x = speed.x / prevPlayerPositions.length;
+        speed.y = speed.y / prevPlayerPositions.length;
+        speed.z = speed.z / prevPlayerPositions.length;
+
+
+        targetGrade = bot.hawkEye.getMasterGrade(targets.entity, speed);
+
+        longRangeAttack.setInfoShot(targetGrade);
         console.clear();
         console.log(targetGrade);
     }
@@ -53,6 +85,18 @@ function guardCombatJobFunction(bot, targets) {
 
     function stopGrades() {
         bot.removeListener('physicTick', getGrades);
+    }
+
+    checkHandleSword = function() {
+        const swordHandled = inventory.checkItemEquiped('sword');
+
+        if (swordHandled)
+            return;
+
+        const itemEquip = bot.inventory.items().find(item => item.name.includes('sword'));
+        if (itemEquip) {
+            bot.equip(itemEquip, 'hand');
+        }
     }
 
     const transitions = [
@@ -71,6 +115,9 @@ function guardCombatJobFunction(bot, targets) {
             parent: attack,
             child: followMob,
             name: 'Mob is too far',
+            onTransition: () => {
+                checkHandleSword();
+            },
             shouldTransition: () => followMob.distanceToTarget() > range_sword && followMob.distanceToTarget() < range_followToShortAttack && targets.entity.isValid,
         }),
 
@@ -86,12 +133,15 @@ function guardCombatJobFunction(bot, targets) {
             parent: followMob,
             child: longRangeAttack,
             name: 'Mob is on range for Long Range Attack',
-            shouldTransition: () => followMob.distanceToTarget() < rango_bow && followMob.distanceToTarget() > range_followToShortAttack && targets.entity.isValid,
+            shouldTransition: () => followMob.distanceToTarget() < rango_bow && followMob.distanceToTarget() > range_followToShortAttack && targetGrade !== false && targets.entity.isValid,
         }),
 
         new StateTransition({
             parent: longRangeAttack,
             child: followMob,
+            onTransition: () => {
+                checkHandleSword();
+            },
             name: 'Mob is near for short attack',
             shouldTransition: () => followMob.distanceToTarget() < range_followToShortAttack && targets.entity.isValid,
         }),
@@ -99,15 +149,25 @@ function guardCombatJobFunction(bot, targets) {
         new StateTransition({
             parent: longRangeAttack,
             child: followMob,
+            onTransition: () => {
+                checkHandleSword();
+            },
             name: 'Mob is VERY too far',
             shouldTransition: () => followMob.distanceToTarget() > rango_bow && targets.entity.isValid,
         }),
 
         new StateTransition({
             parent: longRangeAttack,
+            child: followMob,
+            name: 'Cant target to Mob',
+            shouldTransition: () => targetGrade === false && targets.entity.isValid,
+        }),
+
+        new StateTransition({
+            parent: longRangeAttack,
             child: longRangeAttack,
             name: 'Mob is on range for Long Range Attack',
-            shouldTransition: () => followMob.distanceToTarget() < rango_bow && followMob.distanceToTarget() > range_followToShortAttack && longRangeAttack.nextAttack() && targets.entity.isValid,
+            shouldTransition: () => followMob.distanceToTarget() < rango_bow && followMob.distanceToTarget() > range_followToShortAttack && targets.entity.isValid,
         }),
         // END ************* Long Range Attack 
 
@@ -133,7 +193,7 @@ function guardCombatJobFunction(bot, targets) {
             onTransition: () => {
                 targets.entity = undefined;
                 stopGrades();
-                console.log('exit');
+                checkHandleSword();
             },
             shouldTransition: () => targets.entity.isValid === false
         }),
@@ -145,7 +205,7 @@ function guardCombatJobFunction(bot, targets) {
             onTransition: () => {
                 targets.entity = undefined;
                 stopGrades();
-                console.log('exit');
+                checkHandleSword();
             },
             shouldTransition: () => targets.entity.isValid === false
         }),
@@ -157,7 +217,7 @@ function guardCombatJobFunction(bot, targets) {
             onTransition: () => {
                 targets.entity = undefined;
                 stopGrades();
-                console.log('exit');
+                checkHandleSword();
             },
             shouldTransition: () => targets.entity.isValid === false
         }),

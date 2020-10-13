@@ -35,6 +35,9 @@ class BehaviorGetItemsAndEquip {
 
         if (!chestToOpen) {
             this.bot.chat('no chest found')
+            setTimeout(() => {
+                this.getAndEquip();
+            }, 3000);
             return;
         }
 

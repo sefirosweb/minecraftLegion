@@ -10,7 +10,6 @@ const BehaviorGetClosestEnemy = require("./../BehaviorModules/BehaviorGetClosest
 const BehaviorGetReadyForPatrol = require("./../BehaviorModules/BehaviorGetReadyForPatrol");
 const BehaviorGetItemsAndEquip = require("./../BehaviorModules/BehaviorGetItemsAndEquip");
 
-
 const mineflayer_pathfinder = require("mineflayer-pathfinder");
 
 function guardJobFunction(bot, targets) {
@@ -79,7 +78,6 @@ function guardJobFunction(bot, targets) {
             shouldTransition: () => patrol.getEndPatrol(),
         }),
 
-
         new StateTransition({
             parent: getReadyForPatrol,
             child: patrol,
@@ -107,7 +105,6 @@ function guardJobFunction(bot, targets) {
             name: 'getItemsAndEquip -> patrol',
             shouldTransition: () => getItemsAndEquip.getIsFinished(),
         }),
-
 
         new StateTransition({
             parent: guardCombatJobFunction,
