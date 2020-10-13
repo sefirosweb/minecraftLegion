@@ -39,9 +39,23 @@ function guardCombatJobFunction(bot, targets) {
     let targetGrade = false;
     let prevPlayerPositions = [];
     let bowColdown = Date.now();; // Used for avoid bugs on jam between bow and sword 
+    let newTargetColdDown = Date.now();
+
+    const filter = e => e.type === 'mob' &&
+        e.position.distanceTo(bot.entity.position) < 5 &&
+        e.mobType !== 'Armor Stand'
 
     function getGrades() {
-        if (Date.now() - bowColdown < 3000) {
+        // Of other enemies aproax, change target (Ex clipper)
+        if (Date.now() - newTargetColdDown > 1000) {
+            const entity = bot.nearestEntity(filter);
+            if (entity) {
+                targets.entity = entity;
+                newTargetColdDown = Date.now();
+            }
+        }
+
+        if (Date.now() - bowColdown < 1500) {
             longRangeAttack.setInfoShot(false);
             return false;
         }
@@ -78,12 +92,8 @@ function guardCombatJobFunction(bot, targets) {
         speed.y = speed.y / prevPlayerPositions.length;
         speed.z = speed.z / prevPlayerPositions.length;
 
-
         targetGrade = bot.hawkEye.getMasterGrade(targets.entity, speed);
-
         longRangeAttack.setInfoShot(targetGrade);
-        console.clear();
-        console.log(targetGrade);
     }
 
     function startGrades() {
@@ -111,7 +121,6 @@ function guardCombatJobFunction(bot, targets) {
             parent: enter,
             child: attack,
             onTransition: () => {
-                console.log('Activating master grade');
                 startGrades();
             },
             name: 'enter -> followMob',
