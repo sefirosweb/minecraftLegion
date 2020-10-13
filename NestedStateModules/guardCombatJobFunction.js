@@ -38,9 +38,16 @@ function guardCombatJobFunction(bot, targets) {
 
     let targetGrade = false;
     let prevPlayerPositions = [];
+    let bowColdown = Date.now();; // Used for avoid bugs on jam between bow and sword 
 
     function getGrades() {
+        if (Date.now() - bowColdown < 3000) {
+            longRangeAttack.setInfoShot(false);
+            return false;
+        }
+
         if (!targets.entity) {
+            longRangeAttack.setInfoShot(false);
             return false;
         }
         if (prevPlayerPositions.length > 10) {
@@ -141,6 +148,7 @@ function guardCombatJobFunction(bot, targets) {
             child: followMob,
             onTransition: () => {
                 checkHandleSword();
+                bowColdown = Date.now();
             },
             name: 'Mob is near for short attack',
             shouldTransition: () => followMob.distanceToTarget() < range_followToShortAttack && targets.entity.isValid,
@@ -151,6 +159,7 @@ function guardCombatJobFunction(bot, targets) {
             child: followMob,
             onTransition: () => {
                 checkHandleSword();
+                bowColdown = Date.now();
             },
             name: 'Mob is VERY too far',
             shouldTransition: () => followMob.distanceToTarget() > rango_bow && targets.entity.isValid,
@@ -159,6 +168,10 @@ function guardCombatJobFunction(bot, targets) {
         new StateTransition({
             parent: longRangeAttack,
             child: followMob,
+            onTransition: () => {
+                checkHandleSword();
+                bowColdown = Date.now();
+            },
             name: 'Cant target to Mob',
             shouldTransition: () => targetGrade === false && targets.entity.isValid,
         }),
