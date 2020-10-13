@@ -74,9 +74,7 @@ function createNewBot(botName, portBotStateMachine = null, portPrismarineViewer 
 
             try {
                 bot.removeListener('move', nextPointListener);
-            } catch (e) {
-                // console.log('nextPointListener no inicializado');
-            }
+            } catch (e) {}
 
             transitions[1].trigger();
 
