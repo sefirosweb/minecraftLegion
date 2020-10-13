@@ -3,14 +3,17 @@ const { stdout, stdin } = require('process');
 
 const botsToStart = [
     { username: "Guard1", portBotStateMachine: 12121, portPrismarineViewer: '', portInventory: '' },
-    { username: "Archer1", portBotStateMachine: '', portPrismarineViewer: '', portInventory: '' },
-
     { username: "Guard2", portBotStateMachine: '', portPrismarineViewer: '', portInventory: '' },
     { username: "Guard3", portBotStateMachine: '', portPrismarineViewer: '', portInventory: '' },
-    /*
-    { username: "Archer2", portBotStateMachine: null, portPrismarineViewer: null, portInventory: null },
-    { username: "Archer3", portBotStateMachine: null, portPrismarineViewer: null, portInventory: null },
-    { username: "Archer4", portBotStateMachine: null, portPrismarineViewer: null, portInventory: null },*/
+    { username: "Guard4", portBotStateMachine: '', portPrismarineViewer: '', portInventory: '' },
+
+
+    { username: "Archer1", portBotStateMachine: '', portPrismarineViewer: '', portInventory: '' },
+    { username: "Archer2", portBotStateMachine: '', portPrismarineViewer: '', portInventory: '' },
+    { username: "Archer3", portBotStateMachine: '', portPrismarineViewer: '', portInventory: '' },
+    // { username: "Archer4", portBotStateMachine: '', portPrismarineViewer: '', portInventory: '' },
+
+
 ];
 
 let i = 0;
