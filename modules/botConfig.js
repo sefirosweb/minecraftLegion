@@ -10,7 +10,7 @@ function getConn(botName) {
         mode: 'none', // none, pve, pvp
         distance: 10,
         help_friends: false,
-        chest: false,
+        chest: [],
         patrol: []
     };
 

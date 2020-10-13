@@ -39,6 +39,9 @@ class BehaviorMoveToArray {
         let nearestDistance = false;
         let nearestPoint = 0;
         let currentPoint = 0;
+        if (this.patrol.length == 0) {
+            return;
+        }
         this.patrol.forEach(position => {
             let distance = this.getDistance(position);
             if (distance < nearestDistance || !nearestDistance) {
