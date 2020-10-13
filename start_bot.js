@@ -76,6 +76,10 @@ function createNewBot(botName, portBotStateMachine = null, portPrismarineViewer 
                 bot.removeListener('move', nextPointListener);
             } catch (e) {}
 
+            try {
+                bot.removeListener('physicTick', getGrades);
+            } catch (e) {}
+
             transitions[1].trigger();
 
         })

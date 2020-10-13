@@ -8,6 +8,10 @@ const BehaviorAttack = require("./../BehaviorModules/BehaviorAttack");
 const BehaviorLongAttack = require("./../BehaviorModules/BehaviorLongAttack");
 
 function guardCombatJobFunction(bot, targets) {
+    const hawkEye = require("minecrafthawkeye");
+    bot.loadPlugin(hawkEye);
+
+
     const range_exitIsToFarAway = 100;
 
     const rango_bow = 60;
@@ -30,12 +34,34 @@ function guardCombatJobFunction(bot, targets) {
     const followMob = new BehaviorFollowEntity(bot, targets);
     followMob.stateName = 'Follow Enemy';
 
+
+    let targetGrade = false;
+
+    function getGrades() {
+        if (targets.entity) {
+            targetGrade = bot.hawkEye.getMasterGrade(targets.entity);
+        } else {
+            targetGrade = false;
+        }
+        console.clear();
+        console.log(targetGrade);
+    }
+
+    function startGrades() {
+        bot.on('physicTick', getGrades);
+    }
+
+    function stopGrades() {
+        bot.removeListener('physicTick', getGrades);
+    }
+
     const transitions = [
         new StateTransition({
             parent: enter,
             child: attack,
             onTransition: () => {
                 console.log('Activating master grade');
+                startGrades();
             },
             name: 'enter -> followMob',
             shouldTransition: () => true,
@@ -104,7 +130,11 @@ function guardCombatJobFunction(bot, targets) {
             parent: attack,
             child: exit,
             name: 'Mob is dead',
-            onTransition: () => targets.entity = undefined,
+            onTransition: () => {
+                targets.entity = undefined;
+                stopGrades();
+                console.log('exit');
+            },
             shouldTransition: () => targets.entity.isValid === false
         }),
 
@@ -112,7 +142,11 @@ function guardCombatJobFunction(bot, targets) {
             parent: longRangeAttack,
             child: exit,
             name: 'Mob is dead',
-            onTransition: () => targets.entity = undefined,
+            onTransition: () => {
+                targets.entity = undefined;
+                stopGrades();
+                console.log('exit');
+            },
             shouldTransition: () => targets.entity.isValid === false
         }),
 
@@ -120,7 +154,11 @@ function guardCombatJobFunction(bot, targets) {
             parent: followMob,
             child: exit,
             name: 'Mob is dead',
-            onTransition: () => targets.entity = undefined,
+            onTransition: () => {
+                targets.entity = undefined;
+                stopGrades();
+                console.log('exit');
+            },
             shouldTransition: () => targets.entity.isValid === false
         }),
         // END ************* Long Range Attack 

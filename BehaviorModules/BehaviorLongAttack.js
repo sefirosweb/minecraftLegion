@@ -75,7 +75,7 @@ class BehaviorLongAttack {
         }
 
 
-        const infoShot = this.bot.hawkEye.getMasterGrade(this.bot, this.targets.entity, speed);
+        const infoShot = this.bot.hawkEye.getMasterGrade(this.targets.entity, speed);
 
         /*
         console.clear();
