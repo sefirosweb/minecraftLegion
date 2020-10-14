@@ -46,6 +46,7 @@ function guardCombatJobFunction(bot, targets) {
         e.mobType !== 'Armor Stand'
 
     function getGrades() {
+
         // Of other enemies aproax, change target (Ex clipper)
         if (Date.now() - newTargetColdDown > 1000) {
             const entity = bot.nearestEntity(filter);
@@ -117,6 +118,44 @@ function guardCombatJobFunction(bot, targets) {
     }
 
     const transitions = [
+        // Mob is dead
+        new StateTransition({
+            parent: attack,
+            child: exit,
+            name: 'Mob is dead',
+            onTransition: () => {
+                targets.entity = undefined;
+                stopGrades();
+                checkHandleSword();
+            },
+            shouldTransition: () => !targets.entity || targets.entity.isValid === false
+        }),
+
+        new StateTransition({
+            parent: longRangeAttack,
+            child: exit,
+            name: 'Mob is dead',
+            onTransition: () => {
+                targets.entity = undefined;
+                stopGrades();
+                checkHandleSword();
+            },
+            shouldTransition: () => !targets.entity || targets.entity.isValid === false
+        }),
+
+        new StateTransition({
+            parent: followMob,
+            child: exit,
+            name: 'Mob is dead',
+            onTransition: () => {
+                targets.entity = undefined;
+                stopGrades();
+                checkHandleSword();
+            },
+            shouldTransition: () => !targets.entity || targets.entity.isValid === false
+        }),
+        // END Mob is dead ***********
+
         new StateTransition({
             parent: enter,
             child: attack,
@@ -207,43 +246,6 @@ function guardCombatJobFunction(bot, targets) {
             shouldTransition: () => followMob.distanceToTarget() < range_sword && attack.nextAttack() && targets.entity.isValid,
         }),
 
-        // Mob is dead
-        new StateTransition({
-            parent: attack,
-            child: exit,
-            name: 'Mob is dead',
-            onTransition: () => {
-                targets.entity = undefined;
-                stopGrades();
-                checkHandleSword();
-            },
-            shouldTransition: () => targets.entity.isValid === false
-        }),
-
-        new StateTransition({
-            parent: longRangeAttack,
-            child: exit,
-            name: 'Mob is dead',
-            onTransition: () => {
-                targets.entity = undefined;
-                stopGrades();
-                checkHandleSword();
-            },
-            shouldTransition: () => targets.entity.isValid === false
-        }),
-
-        new StateTransition({
-            parent: followMob,
-            child: exit,
-            name: 'Mob is dead',
-            onTransition: () => {
-                targets.entity = undefined;
-                stopGrades();
-                checkHandleSword();
-            },
-            shouldTransition: () => targets.entity.isValid === false
-        }),
-        // END ************* Long Range Attack 
     ];
 
     const guardCombatJobFunction = new NestedStateMachine(transitions, enter, exit);
