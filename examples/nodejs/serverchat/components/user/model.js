@@ -1,4 +1,4 @@
-/*const MongoLib = require('../../network/mongoLib')
+/* const MongoLib = require('../../network/mongoLib')
 
 const mongodb = require('mongodb')
 
@@ -18,7 +18,6 @@ const mySchema = new Schema({
         required: true
     },
 });
-
 
 const model = mongodb.model('Message', mySchema);
 module.exports = model

@@ -1,59 +1,58 @@
-const express = require('express');
+const express = require('express')
 const multer = require('multer')
 const response = require('../../network/response')
 const controller = require('./controller')
-const router = express.Router();
+const router = express.Router()
 
 router.get('/', function (req, res) {
-    const filter = req.query.user || null;
-    controller.getMessages(filter)
-        .then((result) => {
-            response.success(req, res, result)
-        })
-        .catch(e => {
-            response.error(req, res, 'Error interno', 500, '[message network] Error desconocido => ' + e)
-        });
+  const filter = req.query.user || null
+  controller.getMessages(filter)
+    .then((result) => {
+      response.success(req, res, result)
+    })
+    .catch(e => {
+      response.error(req, res, 'Error interno', 500, '[message network] Error desconocido => ' + e)
+    })
 })
 
 router.get('/:id', function (req, res) {
-    controller.getMessage(req.params.id)
-        .then((result) => {
-            response.success(req, res, result)
-        })
-        .catch(e => {
-            response.error(req, res, 'Error interno', 500, '[message network] Error desconocido => ' + e)
-        });
+  controller.getMessage(req.params.id)
+    .then((result) => {
+      response.success(req, res, result)
+    })
+    .catch(e => {
+      response.error(req, res, 'Error interno', 500, '[message network] Error desconocido => ' + e)
+    })
 })
 
 router.post('/', function (req, res) {
-    controller.addMessage(req.body.user, req.body.message)
-        .then((result) => {
-            response.success(req, res, result)
-        })
-        .catch(e => {
-            response.error(req, res, 'Informacion Invalida', 500, '[message network] No se ha insertado usuario o contraseña => ' + e)
-        });
+  controller.addMessage(req.body.user, req.body.message)
+    .then((result) => {
+      response.success(req, res, result)
+    })
+    .catch(e => {
+      response.error(req, res, 'Informacion Invalida', 500, '[message network] No se ha insertado usuario o contraseña => ' + e)
+    })
 })
 
 router.patch('/:id', function (req, res) {
-    controller.updateMessage(req.body.user, req.body.message, req.params.id)
-        .then(() => {
-            response.success(req, res, `Usuario ${req.params.id} eliminado`)
-        })
-        .catch(e => {
-            response.error(req, res, 'Informacion Invalida', 500, '[message network] No se ha insertado usuario o contraseña o id => ' + e)
-        });
+  controller.updateMessage(req.body.user, req.body.message, req.params.id)
+    .then(() => {
+      response.success(req, res, `Usuario ${req.params.id} eliminado`)
+    })
+    .catch(e => {
+      response.error(req, res, 'Informacion Invalida', 500, '[message network] No se ha insertado usuario o contraseña o id => ' + e)
+    })
 })
 
 router.delete('/:id', function (req, res) {
-    controller.deleteMessage(req.params.id)
-        .then(() => {
-            response.success(req, res, `Usuario ${req.params.id} eliminado`)
-        })
-        .catch(e => {
-            response.error(req, res, 'Informacion Invalida', 500, '[message network] No se ha insertado id => ' + e)
-        });
+  controller.deleteMessage(req.params.id)
+    .then(() => {
+      response.success(req, res, `Usuario ${req.params.id} eliminado`)
+    })
+    .catch(e => {
+      response.error(req, res, 'Informacion Invalida', 500, '[message network] No se ha insertado id => ' + e)
+    })
 })
 
-
-module.exports = router;
+module.exports = router

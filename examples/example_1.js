@@ -3,12 +3,12 @@ const USERNAME = process.env.USER
 const SERVER = process.env.SERVER
 const PORT = process.env.PORT
 
-console.log("Bot: " + USERNAME + " Conecting to:" + SERVER)
+console.log('Bot: ' + USERNAME + ' Conecting to:' + SERVER)
 const mineflayer = require('mineflayer')
 const bot = mineflayer.createBot({
-    username: USERNAME,
-    host: SERVER,
-    port: PORT
+  username: USERNAME,
+  host: SERVER,
+  port: PORT
 })
 
 // Console logs for issues
@@ -17,19 +17,18 @@ bot.on('error', err => console.log(err))
 
 // Example Chat
 bot.on('chat', function (username, message) {
-    if (username === bot.username) return
-    console.log(username + ': ' + message)
-    if(message == "Hey"){
-        bot.chat('Hi!')
-    }
+  if (username === bot.username) return
+  console.log(username + ': ' + message)
+  if (message == 'Hey') {
+    bot.chat('Hi!')
+  }
 })
 
 // Example looking to nearest player
-bot.on('physicTick', function(){
-    const playerFilter = (entity) => entity.type === 'player'
-    const playerEntity = bot.nearestEntity(playerFilter)
-    if(!playerEntity) return
-    const pos = playerEntity.position.offset(0,playerEntity.height,0)
-    bot.lookAt(pos)
-});
-
+bot.on('physicTick', function () {
+  const playerFilter = (entity) => entity.type === 'player'
+  const playerEntity = bot.nearestEntity(playerFilter)
+  if (!playerEntity) return
+  const pos = playerEntity.position.offset(0, playerEntity.height, 0)
+  bot.lookAt(pos)
+})

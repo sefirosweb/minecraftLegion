@@ -18,7 +18,6 @@ const mySchema = new Schema({
     },
 });
 
-
 const model = mongodb.model('Message', mySchema);
 module.exports = model
 */
