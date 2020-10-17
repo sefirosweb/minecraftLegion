@@ -7,8 +7,9 @@ let botList = document.getElementById('botList');
 
 // Get logs
 socket.on('logs', (data) => {
-    textAreaLogs.append(data + '\r\n')
-    textAreaLogs.scrollTop = textAreaLogs.scrollHeight;
+    textAreaLogs.appendChild(document.createTextNode(data))
+    textAreaLogs.appendChild(document.createElement("br"))
+    textAreaLogs.scrollTop = textAreaLogs.scrollHeight
 })
 
 // Get online Bots
@@ -26,8 +27,10 @@ socket.on('botsOnline', botsOnline => {
         botList.removeChild(botList.firstChild);
     }
 
+    const countBots = botsConnected.length
+
     var li = document.createElement("li");
-    li.appendChild(document.createTextNode('Bots Online'))
+    li.appendChild(document.createTextNode('Bots Online (' + countBots + ')'))
     li.classList.add("list-group-item")
     li.classList.add("active")
     botList.appendChild(li);

@@ -31,7 +31,7 @@ io.on('connection', (socket) => {
     botsConnected.splice(botsConnected.indexOf(find), 1)
 
     io.sockets.emit('botsOnline', JSON.stringify(botsConnected))
-    sendLogs('Disconnected', find.name)
+    sendLogs('<span>Disconnected</span>', find.name)
   });
 
   // When bot logins
@@ -72,13 +72,13 @@ function sendLogs(data, botName = '') {
 const botsToStart = [
   { username: 'Guard1', portBotStateMachine: '', portPrismarineViewer: '', portInventory: '' },
   { username: 'Guard2', portBotStateMachine: '', portPrismarineViewer: '', portInventory: '' },
-  /* { username: 'Guard3', portBotStateMachine: '', portPrismarineViewer: '', portInventory: '' },
+  { username: 'Guard3', portBotStateMachine: '', portPrismarineViewer: '', portInventory: '' },
   { username: 'Guard4', portBotStateMachine: '', portPrismarineViewer: '', portInventory: '' },
 
   { username: 'Archer1', portBotStateMachine: '', portPrismarineViewer: '', portInventory: '' },
   { username: 'Archer2', portBotStateMachine: '', portPrismarineViewer: '', portInventory: '' },
   { username: 'Archer3', portBotStateMachine: '', portPrismarineViewer: '', portInventory: '' }
-*/
+
 ]
 
 let i = 0
