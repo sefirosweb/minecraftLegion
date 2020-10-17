@@ -8,7 +8,7 @@ const path = require('path')
 const SocketIO = require('socket.io')
 
 // Server
-app.set('port', config.webServer || 3000)
+app.set('port', config.webServerPort || 3000)
 
 // Static files
 app.use(express.static(path.join(__dirname, 'public')))
@@ -23,20 +23,34 @@ const botsConnected = [];
 // Websocket server
 const io = SocketIO(server)
 io.on('connection', (socket) => {
+  // When bot logouts
+  socket.on('disconnect', function () {
+    const find = botsConnected.find(botConection => botConection.socketId === socket.id)
+    if (find === undefined) { return }
 
-  // io.sockets.emit('logs', 'New connection');
+    botsConnected.splice(botsConnected.indexOf(find), 1)
 
-  socket.emit('getFriends', JSON.stringify(botsConnected))
+    io.sockets.emit('botsOnline', JSON.stringify(botsConnected))
+    sendLogs(find.name + ' disconnected!')
+  });
+
+  // When bot logins
+  socket.on('addFriend', (botName) => {
+    const find = botsConnected.find(botConection => botConection.name === botName)
+    if (find === undefined) {
+      botsConnected.push({ socketId: socket.id, name: botName })
+    }
+    io.sockets.emit('botsOnline', JSON.stringify(botsConnected))
+    sendLogs(botName + ' loged!')
+  })
+
+  socket.on('getBotsOnline', () => {
+    socket.emit('botsOnline', JSON.stringify(botsConnected))
+  })
 
   // Reciving info
   socket.on('command', (data) => {
     sendLogs(data)
-  })
-
-  socket.on('addFriend', (botName) => {
-    botsConnected.push(botName)
-    io.sockets.emit('getFriends', JSON.stringify(botsConnected))
-    sendLogs(botName + ' loged!')
   })
 
 })

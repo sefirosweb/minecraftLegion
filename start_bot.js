@@ -1,6 +1,13 @@
 const config = require('./config')
 const mineflayer = require('mineflayer')
 
+const io = require("socket.io-client")
+const ioClient = io.connect(config.webServer + ':' + config.webServerPort)
+
+ioClient.on('botsOnline', (botsOnline) => {
+  console.log(botsOnline)
+})
+
 const {
   StateTransition,
   BotStateMachine,
@@ -37,15 +44,7 @@ function createNewBot(botName, portBotStateMachine = null, portPrismarineViewer 
     process.exit()
   })
   bot.once('spawn', () => {
-
-    const io = require("socket.io-client")
-    const ioClient = io.connect("http://localhost:3000")
-
     ioClient.emit('addFriend', bot.username)
-    ioClient.on('getFriends', (botname) => {
-      console.log(botName)
-    })
-
 
     bot.chat('Im in!')
     if (portInventory !== null) {

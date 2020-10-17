@@ -18,21 +18,32 @@
 </head>
 
 <body>
-    <div class="container">
-        <h1>Minecraft Legion</h1>
-
-        <div>
-            <div class="form-group">
-                <label for="textAreaLogs">Logs</label>
-                <textarea class="form-control" readonly id="textAreaLogs" rows="10"></textarea>
+    <div class="container-fluid">
+        <div style="padding-top: 20px;"></div>
+        <div class="row">
+            <div class="col-8 offset-1">
+                <h1>Minecraft Legion</h1>
             </div>
         </div>
-        <div class="form-group">
-            <input type="text" class="form-control" id="inputCommandText">
+        <div class="row">
+            <div class="col-8 offset-1">
+                <div class="form-group">
+                    <textarea class="form-control" readonly id="textAreaLogs" rows="10" placeholder="Logs"></textarea>
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control" id="inputCommandText">
+                </div>
+                <button type="button" id="sendCommandButton" class="btn btn-primary">Send</button>
+            </div>
+            <div class="col-2">
+                <ul class="list-group" id="botList">
+                </ul>
+            </div>
         </div>
-        <button type="button" id="sendCommandButton" class="btn btn-primary">Send</button>
     </div>
-    <script src="jss/websocket.js"></script>
 </body>
+<footer>
+    <script src="jss/websocket.js"></script>
+</footer>
 
 </html>
