@@ -10,9 +10,9 @@ function startWorkFunction (bot, targets) {
   const enter = new BehaviorIdle(targets)
   enter.stateName = 'Enter'
 
-  const guardJob = new require('./guardJobFunction')(bot, targets)
-  const archerJob = new require('./archerJobFunction')(bot, targets)
-  const farmerJob = new require('./farmerJobFunction')(bot, targets)
+  const guardJob = require('./guardJobFunction')(bot, targets)
+  const archerJob = require('./archerJobFunction')(bot, targets)
+  const farmerJob = require('./farmerJobFunction')(bot, targets)
   const loadConfig = new BehaviorLoadConfig(bot, targets)
   loadConfig.stateName = 'Load Bot Config'
 

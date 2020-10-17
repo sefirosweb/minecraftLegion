@@ -5,6 +5,7 @@ const {
   BehaviorLookAtEntity,
   NestedStateMachine
 } = require('mineflayer-statemachine')
+const botConfig = require('../modules/botConfig')
 
 function commandsFunction (bot, targets) {
   const enter = new BehaviorIdle(targets)
@@ -134,13 +135,14 @@ function commandsFunction (bot, targets) {
     }
   }
 
+  let patrol = []
+
   function saveJob (job) {
     switch (true) {
       case (job === 'guard'):
       case (job === 'archer'):
       case (job === 'farmer'):
         bot.chat('I will fulfill this job')
-        const botConfig = require('../modules/botConfig')
         botConfig.setJob(bot.username, job)
         break
       default:
@@ -155,7 +157,6 @@ function commandsFunction (bot, targets) {
       case (mode === 'pvp'):
       case (mode === 'pve'):
         bot.chat('I understood the conflict')
-        const botConfig = require('../modules/botConfig')
         botConfig.setMode(bot.username, mode)
         break
       default:
@@ -168,7 +169,6 @@ function commandsFunction (bot, targets) {
     distance = parseInt(distance)
     if (!isNaN(distance)) {
       bot.chat('I take a look!')
-      const botConfig = require('../modules/botConfig')
       botConfig.setDistance(bot.username, distance)
     } else {
       bot.chat('I dont understood the distance')
@@ -196,7 +196,7 @@ function commandsFunction (bot, targets) {
     distancePatrol = distance
 
     const point = bot.entity.position
-    const patrol = []
+    patrol = []
     patrol.push(point)
     prevPoint = point
 

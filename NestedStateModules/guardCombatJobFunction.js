@@ -8,11 +8,9 @@ const BehaviorAttack = require('./../BehaviorModules/BehaviorAttack')
 const BehaviorLongAttack = require('./../BehaviorModules/BehaviorLongAttack')
 
 function guardCombatJobFunction (bot, targets) {
-  inventory = require('../modules/inventoryModule')(bot)
+  const inventory = require('../modules/inventoryModule')(bot)
   const hawkEye = require('minecrafthawkeye')
   bot.loadPlugin(hawkEye)
-
-  const range_exitIsToFarAway = 100
 
   const rangoBow = 60
   const rangeSword = 3
