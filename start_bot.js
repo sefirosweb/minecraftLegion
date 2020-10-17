@@ -1,12 +1,10 @@
 const config = require('./config')
 const mineflayer = require('mineflayer')
 
-const io = require("socket.io-client")
-const ioClient = io.connect(config.webServer + ':' + config.webServerPort)
+const botWebsocket = require('./modules/botWebsocket')
 
-ioClient.on('botsOnline', (botsOnline) => {
-  console.log(botsOnline)
-})
+
+
 
 const {
   StateTransition,
@@ -44,7 +42,7 @@ function createNewBot(botName, portBotStateMachine = null, portPrismarineViewer 
     process.exit()
   })
   bot.once('spawn', () => {
-    ioClient.emit('addFriend', bot.username)
+    botWebsocket.emit('addFriend', bot.username)
 
     bot.chat('Im in!')
     if (portInventory !== null) {
@@ -79,17 +77,21 @@ function createNewBot(botName, portBotStateMachine = null, portPrismarineViewer 
     bot.on('death', function () {
       try {
         bot.removeListener('chat', botChatCommandFunctionListener)
+        botWebsocket.log('removeListener botChatCommandFunctionListener')
       } catch (e) { }
 
       try {
         bot.removeListener('move', nextPointListener)
+        botWebsocket.log('removeListener nextPointListener')
       } catch (e) { }
 
       try {
         bot.removeListener('physicTick', getGrades)
+        botWebsocket.log('removeListener getGrades')
       } catch (e) { }
 
       transitions[1].trigger()
+      botWebsocket.log('trigger death')
     })
 
     const root = new NestedStateMachine(transitions, idleState)

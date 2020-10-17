@@ -1,3 +1,5 @@
+const botWebsocket = require('../modules/botWebsocket')
+
 const {
   StateTransition,
   BehaviorIdle,
@@ -12,7 +14,7 @@ const BehaviorGetItemsAndEquip = require('./../BehaviorModules/BehaviorGetItemsA
 
 const mineflayerpathfinder = require('mineflayer-pathfinder')
 
-function guardJobFunction (bot, targets) {
+function guardJobFunction(bot, targets) {
   const mcData = require('minecraft-data')(bot.version)
   const movementsForAttack = new mineflayerpathfinder.Movements(bot, mcData)
   movementsForAttack.digCost = 100

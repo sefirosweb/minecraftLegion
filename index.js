@@ -31,7 +31,7 @@ io.on('connection', (socket) => {
     botsConnected.splice(botsConnected.indexOf(find), 1)
 
     io.sockets.emit('botsOnline', JSON.stringify(botsConnected))
-    sendLogs(find.name + ' disconnected!')
+    sendLogs('Disconnected', find.name)
   });
 
   // When bot logins
@@ -41,7 +41,7 @@ io.on('connection', (socket) => {
       botsConnected.push({ socketId: socket.id, name: botName })
     }
     io.sockets.emit('botsOnline', JSON.stringify(botsConnected))
-    sendLogs(botName + ' loged!')
+    sendLogs('Login', botName)
   })
 
   socket.on('getBotsOnline', () => {
@@ -53,21 +53,21 @@ io.on('connection', (socket) => {
     sendLogs(data)
   })
 
+  // Reciving logs
+  socket.on('logs', (data) => {
+    const find = botsConnected.find(botConection => botConection.socketId === socket.id)
+    sendLogs(data, find.name)
+  })
+
 })
 
-function sendLogs(data) {
+function sendLogs(data, botName = '') {
   const date = new Date();
   const seconds = date.getSeconds();
   const minutes = date.getMinutes();
   const hour = date.getHours();
-  io.sockets.emit('logs', hour + ':' + minutes + ':' + seconds + ' ' + data);
+  io.sockets.emit('logs', hour + ':' + minutes + ':' + seconds + ' [' + botName + '] ' + data);
 }
-
-
-
-
-
-
 
 const botsToStart = [
   { username: 'Guard1', portBotStateMachine: '', portPrismarineViewer: '', portInventory: '' },

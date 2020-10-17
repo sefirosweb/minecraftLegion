@@ -1,3 +1,5 @@
+const botWebsocket = require('../modules/botWebsocket')
+
 const {
   StateTransition,
   BehaviorIdle,
@@ -7,7 +9,7 @@ const {
 const BehaviorAttack = require('./../BehaviorModules/BehaviorAttack')
 const BehaviorLongAttack = require('./../BehaviorModules/BehaviorLongAttack')
 
-function guardCombatJobFunction (bot, targets) {
+function guardCombatJobFunction(bot, targets) {
   const inventory = require('../modules/inventoryModule')(bot)
   const hawkEye = require('minecrafthawkeye')
   bot.loadPlugin(hawkEye)
@@ -40,11 +42,12 @@ function guardCombatJobFunction (bot, targets) {
     e.position.distanceTo(bot.entity.position) < 5 &&
     e.mobType !== 'Armor Stand'
 
-  function getGrades () {
+  function getGrades() {
     // Of other enemies aproax, change target (Ex clipper)
     if (Date.now() - newTargetColdDown > 1000) {
       const entity = bot.nearestEntity(filter)
       if (entity) {
+        botWebsocket.log('Change Target => ' + entity.mobType)
         targets.entity = entity
         newTargetColdDown = Date.now()
       }
@@ -91,15 +94,15 @@ function guardCombatJobFunction (bot, targets) {
     longRangeAttack.setInfoShot(targetGrade)
   }
 
-  function startGrades () {
+  function startGrades() {
     bot.on('physicTick', getGrades)
   }
 
-  function stopGrades () {
+  function stopGrades() {
     bot.removeListener('physicTick', getGrades)
   }
 
-  function checkHandleSword () {
+  function checkHandleSword() {
     const swordHandled = inventory.checkItemEquiped('sword')
 
     if (swordHandled) { return }
@@ -117,6 +120,7 @@ function guardCombatJobFunction (bot, targets) {
       child: exit,
       name: 'Mob is dead',
       onTransition: () => {
+        botWebsocket.log('End Combat - attack')
         targets.entity = undefined
         stopGrades()
         checkHandleSword()
@@ -129,6 +133,7 @@ function guardCombatJobFunction (bot, targets) {
       child: exit,
       name: 'Mob is dead',
       onTransition: () => {
+        botWebsocket.log('End Combat - longRangeAttack')
         targets.entity = undefined
         stopGrades()
         checkHandleSword()
@@ -141,6 +146,7 @@ function guardCombatJobFunction (bot, targets) {
       child: exit,
       name: 'Mob is dead',
       onTransition: () => {
+        botWebsocket.log('End Combat - followMob')
         targets.entity = undefined
         stopGrades()
         checkHandleSword()
@@ -153,6 +159,7 @@ function guardCombatJobFunction (bot, targets) {
       parent: enter,
       child: attack,
       onTransition: () => {
+        botWebsocket.log('Start combat ' + targets.entity.mobType)
         startGrades()
       },
       name: 'enter -> followMob',
