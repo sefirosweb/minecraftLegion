@@ -1,7 +1,7 @@
 const cp = require('child_process')
 
 const botsToStart = [
-  { username: 'Guard1', portBotStateMachine: 12121, portPrismarineViewer: '', portInventory: '' },
+  { username: 'Guard1', portBotStateMachine: '', portPrismarineViewer: '', portInventory: '' },
   { username: 'Guard2', portBotStateMachine: '', portPrismarineViewer: '', portInventory: '' },
   { username: 'Guard3', portBotStateMachine: '', portPrismarineViewer: '', portInventory: '' },
   { username: 'Guard4', portBotStateMachine: '', portPrismarineViewer: '', portInventory: '' },
@@ -9,7 +9,6 @@ const botsToStart = [
   { username: 'Archer1', portBotStateMachine: '', portPrismarineViewer: '', portInventory: '' },
   { username: 'Archer2', portBotStateMachine: '', portPrismarineViewer: '', portInventory: '' },
   { username: 'Archer3', portBotStateMachine: '', portPrismarineViewer: '', portInventory: '' }
-  // { username: "Archer4", portBotStateMachine: '', portPrismarineViewer: '', portInventory: '' },
 
 ]
 

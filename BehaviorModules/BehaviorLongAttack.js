@@ -10,6 +10,7 @@ module.exports = class BehaviorLongAttack {
 
     this.preparingShot = false
     this.prevTime = false
+    this.infoShot = false
   }
 
   onStateEntered () {
