@@ -7,6 +7,7 @@
         "example": "examples"
     },
     "dependencies": {
+        "express": "^4.17.1",
         "lowdb": "^1.0.0",
         "minecrafthawkeye": "^1.0.8",
         "mineflayer": "^2.31.0",

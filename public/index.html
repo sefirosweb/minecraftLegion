@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minecraft Legion!</title>
+
+    <!-- Boostrap -->
+    <link rel="stylesheet" href="vendor/boostrap_4.5/css/bootstrap.min.css">
+    <script src="vendor/jquery-3.5.1.slim.min.js"></script>
+    <script src="vendor/boostrap_4.5/js/bootstrap.bundle.min.js"></script>
+
+
+    <!-- Main config -->
+    <link rel="stylesheet" href="css/main.css">
+    <script src="socket.io/socket.io.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Minecraft Legion</h1>
+
+        <div>
+            <div class="form-group">
+                <label for="textAreaLogs">Logs</label>
+                <textarea class="form-control" readonly id="textAreaLogs" rows="10"></textarea>
+            </div>
+        </div>
+        <div class="form-group">
+            <input type="text" class="form-control" id="inputCommandText">
+        </div>
+        <button type="button" id="sendCommandButton" class="btn btn-primary">Send</button>
+    </div>
+    <script src="jss/websocket.js"></script>
+</body>
+
+</html>
