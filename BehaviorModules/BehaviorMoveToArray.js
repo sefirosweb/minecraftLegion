@@ -31,9 +31,9 @@ class BehaviorMoveToArray {
         this.startMoving();
     }
 
-    onStateExited = function() {
+    onStateExited = function () {
         this.stopMoving();
-    };
+    }
 
     sortPatrol() {
         let nearestDistance = false;
@@ -53,7 +53,7 @@ class BehaviorMoveToArray {
         this.currentPosition = nearestPoint;
     }
 
-    getEndPatrol = function() {
+    getEndPatrol = function () {
         if (this.distanceToTarget() <= 2 && this.endPatrol == false) {
             this.startMoving();
             return false;
@@ -66,12 +66,12 @@ class BehaviorMoveToArray {
         return false;
     };
 
-    stopMoving = function() {
+    stopMoving = function () {
         const pathfinder = this.bot.pathfinder;
         pathfinder.setGoal(null);
     };
 
-    startMoving = function() {
+    startMoving = function () {
         this.position = this.patrol[this.currentPosition];
         this.currentPosition++;
 
@@ -93,17 +93,17 @@ class BehaviorMoveToArray {
         let goal = new mineflayer_pathfinder.goals.GoalBlock(position.x, position.y, position.z);
         pathfinder.setMovements(this.movements);
         pathfinder.setGoal(goal);
-    };
+    }
 
-    restart = function() {
+    restart = function () {
         this.stopMoving();
         this.startMoving();
-    };
+    }
 
-    distanceToTarget = function() {
+    distanceToTarget = function () {
         let position = this.position;
         return this.getDistance(position)
-    };
+    }
 
     getDistance(position) {
         if (!position)

@@ -1,4 +1,3 @@
-const mineflayer = require('mineflayer')
 const mineflayerViewer = require('prismarine-viewer').mineflayer
 
 function start (bot, port = 4000) {

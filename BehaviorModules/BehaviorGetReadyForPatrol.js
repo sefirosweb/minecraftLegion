@@ -18,16 +18,16 @@ class BehaviorGetReadyForPatrol {
   }
 
   checkImReady () {
-    if (this.inventory.countItemsInInventoryOrEquipped('sword') == 0) {
+    if (this.inventory.countItemsInInventoryOrEquipped('sword') === 0) {
       this.isReady = false
       return
     }
 
-    if (this.inventory.countItemsInInventoryOrEquipped('shield') == 0) {
+    if (this.inventory.countItemsInInventoryOrEquipped('shield') === 0) {
       this.isReady = false
       return
     }
-    if (this.inventory.countItemsInInventoryOrEquipped('bow') == 0) {
+    if (this.inventory.countItemsInInventoryOrEquipped('bow') === 0) {
       this.isReady = false
       return
     }
@@ -35,19 +35,19 @@ class BehaviorGetReadyForPatrol {
       this.isReady = false
       return
     }
-    if (this.inventory.countItemsInInventoryOrEquipped('helmet') == 0) {
+    if (this.inventory.countItemsInInventoryOrEquipped('helmet') === 0) {
       this.isReady = false
       return
     }
-    if (this.inventory.countItemsInInventoryOrEquipped('chest') == 0) {
+    if (this.inventory.countItemsInInventoryOrEquipped('chest') === 0) {
       this.isReady = false
       return
     }
-    if (this.inventory.countItemsInInventoryOrEquipped('leggings') == 0) {
+    if (this.inventory.countItemsInInventoryOrEquipped('leggings') === 0) {
       this.isReady = false
       return
     }
-    if (this.inventory.countItemsInInventoryOrEquipped('boots') == 0) {
+    if (this.inventory.countItemsInInventoryOrEquipped('boots') === 0) {
       this.isReady = false
       return
     }

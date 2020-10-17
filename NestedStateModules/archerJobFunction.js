@@ -2,10 +2,8 @@ const {
   StateTransition,
   BehaviorIdle,
   BehaviorFollowEntity,
-  BehaviorLookAtEntity,
   NestedStateMachine,
-  BehaviorGetClosestEntity,
-  EntityFilters
+  BehaviorGetClosestEntity
 
 } = require('mineflayer-statemachine')
 const BehaviorAttack = require('../BehaviorModules/BehaviorAttack')
@@ -17,7 +15,7 @@ function archerJobFunction (bot, targets) {
 
   function distanceFilter (entity) {
     return entity.position.distanceTo(this.bot.player.entity.position) <= 10 &&
-            (entity.type === 'mob' || entity.type === 'player')
+      (entity.type === 'mob' || entity.type === 'player')
   }
   const getClosestMob = new BehaviorGetClosestEntity(bot, targets, distanceFilter)
 

@@ -1,44 +1,44 @@
 class BehaviorGetPlayer {
     constructor(bot, targets) {
-        this.bot = bot;
-        this.targets = targets;
-        this.stateName = 'BehaviorGetPlayer';
-        this.playerIsFound = false;
-        this.playername;
+        this.bot = bot
+        this.targets = targets
+        this.stateName = 'BehaviorGetPlayer'
+        this.playerIsFound = false
+        this.playername
     }
 
     onStateEntered() {
-        this.getPlayerEntity(this.playerName);
+        this.getPlayerEntity(this.playerName)
     }
 
-    getPlayerEntity = function(playerName) {
+    getPlayerEntity = function (playerName) {
         this.targets.entity = this.checkPlayer(playerName) || undefined
         this.playerIsFound = this.targets.entity !== undefined
         if (this.playerIsFound) {
-            this.playerName = playerName;
+            this.playerName = playerName
         }
-        return this.playerIsFound;
+        return this.playerIsFound
     }
 
-    checkPlayer = function(playerName) {
+    checkPlayer = function (playerName) {
         for (let entityName of Object.keys(this.bot.entities)) {
-            let entity = this.bot.entities[entityName];
+            let entity = this.bot.entities[entityName]
             if (entity === this.bot.entity)
-                continue;
+                continue
             if (entity.type !== 'player')
-                continue;
+                continue
             if (entity.username == playerName)
-                return entity;
+                return entity
         }
-        return null;
+        return null
     }
 
-    playerFound = function() {
-        return this.playerIsFound;
+    playerFound = function () {
+        return this.playerIsFound
     }
 
-    getPlayerName = function() {
-        return this.playerName;
+    getPlayerName = function () {
+        return this.playerName
     }
 
 }

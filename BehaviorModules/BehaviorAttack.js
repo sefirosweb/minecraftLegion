@@ -9,22 +9,22 @@ class BehaviorAttack {
         this.inventory = require('../modules/inventoryModule')(this.bot);
     }
 
-    onStateEntered = function() {
+    onStateEntered = function () {
         this.bot.lookAt(this.targets.entity.position.offset(0, 1, 0));
         this.checkHandleSword();
         this.bot.attack(this.targets.entity, true)
-    };
+    }
 
-    nextAttack = function() {
+    nextAttack = function () {
         const currentDate = Date.now();
         if (currentDate - this.lastAttack > 500) {
             this.lastAttack = currentDate
             return true;
         }
         return false;
-    };
+    }
 
-    checkHandleSword = function() {
+    checkHandleSword = function () {
         const swordHandled = this.inventory.checkItemEquiped('sword');
 
         if (swordHandled)
@@ -36,11 +36,5 @@ class BehaviorAttack {
         }
     }
 
-
-    /*
-    onStateExited() {
-        this.targets.targetEntity = bot.nearestEntity(() => true)
-    }
-    */
 }
 module.exports = BehaviorAttack

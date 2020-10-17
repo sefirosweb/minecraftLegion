@@ -12,31 +12,31 @@ class BehaviorLoadConfig {
         this.patrol = [];
     }
 
-    onStateEntered = function() {
+    onStateEntered = function () {
         this.job = botConfig.getJob(this.bot.username);
         this.mode = botConfig.getMode(this.bot.username);
         this.distance = botConfig.getDistance(this.bot.username);
         this.patrol = botConfig.getPatrol(this.bot.username);
         this.chest = botConfig.getChest(this.bot.username);
-    };
+    }
 
-    getJob = function() {
+    getJob = function () {
         return this.job;
-    };
+    }
 
-    getMode = function() {
+    getMode = function () {
         return this.mode;
     }
 
-    getDistance = function() {
+    getDistance = function () {
         return this.distance;
     }
 
-    getPatrol = function() {
+    getPatrol = function () {
         return this.patrol;
     }
 
-    getChest = function() {
+    getChest = function () {
         return this.chest;
     }
 

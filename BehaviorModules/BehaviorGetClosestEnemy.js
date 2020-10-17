@@ -1,5 +1,3 @@
-const mineflayer_pathfinder = require('mineflayer-pathfinder')
-
 class BehaviorGetClosestEnemy {
   constructor (bot, targets, mode, distance) {
     this.bot = bot
@@ -35,14 +33,15 @@ class BehaviorGetClosestEnemy {
   getValidPath (entity) {
     if (entity.type === 'mob' && (
       entity.mobType === 'Phantom' ||
-                entity.mobType === 'Blaze' ||
-                entity.mobType === 'Ender Dragon'
+      entity.mobType === 'Blaze' ||
+      entity.mobType === 'Ender Dragon'
     )) { return true }
     const mcData = require('minecraft-data')(this.bot.version)
-    this.movements = new mineflayer_pathfinder.Movements(this.bot, mcData)
+    const mineflayerPathfinder = require('mineflayer-pathfinder')
+    this.movements = new mineflayerPathfinder.Movements(this.bot, mcData)
     this.movements.digCost = 100
 
-    const goal = new mineflayer_pathfinder.goals.GoalNear(entity.position.x, entity.position.y, entity.position.z, 2)
+    const goal = new mineflayerPathfinder.goals.GoalNear(entity.position.x, entity.position.y, entity.position.z, 2)
 
     let result
 
@@ -80,18 +79,18 @@ class BehaviorGetClosestEnemy {
   filter (entity) {
     if (this.mode === 'pvp') {
       return (entity.position.distanceTo(this.bot.player.entity.position) <= this.distance) &&
-                (entity.type === 'mob' || entity.type === 'player') &&
-                (entity.mobType !== 'Armor Stand') &&
-                (entity.kind !== 'Passive mobs') &&
-                (entity.isValid)
+        (entity.type === 'mob' || entity.type === 'player') &&
+        (entity.mobType !== 'Armor Stand') &&
+        (entity.kind !== 'Passive mobs') &&
+        (entity.isValid)
     }
 
     if (this.mode === 'pve') {
       return (entity.position.distanceTo(this.bot.player.entity.position) <= this.distance) &&
-                (entity.type === 'mob') &&
-                (entity.mobType !== 'Armor Stand') &&
-                (entity.kind !== 'Passive mobs') &&
-                (entity.isValid)
+        (entity.type === 'mob') &&
+        (entity.mobType !== 'Armor Stand') &&
+        (entity.kind !== 'Passive mobs') &&
+        (entity.isValid)
     }
 
     return false

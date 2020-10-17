@@ -83,7 +83,8 @@ function commandsFunction (bot, targets) {
     })
   ]
 
-  botChatCommandFunctionListener = function (username, message) {
+  const botChatCommandFunctionListener = function (username, message) {
+    let msg
     switch (true) {
       case (message === 'bye'):
         bot.removeListener('chat', botChatCommandFunctionListener)
@@ -100,22 +101,22 @@ function commandsFunction (bot, targets) {
         break
       default:
         if (message.match(/set job.*/)) {
-          var msg = message.split(' ')
+          msg = message.split(' ')
           saveJob(msg[2])
         }
 
         if (message.match(/set mode.*/)) {
-          var msg = message.split(' ')
+          msg = message.split(' ')
           saveMode(msg[2])
         }
 
         if (message.match(/set distance.*/)) {
-          var msg = message.split(' ')
+          msg = message.split(' ')
           saveDistance(msg[2])
         }
 
         if (message.match(/set start patrol.*/)) {
-          var msg = message.split(' ')
+          msg = message.split(' ')
           startGetPoints(msg[3])
         }
 
@@ -174,7 +175,6 @@ function commandsFunction (bot, targets) {
     }
   }
 
-  const point = []
   let prevPoint
   let distancePatrol
 
@@ -196,7 +196,7 @@ function commandsFunction (bot, targets) {
     distancePatrol = distance
 
     const point = bot.entity.position
-    patrol = []
+    const patrol = []
     patrol.push(point)
     prevPoint = point
 
