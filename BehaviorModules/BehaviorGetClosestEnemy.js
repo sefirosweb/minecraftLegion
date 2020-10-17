@@ -33,6 +33,11 @@ class BehaviorGetClosestEnemy {
   }
 
   getValidPath (entity) {
+    if (entity.type === 'mob' && (
+      entity.mobType === 'Phantom' ||
+                entity.mobType === 'Blaze' ||
+                entity.mobType === 'Ender Dragon'
+    )) { return true }
     const mcData = require('minecraft-data')(this.bot.version)
     this.movements = new mineflayer_pathfinder.Movements(this.bot, mcData)
     this.movements.digCost = 100

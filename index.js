@@ -1,5 +1,4 @@
 const cp = require('child_process')
-const { stdout, stdin } = require('process')
 
 const botsToStart = [
   { username: 'Guard1', portBotStateMachine: 12121, portPrismarineViewer: '', portInventory: '' },
@@ -18,7 +17,8 @@ let i = 0
 const totalBots = botsToStart.length
 
 function startBots () {
-  botToStart = botsToStart[i]
+  const { stdout, stdin } = require('process')
+  const botToStart = botsToStart[i]
   i++
   if (i <= totalBots) {
     setTimeout(() => {
