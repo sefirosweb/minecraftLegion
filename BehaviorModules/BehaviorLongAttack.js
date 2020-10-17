@@ -1,4 +1,4 @@
-class BehaviorLongAttack {
+module.exports = class BehaviorLongAttack {
     constructor(bot, targets) {
         this.bot = bot
         this.targets = targets
@@ -61,4 +61,3 @@ class BehaviorLongAttack {
     }
 
 }
-module.exports = BehaviorLongAttack

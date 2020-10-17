@@ -1,5 +1,5 @@
-class BehaviorGetItemsAndEquip {
-  constructor (bot, targets) {
+module.exports = class BehaviorGetItemsAndEquip {
+  constructor(bot, targets) {
     this.bot = bot
     this.targets = targets
     this.stateName = 'BehaviorGetItemsAndEquip'
@@ -10,22 +10,22 @@ class BehaviorGetItemsAndEquip {
     this.inventory = require('../modules/inventoryModule')(this.bot)
   }
 
-  onStateEntered () {
+  onStateEntered() {
     this.isFinished = false
     this.getAndEquip()
   }
 
-  onStateExited () {
+  onStateExited() {
     try {
       this.chest.removeAllListeners()
-    } catch (e) {}
+    } catch (e) { }
   }
 
-  getIsFinished () {
+  getIsFinished() {
     return this.isFinished
   }
 
-  getAndEquip () {
+  getAndEquip() {
     const mcData = require('minecraft-data')(this.bot.version)
 
     const chestToOpen = this.bot.findBlock({
@@ -60,7 +60,7 @@ class BehaviorGetItemsAndEquip {
     })
   }
 
-  getItemsFromChest () {
+  getItemsFromChest() {
     return new Promise((resolve, reject) => {
       this.withdrawItem('sword', 1)
         .then(() => {
@@ -91,7 +91,7 @@ class BehaviorGetItemsAndEquip {
     })
   }
 
-  withdrawItem (item, amount) {
+  withdrawItem(item, amount) {
     return new Promise((resolve, reject) => {
       const currentItems = this.inventory.countItemsInInventoryOrEquipped(item)
       amount -= currentItems
@@ -113,7 +113,7 @@ class BehaviorGetItemsAndEquip {
     })
   }
 
-  equipAllItems () {
+  equipAllItems() {
     return new Promise((resolve, reject) => {
       this.inventory.equipItem('helmet')
         .then(() => {
@@ -134,4 +134,3 @@ class BehaviorGetItemsAndEquip {
     })
   }
 }
-module.exports = BehaviorGetItemsAndEquip

@@ -1,5 +1,5 @@
-class BehaviorGetReadyForPatrol {
-  constructor (bot, targets) {
+module.exports = class BehaviorGetReadyForPatrol {
+  constructor(bot, targets) {
     this.bot = bot
     this.targets = targets
     this.stateName = 'BehaviorGetReadyForPatrol'
@@ -9,15 +9,15 @@ class BehaviorGetReadyForPatrol {
     this.inventory = require('../modules/inventoryModule')(this.bot)
   }
 
-  onStateEntered () {
+  onStateEntered() {
     this.checkImReady()
   }
 
-  getReady () {
+  getReady() {
     return this.isReady
   }
 
-  checkImReady () {
+  checkImReady() {
     if (this.inventory.countItemsInInventoryOrEquipped('sword') === 0) {
       this.isReady = false
       return
@@ -55,4 +55,3 @@ class BehaviorGetReadyForPatrol {
     this.isReady = true
   }
 }
-module.exports = BehaviorGetReadyForPatrol

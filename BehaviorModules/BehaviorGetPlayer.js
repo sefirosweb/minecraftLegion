@@ -1,4 +1,4 @@
-class BehaviorGetPlayer {
+module.exports = class BehaviorGetPlayer {
     constructor(bot, targets) {
         this.bot = bot
         this.targets = targets
@@ -42,4 +42,3 @@ class BehaviorGetPlayer {
     }
 
 }
-module.exports = BehaviorGetPlayer

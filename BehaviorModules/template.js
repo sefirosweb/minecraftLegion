@@ -1,4 +1,4 @@
-class template {
+module.exports = class template {
     constructor(bot, targets) {
         this.bot = bot;
         this.targets = targets;
@@ -13,10 +13,9 @@ class template {
         this.targets.targetEntity = bot.nearestEntity(() => true)
     }
 
-    getPlayerEntity = function(playerName) {
+    getPlayerEntity = function (playerName) {
         this.targets.entity = this.checkPlayer(playerName) || undefined
         this.playerIsFound = this.targets.entity !== undefined
     }
 
 }
-module.exports = template

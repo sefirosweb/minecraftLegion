@@ -1,5 +1,5 @@
-class BehaviorGetClosestEnemy {
-  constructor (bot, targets, mode, distance) {
+module.exports = class BehaviorGetClosestEnemy {
+  constructor(bot, targets, mode, distance) {
     this.bot = bot
     this.targets = targets
     this.stateName = 'getClosestEnemy'
@@ -10,7 +10,7 @@ class BehaviorGetClosestEnemy {
     this.currentEntity = false
   }
 
-  onStateEntered () {
+  onStateEntered() {
     if (this.mode === 'none') {
       this.targets.entity = undefined
     } else {
@@ -30,7 +30,7 @@ class BehaviorGetClosestEnemy {
     }
   }
 
-  getValidPath (entity) {
+  getValidPath(entity) {
     if (entity.type === 'mob' && (
       entity.mobType === 'Phantom' ||
       entity.mobType === 'Blaze' ||
@@ -52,7 +52,7 @@ class BehaviorGetClosestEnemy {
     return result.status === 'success'
   }
 
-  sortEntitiesDistance () {
+  sortEntitiesDistance() {
     const entities = this.getAllEntities()
     entities.sort(function (a, b) {
       return a.distance - b.distance
@@ -60,7 +60,7 @@ class BehaviorGetClosestEnemy {
     return entities
   }
 
-  getAllEntities () {
+  getAllEntities() {
     const entities = []
     for (const entityName of Object.keys(this.bot.entities)) {
       const entity = this.bot.entities[entityName]
@@ -76,7 +76,7 @@ class BehaviorGetClosestEnemy {
     return entities
   }
 
-  filter (entity) {
+  filter(entity) {
     if (this.mode === 'pvp') {
       return (entity.position.distanceTo(this.bot.player.entity.position) <= this.distance) &&
         (entity.type === 'mob' || entity.type === 'player') &&
@@ -96,5 +96,3 @@ class BehaviorGetClosestEnemy {
     return false
   }
 }
-
-module.exports = BehaviorGetClosestEnemy

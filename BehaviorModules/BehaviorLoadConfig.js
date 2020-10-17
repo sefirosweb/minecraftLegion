@@ -1,6 +1,6 @@
 const botConfig = require('../modules/botConfig');
 
-class BehaviorLoadConfig {
+module.exports = class BehaviorLoadConfig {
     constructor(bot, targets) {
         this.bot = bot;
         this.targets = targets;
@@ -41,4 +41,3 @@ class BehaviorLoadConfig {
     }
 
 }
-module.exports = BehaviorLoadConfig

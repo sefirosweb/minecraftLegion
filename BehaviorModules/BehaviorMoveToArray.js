@@ -1,6 +1,6 @@
 const mineflayer_pathfinder = require("mineflayer-pathfinder");
 
-class BehaviorMoveToArray {
+module.exports = class BehaviorMoveToArray {
     constructor(bot, targets, patrol = [], startNearestPoint = false) {
         this.bot = bot;
         this.targets = targets;
@@ -119,4 +119,3 @@ class BehaviorMoveToArray {
     }
 
 }
-module.exports = BehaviorMoveToArray
