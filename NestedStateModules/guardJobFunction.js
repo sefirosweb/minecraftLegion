@@ -10,11 +10,11 @@ const BehaviorGetClosestEnemy = require('./../BehaviorModules/BehaviorGetClosest
 const BehaviorGetReadyForPatrol = require('./../BehaviorModules/BehaviorGetReadyForPatrol')
 const BehaviorGetItemsAndEquip = require('./../BehaviorModules/BehaviorGetItemsAndEquip')
 
-const mineflayer_pathfinder = require('mineflayer-pathfinder')
+const mineflayerpathfinder = require('mineflayer-pathfinder')
 
 function guardJobFunction (bot, targets) {
   const mcData = require('minecraft-data')(bot.version)
-  const movementsForAttack = new mineflayer_pathfinder.Movements(bot, mcData)
+  const movementsForAttack = new mineflayerpathfinder.Movements(bot, mcData)
   movementsForAttack.digCost = 100
 
   const enter = new BehaviorIdle(targets)
@@ -37,7 +37,7 @@ function guardJobFunction (bot, targets) {
   const getItemsAndEquip = new BehaviorGetItemsAndEquip(bot, targets)
   getItemsAndEquip.stateName = 'Get items and equip'
 
-  const guardCombatJobFunction = new require('./guardCombatJobFunction')(bot, targets)
+  const guardCombatJobFunction = require('./guardCombatJobFunction')(bot, targets)
 
   const transitions = [
     new StateTransition({

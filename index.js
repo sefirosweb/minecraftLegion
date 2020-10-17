@@ -17,7 +17,6 @@ let i = 0
 const totalBots = botsToStart.length
 
 function startBots () {
-  const { stdout, stdin } = require('process')
   const botToStart = botsToStart[i]
   i++
   if (i <= totalBots) {

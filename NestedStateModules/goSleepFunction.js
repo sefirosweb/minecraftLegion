@@ -33,7 +33,7 @@ const goSleepFunction = function (bot) {
       child: goSleep,
       shouldTransition: () => moveToBed.distanceToTarget() < 2,
       name: 'Click Sleep on Bed',
-      onTransition: () => goSleep.bed = moveToBed.targets
+      onTransition: () => { goSleep.bed = moveToBed.targets }
     }),
 
     new StateTransition({

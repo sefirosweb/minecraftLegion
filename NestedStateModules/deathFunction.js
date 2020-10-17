@@ -9,8 +9,8 @@ function deathFunction (bot, targets) {
   const enter = new BehaviorIdle(targets)
   enter.stateName = 'Enter'
 
-  const startWork = new require('./startWorkFunction')(bot, targets)
-  const commands = new require('./commandsFunction')(bot, targets)
+  const startWork = require('./startWorkFunction')(bot, targets)
+  const commands = require('./commandsFunction')(bot, targets)
   const playerEntity = new BehaviorGetPlayer(bot, targets)
   playerEntity.stateName = 'Search Player'
 
