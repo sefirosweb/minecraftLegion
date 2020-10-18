@@ -112,8 +112,8 @@ function guardCombatJobFunction(bot, targets) {
     const itemEquip = bot.inventory.items().find(item => item.name.includes('sword'))
     if (itemEquip) {
       botWebsocket.log('Sword changing');
-      bot.equip(itemEquip, 'hand', function (date) {
-        botWebsocket.log('Sword changed');
+      bot.equip(itemEquip, 'hand', function () {
+        botWebsocket.log('Sword changed')
       })
     }
   }
