@@ -6,8 +6,9 @@ const {
   NestedStateMachine
 } = require('mineflayer-statemachine')
 const botConfig = require('../modules/botConfig')
+const customEvents = require('../modules/customEvents')
 
-function commandsFunction (bot, targets) {
+function commandsFunction(bot, targets) {
   const enter = new BehaviorIdle(targets)
   enter.stateName = 'Enter'
 
@@ -79,16 +80,16 @@ function commandsFunction (bot, targets) {
       parent: enter,
       child: lookAtPlayersState,
       name: 'Enter to nested',
-      onTransition: () => bot.on('chat', botChatCommandFunctionListener),
+      onTransition: () => customEvents.addEvent('chat', botChatCommandFunctionListener),
       shouldTransition: () => true
     })
   ]
 
-  const botChatCommandFunctionListener = function (username, message) {
+  function botChatCommandFunctionListener(username, message) {
     let msg
     switch (true) {
       case (message === 'bye'):
-        bot.removeListener('chat', botChatCommandFunctionListener)
+        customEvents.removeListener('chat', botChatCommandFunctionListener)
         transitions[0].trigger()
         transitions[1].trigger()
         transitions[2].trigger()
@@ -137,7 +138,7 @@ function commandsFunction (bot, targets) {
 
   let patrol = []
 
-  function saveJob (job) {
+  function saveJob(job) {
     switch (true) {
       case (job === 'guard'):
       case (job === 'archer'):
@@ -151,7 +152,7 @@ function commandsFunction (bot, targets) {
     }
   }
 
-  function saveMode (mode) {
+  function saveMode(mode) {
     switch (true) {
       case (mode === 'none'):
       case (mode === 'pvp'):
@@ -165,7 +166,7 @@ function commandsFunction (bot, targets) {
     }
   }
 
-  function saveDistance (distance) {
+  function saveDistance(distance) {
     distance = parseInt(distance)
     if (!isNaN(distance)) {
       bot.chat('I take a look!')
@@ -178,14 +179,14 @@ function commandsFunction (bot, targets) {
   let prevPoint
   let distancePatrol
 
-  function nextPointListener (point) {
+  function nextPointListener(point) {
     if (point.distanceTo(prevPoint) > distancePatrol) {
       patrol.push(point)
       prevPoint = point
     }
   }
 
-  function startGetPoints (distance = 2) {
+  function startGetPoints(distance = 2) {
     distance = parseInt(distance)
     if (isNaN(distance)) {
       bot.chat('I dont understood the distance')
@@ -200,18 +201,18 @@ function commandsFunction (bot, targets) {
     patrol.push(point)
     prevPoint = point
 
-    bot.on('move', nextPointListener)
+    customEvents.addEvent('move', nextPointListener)
   }
 
-  function savePatrol () {
-    bot.removeListener('move', nextPointListener)
+  function savePatrol() {
+    customEvents.removeListener('move', nextPointListener)
     const botConfig = require('../modules/botConfig')
     botConfig.setPatrol(bot.username, patrol)
     bot.chat('Ok, I memorized the patrol')
   }
 
-  function saveChest () {
-    bot.removeListener('move', nextPointListener)
+  function saveChest() {
+    customEvents.removeListener('move', nextPointListener)
     const botConfig = require('../modules/botConfig')
     botConfig.setChest(bot.username, patrol)
     bot.chat('Oooh my treasure')

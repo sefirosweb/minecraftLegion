@@ -1,5 +1,5 @@
 const botWebsocket = require('../modules/botWebsocket')
-const customEvents = require('../modules/physicTickEvents')
+const customEvents = require('../modules/customEvents')
 
 const {
   StateTransition,
@@ -97,11 +97,11 @@ function guardCombatJobFunction(bot, targets) {
   }
 
   function startGrades() {
-    customEvents.addEvent(getGrades)
+    customEvents.addEvent('physicTick', getGrades)
   }
 
   function stopGrades() {
-    customEvents.removeListener(getGrades)
+    customEvents.removeListener('physicTick', getGrades)
   }
 
   function checkHandleSword() {
@@ -111,7 +111,7 @@ function guardCombatJobFunction(bot, targets) {
 
     const itemEquip = bot.inventory.items().find(item => item.name.includes('sword'))
     if (itemEquip) {
-      botWebsocket.log('Sword changin');
+      botWebsocket.log('Sword changing');
       bot.equip(itemEquip, 'hand', function (date) {
         botWebsocket.log('Sword changed');
       })

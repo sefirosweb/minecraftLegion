@@ -1,7 +1,7 @@
 const config = require('./config')
 const mineflayer = require('mineflayer')
 const botWebsocket = require('./modules/botWebsocket')
-const customEvents = require('./modules/physicTickEvents')
+const customEvents = require('./modules/customEvents')
 
 const {
   StateTransition,
@@ -41,7 +41,9 @@ function createNewBot(botName, portBotStateMachine = null, portPrismarineViewer 
 
   bot.once('spawn', () => {
     botWebsocket.emit('addFriend', bot.username)
-    bot.on('physicTick', customEvents.executeEvents)
+    bot.on('physicTick', customEvents.executePhysicTickEvents)
+    bot.on('chat', customEvents.executeChatEvents)
+    bot.on('move', customEvents.executeMoveEvents)
 
     bot.chat('Im in!')
     if (portInventory !== null) {
@@ -74,22 +76,10 @@ function createNewBot(botName, portBotStateMachine = null, portPrismarineViewer 
     ]
 
     bot.on('death', function () {
-      customEvents.removeAllListeners()
-
-      try {
-        bot.removeListener('chat', botChatCommandFunctionListener)
-        botWebsocket.log('removeListener botChatCommandFunctionListener')
-      } catch (e) { }
-
-      try {
-        bot.removeListener('move', nextPointListener)
-        botWebsocket.log('removeListener nextPointListener')
-      } catch (e) { }
-
-      try {
-        bot.removeListener('physicTick', getGrades)
-        botWebsocket.log('removeListener getGrades')
-      } catch (e) { }
+      // Clear custom events when dies
+      customEvents.removeAllListeners('physicTick')
+      customEvents.removeAllListeners('chat')
+      customEvents.removeAllListeners('move')
 
       transitions[1].trigger()
       botWebsocket.log('trigger death')
