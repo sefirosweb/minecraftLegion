@@ -1,4 +1,5 @@
 const botWebsocket = require('../modules/botWebsocket')
+const customEvents = require('../modules/physicTickEvents')
 
 const {
   StateTransition,
@@ -96,11 +97,11 @@ function guardCombatJobFunction(bot, targets) {
   }
 
   function startGrades() {
-    bot.on('physicTick', getGrades)
+    customEvents.addEvent(getGrades)
   }
 
   function stopGrades() {
-    bot.removeListener('physicTick', getGrades)
+    customEvents.removeListener(getGrades)
   }
 
   function checkHandleSword() {

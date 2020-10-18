@@ -70,16 +70,16 @@ function sendLogs(data, botName = '') {
 }
 
 const botsToStart = [
-  /* { username: 'Guard1', portBotStateMachine: '', portPrismarineViewer: '', portInventory: '' },
+  /* 
+{ username: 'base', portBotStateMachine: '', portPrismarineViewer: '', portInventory: '' },
+{ username: 'Guard1', portBotStateMachine: '', portPrismarineViewer: '', portInventory: '' },
 { username: 'Guard2', portBotStateMachine: '', portPrismarineViewer: '', portInventory: '' },
- { username: 'Guard3', portBotStateMachine: '', portPrismarineViewer: '', portInventory: '' },
- { username: 'Guard4', portBotStateMachine: '', portPrismarineViewer: '', portInventory: '' },
+{ username: 'Guard3', portBotStateMachine: '', portPrismarineViewer: '', portInventory: '' },
 
- { username: 'Archer1', portBotStateMachine: '', portPrismarineViewer: '', portInventory: '' },
- { username: 'Archer2', portBotStateMachine: '', portPrismarineViewer: '', portInventory: '' },
- { username: 'Archer3', portBotStateMachine: '', portPrismarineViewer: '', portInventory: '' }
- */
-
+{ username: 'Archer1', portBotStateMachine: '', portPrismarineViewer: '', portInventory: '' },
+{ username: 'Archer2', portBotStateMachine: '', portPrismarineViewer: '', portInventory: '' },
+{ username: 'Archer3', portBotStateMachine: '', portPrismarineViewer: '', portInventory: '' }
+*/
 ]
 
 let i = 0
@@ -107,7 +107,7 @@ function startBots() {
         }
       })
       startBots()
-    }, 1500)
+    }, 10000)
   }
 };
 

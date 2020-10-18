@@ -1,10 +1,7 @@
 const config = require('./config')
 const mineflayer = require('mineflayer')
-
 const botWebsocket = require('./modules/botWebsocket')
-
-
-
+const customEvents = require('./modules/physicTickEvents')
 
 const {
   StateTransition,
@@ -41,8 +38,10 @@ function createNewBot(botName, portBotStateMachine = null, portPrismarineViewer 
     console.log(err)
     process.exit()
   })
+
   bot.once('spawn', () => {
     botWebsocket.emit('addFriend', bot.username)
+    bot.on('physicTick', customEvents.executeEvents)
 
     bot.chat('Im in!')
     if (portInventory !== null) {
@@ -75,7 +74,7 @@ function createNewBot(botName, portBotStateMachine = null, portPrismarineViewer 
     ]
 
     bot.on('death', function () {
-      console.log(bot.rawListeners("physicTick"))
+      customEvents.removeAllListeners()
 
       try {
         bot.removeListener('chat', botChatCommandFunctionListener)
