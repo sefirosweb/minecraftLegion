@@ -16,22 +16,31 @@ Install:
 Usage in chat:
 First activate bot "hi namebot" or "hi all" for activate all bots at same time
 * hi nameBot
+Ch
 For follow you
 * come
+
 For stay in the position
 * stay
+
 For set the way to the chest of equipment
 * set start chest
+
 For end the way of the chest of equipment
 * set end chest
+
 For set the the patrol way
 * set start patrol
+
 For end the bucle of patrol
 * set end patrol
+
 For set max distance for attack mobs
 * set distance X
+
 For set mode (pvp / pve / none)
 * set mode pve
+
 For finish commands
 * bye
 
