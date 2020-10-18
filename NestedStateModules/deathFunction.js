@@ -5,7 +5,7 @@ const {
 } = require('mineflayer-statemachine')
 const BehaviorGetPlayer = require('./../BehaviorModules/BehaviorGetPlayer')
 
-function deathFunction (bot, targets) {
+function deathFunction(bot, targets) {
   const enter = new BehaviorIdle(targets)
   enter.stateName = 'Enter'
 
@@ -55,7 +55,6 @@ function deathFunction (bot, targets) {
     if (message === 'hi ' + bot.username || message === 'hi all') {
       const player = playerEntity.getPlayerEntity(username)
       if (player) {
-        console.log(player)
         transitions[1].trigger()
         transitions[2].trigger()
       }

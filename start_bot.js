@@ -75,6 +75,8 @@ function createNewBot(botName, portBotStateMachine = null, portPrismarineViewer 
     ]
 
     bot.on('death', function () {
+      console.log(bot.rawListeners("physicTick"))
+
       try {
         bot.removeListener('chat', botChatCommandFunctionListener)
         botWebsocket.log('removeListener botChatCommandFunctionListener')

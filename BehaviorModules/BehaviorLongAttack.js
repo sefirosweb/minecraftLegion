@@ -1,5 +1,5 @@
 module.exports = class BehaviorLongAttack {
-  constructor (bot, targets) {
+  constructor(bot, targets) {
     this.bot = bot
     this.targets = targets
     this.stateName = 'BehaviorLongAttack'
@@ -13,11 +13,11 @@ module.exports = class BehaviorLongAttack {
     this.infoShot = false
   }
 
-  onStateEntered () {
+  onStateEntered() {
     this.shot()
   }
 
-  shot () {
+  shot() {
     if (!this.preparingShot) {
       this.bot.activateItem()
       this.preparingShot = true
@@ -40,18 +40,18 @@ module.exports = class BehaviorLongAttack {
     }
   }
 
-  setInfoShot (infoShot) {
+  setInfoShot(infoShot) {
     this.infoShot = infoShot
   }
 
-  equipBow () {
+  equipBow() {
     const itemEquip = this.bot.inventory.items().find(item => item.name.includes('bow'))
     if (itemEquip) {
       this.bot.equip(itemEquip, 'hand')
     }
   }
 
-  checkBowEquipped () {
+  checkBowEquipped() {
     const handleItem = this.bot.inventory.slots[this.bot.QUICK_BAR_START + this.bot.quickBarSlot]
     if (!handleItem) {
       return false

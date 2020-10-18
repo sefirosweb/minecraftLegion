@@ -42,7 +42,8 @@ function guardCombatJobFunction(bot, targets) {
     e.position.distanceTo(bot.entity.position) < 5 &&
     e.mobType !== 'Armor Stand'
 
-  function getGrades() {
+  const getGrades = function () {
+    botWebsocket.log('start getting grades')
     // Of other enemies aproax, change target (Ex clipper)
     if (Date.now() - newTargetColdDown > 1000) {
       const entity = bot.nearestEntity(filter)
@@ -58,10 +59,11 @@ function guardCombatJobFunction(bot, targets) {
       return false
     }
 
-    if (!targets.entity) {
+    if (!targets.entity || targets.entity === undefined) {
       longRangeAttack.setInfoShot(false)
       return false
     }
+
     if (prevPlayerPositions.length > 10) {
       prevPlayerPositions.shift()
     }
@@ -91,7 +93,10 @@ function guardCombatJobFunction(bot, targets) {
     speed.z = speed.z / prevPlayerPositions.length
 
     targetGrade = bot.hawkEye.getMasterGrade(targets.entity, speed)
+    botWebsocket.log(JSON.stringify(targetGrade))
+
     longRangeAttack.setInfoShot(targetGrade)
+    botWebsocket.log("Done")
   }
 
   function startGrades() {
@@ -109,7 +114,10 @@ function guardCombatJobFunction(bot, targets) {
 
     const itemEquip = bot.inventory.items().find(item => item.name.includes('sword'))
     if (itemEquip) {
-      bot.equip(itemEquip, 'hand')
+      botWebsocket.log('Sword changin');
+      bot.equip(itemEquip, 'hand', function (date) {
+        botWebsocket.log('Sword changed');
+      })
     }
   }
 
@@ -121,8 +129,8 @@ function guardCombatJobFunction(bot, targets) {
       name: 'Mob is dead',
       onTransition: () => {
         botWebsocket.log('End Combat - attack')
-        targets.entity = undefined
         stopGrades()
+        targets.entity = undefined
         checkHandleSword()
       },
       shouldTransition: () => !targets.entity || targets.entity.isValid === false
@@ -134,8 +142,8 @@ function guardCombatJobFunction(bot, targets) {
       name: 'Mob is dead',
       onTransition: () => {
         botWebsocket.log('End Combat - longRangeAttack')
-        targets.entity = undefined
         stopGrades()
+        targets.entity = undefined
         checkHandleSword()
       },
       shouldTransition: () => !targets.entity || targets.entity.isValid === false
@@ -147,8 +155,8 @@ function guardCombatJobFunction(bot, targets) {
       name: 'Mob is dead',
       onTransition: () => {
         botWebsocket.log('End Combat - followMob')
-        targets.entity = undefined
         stopGrades()
+        targets.entity = undefined
         checkHandleSword()
       },
       shouldTransition: () => !targets.entity || targets.entity.isValid === false
