@@ -1,3 +1,5 @@
+const botWebsocket = require('../modules/botWebsocket')
+
 module.exports = class BehaviorLongAttack {
   constructor(bot, targets) {
     this.bot = bot
@@ -47,15 +49,15 @@ module.exports = class BehaviorLongAttack {
   equipBow() {
     const itemEquip = this.bot.inventory.items().find(item => item.name.includes('bow'))
     if (itemEquip) {
-      this.bot.equip(itemEquip, 'hand')
+      this.bot.equip(itemEquip, 'hand', (error) => {
+        if (error !== undefined) {
+          botWebsocket.log('ERROR: ' + JSON.stringify(error))
+        }
+      })
     }
   }
 
   checkBowEquipped() {
-    const handleItem = this.bot.inventory.slots[this.bot.QUICK_BAR_START + this.bot.quickBarSlot]
-    if (!handleItem) {
-      return false
-    }
-    return handleItem.name === 'bow'
+    return this.inventory.checkItemEquiped('bow')
   }
 }

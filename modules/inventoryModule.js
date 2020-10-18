@@ -1,5 +1,8 @@
+const botWebsocket = require('../modules/botWebsocket')
+const logs = require('../modules/botWebsocket')
+
 module.exports = function (bot) {
-  function countItemsInInventoryOrEquipped (item) {
+  function countItemsInInventoryOrEquipped(item) {
     let currentItems = 0
 
     if (checkItemEquiped(item)) {
@@ -10,14 +13,14 @@ module.exports = function (bot) {
     return currentItems
   }
 
-  function countItemsInInventory (itemToCount) {
+  function countItemsInInventory(itemToCount) {
     let currentItems = bot.inventory.items().filter(item => item.name.includes(itemToCount))
     currentItems = currentItems.map(x => x.count)
     currentItems = currentItems.reduce((total, num) => { return total + num }, 0)
     return currentItems
   }
 
-  function checkItemEquiped (itemArmor) {
+  function checkItemEquiped(itemArmor) {
     let slotID
     switch (itemArmor) {
       case 'helmet':
@@ -35,13 +38,29 @@ module.exports = function (bot) {
       case 'shield':
         slotID = 45
         break
+      case 'sword':
+        slotID = bot.getEquipmentDestSlot('hand')
+        const swordEquiped = bot.inventory.slots[slotID]
+        if (swordEquiped === null) { return false }
+        const isSword = swordEquiped.name.includes('sword')
+        return isSword
+        break
+      case 'bow':
+        slotID = bot.getEquipmentDestSlot('hand')
+        const bowEquiped = bot.inventory.slots[slotID]
+        if (bowEquiped === null) { return false }
+        const isBow = bowEquiped.name.includes('bow')
+        return isBow
+        break
       default:
         return false
+        throw new Error('checkItemEquiped => No reconogize this slot' + itemArmor)
     }
+
     return bot.inventory.slots[slotID] !== null
   }
 
-  function equipItem (itemArmor) {
+  function equipItem(itemArmor) {
     return new Promise((resolve, reject) => {
       if (checkItemEquiped(itemArmor)) {
         resolve()
@@ -77,8 +96,11 @@ module.exports = function (bot) {
           break
       }
 
-      bot.equip(armor, location, () => {
-        resolve()
+      bot.equip(armor, location, (error) => {
+        if (error === undefined) {
+          resolve()
+        }
+        reject(error)
       })
     })
   }

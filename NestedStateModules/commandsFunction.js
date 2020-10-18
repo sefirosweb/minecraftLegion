@@ -6,6 +6,7 @@ const {
   NestedStateMachine
 } = require('mineflayer-statemachine')
 const botConfig = require('../modules/botConfig')
+const botWebsocket = require('../modules/botWebsocket')
 const customEvents = require('../modules/customEvents')
 
 function commandsFunction(bot, targets) {
@@ -127,7 +128,7 @@ function commandsFunction(bot, targets) {
         }
 
         if (message.match(/set start chest.*/)) {
-          startGetPoints()
+          startGetPoints(1)
         }
 
         if (message.match(/set end chest.*/)) {
@@ -183,6 +184,7 @@ function commandsFunction(bot, targets) {
     if (point.distanceTo(prevPoint) > distancePatrol) {
       patrol.push(point)
       prevPoint = point
+      botWebsocket.log('Point: ' + JSON.stringify(point))
     }
   }
 
@@ -200,6 +202,7 @@ function commandsFunction(bot, targets) {
     patrol = []
     patrol.push(point)
     prevPoint = point
+    botWebsocket.log('Point: ' + JSON.stringify(point))
 
     customEvents.addEvent('move', nextPointListener)
   }

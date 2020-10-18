@@ -48,7 +48,7 @@ function guardCombatJobFunction(bot, targets) {
     if (Date.now() - newTargetColdDown > 1000) {
       const entity = bot.nearestEntity(filter)
       if (entity) {
-        botWebsocket.log('Change Target => ' + entity.mobType)
+        botWebsocket.log('Change Target => ' + entity.mobType + ' ' + JSON.stringify(entity.position))
         targets.entity = entity
         newTargetColdDown = Date.now()
       }
@@ -164,7 +164,7 @@ function guardCombatJobFunction(bot, targets) {
       parent: enter,
       child: attack,
       onTransition: () => {
-        botWebsocket.log('Start combat ' + targets.entity.mobType)
+        botWebsocket.log('Start combat ' + targets.entity.mobType + ' ' + JSON.stringify(targets.entity.position))
         startGrades()
       },
       name: 'enter -> followMob',
