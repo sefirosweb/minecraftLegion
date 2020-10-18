@@ -1,6 +1,6 @@
 {
     "name": "minecraftlegion",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "description": "Bot multi proposito para minecraft",
     "main": "index.js",
     "directories": {

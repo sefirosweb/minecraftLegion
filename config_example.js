@@ -1,16 +1,8 @@
 const config = {
-  username: '',
-  password: '',
-  autologin: '',
+  server: '127.0.0.1',
   port: '',
-  server: '',
 
-  cluster_webhook_address: '',
-  cluster_webhook_port: '',
-
-  db_user: '',
-  db_password: '',
-  db_host: '',
-  db_name: ''
-}
+  webServer: 'http://localhost',
+  webServerPort: '3000',
+};
 module.exports = config
