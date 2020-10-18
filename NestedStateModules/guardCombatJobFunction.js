@@ -43,7 +43,6 @@ function guardCombatJobFunction(bot, targets) {
     e.mobType !== 'Armor Stand'
 
   const getGrades = function () {
-    botWebsocket.log('start getting grades')
     // Of other enemies aproax, change target (Ex clipper)
     if (Date.now() - newTargetColdDown > 1000) {
       const entity = bot.nearestEntity(filter)
@@ -93,10 +92,7 @@ function guardCombatJobFunction(bot, targets) {
     speed.z = speed.z / prevPlayerPositions.length
 
     targetGrade = bot.hawkEye.getMasterGrade(targets.entity, speed)
-    botWebsocket.log(JSON.stringify(targetGrade))
-
     longRangeAttack.setInfoShot(targetGrade)
-    botWebsocket.log("Done")
   }
 
   function startGrades() {
