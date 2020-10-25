@@ -1,19 +1,29 @@
 const config = require('../config')
-const SocketIO = require('socket.io')
-
 const io = require("socket.io-client")
-const ioClient = io.connect(config.webServer + ':' + config.webServerPort)
+let socket
+
+function connect(botUsername) {
+    socket = io(config.webServer + ':' + config.webServerPort);
+    socket.on('connect', () => {
+        console.log('Connected to webserver');
+        socket.emit('addFriend', botUsername)
+    });
+
+    socket.on('disconnect', () => {
+        console.log('Disconected from webserver');
+    });
+}
 
 function emit(chanel, data) {
-    ioClient.emit(chanel, data)
+    socket.emit(chanel, data)
 }
 
 function log(data) {
-    ioClient.emit('logs', data)
+    socket.emit('logs', data)
 }
 
-
 module.exports = {
+    connect,
     emit,
     log
 }

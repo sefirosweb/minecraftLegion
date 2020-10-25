@@ -1,7 +1,7 @@
 const config = require('./config')
 const mineflayer = require('mineflayer')
-const botWebsocket = require('./modules/botWebsocket')
 const customEvents = require('./modules/customEvents')
+const botWebsocket = require('./modules/botWebsocket')
 
 const {
   StateTransition,
@@ -29,6 +29,8 @@ function createNewBot(botName, portBotStateMachine = null, portPrismarineViewer 
     port: config.port
   })
   bot.loadPlugin(require('mineflayer-pathfinder').pathfinder)
+  botWebsocket.connect(bot.username)
+
   bot.on('kicked', (reason) => {
     const reasonDecoded = JSON.parse(reason)
     console.log(reasonDecoded)
@@ -40,7 +42,6 @@ function createNewBot(botName, portBotStateMachine = null, portPrismarineViewer 
   })
 
   bot.once('spawn', () => {
-    botWebsocket.emit('addFriend', bot.username)
     bot.on('physicTick', customEvents.executePhysicTickEvents)
     bot.on('chat', customEvents.executeChatEvents)
     bot.on('move', customEvents.executeMoveEvents)
