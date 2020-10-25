@@ -1,3 +1,4 @@
+const botWebsocket = require('../modules/botWebsocket')
 class BehaviorAttack {
   constructor(bot, targets) {
     this.bot = bot
