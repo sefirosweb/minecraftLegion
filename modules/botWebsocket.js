@@ -18,6 +18,23 @@ function emit(chanel, data) {
     socket.emit(chanel, data)
 }
 
+function emitHealth(health) {
+    const data = {
+        type: 'health',
+        value: health
+    }
+    emit('botStatus', JSON.stringify(data))
+}
+
+function emitFood(health) {
+    const data = {
+        type: 'food',
+        value: health
+    }
+    emit('botStatus', JSON.stringify(data))
+}
+
+
 function log(data) {
     socket.emit('logs', data)
 }
@@ -25,5 +42,7 @@ function log(data) {
 module.exports = {
     connect,
     emit,
-    log
+    log,
+    emitHealth,
+    emitFood
 }

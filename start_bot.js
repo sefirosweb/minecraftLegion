@@ -46,6 +46,11 @@ function createNewBot(botName, portBotStateMachine = null, portPrismarineViewer 
     bot.on('chat', customEvents.executeChatEvents)
     bot.on('move', customEvents.executeMoveEvents)
 
+    bot.on('health', () => {
+      botWebsocket.emitHealth(bot.health)
+      botWebsocket.emitFood(bot.food)
+    })
+
     bot.chat('Im in!')
     if (portInventory !== null) {
       const inventoryViewer = require('mineflayer-web-inventory')
