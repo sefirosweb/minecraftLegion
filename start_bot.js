@@ -11,18 +11,13 @@ const {
   NestedStateMachine
 } = require('mineflayer-statemachine')
 
-if (process.argv.length < 3 || process.argv.length > 4) {
-  console.log('Usage : node block_entity.js <botName> <portBotStateMachine> <portPrismarineViewer> <portInventory>')
-  createNewBot('Guard1')
-} else {
-  const botName = process.argv[2]
-  const portBotStateMachine = process.argv[3] ? process.argv[3] : null
-  const portPrismarineViewer = process.argv[4] ? process.argv[4] : null
-  const portInventory = process.argv[6] ? process.argv[5] : null
-  createNewBot(botName, portBotStateMachine, portPrismarineViewer, portInventory)
-}
+console.log('Usage : node start_bot.js <botName> <botPassword>')
+const botName = process.argv[2]
+const botPassword = process.argv[3]
 
-function createNewBot(botName, portBotStateMachine = null, portPrismarineViewer = null, portInventory = null) {
+createNewBot(botName, botPassword)
+
+function createNewBot(botName, botPassword = '') {
   const bot = mineflayer.createBot({
     username: botName,
     host: config.server,
@@ -52,14 +47,14 @@ function createNewBot(botName, portBotStateMachine = null, portPrismarineViewer 
     })
 
     bot.chat('Im in!')
-    if (portInventory !== null) {
-      const inventoryViewer = require('mineflayer-web-inventory')
-      inventoryViewer(bot, { port: portInventory })
-    }
-    if (portPrismarineViewer !== null) {
-      const prismarineViewer = require('./modules/viewer')
-      prismarineViewer.start(bot, portPrismarineViewer)
-    }
+    // if (portInventory !== null) {
+    //   const inventoryViewer = require('mineflayer-web-inventory')
+    //   inventoryViewer(bot, { port: portInventory })
+    // }
+    // if (portPrismarineViewer !== null) {
+    //   const prismarineViewer = require('./modules/viewer')
+    //   prismarineViewer.start(bot, portPrismarineViewer)
+    // }
 
     const targets = {}
     const idleState = new BehaviorIdle(targets)
@@ -95,9 +90,9 @@ function createNewBot(botName, portBotStateMachine = null, portPrismarineViewer 
     root.stateName = 'main'
     const stateMachine = new BotStateMachine(bot, root)
 
-    if (portBotStateMachine !== null) {
-      const webserver = new StateMachineWebserver(bot, stateMachine, portBotStateMachine)
-      webserver.startServer()
-    }
+    // if (portBotStateMachine !== null) {
+    //   const webserver = new StateMachineWebserver(bot, stateMachine, portBotStateMachine)
+    //   webserver.startServer()
+    // }
   })
 }
