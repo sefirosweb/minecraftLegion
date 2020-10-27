@@ -1,17 +1,23 @@
-const config = require('../config')
+const { webServer, webServerPort } = require('../config')
 const io = require("socket.io-client")
 let socket
 
 function connect(botUsername) {
-    socket = io(config.webServer + ':' + config.webServerPort);
+    socket = io(webServer + ':' + webServerPort);
     socket.on('connect', () => {
         console.log('Connected to webserver');
         socket.emit('addFriend', botUsername)
-    });
+    })
 
     socket.on('disconnect', () => {
         console.log('Disconected from webserver');
-    });
+    })
+
+    socket.on('botDisconnect', (socketId) => {
+        if (socketId === socket.id) {
+            process.exit(1);
+        }
+    })
 }
 
 function emit(chanel, data) {
@@ -33,7 +39,6 @@ function emitFood(health) {
     }
     emit('botStatus', JSON.stringify(data))
 }
-
 
 function log(data) {
     socket.emit('logs', data)

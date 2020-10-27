@@ -12,6 +12,24 @@ const botsToStart = [
 let i = 0
 const totalBots = botsToStart.length
 
+function startBot(botName, password) {
+  const command = 'node start_bot ' + botName
+  cp.exec(command, (err, stdout, stderr) => {
+    if (err) {
+      console.log(`Error: ${err}`)
+      return
+    }
+
+    if (stdout) {
+      console.log(`Stdout: ${stdout}`)
+    }
+
+    if (stderr) {
+      console.log(`Stderr: ${stderr}`)
+    }
+  })
+}
+
 function startBots() {
   const botToStart = botsToStart[i]
   i++
@@ -38,4 +56,24 @@ function startBots() {
   }
 };
 
-startBots()
+// startBots()
+
+
+
+// Master websocket for load bots
+const { webServer, webServerPort } = require('./config')
+const io = require("socket.io-client")
+const socket = io(webServer + ':' + webServerPort);
+
+socket.on('connect', () => {
+  console.log('Connected to webserver');
+  socket.emit('botMaster', 'on')
+});
+
+socket.on('disconnect', () => {
+  console.log('disconnected from webserver');
+})
+
+socket.on('botConnect', data => {
+  startBot(data.botName, data.botPassword)
+})
