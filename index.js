@@ -1,17 +1,5 @@
 const cp = require('child_process')
 
-const botsToStart = [
-  { username: 'Guard1', portBotStateMachine: '', portPrismarineViewer: '', portInventory: '' },
-  { username: 'Guard2', portBotStateMachine: '', portPrismarineViewer: '', portInventory: '' },
-  { username: 'Guard3', portBotStateMachine: '', portPrismarineViewer: '', portInventory: '' },
-  { username: 'Archer1', portBotStateMachine: '', portPrismarineViewer: '', portInventory: '' },
-  { username: 'Archer2', portBotStateMachine: '', portPrismarineViewer: '', portInventory: '' },
-  { username: 'Archer3', portBotStateMachine: '', portPrismarineViewer: '', portInventory: '' }
-]
-
-let i = 0
-const totalBots = botsToStart.length
-
 function startBot(botName, password) {
   const command = 'node start_bot ' + botName
   cp.exec(command, (err, stdout, stderr) => {
@@ -30,33 +18,29 @@ function startBot(botName, password) {
   })
 }
 
-function startBots() {
+
+const botsToStart = [
+  { username: 'Guard1' },
+  { username: 'Guard2' },
+  { username: 'Guard3' },
+  { username: 'Archer1' },
+  { username: 'Archer2' },
+  { username: 'Archer3' }
+]
+
+let i = 0
+function runNextBot() {
   const botToStart = botsToStart[i]
   i++
-  if (i <= totalBots) {
+  if (i <= botsToStart.length) {
     setTimeout(() => {
-      const command = 'node start_bot ' + botToStart.username + ' ' + botToStart.portBotStateMachine
-      console.log(command)
-      cp.exec(command, (err, stdout, stderr) => {
-        if (err) {
-          console.log(`Error: ${err}`)
-          return
-        }
-
-        if (stdout) {
-          console.log(`Stdout: ${stdout}`)
-        }
-
-        if (stderr) {
-          console.log(`Stderr: ${stderr}`)
-        }
-      })
-      startBots()
+      startBot(botToStart.username)
+      runNextBot()
     }, 3000)
   }
 };
 
-// startBots()
+runNextBot()
 
 
 
