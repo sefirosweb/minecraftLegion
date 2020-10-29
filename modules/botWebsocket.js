@@ -29,7 +29,7 @@ function emitHealth(health) {
         type: 'health',
         value: health
     }
-    emit('botStatus', JSON.stringify(data))
+    emit('botStatus', data)
 }
 
 function emitFood(health) {
@@ -37,7 +37,7 @@ function emitFood(health) {
         type: 'food',
         value: health
     }
-    emit('botStatus', JSON.stringify(data))
+    emit('botStatus', data)
 }
 
 function log(data) {
