@@ -46,6 +46,11 @@ function createNewBot(botName, botPassword = '') {
       botWebsocket.emitFood(bot.food)
     })
 
+    botWebsocket.on('sendMessage', (message) => {
+      bot.chat(message)
+      botWebsocket.log(message)
+    })
+
     bot.chat('Im in!')
     // if (portInventory !== null) {
     //   const inventoryViewer = require('mineflayer-web-inventory')

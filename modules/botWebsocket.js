@@ -44,10 +44,15 @@ function log(data) {
     socket.emit('logs', data)
 }
 
+function on(listener, cb) {
+    socket.on(listener, cb)
+}
+
 module.exports = {
     connect,
     emit,
     log,
     emitHealth,
-    emitFood
+    emitFood,
+    on
 }
