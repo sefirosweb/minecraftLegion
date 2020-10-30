@@ -40,7 +40,7 @@ function runNextBot() {
   }
 };
 
-// runNextBot()
+runNextBot()
 
 
 

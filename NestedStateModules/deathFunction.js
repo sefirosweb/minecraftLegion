@@ -4,6 +4,7 @@ const {
   NestedStateMachine
 } = require('mineflayer-statemachine')
 const BehaviorGetPlayer = require('./../BehaviorModules/BehaviorGetPlayer')
+const botWebsocket = require('../modules/botWebsocket')
 
 function deathFunction(bot, targets) {
   const enter = new BehaviorIdle(targets)

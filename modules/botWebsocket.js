@@ -13,10 +13,8 @@ function connect(botUsername) {
         console.log('Disconected from webserver');
     })
 
-    socket.on('botDisconnect', (socketId) => {
-        if (socketId === socket.id) {
-            process.exit(1);
-        }
+    socket.on('sendDisconnect', () => {
+        process.exit(1);
     })
 }
 
