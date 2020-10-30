@@ -95,9 +95,18 @@ function createNewBot(botName, botPassword = '') {
     root.stateName = 'main'
     const stateMachine = new BotStateMachine(bot, root)
 
-    // if (portBotStateMachine !== null) {
-    //   const webserver = new StateMachineWebserver(bot, stateMachine, portBotStateMachine)
-    //   webserver.startServer()
-    // }
+    let webserver = {}
+    botWebsocket.on('setStateMachine', (message) => {
+      if (typeof webserver.isServerRunning !== "function") {
+        webserver = new StateMachineWebserver(bot, stateMachine, message.port)
+      }
+      if (typeof webserver.isServerRunning === "function") {
+        if (!webserver.isServerRunning()) {
+          webserver.startServer()
+        }
+        botWebsocket.log(`Started state machine web server at http://localhost:${webserver.port}`);
+      }
+    })
+
   })
 }
