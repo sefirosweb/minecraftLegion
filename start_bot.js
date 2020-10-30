@@ -52,6 +52,7 @@ function createNewBot(botName, botPassword = '') {
     })
 
     botWebsocket.log('Ready!')
+
     let inventoryViewer = {}
     botWebsocket.on('startInventory', (message) => {
       if (typeof inventoryViewer !== "function") {
@@ -60,13 +61,16 @@ function createNewBot(botName, botPassword = '') {
         botWebsocket.log(`Started inventory web server at http://localhost:${message.port}`);
       }
     })
-    // if (portInventory !== null) {
-    //   
-    // }
-    // if (portPrismarineViewer !== null) {
-    //   const prismarineViewer = require('./modules/viewer')
-    //   prismarineViewer.start(bot, portPrismarineViewer)
-    // }
+
+    let prismarineViewer = {}
+    botWebsocket.on('startViewer', (message) => {
+      if (typeof prismarineViewer !== "function") {
+        const prismarineViewer = require('./modules/viewer')
+        prismarineViewer.start(bot, message.port)
+        botWebsocket.log(`Started viewer web server at http://localhost:${message.port}`);
+      }
+    })
+
 
     const targets = {}
     const idleState = new BehaviorIdle(targets)
