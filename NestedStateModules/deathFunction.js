@@ -52,6 +52,17 @@ function deathFunction(bot, targets) {
     })
   ]
 
+  botWebsocket.on('sendStay', (master) => {
+    const player = playerEntity.getPlayerEntity(master)
+    if (player) {
+      botWebsocket.log('sendStay')
+      transitions[1].trigger()
+      transitions[2].trigger()
+    } else {
+      botWebsocket.log(`Playername ${master} not found!`)
+    }
+  })
+
   bot.on('chat', (username, message) => {
     if (message === 'hi ' + bot.username || message === 'hi all') {
       const player = playerEntity.getPlayerEntity(username)

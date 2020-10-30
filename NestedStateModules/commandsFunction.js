@@ -64,7 +64,13 @@ function commandsFunction(bot, targets) {
       name: 'Player say: stay',
       onTransition: () => bot.chat('I wait here!')
     }),
-
+    new StateTransition({ // 6
+      parent: enter,
+      child: lookAtPlayersState,
+      name: 'Enter to nested',
+      onTransition: () => customEvents.addEvent('chat', botChatCommandFunctionListener),
+      shouldTransition: () => true
+    }),
     new StateTransition({
       parent: followPlayer,
       child: lookAtFollowTarget,
@@ -76,31 +82,74 @@ function commandsFunction(bot, targets) {
       child: followPlayer,
       name: 'The player is too close',
       shouldTransition: () => lookAtFollowTarget.distanceToTarget() >= 2
-    }),
-    new StateTransition({
-      parent: enter,
-      child: lookAtPlayersState,
-      name: 'Enter to nested',
-      onTransition: () => customEvents.addEvent('chat', botChatCommandFunctionListener),
-      shouldTransition: () => true
     })
   ]
+
+
+  function stayTrigger() {
+    transitions[4].trigger()
+    transitions[5].trigger()
+  }
+
+  function followTrigger() {
+    transitions[3].trigger()
+  }
+
+  function endCommandsTrigger() {
+    customEvents.removeListener('chat', botChatCommandFunctionListener)
+    transitions[0].trigger()
+    transitions[1].trigger()
+    transitions[2].trigger()
+  }
+
+  botWebsocket.on('sendStay', () => {
+    botWebsocket.log('sendStay')
+    stayTrigger()
+  })
+
+  botWebsocket.on('sendFollow', () => {
+    botWebsocket.log('sendFollow')
+    followTrigger()
+  })
+
+  botWebsocket.on('sendEndCommands', () => {
+    botWebsocket.log('sendEndCommands')
+    endCommandsTrigger()
+  })
+
+  botWebsocket.on('sendStartPatrol', () => {
+    botWebsocket.log('sendStartPatrol')
+    startGetPoints()
+  })
+
+  botWebsocket.on('sendEndPatrol', () => {
+    botWebsocket.log('sendEndPatrol')
+    savePatrol()
+  })
+
+
+  botWebsocket.on('sendStartChest', () => {
+    botWebsocket.log('sendStartChest')
+    startGetPoints()
+  })
+
+
+  botWebsocket.on('sendEndChest', () => {
+    botWebsocket.log('sendEndChest')
+    saveChest()
+  })
 
   function botChatCommandFunctionListener(username, message) {
     let msg
     switch (true) {
       case (message === 'bye'):
-        customEvents.removeListener('chat', botChatCommandFunctionListener)
-        transitions[0].trigger()
-        transitions[1].trigger()
-        transitions[2].trigger()
+        endCommandsTrigger()
         break
       case (message === 'come'):
-        transitions[3].trigger()
+        followTrigger();
         break
       case (message === 'stay'):
-        transitions[4].trigger()
-        transitions[5].trigger()
+        stayTrigger()
         break
       default:
         if (message.match(/set job.*/)) {
