@@ -51,7 +51,7 @@ function createNewBot(botName, botPassword = '') {
       botWebsocket.log(message)
     })
 
-    bot.chat('Im in!')
+    botWebsocket.log('Ready!')
     // if (portInventory !== null) {
     //   const inventoryViewer = require('mineflayer-web-inventory')
     //   inventoryViewer(bot, { port: portInventory })

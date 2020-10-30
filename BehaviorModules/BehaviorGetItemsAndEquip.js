@@ -36,7 +36,7 @@ module.exports = class BehaviorGetItemsAndEquip {
     })
 
     if (!chestToOpen) {
-      this.bot.chat('no chest found')
+      botWebsocket.log('No chest found')
       setTimeout(() => {
         this.getAndEquip()
       }, 3000)
@@ -104,7 +104,7 @@ module.exports = class BehaviorGetItemsAndEquip {
 
       const foundItem = this.chest.items().find(itemtoFind => itemtoFind.name.includes(item))
       if (!foundItem) {
-        this.bot.chat('No item ' + item + ' in chest!')
+        botWebsocket.log(`No item ${item} in chest!`)
         resolve()
         return
       }

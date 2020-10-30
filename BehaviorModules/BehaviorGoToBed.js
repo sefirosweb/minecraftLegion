@@ -1,5 +1,5 @@
 const BehaviorGoToBed = (function () {
-  function BehaviorGoToBed (bot, bed) {
+  function BehaviorGoToBed(bot, bed) {
     this.bot = bot
     this.bed = bed
     this.stateName = 'goToBed'
@@ -24,7 +24,7 @@ const BehaviorGoToBed = (function () {
   BehaviorGoToBed.prototype.sleep = function () {
     this.bot.sleep(this.bed, (err) => {
       if (err) {
-        this.bot.chat(`I can't sleep: ${err.message}`)
+        botWebsocket.log(`I can't sleep: ${err.message}`)
         setTimeout(() => {
           this.sleep()
         }, 10000)
