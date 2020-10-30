@@ -52,9 +52,16 @@ function createNewBot(botName, botPassword = '') {
     })
 
     botWebsocket.log('Ready!')
+    let inventoryViewer = {}
+    botWebsocket.on('startInventory', (message) => {
+      if (typeof inventoryViewer !== "function") {
+        inventoryViewer = require('mineflayer-web-inventory')
+        inventoryViewer(bot, { port: message.port })
+        botWebsocket.log(`Started inventory web server at http://localhost:${message.port}`);
+      }
+    })
     // if (portInventory !== null) {
-    //   const inventoryViewer = require('mineflayer-web-inventory')
-    //   inventoryViewer(bot, { port: portInventory })
+    //   
     // }
     // if (portPrismarineViewer !== null) {
     //   const prismarineViewer = require('./modules/viewer')
@@ -96,7 +103,7 @@ function createNewBot(botName, botPassword = '') {
     const stateMachine = new BotStateMachine(bot, root)
 
     let webserver = {}
-    botWebsocket.on('setStateMachine', (message) => {
+    botWebsocket.on('startStateMachine', (message) => {
       if (typeof webserver.isServerRunning !== "function") {
         webserver = new StateMachineWebserver(bot, stateMachine, message.port)
       }
