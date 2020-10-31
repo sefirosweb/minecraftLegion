@@ -52,24 +52,25 @@ function deathFunction(bot, targets) {
     })
   ]
 
-  botWebsocket.on('sendStay', (master) => {
+  function commandTrigger(master) {
     const player = playerEntity.getPlayerEntity(master)
     if (player) {
       botWebsocket.log('sendStay')
       transitions[1].trigger()
       transitions[2].trigger()
+      botWebsocket.emitCombat(false)
     } else {
       botWebsocket.log(`Playername ${master} not found!`)
     }
+  }
+
+  botWebsocket.on('sendStay', (master) => {
+    commandTrigger(master)
   })
 
   bot.on('chat', (username, message) => {
     if (message === 'hi ' + bot.username || message === 'hi all') {
-      const player = playerEntity.getPlayerEntity(username)
-      if (player) {
-        transitions[1].trigger()
-        transitions[2].trigger()
-      }
+      commandTrigger(username)
     }
   })
 

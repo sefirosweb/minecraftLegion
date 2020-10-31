@@ -125,6 +125,7 @@ function guardCombatJobFunction(bot, targets) {
       child: exit,
       name: 'Mob is dead',
       onTransition: () => {
+        botWebsocket.emitCombat(false)
         botWebsocket.log('End Combat - attack')
         stopGrades()
         targets.entity = undefined
@@ -138,6 +139,7 @@ function guardCombatJobFunction(bot, targets) {
       child: exit,
       name: 'Mob is dead',
       onTransition: () => {
+        botWebsocket.emitCombat(false)
         botWebsocket.log('End Combat - longRangeAttack')
         stopGrades()
         targets.entity = undefined
@@ -151,6 +153,7 @@ function guardCombatJobFunction(bot, targets) {
       child: exit,
       name: 'Mob is dead',
       onTransition: () => {
+        botWebsocket.emitCombat(false)
         botWebsocket.log('End Combat - followMob')
         stopGrades()
         targets.entity = undefined
@@ -164,6 +167,7 @@ function guardCombatJobFunction(bot, targets) {
       parent: enter,
       child: attack,
       onTransition: () => {
+        botWebsocket.emitCombat(true)
         botWebsocket.log('Start combat ' + targets.entity.mobType + ' ' + JSON.stringify(targets.entity.position))
         startGrades()
       },

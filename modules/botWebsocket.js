@@ -30,6 +30,14 @@ function emitHealth(health) {
     emit('botStatus', data)
 }
 
+function emitCombat(combat) {
+    const data = {
+        type: 'combat',
+        value: combat
+    }
+    emit('botStatus', data)
+}
+
 function emitFood(health) {
     const data = {
         type: 'food',
@@ -48,9 +56,10 @@ function on(listener, cb) {
 
 module.exports = {
     connect,
+    on,
     emit,
     log,
     emitHealth,
     emitFood,
-    on
+    emitCombat
 }

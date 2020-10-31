@@ -100,6 +100,7 @@ function createNewBot(botName, botPassword = '') {
 
       transitions[1].trigger()
       botWebsocket.log('trigger death')
+      botWebsocket.emitCombat(false)
     })
 
     const root = new NestedStateMachine(transitions, idleState)
