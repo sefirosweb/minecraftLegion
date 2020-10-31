@@ -84,6 +84,9 @@ module.exports = class BehaviorGetItemsAndEquip {
           return this.withdrawItem('bow', 1)
         })
         .then(() => {
+          return this.withdrawItem('cooked_chicken', 64) // Food
+        })
+        .then(() => {
           return this.withdrawItem('arrow', 128)
         }).then(() => {
           setTimeout(() => {
@@ -101,6 +104,8 @@ module.exports = class BehaviorGetItemsAndEquip {
         resolve()
         return
       }
+
+      // console.log(this.chest.items()) // Items in chest
 
       const foundItem = this.chest.items().find(itemtoFind => itemtoFind.name.includes(item))
       if (!foundItem) {

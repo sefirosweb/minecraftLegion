@@ -1,3 +1,8 @@
+## 0.1.2
+* Added websocket conection
+* Added auto eat food
+* Added chest for food
+
 ## 0.1.1
 * Added sockets for comunicate all bots between server
 * Web logs of all bots at same time

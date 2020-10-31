@@ -1,7 +1,7 @@
 const botConfig = require('../modules/botConfig')
 
 module.exports = class BehaviorLoadConfig {
-  constructor (bot, targets) {
+  constructor(bot, targets) {
     this.bot = bot
     this.targets = targets
     this.stateName = 'BehaviorLoadConfig'
@@ -12,31 +12,36 @@ module.exports = class BehaviorLoadConfig {
     this.patrol = []
   }
 
-  onStateEntered () {
+  onStateEntered() {
     this.job = botConfig.getJob(this.bot.username)
     this.mode = botConfig.getMode(this.bot.username)
     this.distance = botConfig.getDistance(this.bot.username)
     this.patrol = botConfig.getPatrol(this.bot.username)
     this.chest = botConfig.getChest(this.bot.username)
+    this.foodChest = botConfig.getFoodChest(this.bot.username)
   }
 
-  getJob () {
+  getJob() {
     return this.job
   }
 
-  getMode () {
+  getMode() {
     return this.mode
   }
 
-  getDistance () {
+  getDistance() {
     return this.distance
   }
 
-  getPatrol () {
+  getPatrol() {
     return this.patrol
   }
 
-  getChest () {
+  getChest() {
     return this.chest
+  }
+
+  getFoodChest() {
+    return this.foodChest
   }
 }

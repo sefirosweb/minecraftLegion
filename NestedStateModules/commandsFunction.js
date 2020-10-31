@@ -117,26 +117,24 @@ function commandsFunction(bot, targets) {
     endCommandsTrigger()
   })
 
-  botWebsocket.on('sendStartPatrol', () => {
-    botWebsocket.log('sendStartPatrol')
+  botWebsocket.on('sendStartWay', () => {
+    botWebsocket.log('sendStartWay')
     startGetPoints()
   })
 
-  botWebsocket.on('sendEndPatrol', () => {
-    botWebsocket.log('sendEndPatrol')
+  botWebsocket.on('sendSavePatrol', () => {
+    botWebsocket.log('sendSavePatrol')
     savePatrol()
   })
 
-
-  botWebsocket.on('sendStartChest', () => {
-    botWebsocket.log('sendStartChest')
-    startGetPoints()
+  botWebsocket.on('sendSaveChest', () => {
+    botWebsocket.log('sendSaveChest')
+    saveChest()
   })
 
-
-  botWebsocket.on('sendEndChest', () => {
-    botWebsocket.log('sendEndChest')
-    saveChest()
+  botWebsocket.on('sendSaveFoodChest', () => {
+    botWebsocket.log('sendSaveFoodChest')
+    saveFoodChest()
   })
 
   function botChatCommandFunctionListener(username, message) {
@@ -167,21 +165,21 @@ function commandsFunction(bot, targets) {
           saveDistance(msg[2])
         }
 
-        if (message.match(/set start patrol.*/)) {
+        if (message.match(/set start way.*/)) {
           msg = message.split(' ')
           startGetPoints(msg[3])
         }
 
-        if (message.match(/set end patrol.*/)) {
+        if (message.match(/set save patrol.*/)) {
           savePatrol()
         }
 
-        if (message.match(/set start chest.*/)) {
-          startGetPoints(1)
+        if (message.match(/set save chest.*/)) {
+          saveChest()
         }
 
-        if (message.match(/set end chest.*/)) {
-          saveChest()
+        if (message.match(/set save food chest.*/)) {
+          saveFoodChest()
         }
     }
   }
@@ -258,16 +256,20 @@ function commandsFunction(bot, targets) {
 
   function savePatrol() {
     customEvents.removeListener('move', nextPointListener)
-    const botConfig = require('../modules/botConfig')
     botConfig.setPatrol(bot.username, patrol)
     bot.chat('Ok, I memorized the patrol')
   }
 
   function saveChest() {
     customEvents.removeListener('move', nextPointListener)
-    const botConfig = require('../modules/botConfig')
     botConfig.setChest(bot.username, patrol)
     bot.chat('Oooh my treasure')
+  }
+
+  function saveFoodChest() {
+    customEvents.removeListener('move', nextPointListener)
+    botConfig.setFoodChest(bot.username, patrol)
+    bot.chat(`Here's the pantry?`)
   }
 
   const commandsFunction = new NestedStateMachine(transitions, enter, exit)
