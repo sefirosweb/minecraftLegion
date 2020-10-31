@@ -111,8 +111,8 @@ function guardJobFunction(bot, targets) {
 
     new StateTransition({
       parent: getItemsAndEquip,
-      child: getReadyForPatrol,
-      name: 'getItemsAndEquip -> getReadyForPatrol',
+      child: eatFood,
+      name: 'getItemsAndEquip -> eatFood',
       shouldTransition: () => getItemsAndEquip.getIsFinished()
     }),
 
