@@ -43,7 +43,9 @@ function guardJobFunction(bot, targets) {
   goFoodChest.stateName = 'Go Food Chest'
 
   const equip = new BehaviorEquip(bot, targets)
+  const equip2 = new BehaviorEquip(bot, targets)
   equip.stateName = 'Equip items'
+  equip2.stateName = 'Equip items'
 
   const equipmentItems = [{ item: 'helmet', quantity: 1 }, { item: 'chest', quantity: 1 }, { item: 'leggings', quantity: 1 },
   { item: 'boots', quantity: 1 }, { item: 'shield', quantity: 1 }, { item: 'sword', quantity: 1 }, { item: 'bow', quantity: 1 }]
@@ -110,6 +112,9 @@ function guardJobFunction(bot, targets) {
       parent: getReadyForPatrol,
       child: goChest,
       name: 'getReadyForPatrol -> goChest',
+      onTransition: () => {
+        goChest.sortPatrol()
+      },
       shouldTransition: () => !getReadyForPatrol.getIsReady() // No
     }),
 
@@ -131,6 +136,9 @@ function guardJobFunction(bot, targets) {
       parent: equip,
       child: goFoodChest,
       name: 'equip -> goFoodChest',
+      onTransition: () => {
+        goFoodChest.sortPatrol()
+      },
       shouldTransition: () => equip.isFinished()
     }),
 
@@ -145,6 +153,9 @@ function guardJobFunction(bot, targets) {
       parent: getConsumibles,
       child: eatFood,
       name: 'getEquipments -> eatFood',
+      onTransition: () => {
+        patrol.sortPatrol()
+      },
       shouldTransition: () => getConsumibles.isFinished()
     }),
 
@@ -157,9 +168,16 @@ function guardJobFunction(bot, targets) {
 
     new StateTransition({
       parent: eatFood,
-      child: patrol,
+      child: equip2,
       name: 'Continue patrol bot is full',
       shouldTransition: () => eatFood.isFinished()
+    }),
+
+    new StateTransition({
+      parent: equip2,
+      child: patrol,
+      name: 'Continue patrol bot is full',
+      shouldTransition: () => equip2.isFinished()
     }),
 
   ]
