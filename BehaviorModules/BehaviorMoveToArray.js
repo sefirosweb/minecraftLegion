@@ -1,7 +1,7 @@
 const mineflayerPathfinder = require('mineflayer-pathfinder')
 
 module.exports = class BehaviorMoveToArray {
-  constructor (bot, targets, patrol = [], startNearestPoint = false) {
+  constructor(bot, targets, patrol = [], startNearestPoint = false) {
     this.bot = bot
     this.targets = targets
     this.stateName = 'BehaviorMoveToArray'
@@ -27,15 +27,15 @@ module.exports = class BehaviorMoveToArray {
     }
   }
 
-  onStateEntered () {
+  onStateEntered() {
     this.startMoving()
   }
 
-  onStateExited () {
+  onStateExited() {
     this.stopMoving()
   }
 
-  sortPatrol () {
+  sortPatrol() {
     let nearestDistance = false
     let nearestPoint = 0
     let currentPoint = 0
@@ -53,7 +53,7 @@ module.exports = class BehaviorMoveToArray {
     this.currentPosition = nearestPoint
   }
 
-  getEndPatrol () {
+  getEndPatrol() {
     if (this.distanceToTarget() <= 2 && this.endPatrol === false) {
       this.startMoving()
       return false
@@ -66,12 +66,12 @@ module.exports = class BehaviorMoveToArray {
     return false
   };
 
-  stopMoving () {
+  stopMoving() {
     const pathfinder = this.bot.pathfinder
     pathfinder.setGoal(null)
   };
 
-  startMoving () {
+  startMoving() {
     this.position = this.patrol[this.currentPosition]
     this.currentPosition++
 
@@ -95,22 +95,22 @@ module.exports = class BehaviorMoveToArray {
     pathfinder.setGoal(goal)
   }
 
-  restart () {
+  restart() {
     this.stopMoving()
     this.startMoving()
   }
 
-  distanceToTarget () {
+  distanceToTarget() {
     const position = this.position
     return this.getDistance(position)
   }
 
-  getDistance (position) {
+  getDistance(position) {
     if (!position) { return 0 }
     return this.bot.entity.position.distanceTo(position)
   }
 
-  setPatrol (patrol, startNearestPoint = false) {
+  setPatrol(patrol, startNearestPoint = false) {
     this.patrol = patrol
     if (startNearestPoint === true && this.patrol !== undefined) {
       this.sortPatrol()
