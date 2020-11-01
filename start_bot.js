@@ -31,8 +31,9 @@ function createNewBot(botName, botPassword = '') {
     console.log(reasonDecoded)
     process.exit()
   })
-  bot.on('error', (err) => {
-    console.log(err)
+  bot.on('error', (error) => {
+    botWebsocket.log('Error bot detected ' + JSON.stringify(error))
+    console.log(error)
     process.exit()
   })
 

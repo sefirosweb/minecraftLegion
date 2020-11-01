@@ -34,7 +34,7 @@ class BehaviorAttack {
     if (itemEquip) {
       this.bot.equip(itemEquip, 'hand', (error) => {
         if (error !== undefined) {
-          botWebsocket.log('ERROR: ' + JSON.stringify(error))
+          botWebsocket.log('Error equip sword: ' + error)
         }
       })
     }

@@ -79,7 +79,7 @@ module.exports = class BehaviorEatFood {
         }
       })
       .catch((error) => {
-        botWebsocket.log('Error on eat food ' + JSON.stringify(error))
+        botWebsocket.log('Error on eat food ' + error)
         this.isEndEating = true
       })
   }
