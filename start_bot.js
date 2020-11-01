@@ -73,21 +73,33 @@ function createNewBot(botName, botPassword = '') {
 
 
     const targets = {}
-    const idleState = new BehaviorIdle(targets)
-    idleState.stateName = 'Start'
+    const startState = new BehaviorIdle(targets)
+    startState.stateName = 'Start'
+    const watiState = new BehaviorIdle(targets)
+    watiState.stateName = 'Wait Second'
     const death = require('./NestedStateModules/deathFunction')(bot, targets)
 
     const transitions = [
       new StateTransition({
-        parent: idleState,
-        child: death,
+        parent: startState,
+        child: watiState,
         name: 'idleState -> deathFunction',
-        shouldTransition: () => true
+        shouldTransition: () => true,
+        onTransition: () => {
+          console.log("start")
+          setTimeout(() => transitions[1].trigger(), 2000)
+        }
+      }),
+
+      new StateTransition({
+        parent: watiState,
+        child: death,
+        name: 'Wait 1 second for continue'
       }),
 
       new StateTransition({
         parent: death,
-        child: idleState,
+        child: startState,
         name: 'if bot die then restarts'
       })
     ]
@@ -98,12 +110,13 @@ function createNewBot(botName, botPassword = '') {
       customEvents.removeAllListeners('chat')
       customEvents.removeAllListeners('move')
 
-      transitions[1].trigger()
       botWebsocket.log('trigger death')
       botWebsocket.emitCombat(false)
+
+      setTimeout(() => transitions[2].trigger(), 1000)
     })
 
-    const root = new NestedStateMachine(transitions, idleState)
+    const root = new NestedStateMachine(transitions, startState)
     root.stateName = 'main'
     const stateMachine = new BotStateMachine(bot, root)
 

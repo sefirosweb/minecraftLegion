@@ -10,10 +10,12 @@ const BehaviorLoadConfig = require('./../BehaviorModules/BehaviorLoadConfig')
 const BehaviorMoveToArray = require('./../BehaviorModules/BehaviorMoveToArray')
 const BehaviorGetClosestEnemy = require('./../BehaviorModules/BehaviorGetClosestEnemy')
 const BehaviorGetReadyForPatrol = require('./../BehaviorModules/BehaviorGetReadyForPatrol')
-const BehaviorGetItemsAndEquip = require('./../BehaviorModules/BehaviorGetItemsAndEquip')
+const BehaviorWithdrawItemChest = require('./../BehaviorModules/BehaviorWithdrawItemChest')
 const BehaviorEatFood = require('./../BehaviorModules/BehaviorEatFood')
+const BehaviorEquip = require('./../BehaviorModules/BehaviorEquip')
 
 const mineflayerpathfinder = require('mineflayer-pathfinder')
+const { getFoodChest } = require('../modules/botConfig')
 
 function guardJobFunction(bot, targets) {
   const mcData = require('minecraft-data')(bot.version)
@@ -35,13 +37,22 @@ function guardJobFunction(bot, targets) {
   getReadyForPatrol.stateName = 'Get Ready for Patrol'
 
   const goChest = new BehaviorMoveToArray(bot, targets)
-  goChest.stateName = 'Go Chest'
+  goChest.stateName = 'Go Equipment Chest'
 
   const goFoodChest = new BehaviorMoveToArray(bot, targets)
   goFoodChest.stateName = 'Go Food Chest'
 
-  const getItemsAndEquip = new BehaviorGetItemsAndEquip(bot, targets)
-  getItemsAndEquip.stateName = 'Get items and equip'
+  const equip = new BehaviorEquip(bot, targets)
+  equip.stateName = 'Equip items'
+
+  const equipmentItems = [{ item: 'helmet', quantity: 1 }, { item: 'chest', quantity: 1 }, { item: 'leggings', quantity: 1 },
+  { item: 'boots', quantity: 1 }, { item: 'shield', quantity: 1 }, { item: 'sword', quantity: 1 }, { item: 'bow', quantity: 1 }]
+  const getEquipments = new BehaviorWithdrawItemChest(bot, targets, equipmentItems)
+  getEquipments.stateName = 'Get equipment items'
+
+  const consumibleItems = [{ item: 'arrow', quantity: 128 }, { item: 'cooked_chicken', quantity: 64 }]
+  const getConsumibles = new BehaviorWithdrawItemChest(bot, targets, consumibleItems)
+  getConsumibles.stateName = 'Get Food and Arrows'
 
   const eatFood = new BehaviorEatFood(bot, targets, ['cooked_chicken']) // Set array valid foods
   eatFood.stateName = 'Eat Food'
@@ -92,28 +103,49 @@ function guardJobFunction(bot, targets) {
       parent: getReadyForPatrol,
       child: eatFood,
       name: 'getReadyForPatrol -> eatFood',
-      shouldTransition: () => getReadyForPatrol.getReady()
+      shouldTransition: () => getReadyForPatrol.getIsReady() // Yes
     }),
 
     new StateTransition({
       parent: getReadyForPatrol,
       child: goChest,
       name: 'getReadyForPatrol -> goChest',
-      shouldTransition: () => !getReadyForPatrol.getReady()
+      shouldTransition: () => !getReadyForPatrol.getIsReady() // No
     }),
 
     new StateTransition({
       parent: goChest,
-      child: getItemsAndEquip,
-      name: 'goChest -> getItemsAndEquip',
+      child: getEquipments,
+      name: 'goChest -> getEquipments',
       shouldTransition: () => goChest.isFinished()
     }),
 
     new StateTransition({
-      parent: getItemsAndEquip,
+      parent: getEquipments,
+      child: equip,
+      name: 'getEquipments -> equip',
+      shouldTransition: () => getEquipments.isFinished()
+    }),
+
+    new StateTransition({
+      parent: equip,
+      child: goFoodChest,
+      name: 'equip -> goFoodChest',
+      shouldTransition: () => equip.isFinished()
+    }),
+
+    new StateTransition({
+      parent: goFoodChest,
+      child: getConsumibles,
+      name: 'goFoodChest -> getConsumibles',
+      shouldTransition: () => goFoodChest.isFinished()
+    }),
+
+    new StateTransition({
+      parent: getConsumibles,
       child: eatFood,
-      name: 'getItemsAndEquip -> eatFood',
-      shouldTransition: () => getItemsAndEquip.isFinished()
+      name: 'getEquipments -> eatFood',
+      shouldTransition: () => getConsumibles.isFinished()
     }),
 
     new StateTransition({

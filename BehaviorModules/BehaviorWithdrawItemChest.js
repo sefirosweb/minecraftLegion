@@ -1,34 +1,39 @@
 const botWebsocket = require('../modules/botWebsocket')
 
 module.exports = class BehaviorWithdrawItemChest {
-  constructor(bot, targets) {
+  constructor(bot, targets, itemsToWithdraw = []) {
     this.bot = bot
     this.targets = targets
     this.stateName = 'BehaviorWithdrawItemChest'
 
-    this.isFinished = false
+    this.isEndFinished = false
     this.chest = false
+
+    this.indexItemsToWithdraw = 0
+    this.itemsToWithdraw = itemsToWithdraw
 
     this.inventory = require('../modules/inventoryModule')(this.bot)
   }
 
   onStateEntered() {
-    this.isFinished = false
-    this.getAndEquip()
+    this.indexItemsToWithdraw = 0
+    this.isEndFinished = false
+    this.withdrawItems()
   }
 
   onStateExited() {
-    this.isFinished = false
+    this.indexItemsToWithdraw = 0
+    this.isEndFinished = false
     try {
       this.chest.removeAllListeners()
     } catch (e) { }
   }
 
-  getIsFinished() {
-    return this.isFinished
+  isFinished() {
+    return this.isEndFinished
   }
 
-  getAndEquip() {
+  withdrawItems() {
     const mcData = require('minecraft-data')(this.bot.version)
 
     const chestToOpen = this.bot.findBlock({
@@ -38,110 +43,65 @@ module.exports = class BehaviorWithdrawItemChest {
 
     if (!chestToOpen) {
       botWebsocket.log('No chest found')
-      setTimeout(() => {
-        this.getAndEquip()
-      }, 3000)
+      this.isEndFinished = true
       return
     }
 
     this.chest = this.bot.openChest(chestToOpen)
 
     this.chest.on('open', () => {
-      this.getItemsFromChest()
-        .then(() => {
-          this.chest.close()
-        })
+      setTimeout(() => {
+        this.getItemsFromChest()
+          .then(() => {
+            this.chest.close()
+          })
+      }, 1000)
     })
 
     this.chest.on('close', () => {
-      setTimeout(() => {
-        this.equipAllItems()
-          .then(() => {
-            this.isFinished = true
-          })
-      }, 1000)
+      setTimeout(this.isEndFinished = true, 1000)
+
     })
   }
 
   getItemsFromChest() {
     return new Promise((resolve, reject) => {
-      this.withdrawItem('sword', 1)
+
+      if (this.indexItemsToWithdraw >= this.itemsToWithdraw.length) {
+        resolve()
+      }
+
+      const itemToWithdraw = this.itemsToWithdraw[this.indexItemsToWithdraw]
+      this.withdrawItem(itemToWithdraw.item, itemToWithdraw.quantity)
         .then(() => {
-          return this.withdrawItem('helmet', 1)
+          this.indexItemsToWithdraw++
+          this.getItemsFromChest()
+            .then(() => resolve())
         })
-        .then(() => {
-          return this.withdrawItem('chest', 1)
-        })
-        .then(() => {
-          return this.withdrawItem('leggings', 1)
-        })
-        .then(() => {
-          return this.withdrawItem('boots', 1)
-        })
-        .then(() => {
-          return this.withdrawItem('shield', 1)
-        })
-        .then(() => {
-          return this.withdrawItem('bow', 1)
-        })
-        .then(() => {
-          return this.withdrawItem('cooked_chicken', 64) // Food
-        })
-        .then(() => {
-          return this.withdrawItem('arrow', 128)
-        }).then(() => {
-          setTimeout(() => {
-            resolve()
-          }, 1000)
-        })
+
     })
   }
 
-  withdrawItem(item, amount) {
+  withdrawItem(itemName, quantity) {
     return new Promise((resolve, reject) => {
-      const currentItems = this.inventory.countItemsInInventoryOrEquipped(item)
-      amount -= currentItems
-      if (amount <= 0) {
+      const currentItems = this.inventory.countItemsInInventoryOrEquipped(itemName)
+      quantity -= currentItems
+      if (quantity <= 0) {
         resolve()
         return
       }
 
-      // console.log(this.chest.items()) // Items in chest
-
-      const foundItem = this.chest.items().find(itemtoFind => itemtoFind.name.includes(item))
+      const foundItem = this.chest.items().find(itemtoFind => itemtoFind.name.includes(itemName))
       if (!foundItem) {
         botWebsocket.log(`No item ${item} in chest!`)
         resolve()
         return
       }
 
-      this.chest.withdraw(foundItem.type, null, amount, () => {
+      this.chest.withdraw(foundItem.type, null, quantity, () => {
         resolve()
       })
     })
   }
 
-  equipAllItems() {
-    return new Promise((resolve, reject) => {
-      this.inventory.equipItem('helmet')
-        .then(() => {
-          return this.inventory.equipItem('chest')
-        })
-        .then(() => {
-          return this.inventory.equipItem('leggings')
-        })
-        .then(() => {
-          return this.inventory.equipItem('boots')
-        })
-        .then(() => {
-          return this.inventory.equipItem('shield')
-        })
-        .then(() => {
-          resolve()
-        })
-        .catch((error) => {
-          botWebsocket.log(JSON.stringify(error))
-        })
-    })
-  }
 }

@@ -13,7 +13,7 @@ module.exports = class BehaviorGetReadyForPatrol {
     this.checkImReady()
   }
 
-  getReady() {
+  getIsReady() {
     return this.isReady
   }
 
