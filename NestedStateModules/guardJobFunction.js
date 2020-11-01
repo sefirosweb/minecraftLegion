@@ -43,7 +43,7 @@ function guardJobFunction(bot, targets) {
   const getItemsAndEquip = new BehaviorGetItemsAndEquip(bot, targets)
   getItemsAndEquip.stateName = 'Get items and equip'
 
-  const eatFood = new BehaviorEatFood(bot, targets)
+  const eatFood = new BehaviorEatFood(bot, targets, ['cooked_chicken']) // Set array valid foods
   eatFood.stateName = 'Eat Food'
 
   const guardCombatJobFunction = require('./guardCombatJobFunction')(bot, targets)

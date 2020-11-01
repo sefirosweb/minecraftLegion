@@ -1,15 +1,22 @@
 const lodash = require('lodash');
+const botWebsocket = require('../modules/botWebsocket')
 
 module.exports = class BehaviorEatFood {
-  constructor(bot, targets) {
+  constructor(bot, targets, foods = []) {
     this.bot = bot
     this.targets = targets
     this.stateName = 'BehaviorEatFood'
 
     this.priority = 'saturation' // saturation or foodPoints
-    const mcData = require('minecraft-data')(bot.version)
-    const data = mcData.foodsArray
-    this.foods = data.map((item) => item.name)
+
+    // If no food introduced then get all foods
+    if (foods.length === 0) {
+      const mcData = require('minecraft-data')(bot.version)
+      const mcDataFoods = mcData.foodsArray
+      this.foods = mcDataFoods.map((item) => item.name)
+    } else {
+      this.foods = foods
+    }
 
     this.isEating = false
     this.isEndEating = false
@@ -33,18 +40,20 @@ module.exports = class BehaviorEatFood {
   eat() {
     this.isEating = true
 
-    let found_food = this.getFodInInventory()
+    // Check if in inventory have food
+    const available_food = this.bot.inventory.items().reduce((valid_food, food) => {
+      const return_valid_food = [...valid_food]
+      if (this.foods.includes(food.name)) {
+        return_valid_food.push(food)
+      }
+      return return_valid_food
+    }, [])
 
-    if (found_food.length === 0 || !found_food) { // No food can't eat finish Behavior
+    if (available_food.length === 0) {
+      botWebsocket.log("No food in inventory ")
       this.isEndEating = true
       return
     }
-
-    let available_food = []
-
-    this.bot.inventory.items().forEach((element) => {
-      if (this.foods.includes(element.name)) available_food.push(element)
-    })
 
     let best_food
 
@@ -69,7 +78,8 @@ module.exports = class BehaviorEatFood {
           this.isEndEating = true
         }
       })
-      .catch(() => {
+      .catch((error) => {
+        botWebsocket.log('Error on eat food ' + JSON.stringify(error))
         this.isEndEating = true
       })
   }
@@ -109,7 +119,4 @@ module.exports = class BehaviorEatFood {
     return this.isEndEating
   }
 
-  getFodInInventory() {
-    return this.bot.inventory.items().filter((item) => this.foods.includes(item.name))
-  }
 }
