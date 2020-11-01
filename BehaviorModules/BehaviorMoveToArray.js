@@ -1,4 +1,5 @@
 const mineflayerPathfinder = require('mineflayer-pathfinder')
+const botWebsocket = require('../modules/botWebsocket')
 
 module.exports = class BehaviorMoveToArray {
   constructor(bot, targets, patrol = [], startNearestPoint = false) {
@@ -18,7 +19,7 @@ module.exports = class BehaviorMoveToArray {
 
     this.bot.on('path_update', (r) => {
       if (r.status === 'noPath') {
-        // this.endPatrol = true;
+        botWebsocket.log('No path! ' + JSON.stringify(r))
       }
     })
 
