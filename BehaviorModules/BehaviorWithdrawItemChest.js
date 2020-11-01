@@ -59,7 +59,7 @@ module.exports = class BehaviorWithdrawItemChest {
     })
 
     this.chest.on('close', () => {
-      setTimeout(this.isEndFinished = true, 1000)
+      setTimeout(() => this.isEndFinished = true, 1000)
 
     })
   }
@@ -93,7 +93,7 @@ module.exports = class BehaviorWithdrawItemChest {
 
       const foundItem = this.chest.items().find(itemtoFind => itemtoFind.name.includes(itemName))
       if (!foundItem) {
-        botWebsocket.log(`No item ${item} in chest!`)
+        botWebsocket.log(`No item ${itemName} in chest!`)
         resolve()
         return
       }
