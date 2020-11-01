@@ -110,11 +110,6 @@ module.exports = class BehaviorEatFood {
 
   }
 
-  getFood() {
-    console.log(this.bot.food)
-    return this.bot.food
-  }
-
   isFinished() {
     return this.isEndEating
   }
