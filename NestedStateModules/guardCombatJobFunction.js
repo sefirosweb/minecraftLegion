@@ -18,6 +18,7 @@ function guardCombatJobFunction(bot, targets) {
   const rangoBow = 60
   const rangeSword = 3
   const rangeFollowToShortAttack = 5
+  const timeBowColdown = 1500
 
   const enter = new BehaviorIdle(targets)
   enter.stateName = 'Enter'
@@ -54,7 +55,7 @@ function guardCombatJobFunction(bot, targets) {
       }
     }
 
-    if (Date.now() - bowColdown < 1500) {
+    if (Date.now() - bowColdown < timeBowColdown) {
       longRangeAttack.setInfoShot(false)
       return false
     }
@@ -197,7 +198,7 @@ function guardCombatJobFunction(bot, targets) {
       parent: followMob,
       child: longRangeAttack,
       name: 'Mob is on range for Long Range Attack',
-      shouldTransition: () => followMob.distanceToTarget() < rangoBow && followMob.distanceToTarget() > rangeFollowToShortAttack && targetGrade !== false && targets.entity.isValid
+      shouldTransition: () => followMob.distanceToTarget() < rangoBow && followMob.distanceToTarget() > rangeFollowToShortAttack && Date.now() - bowColdown > timeBowColdown && targetGrade !== false && targets.entity.isValid
     }),
 
     new StateTransition({
@@ -209,6 +210,17 @@ function guardCombatJobFunction(bot, targets) {
       },
       name: 'Mob is near for short attack',
       shouldTransition: () => followMob.distanceToTarget() < rangeFollowToShortAttack && targets.entity.isValid
+    }),
+
+    new StateTransition({
+      parent: longRangeAttack,
+      child: followMob,
+      onTransition: () => {
+        checkHandleSword()
+        bowColdown = Date.now()
+      },
+      name: 'No arrows',
+      shouldTransition: () => longRangeAttack.checkArrows() === false && targets.entity.isValid
     }),
 
     new StateTransition({

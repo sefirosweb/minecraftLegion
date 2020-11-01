@@ -57,6 +57,15 @@ module.exports = class BehaviorLongAttack {
     }
   }
 
+  checkArrows() {
+    const arrows = this.bot.inventory.items().find(item => item.name.includes('arrow'))
+    if (arrows === undefined) {
+      return false
+    } else {
+      return true
+    }
+  }
+
   checkBowEquipped() {
     return this.inventory.checkItemEquiped('bow')
   }
