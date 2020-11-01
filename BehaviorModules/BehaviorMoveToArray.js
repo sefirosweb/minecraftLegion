@@ -53,7 +53,7 @@ module.exports = class BehaviorMoveToArray {
     this.currentPosition = nearestPoint
   }
 
-  getEndPatrol() {
+  isFinished() {
     if (this.distanceToTarget() <= 2 && this.endPatrol === false) {
       this.startMoving()
       return false

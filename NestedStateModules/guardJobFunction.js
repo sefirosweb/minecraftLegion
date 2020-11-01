@@ -85,7 +85,7 @@ function guardJobFunction(bot, targets) {
       parent: patrol,
       child: getReadyForPatrol,
       name: 'patrol -> getReadyForPatrol',
-      shouldTransition: () => patrol.getEndPatrol()
+      shouldTransition: () => patrol.isFinished()
     }),
 
     new StateTransition({
@@ -106,14 +106,14 @@ function guardJobFunction(bot, targets) {
       parent: goChest,
       child: getItemsAndEquip,
       name: 'goChest -> getItemsAndEquip',
-      shouldTransition: () => goChest.getEndPatrol()
+      shouldTransition: () => goChest.isFinished()
     }),
 
     new StateTransition({
       parent: getItemsAndEquip,
       child: eatFood,
       name: 'getItemsAndEquip -> eatFood',
-      shouldTransition: () => getItemsAndEquip.getIsFinished()
+      shouldTransition: () => getItemsAndEquip.isFinished()
     }),
 
     new StateTransition({

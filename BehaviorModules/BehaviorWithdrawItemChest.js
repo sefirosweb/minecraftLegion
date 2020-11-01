@@ -1,30 +1,31 @@
 const botWebsocket = require('../modules/botWebsocket')
 
-module.exports = class BehaviorGetItemsAndEquip {
+module.exports = class BehaviorWithdrawItemChest {
   constructor(bot, targets) {
     this.bot = bot
     this.targets = targets
-    this.stateName = 'BehaviorGetItemsAndEquip'
+    this.stateName = 'BehaviorWithdrawItemChest'
 
-    this.isEndFinished = false
+    this.isFinished = false
     this.chest = false
 
     this.inventory = require('../modules/inventoryModule')(this.bot)
   }
 
   onStateEntered() {
-    this.isEndFinished = false
+    this.isFinished = false
     this.getAndEquip()
   }
 
   onStateExited() {
+    this.isFinished = false
     try {
       this.chest.removeAllListeners()
     } catch (e) { }
   }
 
-  isFinished() {
-    return this.isEndFinished
+  getIsFinished() {
+    return this.isFinished
   }
 
   getAndEquip() {
@@ -56,7 +57,7 @@ module.exports = class BehaviorGetItemsAndEquip {
       setTimeout(() => {
         this.equipAllItems()
           .then(() => {
-            this.isEndFinished = true
+            this.isFinished = true
           })
       }, 1000)
     })
