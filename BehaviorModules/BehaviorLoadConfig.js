@@ -17,8 +17,9 @@ module.exports = class BehaviorLoadConfig {
     this.mode = botConfig.getMode(this.bot.username)
     this.distance = botConfig.getDistance(this.bot.username)
     this.patrol = botConfig.getPatrol(this.bot.username)
-    this.chest = botConfig.getChest(this.bot.username)
-    this.foodChest = botConfig.getFoodChest(this.bot.username)
+    this.equipmentChest = botConfig.getChest(this.bot.username, 'equipment')
+    this.foodChest = botConfig.getChest(this.bot.username, 'food')
+    this.depositChest = botConfig.getChest(this.bot.username, 'deposit')
   }
 
   getJob() {
@@ -37,11 +38,16 @@ module.exports = class BehaviorLoadConfig {
     return this.patrol
   }
 
-  getChest() {
-    return this.chest
+  getEquipmentChest() {
+    return this.equipmentChest
   }
 
   getFoodChest() {
     return this.foodChest
   }
+
+  getDepositChest() {
+    return this.depositChest
+  }
+
 }

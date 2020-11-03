@@ -10,9 +10,8 @@ function getConn(botName) {
     mode: 'none', // none, pve, pvp
     distance: 10,
     help_friends: false,
-    chest: [],
-    patrol: [],
-    foodCHest: []
+    chests: {},
+    patrol: []
   }
 
   db.defaults({ config: defaultConfig }).write()
@@ -59,24 +58,24 @@ function getPatrol(botName) {
   return db.get('config.patrol').value()
 }
 
-function setChest(botName, chest) {
+function setChest(botName, chest, chestName) {
   const db = getConn(botName)
-  db.set('config.chest', chest).write()
+  const chests = db.get('config.chests').value()
+  chests[chestName] = chest
+
+  console.log(chests)
+
+  db.set('config.chests', chests).write()
 }
 
-function getChest(botName) {
+function getChest(botName, chestName) {
   const db = getConn(botName)
-  return db.get('config.chest').value()
-}
-
-function setFoodChest(botName, chest) {
-  const db = getConn(botName)
-  db.set('config.foodChest', chest).write()
-}
-
-function getFoodChest(botName) {
-  const db = getConn(botName)
-  return db.get('config.foodChest').value()
+  const chest = db.get('config.chests').value()[chestName]
+  if (chest === undefined) {
+    return []
+  } else {
+    return chest
+  }
 }
 
 module.exports = {
@@ -89,7 +88,5 @@ module.exports = {
   setPatrol,
   getPatrol,
   setChest,
-  getChest,
-  setFoodChest,
-  getFoodChest
+  getChest
 }

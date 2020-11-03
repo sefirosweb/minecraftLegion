@@ -36,8 +36,8 @@ function guardJobFunction(bot, targets) {
   const getReadyForPatrol = new BehaviorGetReadyForPatrol(bot, targets)
   getReadyForPatrol.stateName = 'Get Ready for Patrol'
 
-  const goChest = new BehaviorMoveToArray(bot, targets)
-  goChest.stateName = 'Go Equipment Chest'
+  const goEquipmentChest = new BehaviorMoveToArray(bot, targets)
+  goEquipmentChest.stateName = 'Go Equipment Chest'
 
   const goFoodChest = new BehaviorMoveToArray(bot, targets)
   goFoodChest.stateName = 'Go Food Chest'
@@ -76,7 +76,7 @@ function guardJobFunction(bot, targets) {
       onTransition: () => {
         targets.entity = undefined
         patrol.setPatrol(loadConfig.getPatrol(), true)
-        goChest.setPatrol(loadConfig.getChest(), true)
+        goEquipmentChest.setPatrol(loadConfig.getEquipmentChest(), true)
         goFoodChest.setPatrol(loadConfig.getFoodChest(), true)
         getClosestMob.mode = loadConfig.getMode()
         getClosestMob.distance = loadConfig.getDistance()
@@ -110,19 +110,19 @@ function guardJobFunction(bot, targets) {
 
     new StateTransition({
       parent: getReadyForPatrol,
-      child: goChest,
-      name: 'getReadyForPatrol -> goChest',
+      child: goEquipmentChest,
+      name: 'getReadyForPatrol -> goEquipmentChest',
       onTransition: () => {
-        goChest.sortPatrol()
+        goEquipmentChest.sortPatrol()
       },
       shouldTransition: () => !getReadyForPatrol.getIsReady() // No
     }),
 
     new StateTransition({
-      parent: goChest,
+      parent: goEquipmentChest,
       child: getEquipments,
-      name: 'goChest -> getEquipments',
-      shouldTransition: () => goChest.isFinished()
+      name: 'goEquipmentChest -> getEquipments',
+      shouldTransition: () => goEquipmentChest.isFinished()
     }),
 
     new StateTransition({

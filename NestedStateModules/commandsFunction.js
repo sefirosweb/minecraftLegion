@@ -127,14 +127,9 @@ function commandsFunction(bot, targets) {
     savePatrol()
   })
 
-  botWebsocket.on('sendSaveChest', () => {
+  botWebsocket.on('sendSaveChest', (chestName) => {
     botWebsocket.log('sendSaveChest')
-    saveChest()
-  })
-
-  botWebsocket.on('sendSaveFoodChest', () => {
-    botWebsocket.log('sendSaveFoodChest')
-    saveFoodChest()
+    saveChest(chestName)
   })
 
   function botChatCommandFunctionListener(username, message) {
@@ -175,11 +170,8 @@ function commandsFunction(bot, targets) {
         }
 
         if (message.match(/set save chest.*/)) {
-          saveChest()
-        }
-
-        if (message.match(/set save food chest.*/)) {
-          saveFoodChest()
+          msg = message.split(' ')
+          saveChest(msg[3])
         }
     }
   }
@@ -260,16 +252,15 @@ function commandsFunction(bot, targets) {
     bot.chat('Ok, I memorized the patrol')
   }
 
-  function saveChest() {
+  function saveChest(chestName) {
+    const permitedChests = ['food', 'equipment', 'deposit']
+    if (!permitedChests.includes(chestName)) {
+      bot.chat(`I don't know what chest is it`)
+      return
+    }
     customEvents.removeListener('move', nextPointListener)
-    botConfig.setChest(bot.username, patrol)
+    botConfig.setChest(bot.username, patrol, chestName)
     bot.chat('Oooh my treasure')
-  }
-
-  function saveFoodChest() {
-    customEvents.removeListener('move', nextPointListener)
-    botConfig.setFoodChest(bot.username, patrol)
-    bot.chat(`Here's the pantry?`)
   }
 
   const commandsFunction = new NestedStateMachine(transitions, enter, exit)
