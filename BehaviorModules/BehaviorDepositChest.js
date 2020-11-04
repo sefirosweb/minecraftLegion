@@ -8,25 +8,30 @@ module.exports = class BehaviorDepositChest {
 
     this.isEndFinished = false
     this.chest = false
-
-
+    this.itemsToDeposit = []
 
     this.inventory = require('../modules/inventoryModule')(this.bot)
   }
 
   onStateEntered() {
     this.indexItemsToDeposit = 0
-    this.itemsToDeposit = this.bot.inventory.items() // itemsToDeposit
     this.isEndFinished = false
+    const itemToDeposit = this.itemsToDeposit.map(item => item['displayName'])
+    botWebsocket.log('Items to deposit ' + JSON.stringify(itemToDeposit))
     this.depositAllItems()
   }
 
   onStateExited() {
     this.indexItemsToDeposit = 0
     this.isEndFinished = false
+    this.itemsToDeposit = []
     try {
       this.chest.removeAllListeners()
     } catch (e) { }
+  }
+
+  setItemsToDeposit(itemsToDeposit) {
+    this.itemsToDeposit = itemsToDeposit
   }
 
   isFinished() {

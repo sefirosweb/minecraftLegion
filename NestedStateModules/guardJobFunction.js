@@ -18,6 +18,13 @@ const BehaviorEquip = require('./../BehaviorModules/BehaviorEquip')
 const mineflayerpathfinder = require('mineflayer-pathfinder')
 const { getFoodChest } = require('../modules/botConfig')
 
+const excludeItemsDeposit = [
+  'iron_sword',
+  'bow',
+  'arrow',
+  'cooked_chicken'
+]
+
 function guardJobFunction(bot, targets) {
   const mcData = require('minecraft-data')(bot.version)
   const movementsForAttack = new mineflayerpathfinder.Movements(bot, mcData)
@@ -113,6 +120,10 @@ function guardJobFunction(bot, targets) {
       parent: goDepositChest,
       child: depositItems,
       name: 'goDepositChest -> depositItems',
+      onTransition: () => {
+        const itemsToDeposit = bot.inventory.items().filter(item => !excludeItemsDeposit.includes(item.name))
+        depositItems.setItemsToDeposit(itemsToDeposit)
+      },
       shouldTransition: () => goDepositChest.isFinished()
     }),
 
