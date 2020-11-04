@@ -11,6 +11,7 @@ const BehaviorMoveToArray = require('./../BehaviorModules/BehaviorMoveToArray')
 const BehaviorGetClosestEnemy = require('./../BehaviorModules/BehaviorGetClosestEnemy')
 const BehaviorGetReadyForPatrol = require('./../BehaviorModules/BehaviorGetReadyForPatrol')
 const BehaviorWithdrawItemChest = require('./../BehaviorModules/BehaviorWithdrawItemChest')
+const BehaviorDepositChest = require('./../BehaviorModules/BehaviorDepositChest')
 const BehaviorEatFood = require('./../BehaviorModules/BehaviorEatFood')
 const BehaviorEquip = require('./../BehaviorModules/BehaviorEquip')
 
@@ -39,8 +40,14 @@ function guardJobFunction(bot, targets) {
   const goEquipmentChest = new BehaviorMoveToArray(bot, targets)
   goEquipmentChest.stateName = 'Go Equipment Chest'
 
+  const depositItems = new BehaviorDepositChest(bot, targets)
+  depositItems.stateName = 'Deposit Items'
+
   const goFoodChest = new BehaviorMoveToArray(bot, targets)
   goFoodChest.stateName = 'Go Food Chest'
+
+  const goDepositChest = new BehaviorMoveToArray(bot, targets)
+  goDepositChest.stateName = 'Go Deposit Chest'
 
   const equip = new BehaviorEquip(bot, targets)
   const equip2 = new BehaviorEquip(bot, targets)
@@ -78,6 +85,7 @@ function guardJobFunction(bot, targets) {
         patrol.setPatrol(loadConfig.getPatrol(), true)
         goEquipmentChest.setPatrol(loadConfig.getEquipmentChest(), true)
         goFoodChest.setPatrol(loadConfig.getFoodChest(), true)
+        goDepositChest.setPatrol(loadConfig.getDepositChest(), true)
         getClosestMob.mode = loadConfig.getMode()
         getClosestMob.distance = loadConfig.getDistance()
       },
@@ -96,9 +104,23 @@ function guardJobFunction(bot, targets) {
 
     new StateTransition({
       parent: patrol,
-      child: getReadyForPatrol,
-      name: 'patrol -> getReadyForPatrol',
+      child: goDepositChest,
+      name: 'patrol -> goDepositChest',
       shouldTransition: () => patrol.isFinished()
+    }),
+
+    new StateTransition({
+      parent: goDepositChest,
+      child: depositItems,
+      name: 'goDepositChest -> depositItems',
+      shouldTransition: () => goDepositChest.isFinished()
+    }),
+
+    new StateTransition({
+      parent: depositItems,
+      child: getReadyForPatrol,
+      name: 'depositItems -> getReadyForPatrol',
+      shouldTransition: () => depositItems.isFinished()
     }),
 
     new StateTransition({

@@ -1,28 +1,28 @@
 const botWebsocket = require('../modules/botWebsocket')
 
-module.exports = class BehaviorWithdrawItemChest {
-  constructor(bot, targets, itemsToWithdraw = []) {
+module.exports = class BehaviorDepositChest {
+  constructor(bot, targets) {
     this.bot = bot
     this.targets = targets
-    this.stateName = 'BehaviorWithdrawItemChest'
+    this.stateName = 'BehaviorDepositChest'
 
     this.isEndFinished = false
     this.chest = false
 
-    this.indexItemsToWithdraw = 0
-    this.itemsToWithdraw = itemsToWithdraw
+
 
     this.inventory = require('../modules/inventoryModule')(this.bot)
   }
 
   onStateEntered() {
-    this.indexItemsToWithdraw = 0
+    this.indexItemsToDeposit = 0
+    this.itemsToDeposit = this.bot.inventory.items() // itemsToDeposit
     this.isEndFinished = false
-    this.withdrawItems()
+    this.depositAllItems()
   }
 
   onStateExited() {
-    this.indexItemsToWithdraw = 0
+    this.indexItemsToDeposit = 0
     this.isEndFinished = false
     try {
       this.chest.removeAllListeners()
@@ -33,7 +33,7 @@ module.exports = class BehaviorWithdrawItemChest {
     return this.isEndFinished
   }
 
-  withdrawItems() {
+  depositAllItems() {
     const mcData = require('minecraft-data')(this.bot.version)
 
     const chestToOpen = this.bot.findBlock({
@@ -55,31 +55,31 @@ module.exports = class BehaviorWithdrawItemChest {
 
     this.chest.on('open', () => {
       setTimeout(() => {
-        this.getItemsFromChest()
+        this.depositItems()
           .then(() => this.chest.close())
           .catch((error) => {
-            botWebsocket.log('Error Withdraw items ' + error)
-            console.log('Error Withdraw items ' + error)
+            botWebsocket.log('Error Deposit items ' + error)
+            console.log('Error Deposit items ' + error)
             this.chest.close()
           })
-      }, 500)
+      }, 1000)
     })
-
   }
 
-  getItemsFromChest() {
+  depositItems() {
     return new Promise((resolve, reject) => {
+      const itemToDeposit = this.itemsToDeposit[this.indexItemsToDeposit]
 
-      if (this.indexItemsToWithdraw >= this.itemsToWithdraw.length) {
+      if (this.itemsToDeposit.length <= this.indexItemsToDeposit) {
         resolve()
         return
       }
 
-      const itemToWithdraw = this.itemsToWithdraw[this.indexItemsToWithdraw]
-      this.withdrawItem(itemToWithdraw.item, itemToWithdraw.quantity)
+      this.indexItemsToDeposit++
+
+      this.depositToChest(itemToDeposit.type, itemToDeposit.count)
         .then(() => {
-          this.indexItemsToWithdraw++
-          this.getItemsFromChest()
+          this.depositItems()
             .then(() => resolve())
             .catch((error) => reject(error))
         })
@@ -87,21 +87,9 @@ module.exports = class BehaviorWithdrawItemChest {
     })
   }
 
-  withdrawItem(itemName, quantity) {
+  depositToChest(itemType, quantity) {
     return new Promise((resolve, reject) => {
-      const currentItems = this.inventory.countItemsInInventoryOrEquipped(itemName)
-      quantity -= currentItems
-      if (quantity <= 0) {
-        resolve()
-      }
-
-      const foundItem = this.chest.items().find(itemtoFind => itemtoFind.name.includes(itemName))
-      if (!foundItem) {
-        botWebsocket.log(`No item ${itemName} in chest!`)
-        resolve()
-      }
-
-      this.chest.withdraw(foundItem.type, null, quantity, (error) => {
+      this.chest.deposit(itemType, null, quantity, (error) => {
         if (error) {
           setTimeout(() => reject(error), 200);
         } else {
