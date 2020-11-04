@@ -33,6 +33,9 @@ function guardJobFunction(bot, targets) {
   const enter = new BehaviorIdle(targets)
   enter.stateName = 'Enter'
 
+  const checkItemsToDeposit = new BehaviorIdle(targets)
+  checkItemsToDeposit.stateName = 'Verify Items To Deposit'
+
   const loadConfig = new BehaviorLoadConfig(bot, targets)
   loadConfig.stateName = 'Load Bot Config'
 
@@ -111,9 +114,34 @@ function guardJobFunction(bot, targets) {
 
     new StateTransition({
       parent: patrol,
-      child: goDepositChest,
-      name: 'patrol -> goDepositChest',
+      child: checkItemsToDeposit,
+      name: 'patrol -> checkItemsToDeposit',
       shouldTransition: () => patrol.isFinished()
+    }),
+
+    new StateTransition({
+      parent: checkItemsToDeposit,
+      child: goDepositChest,
+      name: 'checkItemsToDeposit -> goDepositChest',
+      onTransition: () => goDepositChest.sortPatrol(),
+      shouldTransition: () => {
+        const itemsToDeposit = bot.inventory.items().filter(item => !excludeItemsDeposit.includes(item.name))
+        if (itemsToDeposit.length > 0) {
+          return true
+        }
+      }
+    }),
+
+    new StateTransition({
+      parent: checkItemsToDeposit,
+      child: getReadyForPatrol,
+      name: 'checkItemsToDeposit -> getReadyForPatrol',
+      shouldTransition: () => {
+        const itemsToDeposit = bot.inventory.items().filter(item => !excludeItemsDeposit.includes(item.name))
+        if (itemsToDeposit.length === 0) {
+          return true
+        }
+      }
     }),
 
     new StateTransition({
