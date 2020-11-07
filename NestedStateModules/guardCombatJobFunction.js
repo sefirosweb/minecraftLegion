@@ -241,6 +241,17 @@ function guardCombatJobFunction (bot, targets) {
         checkHandleSword()
         bowColdown = Date.now()
       },
+      name: 'Invalid mob for long range',
+      shouldTransition: () => targets.entity.mobType === 'Enderman' && targets.entity.isValid
+    }),
+
+    new StateTransition({
+      parent: longRangeAttack,
+      child: followMob,
+      onTransition: () => {
+        checkHandleSword()
+        bowColdown = Date.now()
+      },
       name: 'Cant target to Mob',
       shouldTransition: () => targetGrade === false && targets.entity.isValid
     }),
