@@ -138,7 +138,7 @@ function guardJobFunction (bot, targets) {
       parent: patrol,
       child: goToObject,
       name: 'patrol -> goToObject',
-      onTransition: () => botWebsocket.log('Item Found => ' + JSON.stringify(findItem.targets.itemDrop)),
+      // onTransition: () => botWebsocket.log('Item Found => ' + JSON.stringify(findItem.targets.itemDrop)),
       shouldTransition: () => findItem.search()
     }),
 
