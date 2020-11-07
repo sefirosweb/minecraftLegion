@@ -77,6 +77,9 @@ function guardJobFunction(bot, targets) {
   const eatFood = new BehaviorEatFood(bot, targets, ['cooked_chicken']) // Set array valid foods
   eatFood.stateName = 'Eat Food'
 
+  const eatFoodCombat = new BehaviorEatFood(bot, targets, ['cooked_chicken'])
+  eatFoodCombat.stateName = 'Eat Food In Combat'
+
   const goToObject = new BehaviorMoveTo(bot, targets)
   goToObject.stateName = 'Move To Object'
 
@@ -261,6 +264,20 @@ function guardJobFunction(bot, targets) {
       child: eatFood,
       name: 'Mob is dead',
       shouldTransition: () => guardCombatJobFunction.isFinished()
+    }),
+
+    new StateTransition({
+      parent: guardCombatJobFunction,
+      child: eatFoodCombat,
+      name: 'Eat In Combat',
+      shouldTransition: () => bot.health < 15 && bot.food !== 20
+    }),
+
+    new StateTransition({
+      parent: eatFoodCombat,
+      child: guardCombatJobFunction,
+      name: 'End Eat In Combat',
+      shouldTransition: () => eatFoodCombat.isFinished()
     }),
 
     new StateTransition({

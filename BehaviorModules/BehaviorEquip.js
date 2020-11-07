@@ -48,6 +48,9 @@ module.exports = class BehaviorEquip {
           return this.inventory.equipItem('shield')
         })
         .then(() => {
+          return this.inventory.equipItem('sword')
+        })
+        .then(() => {
           resolve()
         })
         .catch((error) => {
