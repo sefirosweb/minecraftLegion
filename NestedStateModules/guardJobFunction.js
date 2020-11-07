@@ -3,8 +3,8 @@ const botWebsocket = require('../modules/botWebsocket')
 const {
   StateTransition,
   BehaviorIdle,
-  NestedStateMachine
-
+  NestedStateMachine,
+  BehaviorMoveTo
 } = require('mineflayer-statemachine')
 const BehaviorLoadConfig = require('./../BehaviorModules/BehaviorLoadConfig')
 const BehaviorMoveToArray = require('./../BehaviorModules/BehaviorMoveToArray')
@@ -14,6 +14,7 @@ const BehaviorWithdrawItemChest = require('./../BehaviorModules/BehaviorWithdraw
 const BehaviorDepositChest = require('./../BehaviorModules/BehaviorDepositChest')
 const BehaviorEatFood = require('./../BehaviorModules/BehaviorEatFood')
 const BehaviorEquip = require('./../BehaviorModules/BehaviorEquip')
+const BehaviorFindItems = require('./../BehaviorModules/BehaviorFindItems')
 
 const mineflayerpathfinder = require('mineflayer-pathfinder')
 const { getFoodChest } = require('../modules/botConfig')
@@ -76,7 +77,16 @@ function guardJobFunction(bot, targets) {
   const eatFood = new BehaviorEatFood(bot, targets, ['cooked_chicken']) // Set array valid foods
   eatFood.stateName = 'Eat Food'
 
+  const goToObject = new BehaviorMoveTo(bot, targets)
+  goToObject.stateName = 'Move To Object'
+
+  const findItem = new BehaviorFindItems(bot, targets)
+  findItem.stateName = 'Find Item Dropped'
+
   const guardCombatJobFunction = require('./guardCombatJobFunction')(bot, targets)
+
+  const test = new BehaviorIdle(targets)
+  test.stateName = 'test'
 
   const transitions = [
     new StateTransition({
@@ -111,6 +121,32 @@ function guardJobFunction(bot, targets) {
         return targets.entity !== undefined
       }
     }),
+
+    new StateTransition({
+      parent: goToObject,
+      child: guardCombatJobFunction,
+      name: 'goToObject -> try getClosestMob',
+      shouldTransition: () => {
+        getClosestMob.onStateEntered()
+        return targets.entity !== undefined
+      }
+    }),
+
+    new StateTransition({
+      parent: patrol,
+      child: goToObject,
+      name: 'patrol -> goToObject',
+      onTransition: () => botWebsocket.log('Item Found => ' + JSON.stringify(findItem.targets.itemDrop)),
+      shouldTransition: () => findItem.search()
+    }),
+
+    new StateTransition({
+      parent: goToObject,
+      child: patrol,
+      name: 'goToObject -> patrol',
+      shouldTransition: () => !goToObject.targets.itemDrop.isValid,
+    }),
+
 
     new StateTransition({
       parent: patrol,
