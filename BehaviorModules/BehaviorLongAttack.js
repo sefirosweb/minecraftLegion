@@ -57,6 +57,15 @@ module.exports = class BehaviorLongAttack {
     }
   }
 
+  checkBow() {
+    const bow = this.bot.inventory.items().find(item => item.name.includes('bow'))
+    if (bow === undefined) {
+      return false
+    } else {
+      return true
+    }
+  }
+
   checkArrows() {
     const arrows = this.bot.inventory.items().find(item => item.name.includes('arrow'))
     if (arrows === undefined) {
@@ -68,5 +77,13 @@ module.exports = class BehaviorLongAttack {
 
   checkBowEquipped() {
     return this.inventory.checkItemEquiped('bow')
+  }
+
+  checkBowAndArrow() {
+    if (this.checkBow() && this.checkArrows()) {
+      return true
+    } else {
+      return false
+    }
   }
 }

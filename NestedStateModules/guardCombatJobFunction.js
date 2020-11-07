@@ -219,8 +219,8 @@ function guardCombatJobFunction(bot, targets) {
         checkHandleSword()
         bowColdown = Date.now()
       },
-      name: 'No arrows',
-      shouldTransition: () => longRangeAttack.checkArrows() === false && targets.entity.isValid
+      name: 'No arrows or Bow',
+      shouldTransition: () => longRangeAttack.checkBowAndArrow() === false && targets.entity.isValid
     }),
 
     new StateTransition({
