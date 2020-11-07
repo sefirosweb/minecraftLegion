@@ -55,7 +55,7 @@ module.exports = class BehaviorDepositChest {
     this.chest = this.bot.openChest(chestToOpen)
 
     this.chest.on('close', () => {
-      setTimeout(function () {
+      setTimeout(() => {
         this.isEndFinished = true
       }, 1000)
     })
