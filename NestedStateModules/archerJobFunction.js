@@ -1,3 +1,5 @@
+const botWebsocket = require('../modules/botWebsocket')
+
 const {
   StateTransition,
   BehaviorIdle,

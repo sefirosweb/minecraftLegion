@@ -50,7 +50,9 @@ module.exports = class BehaviorWithdrawItemChest {
     this.chest = this.bot.openChest(chestToOpen)
 
     this.chest.on('close', () => {
-      setTimeout(() => this.isEndFinished = true, 1000)
+      setTimeout(function () {
+        this.isEndFinished = true
+      }, 1000)
     })
 
     this.chest.on('open', () => {

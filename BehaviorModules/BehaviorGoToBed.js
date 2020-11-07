@@ -1,3 +1,5 @@
+const botWebsocket = require('../modules/botWebsocket')
+
 const BehaviorGoToBed = (function () {
   function BehaviorGoToBed (bot, bed) {
     this.bot = bot

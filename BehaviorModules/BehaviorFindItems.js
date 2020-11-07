@@ -22,7 +22,8 @@ module.exports = class BehaviorFindItems {
   }
 
   search () {
-    return Object.keys(this.bot.entities).find((entityName) => {
+    const entities = Object.keys(this.bot.entities)
+    return entities.find((entityName) => {
       const entity = this.bot.entities[entityName]
 
       if (entity.position.distanceTo(this.bot.entity.position) < this.distanceToFind) {
@@ -33,9 +34,8 @@ module.exports = class BehaviorFindItems {
           // console.log(entity)
           return true
         }
-
-        return false
       }
+      return false
     })
   }
 }

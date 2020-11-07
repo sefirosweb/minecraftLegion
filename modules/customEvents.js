@@ -29,7 +29,7 @@ function rawListeners (event) {
   return eventsToListen.rawListeners(event)
 }
 
-function listenerCount () {
+function listenerCount (event) {
   return eventsToListen.listenerCount(event)
 }
 

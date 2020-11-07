@@ -17,9 +17,7 @@
         "mineflayer-web-inventory": "^1.1.3",
         "prismarine-viewer": "^1.5.0"
     },
-    "devDependencies": {
-        "standard": "^16.0.1"
-    },
+    "devDependencies": {},
     "scripts": {
         "start": "nodemon index.js --ignore botConfig/",
         "one": "nodemon start_bot.js Guard1 --ignore botConfig/",

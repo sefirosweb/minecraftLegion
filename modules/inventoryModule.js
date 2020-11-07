@@ -1,6 +1,3 @@
-const botWebsocket = require('../modules/botWebsocket')
-const logs = require('../modules/botWebsocket')
-
 module.exports = function (bot) {
   function countItemsInInventoryOrEquipped (item) {
     let currentItems = 0
@@ -21,6 +18,8 @@ module.exports = function (bot) {
   }
 
   function checkItemEquiped (itemArmor) {
+    let swordEquiped, isSword, bowEquiped, isBow
+
     let slotID
     switch (itemArmor) {
       case 'helmet':
@@ -40,21 +39,18 @@ module.exports = function (bot) {
         break
       case 'sword':
         slotID = bot.getEquipmentDestSlot('hand')
-        const swordEquiped = bot.inventory.slots[slotID]
+        swordEquiped = bot.inventory.slots[slotID]
         if (swordEquiped === null) { return false }
-        const isSword = swordEquiped.name.includes('sword')
+        isSword = swordEquiped.name.includes('sword')
         return isSword
-        break
       case 'bow':
         slotID = bot.getEquipmentDestSlot('hand')
-        const bowEquiped = bot.inventory.slots[slotID]
+        bowEquiped = bot.inventory.slots[slotID]
         if (bowEquiped === null) { return false }
-        const isBow = bowEquiped.name.includes('bow')
+        isBow = bowEquiped.name.includes('bow')
         return isBow
-        break
       default:
         return false
-        throw new Error('checkItemEquiped => No reconogize this slot' + itemArmor)
     }
 
     return bot.inventory.slots[slotID] !== null

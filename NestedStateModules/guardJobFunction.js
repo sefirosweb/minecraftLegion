@@ -6,6 +6,8 @@ const {
   NestedStateMachine,
   BehaviorMoveTo
 } = require('mineflayer-statemachine')
+const mineflayerpathfinder = require('mineflayer-pathfinder')
+
 const BehaviorLoadConfig = require('./../BehaviorModules/BehaviorLoadConfig')
 const BehaviorMoveToArray = require('./../BehaviorModules/BehaviorMoveToArray')
 const BehaviorGetClosestEnemy = require('./../BehaviorModules/BehaviorGetClosestEnemy')
@@ -15,9 +17,6 @@ const BehaviorDepositChest = require('./../BehaviorModules/BehaviorDepositChest'
 const BehaviorEatFood = require('./../BehaviorModules/BehaviorEatFood')
 const BehaviorEquip = require('./../BehaviorModules/BehaviorEquip')
 const BehaviorFindItems = require('./../BehaviorModules/BehaviorFindItems')
-
-const mineflayerpathfinder = require('mineflayer-pathfinder')
-const { getFoodChest } = require('../modules/botConfig')
 
 const excludeItemsDeposit = [
   'iron_sword',

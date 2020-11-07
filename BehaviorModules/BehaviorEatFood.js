@@ -23,7 +23,7 @@ module.exports = class BehaviorEatFood {
   }
 
   onStateEntered () {
-    if (this.bot.food == 20) {
+    if (this.bot.food === 20) {
       this.isEndEating = true
     } else {
       this.eat()
@@ -39,34 +39,34 @@ module.exports = class BehaviorEatFood {
     this.isEating = true
 
     // Check if in inventory have food
-    const available_food = this.bot.inventory.items().reduce((valid_food, food) => {
-      const return_valid_food = [...valid_food]
+    const availableFood = this.bot.inventory.items().reduce((validFood, food) => {
+      const returnValidFood = [...validFood]
       if (this.foods.includes(food.name)) {
-        return_valid_food.push(food)
+        returnValidFood.push(food)
       }
-      return return_valid_food
+      return returnValidFood
     }, [])
 
-    if (available_food.length === 0) {
+    if (availableFood.length === 0) {
       botWebsocket.log('No food in inventory ')
       this.isEndEating = true
       return
     }
 
-    let best_food
+    let bestFood
 
     if (this.priority === 'foodPoints') {
-      best_food = available_food.find((item) => item.foodPoints === lodash.maxBy(available_food, 'foodPoints'))
+      bestFood = availableFood.find((item) => item.foodPoints === lodash.maxBy(availableFood, 'foodPoints'))
     } else {
-      best_food = available_food.find((item) => item.saturation === lodash.maxBy(available_food, 'saturation'))
+      bestFood = availableFood.find((item) => item.saturation === lodash.maxBy(availableFood, 'saturation'))
     }
 
-    if (!best_food) {
+    if (!bestFood) {
       this.isEndEating = true
       return
     }
 
-    this.equipFood(best_food)
+    this.equipFood(bestFood)
       .then(() => this.consumeFood())
       .then(() => {
         this.isEating = false

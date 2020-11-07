@@ -1,5 +1,8 @@
 {
     "files.exclude": {
         "node_modules": true,
-    }
+    },
+    "javascript.validate.enable": false,
+    "standard.autoFixOnSave": true,
+    "editor.formatOnSave": false
 }
