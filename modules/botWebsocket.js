@@ -1,12 +1,14 @@
 const { webServer, webServerPort } = require('../config')
 const io = require('socket.io-client')
-let socket
+let socket, friends
 
 function connect (botUsername) {
   socket = io(webServer + ':' + webServerPort)
   socket.on('connect', () => {
     console.log('Connected to webserver')
     socket.emit('addFriend', botUsername)
+
+    // socket.emit('getBotsOnline', botUsername)
   })
 
   socket.on('disconnect', () => {
@@ -15,6 +17,11 @@ function connect (botUsername) {
 
   socket.on('sendDisconnect', () => {
     process.exit(1)
+  })
+
+  socket.on('botsOnline', (botsOnline) => {
+    // console.log(botsOnline)
+    friends = botsOnline
   })
 }
 
@@ -54,6 +61,10 @@ function on (listener, cb) {
   socket.on(listener, cb)
 }
 
+function getFriends () {
+  return friends
+}
+
 module.exports = {
   connect,
   on,
@@ -61,5 +72,6 @@ module.exports = {
   log,
   emitHealth,
   emitFood,
-  emitCombat
+  emitCombat,
+  getFriends
 }

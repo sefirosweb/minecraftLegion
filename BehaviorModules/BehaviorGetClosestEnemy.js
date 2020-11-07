@@ -1,3 +1,4 @@
+const botWebsocket = require('../modules/botWebsocket')
 module.exports = class BehaviorGetClosestEnemy {
   constructor (bot, targets, mode, distance) {
     this.bot = bot
@@ -78,11 +79,21 @@ module.exports = class BehaviorGetClosestEnemy {
 
   filter (entity) {
     if (this.mode === 'pvp') {
-      return (entity.position.distanceTo(this.bot.player.entity.position) <= this.distance) &&
+      if (
+        (entity.position.distanceTo(this.bot.player.entity.position) <= this.distance) &&
         (entity.type === 'mob' || entity.type === 'player') &&
         (entity.mobType !== 'Armor Stand') &&
         (entity.kind !== 'Passive mobs') &&
         (entity.isValid)
+      ) {
+        const botFriends = botWebsocket.getFriends()
+        // console.log('username', entity.username)
+        const bFriend = botFriends.find(b => b.name.includes(entity.username))
+        if (bFriend === undefined) {
+          return true
+        }
+        return false
+      }
     }
 
     if (this.mode === 'pve') {
