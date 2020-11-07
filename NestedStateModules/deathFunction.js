@@ -6,7 +6,7 @@ const {
 const BehaviorGetPlayer = require('./../BehaviorModules/BehaviorGetPlayer')
 const botWebsocket = require('../modules/botWebsocket')
 
-function deathFunction(bot, targets) {
+function deathFunction (bot, targets) {
   const enter = new BehaviorIdle(targets)
   enter.stateName = 'Enter'
 
@@ -52,7 +52,7 @@ function deathFunction(bot, targets) {
     })
   ]
 
-  function commandTrigger(master) {
+  function commandTrigger (master) {
     const player = playerEntity.getPlayerEntity(master)
     if (player) {
       botWebsocket.log('sendStay')

@@ -9,7 +9,7 @@ const botConfig = require('../modules/botConfig')
 const botWebsocket = require('../modules/botWebsocket')
 const customEvents = require('../modules/customEvents')
 
-function commandsFunction(bot, targets) {
+function commandsFunction (bot, targets) {
   const enter = new BehaviorIdle(targets)
   enter.stateName = 'Enter'
 
@@ -85,17 +85,16 @@ function commandsFunction(bot, targets) {
     })
   ]
 
-
-  function stayTrigger() {
+  function stayTrigger () {
     transitions[4].trigger()
     transitions[5].trigger()
   }
 
-  function followTrigger() {
+  function followTrigger () {
     transitions[3].trigger()
   }
 
-  function endCommandsTrigger() {
+  function endCommandsTrigger () {
     customEvents.removeListener('chat', botChatCommandFunctionListener)
     transitions[0].trigger()
     transitions[1].trigger()
@@ -132,14 +131,14 @@ function commandsFunction(bot, targets) {
     saveChest(chestName)
   })
 
-  function botChatCommandFunctionListener(username, message) {
+  function botChatCommandFunctionListener (username, message) {
     let msg
     switch (true) {
       case (message === 'bye'):
         endCommandsTrigger()
         break
       case (message === 'come'):
-        followTrigger();
+        followTrigger()
         break
       case (message === 'stay'):
         stayTrigger()
@@ -178,7 +177,7 @@ function commandsFunction(bot, targets) {
 
   let patrol = []
 
-  function saveJob(job) {
+  function saveJob (job) {
     switch (true) {
       case (job === 'guard'):
       case (job === 'archer'):
@@ -192,7 +191,7 @@ function commandsFunction(bot, targets) {
     }
   }
 
-  function saveMode(mode) {
+  function saveMode (mode) {
     switch (true) {
       case (mode === 'none'):
       case (mode === 'pvp'):
@@ -206,7 +205,7 @@ function commandsFunction(bot, targets) {
     }
   }
 
-  function saveDistance(distance) {
+  function saveDistance (distance) {
     distance = parseInt(distance)
     if (!isNaN(distance)) {
       bot.chat('I take a look!')
@@ -219,7 +218,7 @@ function commandsFunction(bot, targets) {
   let prevPoint
   let distancePatrol
 
-  function nextPointListener(point) {
+  function nextPointListener (point) {
     if (point.distanceTo(prevPoint) > distancePatrol) {
       patrol.push(point)
       prevPoint = point
@@ -227,7 +226,7 @@ function commandsFunction(bot, targets) {
     }
   }
 
-  function startGetPoints(distance = 2) {
+  function startGetPoints (distance = 2) {
     distance = parseInt(distance)
     if (isNaN(distance)) {
       bot.chat('I dont understood the distance')
@@ -246,16 +245,16 @@ function commandsFunction(bot, targets) {
     customEvents.addEvent('move', nextPointListener)
   }
 
-  function savePatrol() {
+  function savePatrol () {
     customEvents.removeListener('move', nextPointListener)
     botConfig.setPatrol(bot.username, patrol)
     bot.chat('Ok, I memorized the patrol')
   }
 
-  function saveChest(chestName) {
+  function saveChest (chestName) {
     const permitedChests = ['food', 'equipment', 'deposit']
     if (!permitedChests.includes(chestName)) {
-      bot.chat(`I don't know what chest is it`)
+      bot.chat('I don\'t know what chest is it')
       return
     }
     customEvents.removeListener('move', nextPointListener)

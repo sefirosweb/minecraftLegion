@@ -17,7 +17,7 @@ const botPassword = process.argv[3]
 
 createNewBot(botName, botPassword)
 
-function createNewBot(botName, botPassword = '') {
+function createNewBot (botName, botPassword = '') {
   const bot = mineflayer.createBot({
     username: botName,
     host: config.server,
@@ -56,22 +56,21 @@ function createNewBot(botName, botPassword = '') {
 
     let inventoryViewer = {}
     botWebsocket.on('startInventory', (message) => {
-      if (typeof inventoryViewer !== "function") {
+      if (typeof inventoryViewer !== 'function') {
         inventoryViewer = require('mineflayer-web-inventory')
         inventoryViewer(bot, { port: message.port })
-        botWebsocket.log(`Started inventory web server at http://localhost:${message.port}`);
+        botWebsocket.log(`Started inventory web server at http://localhost:${message.port}`)
       }
     })
 
-    let prismarineViewer = {}
+    const prismarineViewer = {}
     botWebsocket.on('startViewer', (message) => {
-      if (typeof prismarineViewer !== "function") {
+      if (typeof prismarineViewer !== 'function') {
         const prismarineViewer = require('./modules/viewer')
         prismarineViewer.start(bot, message.port)
-        botWebsocket.log(`Started viewer web server at http://localhost:${message.port}`);
+        botWebsocket.log(`Started viewer web server at http://localhost:${message.port}`)
       }
     })
-
 
     const targets = {}
     const startState = new BehaviorIdle(targets)
@@ -87,7 +86,7 @@ function createNewBot(botName, botPassword = '') {
         name: 'idleState -> deathFunction',
         shouldTransition: () => true,
         onTransition: () => {
-          console.log("start")
+          console.log('start')
           setTimeout(() => transitions[1].trigger(), 2000)
         }
       }),
@@ -123,16 +122,15 @@ function createNewBot(botName, botPassword = '') {
 
     let webserver = {}
     botWebsocket.on('startStateMachine', (message) => {
-      if (typeof webserver.isServerRunning !== "function") {
+      if (typeof webserver.isServerRunning !== 'function') {
         webserver = new StateMachineWebserver(bot, stateMachine, message.port)
       }
-      if (typeof webserver.isServerRunning === "function") {
+      if (typeof webserver.isServerRunning === 'function') {
         if (!webserver.isServerRunning()) {
           webserver.startServer()
         }
-        botWebsocket.log(`Started state machine web server at http://localhost:${webserver.port}`);
+        botWebsocket.log(`Started state machine web server at http://localhost:${webserver.port}`)
       }
     })
-
   })
 }

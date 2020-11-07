@@ -3,6 +3,6 @@ const config = {
   port: '',
 
   webServer: 'http://localhost',
-  webServerPort: '3000',
-};
+  webServerPort: '3000'
+}
 module.exports = config

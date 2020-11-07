@@ -1,6 +1,6 @@
 const cp = require('child_process')
 
-function startBot(botName, password) {
+function startBot (botName, password) {
   const command = 'node start_bot ' + botName
   cp.exec(command, (err, stdout, stderr) => {
     if (err) {
@@ -18,7 +18,6 @@ function startBot(botName, password) {
   })
 }
 
-
 const botsToStart = [
   { username: 'Guard1' },
   { username: 'Guard2' },
@@ -29,7 +28,7 @@ const botsToStart = [
 ]
 
 let i = 0
-function runNextBot() {
+function runNextBot () {
   const botToStart = botsToStart[i]
   i++
   if (i <= botsToStart.length) {
@@ -42,20 +41,18 @@ function runNextBot() {
 
 runNextBot()
 
-
-
 // Master websocket for load bots
 const { webServer, webServerPort } = require('./config')
-const io = require("socket.io-client")
-const socket = io(webServer + ':' + webServerPort);
+const io = require('socket.io-client')
+const socket = io(webServer + ':' + webServerPort)
 
 socket.on('connect', () => {
-  console.log('Connected to webserver');
+  console.log('Connected to webserver')
   socket.emit('botMaster', 'on')
-});
+})
 
 socket.on('disconnect', () => {
-  console.log('disconnected from webserver');
+  console.log('disconnected from webserver')
 })
 
 socket.on('botConnect', data => {

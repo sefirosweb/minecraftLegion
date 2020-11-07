@@ -10,7 +10,7 @@ const {
 const BehaviorAttack = require('./../BehaviorModules/BehaviorAttack')
 const BehaviorLongAttack = require('./../BehaviorModules/BehaviorLongAttack')
 
-function guardCombatJobFunction(bot, targets) {
+function guardCombatJobFunction (bot, targets) {
   const inventory = require('../modules/inventoryModule')(bot)
   const hawkEye = require('minecrafthawkeye')
   bot.loadPlugin(hawkEye)
@@ -97,22 +97,22 @@ function guardCombatJobFunction(bot, targets) {
     longRangeAttack.setInfoShot(targetGrade)
   }
 
-  function startGrades() {
+  function startGrades () {
     customEvents.addEvent('physicTick', getGrades)
   }
 
-  function stopGrades() {
+  function stopGrades () {
     customEvents.removeListener('physicTick', getGrades)
   }
 
-  function checkHandleSword() {
+  function checkHandleSword () {
     const swordHandled = inventory.checkItemEquiped('sword')
 
     if (swordHandled) { return }
 
     const itemEquip = bot.inventory.items().find(item => item.name.includes('sword'))
     if (itemEquip) {
-      botWebsocket.log('Sword changing');
+      botWebsocket.log('Sword changing')
       bot.equip(itemEquip, 'hand', function () {
         botWebsocket.log('Sword changed')
       })

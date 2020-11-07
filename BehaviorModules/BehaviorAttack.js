@@ -1,6 +1,6 @@
 const botWebsocket = require('../modules/botWebsocket')
 class BehaviorAttack {
-  constructor(bot, targets) {
+  constructor (bot, targets) {
     this.bot = bot
     this.targets = targets
     this.stateName = 'BehaviorAttack'
@@ -10,13 +10,13 @@ class BehaviorAttack {
     this.inventory = require('../modules/inventoryModule')(this.bot)
   }
 
-  onStateEntered() {
+  onStateEntered () {
     this.bot.lookAt(this.targets.entity.position.offset(0, 1, 0))
     this.checkHandleSword()
     this.bot.attack(this.targets.entity, true)
   }
 
-  nextAttack() {
+  nextAttack () {
     const currentDate = Date.now()
     if (currentDate - this.lastAttack > 500) {
       this.lastAttack = currentDate
@@ -25,7 +25,7 @@ class BehaviorAttack {
     return false
   }
 
-  checkHandleSword() {
+  checkHandleSword () {
     const swordHandled = this.inventory.checkItemEquiped('sword')
 
     if (swordHandled) { return }

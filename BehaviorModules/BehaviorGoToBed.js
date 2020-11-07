@@ -1,5 +1,5 @@
 const BehaviorGoToBed = (function () {
-  function BehaviorGoToBed(bot, bed) {
+  function BehaviorGoToBed (bot, bed) {
     this.bot = bot
     this.bed = bed
     this.stateName = 'goToBed'

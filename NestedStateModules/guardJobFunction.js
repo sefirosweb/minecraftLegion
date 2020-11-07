@@ -26,7 +26,7 @@ const excludeItemsDeposit = [
   'cooked_chicken'
 ]
 
-function guardJobFunction(bot, targets) {
+function guardJobFunction (bot, targets) {
   const mcData = require('minecraft-data')(bot.version)
   const movementsForAttack = new mineflayerpathfinder.Movements(bot, mcData)
   movementsForAttack.digCost = 100
@@ -66,7 +66,7 @@ function guardJobFunction(bot, targets) {
   equip2.stateName = 'Equip items'
 
   const equipmentItems = [{ item: 'helmet', quantity: 1 }, { item: 'chest', quantity: 1 }, { item: 'leggings', quantity: 1 },
-  { item: 'boots', quantity: 1 }, { item: 'shield', quantity: 1 }, { item: 'sword', quantity: 1 }, { item: 'bow', quantity: 1 }]
+    { item: 'boots', quantity: 1 }, { item: 'shield', quantity: 1 }, { item: 'sword', quantity: 1 }, { item: 'bow', quantity: 1 }]
   const getEquipments = new BehaviorWithdrawItemChest(bot, targets, equipmentItems)
   getEquipments.stateName = 'Get equipment items'
 
@@ -147,9 +147,8 @@ function guardJobFunction(bot, targets) {
       parent: goToObject,
       child: patrol,
       name: 'goToObject -> patrol',
-      shouldTransition: () => !goToObject.targets.itemDrop.isValid,
+      shouldTransition: () => !goToObject.targets.itemDrop.isValid
     }),
-
 
     new StateTransition({
       parent: patrol,
@@ -292,7 +291,7 @@ function guardJobFunction(bot, targets) {
       child: patrol,
       name: 'Continue patrol bot is full',
       shouldTransition: () => equip2.isFinished()
-    }),
+    })
 
   ]
 

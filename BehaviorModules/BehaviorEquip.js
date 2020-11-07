@@ -1,7 +1,7 @@
 const botWebsocket = require('../modules/botWebsocket')
 
 module.exports = class BehaviorEquip {
-  constructor(bot, targets) {
+  constructor (bot, targets) {
     this.bot = bot
     this.targets = targets
     this.stateName = 'BehaviorEquip'
@@ -11,7 +11,7 @@ module.exports = class BehaviorEquip {
     this.inventory = require('../modules/inventoryModule')(this.bot)
   }
 
-  onStateEntered() {
+  onStateEntered () {
     this.isEndFinished = false
     this.equipAllItems()
       .then(() => {
@@ -20,19 +20,19 @@ module.exports = class BehaviorEquip {
       .catch((error) => {
         console.log(error)
         this.isEndFinished = true
-        botWebsocket.log("Error Equip Items" + JSON.stringify(error))
+        botWebsocket.log('Error Equip Items' + JSON.stringify(error))
       })
   }
 
-  onStateExited() {
+  onStateExited () {
     this.isEndFinished = false
   }
 
-  isFinished() {
+  isFinished () {
     return this.isEndFinished
   }
 
-  equipAllItems() {
+  equipAllItems () {
     return new Promise((resolve, reject) => {
       this.inventory.equipItem('helmet')
         .then(() => {

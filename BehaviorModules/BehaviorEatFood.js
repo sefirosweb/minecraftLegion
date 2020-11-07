@@ -1,8 +1,8 @@
-const lodash = require('lodash');
+const lodash = require('lodash')
 const botWebsocket = require('../modules/botWebsocket')
 
 module.exports = class BehaviorEatFood {
-  constructor(bot, targets, foods = []) {
+  constructor (bot, targets, foods = []) {
     this.bot = bot
     this.targets = targets
     this.stateName = 'BehaviorEatFood'
@@ -22,7 +22,7 @@ module.exports = class BehaviorEatFood {
     this.isEndEating = false
   }
 
-  onStateEntered() {
+  onStateEntered () {
     if (this.bot.food == 20) {
       this.isEndEating = true
     } else {
@@ -30,14 +30,12 @@ module.exports = class BehaviorEatFood {
     }
   }
 
-
-  onStateExited() {
+  onStateExited () {
     this.isEating = false
     this.isEndEating = false
   }
 
-
-  eat() {
+  eat () {
     this.isEating = true
 
     // Check if in inventory have food
@@ -50,7 +48,7 @@ module.exports = class BehaviorEatFood {
     }, [])
 
     if (available_food.length === 0) {
-      botWebsocket.log("No food in inventory ")
+      botWebsocket.log('No food in inventory ')
       this.isEndEating = true
       return
     }
@@ -84,7 +82,7 @@ module.exports = class BehaviorEatFood {
       })
   }
 
-  consumeFood() {
+  consumeFood () {
     return new Promise((resolve, reject) => {
       this.bot.consume((error) => {
         if (error) {
@@ -96,7 +94,7 @@ module.exports = class BehaviorEatFood {
     })
   }
 
-  equipFood(food) {
+  equipFood (food) {
     return new Promise((resolve, reject) => {
       this.bot.equip(food, 'hand', function (error) {
         if (error) {
@@ -106,12 +104,9 @@ module.exports = class BehaviorEatFood {
         }
       })
     })
-
-
   }
 
-  isFinished() {
+  isFinished () {
     return this.isEndEating
   }
-
 }

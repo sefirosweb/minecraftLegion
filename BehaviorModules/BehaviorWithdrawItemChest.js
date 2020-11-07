@@ -1,7 +1,7 @@
 const botWebsocket = require('../modules/botWebsocket')
 
 module.exports = class BehaviorWithdrawItemChest {
-  constructor(bot, targets, itemsToWithdraw = []) {
+  constructor (bot, targets, itemsToWithdraw = []) {
     this.bot = bot
     this.targets = targets
     this.stateName = 'BehaviorWithdrawItemChest'
@@ -15,13 +15,13 @@ module.exports = class BehaviorWithdrawItemChest {
     this.inventory = require('../modules/inventoryModule')(this.bot)
   }
 
-  onStateEntered() {
+  onStateEntered () {
     this.indexItemsToWithdraw = 0
     this.isEndFinished = false
     this.withdrawItems()
   }
 
-  onStateExited() {
+  onStateExited () {
     this.indexItemsToWithdraw = 0
     this.isEndFinished = false
     try {
@@ -29,11 +29,11 @@ module.exports = class BehaviorWithdrawItemChest {
     } catch (e) { }
   }
 
-  isFinished() {
+  isFinished () {
     return this.isEndFinished
   }
 
-  withdrawItems() {
+  withdrawItems () {
     const mcData = require('minecraft-data')(this.bot.version)
 
     const chestToOpen = this.bot.findBlock({
@@ -64,12 +64,10 @@ module.exports = class BehaviorWithdrawItemChest {
           })
       }, 500)
     })
-
   }
 
-  getItemsFromChest() {
+  getItemsFromChest () {
     return new Promise((resolve, reject) => {
-
       if (this.indexItemsToWithdraw >= this.itemsToWithdraw.length) {
         resolve()
         return
@@ -87,7 +85,7 @@ module.exports = class BehaviorWithdrawItemChest {
     })
   }
 
-  withdrawItem(itemName, quantity) {
+  withdrawItem (itemName, quantity) {
     return new Promise((resolve, reject) => {
       const currentItems = this.inventory.countItemsInInventoryOrEquipped(itemName)
       quantity -= currentItems
@@ -103,12 +101,11 @@ module.exports = class BehaviorWithdrawItemChest {
 
       this.chest.withdraw(foundItem.type, null, quantity, (error) => {
         if (error) {
-          setTimeout(() => reject(error), 200);
+          setTimeout(() => reject(error), 200)
         } else {
-          setTimeout(() => resolve(), 200);
+          setTimeout(() => resolve(), 200)
         }
       })
     })
   }
-
 }

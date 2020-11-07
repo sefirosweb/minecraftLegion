@@ -2,7 +2,7 @@ const botWebsocket = require('../modules/botWebsocket')
 const logs = require('../modules/botWebsocket')
 
 module.exports = function (bot) {
-  function countItemsInInventoryOrEquipped(item) {
+  function countItemsInInventoryOrEquipped (item) {
     let currentItems = 0
 
     if (checkItemEquiped(item)) {
@@ -13,14 +13,14 @@ module.exports = function (bot) {
     return currentItems
   }
 
-  function countItemsInInventory(itemToCount) {
+  function countItemsInInventory (itemToCount) {
     let currentItems = bot.inventory.items().filter(item => item.name.includes(itemToCount))
     currentItems = currentItems.map(x => x.count)
     currentItems = currentItems.reduce((total, num) => { return total + num }, 0)
     return currentItems
   }
 
-  function checkItemEquiped(itemArmor) {
+  function checkItemEquiped (itemArmor) {
     let slotID
     switch (itemArmor) {
       case 'helmet':
@@ -60,7 +60,7 @@ module.exports = function (bot) {
     return bot.inventory.slots[slotID] !== null
   }
 
-  function equipItem(itemArmor) {
+  function equipItem (itemArmor) {
     return new Promise((resolve, reject) => {
       if (checkItemEquiped(itemArmor)) {
         resolve()

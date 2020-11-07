@@ -1,7 +1,7 @@
 const low = require('lowdb')
 const Filesync = require('lowdb/adapters/FileSync')
 
-function getConn(botName) {
+function getConn (botName) {
   const adapter = new Filesync('./botConfig/' + botName + '.json')
   const db = low(adapter)
   const defaultConfig = {
@@ -18,47 +18,47 @@ function getConn(botName) {
   return db
 }
 
-function setJob(botName, job) {
+function setJob (botName, job) {
   const db = getConn(botName)
   db.set('config.job', job).write()
 }
 
-function getJob(botName) {
+function getJob (botName) {
   const db = getConn(botName)
   return db.get('config.job').value()
 }
 
-function setMode(botName, mode) {
+function setMode (botName, mode) {
   const db = getConn(botName)
   db.set('config.mode', mode).write()
 }
 
-function getMode(botName) {
+function getMode (botName) {
   const db = getConn(botName)
   return db.get('config.mode').value()
 }
 
-function setDistance(botName, distance) {
+function setDistance (botName, distance) {
   const db = getConn(botName)
   db.set('config.distance', distance).write()
 }
 
-function getDistance(botName) {
+function getDistance (botName) {
   const db = getConn(botName)
   return db.get('config.distance').value()
 }
 
-function setPatrol(botName, patrol) {
+function setPatrol (botName, patrol) {
   const db = getConn(botName)
   db.set('config.patrol', patrol).write()
 }
 
-function getPatrol(botName) {
+function getPatrol (botName) {
   const db = getConn(botName)
   return db.get('config.patrol').value()
 }
 
-function setChest(botName, chest, chestName) {
+function setChest (botName, chest, chestName) {
   const db = getConn(botName)
   const chests = db.get('config.chests').value()
   chests[chestName] = chest
@@ -68,7 +68,7 @@ function setChest(botName, chest, chestName) {
   db.set('config.chests', chests).write()
 }
 
-function getChest(botName, chestName) {
+function getChest (botName, chestName) {
   const db = getConn(botName)
   const chest = db.get('config.chests').value()[chestName]
   if (chest === undefined) {

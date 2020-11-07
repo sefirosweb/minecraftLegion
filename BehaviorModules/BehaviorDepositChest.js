@@ -1,7 +1,7 @@
 const botWebsocket = require('../modules/botWebsocket')
 
 module.exports = class BehaviorDepositChest {
-  constructor(bot, targets) {
+  constructor (bot, targets) {
     this.bot = bot
     this.targets = targets
     this.stateName = 'BehaviorDepositChest'
@@ -13,15 +13,15 @@ module.exports = class BehaviorDepositChest {
     this.inventory = require('../modules/inventoryModule')(this.bot)
   }
 
-  onStateEntered() {
+  onStateEntered () {
     this.indexItemsToDeposit = 0
     this.isEndFinished = false
-    const itemToDeposit = this.itemsToDeposit.map(item => item['displayName'])
+    const itemToDeposit = this.itemsToDeposit.map(item => item.displayName)
     botWebsocket.log('Items to deposit ' + JSON.stringify(itemToDeposit))
     this.depositAllItems()
   }
 
-  onStateExited() {
+  onStateExited () {
     this.indexItemsToDeposit = 0
     this.isEndFinished = false
     this.itemsToDeposit = []
@@ -30,15 +30,15 @@ module.exports = class BehaviorDepositChest {
     } catch (e) { }
   }
 
-  setItemsToDeposit(itemsToDeposit) {
+  setItemsToDeposit (itemsToDeposit) {
     this.itemsToDeposit = itemsToDeposit
   }
 
-  isFinished() {
+  isFinished () {
     return this.isEndFinished
   }
 
-  depositAllItems() {
+  depositAllItems () {
     const mcData = require('minecraft-data')(this.bot.version)
 
     const chestToOpen = this.bot.findBlock({
@@ -71,7 +71,7 @@ module.exports = class BehaviorDepositChest {
     })
   }
 
-  depositItems() {
+  depositItems () {
     return new Promise((resolve, reject) => {
       const itemToDeposit = this.itemsToDeposit[this.indexItemsToDeposit]
 
@@ -92,16 +92,15 @@ module.exports = class BehaviorDepositChest {
     })
   }
 
-  depositToChest(itemType, quantity) {
+  depositToChest (itemType, quantity) {
     return new Promise((resolve, reject) => {
       this.chest.deposit(itemType, null, quantity, (error) => {
         if (error) {
-          setTimeout(() => reject(error), 200);
+          setTimeout(() => reject(error), 200)
         } else {
-          setTimeout(() => resolve(), 200);
+          setTimeout(() => resolve(), 200)
         }
       })
     })
   }
-
 }

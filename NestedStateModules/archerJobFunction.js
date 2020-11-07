@@ -8,12 +8,12 @@ const {
 } = require('mineflayer-statemachine')
 const BehaviorAttack = require('../BehaviorModules/BehaviorAttack')
 
-function archerJobFunction(bot, targets) {
+function archerJobFunction (bot, targets) {
   const enter = new BehaviorIdle(targets)
   const exit = new BehaviorIdle(targets)
   const attack = new BehaviorAttack(bot, targets)
 
-  function distanceFilter(entity) {
+  function distanceFilter (entity) {
     return entity.position.distanceTo(this.bot.player.entity.position) <= 10 &&
       (entity.type === 'mob' || entity.type === 'player')
   }
