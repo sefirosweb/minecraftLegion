@@ -154,6 +154,11 @@ function commandsFunction (bot, targets) {
           saveMode(msg[2])
         }
 
+        if (message.match(/set help.*/)) {
+          msg = message.split(' ')
+          saveHelp(msg[2])
+        }
+
         if (message.match(/set distance.*/)) {
           msg = message.split(' ')
           saveDistance(msg[2])
@@ -201,6 +206,22 @@ function commandsFunction (bot, targets) {
         break
       default:
         bot.chat("Master, I don't know what you means mode")
+        break
+    }
+  }
+
+  function saveHelp (mode) {
+    switch (true) {
+      case (mode === 'true'):
+        bot.chat('I will defend my friends')
+        botConfig.setHelpFriend(bot.username, true)
+        break
+      case (mode === 'false'):
+        bot.chat('Its ok for my friends')
+        botConfig.setHelpFriend(bot.username, false)
+        break
+      default:
+        bot.chat("Master, I don't know friends say")
         break
     }
   }

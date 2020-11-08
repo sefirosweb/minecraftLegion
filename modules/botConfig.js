@@ -38,6 +38,16 @@ function getMode (botName) {
   return db.get('config.mode').value()
 }
 
+function setHelpFriend (botName, mode) {
+  const db = getConn(botName)
+  db.set('config.help_friends', mode).write()
+}
+
+function getHelpFriend (botName) {
+  const db = getConn(botName)
+  return db.get('config.help_friends').value()
+}
+
 function setDistance (botName, distance) {
   const db = getConn(botName)
   db.set('config.distance', distance).write()
@@ -83,6 +93,8 @@ module.exports = {
   getJob,
   setMode,
   getMode,
+  setHelpFriend,
+  getHelpFriend,
   setDistance,
   getDistance,
   setPatrol,
