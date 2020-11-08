@@ -16,7 +16,7 @@ module.exports = class BehaviorLoadConfig {
   onStateEntered () {
     this.job = botConfig.getJob(this.bot.username)
     this.mode = botConfig.getMode(this.bot.username)
-    this.mode = botConfig.getHelpFriend(this.bot.username)
+    this.helpFriends = botConfig.getHelpFriend(this.bot.username)
     this.distance = botConfig.getDistance(this.bot.username)
     this.patrol = botConfig.getPatrol(this.bot.username)
     this.equipmentChest = botConfig.getChest(this.bot.username, 'equipment')

@@ -23,6 +23,19 @@ function connect (botUsername) {
     friends = botsOnline
   })
 
+  socket.on('botStatus', data => {
+    const index = friends.findIndex(e => e.socketId === data.socketId)
+    if (index < 0) {
+      return
+    }
+    const friendUpdate = [
+      ...friends
+    ]
+    friendUpdate[index][data.type] = data.value
+
+    friends = friendUpdate
+  })
+
   socket.on('mastersOnline', (mastersOnline) => {
     // console.log('mastersOnline', mastersOnline)
     masters = mastersOnline
