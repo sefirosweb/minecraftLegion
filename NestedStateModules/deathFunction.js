@@ -53,6 +53,14 @@ function deathFunction (bot, targets) {
   ]
 
   function commandTrigger (master) {
+    const masters = botWebsocket.getMasters()
+    const findMaster = masters.find(e => e.name === master)
+
+    if (findMaster === undefined) {
+      botWebsocket.log(`${master} is no in master list!`)
+      return
+    }
+
     const player = playerEntity.getPlayerEntity(master)
     if (player) {
       botWebsocket.log('sendStay')

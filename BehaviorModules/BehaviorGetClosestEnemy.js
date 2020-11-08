@@ -87,12 +87,18 @@ module.exports = class BehaviorGetClosestEnemy {
         (entity.isValid)
       ) {
         const botFriends = botWebsocket.getFriends()
-        // console.log('username', entity.username)
-        const bFriend = botFriends.find(b => b.name.includes(entity.username))
-        if (bFriend === undefined) {
-          return true
+        const bFriend = botFriends.find(b => b.name === entity.username)
+        if (bFriend !== undefined) {
+          return false
         }
-        return false
+
+        const masters = botWebsocket.getMasters()
+        const mFriend = masters.find(b => b.name === entity.username)
+        if (mFriend !== undefined) {
+          return false
+        }
+
+        return true
       }
     }
 
