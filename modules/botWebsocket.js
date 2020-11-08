@@ -1,6 +1,6 @@
 const { webServer, webServerPort } = require('../config')
 const io = require('socket.io-client')
-let socket, friends, masters
+let socket; let friends = []; let masters = []
 
 function connect (botUsername) {
   socket = io(webServer + ':' + webServerPort)

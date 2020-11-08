@@ -4,7 +4,8 @@ const {
   StateTransition,
   BehaviorIdle,
   NestedStateMachine,
-  BehaviorMoveTo
+  BehaviorMoveTo,
+  BehaviorFollowEntity
 } = require('mineflayer-statemachine')
 const mineflayerpathfinder = require('mineflayer-pathfinder')
 
@@ -17,6 +18,7 @@ const BehaviorDepositChest = require('./../BehaviorModules/BehaviorDepositChest'
 const BehaviorEatFood = require('./../BehaviorModules/BehaviorEatFood')
 const BehaviorEquip = require('./../BehaviorModules/BehaviorEquip')
 const BehaviorFindItems = require('./../BehaviorModules/BehaviorFindItems')
+const BehaviorHelpFriend = require('./../BehaviorModules/BehaviorHelpFriend')
 
 const excludeItemsDeposit = [
   'iron_sword',
@@ -84,6 +86,12 @@ function guardJobFunction (bot, targets) {
 
   const findItem = new BehaviorFindItems(bot, targets)
   findItem.stateName = 'Find Item Dropped'
+
+  const helpFriend = new BehaviorHelpFriend(bot, targets, true)
+  helpFriend.stateName = 'Check friend needs help'
+
+  const goFriend = new BehaviorFollowEntity(bot, targets)
+  goFriend.stateName = 'Go To Help Friend'
 
   const guardCombatJobFunction = require('./guardCombatJobFunction')(bot, targets)
 
@@ -154,6 +162,39 @@ function guardJobFunction (bot, targets) {
       child: checkItemsToDeposit,
       name: 'patrol -> checkItemsToDeposit',
       shouldTransition: () => patrol.isFinished()
+    }),
+
+    new StateTransition({
+      parent: patrol,
+      child: helpFriend,
+      name: 'patrol -> patrol',
+      shouldTransition: () => helpFriend.findHelpFriend()
+    }),
+
+    new StateTransition({
+      parent: helpFriend,
+      child: goFriend,
+      name: 'helpFriend -> goFriend',
+      shouldTransition: () => true
+    }),
+
+    new StateTransition({
+      parent: goFriend,
+      child: guardCombatJobFunction,
+      name: 'goFriend -> guardCombatJobFunction',
+      shouldTransition: () => {
+        getClosestMob.onStateEntered()
+        return targets.entity !== undefined && !helpFriend.targetIsFriend()
+      }
+    }),
+
+    new StateTransition({
+      parent: goFriend,
+      child: patrol,
+      name: 'Now no need help',
+      shouldTransition: () => {
+        return !helpFriend.stillNeedHelp()
+      }
     }),
 
     new StateTransition({
