@@ -38,4 +38,16 @@ module.exports = class BehaviorFindItems {
       return false
     })
   }
+
+  checkInventorySpace () {
+    const inventory = this.bot.inventory.slots
+    const spaceLeft = inventory.reduce((currentSpace, slot) => {
+      if (slot === null) {
+        currentSpace++
+      }
+      return currentSpace
+    }, 0) - 5
+
+    return spaceLeft
+  }
 }

@@ -25,11 +25,8 @@ module.exports = class BehaviorEatFood {
   onStateEntered () {
     if (this.bot.food === 20) {
       this.isEndEating = true
-      console.log('Full')
     } else {
-      console.log('start eat')
       this.eat()
-      console.log('eated')
     }
   }
 

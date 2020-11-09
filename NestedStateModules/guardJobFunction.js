@@ -21,13 +21,15 @@ const BehaviorFindItems = require('./../BehaviorModules/BehaviorFindItems')
 const BehaviorHelpFriend = require('./../BehaviorModules/BehaviorHelpFriend')
 
 const excludeItemsDeposit = [
-  'iron_sword',
-  'bow',
-  'arrow',
-  'cooked_chicken'
+  { name: 'iron_sword', quantity: 1 },
+  { name: 'shield', quantity: 1 },
+  { name: 'bow', quantity: 1 },
+  { name: 'arrow', quantity: 128 },
+  { name: 'cooked_chicken', quantity: 64 }
 ]
 
 function guardJobFunction (bot, targets) {
+  const { getResumeInventory } = require('../modules/inventoryModule')(bot)
   const mcData = require('minecraft-data')(bot.version)
   const movementsForAttack = new mineflayerpathfinder.Movements(bot, mcData)
   movementsForAttack.digCost = 100
@@ -95,8 +97,27 @@ function guardJobFunction (bot, targets) {
 
   const guardCombatJobFunction = require('./guardCombatJobFunction')(bot, targets)
 
-  const test = new BehaviorIdle(targets)
-  test.stateName = 'test'
+  function getItemsToDeposit () {
+    const items = getResumeInventory()
+
+    const itemsToDeposit = items.reduce((currentItems, slot) => {
+      const newItems = [...currentItems]
+      const itemToExclude = excludeItemsDeposit.find(i => i.name === slot.name)
+
+      if (itemToExclude === undefined) {
+        newItems.push(slot)
+      } else {
+        slot.quantity -= itemToExclude.quantity
+        if (slot.quantity > 0) {
+          newItems.push(slot)
+        }
+      }
+
+      return newItems
+    }, [])
+
+    return itemsToDeposit
+  }
 
   const transitions = [
     new StateTransition({
@@ -147,7 +168,7 @@ function guardJobFunction (bot, targets) {
       child: goToObject,
       name: 'patrol -> goToObject',
       // onTransition: () => botWebsocket.log('Item Found => ' + JSON.stringify(findItem.targets.itemDrop)),
-      shouldTransition: () => findItem.search()
+      shouldTransition: () => findItem.search() && findItem.checkInventorySpace() > 3
     }),
 
     new StateTransition({
@@ -200,26 +221,16 @@ function guardJobFunction (bot, targets) {
     new StateTransition({
       parent: checkItemsToDeposit,
       child: goDepositChest,
-      name: 'checkItemsToDeposit -> goDepositChest',
+      name: 'If have more than 1 item to deposit',
       onTransition: () => goDepositChest.sortPatrol(),
-      shouldTransition: () => {
-        const itemsToDeposit = bot.inventory.items().filter(item => !excludeItemsDeposit.includes(item.name))
-        if (itemsToDeposit.length > 0) {
-          return true
-        }
-      }
+      shouldTransition: () => getItemsToDeposit().length > 0
     }),
 
     new StateTransition({
       parent: checkItemsToDeposit,
       child: getReadyForPatrol,
-      name: 'checkItemsToDeposit -> getReadyForPatrol',
-      shouldTransition: () => {
-        const itemsToDeposit = bot.inventory.items().filter(item => !excludeItemsDeposit.includes(item.name))
-        if (itemsToDeposit.length === 0) {
-          return true
-        }
-      }
+      name: 'No items to deposit',
+      shouldTransition: () => getItemsToDeposit().length === 0
     }),
 
     new StateTransition({
@@ -227,8 +238,7 @@ function guardJobFunction (bot, targets) {
       child: depositItems,
       name: 'goDepositChest -> depositItems',
       onTransition: () => {
-        const itemsToDeposit = bot.inventory.items().filter(item => !excludeItemsDeposit.includes(item.name))
-        depositItems.setItemsToDeposit(itemsToDeposit)
+        depositItems.setItemsToDeposit(getItemsToDeposit())
       },
       shouldTransition: () => goDepositChest.isFinished()
     }),
@@ -244,7 +254,7 @@ function guardJobFunction (bot, targets) {
       parent: getReadyForPatrol,
       child: eatFood,
       name: 'getReadyForPatrol -> eatFood',
-      shouldTransition: () => getReadyForPatrol.getIsReady() // Yes
+      shouldTransition: () => getReadyForPatrol.getIsReady()
     }),
 
     new StateTransition({
@@ -254,7 +264,7 @@ function guardJobFunction (bot, targets) {
       onTransition: () => {
         goEquipmentChest.sortPatrol()
       },
-      shouldTransition: () => !getReadyForPatrol.getIsReady() // No
+      shouldTransition: () => !getReadyForPatrol.getIsReady()
     }),
 
     new StateTransition({

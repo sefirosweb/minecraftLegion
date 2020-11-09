@@ -16,8 +16,7 @@ module.exports = class BehaviorDepositChest {
   onStateEntered () {
     this.indexItemsToDeposit = 0
     this.isEndFinished = false
-    const itemToDeposit = this.itemsToDeposit.map(item => item.displayName)
-    botWebsocket.log('Items to deposit ' + JSON.stringify(itemToDeposit))
+    botWebsocket.log('Items to deposit ' + JSON.stringify(this.itemsToDeposit))
     this.depositAllItems()
   }
 
@@ -84,7 +83,7 @@ module.exports = class BehaviorDepositChest {
 
       this.indexItemsToDeposit++
 
-      this.depositToChest(itemToDeposit.type, itemToDeposit.count)
+      this.depositToChest(itemToDeposit.type, itemToDeposit.quantity)
         .then(() => {
           this.depositItems()
             .then(() => resolve())

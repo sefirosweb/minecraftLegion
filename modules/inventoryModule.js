@@ -101,10 +101,33 @@ module.exports = function (bot) {
     })
   }
 
+  function getResumeInventory () {
+    const items = bot.inventory.items().reduce((currentItems, slot) => {
+      const newItems = [...currentItems]
+      const itemSlot = {
+        name: slot.name,
+        type: slot.type,
+        quantity: slot.count
+      }
+
+      const index = currentItems.findIndex(i => i.type === slot.type)
+      if (index >= 0) {
+        currentItems[index].quantity += slot.count
+      } else {
+        newItems.push(itemSlot)
+      }
+
+      return newItems
+    }, [])
+
+    return items
+  }
+
   return {
     countItemsInInventoryOrEquipped,
     countItemsInInventory,
     checkItemEquiped,
-    equipItem
+    equipItem,
+    getResumeInventory
   }
 }
