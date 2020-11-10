@@ -2,16 +2,18 @@ const mineflayerPathfinder = require('mineflayer-pathfinder')
 const botWebsocket = require('../modules/botWebsocket')
 
 module.exports = class BehaviorMoveToArray {
-  constructor (bot, targets, patrol = [], startNearestPoint = false) {
+  constructor (bot, targets, patrol = [], startNearestPoint = false, distance = 2) {
     this.bot = bot
     this.targets = targets
     this.stateName = 'BehaviorMoveToArray'
 
+    this.patrol = patrol
+    this.startNearestPoint = startNearestPoint
+    this.distance = distance
+
     this.currentPosition = 0
     this.endPatrol = false
     this.active = false
-    this.patrol = patrol
-    this.startNearestPoint = startNearestPoint
     this.position = false
 
     const mcData = require('minecraft-data')(this.bot.version)
@@ -55,7 +57,7 @@ module.exports = class BehaviorMoveToArray {
   }
 
   isFinished () {
-    if (this.distanceToTarget() <= 2 && this.endPatrol === false) {
+    if (this.distanceToTarget() <= this.distance && this.endPatrol === false) {
       this.startMoving()
       return false
     }

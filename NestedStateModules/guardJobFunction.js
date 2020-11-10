@@ -51,17 +51,17 @@ function guardJobFunction (bot, targets) {
   const getReadyForPatrol = new BehaviorGetReadyForPatrol(bot, targets)
   getReadyForPatrol.stateName = 'Get Ready for Patrol'
 
-  const goEquipmentChest = new BehaviorMoveToArray(bot, targets)
+  const goEquipmentChest = new BehaviorMoveToArray(bot, targets, [], true, 1)
   goEquipmentChest.stateName = 'Go Equipment Chest'
+
+  const goFoodChest = new BehaviorMoveToArray(bot, targets, [], true, 1)
+  goFoodChest.stateName = 'Go Food Chest'
+
+  const goDepositChest = new BehaviorMoveToArray(bot, targets, [], true, 1)
+  goDepositChest.stateName = 'Go Deposit Chest'
 
   const depositItems = new BehaviorDepositChest(bot, targets)
   depositItems.stateName = 'Deposit Items'
-
-  const goFoodChest = new BehaviorMoveToArray(bot, targets)
-  goFoodChest.stateName = 'Go Food Chest'
-
-  const goDepositChest = new BehaviorMoveToArray(bot, targets)
-  goDepositChest.stateName = 'Go Deposit Chest'
 
   const equip = new BehaviorEquip(bot, targets)
   const equip2 = new BehaviorEquip(bot, targets)
