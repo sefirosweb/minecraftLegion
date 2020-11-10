@@ -24,8 +24,8 @@ const excludeItemsDeposit = [
   { name: 'iron_sword', quantity: 1 },
   { name: 'shield', quantity: 1 },
   { name: 'bow', quantity: 1 },
-  { name: 'arrow', quantity: 128 },
-  { name: 'cooked_chicken', quantity: 64 }
+  { name: 'arrow', quantity: 256 },
+  { name: 'cooked_chicken', quantity: 128 }
 ]
 
 function guardJobFunction (bot, targets) {
