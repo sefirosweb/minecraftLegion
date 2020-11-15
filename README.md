@@ -9,7 +9,7 @@ The other 2 parts are <a target="_blank" href="https://github.com/sefirosweb/min
 
 I highly recomend use the other 2 parts for comunicate the bots and coordinate the actions y manage remotly
 
-Install: 
+## Install:
 - Install Novde version 10+
 - npm i minecraftlegion
 
