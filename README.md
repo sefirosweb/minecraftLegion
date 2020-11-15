@@ -5,7 +5,7 @@ This project are based on <a target="_blank" href="https://github.com/Prismarine
 
 This program is part of the 3 of this project,
 Each part can be run independently, 
-The other 2 parts are <a target="_blank" href="https://github.com/sefirosweb/minecraftLegionWebServer">minecraftLegionWebServer</a> & <a href="minecraftLegionWebClient">minecraftLegionWebClient</a>
+The other 2 parts are <a target="_blank" href="https://github.com/sefirosweb/minecraftLegionWebServer">minecraftLegionWebServer</a> & <a href="https://github.com/sefirosweb/minecraftLegionWebClient">minecraftLegionWebClient</a>
 
 I highly recomend use the other 2 parts for comunicate the bots and coordinate the actions y manage remotly
 
