@@ -1,7 +1,7 @@
 # minecraftLegion
 Minecraft multipurpose bot
 
-This project are based on mineflayer & PrismarineJS repository
+This project are based on <a href="https://github.com/PrismarineJS/mineflayer">mineflayer</a> & PrismarineJS repository
 
 This program is part of the 3 of this project,
 Each part can be run independently, 

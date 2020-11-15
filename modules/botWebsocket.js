@@ -1,5 +1,6 @@
 const { webServer, webServerPort } = require('../config')
 const io = require('socket.io-client')
+const config = require('../config')
 let socket; let friends = []; let masters = []
 
 function connect (botUsername) {
@@ -83,7 +84,8 @@ function getFriends () {
 }
 
 function getMasters () {
-  return masters
+  const allMasters = masters.concat(config.masters) // Gef offline + online config
+  return allMasters
 }
 
 module.exports = {
