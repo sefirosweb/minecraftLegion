@@ -1,11 +1,11 @@
 # minecraftLegion
 Minecraft multipurpose bot
 
-This project are based on <a href="https://github.com/PrismarineJS/mineflayer">mineflayer</a> & PrismarineJS repository
+This project are based on <a target="_blank" href="https://github.com/PrismarineJS/mineflayer">mineflayer</a> & PrismarineJS repository
 
 This program is part of the 3 of this project,
 Each part can be run independently, 
-The other 2 parts are <a href="https://github.com/sefirosweb/minecraftLegionWebServer">minecraftLegionWebServer</a> & <a href="minecraftLegionWebClient">minecraftLegionWebClient</a>
+The other 2 parts are <a target="_blank" href="https://github.com/sefirosweb/minecraftLegionWebServer">minecraftLegionWebServer</a> & <a href="minecraftLegionWebClient">minecraftLegionWebClient</a>
 
 I highly recomend use the other 2 parts for comunicate the bots and coordinate the actions y manage remotly
 
@@ -18,7 +18,7 @@ Edit config.js
 const config = {
   server: '127.0.0.1', // Minecraft Server
   port: '', // Minecraft Port
-
+  masters: [{ name: 'PlayerName' }, { name: 'SecondPlayerName' }], // Is requeried for manage the bot in game, *offline mode
   webServer: 'http://localhost', // minecraftLegionWebServer Web - Optional
   webServerPort: '3000' // minecraftLegionWebServer PORT - Optional
 }
@@ -33,7 +33,7 @@ node start
 
 This method conencts automatically to minecraftLegionWebServer and via web you can add bots / disconnects and manage the behavior
 
-For manage bot vía web go to <a href="https://github.com/sefirosweb/minecraftLegionWebClient">minecraftLegionWebClient</a> for see more!
+For manage bot vía web go to <a target="_blank" href="https://github.com/sefirosweb/minecraftLegionWebClient">minecraftLegionWebClient</a> for see more!
 
 
 ## Usage commands in chat:
@@ -80,7 +80,8 @@ For finish commands
 # TODO
 - Make a Archer Job (tower patrol)
 - Make a Farmer Job
-- Make a woodcutter Job
+- Make a Woodcutter Job
+- Make a Minner Job
 - Optimize combat Guard Job ( combat creepers, PVP, destroy shields)
 - Check day/night for sleep ?
 - Add bed location for sleep
