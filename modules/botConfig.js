@@ -18,6 +18,11 @@ function getConn (botName) {
   return db
 }
 
+function getAll (botName) {
+  const db = getConn(botName)
+  return db.get('config').value()
+}
+
 function setJob (botName, job) {
   const db = getConn(botName)
   db.set('config.job', job).write()
@@ -89,6 +94,7 @@ function getChest (botName, chestName) {
 }
 
 module.exports = {
+  getAll,
   setJob,
   getJob,
   setMode,

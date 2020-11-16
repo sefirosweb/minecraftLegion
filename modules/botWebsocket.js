@@ -1,6 +1,7 @@
 const { webServer, webServerPort } = require('../config')
 const io = require('socket.io-client')
 const config = require('../config')
+const botconfig = require('./botConfig')
 let socket; let friends = []; let masters = []
 
 function connect (botUsername) {
@@ -20,26 +21,31 @@ function connect (botUsername) {
   })
 
   socket.on('botsOnline', (botsOnline) => {
-    // console.log(botsOnline)
     friends = botsOnline
   })
 
   socket.on('botStatus', data => {
-    const index = friends.findIndex(e => e.socketId === data.socketId)
-    if (index < 0) {
-      return
+    const botIndex = friends.findIndex(e => e.socketId === data.socketId)
+    if (botIndex >= 0) {
+      const friendUpdate = [
+        ...friends
+      ]
+      friendUpdate[botIndex][data.type] = data.value
+      friends = friendUpdate
     }
-    const friendUpdate = [
-      ...friends
-    ]
-    friendUpdate[index][data.type] = data.value
-
-    friends = friendUpdate
   })
 
   socket.on('mastersOnline', (mastersOnline) => {
-    // console.log('mastersOnline', mastersOnline)
     masters = mastersOnline
+  })
+
+  socket.on('getConfig', (data) => {
+    const action = {
+      action: 'sendConfig',
+      value: botconfig.getAll(botUsername)
+    }
+    console.log(action)
+    socket.emit('sendAction', action)
   })
 }
 
