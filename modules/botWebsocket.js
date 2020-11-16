@@ -9,7 +9,6 @@ function connect (botUsername) {
   socket.on('connect', () => {
     console.log('Connected to webserver')
     socket.emit('addFriend', botUsername)
-    // socket.emit('getBotsOnline', botUsername)
   })
 
   socket.on('disconnect', () => {
