@@ -38,12 +38,12 @@ function connect (botUsername) {
     masters = mastersOnline
   })
 
-  socket.on('getConfig', (data) => {
+  socket.on('getConfig', (socketId) => {
     const action = {
       action: 'sendConfig',
-      value: botconfig.getAll(botUsername)
+      value: botconfig.getAll(botUsername),
+      socketId
     }
-    console.log(action)
     socket.emit('sendAction', action)
   })
 }
