@@ -1,3 +1,5 @@
+## 0.1.3
+* Updated vendor repository (mineflayer dependencys)
 ## 0.1.2
 * Added websocket conection
 * Added auto eat food
