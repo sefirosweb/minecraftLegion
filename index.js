@@ -1,7 +1,8 @@
 const cp = require('child_process')
+const path = require('path');
 
 function startBot (botName, password) {
-  const command = 'node start_bot ' + botName
+  const command = 'node ' + path.join(__dirname, 'start_bot') + ' ' + botName
   cp.exec(command, (err, stdout, stderr) => {
     if (err) {
       console.log(`Error: ${err}`)
