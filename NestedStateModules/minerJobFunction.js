@@ -1,5 +1,3 @@
-// const botWebsocket = require('../modules/botWebsocket')
-
 const {
   StateTransition,
   BehaviorIdle,
@@ -18,7 +16,7 @@ const BehaviorDepositChest = require('./../BehaviorModules/BehaviorDepositChest'
 const BehaviorEatFood = require('./../BehaviorModules/BehaviorEatFood')
 const BehaviorEquip = require('./../BehaviorModules/BehaviorEquip')
 const BehaviorFindItems = require('./../BehaviorModules/BehaviorFindItems')
-const BehaviorHelpFriend = require('./../BehaviorModules/BehaviorHelpFriend')
+
 
 const excludeItemsDeposit = [
   { name: 'iron_sword', quantity: 1 },
@@ -33,6 +31,8 @@ function guardJobFunction (bot, targets) {
   const mcData = require('minecraft-data')(bot.version)
   const movementsForAttack = new mineflayerpathfinder.Movements(bot, mcData)
   movementsForAttack.digCost = 100
+
+  const food = 'cooked_chicken'
 
   const enter = new BehaviorIdle(targets)
   enter.stateName = 'Enter'
@@ -73,14 +73,14 @@ function guardJobFunction (bot, targets) {
   const getEquipments = new BehaviorWithdrawItemChest(bot, targets, equipmentItems)
   getEquipments.stateName = 'Get equipment items'
 
-  const consumibleItems = [{ item: 'arrow', quantity: 128 }, { item: 'cooked_chicken', quantity: 64 }]
+  const consumibleItems = [{ item: 'arrow', quantity: 64 }, { item: food, quantity: 64 }]
   const getConsumibles = new BehaviorWithdrawItemChest(bot, targets, consumibleItems)
   getConsumibles.stateName = 'Get Food and Arrows'
 
-  const eatFood = new BehaviorEatFood(bot, targets, ['cooked_chicken']) // Set array valid foods
+  const eatFood = new BehaviorEatFood(bot, targets, [food]) // Set array valid foods
   eatFood.stateName = 'Eat Food'
 
-  const eatFoodCombat = new BehaviorEatFood(bot, targets, ['cooked_chicken'])
+  const eatFoodCombat = new BehaviorEatFood(bot, targets, [food])
   eatFoodCombat.stateName = 'Eat Food In Combat'
 
   const goToObject = new BehaviorMoveTo(bot, targets)
@@ -88,12 +88,6 @@ function guardJobFunction (bot, targets) {
 
   const findItem = new BehaviorFindItems(bot, targets)
   findItem.stateName = 'Find Item Dropped'
-
-  const helpFriend = new BehaviorHelpFriend(bot, targets, true)
-  helpFriend.stateName = 'Check friend needs help'
-
-  const goFriend = new BehaviorFollowEntity(bot, targets)
-  goFriend.stateName = 'Go To Help Friend'
 
   const guardCombatJobFunction = require('./guardCombatJobFunction')(bot, targets)
 
@@ -143,15 +137,7 @@ function guardJobFunction (bot, targets) {
       shouldTransition: () => true
     }),
 
-    new StateTransition({
-      parent: patrol,
-      child: guardCombatJobFunction,
-      name: 'patrol -> try getClosestMob',
-      shouldTransition: () => {
-        getClosestMob.onStateEntered()
-        return targets.entity !== undefined
-      }
-    }),
+
 
     new StateTransition({
       parent: goToObject,
@@ -160,61 +146,6 @@ function guardJobFunction (bot, targets) {
       shouldTransition: () => {
         getClosestMob.onStateEntered()
         return targets.entity !== undefined
-      }
-    }),
-
-    new StateTransition({
-      parent: patrol,
-      child: goToObject,
-      name: 'patrol -> goToObject',
-      // onTransition: () => botWebsocket.log('Item Found => ' + JSON.stringify(findItem.targets.itemDrop)),
-      shouldTransition: () => findItem.search() && findItem.checkInventorySpace() > 3
-    }),
-
-    new StateTransition({
-      parent: goToObject,
-      child: patrol,
-      name: 'goToObject -> patrol',
-      shouldTransition: () => !goToObject.targets.itemDrop.isValid
-    }),
-
-    new StateTransition({
-      parent: patrol,
-      child: checkItemsToDeposit,
-      name: 'patrol -> checkItemsToDeposit',
-      shouldTransition: () => patrol.isFinished()
-    }),
-
-    new StateTransition({
-      parent: patrol,
-      child: helpFriend,
-      name: 'patrol -> patrol',
-      shouldTransition: () => helpFriend.findHelpFriend()
-    }),
-
-    new StateTransition({
-      parent: helpFriend,
-      child: goFriend,
-      name: 'helpFriend -> goFriend',
-      shouldTransition: () => true
-    }),
-
-    new StateTransition({
-      parent: goFriend,
-      child: guardCombatJobFunction,
-      name: 'goFriend -> guardCombatJobFunction',
-      shouldTransition: () => {
-        getClosestMob.onStateEntered()
-        return targets.entity !== undefined && !helpFriend.targetIsFriend()
-      }
-    }),
-
-    new StateTransition({
-      parent: goFriend,
-      child: patrol,
-      name: 'Now no need help',
-      shouldTransition: () => {
-        return !helpFriend.stillNeedHelp()
       }
     }),
 
@@ -334,19 +265,12 @@ function guardJobFunction (bot, targets) {
       child: equip2,
       name: 'Continue patrol bot is full',
       shouldTransition: () => eatFood.isFinished()
-    }),
-
-    new StateTransition({
-      parent: equip2,
-      child: patrol,
-      name: 'Continue patrol bot is full',
-      shouldTransition: () => equip2.isFinished()
     })
 
   ]
 
   const guardJobFunction = new NestedStateMachine(transitions, enter)
-  guardJobFunction.stateName = 'Guard Job'
+  guardJobFunction.stateName = 'Miner Job'
   return guardJobFunction
 }
 

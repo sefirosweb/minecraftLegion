@@ -13,6 +13,7 @@ function startWorkFunction (bot, targets) {
   const guardJob = require('./guardJobFunction')(bot, targets)
   const archerJob = require('./archerJobFunction')(bot, targets)
   const farmerJob = require('./farmerJobFunction')(bot, targets)
+  const minerJob = require('./minerJobFunction')(bot, targets)
   const loadConfig = new BehaviorLoadConfig(bot, targets)
   loadConfig.stateName = 'Load Bot Config'
 
@@ -43,6 +44,13 @@ function startWorkFunction (bot, targets) {
       child: farmerJob,
       name: 'loadConfig -> farmerJob',
       shouldTransition: () => loadConfig.getJob() === 'farmer'
+    }),
+
+    new StateTransition({
+      parent: loadConfig,
+      child: minerJob,
+      name: 'loadConfig -> minerJob',
+      shouldTransition: () => loadConfig.getJob() === 'miner'
     })
 
   ]

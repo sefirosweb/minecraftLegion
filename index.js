@@ -20,12 +20,13 @@ function startBot (botName, password) {
 }
 
 const botsToStart = [
-  { username: 'Guard1' },
-  { username: 'Guard2' },
-  { username: 'Guard3' },
-  { username: 'Archer1' },
-  { username: 'Archer2' },
-  { username: 'Archer3' }
+  // { username: 'Guard1' },
+  // { username: 'Guard2' },
+  // { username: 'Guard3' },
+  // { username: 'Archer1' },
+  // { username: 'Archer2' },
+  // { username: 'Archer3' }
+  { username: 'Miner' }
 ]
 
 let i = 0

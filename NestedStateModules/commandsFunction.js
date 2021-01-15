@@ -187,6 +187,8 @@ function commandsFunction (bot, targets) {
       case (job === 'guard'):
       case (job === 'archer'):
       case (job === 'farmer'):
+      case (job === 'miner'):
+      case (job === 'tuneler'):
         bot.chat('I will fulfill this job')
         botConfig.setJob(bot.username, job)
         break
