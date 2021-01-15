@@ -177,10 +177,33 @@ function commandsFunction (bot, targets) {
           msg = message.split(' ')
           saveChest(msg[3])
         }
+
+        if (message.match(/set miner.*/)) {
+          msg = message.split(' ')
+          saveMiner(msg)
+        }
     }
   }
 
   let patrol = []
+
+  function saveMiner(coords){
+    if(coords.length !== 8){
+      bot.chat("The coords is wrong")
+      return false
+    }
+    const minerCoords = {}
+    minerCoords.xStart = coords['2']
+    minerCoords.yStart = coords['4']
+    minerCoords.zStart = coords['4']
+    minerCoords.xEnd = coords['5']
+    minerCoords.yEnd = coords['5']
+    minerCoords.zEnd = coords['5']
+    
+    botWebsocket.log('Point: ' + JSON.stringify(minerCoords))
+    botConfig.setMiner(bot.username, minerCoords)
+    
+  }
 
   function saveJob (job) {
     switch (true) {
@@ -188,7 +211,6 @@ function commandsFunction (bot, targets) {
       case (job === 'archer'):
       case (job === 'farmer'):
       case (job === 'miner'):
-      case (job === 'tuneler'):
         bot.chat('I will fulfill this job')
         botConfig.setJob(bot.username, job)
         break

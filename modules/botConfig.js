@@ -11,6 +11,7 @@ function getConn (botName) {
     mode: 'none', // none, pve, pvp
     distance: 10,
     help_friends: false,
+    minerCords: {},
     chests: {},
     patrol: []
   }
@@ -78,9 +79,6 @@ function setChest (botName, chest, chestName) {
   const db = getConn(botName)
   const chests = db.get('config.chests').value()
   chests[chestName] = chest
-
-  console.log(chests)
-
   db.set('config.chests', chests).write()
 }
 
@@ -92,6 +90,11 @@ function getChest (botName, chestName) {
   } else {
     return chest
   }
+}
+
+function setMiner (botName, minerCords) {
+  const db = getConn(botName)
+  db.set('config.minerCords', minerCords).write()
 }
 
 module.exports = {
@@ -107,5 +110,6 @@ module.exports = {
   setPatrol,
   getPatrol,
   setChest,
-  getChest
+  getChest,
+  setMiner
 }
