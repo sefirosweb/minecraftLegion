@@ -22,7 +22,7 @@ module.exports = class BehaviorGetReady {
     for (let i = 0; i < this.itemsToBeReady.length; i++) {
       const itemToBeReady = this.itemsToBeReady[i]
       const itemsInUse = this.inventory.countItemsInInventoryOrEquipped(itemToBeReady.item)
-      console.log(itemToBeReady, 'In use ' + itemsInUse);
+      // console.log(itemToBeReady, 'In use ' + itemsInUse);
       if (itemsInUse < itemToBeReady.quantity) {
         this.isReady = false
         return
