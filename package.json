@@ -17,11 +17,14 @@
         "mineflayer-web-inventory": "^1.2.0",
         "prismarine-viewer": "^1.5.0"
     },
-    "devDependencies": {},
+    "devDependencies": {
+        "standard": "^16.0.3"
+    },
     "scripts": {
         "start": "nodemon index.js --ignore botConfig/",
         "one": "nodemon start_bot.js Miner --ignore botConfig/",
-        "test": "echo \"Error: no test specified\" && exit 1"
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "standard": "standard --fix"
     },
     "repository": {
         "type": "git",

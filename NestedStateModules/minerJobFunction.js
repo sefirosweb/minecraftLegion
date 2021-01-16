@@ -1,17 +1,12 @@
 const {
   StateTransition,
   BehaviorIdle,
-  NestedStateMachine,
-  BehaviorMoveTo,
-  BehaviorFollowEntity
+  NestedStateMachine
 } = require('mineflayer-statemachine')
-const mineflayerpathfinder = require('mineflayer-pathfinder')
 
 const BehaviorLoadConfig = require('./../BehaviorModules/BehaviorLoadConfig')
 
 function minerJobFunction (bot, targets) {
-  const mcData = require('minecraft-data')(bot.version)
-
   const enter = new BehaviorIdle(targets)
   enter.stateName = 'Enter'
 
