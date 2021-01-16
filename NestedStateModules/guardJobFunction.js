@@ -59,6 +59,8 @@ const consumibleItems = [
   { item: 'cooked_chicken', quantity: 64 }
 ]
 
+const validFood = ['cooked_chicken']
+
 function guardJobFunction(bot, targets) {
   const { getResumeInventory } = require('../modules/inventoryModule')(bot)
   const mcData = require('minecraft-data')(bot.version)
@@ -106,10 +108,10 @@ function guardJobFunction(bot, targets) {
   const getConsumibles = new BehaviorWithdrawItemChest(bot, targets, consumibleItems)
   getConsumibles.stateName = 'Get Food and Arrows'
 
-  const eatFood = new BehaviorEatFood(bot, targets, ['cooked_chicken']) // Set array valid foods
+  const eatFood = new BehaviorEatFood(bot, targets, validFood)
   eatFood.stateName = 'Eat Food'
 
-  const eatFoodCombat = new BehaviorEatFood(bot, targets, ['cooked_chicken'])
+  const eatFoodCombat = new BehaviorEatFood(bot, targets, validFood)
   eatFoodCombat.stateName = 'Eat Food In Combat'
 
   const goToObject = new BehaviorMoveTo(bot, targets)
