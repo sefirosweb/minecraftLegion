@@ -13,18 +13,16 @@ const BehaviorWithdrawItemChest = require('./../BehaviorModules/BehaviorWithdraw
 const BehaviorDepositChest = require('./../BehaviorModules/BehaviorDepositChest')
 const BehaviorEatFood = require('./../BehaviorModules/BehaviorEatFood')
 const BehaviorEquip = require('./../BehaviorModules/BehaviorEquip')
-const BehaviorFindItems = require('./../BehaviorModules/BehaviorFindItems')
-const BehaviorHelpFriend = require('./../BehaviorModules/BehaviorHelpFriend')
 
 // Exclude items to deposit
 const excludeItemsDeposit = [
-  { item: 'iron_sword', quantity: 1 },
+  { item: 'iron_sword', quantity: 1 }, // Danger user iron_XXX
+  { item: 'iron_pickaxe', quantity: 4 },
+  { item: 'iron_shovel', quantity: 4 },
   { item: 'shield', quantity: 1 },
   { item: 'bow', quantity: 1 },
   { item: 'arrow', quantity: 128 },
-  { item: 'cooked_chicken', quantity: 64 },
-  { item: 'pickaxe', quantity: 4 },
-  { item: 'shovel', quantity: 4 }
+  { item: 'cooked_chicken', quantity: 64 }
 ]
 
 // Check this items in inventory for go withdraw
@@ -64,6 +62,7 @@ const consumibleItems = [
 const validFood = ['cooked_chicken']
 
 function minerJobFunction (bot, targets) {
+  const { getResumeInventory } = require('../modules/inventoryModule')(bot)
   const mcData = require('minecraft-data')(bot.version)
   const movementsForAttack = new mineflayerpathfinder.Movements(bot, mcData)
   movementsForAttack.digCost = 100
@@ -99,6 +98,37 @@ function minerJobFunction (bot, targets) {
 
   const eatFood = new BehaviorEatFood(bot, targets, validFood)
   eatFood.stateName = 'Eat Food'
+
+  const depositItems = new BehaviorDepositChest(bot, targets)
+  depositItems.stateName = 'Deposit Items'
+
+  function getItemsToDeposit () {
+    const items = getResumeInventory()
+
+    const itemsToDeposit = items.reduce((currentItems, slot) => {
+      const newItems = [...currentItems]
+      const itemToExclude = excludeItemsDeposit.find(i => {
+        console.log(i.item, slot.name)
+        return i.item === slot.name
+      })
+      // console.log(newItems)
+
+      if (itemToExclude === undefined) {
+        newItems.push(slot)
+      } else {
+        slot.quantity -= itemToExclude.quantity
+        if (slot.quantity > 0) {
+          newItems.push(slot)
+        }
+      }
+
+      return newItems
+    }, [])
+
+    return itemsToDeposit
+  }
+
+  const miningFunction = require('./miningFunction')(bot, targets)
 
   const transitions = [
     new StateTransition({
@@ -177,6 +207,38 @@ function minerJobFunction (bot, targets) {
       child: eatFood,
       name: 'getReady -> eatFood',
       shouldTransition: () => getReady.getIsReady()
+    }),
+
+    new StateTransition({
+      parent: eatFood,
+      child: miningFunction,
+      name: 'Continue Mining',
+      shouldTransition: () => eatFood.isFinished()
+    }),
+
+    new StateTransition({
+      parent: miningFunction,
+      child: goDepositChest,
+      name: 'Return to base',
+      onTransition: () => goDepositChest.sortPatrol(),
+      shouldTransition: () => miningFunction.isFinished()
+    }),
+
+    new StateTransition({
+      parent: goDepositChest,
+      child: depositItems,
+      name: 'goDepositChest -> depositItems',
+      onTransition: () => {
+        depositItems.setItemsToDeposit(getItemsToDeposit())
+      },
+      shouldTransition: () => goDepositChest.isFinished()
+    }),
+
+    new StateTransition({
+      parent: depositItems,
+      child: getReady,
+      name: 'depositItems -> getReady',
+      shouldTransition: () => depositItems.isFinished()
     })
 
   ]
