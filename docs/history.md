@@ -1,6 +1,7 @@
 ## 0.1.4
 * Fixed some bugs
 * Polymorfed function BehaviorGetReady
+* Adding a minner basic function (can mine a hole)
 ## 0.1.3
 * Updated vendor repository (mineflayer dependencys)
 ## 0.1.2
