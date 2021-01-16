@@ -38,7 +38,7 @@ module.exports = class BehaviorWithdrawItemChest {
 
     const chestToOpen = this.bot.findBlock({
       matching: ['chest', 'ender_chest', 'trapped_chest'].map(name => mcData.blocksByName[name].id),
-      maxDistance: 6
+      maxDistance: 3
     })
 
     if (!chestToOpen) {
@@ -52,7 +52,7 @@ module.exports = class BehaviorWithdrawItemChest {
     this.chest.on('close', () => {
       setTimeout(() => {
         this.isEndFinished = true
-      }, 1000)
+      }, 1500)
     })
 
     this.chest.on('open', () => {
@@ -64,7 +64,7 @@ module.exports = class BehaviorWithdrawItemChest {
             console.log('Error Withdraw items ' + error)
             this.chest.close()
           })
-      }, 500)
+      }, 1500)
     })
   }
 

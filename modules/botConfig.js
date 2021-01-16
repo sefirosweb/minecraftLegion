@@ -97,6 +97,11 @@ function setMiner (botName, minerCords) {
   db.set('config.minerCords', minerCords).write()
 }
 
+function getMiner (botName) {
+  const db = getConn(botName)
+  return db.get('config.minerCords').value()
+}
+
 module.exports = {
   getAll,
   setJob,
@@ -111,5 +116,6 @@ module.exports = {
   getPatrol,
   setChest,
   getChest,
-  setMiner
+  setMiner,
+  getMiner
 }

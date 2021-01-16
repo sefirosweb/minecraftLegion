@@ -108,10 +108,8 @@ function minerJobFunction (bot, targets) {
     const itemsToDeposit = items.reduce((currentItems, slot) => {
       const newItems = [...currentItems]
       const itemToExclude = excludeItemsDeposit.find(i => {
-        console.log(i.item, slot.name)
         return i.item === slot.name
       })
-      // console.log(newItems)
 
       if (itemToExclude === undefined) {
         newItems.push(slot)

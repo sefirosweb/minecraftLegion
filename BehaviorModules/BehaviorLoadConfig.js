@@ -11,6 +11,10 @@ module.exports = class BehaviorLoadConfig {
     this.helpFriends = false
     this.distance = 10
     this.patrol = []
+    this.equipmentChest = []
+    this.foodChest = []
+    this.depositChest = []
+    this.miner = []
   }
 
   onStateEntered () {
@@ -22,6 +26,7 @@ module.exports = class BehaviorLoadConfig {
     this.equipmentChest = botConfig.getChest(this.bot.username, 'equipment')
     this.foodChest = botConfig.getChest(this.bot.username, 'food')
     this.depositChest = botConfig.getChest(this.bot.username, 'deposit')
+    this.miner = botConfig.getMiner(this.bot.username)
   }
 
   getJob () {
@@ -54,5 +59,9 @@ module.exports = class BehaviorLoadConfig {
 
   getDepositChest () {
     return this.depositChest
+  }
+
+  getMiner () {
+    return this.miner
   }
 }

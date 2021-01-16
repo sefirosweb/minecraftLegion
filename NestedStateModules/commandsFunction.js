@@ -194,14 +194,15 @@ function commandsFunction (bot, targets) {
     }
     const minerCoords = {}
     minerCoords.xStart = coords['2']
-    minerCoords.yStart = coords['4']
+    minerCoords.yStart = coords['3']
     minerCoords.zStart = coords['4']
     minerCoords.xEnd = coords['5']
-    minerCoords.yEnd = coords['5']
-    minerCoords.zEnd = coords['5']
+    minerCoords.yEnd = coords['6']
+    minerCoords.zEnd = coords['7']
 
     botWebsocket.log('Point: ' + JSON.stringify(minerCoords))
     botConfig.setMiner(bot.username, minerCoords)
+    bot.chat('Lets made a tunel!')
   }
 
   function saveJob (job) {
