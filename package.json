@@ -20,7 +20,7 @@
     "devDependencies": {},
     "scripts": {
         "start": "nodemon index.js --ignore botConfig/",
-        "one": "nodemon start_bot.js Guard1 --ignore botConfig/",
+        "one": "nodemon start_bot.js Miner --ignore botConfig/",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
     "repository": {
