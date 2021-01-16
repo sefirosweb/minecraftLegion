@@ -1,5 +1,5 @@
 module.exports = class BehaviorGetReady {
-  constructor(bot, targets) {
+  constructor (bot, targets) {
     this.bot = bot
     this.targets = targets
     this.stateName = 'BehaviorGetReady'
@@ -10,15 +10,15 @@ module.exports = class BehaviorGetReady {
     this.inventory = require('../modules/inventoryModule')(this.bot)
   }
 
-  onStateEntered() {
+  onStateEntered () {
     this.checkImReady()
   }
 
-  getIsReady() {
+  getIsReady () {
     return this.isReady
   }
 
-  checkImReady() {
+  checkImReady () {
     for (let i = 0; i < this.itemsToBeReady.length; i++) {
       const itemToBeReady = this.itemsToBeReady[i]
       const itemsInUse = this.inventory.countItemsInInventoryOrEquipped(itemToBeReady.item)

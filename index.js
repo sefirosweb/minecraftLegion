@@ -1,5 +1,5 @@
 const cp = require('child_process')
-const path = require('path');
+const path = require('path')
 
 function startBot (botName, password) {
   const command = 'node ' + path.join(__dirname, 'start_bot') + ' ' + botName

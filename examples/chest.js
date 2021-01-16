@@ -29,7 +29,7 @@ bot.on('chat', (username, message) => {
   }
 })
 
-function sayItems(items = bot.inventory.items()) {
+function sayItems (items = bot.inventory.items()) {
   const output = items.map(itemToString).join(', ')
   if (output) {
     bot.chat(output)
@@ -38,8 +38,8 @@ function sayItems(items = bot.inventory.items()) {
   }
 }
 
-function watchChest() {
-  let chestToOpen = bot.findBlock({
+function watchChest () {
+  const chestToOpen = bot.findBlock({
     matching: ['chest', 'ender_chest', 'trapped_chest'].map(name => mcData.blocksByName[name].id),
     maxDistance: 6
   })
@@ -60,7 +60,7 @@ function watchChest() {
   })
 }
 
-function itemToString(item) {
+function itemToString (item) {
   if (item) {
     return `${item.name} x ${item.count}`
   } else {

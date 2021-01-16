@@ -54,14 +54,14 @@ const equipmentItems = [
 ]
 
 // BehaviorWithdrawItemChest 2
-const consumibleItems = [ 
+const consumibleItems = [
   { item: 'arrow', quantity: 64 },
   { item: 'cooked_chicken', quantity: 64 }
 ]
 
 const validFood = ['cooked_chicken']
 
-function guardJobFunction(bot, targets) {
+function guardJobFunction (bot, targets) {
   const { getResumeInventory } = require('../modules/inventoryModule')(bot)
   const mcData = require('minecraft-data')(bot.version)
   const movementsForAttack = new mineflayerpathfinder.Movements(bot, mcData)
@@ -128,7 +128,7 @@ function guardJobFunction(bot, targets) {
 
   const guardCombatJobFunction = require('./guardCombatJobFunction')(bot, targets)
 
-  function getItemsToDeposit() {
+  function getItemsToDeposit () {
     const items = getResumeInventory()
 
     const itemsToDeposit = items.reduce((currentItems, slot) => {

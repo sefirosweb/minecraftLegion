@@ -25,7 +25,6 @@ function createNewBot (botName, botPassword = '') {
   })
   bot.loadPlugin(require('mineflayer-pathfinder').pathfinder)
 
-
   bot.on('kicked', (reason) => {
     const reasonDecoded = JSON.parse(reason)
     console.log(reasonDecoded)

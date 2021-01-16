@@ -1,9 +1,9 @@
 const low = require('lowdb')
 const Filesync = require('lowdb/adapters/FileSync')
-const path = require('path');
+const path = require('path')
 
 function getConn (botName) {
-  const adapter = new Filesync( path.join(__dirname, '../botConfig/') + botName + '.json')
+  const adapter = new Filesync(path.join(__dirname, '../botConfig/') + botName + '.json')
   const db = low(adapter)
   const defaultConfig = {
     name: botName,

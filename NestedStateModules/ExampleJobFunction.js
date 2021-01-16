@@ -11,7 +11,7 @@ const BehaviorLoadConfig = require('./../BehaviorModules/BehaviorLoadConfig')
 
 function minerJobFunction (bot, targets) {
   const mcData = require('minecraft-data')(bot.version)
-  
+
   const enter = new BehaviorIdle(targets)
   enter.stateName = 'Enter'
 

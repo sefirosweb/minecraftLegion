@@ -44,7 +44,7 @@ module.exports = class BehaviorGetClosestEnemy {
 
     const goal = new mineflayerPathfinder.goals.GoalNear(entity.position.x, entity.position.y, entity.position.z, 2)
 
-    let result = this.bot.pathfinder.getPathTo(this.movements, goal, 40)
+    const result = this.bot.pathfinder.getPathTo(this.movements, goal, 40)
 
     return result.status === 'success'
   }

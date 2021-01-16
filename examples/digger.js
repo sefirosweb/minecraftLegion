@@ -64,7 +64,7 @@ function dig () {
       console.log(err.stack)
       return
     }
-    dig();
+    dig()
   }
 }
 
@@ -73,7 +73,7 @@ let stone = 0
 function build () {
   stone++
   console.log(stone)
-  if(stone > 5){
+  if (stone > 5) {
     return
   }
   const referenceBlock = bot.blockAt(bot.entity.position.offset(0, -1, 0))
