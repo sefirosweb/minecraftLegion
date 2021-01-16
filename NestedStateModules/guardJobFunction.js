@@ -12,7 +12,7 @@ const mineflayerpathfinder = require('mineflayer-pathfinder')
 const BehaviorLoadConfig = require('./../BehaviorModules/BehaviorLoadConfig')
 const BehaviorMoveToArray = require('./../BehaviorModules/BehaviorMoveToArray')
 const BehaviorGetClosestEnemy = require('./../BehaviorModules/BehaviorGetClosestEnemy')
-const BehaviorGetReadyForPatrol = require('./../BehaviorModules/BehaviorGetReadyForPatrol')
+const BehaviorGetReady = require('./../BehaviorModules/BehaviorGetReady')
 const BehaviorWithdrawItemChest = require('./../BehaviorModules/BehaviorWithdrawItemChest')
 const BehaviorDepositChest = require('./../BehaviorModules/BehaviorDepositChest')
 const BehaviorEatFood = require('./../BehaviorModules/BehaviorEatFood')
@@ -20,15 +20,46 @@ const BehaviorEquip = require('./../BehaviorModules/BehaviorEquip')
 const BehaviorFindItems = require('./../BehaviorModules/BehaviorFindItems')
 const BehaviorHelpFriend = require('./../BehaviorModules/BehaviorHelpFriend')
 
+// Exclude items to deposit
 const excludeItemsDeposit = [
-  { name: 'iron_sword', quantity: 1 },
-  { name: 'shield', quantity: 1 },
-  { name: 'bow', quantity: 1 },
-  { name: 'arrow', quantity: 256 },
-  { name: 'cooked_chicken', quantity: 128 }
+  { item: 'iron_sword', quantity: 1 },
+  { item: 'shield', quantity: 1 },
+  { item: 'bow', quantity: 1 },
+  { item: 'arrow', quantity: 128 },
+  { item: 'cooked_chicken', quantity: 64 }
 ]
 
-function guardJobFunction (bot, targets) {
+// Check this items in inventory for go withdraw
+const itemsToBeReady = [
+  { item: 'helmet', quantity: 1 },
+  { item: 'chest', quantity: 1 },
+  { item: 'leggings', quantity: 1 },
+  { item: 'boots', quantity: 1 },
+  { item: 'shield', quantity: 1 },
+  { item: 'sword', quantity: 1 },
+  { item: 'bow', quantity: 1 },
+  { item: 'arrow', quantity: 16 },
+  { item: 'cooked_chicken', quantity: 16 }
+]
+
+// BehaviorWithdrawItemChest 1
+const equipmentItems = [
+  { item: 'helmet', quantity: 1 },
+  { item: 'chest', quantity: 1 },
+  { item: 'leggings', quantity: 1 },
+  { item: 'boots', quantity: 1 },
+  { item: 'shield', quantity: 1 },
+  { item: 'sword', quantity: 1 },
+  { item: 'bow', quantity: 1 }
+]
+
+// BehaviorWithdrawItemChest 2
+const consumibleItems = [ 
+  { item: 'arrow', quantity: 64 },
+  { item: 'cooked_chicken', quantity: 64 }
+]
+
+function guardJobFunction(bot, targets) {
   const { getResumeInventory } = require('../modules/inventoryModule')(bot)
   const mcData = require('minecraft-data')(bot.version)
   const movementsForAttack = new mineflayerpathfinder.Movements(bot, mcData)
@@ -48,8 +79,9 @@ function guardJobFunction (bot, targets) {
 
   const getClosestMob = new BehaviorGetClosestEnemy(bot, targets)
 
-  const getReadyForPatrol = new BehaviorGetReadyForPatrol(bot, targets)
-  getReadyForPatrol.stateName = 'Get Ready for Patrol'
+  const getReady = new BehaviorGetReady(bot, targets)
+  getReady.stateName = 'Get Ready for Patrol'
+  getReady.itemsToBeReady = itemsToBeReady
 
   const goEquipmentChest = new BehaviorMoveToArray(bot, targets, [], true, 1)
   goEquipmentChest.stateName = 'Go Equipment Chest'
@@ -68,12 +100,9 @@ function guardJobFunction (bot, targets) {
   equip.stateName = 'Equip items'
   equip2.stateName = 'Equip items'
 
-  const equipmentItems = [{ item: 'helmet', quantity: 1 }, { item: 'chest', quantity: 1 }, { item: 'leggings', quantity: 1 },
-    { item: 'boots', quantity: 1 }, { item: 'shield', quantity: 1 }, { item: 'sword', quantity: 1 }, { item: 'bow', quantity: 1 }]
   const getEquipments = new BehaviorWithdrawItemChest(bot, targets, equipmentItems)
   getEquipments.stateName = 'Get equipment items'
 
-  const consumibleItems = [{ item: 'arrow', quantity: 128 }, { item: 'cooked_chicken', quantity: 64 }]
   const getConsumibles = new BehaviorWithdrawItemChest(bot, targets, consumibleItems)
   getConsumibles.stateName = 'Get Food and Arrows'
 
@@ -97,12 +126,12 @@ function guardJobFunction (bot, targets) {
 
   const guardCombatJobFunction = require('./guardCombatJobFunction')(bot, targets)
 
-  function getItemsToDeposit () {
+  function getItemsToDeposit() {
     const items = getResumeInventory()
 
     const itemsToDeposit = items.reduce((currentItems, slot) => {
       const newItems = [...currentItems]
-      const itemToExclude = excludeItemsDeposit.find(i => i.name === slot.name)
+      const itemToExclude = excludeItemsDeposit.find(i => i.item === slot.name)
 
       if (itemToExclude === undefined) {
         newItems.push(slot)
@@ -129,7 +158,7 @@ function guardJobFunction (bot, targets) {
 
     new StateTransition({
       parent: loadConfig,
-      child: getReadyForPatrol,
+      child: getReady,
       name: 'loadConfig -> patrol',
       onTransition: () => {
         targets.entity = undefined
@@ -228,7 +257,7 @@ function guardJobFunction (bot, targets) {
 
     new StateTransition({
       parent: checkItemsToDeposit,
-      child: getReadyForPatrol,
+      child: getReady,
       name: 'No items to deposit',
       shouldTransition: () => getItemsToDeposit().length === 0
     }),
@@ -245,26 +274,26 @@ function guardJobFunction (bot, targets) {
 
     new StateTransition({
       parent: depositItems,
-      child: getReadyForPatrol,
-      name: 'depositItems -> getReadyForPatrol',
+      child: getReady,
+      name: 'depositItems -> getReady',
       shouldTransition: () => depositItems.isFinished()
     }),
 
     new StateTransition({
-      parent: getReadyForPatrol,
+      parent: getReady,
       child: eatFood,
-      name: 'getReadyForPatrol -> eatFood',
-      shouldTransition: () => getReadyForPatrol.getIsReady()
+      name: 'getReady -> eatFood',
+      shouldTransition: () => getReady.getIsReady()
     }),
 
     new StateTransition({
-      parent: getReadyForPatrol,
+      parent: getReady,
       child: goEquipmentChest,
-      name: 'getReadyForPatrol -> goEquipmentChest',
+      name: 'getReady -> goEquipmentChest',
       onTransition: () => {
         goEquipmentChest.sortPatrol()
       },
-      shouldTransition: () => !getReadyForPatrol.getIsReady()
+      shouldTransition: () => !getReady.getIsReady()
     }),
 
     new StateTransition({
