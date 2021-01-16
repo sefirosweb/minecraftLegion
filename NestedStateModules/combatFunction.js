@@ -10,7 +10,7 @@ const {
 const BehaviorAttack = require('./../BehaviorModules/BehaviorAttack')
 const BehaviorLongAttack = require('./../BehaviorModules/BehaviorLongAttack')
 
-function guardCombatJobFunction (bot, targets) {
+function combatFunction (bot, targets) {
   const inventory = require('../modules/inventoryModule')(bot)
   const hawkEye = require('minecrafthawkeye')
   bot.loadPlugin(hawkEye)
@@ -280,9 +280,9 @@ function guardCombatJobFunction (bot, targets) {
 
   ]
 
-  const guardCombatJobFunction = new NestedStateMachine(transitions, enter, exit)
-  guardCombatJobFunction.stateName = 'Guard Combat'
-  return guardCombatJobFunction
+  const combatFunction = new NestedStateMachine(transitions, enter, exit)
+  combatFunction.stateName = 'Combat'
+  return combatFunction
 }
 
-module.exports = guardCombatJobFunction
+module.exports = combatFunction
