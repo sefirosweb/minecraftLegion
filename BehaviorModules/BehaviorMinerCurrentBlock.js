@@ -6,7 +6,7 @@ module.exports = class BehaviorMinerCurrentBlock {
     this.targets = targets
     this.stateName = 'BehaviorMinerCurrentBlock'
 
-    this.blockInValidType = ['air', 'lava']
+    this.blockInValidType = ['air', 'cave_air']
     this.minerCords = false
 
     this.xStart = false
@@ -108,6 +108,7 @@ module.exports = class BehaviorMinerCurrentBlock {
     const isValidBlockType = this.blockInValidType.find(b => b === block.name)
     if (isValidBlockType === undefined) {
       this.targets.position = block.position // I detect is not air / lava / water then go to this position
+      // console.log(block.name)
       return true
     }
 

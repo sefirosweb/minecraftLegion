@@ -9,6 +9,7 @@ const BehaviorLoadConfig = require('./../BehaviorModules/BehaviorLoadConfig')
 const BehaviorMinerCurrentLayer = require('./../BehaviorModules/BehaviorMinerCurrentLayer')
 const BehaviorMinerCurrentBlock = require('./../BehaviorModules/BehaviorMinerCurrentBlock')
 const BehaviorDigBlock = require('./../BehaviorModules/BehaviorDigBlock')
+const BehaviorMinerChecks = require('./../BehaviorModules/BehaviorMinerChecks')
 
 function minerJobFunction (bot, targets) {
   const enter = new BehaviorIdle(targets)
@@ -37,6 +38,9 @@ function minerJobFunction (bot, targets) {
 
   const moveToBlock = new BehaviorMoveTo(bot, targets)
   moveToBlock.stateName = 'Move To Block'
+
+  const minerChecks = new BehaviorMinerChecks(bot, targets)
+  minerChecks.stateName = 'Check Inventory'
 
   const transitions = [
     new StateTransition({
@@ -97,17 +101,31 @@ function minerJobFunction (bot, targets) {
     }),
 
     new StateTransition({
-      parent: moveToBlock, // This is a "Move To Block" label
+      parent: moveToBlock,
       child: mineBlock,
       name: 'Move To Block',
       shouldTransition: () => moveToBlock.distanceToTarget() < 3
     }),
 
     new StateTransition({
-      parent: mineBlock, // This is a "Mine Block" label
-      child: currentBlock,
+      parent: mineBlock,
+      child: minerChecks,
       name: 'Go Next Block',
       shouldTransition: () => mineBlock.isFinished()
+    }),
+
+    new StateTransition({
+      parent: minerChecks,
+      child: currentBlock,
+      name: 'Continue Mining',
+      shouldTransition: () => minerChecks.isFinished() && minerChecks.getIsReady()
+    }),
+
+    new StateTransition({
+      parent: minerChecks,
+      child: exit,
+      name: 'Continue Mining',
+      shouldTransition: () => minerChecks.isFinished() && !minerChecks.getIsReady()
     })
 
   ]
