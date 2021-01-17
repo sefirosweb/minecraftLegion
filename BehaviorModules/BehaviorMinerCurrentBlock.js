@@ -1,3 +1,4 @@
+const botWebsocket = require('../modules/botWebsocket')
 module.exports = class BehaviorMinerCurrentBlock {
   constructor (bot, targets) {
     this.bot = bot
@@ -19,6 +20,7 @@ module.exports = class BehaviorMinerCurrentBlock {
     this.zCurrent = false
 
     this.isEndFinished = false
+    this.firstBlockOnLayer = true
   }
 
   isFinished () {
@@ -27,7 +29,7 @@ module.exports = class BehaviorMinerCurrentBlock {
 
   setMinerCords (minerCords) {
     this.isEndFinished = false
-    // console.log('BehaviorMinerCurrentBlock: Set new coords', minerCords)
+    this.firstBlockOnLayer = true
     this.minerCords = minerCords
     this.startBlock()
   }
@@ -60,10 +62,9 @@ module.exports = class BehaviorMinerCurrentBlock {
       this.xCurrent === this.xEnd
     ) {
       this.isEndFinished = true
-      console.log('Is finished')
+      botWebsocket.log('Current layer finished ' + this.yCurrent)
     } else {
       this.zNext()
-      // console.log(this.getCurrentBlock())
     }
   }
 
@@ -89,10 +90,14 @@ module.exports = class BehaviorMinerCurrentBlock {
       this.zCurrent = this.zStart
       this.xNext()
     } else {
-      if (this.zStart < this.zEnd) {
-        this.zCurrent++
+      if (this.firstBlockOnLayer) {
+        this.firstBlockOnLayer = false
       } else {
-        this.zCurrent--
+        if (this.zStart < this.zEnd) {
+          this.zCurrent++
+        } else {
+          this.zCurrent--
+        }
       }
     }
   }

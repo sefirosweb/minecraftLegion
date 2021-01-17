@@ -27,7 +27,6 @@ module.exports = class template {
     const tool = this.getBestTool(block)
 
     if (tool) {
-      console.log(tool)
       this.bot.equip(tool, 'hand')
         .then(() => this.startDig(block))
         .catch(err => {

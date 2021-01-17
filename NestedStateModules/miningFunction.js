@@ -66,6 +66,13 @@ function minerJobFunction (bot, targets) {
 
     new StateTransition({
       parent: currentLayer,
+      child: exit,
+      name: 'currentLayer -> finished',
+      shouldTransition: () => currentLayer.isFinished()
+    }),
+
+    new StateTransition({
+      parent: currentLayer,
       child: isLavaOrWater,
       name: 'currentLayer -> checkLavaWater',
       // onTransition: () => {},
@@ -110,9 +117,6 @@ function minerJobFunction (bot, targets) {
       parent: isAir,
       child: moveToBlock,
       name: 'Is Solid Block',
-      onTransition: () => {
-        console.log('current target: ', targets.position)
-      },
       shouldTransition: () => !isAir.getIsValidBlockType()
     }),
 
