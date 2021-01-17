@@ -13,48 +13,62 @@ const BehaviorMinerChecks = require('./../BehaviorModules/BehaviorMinerChecks')
 const BehaviorEatFood = require('./../BehaviorModules/BehaviorEatFood')
 
 function minerJobFunction (bot, targets) {
-  const enter = new BehaviorIdle(targets)
-  enter.stateName = 'Enter'
-  enter.x = 100
-  enter.y = 100
-
-
-  const exit = new BehaviorIdle(targets)
-  exit.stateName = 'exit'
-
-  const test = new BehaviorIdle(targets)
-  test.stateName = 'test'
+  const start = new BehaviorIdle(targets)
+  start.stateName = 'Start'
+  start.x = 125
+  start.y = 113
 
   const loadConfig = new BehaviorLoadConfig(bot, targets)
   loadConfig.stateName = 'Load Bot Config'
+  loadConfig.x = 325
+  loadConfig.y = 113
+
+  const exit = new BehaviorIdle(targets)
+  exit.stateName = 'Exit'
+  exit.x = 325
+  exit.y = 313
 
   const currentLayer = new BehaviorMinerCurrentLayer(bot, targets)
   currentLayer.stateName = 'Check next Layer'
+  currentLayer.x = 525
+  currentLayer.y = 113
 
   const isLavaOrWater = new BehaviorIdle(bot, targets)
   isLavaOrWater.stateName = 'Check water and lava'
+  isLavaOrWater.x = 525
+  isLavaOrWater.y = 313
 
   const currentBlock = new BehaviorMinerCurrentBlock(bot, targets)
   currentBlock.stateName = 'Check next block'
+  currentBlock.x = 725
+  currentBlock.y = 113
 
   const mineBlock = new BehaviorDigBlock(bot, targets)
   mineBlock.stateName = 'Mine Block'
+  mineBlock.x = 825
+  mineBlock.y = 513
 
   const moveToBlock = new BehaviorMoveTo(bot, targets)
   moveToBlock.stateName = 'Move To Block'
+  moveToBlock.x = 925
+  moveToBlock.y = 313
 
   const minerChecks = new BehaviorMinerChecks(bot, targets)
   minerChecks.stateName = 'Check Inventory'
+  minerChecks.x = 525
+  minerChecks.y = 513
 
   const validFood = ['cooked_chicken']
   const eatFood = new BehaviorEatFood(bot, targets, validFood)
   eatFood.stateName = 'Eat Food'
+  eatFood.x = 725
+  eatFood.y = 313
 
   const transitions = [
     new StateTransition({
-      parent: enter,
+      parent: start,
       child: loadConfig,
-      name: 'enter -> loadConfig',
+      name: 'start -> loadConfig',
       shouldTransition: () => true
     }),
 
@@ -145,7 +159,7 @@ function minerJobFunction (bot, targets) {
 
   ]
 
-  const minerJobFunction = new NestedStateMachine(transitions, enter, exit)
+  const minerJobFunction = new NestedStateMachine(transitions, start, exit)
   minerJobFunction.stateName = 'Mining'
   return minerJobFunction
 }

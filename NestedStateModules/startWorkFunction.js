@@ -7,21 +7,37 @@ const {
 const BehaviorLoadConfig = require('./../BehaviorModules/BehaviorLoadConfig')
 
 function startWorkFunction (bot, targets) {
-  const enter = new BehaviorIdle(targets)
-  enter.stateName = 'Enter'
+  const start = new BehaviorIdle(targets)
+  start.stateName = 'Start'
+  start.x = 125
+  start.y = 113
 
   const guardJob = require('./guardJobFunction')(bot, targets)
+  guardJob.x = 525
+  guardJob.y = 313
+
   const archerJob = require('./archerJobFunction')(bot, targets)
+  archerJob.x = 525
+  archerJob.y = 113
+
   const farmerJob = require('./farmerJobFunction')(bot, targets)
+  farmerJob.x = 325
+  farmerJob.y = 350
+
   const minerJob = require('./minerJobFunction')(bot, targets)
+  minerJob.x = 325
+  minerJob.y = 50
+
   const loadConfig = new BehaviorLoadConfig(bot, targets)
   loadConfig.stateName = 'Load Bot Config'
+  loadConfig.x = 325
+  loadConfig.y = 213
 
   const transitions = [
     new StateTransition({
-      parent: enter,
+      parent: start,
       child: loadConfig,
-      name: 'enter -> loadConfig',
+      name: 'start -> loadConfig',
       shouldTransition: () => true
     }),
 
@@ -55,7 +71,7 @@ function startWorkFunction (bot, targets) {
 
   ]
 
-  const startWorkFunction = new NestedStateMachine(transitions, enter)
+  const startWorkFunction = new NestedStateMachine(transitions, start)
   startWorkFunction.stateName = 'Select Job'
   return startWorkFunction
 }

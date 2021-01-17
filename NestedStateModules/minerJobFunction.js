@@ -70,43 +70,68 @@ function minerJobFunction (bot, targets) {
   const movementsForAttack = new mineflayerpathfinder.Movements(bot, mcData)
   movementsForAttack.digCost = 100
 
-  const enter = new BehaviorIdle(targets)
-  enter.stateName = 'Enter'
+  const start = new BehaviorIdle(targets)
+  start.stateName = 'Start'
+  start.x = 125
+  start.y = 113
 
   const loadConfig = new BehaviorLoadConfig(bot, targets)
   loadConfig.stateName = 'Load Bot Config'
+  loadConfig.x = 325
+  loadConfig.y = 113
 
   const goEquipmentChest = new BehaviorMoveToArray(bot, targets, [], true, 1)
   goEquipmentChest.stateName = 'Go Equipment Chest'
+  goEquipmentChest.x = 725
+  goEquipmentChest.y = 113
 
   const goFoodChest = new BehaviorMoveToArray(bot, targets, [], true, 1)
   goFoodChest.stateName = 'Go Food Chest'
+  goFoodChest.x = 925
+  goFoodChest.y = 313
 
   const goDepositChest = new BehaviorMoveToArray(bot, targets, [], true, 1)
   goDepositChest.stateName = 'Go Deposit Chest'
+  goDepositChest.x = 225
+  goDepositChest.y = 513
 
   const getClosestMob = new BehaviorGetClosestEnemy(bot, targets)
 
   const getEquipments = new BehaviorWithdrawItemChest(bot, targets, equipmentItems)
   getEquipments.stateName = 'Get equipment items'
+  getEquipments.x = 925
+  getEquipments.y = 113
 
   const getConsumibles = new BehaviorWithdrawItemChest(bot, targets, consumibleItems)
   getConsumibles.stateName = 'Get Food and Arrows'
+  getConsumibles.x = 725
+  getConsumibles.y = 313
 
   const equip = new BehaviorEquip(bot, targets)
+  equip.stateName = 'Equip Armor'
+  equip.x = 1075
+  equip.y = 213
 
   const getReady = new BehaviorGetReady(bot, targets)
   getReady.stateName = 'Get Ready for Mining'
+  getReady.x = 525
+  getReady.y = 113
   getReady.itemsToBeReady = itemsToBeReady
 
   const eatFood = new BehaviorEatFood(bot, targets, validFood)
   eatFood.stateName = 'Eat Food'
+  eatFood.x = 525
+  eatFood.y = 313
 
   const eatFoodCombat = new BehaviorEatFood(bot, targets, validFood)
   eatFoodCombat.stateName = 'Eat Food In Combat'
+  eatFoodCombat.x = 825
+  eatFoodCombat.y = 513
 
   const depositItems = new BehaviorDepositChest(bot, targets)
   depositItems.stateName = 'Deposit Items'
+  depositItems.x = 225
+  depositItems.y = 313
 
   function getItemsToDeposit () {
     const items = getResumeInventory()
@@ -133,14 +158,18 @@ function minerJobFunction (bot, targets) {
   }
 
   const miningFunction = require('./miningFunction')(bot, targets)
+  miningFunction.x = 425
+  miningFunction.y = 513
 
   const combatFunction = require('./combatFunction')(bot, targets)
+  combatFunction.x = 625
+  combatFunction.y = 513
 
   const transitions = [
     new StateTransition({
-      parent: enter,
+      parent: start,
       child: loadConfig,
-      name: 'enter -> loadConfig',
+      name: 'start -> loadConfig',
       shouldTransition: () => true
     }),
 
@@ -280,7 +309,7 @@ function minerJobFunction (bot, targets) {
 
   ]
 
-  const minerJobFunction = new NestedStateMachine(transitions, enter)
+  const minerJobFunction = new NestedStateMachine(transitions, start)
   minerJobFunction.stateName = 'Miner Job'
   return minerJobFunction
 }

@@ -67,66 +67,108 @@ function guardJobFunction (bot, targets) {
   const movementsForAttack = new mineflayerpathfinder.Movements(bot, mcData)
   movementsForAttack.digCost = 100
 
-  const enter = new BehaviorIdle(targets)
-  enter.stateName = 'Enter'
+  const start = new BehaviorIdle(targets)
+  start.stateName = 'Start'
+  start.x = 125
+  start.y = 113
 
   const checkItemsToDeposit = new BehaviorIdle(targets)
   checkItemsToDeposit.stateName = 'Verify Items To Deposit'
+  checkItemsToDeposit.x = 525
+  checkItemsToDeposit.y = 313
 
   const loadConfig = new BehaviorLoadConfig(bot, targets)
   loadConfig.stateName = 'Load Bot Config'
+  loadConfig.x = 325
+  loadConfig.y = 113
 
   const patrol = new BehaviorMoveToArray(bot, targets)
   patrol.stateName = 'Patrol'
+  patrol.x = 525
+  patrol.y = 513
 
   const getClosestMob = new BehaviorGetClosestEnemy(bot, targets)
 
   const getReady = new BehaviorGetReady(bot, targets)
   getReady.stateName = 'Get Ready for Patrol'
+  getReady.x = 525
+  getReady.y = 113
   getReady.itemsToBeReady = itemsToBeReady
 
   const goEquipmentChest = new BehaviorMoveToArray(bot, targets, [], true, 1)
   goEquipmentChest.stateName = 'Go Equipment Chest'
+  goEquipmentChest.x = 725
+  goEquipmentChest.y = 113
 
   const goFoodChest = new BehaviorMoveToArray(bot, targets, [], true, 1)
   goFoodChest.stateName = 'Go Food Chest'
+  goFoodChest.x = 1125
+  goFoodChest.y = 213
 
   const goDepositChest = new BehaviorMoveToArray(bot, targets, [], true, 1)
   goDepositChest.stateName = 'Go Deposit Chest'
+  goDepositChest.x = 325
+  goDepositChest.y = 313
 
   const depositItems = new BehaviorDepositChest(bot, targets)
   depositItems.stateName = 'Deposit Items'
+  depositItems.x = 325
+  depositItems.y = 213
 
   const equip = new BehaviorEquip(bot, targets)
+  equip.x = 1125
+  equip.y = 113
+
+  equip.stateName = 'Equip items 1'
+  equip.x = 1125
+  equip.y = 113
+
   const equip2 = new BehaviorEquip(bot, targets)
-  equip.stateName = 'Equip items'
-  equip2.stateName = 'Equip items'
+  equip2.stateName = 'Equip items 2'
+  equip2.x = 725
+  equip2.y = 413
 
   const getEquipments = new BehaviorWithdrawItemChest(bot, targets, equipmentItems)
   getEquipments.stateName = 'Get equipment items'
+  getEquipments.x = 925
+  getEquipments.y = 113
 
   const getConsumibles = new BehaviorWithdrawItemChest(bot, targets, consumibleItems)
   getConsumibles.stateName = 'Get Food and Arrows'
+  getConsumibles.x = 925
+  getConsumibles.y = 213
 
   const eatFood = new BehaviorEatFood(bot, targets, validFood)
   eatFood.stateName = 'Eat Food'
+  eatFood.x = 725
+  eatFood.y = 213
 
   const eatFoodCombat = new BehaviorEatFood(bot, targets, validFood)
   eatFoodCombat.stateName = 'Eat Food In Combat'
+  eatFoodCombat.x = 1125
+  eatFoodCombat.y = 513
 
   const goToObject = new BehaviorMoveTo(bot, targets)
   goToObject.stateName = 'Pick up item'
+  goToObject.x = 725
+  goToObject.y = 625
 
   const findItem = new BehaviorFindItems(bot, targets)
   findItem.stateName = 'Find Item Dropped'
 
   const helpFriend = new BehaviorHelpFriend(bot, targets, true)
   helpFriend.stateName = 'Check friend needs help'
+  helpFriend.x = 525
+  helpFriend.y = 813
 
   const goFriend = new BehaviorFollowEntity(bot, targets)
   goFriend.stateName = 'Go To Help Friend'
+  goFriend.x = 725
+  goFriend.y = 813
 
   const combatFunction = require('./combatFunction')(bot, targets)
+  combatFunction.x = 925
+  combatFunction.y = 513
 
   function getItemsToDeposit () {
     const items = getResumeInventory()
@@ -152,9 +194,9 @@ function guardJobFunction (bot, targets) {
 
   const transitions = [
     new StateTransition({
-      parent: enter,
+      parent: start,
       child: loadConfig,
-      name: 'enter -> loadConfig',
+      name: 'start -> loadConfig',
       shouldTransition: () => true
     }),
 
@@ -376,7 +418,7 @@ function guardJobFunction (bot, targets) {
 
   ]
 
-  const guardJobFunction = new NestedStateMachine(transitions, enter)
+  const guardJobFunction = new NestedStateMachine(transitions, start)
   guardJobFunction.stateName = 'Guard Job'
   return guardJobFunction
 }

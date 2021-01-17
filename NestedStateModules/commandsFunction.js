@@ -10,20 +10,30 @@ const botWebsocket = require('../modules/botWebsocket')
 const customEvents = require('../modules/customEvents')
 
 function commandsFunction (bot, targets) {
-  const enter = new BehaviorIdle(targets)
-  enter.stateName = 'Enter'
+  const start = new BehaviorIdle(targets)
+  start.stateName = 'Start'
+  start.x = 125
+  start.y = 113
 
   const exit = new BehaviorIdle(targets)
   exit.stateName = 'Exit'
+  exit.x = 350
+  exit.y = 250
 
   const followPlayer = new BehaviorFollowEntity(bot, targets)
   followPlayer.stateName = 'Follow Player'
+  followPlayer.x = 125
+  followPlayer.y = 313
 
   const lookAtFollowTarget = new BehaviorLookAtEntity(bot, targets)
   lookAtFollowTarget.stateName = 'Look Player'
+  lookAtFollowTarget.x = 550
+  lookAtFollowTarget.y = 313
 
   const lookAtPlayersState = new BehaviorLookAtEntity(bot, targets)
   lookAtPlayersState.stateName = 'Stay In Position'
+  lookAtPlayersState.x = 350
+  lookAtPlayersState.y = 113
 
   const transitions = [
     new StateTransition({ // 0
@@ -65,7 +75,7 @@ function commandsFunction (bot, targets) {
       onTransition: () => bot.chat('I wait here!')
     }),
     new StateTransition({ // 6
-      parent: enter,
+      parent: start,
       child: lookAtPlayersState,
       name: 'Enter to nested',
       onTransition: () => customEvents.addEvent('chat', botChatCommandFunctionListener),
@@ -308,7 +318,7 @@ function commandsFunction (bot, targets) {
     bot.chat('Oooh my treasure')
   }
 
-  const commandsFunction = new NestedStateMachine(transitions, enter, exit)
+  const commandsFunction = new NestedStateMachine(transitions, start, exit)
   commandsFunction.stateName = 'Commands Bot'
   return commandsFunction
 }

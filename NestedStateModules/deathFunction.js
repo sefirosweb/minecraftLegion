@@ -7,10 +7,10 @@ const BehaviorGetPlayer = require('./../BehaviorModules/BehaviorGetPlayer')
 const botWebsocket = require('../modules/botWebsocket')
 
 function deathFunction (bot, targets) {
-  const enter = new BehaviorIdle(targets)
-  enter.stateName = 'Enter'
-  enter.x = 125
-  enter.y = 113
+  const start = new BehaviorIdle(targets)
+  start.stateName = 'Start'
+  start.x = 125
+  start.y = 113
 
   const startWork = require('./startWorkFunction')(bot, targets)
   startWork.x = 325
@@ -27,14 +27,14 @@ function deathFunction (bot, targets) {
 
   const transitions = [
     new StateTransition({
-      parent: enter,
+      parent: start,
       child: startWork,
-      name: 'enter -> startWork',
+      name: 'start -> startWork',
       shouldTransition: () => true
     }),
 
     new StateTransition({
-      parent: enter,
+      parent: start,
       child: playerEntity,
       name: 'Player say: hi'
     }),
@@ -92,7 +92,7 @@ function deathFunction (bot, targets) {
     }
   })
 
-  const deathFunction = new NestedStateMachine(transitions, enter)
+  const deathFunction = new NestedStateMachine(transitions, start)
   deathFunction.stateName = 'After death function'
   return deathFunction
 }

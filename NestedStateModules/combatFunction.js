@@ -20,22 +20,30 @@ function combatFunction (bot, targets) {
   const rangeFollowToShortAttack = 5
   const timeBowColdown = 1500
 
-  const enter = new BehaviorIdle(targets)
-  enter.stateName = 'Enter'
-  enter.x = 100
-  enter.y = 100
+  const start = new BehaviorIdle(targets)
+  start.stateName = 'Start'
+  start.x = 125
+  start.y = 113
 
   const exit = new BehaviorIdle(targets)
   exit.stateName = 'Exit'
+  exit.x = 575
+  exit.y = 263
 
   const attack = new BehaviorAttack(bot, targets)
   attack.stateName = 'Attack'
+  attack.x = 325
+  attack.y = 263
 
   const longRangeAttack = new BehaviorLongAttack(bot, targets)
   longRangeAttack.stateName = 'Long Range Attack'
+  longRangeAttack.x = 725
+  longRangeAttack.y = 413
 
   const followMob = new BehaviorFollowEntity(bot, targets)
   followMob.stateName = 'Follow Enemy'
+  followMob.x = 725
+  followMob.y = 113
 
   let targetGrade = false
   const prevPlayerPositions = []
@@ -167,14 +175,14 @@ function combatFunction (bot, targets) {
     // END Mob is dead ***********
 
     new StateTransition({
-      parent: enter,
+      parent: start,
       child: attack,
       onTransition: () => {
         botWebsocket.emitCombat(true)
         botWebsocket.log('Start combat ' + targets.entity.mobType + ' ' + JSON.stringify(targets.entity.position))
         startGrades()
       },
-      name: 'enter -> followMob',
+      name: 'start -> followMob',
       shouldTransition: () => true
     }),
 
@@ -282,7 +290,7 @@ function combatFunction (bot, targets) {
 
   ]
 
-  const combatFunction = new NestedStateMachine(transitions, enter, exit)
+  const combatFunction = new NestedStateMachine(transitions, start, exit)
   combatFunction.stateName = 'Combat'
   return combatFunction
 }
