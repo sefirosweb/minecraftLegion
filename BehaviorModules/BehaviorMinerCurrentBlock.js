@@ -52,14 +52,25 @@ module.exports = class BehaviorMinerCurrentBlock {
     }
     this.yCurrent = parseInt(this.yStart)
 
-    this.xStart = parseInt(this.minerCords.xStart)
-    this.zStart = parseInt(this.minerCords.zStart)
+    if (this.minerCords.orientation === 'n' || this.minerCords.orientation === 'e') {
+      this.xStart = parseInt(this.minerCords.xStart)
+      this.zStart = parseInt(this.minerCords.zStart)
 
-    this.xEnd = parseInt(this.minerCords.xEnd)
-    this.zEnd = parseInt(this.minerCords.zEnd)
+      this.xEnd = parseInt(this.minerCords.xEnd)
+      this.zEnd = parseInt(this.minerCords.zEnd)
 
-    this.xCurrent = parseInt(this.xStart)
-    this.zCurrent = parseInt(this.zStart)
+      this.xCurrent = parseInt(this.xStart)
+      this.zCurrent = parseInt(this.zStart)
+    } else {
+      this.xStart = parseInt(this.minerCords.xEnd)
+      this.zStart = parseInt(this.minerCords.zEnd)
+
+      this.xEnd = parseInt(this.minerCords.xStart)
+      this.zEnd = parseInt(this.minerCords.zStart)
+
+      this.xCurrent = parseInt(this.xStart)
+      this.zCurrent = parseInt(this.zStart)
+    }
   }
 
   onStateEntered () {
@@ -72,7 +83,13 @@ module.exports = class BehaviorMinerCurrentBlock {
       this.isLayerFinished = true
       botWebsocket.log('Current layer finished ' + this.yCurrent)
     } else {
-      this.zNext()
+      if (this.minerCords.orientation === 'n' || this.minerCords.orientation === 's') {
+        this.zNext()
+      }
+      if (this.minerCords.orientation === 'e' || this.minerCords.orientation === 'w') {
+        this.xNext()
+      }
+
       if (this.calculateIsValid()) {
         this.isEndFinished = true
       } else {
@@ -106,7 +123,12 @@ module.exports = class BehaviorMinerCurrentBlock {
       const temp = this.xEnd
       this.xEnd = this.xStart
       this.xStart = temp
-      this.yNext()
+      if (this.minerCords.orientation === 'n' || this.minerCords.orientation === 's') {
+        this.yNext()
+      }
+      if (this.minerCords.orientation === 'e' || this.minerCords.orientation === 'w') {
+        this.zNext()
+      }
     } else {
       if (this.xStart < this.xEnd) {
         this.xCurrent++
@@ -121,7 +143,12 @@ module.exports = class BehaviorMinerCurrentBlock {
       const temp = this.zEnd
       this.zEnd = this.zStart
       this.zStart = temp
-      this.xNext()
+      if (this.minerCords.orientation === 'n' || this.minerCords.orientation === 's') {
+        this.xNext()
+      }
+      if (this.minerCords.orientation === 'e' || this.minerCords.orientation === 'w') {
+        this.yNext()
+      }
     } else {
       if (this.firstBlockOnLayer) {
         this.firstBlockOnLayer = false

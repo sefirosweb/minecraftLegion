@@ -77,6 +77,8 @@ module.exports = class BehaviorMinerCurrentLayer {
       minerCoords.yEnd = this.currentLayer
       minerCoords.zEnd = this.minerCords.zEnd
 
+      minerCoords.orientation = this.minerCords.orientation
+
       return minerCoords
     } else {
       throw console.error('No soportado otro metodo')

@@ -6,13 +6,9 @@ const {
 } = require('mineflayer-statemachine')
 
 const BehaviorLoadConfig = require('./../BehaviorModules/BehaviorLoadConfig')
-const BehaviorGetBlockInfo = require('./../BehaviorModules/BehaviorGetBlockInfo')
 const BehaviorMinerCurrentLayer = require('./../BehaviorModules/BehaviorMinerCurrentLayer')
 const BehaviorMinerCurrentBlock = require('./../BehaviorModules/BehaviorMinerCurrentBlock')
 const BehaviorDigBlock = require('./../BehaviorModules/BehaviorDigBlock')
-
-const lavaOrWaterBlock = ['water', 'lava']
-const airBlock = ['air']
 
 function minerJobFunction (bot, targets) {
   const enter = new BehaviorIdle(targets)
