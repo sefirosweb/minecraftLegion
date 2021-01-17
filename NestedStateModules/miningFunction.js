@@ -2,7 +2,8 @@ const {
   StateTransition,
   BehaviorIdle,
   NestedStateMachine,
-  BehaviorMoveTo
+  BehaviorMoveTo,
+  BehaviorPlaceBlock
 } = require('mineflayer-statemachine')
 
 const BehaviorLoadConfig = require('./../BehaviorModules/BehaviorLoadConfig')
@@ -11,6 +12,7 @@ const BehaviorMinerCurrentBlock = require('./../BehaviorModules/BehaviorMinerCur
 const BehaviorDigBlock = require('./../BehaviorModules/BehaviorDigBlock')
 const BehaviorMinerChecks = require('./../BehaviorModules/BehaviorMinerChecks')
 const BehaviorEatFood = require('./../BehaviorModules/BehaviorEatFood')
+const BehaviorMinerCheckLayer = require('./../BehaviorModules/BehaviorMinerCheckLayer')
 
 function minerJobFunction (bot, targets) {
   const start = new BehaviorIdle(targets)
@@ -25,18 +27,13 @@ function minerJobFunction (bot, targets) {
 
   const exit = new BehaviorIdle(targets)
   exit.stateName = 'Exit'
-  exit.x = 325
+  exit.x = 125
   exit.y = 313
 
-  const currentLayer = new BehaviorMinerCurrentLayer(bot, targets)
-  currentLayer.stateName = 'Check next Layer'
-  currentLayer.x = 525
-  currentLayer.y = 113
-
-  const isLavaOrWater = new BehaviorIdle(bot, targets)
-  isLavaOrWater.stateName = 'Check water and lava'
-  isLavaOrWater.x = 525
-  isLavaOrWater.y = 313
+  const nextLayer = new BehaviorMinerCurrentLayer(bot, targets)
+  nextLayer.stateName = 'Next Layer'
+  nextLayer.x = 525
+  nextLayer.y = 113
 
   const currentBlock = new BehaviorMinerCurrentBlock(bot, targets)
   currentBlock.stateName = 'Check next block'
@@ -46,17 +43,32 @@ function minerJobFunction (bot, targets) {
   const mineBlock = new BehaviorDigBlock(bot, targets)
   mineBlock.stateName = 'Mine Block'
   mineBlock.x = 825
-  mineBlock.y = 513
+  mineBlock.y = 613
 
-  const moveToBlock = new BehaviorMoveTo(bot, targets)
-  moveToBlock.stateName = 'Move To Block'
-  moveToBlock.x = 925
-  moveToBlock.y = 313
+  const moveToBlock1 = new BehaviorMoveTo(bot, targets)
+  moveToBlock1.stateName = 'Move To Block 1'
+  moveToBlock1.x = 925
+  moveToBlock1.y = 313
+
+  const moveToBlock2 = new BehaviorMoveTo(bot, targets)
+  moveToBlock2.stateName = 'Move To Block 2'
+  moveToBlock2.x = 325
+  moveToBlock2.y = 450
+
+  const placeBlock = new BehaviorPlaceBlock(bot, targets)
+  placeBlock.stateName = 'Place Block'
+  placeBlock.x = 325
+  placeBlock.y = 315
 
   const minerChecks = new BehaviorMinerChecks(bot, targets)
   minerChecks.stateName = 'Check Inventory'
-  minerChecks.x = 525
-  minerChecks.y = 513
+  minerChecks.x = 325
+  minerChecks.y = 613
+
+  const checkLayer = new BehaviorMinerCheckLayer(bot, targets)
+  checkLayer.stateName = 'Check Lava & Water'
+  checkLayer.x = 525
+  checkLayer.y = 313
 
   const validFood = ['cooked_chicken']
   const eatFood = new BehaviorEatFood(bot, targets, validFood)
@@ -74,59 +86,82 @@ function minerJobFunction (bot, targets) {
 
     new StateTransition({
       parent: loadConfig,
-      child: currentLayer,
-      name: 'loadConfig -> currentLayer',
+      child: nextLayer,
+      name: 'loadConfig -> nextLayer',
       onTransition: () => {
         targets.entity = undefined
-        currentLayer.setMinerCords(loadConfig.getMiner())
+        nextLayer.setMinerCords(loadConfig.getMiner())
       },
       shouldTransition: () => true
     }),
 
     new StateTransition({
-      parent: currentLayer,
+      parent: nextLayer,
       child: exit,
-      name: 'currentLayer -> finished',
-      shouldTransition: () => currentLayer.isFinished()
+      name: 'nextLayer -> finished',
+      shouldTransition: () => nextLayer.isFinished()
     }),
 
     new StateTransition({
-      parent: currentLayer,
-      child: isLavaOrWater,
-      name: 'currentLayer -> checkLavaWater',
-      // onTransition: () => {},
+      parent: nextLayer,
+      child: checkLayer,
+      name: 'nextLayer -> checkLavaWater',
+      onTransition: () => {
+        checkLayer.setMinerCords(nextLayer.getCurrentLayerCoords())
+      },
       shouldTransition: () => true
     }),
 
     new StateTransition({
-      parent: isLavaOrWater,
+      parent: checkLayer,
+      child: moveToBlock2,
+      name: 'checkLavaWater -> moveToBlock2',
+      shouldTransition: () => checkLayer.getFoundLavaOrWater()
+    }),
+
+    new StateTransition({
+      parent: moveToBlock2,
+      child: placeBlock,
+      name: 'checkLavaWater -> moveToBlock2',
+      shouldTransition: () => moveToBlock2.distanceToTarget() < 2
+    }),
+
+    new StateTransition({
+      parent: placeBlock,
+      child: checkLayer,
+      name: 'checkLavaWater -> moveToBlock2',
+      shouldTransition: () => placeBlock.isFinished
+    }),
+
+    new StateTransition({
+      parent: checkLayer,
       child: eatFood,
       name: 'checkLavaWater -> currentBlock',
       onTransition: () => {
-        currentBlock.setMinerCords(currentLayer.getCurrentLayerCoords())
+        currentBlock.setMinerCords(nextLayer.getCurrentLayerCoords())
       },
-      shouldTransition: () => true
+      shouldTransition: () => checkLayer.isFinished()
     }),
 
     new StateTransition({
       parent: currentBlock,
-      child: moveToBlock,
+      child: moveToBlock1,
       name: 'Check is Air',
       shouldTransition: () => currentBlock.isFinished()
     }),
 
     new StateTransition({
       parent: currentBlock,
-      child: currentLayer,
+      child: nextLayer,
       name: 'Finished chunk',
       shouldTransition: () => currentBlock.getLayerIsFinished()
     }),
 
     new StateTransition({
-      parent: moveToBlock,
+      parent: moveToBlock1,
       child: mineBlock,
-      name: 'Move To Block',
-      shouldTransition: () => moveToBlock.distanceToTarget() < 3
+      name: 'Move To Block 1',
+      shouldTransition: () => moveToBlock1.distanceToTarget() < 3
     }),
 
     new StateTransition({

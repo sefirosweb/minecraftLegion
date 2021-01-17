@@ -63,7 +63,7 @@ module.exports = class BehaviorMinerCurrentBlock {
 
       this.xCurrent = parseInt(this.xStart)
       this.zCurrent = parseInt(this.zStart)
-    } else {
+    } else { // S & W
       this.xStart = parseInt(this.minerCords.xEnd)
       this.zStart = parseInt(this.minerCords.zEnd)
 

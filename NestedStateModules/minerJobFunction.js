@@ -25,7 +25,8 @@ const excludeItemsDeposit = [
   { item: 'shield', quantity: 1 },
   { item: 'bow', quantity: 1 },
   { item: 'arrow', quantity: 128 },
-  { item: 'cooked_chicken', quantity: 64 }
+  { item: 'cooked_chicken', quantity: 64 },
+  { item: 'cobblestone', quantity: 64 }
 ]
 
 // Check this items in inventory for go withdraw
