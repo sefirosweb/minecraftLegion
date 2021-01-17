@@ -3,6 +3,9 @@ module.exports = class BehaviorGetPlayer {
     this.bot = bot
     this.targets = targets
     this.stateName = 'BehaviorGetPlayer'
+    this.x = 0
+    this.y = 0
+
     this.playerIsFound = false
     this.playername = false
   }

@@ -5,6 +5,8 @@ module.exports = class BehaviorMinerChecks {
     this.bot = bot
     this.targets = targets
     this.stateName = 'BehaviorMinerChecks'
+    this.x = 0
+    this.y = 0
 
     this.inventoryModule = require('../modules/inventoryModule')(bot)
     this.isEndFinished = false

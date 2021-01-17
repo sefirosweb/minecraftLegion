@@ -5,6 +5,8 @@ module.exports = class BehaviorDepositChest {
     this.bot = bot
     this.targets = targets
     this.stateName = 'BehaviorDepositChest'
+    this.x = 0
+    this.y = 0
 
     this.isEndFinished = false
     this.chest = false

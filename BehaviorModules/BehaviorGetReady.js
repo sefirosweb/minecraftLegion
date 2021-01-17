@@ -3,6 +3,8 @@ module.exports = class BehaviorGetReady {
     this.bot = bot
     this.targets = targets
     this.stateName = 'BehaviorGetReady'
+    this.x = 0
+    this.y = 0
 
     this.isReady = false
     this.itemsToBeReady = []

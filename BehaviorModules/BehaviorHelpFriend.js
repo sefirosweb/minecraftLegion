@@ -5,6 +5,8 @@ module.exports = class BehaviorHelpFriend {
     this.bot = bot
     this.targets = targets
     this.stateName = 'BehaviorHelpFriend'
+    this.x = 0
+    this.y = 0
 
     this.helpFriend = helpFriend
 

@@ -3,6 +3,8 @@ module.exports = class BehaviorFindItems {
     this.bot = bot
     this.targets = targets
     this.stateName = 'BehaviorFindItems'
+    this.x = 0
+    this.y = 0
 
     this.isEndFinished = false
     this.distanceToFind = distanceToFind

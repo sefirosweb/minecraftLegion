@@ -6,6 +6,8 @@ module.exports = class BehaviorMoveToArray {
     this.bot = bot
     this.targets = targets
     this.stateName = 'BehaviorMoveToArray'
+    this.x = 0
+    this.y = 0
 
     this.patrol = patrol
     this.startNearestPoint = startNearestPoint

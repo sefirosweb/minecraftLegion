@@ -4,6 +4,8 @@ module.exports = class BehaviorMinerCurrentLayer {
     this.bot = bot
     this.targets = targets
     this.stateName = 'BehaviorMinerCurrentLayer'
+    this.x = 0
+    this.y = 0
 
     this.minerCords = false
     this.currentLayer = false

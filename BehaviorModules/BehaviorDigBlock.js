@@ -3,6 +3,8 @@ module.exports = class template {
     this.bot = bot
     this.targets = targets
     this.stateName = 'BehaviorDigBlock'
+    this.x = 0
+    this.y = 0
 
     this.isEndFinished = false
   }
