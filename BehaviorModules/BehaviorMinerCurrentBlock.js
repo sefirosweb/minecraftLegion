@@ -1,10 +1,12 @@
 const botWebsocket = require('../modules/botWebsocket')
+const Vec3 = require('vec3')
 module.exports = class BehaviorMinerCurrentBlock {
   constructor (bot, targets) {
     this.bot = bot
     this.targets = targets
     this.stateName = 'BehaviorMinerCurrentBlock'
 
+    this.blockInValidType = ['air', 'lava']
     this.minerCords = false
 
     this.xStart = false
@@ -19,6 +21,7 @@ module.exports = class BehaviorMinerCurrentBlock {
     this.yCurrent = false
     this.zCurrent = false
 
+    this.isLayerFinished = false
     this.isEndFinished = false
     this.firstBlockOnLayer = true
   }
@@ -27,8 +30,12 @@ module.exports = class BehaviorMinerCurrentBlock {
     return this.isEndFinished
   }
 
+  getLayerIsFinished () {
+    return this.isLayerFinished
+  }
+
   setMinerCords (minerCords) {
-    this.isEndFinished = false
+    this.isLayerFinished = false
     this.firstBlockOnLayer = true
     this.minerCords = minerCords
     this.startBlock()
@@ -56,16 +63,38 @@ module.exports = class BehaviorMinerCurrentBlock {
   }
 
   onStateEntered () {
+    this.isEndFinished = false
     if (
       this.yCurrent === this.yEnd &&
       this.zCurrent === this.zEnd &&
       this.xCurrent === this.xEnd
     ) {
-      this.isEndFinished = true
+      this.isLayerFinished = true
       botWebsocket.log('Current layer finished ' + this.yCurrent)
     } else {
       this.zNext()
+      if (this.calculateIsValid()) {
+        this.isEndFinished = true
+      } else {
+        this.onStateEntered()
+      }
     }
+  }
+
+  getBlockType () {
+    const position = new Vec3(this.xCurrent, this.yCurrent, this.zCurrent)
+    return this.bot.blockAt(position)
+  }
+
+  calculateIsValid () {
+    const block = this.getBlockType()
+    const isValidBlockType = this.blockInValidType.find(b => b === block.name)
+    if (isValidBlockType === undefined) {
+      this.targets.position = block.position // I detect is not air / lava / water then go to this position
+      return true
+    }
+
+    return false
   }
 
   yNext () {

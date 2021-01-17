@@ -33,9 +33,6 @@ function minerJobFunction (bot, targets) {
   const isLavaOrWater = new BehaviorIdle(bot, targets)
   isLavaOrWater.stateName = 'Check water and lava'
 
-  const isAir = new BehaviorGetBlockInfo(bot, targets, airBlock)
-  isAir.stateName = 'Check Is Air'
-
   const currentBlock = new BehaviorMinerCurrentBlock(bot, targets)
   currentBlock.stateName = 'Check next block'
 
@@ -91,33 +88,16 @@ function minerJobFunction (bot, targets) {
 
     new StateTransition({
       parent: currentBlock,
-      child: isAir,
+      child: moveToBlock,
       name: 'Check is Air',
-      onTransition: () => {
-        isAir.setPosition(currentBlock.getCurrentBlock())
-      },
-      shouldTransition: () => !currentBlock.isFinished()
+      shouldTransition: () => currentBlock.isFinished()
     }),
 
     new StateTransition({
       parent: currentBlock,
       child: currentLayer,
       name: 'Finished chunk',
-      shouldTransition: () => currentBlock.isFinished()
-    }),
-
-    new StateTransition({
-      parent: isAir,
-      child: currentBlock,
-      name: 'Is Air, go next',
-      shouldTransition: () => isAir.getIsValidBlockType()
-    }),
-
-    new StateTransition({
-      parent: isAir,
-      child: moveToBlock,
-      name: 'Is Solid Block',
-      shouldTransition: () => !isAir.getIsValidBlockType()
+      shouldTransition: () => currentBlock.getLayerIsFinished()
     }),
 
     new StateTransition({

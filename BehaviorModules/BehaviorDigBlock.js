@@ -58,6 +58,11 @@ module.exports = class template {
     const items = this.bot.inventory.items()
     const mcData = require('minecraft-data')(this.bot.version)
     const toolsForMaterial = mcData.materials[block.material]
+
+    if (toolsForMaterial === undefined) {
+      return undefined
+    }
+
     const toolsIdForMaterial = Object.keys(toolsForMaterial).map(function (x) {
       return parseInt(x, 10)
     })
