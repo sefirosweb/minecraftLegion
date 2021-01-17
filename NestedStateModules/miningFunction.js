@@ -10,6 +10,7 @@ const BehaviorMinerCurrentLayer = require('./../BehaviorModules/BehaviorMinerCur
 const BehaviorMinerCurrentBlock = require('./../BehaviorModules/BehaviorMinerCurrentBlock')
 const BehaviorDigBlock = require('./../BehaviorModules/BehaviorDigBlock')
 const BehaviorMinerChecks = require('./../BehaviorModules/BehaviorMinerChecks')
+const BehaviorEatFood = require('./../BehaviorModules/BehaviorEatFood')
 
 function minerJobFunction (bot, targets) {
   const enter = new BehaviorIdle(targets)
@@ -41,6 +42,10 @@ function minerJobFunction (bot, targets) {
 
   const minerChecks = new BehaviorMinerChecks(bot, targets)
   minerChecks.stateName = 'Check Inventory'
+
+  const validFood = ['cooked_chicken']
+  const eatFood = new BehaviorEatFood(bot, targets, validFood)
+  eatFood.stateName = 'Eat Food'
 
   const transitions = [
     new StateTransition({
@@ -78,7 +83,7 @@ function minerJobFunction (bot, targets) {
 
     new StateTransition({
       parent: isLavaOrWater,
-      child: currentBlock,
+      child: eatFood,
       name: 'checkLavaWater -> currentBlock',
       onTransition: () => {
         currentBlock.setMinerCords(currentLayer.getCurrentLayerCoords())
@@ -116,9 +121,16 @@ function minerJobFunction (bot, targets) {
 
     new StateTransition({
       parent: minerChecks,
-      child: currentBlock,
+      child: eatFood,
       name: 'Continue Mining',
       shouldTransition: () => minerChecks.isFinished() && minerChecks.getIsReady()
+    }),
+
+    new StateTransition({
+      parent: eatFood,
+      child: currentBlock,
+      name: 'Continue Mining',
+      shouldTransition: () => eatFood.isFinished()
     }),
 
     new StateTransition({

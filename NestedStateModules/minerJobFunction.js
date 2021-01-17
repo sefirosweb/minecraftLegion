@@ -102,6 +102,9 @@ function minerJobFunction (bot, targets) {
   const eatFood = new BehaviorEatFood(bot, targets, validFood)
   eatFood.stateName = 'Eat Food'
 
+  const eatFoodCombat = new BehaviorEatFood(bot, targets, validFood)
+  eatFoodCombat.stateName = 'Eat Food In Combat'
+
   const depositItems = new BehaviorDepositChest(bot, targets)
   depositItems.stateName = 'Deposit Items'
 
@@ -130,6 +133,8 @@ function minerJobFunction (bot, targets) {
   }
 
   const miningFunction = require('./miningFunction')(bot, targets)
+
+  const combatFunction = require('./combatFunction')(bot, targets)
 
   const transitions = [
     new StateTransition({
@@ -240,6 +245,37 @@ function minerJobFunction (bot, targets) {
       child: getReady,
       name: 'depositItems -> getReady',
       shouldTransition: () => depositItems.isFinished()
+    }),
+
+    new StateTransition({
+      parent: miningFunction,
+      child: combatFunction,
+      name: 'miningFunction -> try getClosestMob',
+      shouldTransition: () => {
+        getClosestMob.onStateEntered()
+        return targets.entity !== undefined
+      }
+    }),
+
+    new StateTransition({
+      parent: combatFunction,
+      child: eatFood,
+      name: 'Mob is dead',
+      shouldTransition: () => combatFunction.isFinished()
+    }),
+
+    new StateTransition({
+      parent: combatFunction,
+      child: eatFoodCombat,
+      name: 'Eat In Combat',
+      shouldTransition: () => bot.health < 15 && bot.food !== 20
+    }),
+
+    new StateTransition({
+      parent: eatFoodCombat,
+      child: combatFunction,
+      name: 'End Eat In Combat',
+      shouldTransition: () => eatFoodCombat.isFinished()
     })
 
   ]
