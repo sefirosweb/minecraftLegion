@@ -75,9 +75,17 @@ function createNewBot (botName, botPassword = '') {
     const targets = {}
     const startState = new BehaviorIdle(targets)
     startState.stateName = 'Start'
+    startState.x = 125
+    startState.y = 113
+
     const watiState = new BehaviorIdle(targets)
     watiState.stateName = 'Wait Second'
+    watiState.x = 125
+    watiState.y = 313
+
     const death = require('./NestedStateModules/deathFunction')(bot, targets)
+    death.x = 425
+    death.y = 213
 
     const transitions = [
       new StateTransition({
@@ -117,7 +125,7 @@ function createNewBot (botName, botPassword = '') {
     })
 
     const root = new NestedStateMachine(transitions, startState)
-    root.stateName = 'main'
+    root.stateName = 'Main'
     const stateMachine = new BotStateMachine(bot, root)
 
     let webserver = {}

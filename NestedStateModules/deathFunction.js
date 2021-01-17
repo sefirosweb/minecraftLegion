@@ -9,11 +9,21 @@ const botWebsocket = require('../modules/botWebsocket')
 function deathFunction (bot, targets) {
   const enter = new BehaviorIdle(targets)
   enter.stateName = 'Enter'
+  enter.x = 125
+  enter.y = 113
 
   const startWork = require('./startWorkFunction')(bot, targets)
+  startWork.x = 325
+  startWork.y = 313
+
   const commands = require('./commandsFunction')(bot, targets)
+  commands.x = 525
+  commands.y = 113
+
   const playerEntity = new BehaviorGetPlayer(bot, targets)
   playerEntity.stateName = 'Search Player'
+  playerEntity.x = 325
+  playerEntity.y = 113
 
   const transitions = [
     new StateTransition({

@@ -22,6 +22,8 @@ function combatFunction (bot, targets) {
 
   const enter = new BehaviorIdle(targets)
   enter.stateName = 'Enter'
+  enter.x = 100
+  enter.y = 100
 
   const exit = new BehaviorIdle(targets)
   exit.stateName = 'Exit'

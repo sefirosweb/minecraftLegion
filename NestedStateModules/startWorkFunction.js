@@ -56,7 +56,7 @@ function startWorkFunction (bot, targets) {
   ]
 
   const startWorkFunction = new NestedStateMachine(transitions, enter)
-  startWorkFunction.stateName = 'startWorkFunction'
+  startWorkFunction.stateName = 'Select Job'
   return startWorkFunction
 }
 
