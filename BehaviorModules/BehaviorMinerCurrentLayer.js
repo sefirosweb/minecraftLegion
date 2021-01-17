@@ -13,6 +13,7 @@ module.exports = class BehaviorMinerCurrentLayer {
     this.nextLayer = false
     this.firstBlockLayer = true
     this.isEndFinished = false
+    this.xIsInverted = false
   }
 
   isFinished () {
@@ -24,6 +25,7 @@ module.exports = class BehaviorMinerCurrentLayer {
     this.minerCords = minerCords
     this.firstBlockLayer = true
     this.isEndFinished = false
+    this.xIsInverted = false
     this.startLayer()
   }
 
@@ -50,20 +52,31 @@ module.exports = class BehaviorMinerCurrentLayer {
         this.firstBlockLayer = false
       } else {
         this.currentLayer--
+        if (this.xIsInverted) {
+          this.xIsInverted = false
+        } else {
+          this.xIsInverted = true
+        }
       }
     }
   }
 
   getCurrentLayerCoords () {
     if (this.minerMethod === 'vertically') {
-      const minerCoords = {
-        xStart: this.minerCords.xStart,
-        yStart: this.currentLayer,
-        zStart: this.minerCords.zStart,
-        xEnd: this.minerCords.xEnd,
-        yEnd: this.currentLayer,
-        zEnd: this.minerCords.zEnd
+      const minerCoords = {}
+      if (this.xIsInverted) {
+        minerCoords.xStart = this.minerCords.xStart
+        minerCoords.xEnd = this.minerCords.xEnd
+      } else {
+        minerCoords.xStart = this.minerCords.xEnd
+        minerCoords.xEnd = this.minerCords.xStart
       }
+
+      minerCoords.yStart = this.currentLayer
+      minerCoords.zStart = this.minerCords.zStart
+      minerCoords.yEnd = this.currentLayer
+      minerCoords.zEnd = this.minerCords.zEnd
+
       return minerCoords
     } else {
       throw console.error('No soportado otro metodo')

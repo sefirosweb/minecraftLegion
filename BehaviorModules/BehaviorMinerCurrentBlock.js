@@ -74,7 +74,9 @@ module.exports = class BehaviorMinerCurrentBlock {
 
   xNext () {
     if (this.xCurrent === this.xEnd) {
-      this.xCurrent = this.xStart
+      const temp = this.xEnd
+      this.xEnd = this.xStart
+      this.xStart = temp
       this.yNext()
     } else {
       if (this.xStart < this.xEnd) {
@@ -87,7 +89,9 @@ module.exports = class BehaviorMinerCurrentBlock {
 
   zNext () {
     if (this.zCurrent === this.zEnd) {
-      this.zCurrent = this.zStart
+      const temp = this.zEnd
+      this.zEnd = this.zStart
+      this.zStart = temp
       this.xNext()
     } else {
       if (this.firstBlockOnLayer) {
