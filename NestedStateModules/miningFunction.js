@@ -2,14 +2,14 @@ const {
   StateTransition,
   BehaviorIdle,
   NestedStateMachine,
-  BehaviorMoveTo,
-  BehaviorMineBlock
+  BehaviorMoveTo
 } = require('mineflayer-statemachine')
 
 const BehaviorLoadConfig = require('./../BehaviorModules/BehaviorLoadConfig')
 const BehaviorGetBlockInfo = require('./../BehaviorModules/BehaviorGetBlockInfo')
 const BehaviorMinerCurrentLayer = require('./../BehaviorModules/BehaviorMinerCurrentLayer')
 const BehaviorMinerCurrentBlock = require('./../BehaviorModules/BehaviorMinerCurrentBlock')
+const BehaviorDigBlock = require('./../BehaviorModules/BehaviorDigBlock')
 
 const lavaOrWaterBlock = ['water', 'lava']
 const airBlock = ['air']
@@ -39,7 +39,7 @@ function minerJobFunction (bot, targets) {
   const currentBlock = new BehaviorMinerCurrentBlock(bot, targets)
   currentBlock.stateName = 'Check next block'
 
-  const mineBlock = new BehaviorMineBlock(bot, targets)
+  const mineBlock = new BehaviorDigBlock(bot, targets)
   mineBlock.stateName = 'Mine Block'
 
   const moveToBlock = new BehaviorMoveTo(bot, targets)
@@ -127,7 +127,7 @@ function minerJobFunction (bot, targets) {
       parent: mineBlock, // This is a "Mine Block" label
       child: currentBlock,
       name: 'Go Next Block',
-      shouldTransition: () => mineBlock.isFinished
+      shouldTransition: () => mineBlock.isFinished()
     })
 
   ]
