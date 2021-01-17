@@ -19,6 +19,9 @@ const excludeItemsDeposit = [
   { item: 'iron_sword', quantity: 1 }, // Danger user iron_XXX
   { item: 'iron_pickaxe', quantity: 4 },
   { item: 'iron_shovel', quantity: 4 },
+  { item: 'diamond_sword', quantity: 1 }, // Danger user iron_XXX
+  { item: 'diamond_pickaxe', quantity: 4 },
+  { item: 'diamond_shovel', quantity: 4 },
   { item: 'shield', quantity: 1 },
   { item: 'bow', quantity: 1 },
   { item: 'arrow', quantity: 128 },
@@ -49,8 +52,8 @@ const equipmentItems = [
   { item: 'shield', quantity: 1 },
   { item: 'sword', quantity: 1 },
   { item: 'bow', quantity: 1 },
-  { item: 'pickaxe', quantity: 1 },
-  { item: 'shovel', quantity: 1 }
+  { item: 'pickaxe', quantity: 3 },
+  { item: 'shovel', quantity: 3 }
 ]
 
 // BehaviorWithdrawItemChest 2
