@@ -188,7 +188,7 @@ function commandsFunction (bot, targets) {
   let patrol = []
 
   function saveMiner (coords) {
-    if (coords.length !== 8) {
+    if (coords.length !== 9) {
       bot.chat('The coords is wrong')
       return false
     }
@@ -199,6 +199,7 @@ function commandsFunction (bot, targets) {
     minerCoords.xEnd = coords['5']
     minerCoords.yEnd = coords['6']
     minerCoords.zEnd = coords['7']
+    minerCoords.orientation = coords['8']
 
     botWebsocket.log('Point: ' + JSON.stringify(minerCoords))
     botConfig.setMiner(bot.username, minerCoords)
