@@ -5,8 +5,6 @@ module.exports = class BehaviorLoadConfig {
     this.bot = bot
     this.targets = targets
     this.stateName = 'BehaviorLoadConfig'
-    this.x = 0
-    this.y = 0
 
     this.job = false
     this.mode = 'none'

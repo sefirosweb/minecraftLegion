@@ -3,8 +3,6 @@ const BehaviorIsNight = (function () {
     this.bot = bot
     this.active = true
     this.stateName = 'isNight'
-    this.x = 0
-    this.y = 0
 
     this.night = false
     this.bed = false

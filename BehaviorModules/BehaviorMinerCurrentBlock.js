@@ -5,8 +5,6 @@ module.exports = class BehaviorMinerCurrentBlock {
     this.bot = bot
     this.targets = targets
     this.stateName = 'BehaviorMinerCurrentBlock'
-    this.x = 0
-    this.y = 0
 
     this.blockInValidType = ['air', 'cave_air']
     this.minerCords = false

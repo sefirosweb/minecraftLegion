@@ -5,8 +5,6 @@ const BehaviorGoToBed = (function () {
     this.bot = bot
     this.bed = bed
     this.stateName = 'goToBed'
-    this.x = 0
-    this.y = 0
 
     this.isInBed = false
     this.wake = false

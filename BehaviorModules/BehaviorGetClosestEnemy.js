@@ -4,8 +4,6 @@ module.exports = class BehaviorGetClosestEnemy {
     this.bot = bot
     this.targets = targets
     this.stateName = 'getClosestEnemy'
-    this.x = 0
-    this.y = 0
 
     this.mode = mode
     this.distance = distance

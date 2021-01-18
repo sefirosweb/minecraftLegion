@@ -6,8 +6,6 @@ module.exports = class BehaviorEatFood {
     this.bot = bot
     this.targets = targets
     this.stateName = 'BehaviorEatFood'
-    this.x = 0
-    this.y = 0
 
     this.priority = 'saturation' // saturation or foodPoints
 

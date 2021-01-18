@@ -5,8 +5,6 @@ module.exports = class BehaviorLongAttack {
     this.bot = bot
     this.targets = targets
     this.stateName = 'BehaviorLongAttack'
-    this.x = 0
-    this.y = 0
 
     this.playerIsFound = false
     this.lastAttack = Date.now()

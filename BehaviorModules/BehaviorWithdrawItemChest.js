@@ -5,8 +5,6 @@ module.exports = class BehaviorWithdrawItemChest {
     this.bot = bot
     this.targets = targets
     this.stateName = 'BehaviorWithdrawItemChest'
-    this.x = 0
-    this.y = 0
 
     this.isEndFinished = false
     this.chest = false

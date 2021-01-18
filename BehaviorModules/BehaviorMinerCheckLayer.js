@@ -6,8 +6,6 @@ module.exports = class BehaviorMinerCheckLayer {
     this.bot = bot
     this.targets = targets
     this.stateName = 'BehaviorMinerCheckLayer'
-    this.x = 0
-    this.y = 0
 
     this.isEndFinished = false
     this.minerCords = false
