@@ -114,6 +114,16 @@ function minerJobFunction (bot, targets) {
 
     new StateTransition({
       parent: checkLayer,
+      child: eatFood,
+      name: 'checkLavaWater -> currentBlock',
+      onTransition: () => {
+        currentBlock.setMinerCords(nextLayer.getCurrentLayerCoords())
+      },
+      shouldTransition: () => checkLayer.isFinished()
+    }),
+
+    new StateTransition({
+      parent: checkLayer,
       child: moveToBlock2,
       name: 'checkLavaWater -> moveToBlock2',
       shouldTransition: () => checkLayer.getFoundLavaOrWater()
@@ -123,7 +133,10 @@ function minerJobFunction (bot, targets) {
       parent: moveToBlock2,
       child: placeBlock,
       name: 'checkLavaWater -> moveToBlock2',
-      shouldTransition: () => moveToBlock2.distanceToTarget() < 2
+      shouldTransition: () => {
+        const block = bot.blockAt(targets.position)
+        return moveToBlock2.distanceToTarget() < 3 && bot.canSeeBlock(block)
+      }
     }),
 
     new StateTransition({
@@ -131,16 +144,6 @@ function minerJobFunction (bot, targets) {
       child: checkLayer,
       name: 'checkLavaWater -> moveToBlock2',
       shouldTransition: () => placeBlock.isFinished
-    }),
-
-    new StateTransition({
-      parent: checkLayer,
-      child: eatFood,
-      name: 'checkLavaWater -> currentBlock',
-      onTransition: () => {
-        currentBlock.setMinerCords(nextLayer.getCurrentLayerCoords())
-      },
-      shouldTransition: () => checkLayer.isFinished()
     }),
 
     new StateTransition({
@@ -161,7 +164,10 @@ function minerJobFunction (bot, targets) {
       parent: moveToBlock1,
       child: mineBlock,
       name: 'Move To Block 1',
-      shouldTransition: () => moveToBlock1.distanceToTarget() < 3
+      shouldTransition: () => {
+        const block = bot.blockAt(targets.position)
+        return moveToBlock1.distanceToTarget() < 3 && bot.canSeeBlock(block)
+      }
     }),
 
     new StateTransition({

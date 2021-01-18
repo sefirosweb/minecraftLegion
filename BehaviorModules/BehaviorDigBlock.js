@@ -17,14 +17,10 @@ module.exports = class template {
   }
 
   checkBlock () {
-    const _this = this
     const block = this.bot.blockAt(this.targets.position, true)
     if (!block || !this.bot.canDigBlock(block)) {
-      console.log('Error en el bloque:')
-      console.log(block)
+      console.log(`Error en el bloque: ${block.name}`)
     }
-
-    console.log(block.name)
 
     const tool = this.getBestTool(block)
 
@@ -34,8 +30,8 @@ module.exports = class template {
         .catch(err => {
           console.log(err)
           setTimeout(function () {
-            _this.onStateEntered()
-          }, 5000)
+            this.onStateEntered()
+          }.bind(this), 5000)
         })
     } else {
       this.startDig(block)
@@ -43,7 +39,6 @@ module.exports = class template {
   }
 
   startDig (block) {
-    const _this = this
     this.bot.dig(block)
       .then(() => {
         this.isEndFinished = true
@@ -51,8 +46,8 @@ module.exports = class template {
       .catch(err => {
         console.log(err)
         setTimeout(function () {
-          _this.onStateEntered()
-        }, 5000)
+          this.onStateEntered()
+        }.bind(this), 1000)
       })
   }
 
