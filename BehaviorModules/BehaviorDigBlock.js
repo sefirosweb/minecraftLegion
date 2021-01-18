@@ -26,6 +26,8 @@ module.exports = class template {
       console.log(block)
     }
 
+    console.log(block.name)
+
     const tool = this.getBestTool(block)
 
     if (tool) {

@@ -13,6 +13,9 @@ module.exports = class BehaviorMinerCheckLayer {
     this.minerCords = false
     this.foundLavaOrWater = false
     this.firstBlockOnLayer = true
+
+    this.blocksToFind = ['water', 'lava']
+    this.blockForPlace = ['stone', 'cobblestone', 'dirt', 'andesite', 'diorite', 'granite']
   }
 
   isFinished () {
@@ -30,20 +33,24 @@ module.exports = class BehaviorMinerCheckLayer {
 
   onStateExited () {
     // Reset positions for cehck again all blocks
-    this.startBlock()
-  }
-
-  checkStoneInInventory () {
-    return this.bot.inventory.items().find(item => item.name.includes('cobblestone'))
-  }
-
-  checkArea () {
     const stone = this.checkStoneInInventory()
     if (stone === undefined) {
+      botWebsocket.log('No blocks for place into lava or water')
+      this.targets.item = undefined
       this.isEndFinished = true
       return
     }
 
+    this.targets.item = stone
+
+    this.startBlock()
+  }
+
+  checkStoneInInventory () {
+    return this.bot.inventory.items().find(item => this.blockForPlace.includes(item.name))
+  }
+
+  checkArea () {
     if (
       this.yCurrent === this.yEnd &&
       this.zCurrent === this.zEnd &&
@@ -59,10 +66,9 @@ module.exports = class BehaviorMinerCheckLayer {
       }
 
       const block = this.getBlockType()
-      if (block.name === 'water') {
-        botWebsocket.log('Found: ' + block.name + ' on ' + this.xCurrent + ' ' + this.yCurrent + ' ' + this.zCurrent)
+      if (this.blocksToFind.includes(block.name)) {
+        botWebsocket.log(`Found: ${block.name} on X:${this.xCurrent} Y:${this.yCurrent} Z:${this.zCurrent}`)
         this.targets.position = block.position
-        this.targets.item = stone
         this.targets.blockFace = new Vec3(0, 1, 0)
         this.foundLavaOrWater = true
         return
