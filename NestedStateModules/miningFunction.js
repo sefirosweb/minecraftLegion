@@ -2,8 +2,7 @@ const {
   StateTransition,
   BehaviorIdle,
   NestedStateMachine,
-  BehaviorMoveTo,
-  BehaviorPlaceBlock
+  BehaviorMoveTo
 } = require('mineflayer-statemachine')
 
 const BehaviorLoadConfig = require('./../BehaviorModules/BehaviorLoadConfig')
@@ -13,6 +12,7 @@ const BehaviorDigBlock = require('./../BehaviorModules/BehaviorDigBlock')
 const BehaviorMinerChecks = require('./../BehaviorModules/BehaviorMinerChecks')
 const BehaviorEatFood = require('./../BehaviorModules/BehaviorEatFood')
 const BehaviorMinerCheckLayer = require('./../BehaviorModules/BehaviorMinerCheckLayer')
+const BehaviorCustomPlaceBlock = require('./../BehaviorModules/BehaviorCustomPlaceBlock ')
 
 function minerJobFunction (bot, targets) {
   const start = new BehaviorIdle(targets)
@@ -55,7 +55,7 @@ function minerJobFunction (bot, targets) {
   moveToBlock2.x = 325
   moveToBlock2.y = 450
 
-  const placeBlock = new BehaviorPlaceBlock(bot, targets)
+  const placeBlock = new BehaviorCustomPlaceBlock(bot, targets)
   placeBlock.stateName = 'Place Block'
   placeBlock.x = 325
   placeBlock.y = 315
@@ -131,7 +131,7 @@ function minerJobFunction (bot, targets) {
       name: 'checkLavaWater -> moveToBlock2',
       shouldTransition: () => {
         const block = bot.blockAt(targets.position)
-        return moveToBlock2.distanceToTarget() < 1 && bot.canSeeBlock(block)
+        return moveToBlock2.distanceToTarget() < 3 && bot.canSeeBlock(block)
       }
     }),
 
@@ -139,7 +139,7 @@ function minerJobFunction (bot, targets) {
       parent: placeBlock,
       child: checkLayer,
       name: 'checkLavaWater -> moveToBlock2',
-      shouldTransition: () => placeBlock.isFinished
+      shouldTransition: () => placeBlock.isFinished()
     }),
 
     new StateTransition({

@@ -29,7 +29,6 @@ module.exports = class BehaviorMinerCheckLayer {
     this.isEndFinished = false
 
     this.foundLavaOrWater = this.checkArea()
-    console.log(this.foundLavaOrWater)
     if (this.foundLavaOrWater === false) {
       this.isEndFinished = true
     }
