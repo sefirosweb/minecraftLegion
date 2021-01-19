@@ -49,16 +49,16 @@ function deathFunction (bot, targets) {
       parent: playerEntity,
       child: commands,
       name: 'Transfer to sub nestered commands',
-      shouldTransition: () => commands.isFinished(),
-      onTransition: () => bot.chat('Hi ' + playerEntity.getPlayerName())
+      onTransition: () => bot.chat('Hi ' + playerEntity.getPlayerName()),
+      shouldTransition: () => true
     }),
 
     new StateTransition({
       parent: commands,
       child: startWork,
       name: 'Commands finished',
-      shouldTransition: () => commands.isFinished(),
-      onTransition: () => bot.look(bot.player.entity.yaw, 0)
+      onTransition: () => bot.look(bot.player.entity.yaw, 0),
+      shouldTransition: () => commands.isFinished()
     })
   ]
 
