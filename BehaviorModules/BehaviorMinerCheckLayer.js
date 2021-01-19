@@ -26,7 +26,13 @@ module.exports = class BehaviorMinerCheckLayer {
 
   onStateEntered () {
     this.foundLavaOrWater = false
-    this.checkArea()
+    this.isEndFinished = false
+
+    this.foundLavaOrWater = this.checkArea()
+    console.log(this.foundLavaOrWater)
+    if (this.foundLavaOrWater === false) {
+      this.isEndFinished = true
+    }
   }
 
   onStateExited () {
@@ -54,7 +60,7 @@ module.exports = class BehaviorMinerCheckLayer {
       this.zCurrent === this.zEnd &&
       this.xCurrent === this.xEnd
     ) {
-      this.isEndFinished = true
+      return false
     } else {
       if (this.minerCords.orientation === 'n' || this.minerCords.orientation === 's') {
         this.zNext()
@@ -69,10 +75,10 @@ module.exports = class BehaviorMinerCheckLayer {
         this.targets.position = block.position
         this.targets.blockFace = new Vec3(0, 1, 0)
         this.foundLavaOrWater = true
-        return
+        return true
       }
 
-      this.checkArea()
+      return this.checkArea()
     }
   }
 

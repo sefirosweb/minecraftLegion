@@ -106,9 +106,7 @@ function minerJobFunction (bot, targets) {
       parent: nextLayer,
       child: checkLayer,
       name: 'nextLayer -> checkLavaWater',
-      onTransition: () => {
-        checkLayer.setMinerCords(nextLayer.getCurrentLayerCoords())
-      },
+      onTransition: () => checkLayer.setMinerCords(nextLayer.getCurrentLayerCoords()),
       shouldTransition: () => true
     }),
 
@@ -116,9 +114,7 @@ function minerJobFunction (bot, targets) {
       parent: checkLayer,
       child: eatFood,
       name: 'checkLavaWater -> currentBlock',
-      onTransition: () => {
-        currentBlock.setMinerCords(nextLayer.getCurrentLayerCoords())
-      },
+      onTransition: () => currentBlock.setMinerCords(nextLayer.getCurrentLayerCoords()),
       shouldTransition: () => checkLayer.isFinished()
     }),
 
@@ -135,7 +131,7 @@ function minerJobFunction (bot, targets) {
       name: 'checkLavaWater -> moveToBlock2',
       shouldTransition: () => {
         const block = bot.blockAt(targets.position)
-        return moveToBlock2.distanceToTarget() < 3 && bot.canSeeBlock(block)
+        return moveToBlock2.distanceToTarget() < 1 && bot.canSeeBlock(block)
       }
     }),
 
