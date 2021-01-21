@@ -73,7 +73,7 @@ let stone = 0
 function build () {
   stone++
   console.log(stone)
-  if (stone > 5) {
+  if (stone > 2) {
     return
   }
   const referenceBlock = bot.blockAt(bot.entity.position.offset(0, -1, 0))
@@ -85,24 +85,59 @@ function build () {
 
   function placeIfHighEnough () {
     if (bot.entity.position.y > jumpY) {
-      bot.placeBlock(referenceBlock, vec3(0, 1, 0), (err) => {
-        if (err) {
-          tryCount++
-          if (tryCount > 10) {
-            bot.chat(err.message)
-            bot.setControlState('jump', false)
-            bot.removeListener('move', placeIfHighEnough)
+      equip().then(() => {
+        bot.placeBlock(referenceBlock, vec3(0, 1, 0), (err) => {
+          if (err) {
+            tryCount++
+            if (tryCount > 10) {
+              bot.chat(err.message)
+              bot.setControlState('jump', false)
+              bot.removeListener('move', placeIfHighEnough)
+              return
+            }
             return
           }
-          return
-        }
-        bot.setControlState('jump', false)
-        bot.removeListener('move', placeIfHighEnough)
-        bot.chat('Placing a block was successful')
-        build()
+          bot.setControlState('jump', false)
+          bot.removeListener('move', placeIfHighEnough)
+          bot.chat('Placing a block was successful')
+          build()
+        })
       })
+        .catch(err => console.log(err))
     }
   }
+}
+
+const blockForPlace = ['stone', 'cobblestone', 'dirt', 'andesite', 'diorite', 'granite', 'grass_block']
+
+function equip () {
+  return new Promise((resolve, reject) => {
+    const offHand = bot.inventory.slots[45]
+
+    if (offHand != null && blockForPlace.includes(offHand.name)) {
+      console.log(offHand.name)
+      resolve()
+      return
+    }
+
+    const item = getItemToPlace()
+    if (item === undefined) {
+      reject('No items for equip')
+      return
+    }
+
+    bot.equip(item, 'off-hand')
+      .then(() => {
+        resolve()
+      })
+      .catch(err => {
+        reject(err)
+      })
+  })
+}
+
+function getItemToPlace () {
+  return bot.inventory.items().find(item => blockForPlace.includes(item.name))
 }
 
 function equipDirt () {
