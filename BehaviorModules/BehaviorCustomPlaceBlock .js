@@ -1,10 +1,13 @@
 const botWebsocket = require('../modules/botWebsocket')
+const vec3 = require('vec3')
 module.exports = class BehaviorCustomPlaceBlock {
   constructor (bot, targets) {
     this.bot = bot
     this.targets = targets
     this.stateName = 'Custom BehaviorPlaceBlock '
     this.isEndFinished = false
+
+    this.tryCount = 0
   }
 
   isFinished () {
@@ -12,38 +15,86 @@ module.exports = class BehaviorCustomPlaceBlock {
   }
 
   onStateEntered () {
-    const _this = this
     this.isEndFinished = false
-    if (this.targets.item == null) return
+    this.tryCount = 0
 
-    this.bot.equip(this.targets.item, 'hand').catch(err => {
-      console.log(err)
-    })
+    if (this.targets.item == null) {
+      botWebsocket.log('No exists targets.item')
+      console.error('No exists targets.item')
+      return
+    }
 
-    if (this.targets.position == null) return
-    if (this.targets.blockFace == null) return
+    if (this.targets.position == null) {
+      botWebsocket.log('No exists targets.position')
+      console.error('No exists targets.position')
+      return
+    }
 
     const block = this.bot.blockAt(this.targets.position)
-    if (block == null || !this.bot.canSeeBlock(block)) return
-    botWebsocket.log('Placing... block')
-    // this.bot.placeBlock(block, this.targets.blockFace)
-    this.bot.placeBlock(block, this.targets.blockFace, (err) => {
-      if (err) {
-        console.log(err)
-      } else {
-        console.log('finished')
-      }
-    })
 
-    /*   .then(() => {
-        botWebsocket.log('Block placed')
-        _this.isEndFinished = true
+    if (block.name === this.targets.item.name) {
+      this.isEndFinished = true
+      return
+    }
+
+    if (block == null) {
+      botWebsocket.log('Cant find block')
+      console.error('Cant find block')
+      return
+    }
+
+    this.equip()
+      .then(() => {
+        this.placeBlock(block)
       })
       .catch((err) => {
-        botWebsocket.log('Error on block placed')
+        console.log('Error on change weapon', this.targets.item)
         console.log(err)
-        _this.isEndFinished = false
+        setTimeout(function () {
+          this.onStateEntered()
+        }.bind(this), 200)
       })
-      */
+  }
+
+  placeBlock (block) {
+    this.bot.placeBlock(block, vec3(0, 1, 0))
+      .then(() => {
+        this.isEndFinished = true
+      })
+      .catch(err => {
+        console.log('Error on place block')
+        console.log(err)
+        setTimeout(function () {
+          this.onStateEntered()
+        }.bind(this), 200)
+      })
+  }
+
+  equip () {
+    return new Promise((resolve, reject) => {
+      const hand = this.bot.heldItem
+
+      if (hand != null && hand.name === this.targets.item) {
+        console.log('Equip ', hand)
+        resolve()
+        return
+      }
+
+      const item = this.bot.inventory.items().find(item => this.targets.item.name === item.name)
+
+      if (item === undefined) {
+        reject(new Error('Item not found', this.targets.item))
+        return
+      }
+
+      this.bot.equip(item, 'hand')
+        .then(() => {
+          resolve()
+        })
+        .catch(err => {
+          console.log('Error on equip')
+          reject(err)
+        })
+    })
   }
 }

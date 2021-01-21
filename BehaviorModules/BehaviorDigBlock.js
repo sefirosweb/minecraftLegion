@@ -31,7 +31,7 @@ module.exports = class template {
           console.log(err)
           setTimeout(function () {
             this.onStateEntered()
-          }.bind(this), 5000)
+          }.bind(this), 500)
         })
     } else {
       this.startDig(block)
@@ -47,7 +47,7 @@ module.exports = class template {
         console.log(err)
         setTimeout(function () {
           this.onStateEntered()
-        }.bind(this), 1000)
+        }.bind(this), 500)
       })
   }
 

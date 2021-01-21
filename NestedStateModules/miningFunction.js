@@ -2,7 +2,8 @@ const {
   StateTransition,
   BehaviorIdle,
   NestedStateMachine,
-  BehaviorMoveTo
+  BehaviorMoveTo,
+  BehaviorFindInteractPosition
 } = require('mineflayer-statemachine')
 
 const BehaviorLoadConfig = require('./../BehaviorModules/BehaviorLoadConfig')
@@ -15,6 +16,9 @@ const BehaviorMinerCheckLayer = require('./../BehaviorModules/BehaviorMinerCheck
 const BehaviorCustomPlaceBlock = require('./../BehaviorModules/BehaviorCustomPlaceBlock ')
 
 function minerJobFunction (bot, targets) {
+  const placeBlocks = ['air', 'cave_air', 'lava', 'wawter']
+  // const air = ['air', 'cave_air']
+  const blockForPlace = ['stone', 'cobblestone', 'dirt', 'andesite', 'diorite', 'granite']
   const start = new BehaviorIdle(targets)
   start.stateName = 'Start'
   start.x = 125
@@ -40,14 +44,18 @@ function minerJobFunction (bot, targets) {
   currentBlock.x = 725
   currentBlock.y = 113
 
+  const findInteractPosition = new BehaviorFindInteractPosition(bot, targets)
+  findInteractPosition.x = 925
+  findInteractPosition.y = 113
+
   const mineBlock = new BehaviorDigBlock(bot, targets)
   mineBlock.stateName = 'Mine Block'
-  mineBlock.x = 825
-  mineBlock.y = 613
+  mineBlock.x = 1025
+  mineBlock.y = 563
 
   const moveToBlock1 = new BehaviorMoveTo(bot, targets)
   moveToBlock1.stateName = 'Move To Block 1'
-  moveToBlock1.x = 925
+  moveToBlock1.x = 1025
   moveToBlock1.y = 313
 
   const moveToBlock2 = new BehaviorMoveTo(bot, targets)
@@ -55,13 +63,23 @@ function minerJobFunction (bot, targets) {
   moveToBlock2.x = 325
   moveToBlock2.y = 450
 
-  const placeBlock = new BehaviorCustomPlaceBlock(bot, targets)
-  placeBlock.stateName = 'Place Block'
-  placeBlock.x = 325
-  placeBlock.y = 315
+  const moveToBlock3 = new BehaviorMoveTo(bot, targets)
+  moveToBlock3.stateName = 'Move To Blockk 3'
+  moveToBlock3.x = 725
+  moveToBlock3.y = 613
+
+  const placeBlock1 = new BehaviorCustomPlaceBlock(bot, targets)
+  placeBlock1.stateName = 'Place Block 1'
+  placeBlock1.x = 325
+  placeBlock1.y = 315
+
+  const placeBlock2 = new BehaviorCustomPlaceBlock(bot, targets)
+  placeBlock2.stateName = 'Place Block 2'
+  placeBlock2.x = 725
+  placeBlock2.y = 513
 
   const minerChecks = new BehaviorMinerChecks(bot, targets)
-  minerChecks.stateName = 'Check Inventory'
+  minerChecks.stateName = 'Miner Check'
   minerChecks.x = 325
   minerChecks.y = 613
 
@@ -127,26 +145,39 @@ function minerJobFunction (bot, targets) {
 
     new StateTransition({
       parent: moveToBlock2,
-      child: placeBlock,
+      child: placeBlock1,
       name: 'checkLavaWater -> moveToBlock2',
+      onTransition: () => {
+        targets.position = targets.position.offset(0, -1, 0)
+      },
       shouldTransition: () => {
         const block = bot.blockAt(targets.position)
-        return moveToBlock2.distanceToTarget() < 3 && bot.canSeeBlock(block)
+        return moveToBlock2.distanceToTarget() < 2 && bot.canSeeBlock(block)
       }
     }),
 
     new StateTransition({
-      parent: placeBlock,
+      parent: placeBlock1,
       child: checkLayer,
       name: 'checkLavaWater -> moveToBlock2',
-      shouldTransition: () => placeBlock.isFinished()
+      shouldTransition: () => placeBlock1.isFinished()
     }),
 
     new StateTransition({
       parent: currentBlock,
+      child: findInteractPosition,
+      name: 'Check is Air',
+      onTransition: () => {
+        targets.previousPosition = targets.position
+      },
+      shouldTransition: () => currentBlock.isFinished()
+    }),
+
+    new StateTransition({
+      parent: findInteractPosition,
       child: moveToBlock1,
       name: 'Check is Air',
-      shouldTransition: () => currentBlock.isFinished()
+      shouldTransition: () => true
     }),
 
     new StateTransition({
@@ -160,17 +191,51 @@ function minerJobFunction (bot, targets) {
       parent: moveToBlock1,
       child: mineBlock,
       name: 'Move To Block 1',
+      onTransition: () => {
+        targets.position = targets.previousPosition
+      },
+      shouldTransition: () => moveToBlock1.distanceToTarget() < 3
+    }),
+
+    new StateTransition({
+      parent: mineBlock,
+      child: placeBlock2,
+      name: 'Go Next Block',
+      onTransition: () => {
+        targets.position = targets.position.offset(0, -1, 0) // Place block downside current block
+        targets.item = bot.inventory.items().find(item => blockForPlace.includes(item.name))
+      },
       shouldTransition: () => {
-        const block = bot.blockAt(targets.position)
-        return moveToBlock1.distanceToTarget() < 3 && bot.canSeeBlock(block)
+        const block = bot.blockAt(targets.position.offset(0, -1, 0))
+        return mineBlock.isFinished() && placeBlocks.includes(block.name) && bot.inventory.items().find(item => blockForPlace.includes(item.name))
       }
     }),
 
     new StateTransition({
       parent: mineBlock,
-      child: minerChecks,
+      child: moveToBlock3,
       name: 'Go Next Block',
-      shouldTransition: () => mineBlock.isFinished()
+      shouldTransition: () => {
+        const block = bot.blockAt(targets.position.offset(0, -1, 0))
+        return mineBlock.isFinished() && (!placeBlocks.includes(block.name) || !bot.inventory.items().find(item => blockForPlace.includes(item.name)))
+      }
+    }),
+
+    new StateTransition({
+      parent: placeBlock2,
+      child: moveToBlock3,
+      name: 'Place block',
+      onTransition: () => {
+        targets.position = targets.position.offset(0, 1, 0)
+      },
+      shouldTransition: () => placeBlock2.isFinished()
+    }),
+
+    new StateTransition({
+      parent: moveToBlock3,
+      child: minerChecks,
+      name: 'Place block',
+      shouldTransition: () => moveToBlock3.isFinished()
     }),
 
     new StateTransition({
