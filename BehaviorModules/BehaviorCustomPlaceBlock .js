@@ -47,7 +47,7 @@ module.exports = class BehaviorCustomPlaceBlock {
       .then(() => {
         this.placeBlock(block)
       })
-      .catch((err) => {
+      .catch(err => {
         console.log('Error on change weapon', this.targets.item)
         console.log(err)
         setTimeout(function () {

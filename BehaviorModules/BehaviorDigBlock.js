@@ -19,23 +19,19 @@ module.exports = class template {
   checkBlock () {
     const block = this.bot.blockAt(this.targets.position, true)
     if (!block || !this.bot.canDigBlock(block)) {
-      console.log(`Error en el bloque: ${block.name}`)
+      console.log(`Block error: ${block.name}`)
+      this.isEndFinished = true
+      return
     }
 
-    const tool = this.getBestTool(block)
-
-    if (tool) {
-      this.bot.equip(tool, 'hand')
-        .then(() => this.startDig(block))
-        .catch(err => {
-          console.log(err)
-          setTimeout(function () {
-            this.onStateEntered()
-          }.bind(this), 500)
-        })
-    } else {
-      this.startDig(block)
-    }
+    this.equipToolForBlock(block)
+      .then(() => this.startDig(block))
+      .catch(err => {
+        console.log(err)
+        setTimeout(function () {
+          this.onStateEntered()
+        }.bind(this), 200)
+      })
   }
 
   startDig (block) {
@@ -47,8 +43,34 @@ module.exports = class template {
         console.log(err)
         setTimeout(function () {
           this.onStateEntered()
-        }.bind(this), 500)
+        }.bind(this), 200)
       })
+  }
+
+  equipToolForBlock (block) {
+    return new Promise((resolve, reject) => {
+      const tool = this.getBestTool(block)
+      if (tool === undefined) {
+        resolve()
+        return
+      }
+
+      const hand = this.bot.heldItem
+
+      if (hand !== null && hand.name === tool.name) {
+        resolve()
+        return
+      }
+
+      this.bot.equip(tool, 'hand')
+        .then(() => {
+          resolve()
+        })
+        .catch(err => {
+          console.log(`Error on equip tool: ${tool.name}`)
+          reject(err)
+        })
+    })
   }
 
   getBestTool (block) {
