@@ -103,7 +103,6 @@ module.exports = class BehaviorCustomPlaceBlock {
       Math.floor(this.bot.entity.position.z) === block.position.z
     ) {
       this.isJumping = true
-      console.log('Jumping')
       this.bot.setControlState('jump', true)
     }
     this.place()
