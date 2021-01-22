@@ -52,15 +52,23 @@ const equipmentItems = [
   { item: 'boots', quantity: 1 },
   { item: 'shield', quantity: 1 },
   { item: 'sword', quantity: 1 },
-  { item: 'bow', quantity: 1 },
-  { item: 'pickaxe', quantity: 3 },
-  { item: 'shovel', quantity: 3 }
+  { item: 'bow', quantity: 1 }
 ]
 
 // BehaviorWithdrawItemChest 2
 const consumibleItems = [
   { item: 'arrow', quantity: 64 },
   { item: 'cooked_chicken', quantity: 64 }
+]
+
+// BehaviorWithdrawItemChest 3
+const pickaxe = [
+  { item: 'pickaxe', quantity: 4 }
+]
+
+// BehaviorWithdrawItemChest 4
+const shovel = [
+  { item: 'shovel', quantity: 4 }
 ]
 
 const validFood = ['cooked_chicken']
@@ -88,8 +96,18 @@ function minerJobFunction (bot, targets) {
 
   const goFoodChest = new BehaviorMoveToArray(bot, targets, [], true, 1)
   goFoodChest.stateName = 'Go Food Chest'
-  goFoodChest.x = 925
-  goFoodChest.y = 313
+  goFoodChest.x = 1125
+  goFoodChest.y = 213
+
+  const goPickChest = new BehaviorMoveToArray(bot, targets, [], true, 1)
+  goPickChest.stateName = 'Go Pick Chest'
+  goPickChest.x = 1125
+  goPickChest.y = 413
+
+  const goShovelChest = new BehaviorMoveToArray(bot, targets, [], true, 1)
+  goShovelChest.stateName = 'Go Shovel Chest'
+  goShovelChest.x = 925
+  goShovelChest.y = 313
 
   const goDepositChest = new BehaviorMoveToArray(bot, targets, [], true, 1)
   goDepositChest.stateName = 'Go Deposit Chest'
@@ -105,13 +123,23 @@ function minerJobFunction (bot, targets) {
 
   const getConsumibles = new BehaviorWithdrawItemChest(bot, targets, consumibleItems)
   getConsumibles.stateName = 'Get Food and Arrows'
-  getConsumibles.x = 725
+  getConsumibles.x = 1125
   getConsumibles.y = 313
+
+  const getPicks = new BehaviorWithdrawItemChest(bot, targets, pickaxe)
+  getPicks.stateName = 'Get Pickaxes'
+  getPicks.x = 925
+  getPicks.y = 413
+
+  const getShovels = new BehaviorWithdrawItemChest(bot, targets, shovel)
+  getShovels.stateName = 'Get Shovels'
+  getShovels.x = 725
+  getShovels.y = 213
 
   const equip = new BehaviorEquip(bot, targets)
   equip.stateName = 'Equip Armor'
-  equip.x = 1075
-  equip.y = 213
+  equip.x = 1125
+  equip.y = 113
 
   const getReady = new BehaviorGetReady(bot, targets)
   getReady.stateName = 'Get Ready for Mining'
@@ -233,9 +261,43 @@ function minerJobFunction (bot, targets) {
 
     new StateTransition({
       parent: getConsumibles,
+      child: goPickChest,
+      name: 'getConsumibles -> goPickChest',
+      onTransition: () => {
+        goPickChest.sortPatrol()
+      },
+      shouldTransition: () => getConsumibles.isFinished()
+    }),
+
+    new StateTransition({
+      parent: goPickChest,
+      child: getPicks,
+      name: 'goPickChest -> getPicks',
+      shouldTransition: () => goPickChest.isFinished()
+    }),
+
+    new StateTransition({
+      parent: getPicks,
+      child: goShovelChest,
+      name: 'getPicks -> goShovelChest',
+      onTransition: () => {
+        goShovelChest.sortPatrol()
+      },
+      shouldTransition: () => getPicks.isFinished()
+    }),
+
+    new StateTransition({
+      parent: goShovelChest,
+      child: getShovels,
+      name: 'goShovelChest -> getShovels',
+      shouldTransition: () => goShovelChest.isFinished()
+    }),
+
+    new StateTransition({
+      parent: getShovels,
       child: eatFood,
       name: 'getEquipments -> eatFood',
-      shouldTransition: () => getConsumibles.isFinished()
+      shouldTransition: () => getShovels.isFinished()
     }),
 
     new StateTransition({
