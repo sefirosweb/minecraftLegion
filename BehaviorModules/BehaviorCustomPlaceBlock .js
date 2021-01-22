@@ -28,6 +28,7 @@ module.exports = class BehaviorCustomPlaceBlock {
     this.isEndFinished = false
     this.itemNotFound = false
     this.cantPlaceBlock = false
+    botWebsocket.log('Placing block')
 
     if (this.targets.item == null) {
       botWebsocket.log('No exists targets.item')
@@ -43,14 +44,14 @@ module.exports = class BehaviorCustomPlaceBlock {
 
     const block = this.bot.blockAt(this.targets.position)
 
-    if (block.name === this.targets.item.name) {
-      botWebsocket.log('The block is same')
+    if (block == null) {
+      botWebsocket.log('Cant find block')
       this.isEndFinished = true
       return
     }
 
-    if (block == null) {
-      botWebsocket.log('Cant find block')
+    if (block.name === this.targets.item.name) {
+      botWebsocket.log('The block is same')
       this.isEndFinished = true
       return
     }
@@ -65,12 +66,13 @@ module.exports = class BehaviorCustomPlaceBlock {
       .then(() => {
         this.placeBlock(block)
       })
-      .catch(err => {
+      .catch(function (err) {
         botWebsocket.log(`Error on change item ${this.targets.item.name} ${err.message}`)
         setTimeout(function () {
+          botWebsocket.log('Restaring Place Block...')
           this.onStateEntered()
         }.bind(this), 500)
-      })
+      }.bind(this))
   }
 
   place () {

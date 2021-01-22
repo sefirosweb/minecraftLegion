@@ -105,6 +105,9 @@ module.exports = class BehaviorMinerCurrentBlock {
 
   calculateIsValid () {
     const block = this.getBlockType()
+    if (!block) {
+      return false
+    }
     const isValidBlockType = this.blockInValidType.find(b => b === block.name)
     if (isValidBlockType === undefined) {
       this.targets.position = block.position // I detect is not air / lava / water then go to this position
