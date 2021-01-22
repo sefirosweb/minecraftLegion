@@ -16,7 +16,7 @@ const BehaviorMinerCheckLayer = require('./../BehaviorModules/BehaviorMinerCheck
 const BehaviorCustomPlaceBlock = require('./../BehaviorModules/BehaviorCustomPlaceBlock ')
 
 function minerJobFunction (bot, targets) {
-  const placeBlocks = ['air', 'cave_air', 'lava', 'wawter']
+  const placeBlocks = ['air', 'cave_air', 'lava', 'water']
   // const air = ['air', 'cave_air']
   const blockForPlace = ['stone', 'cobblestone', 'dirt', 'andesite', 'diorite', 'granite']
   const start = new BehaviorIdle(targets)
