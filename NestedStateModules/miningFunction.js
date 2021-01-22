@@ -126,14 +126,14 @@ function minerJobFunction (bot, targets) {
     new StateTransition({
       parent: nextLayer,
       child: exit,
-      name: 'nextLayer -> finished',
+      name: 'Mining finished',
       shouldTransition: () => nextLayer.isFinished()
     }),
 
     new StateTransition({
       parent: nextLayer,
       child: checkLayer,
-      name: 'nextLayer -> checkLavaWater',
+      name: 'nextLayer -> checkLayer',
       onTransition: () => checkLayer.setMinerCords(nextLayer.getCurrentLayerCoords()),
       shouldTransition: () => true
     }),
@@ -141,7 +141,7 @@ function minerJobFunction (bot, targets) {
     new StateTransition({
       parent: checkLayer,
       child: eatFood,
-      name: 'checkLavaWater -> currentBlock',
+      name: 'checkLayer -> eatFood',
       onTransition: () => currentBlock.setMinerCords(nextLayer.getCurrentLayerCoords()),
       shouldTransition: () => checkLayer.isFinished() || !bot.inventory.items().find(item => blockForPlace.includes(item.name))
     }),
@@ -149,7 +149,7 @@ function minerJobFunction (bot, targets) {
     new StateTransition({
       parent: checkLayer,
       child: moveToBlock2,
-      name: 'checkLavaWater -> moveToBlock2',
+      name: 'checkLayer -> moveToBlock2',
       onTransition: () => {
         targets.position = targets.position.offset(0, 1, 0)
       },
@@ -166,7 +166,7 @@ function minerJobFunction (bot, targets) {
     new StateTransition({
       parent: moveToBlock2,
       child: mineBlock2,
-      name: 'If up of block is solid',
+      name: 'If up block is solid',
       shouldTransition: () => {
         const block = bot.blockAt(targets.position)
         return moveToBlock2.distanceToTarget() < 2 && !placeBlocks.includes(block.name)
@@ -176,7 +176,7 @@ function minerJobFunction (bot, targets) {
     new StateTransition({
       parent: mineBlock2,
       child: placeBlock3,
-      name: 'mineBlock2 -> placeBlock1',
+      name: 'mineBlock2 -> placeBlock3',
       onTransition: () => {
         targets.position = targets.position.offset(0, -1, 0)
       },
@@ -186,17 +186,17 @@ function minerJobFunction (bot, targets) {
     new StateTransition({
       parent: placeBlock3,
       child: placeBlock1,
-      name: 'mineBlock2 -> placeBlock1',
+      name: 'placeBlock3 -> placeBlock1',
       onTransition: () => {
         targets.position = targets.position.offset(0, 1, 0)
       },
-      shouldTransition: () => placeBlock3.isFinished()
+      shouldTransition: () => placeBlock3.isFinished() || placeBlock3.isItemNotFound() || placeBlock3.isCantPlaceBlock()
     }),
 
     new StateTransition({
       parent: moveToBlock2,
       child: placeBlock1,
-      name: 'if up block is liquid',
+      name: 'if block is liquid',
       onTransition: () => {
         targets.position = targets.position.offset(0, -1, 0)
       },
@@ -209,21 +209,14 @@ function minerJobFunction (bot, targets) {
     new StateTransition({
       parent: placeBlock1,
       child: checkLayer,
-      name: 'Item placed',
-      shouldTransition: () => placeBlock1.isFinished()
-    }),
-
-    new StateTransition({
-      parent: placeBlock1,
-      child: checkLayer,
-      name: 'Item not found',
-      shouldTransition: () => placeBlock1.isItemNotFound() || placeBlock1.isCantPlaceBlock()
+      name: 'placeBlock1 -> checkLayer',
+      shouldTransition: () => placeBlock1.isFinished() || placeBlock1.isItemNotFound() || placeBlock1.isCantPlaceBlock()
     }),
 
     new StateTransition({
       parent: currentBlock,
       child: findInteractPosition,
-      name: 'Check is Air',
+      name: 'currentBlock -> findInteractPosition',
       onTransition: () => {
         targets.previousPosition = targets.position
       },
@@ -233,7 +226,7 @@ function minerJobFunction (bot, targets) {
     new StateTransition({
       parent: findInteractPosition,
       child: moveToBlock1,
-      name: 'Check is Air',
+      name: 'findInteractPosition -> moveToBlock1',
       shouldTransition: () => true
     }),
 
@@ -247,7 +240,7 @@ function minerJobFunction (bot, targets) {
     new StateTransition({
       parent: moveToBlock1,
       child: mineBlock1,
-      name: 'Move To Block 1',
+      name: 'moveToBlock1 -> mineBlock1',
       onTransition: () => {
         targets.position = targets.previousPosition
       },
@@ -257,7 +250,7 @@ function minerJobFunction (bot, targets) {
     new StateTransition({
       parent: mineBlock1,
       child: placeBlock2,
-      name: 'Go Next Block',
+      name: 'If down is liquid',
       shouldTransition: () => {
         const block = bot.blockAt(targets.position.offset(0, -1, 0))
         const item = bot.inventory.items().find(item => blockForPlace.includes(item.name))
@@ -274,7 +267,7 @@ function minerJobFunction (bot, targets) {
     new StateTransition({
       parent: mineBlock1,
       child: moveToBlock3,
-      name: 'Go Next Block',
+      name: 'If down is solid',
       shouldTransition: () => {
         const block = bot.blockAt(targets.position.offset(0, -1, 0))
         return mineBlock1.isFinished() && (!placeBlocks.includes(block.name) || !bot.inventory.items().find(item => blockForPlace.includes(item.name)))
@@ -284,21 +277,11 @@ function minerJobFunction (bot, targets) {
     new StateTransition({
       parent: placeBlock2,
       child: moveToBlock3,
-      name: 'Placed block',
+      name: 'placeBlock2 -> moveToBlock3',
       onTransition: () => {
         targets.position = targets.position.offset(0, 1, 0)
       },
-      shouldTransition: () => placeBlock2.isFinished()
-    }),
-
-    new StateTransition({
-      parent: placeBlock2,
-      child: moveToBlock3,
-      name: 'Item not found for place block or block is already in use',
-      onTransition: () => {
-        targets.position = targets.position.offset(0, 1, 0)
-      },
-      shouldTransition: () => placeBlock2.isItemNotFound() || placeBlock2.isCantPlaceBlock()
+      shouldTransition: () => placeBlock2.isFinished() || placeBlock2.isItemNotFound() || placeBlock2.isCantPlaceBlock()
     }),
 
     new StateTransition({
@@ -311,21 +294,21 @@ function minerJobFunction (bot, targets) {
     new StateTransition({
       parent: minerChecks,
       child: eatFood,
-      name: 'Continue Mining',
+      name: 'moveToBlock3 -> eatFood',
       shouldTransition: () => minerChecks.isFinished() && minerChecks.getIsReady()
     }),
 
     new StateTransition({
       parent: eatFood,
       child: currentBlock,
-      name: 'Continue Mining',
+      name: 'eatFood -> currentBlock',
       shouldTransition: () => eatFood.isFinished()
     }),
 
     new StateTransition({
       parent: minerChecks,
       child: exit,
-      name: 'Continue Mining',
+      name: 'No pickaxes or shovel in inventory',
       shouldTransition: () => minerChecks.isFinished() && !minerChecks.getIsReady()
     })
 
