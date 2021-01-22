@@ -167,8 +167,15 @@ function minerJobFunction (bot, targets) {
     new StateTransition({
       parent: placeBlock1,
       child: checkLayer,
-      name: 'checkLavaWater -> moveToBlock2',
+      name: 'Item placed',
       shouldTransition: () => placeBlock1.isFinished()
+    }),
+
+    new StateTransition({
+      parent: placeBlock1,
+      child: checkLayer,
+      name: 'Item not found',
+      shouldTransition: () => placeBlock1.isItemNotFound()
     }),
 
     new StateTransition({
@@ -235,7 +242,7 @@ function minerJobFunction (bot, targets) {
     new StateTransition({
       parent: placeBlock2,
       child: moveToBlock3,
-      name: 'Place block',
+      name: 'Placed block',
       onTransition: () => {
         targets.position = targets.position.offset(0, 1, 0)
       },
@@ -243,9 +250,19 @@ function minerJobFunction (bot, targets) {
     }),
 
     new StateTransition({
+      parent: placeBlock2,
+      child: moveToBlock3,
+      name: 'Item not found for place block',
+      onTransition: () => {
+        targets.position = targets.position.offset(0, 1, 0)
+      },
+      shouldTransition: () => placeBlock2.isItemNotFound()
+    }),
+
+    new StateTransition({
       parent: moveToBlock3,
       child: minerChecks,
-      name: 'Place block',
+      name: 'moveToBlock3 -> minerChecks',
       shouldTransition: () => moveToBlock3.isFinished()
     }),
 

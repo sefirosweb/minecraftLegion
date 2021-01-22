@@ -8,14 +8,20 @@ module.exports = class BehaviorCustomPlaceBlock {
     this.isEndFinished = false
 
     this.tryCount = 0
+    this.itemNotFound = false
   }
 
   isFinished () {
     return this.isEndFinished
   }
 
+  isItemNotFound () {
+    return this.itemNotFound
+  }
+
   onStateEntered () {
     this.isEndFinished = false
+    this.itemNotFound = false
     this.tryCount = 0
 
     if (this.targets.item == null) {
@@ -79,17 +85,17 @@ module.exports = class BehaviorCustomPlaceBlock {
       const item = this.bot.inventory.items().find(item => this.targets.item.name === item.name)
 
       if (item === undefined) {
-        reject(new Error('Item not found', this.targets.item))
-        return
+        botWebsocket.log(`Item not found ${this.targets.item}`)
+        this.itemNotFound = true
+      } else {
+        this.bot.equip(item, 'hand')
+          .then(() => {
+            resolve()
+          })
+          .catch(err => {
+            reject(err)
+          })
       }
-
-      this.bot.equip(item, 'hand')
-        .then(() => {
-          resolve()
-        })
-        .catch(err => {
-          reject(err)
-        })
     })
   }
 }
