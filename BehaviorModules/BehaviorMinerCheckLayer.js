@@ -166,6 +166,7 @@ module.exports = class BehaviorMinerCheckLayer {
       this.zEnd = parseInt(this.minerCords.zStart)
     }
 
+    /*
     if (this.xStart > this.xEnd) {
       this.xStart++
       this.xEnd--
@@ -181,6 +182,7 @@ module.exports = class BehaviorMinerCheckLayer {
       this.zStart--
       this.zEnd++
     }
+    */
 
     this.yCurrent = parseInt(this.yStart)
     this.xCurrent = parseInt(this.xStart)
