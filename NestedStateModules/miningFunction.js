@@ -84,7 +84,7 @@ function minerJobFunction (bot, targets) {
   minerChecks.y = 613
 
   const checkLayer = new BehaviorMinerCheckLayer(bot, targets)
-  checkLayer.stateName = 'Check Lava & Water'
+  checkLayer.stateName = 'Check Layer Lava & Water'
   checkLayer.x = 525
   checkLayer.y = 313
 
@@ -133,14 +133,17 @@ function minerJobFunction (bot, targets) {
       child: eatFood,
       name: 'checkLavaWater -> currentBlock',
       onTransition: () => currentBlock.setMinerCords(nextLayer.getCurrentLayerCoords()),
-      shouldTransition: () => checkLayer.isFinished()
+      shouldTransition: () => checkLayer.isFinished() || !bot.inventory.items().find(item => blockForPlace.includes(item.name))
     }),
 
     new StateTransition({
       parent: checkLayer,
       child: moveToBlock2,
       name: 'checkLavaWater -> moveToBlock2',
-      shouldTransition: () => checkLayer.getFoundLavaOrWater()
+      onTransition: () => {
+        targets.item = bot.inventory.items().find(item => blockForPlace.includes(item.name))
+      },
+      shouldTransition: () => checkLayer.getFoundLavaOrWater() && bot.inventory.items().find(item => blockForPlace.includes(item.name))
     }),
 
     new StateTransition({
