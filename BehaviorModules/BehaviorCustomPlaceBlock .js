@@ -61,15 +61,57 @@ module.exports = class BehaviorCustomPlaceBlock {
       })
   }
 
+  place () {
+    return new Promise((resolve, reject) => {
+      const block = this.bot.blockAt(this.targets.position)
+      if (block.name === this.targets.item.name || block == null) {
+        resolve()
+        return
+      }
+
+      if (
+        Math.floor(this.bot.entity.position.x) === block.position.x &&
+        Math.floor(this.bot.entity.position.y) === block.position.y &&
+        Math.floor(this.bot.entity.position.z) === block.position.z &&
+        this.isJumping === false
+      ) {
+        this.isJumping = true
+        this.bot.setControlState('jump', true)
+      }
+
+      this.bot.placeBlock(block, vec3(0, 1, 0))
+        .then(() => {
+          resolve()
+        })
+        .catch(() => {
+          setTimeout(function () {
+            this.place()
+              .then(() => {
+                resolve()
+              })
+          }.bind(this), 200)
+        })
+    })
+  }
+
   placeBlock (block) {
-    this.bot.placeBlock(block, vec3(0, 1, 0))
+    // Jump if this on same position
+    this.isJumping = false
+    if (
+      Math.floor(this.bot.entity.position.x) === block.position.x &&
+      Math.floor(this.bot.entity.position.y) === block.position.y &&
+      Math.floor(this.bot.entity.position.z) === block.position.z
+    ) {
+      this.isJumping = true
+      console.log('Jumping')
+      this.bot.setControlState('jump', true)
+    }
+    this.place()
       .then(() => {
+        if (this.isJumping) {
+          this.bot.setControlState('jump', false)
+        }
         this.isEndFinished = true
-      })
-      .catch(() => {
-        setTimeout(function () {
-          this.onStateEntered()
-        }.bind(this), 200)
       })
   }
 
