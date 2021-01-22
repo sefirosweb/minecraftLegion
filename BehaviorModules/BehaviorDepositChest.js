@@ -64,8 +64,7 @@ module.exports = class BehaviorDepositChest {
         this.depositItems()
           .then(() => this.chest.close())
           .catch((error) => {
-            botWebsocket.log('Error Deposit items ' + error)
-            console.log('Error Deposit items ' + error)
+            botWebsocket.log(`Error Deposit items ${error}`)
             this.chest.close()
           })
       }, 1000)

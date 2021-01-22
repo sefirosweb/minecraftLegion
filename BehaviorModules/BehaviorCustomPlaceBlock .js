@@ -141,7 +141,6 @@ module.exports = class BehaviorCustomPlaceBlock {
       const hand = this.bot.heldItem
 
       if (hand != null && hand.name === this.targets.item.name) {
-        console.log(hand)
         resolve()
         return
       }

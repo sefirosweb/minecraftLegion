@@ -18,9 +18,8 @@ module.exports = class BehaviorEquip {
         this.isEndFinished = true
       })
       .catch((error) => {
-        console.log(error)
         this.isEndFinished = true
-        botWebsocket.log('Error Equip Items' + JSON.stringify(error))
+        botWebsocket.log(`Error Equip Items + ${JSON.stringify(error)}`)
       })
   }
 

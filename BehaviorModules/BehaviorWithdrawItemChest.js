@@ -60,8 +60,7 @@ module.exports = class BehaviorWithdrawItemChest {
         this.getItemsFromChest()
           .then(() => this.chest.close())
           .catch((error) => {
-            botWebsocket.log('Error Withdraw items ' + error)
-            console.log('Error Withdraw items ' + error)
+            botWebsocket.log(`Error Withdraw items  ${error}`)
             this.chest.close()
           })
       }, 1500)

@@ -60,8 +60,8 @@ function minerJobFunction (bot, targets) {
 
   const moveToBlock2 = new BehaviorMoveTo(bot, targets)
   moveToBlock2.stateName = 'Move To Block 2'
-  moveToBlock2.x = 325
-  moveToBlock2.y = 450
+  moveToBlock2.x = 525
+  moveToBlock2.y = 313
 
   const moveToBlock3 = new BehaviorMoveTo(bot, targets)
   moveToBlock3.stateName = 'Move To Blockk 3'
@@ -71,7 +71,7 @@ function minerJobFunction (bot, targets) {
   const placeBlock1 = new BehaviorCustomPlaceBlock(bot, targets)
   placeBlock1.stateName = 'Place Block 1'
   placeBlock1.x = 325
-  placeBlock1.y = 315
+  placeBlock1.y = 415
 
   const placeBlock2 = new BehaviorCustomPlaceBlock(bot, targets)
   placeBlock2.stateName = 'Place Block 2'
@@ -86,7 +86,7 @@ function minerJobFunction (bot, targets) {
   const checkLayer = new BehaviorMinerCheckLayer(bot, targets)
   checkLayer.stateName = 'Check Layer Lava & Water'
   checkLayer.x = 525
-  checkLayer.y = 313
+  checkLayer.y = 213
 
   const validFood = ['cooked_chicken']
   const eatFood = new BehaviorEatFood(bot, targets, validFood)

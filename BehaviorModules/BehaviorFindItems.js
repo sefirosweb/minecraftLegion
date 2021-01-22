@@ -31,7 +31,6 @@ module.exports = class BehaviorFindItems {
           this.targets.itemDrop = entity
           this.targets.position = entity.position
           this.isEndFinished = true
-          // console.log(entity)
           return true
         }
       }

@@ -88,7 +88,7 @@ module.exports = class BehaviorMoveToArray {
 
     const position = this.position
     if (!position) {
-      console.log('[MoveTo] Target not defined. Skipping.')
+      botWebsocket.log('[MoveTo] Target not defined. Skipping.')
       return
     }
 
