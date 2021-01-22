@@ -66,13 +66,6 @@ module.exports = class BehaviorCustomPlaceBlock {
       .then(() => {
         this.placeBlock(block)
       })
-      .catch(function (err) {
-        botWebsocket.log(`Error on change item ${this.targets.item.name} ${err.message}`)
-        setTimeout(function () {
-          botWebsocket.log('Restaring Place Block...')
-          this.onStateEntered()
-        }.bind(this), 500)
-      }.bind(this))
   }
 
   place () {
@@ -97,6 +90,17 @@ module.exports = class BehaviorCustomPlaceBlock {
       ) {
         this.isJumping = true
         this.bot.setControlState('jump', true)
+      }
+
+      const hand = this.bot.heldItem
+      if (hand == null && hand.name !== this.targets.item.name) {
+        this.equip()
+          .then(() => {
+            this.place()
+              .then(() => {
+                resolve()
+              })
+          })
       }
 
       this.bot.placeBlock(block, vec3(0, 1, 0))
@@ -157,9 +161,15 @@ module.exports = class BehaviorCustomPlaceBlock {
           .then(() => {
             resolve()
           })
-          .catch(err => {
-            reject(err)
-          })
+          .catch(function (err) {
+            botWebsocket.log(`Error on change item ${this.targets.item.name} ${err.message}`)
+            setTimeout(function () {
+              this.equip()
+                .then(() => {
+                  resolve()
+                })
+            }.bind(this), 200)
+          }.bind(this))
       }
     })
   }

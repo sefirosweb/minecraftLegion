@@ -68,6 +68,16 @@ module.exports = class BehaviorMinerCheckLayer {
         this.xNext()
       }
 
+      // 4 extreme position => omit
+      if (
+        (this.xCurrent === this.xEnd && this.zCurrent === this.zEnd) ||
+        (this.xCurrent === this.xStart && this.zCurrent === this.zStart) ||
+        (this.xCurrent === this.xEnd && this.zCurrent === this.zStart) ||
+        (this.xCurrent === this.xStart && this.zCurrent === this.zEnd)
+      ) {
+        return this.checkArea()
+      }
+
       const block = this.getBlockType()
       if (block && this.blocksToFind.includes(block.name)) {
         botWebsocket.log(`Found: ${block.name} on X:${this.xCurrent} Y:${this.yCurrent} Z:${this.zCurrent}`)
