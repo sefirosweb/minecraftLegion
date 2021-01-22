@@ -48,7 +48,7 @@ module.exports = class BehaviorCustomPlaceBlock {
         this.placeBlock(block)
       })
       .catch(err => {
-        botWebsocket.log(`Error on change weapon ${this.targets.item.name} ${err.message}`)
+        botWebsocket.log(`Error on change item ${this.targets.item.name} ${err.message}`)
         setTimeout(function () {
           this.onStateEntered()
         }.bind(this), 500)
