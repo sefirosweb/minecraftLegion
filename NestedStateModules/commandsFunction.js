@@ -308,7 +308,7 @@ function commandsFunction (bot, targets) {
   }
 
   function saveChest (chestName) {
-    const permitedChests = ['food', 'equipment', 'deposit']
+    const permitedChests = ['food', 'equipment', 'deposit', 'picks', 'shovels']
     if (!permitedChests.includes(chestName)) {
       bot.chat('I don\'t know what chest is it')
       return
