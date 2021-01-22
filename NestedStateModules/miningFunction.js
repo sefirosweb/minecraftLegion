@@ -144,7 +144,6 @@ function minerJobFunction (bot, targets) {
         const item = bot.inventory.items().find(item => blockForPlace.includes(item.name))
         if (checkLayer.getFoundLavaOrWater() && item) {
           targets.item = item
-          console.log(item)
           return true
         }
         return false
