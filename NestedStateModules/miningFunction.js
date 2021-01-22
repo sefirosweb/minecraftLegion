@@ -140,10 +140,15 @@ function minerJobFunction (bot, targets) {
       parent: checkLayer,
       child: moveToBlock2,
       name: 'checkLavaWater -> moveToBlock2',
-      onTransition: () => {
-        targets.item = bot.inventory.items().find(item => blockForPlace.includes(item.name))
-      },
-      shouldTransition: () => checkLayer.getFoundLavaOrWater() && bot.inventory.items().find(item => blockForPlace.includes(item.name))
+      shouldTransition: () => {
+        const item = bot.inventory.items().find(item => blockForPlace.includes(item.name))
+        if (checkLayer.getFoundLavaOrWater() && item) {
+          targets.item = item
+          console.log(item)
+          return true
+        }
+        return false
+      }
     }),
 
     new StateTransition({
