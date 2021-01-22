@@ -61,9 +61,7 @@ module.exports = class BehaviorCustomPlaceBlock {
       .then(() => {
         this.isEndFinished = true
       })
-      .catch(err => {
-        console.log('Error on place block')
-        console.log(err)
+      .catch(() => {
         setTimeout(function () {
           this.onStateEntered()
         }.bind(this), 200)

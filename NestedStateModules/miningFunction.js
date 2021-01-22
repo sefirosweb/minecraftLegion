@@ -204,13 +204,16 @@ function minerJobFunction (bot, targets) {
       parent: mineBlock,
       child: placeBlock2,
       name: 'Go Next Block',
-      onTransition: () => {
-        targets.position = targets.position.offset(0, -1, 0) // Place block downside current block
-        targets.item = bot.inventory.items().find(item => blockForPlace.includes(item.name))
-      },
       shouldTransition: () => {
         const block = bot.blockAt(targets.position.offset(0, -1, 0))
-        return mineBlock.isFinished() && placeBlocks.includes(block.name) && bot.inventory.items().find(item => blockForPlace.includes(item.name))
+        const item = bot.inventory.items().find(item => blockForPlace.includes(item.name))
+        if (mineBlock.isFinished() && placeBlocks.includes(block.name) && item) {
+          targets.item = item
+          targets.position = targets.position.offset(0, -1, 0)
+          return true
+        }
+
+        return false
       }
     }),
 
