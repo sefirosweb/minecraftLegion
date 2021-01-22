@@ -71,7 +71,7 @@ module.exports = class BehaviorMinerCheckLayer {
       const block = this.getBlockType()
       if (block && this.blocksToFind.includes(block.name)) {
         botWebsocket.log(`Found: ${block.name} on X:${this.xCurrent} Y:${this.yCurrent} Z:${this.zCurrent}`)
-        this.targets.position = block.position.offset(0, 1, 0)
+        this.targets.position = block.position
         this.foundLavaOrWater = true
         return true
       }
@@ -166,7 +166,6 @@ module.exports = class BehaviorMinerCheckLayer {
       this.zEnd = parseInt(this.minerCords.zStart)
     }
 
-    /*
     if (this.xStart > this.xEnd) {
       this.xStart++
       this.xEnd--
@@ -182,7 +181,6 @@ module.exports = class BehaviorMinerCheckLayer {
       this.zStart--
       this.zEnd++
     }
-    */
 
     this.yCurrent = parseInt(this.yStart)
     this.xCurrent = parseInt(this.xStart)

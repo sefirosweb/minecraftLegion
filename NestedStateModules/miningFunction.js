@@ -48,10 +48,15 @@ function minerJobFunction (bot, targets) {
   findInteractPosition.x = 925
   findInteractPosition.y = 113
 
-  const mineBlock = new BehaviorDigBlock(bot, targets)
-  mineBlock.stateName = 'Mine Block'
-  mineBlock.x = 1025
-  mineBlock.y = 563
+  const mineBlock1 = new BehaviorDigBlock(bot, targets)
+  mineBlock1.stateName = 'Mine Block 1'
+  mineBlock1.x = 1025
+  mineBlock1.y = 563
+
+  const mineBlock2 = new BehaviorDigBlock(bot, targets)
+  mineBlock2.stateName = 'Mine Block 2'
+  mineBlock2.x = 325
+  mineBlock2.y = 500
 
   const moveToBlock1 = new BehaviorMoveTo(bot, targets)
   moveToBlock1.stateName = 'Move To Block 1'
@@ -61,7 +66,7 @@ function minerJobFunction (bot, targets) {
   const moveToBlock2 = new BehaviorMoveTo(bot, targets)
   moveToBlock2.stateName = 'Move To Block 2'
   moveToBlock2.x = 525
-  moveToBlock2.y = 313
+  moveToBlock2.y = 363
 
   const moveToBlock3 = new BehaviorMoveTo(bot, targets)
   moveToBlock3.stateName = 'Move To Blockk 3'
@@ -71,12 +76,17 @@ function minerJobFunction (bot, targets) {
   const placeBlock1 = new BehaviorCustomPlaceBlock(bot, targets)
   placeBlock1.stateName = 'Place Block 1'
   placeBlock1.x = 325
-  placeBlock1.y = 415
+  placeBlock1.y = 300
 
   const placeBlock2 = new BehaviorCustomPlaceBlock(bot, targets)
   placeBlock2.stateName = 'Place Block 2'
   placeBlock2.x = 725
   placeBlock2.y = 513
+
+  const placeBlock3 = new BehaviorCustomPlaceBlock(bot, targets)
+  placeBlock3.stateName = 'Place Block 3'
+  placeBlock3.x = 325
+  placeBlock3.y = 400
 
   const minerChecks = new BehaviorMinerChecks(bot, targets)
   minerChecks.stateName = 'Miner Check'
@@ -140,6 +150,9 @@ function minerJobFunction (bot, targets) {
       parent: checkLayer,
       child: moveToBlock2,
       name: 'checkLavaWater -> moveToBlock2',
+      onTransition: () => {
+        targets.position = targets.position.offset(0, 1, 0)
+      },
       shouldTransition: () => {
         const item = bot.inventory.items().find(item => blockForPlace.includes(item.name))
         if (checkLayer.getFoundLavaOrWater() && item) {
@@ -152,14 +165,44 @@ function minerJobFunction (bot, targets) {
 
     new StateTransition({
       parent: moveToBlock2,
+      child: mineBlock2,
+      name: 'If up of block is solid',
+      shouldTransition: () => {
+        const block = bot.blockAt(targets.position)
+        return moveToBlock2.distanceToTarget() < 2 && !placeBlocks.includes(block.name)
+      }
+    }),
+
+    new StateTransition({
+      parent: mineBlock2,
+      child: placeBlock3,
+      name: 'mineBlock2 -> placeBlock1',
+      onTransition: () => {
+        targets.position = targets.position.offset(0, -1, 0)
+      },
+      shouldTransition: () => mineBlock2.isFinished()
+    }),
+
+    new StateTransition({
+      parent: placeBlock3,
       child: placeBlock1,
-      name: 'checkLavaWater -> moveToBlock2',
+      name: 'mineBlock2 -> placeBlock1',
+      onTransition: () => {
+        targets.position = targets.position.offset(0, 1, 0)
+      },
+      shouldTransition: () => placeBlock3.isFinished()
+    }),
+
+    new StateTransition({
+      parent: moveToBlock2,
+      child: placeBlock1,
+      name: 'if up block is liquid',
       onTransition: () => {
         targets.position = targets.position.offset(0, -1, 0)
       },
       shouldTransition: () => {
         const block = bot.blockAt(targets.position)
-        return moveToBlock2.distanceToTarget() < 2 && bot.canSeeBlock(block)
+        return moveToBlock2.distanceToTarget() < 2 && bot.canSeeBlock(block) && placeBlocks.includes(block.name)
       }
     }),
 
@@ -203,7 +246,7 @@ function minerJobFunction (bot, targets) {
 
     new StateTransition({
       parent: moveToBlock1,
-      child: mineBlock,
+      child: mineBlock1,
       name: 'Move To Block 1',
       onTransition: () => {
         targets.position = targets.previousPosition
@@ -212,13 +255,13 @@ function minerJobFunction (bot, targets) {
     }),
 
     new StateTransition({
-      parent: mineBlock,
+      parent: mineBlock1,
       child: placeBlock2,
       name: 'Go Next Block',
       shouldTransition: () => {
         const block = bot.blockAt(targets.position.offset(0, -1, 0))
         const item = bot.inventory.items().find(item => blockForPlace.includes(item.name))
-        if (mineBlock.isFinished() && placeBlocks.includes(block.name) && item) {
+        if (mineBlock1.isFinished() && placeBlocks.includes(block.name) && item) {
           targets.item = item
           targets.position = targets.position.offset(0, -1, 0)
           return true
@@ -229,12 +272,12 @@ function minerJobFunction (bot, targets) {
     }),
 
     new StateTransition({
-      parent: mineBlock,
+      parent: mineBlock1,
       child: moveToBlock3,
       name: 'Go Next Block',
       shouldTransition: () => {
         const block = bot.blockAt(targets.position.offset(0, -1, 0))
-        return mineBlock.isFinished() && (!placeBlocks.includes(block.name) || !bot.inventory.items().find(item => blockForPlace.includes(item.name)))
+        return mineBlock1.isFinished() && (!placeBlocks.includes(block.name) || !bot.inventory.items().find(item => blockForPlace.includes(item.name)))
       }
     }),
 
