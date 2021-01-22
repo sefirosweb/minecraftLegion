@@ -20,13 +20,13 @@ module.exports = class BehaviorCustomPlaceBlock {
 
     if (this.targets.item == null) {
       botWebsocket.log('No exists targets.item')
-      console.error('No exists targets.item')
+      this.isEndFinished = true
       return
     }
 
     if (this.targets.position == null) {
       botWebsocket.log('No exists targets.position')
-      console.error('No exists targets.position')
+      this.isEndFinished = true
       return
     }
 
@@ -39,7 +39,7 @@ module.exports = class BehaviorCustomPlaceBlock {
 
     if (block == null) {
       botWebsocket.log('Cant find block')
-      console.error('Cant find block')
+      this.isEndFinished = true
       return
     }
 
@@ -48,11 +48,10 @@ module.exports = class BehaviorCustomPlaceBlock {
         this.placeBlock(block)
       })
       .catch(err => {
-        console.log('Error on change weapon', this.targets.item)
-        console.log(err)
+        botWebsocket.log(`Error on change weapon ${this.targets.item.name} ${err.message}`)
         setTimeout(function () {
           this.onStateEntered()
-        }.bind(this), 200)
+        }.bind(this), 500)
       })
   }
 
@@ -73,7 +72,6 @@ module.exports = class BehaviorCustomPlaceBlock {
       const hand = this.bot.heldItem
 
       if (hand != null && hand.name === this.targets.item) {
-        console.log('Equip ', hand)
         resolve()
         return
       }
@@ -90,7 +88,6 @@ module.exports = class BehaviorCustomPlaceBlock {
           resolve()
         })
         .catch(err => {
-          console.log('Error on equip')
           reject(err)
         })
     })

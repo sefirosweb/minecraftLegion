@@ -72,7 +72,6 @@ module.exports = class BehaviorMinerCheckLayer {
       if (this.blocksToFind.includes(block.name)) {
         botWebsocket.log(`Found: ${block.name} on X:${this.xCurrent} Y:${this.yCurrent} Z:${this.zCurrent}`)
         this.targets.position = block.position.offset(0, 1, 0)
-        // this.targets.blockFace = new Vec3(0, 1, 0)
         this.foundLavaOrWater = true
         return true
       }

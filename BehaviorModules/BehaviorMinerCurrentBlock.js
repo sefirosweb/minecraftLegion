@@ -81,7 +81,7 @@ module.exports = class BehaviorMinerCurrentBlock {
       this.xCurrent === this.xEnd
     ) {
       this.isLayerFinished = true
-      botWebsocket.log('Current layer finished ' + this.yCurrent)
+      botWebsocket.log(`Current layer finished ${this.yCurrent}`)
     } else {
       if (this.minerCords.orientation === 'n' || this.minerCords.orientation === 's') {
         this.zNext()
@@ -108,7 +108,6 @@ module.exports = class BehaviorMinerCurrentBlock {
     const isValidBlockType = this.blockInValidType.find(b => b === block.name)
     if (isValidBlockType === undefined) {
       this.targets.position = block.position // I detect is not air / lava / water then go to this position
-      // console.log(block.name)
       return true
     }
 
