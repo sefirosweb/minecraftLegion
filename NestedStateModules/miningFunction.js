@@ -174,7 +174,7 @@ function minerJobFunction (bot, targets) {
       parent: placeBlock1,
       child: checkLayer,
       name: 'Item not found',
-      shouldTransition: () => placeBlock1.isItemNotFound()
+      shouldTransition: () => placeBlock1.isItemNotFound() || placeBlock1.isCantPlaceBlock()
     }),
 
     new StateTransition({
@@ -251,11 +251,11 @@ function minerJobFunction (bot, targets) {
     new StateTransition({
       parent: placeBlock2,
       child: moveToBlock3,
-      name: 'Item not found for place block',
+      name: 'Item not found for place block or block is already in use',
       onTransition: () => {
         targets.position = targets.position.offset(0, 1, 0)
       },
-      shouldTransition: () => placeBlock2.isItemNotFound()
+      shouldTransition: () => placeBlock2.isItemNotFound() || placeBlock2.isCantPlaceBlock()
     }),
 
     new StateTransition({

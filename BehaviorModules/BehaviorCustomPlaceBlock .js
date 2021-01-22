@@ -5,10 +5,11 @@ module.exports = class BehaviorCustomPlaceBlock {
     this.bot = bot
     this.targets = targets
     this.stateName = 'Custom BehaviorPlaceBlock '
-    this.isEndFinished = false
+    this.blockCanBeReplaced = ['air', 'cave_air', 'lava', 'water']
 
-    this.tryCount = 0
+    this.isEndFinished = false
     this.itemNotFound = false
+    this.cantPlaceBlock = false
   }
 
   isFinished () {
@@ -19,10 +20,14 @@ module.exports = class BehaviorCustomPlaceBlock {
     return this.itemNotFound
   }
 
+  isCantPlaceBlock () {
+    return this.cantPlaceBlock
+  }
+
   onStateEntered () {
     this.isEndFinished = false
     this.itemNotFound = false
-    this.tryCount = 0
+    this.cantPlaceBlock = false
 
     if (this.targets.item == null) {
       botWebsocket.log('No exists targets.item')
@@ -39,6 +44,7 @@ module.exports = class BehaviorCustomPlaceBlock {
     const block = this.bot.blockAt(this.targets.position)
 
     if (block.name === this.targets.item.name) {
+      botWebsocket.log('The block is same')
       this.isEndFinished = true
       return
     }
@@ -46,6 +52,12 @@ module.exports = class BehaviorCustomPlaceBlock {
     if (block == null) {
       botWebsocket.log('Cant find block')
       this.isEndFinished = true
+      return
+    }
+
+    if (!this.blockCanBeReplaced.includes(block.name)) {
+      botWebsocket.log('Cant place block there!')
+      this.cantPlaceBlock = true
       return
     }
 
@@ -64,8 +76,14 @@ module.exports = class BehaviorCustomPlaceBlock {
   place () {
     return new Promise((resolve, reject) => {
       const block = this.bot.blockAt(this.targets.position)
-      if (block.name === this.targets.item.name || block == null) {
-        resolve()
+      if (block == null || block.name === this.targets.item.name) {
+        resolve(true)
+        return
+      }
+
+      if (!this.blockCanBeReplaced.includes(block.name)) {
+        botWebsocket.log('Cant place block there!!')
+        resolve(false)
         return
       }
 
@@ -86,8 +104,8 @@ module.exports = class BehaviorCustomPlaceBlock {
         .catch(() => {
           setTimeout(function () {
             this.place()
-              .then(() => {
-                resolve()
+              .then(canBePlaced => {
+                resolve(canBePlaced)
               })
           }.bind(this), 200)
         })
@@ -106,11 +124,15 @@ module.exports = class BehaviorCustomPlaceBlock {
       this.bot.setControlState('jump', true)
     }
     this.place()
-      .then(() => {
+      .then((canBePlaced) => {
         if (this.isJumping) {
           this.bot.setControlState('jump', false)
         }
-        this.isEndFinished = true
+        if (canBePlaced) {
+          this.isEndFinished = true
+        } else {
+          this.cantPlaceBlock = true
+        }
       })
   }
 
@@ -119,6 +141,7 @@ module.exports = class BehaviorCustomPlaceBlock {
       const hand = this.bot.heldItem
 
       if (hand != null && hand.name === this.targets.item.name) {
+        console.log(hand)
         resolve()
         return
       }
