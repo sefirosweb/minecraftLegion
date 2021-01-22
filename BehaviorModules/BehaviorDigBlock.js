@@ -1,3 +1,4 @@
+const botWebsocket = require('../modules/botWebsocket')
 module.exports = class template {
   constructor (bot, targets) {
     this.bot = bot
@@ -19,15 +20,14 @@ module.exports = class template {
   checkBlock () {
     const block = this.bot.blockAt(this.targets.position, true)
     if (!block || !this.bot.canDigBlock(block)) {
-      console.log(`Block error: ${block.name}`)
+      botWebsocket.log(`Block error: ${block.name}`)
       this.isEndFinished = true
       return
     }
 
     this.equipToolForBlock(block)
       .then(() => this.startDig(block))
-      .catch(err => {
-        console.log(err)
+      .catch(() => {
         setTimeout(function () {
           this.onStateEntered()
         }.bind(this), 200)
@@ -40,7 +40,7 @@ module.exports = class template {
         this.isEndFinished = true
       })
       .catch(err => {
-        console.log(err)
+        botWebsocket.log(err.message)
         setTimeout(function () {
           this.onStateEntered()
         }.bind(this), 200)
@@ -66,8 +66,8 @@ module.exports = class template {
         .then(() => {
           resolve()
         })
-        .catch(err => {
-          console.log(`Error on equip tool: ${tool.name}`)
+        .catch((err) => {
+          botWebsocket.log(`Error on equip tool: ${tool.name}`)
           reject(err)
         })
     })
