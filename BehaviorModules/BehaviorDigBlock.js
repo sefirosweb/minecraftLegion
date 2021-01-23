@@ -70,6 +70,7 @@ module.exports = class template {
           resolve()
         })
         .catch((err) => {
+          console.log('Error found!')
           console.log(err)
           reject(new Error('Error on equip tool'))
         })
