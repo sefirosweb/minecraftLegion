@@ -33,7 +33,18 @@ module.exports = class BehaviorMinerCurrentLayer {
       this.currentLayer = Math.max(parseInt(this.minerCords.yStart), parseInt(this.minerCords.yEnd))
       this.endLayer = Math.min(parseInt(this.minerCords.yStart), parseInt(this.minerCords.yEnd))
     } else {
-      throw console.error('No soportado otro metodo')
+      // N & S => Z
+      if (this.minerCords.orientation === 'n') {
+        this.currentLayer = Math.max(parseInt(this.minerCords.zStart), parseInt(this.minerCords.zEnd))
+        this.endLayer = Math.min(parseInt(this.minerCords.zStart), parseInt(this.minerCords.zEnd))
+      }
+      if (this.minerCords.orientation === 's') {
+        this.currentLayer = Math.min(parseInt(this.minerCords.zStart), parseInt(this.minerCords.zEnd))
+        this.endLayer = Math.max(parseInt(this.minerCords.zStart), parseInt(this.minerCords.zEnd))
+      }
+      // W & E => X
+      // TODO X
+      // throw console.error('No soportado otro metodo')
     }
   }
 
@@ -51,22 +62,35 @@ module.exports = class BehaviorMinerCurrentLayer {
   }
 
   getCurrentLayerCoords () {
-    if (this.minerMethod === 'vertically') {
-      const minerCoords = {}
-
-      minerCoords.xStart = this.minerCords.xEnd
-      minerCoords.xEnd = this.minerCords.xStart
+    const minerCoords = {}
+    if (this.minerMethod === 'vertically') { // => Y Layer
+      minerCoords.xStart = this.minerCords.xStart
+      minerCoords.xEnd = this.minerCords.xEnd
 
       minerCoords.yStart = this.currentLayer
-      minerCoords.zStart = this.minerCords.zStart
       minerCoords.yEnd = this.currentLayer
+
+      minerCoords.zStart = this.minerCords.zStart
       minerCoords.zEnd = this.minerCords.zEnd
 
       minerCoords.orientation = this.minerCords.orientation
-
-      return minerCoords
     } else {
-      throw console.error('No soportado otro metodo')
+      if (this.minerCords.orientation === 'n' || this.minerCords.orientation === 's') { // => Z Layer
+        minerCoords.xStart = this.minerCords.xStart
+        minerCoords.xEnd = this.minerCords.xEnd
+
+        minerCoords.yStart = Math.min(parseInt(this.minerCords.yStart), parseInt(this.minerCords.yEnd))
+        minerCoords.yEnd = Math.max(parseInt(this.minerCords.yStart), parseInt(this.minerCords.yEnd))
+
+        minerCoords.zStart = this.currentLayer
+        minerCoords.zStart = this.currentLayer
+        return minerCoords
+      }
+
+      // TODO X Layer
+      // throw console.error('No soportado otro metodo')
     }
+
+    return minerCoords
   }
 }
