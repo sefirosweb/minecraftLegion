@@ -9,7 +9,6 @@ module.exports = class BehaviorMinerCurrentLayer {
     this.currentLayer = false
     this.endLayer = false
 
-    this.minerMethod = 'vertically' // Can use Horizontally or Vertically
     this.nextLayer = false
     this.firstBlockLayer = true
     this.isEndFinished = false
@@ -29,7 +28,7 @@ module.exports = class BehaviorMinerCurrentLayer {
   }
 
   startLayer () {
-    if (this.minerMethod === 'vertically') {
+    if (this.minerCords.tunel === 'vertically') {
       this.currentLayer = Math.max(parseInt(this.minerCords.yStart), parseInt(this.minerCords.yEnd))
       this.endLayer = Math.min(parseInt(this.minerCords.yStart), parseInt(this.minerCords.yEnd))
     } else {
@@ -63,7 +62,10 @@ module.exports = class BehaviorMinerCurrentLayer {
 
   getCurrentLayerCoords () {
     const minerCoords = {}
-    if (this.minerMethod === 'vertically') { // => Y Layer
+    minerCoords.orientation = this.minerCords.orientation
+    minerCoords.tunel = this.minerCords.tunel
+
+    if (this.minerCords.tunel === 'vertically') { // => Y Layer
       minerCoords.xStart = this.minerCords.xStart
       minerCoords.xEnd = this.minerCords.xEnd
 
@@ -72,8 +74,6 @@ module.exports = class BehaviorMinerCurrentLayer {
 
       minerCoords.zStart = this.minerCords.zStart
       minerCoords.zEnd = this.minerCords.zEnd
-
-      minerCoords.orientation = this.minerCords.orientation
     } else {
       if (this.minerCords.orientation === 'n' || this.minerCords.orientation === 's') { // => Z Layer
         minerCoords.xStart = this.minerCords.xStart
@@ -84,7 +84,6 @@ module.exports = class BehaviorMinerCurrentLayer {
 
         minerCoords.zStart = this.currentLayer
         minerCoords.zStart = this.currentLayer
-        return minerCoords
       }
 
       // TODO X Layer
