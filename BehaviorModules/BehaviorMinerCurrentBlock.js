@@ -42,7 +42,7 @@ module.exports = class BehaviorMinerCurrentBlock {
   }
 
   startBlock () {
-    // For Horitonzally go down to up
+    // For Horizontally go down to up
     this.yStart = this.minerCords.yStart
     this.yEnd = this.minerCords.yEnd
 
@@ -129,10 +129,14 @@ module.exports = class BehaviorMinerCurrentBlock {
         this.zNext()
       }
     } else {
-      if (this.xStart < this.xEnd) {
-        this.xCurrent++
+      if (this.firstBlockOnLayer) {
+        this.firstBlockOnLayer = false
       } else {
-        this.xCurrent--
+        if (this.xStart < this.xEnd) {
+          this.xCurrent++
+        } else {
+          this.xCurrent--
+        }
       }
     }
   }
