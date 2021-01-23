@@ -57,6 +57,8 @@ module.exports = class BehaviorMinerCurrentLayer {
       } else {
         this.currentLayer--
       }
+
+      botWebsocket.log(`Current LAYER ${this.currentLayer}`)
     }
   }
 
@@ -66,14 +68,14 @@ module.exports = class BehaviorMinerCurrentLayer {
     minerCoords.tunel = this.minerCords.tunel
 
     if (this.minerCords.tunel === 'vertically') { // => Y Layer
-      minerCoords.xStart = this.minerCords.xStart
-      minerCoords.xEnd = this.minerCords.xEnd
+      minerCoords.xStart = parseInt(this.minerCords.xStart)
+      minerCoords.xEnd = parseInt(this.minerCords.xEnd)
 
-      minerCoords.yStart = this.currentLayer
-      minerCoords.yEnd = this.currentLayer
+      minerCoords.yStart = parseInt(this.currentLayer)
+      minerCoords.yEnd = parseInt(this.currentLayer)
 
-      minerCoords.zStart = this.minerCords.zStart
-      minerCoords.zEnd = this.minerCords.zEnd
+      minerCoords.zStart = parseInt(this.minerCords.zStart)
+      minerCoords.zEnd = parseInt(this.minerCords.zEnd)
     } else {
       if (this.minerCords.orientation === 'n' || this.minerCords.orientation === 's') { // => Z Layer
         minerCoords.xStart = this.minerCords.xStart
@@ -83,7 +85,7 @@ module.exports = class BehaviorMinerCurrentLayer {
         minerCoords.yEnd = Math.max(parseInt(this.minerCords.yStart), parseInt(this.minerCords.yEnd))
 
         minerCoords.zStart = this.currentLayer
-        minerCoords.zStart = this.currentLayer
+        minerCoords.zEnd = this.currentLayer
       }
 
       // TODO X Layer
