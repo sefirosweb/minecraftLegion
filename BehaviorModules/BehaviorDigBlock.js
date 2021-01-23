@@ -27,10 +27,12 @@ module.exports = class template {
 
     this.equipToolForBlock(block)
       .then(() => this.startDig(block))
-      .catch(function () {
+      .catch(function (err) {
+        botWebsocket.log(`Error on equipToolForBlock ${err}`)
         setTimeout(function () {
+          botWebsocket.log('Restarting from equipToolForBlock BehaviorDigBlock')
           this.onStateEntered()
-        }.bind(this), 200)
+        }.bind(this), 1000)
       }.bind(this))
   }
 
@@ -39,11 +41,12 @@ module.exports = class template {
       .then(() => {
         this.isEndFinished = true
       })
-      .catch(function (err) {
-        botWebsocket.log(JSON.stringify(err))
+      .catch(function () {
+        botWebsocket.log('Error on digging')
         setTimeout(function () {
+          botWebsocket.log('Restarting from startDig BehaviorDigBlock')
           this.onStateEntered()
-        }.bind(this), 200)
+        }.bind(this), 1000)
       }.bind(this))
   }
 
@@ -67,8 +70,8 @@ module.exports = class template {
           resolve()
         })
         .catch((err) => {
-          botWebsocket.log(`Error on equip tool: ${JSON.stringify(err)}`)
-          reject(err)
+          console.log(err)
+          reject(new Error('Error on equip tool'))
         })
     })
   }
