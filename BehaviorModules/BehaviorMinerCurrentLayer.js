@@ -55,7 +55,11 @@ module.exports = class BehaviorMinerCurrentLayer {
       if (this.firstBlockLayer) {
         this.firstBlockLayer = false
       } else {
-        this.currentLayer--
+        if (this.minerCords.tunel === 'vertically') {
+          this.currentLayer--
+        } else {
+          this.currentLayer++
+        }
       }
 
       botWebsocket.log(`Current LAYER ${this.currentLayer}`)

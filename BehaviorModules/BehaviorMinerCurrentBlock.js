@@ -42,14 +42,10 @@ module.exports = class BehaviorMinerCurrentBlock {
   }
 
   startBlock () {
-    // Put correct order if user wrong set Y position first
-    if (this.minerCords.yStart > this.minerCords.yEnd) {
-      this.yStart = parseInt(this.minerCords.yStart)
-      this.yEnd = parseInt(this.minerCords.yEnd)
-    } else {
-      this.yStart = parseInt(this.minerCords.yEnd)
-      this.yEnd = parseInt(this.minerCords.yStart)
-    }
+    // For Horitonzally go down to up
+    this.yStart = this.minerCords.yStart
+    this.yEnd = this.minerCords.yEnd
+
     this.yCurrent = parseInt(this.yStart)
 
     if (this.minerCords.orientation === 'n' || this.minerCords.orientation === 'e') {
@@ -81,7 +77,7 @@ module.exports = class BehaviorMinerCurrentBlock {
       this.xCurrent === this.xEnd
     ) {
       this.isLayerFinished = true
-      botWebsocket.log(`Current LAER ${this.yCurrent} finished`)
+      botWebsocket.log(`Current LAYER ${this.yCurrent} finished`)
     } else {
       if (this.minerCords.orientation === 'n' || this.minerCords.orientation === 's') {
         this.zNext()
@@ -118,7 +114,7 @@ module.exports = class BehaviorMinerCurrentBlock {
   }
 
   yNext () {
-    this.yCurrent--
+    this.yCurrent++
   }
 
   xNext () {
