@@ -55,10 +55,16 @@ module.exports = class BehaviorMinerCurrentLayer {
       if (this.firstBlockLayer) {
         this.firstBlockLayer = false
       } else {
-        if (this.minerCords.tunel === 'vertically') {
-          this.currentLayer--
-        } else {
-          this.currentLayer++
+        switch (true) {
+          case this.minerCords.tunel === 'vertically':
+            this.currentLayer--
+            break
+          case this.minerCords.tunel === 'horizontally' && this.minerCords.orientation === 'n':
+            this.currentLayer--
+            break
+          case this.minerCords.tunel === 'horizontally' && this.minerCords.orientation === 's':
+            this.currentLayer++
+            break
         }
       }
 

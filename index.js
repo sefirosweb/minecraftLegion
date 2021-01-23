@@ -24,8 +24,8 @@ function startBot (botName, password) {
 
 const botsToStart = [
   { username: 'Miner1' },
-  { username: 'Miner2' }
-  // { username: 'Miner3' },
+  { username: 'Miner2' },
+  { username: 'Miner3' }
   // { username: 'Miner4' }
   // { username: 'Guard1' }
   // { username: 'Guard2' },
