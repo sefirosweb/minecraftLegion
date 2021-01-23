@@ -18,7 +18,7 @@ module.exports = class template {
   }
 
   checkBlock () {
-    const block = this.bot.blockAt(this.targets.position, false)
+    const block = this.bot.blockAt(this.targets.position)
     if (!block || !this.bot.canDigBlock(block)) {
       botWebsocket.log(`Error mining block: ${block.name}`)
       this.isEndFinished = true
