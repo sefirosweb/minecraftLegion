@@ -18,20 +18,20 @@ module.exports = class template {
   }
 
   checkBlock () {
-    const block = this.bot.blockAt(this.targets.position, true)
+    const block = this.bot.blockAt(this.targets.position, false)
     if (!block || !this.bot.canDigBlock(block)) {
-      botWebsocket.log(`Block error: ${block.name}`)
+      botWebsocket.log(`Error mining block: ${block.name}`)
       this.isEndFinished = true
       return
     }
 
     this.equipToolForBlock(block)
       .then(() => this.startDig(block))
-      .catch(() => {
+      .catch(function () {
         setTimeout(function () {
           this.onStateEntered()
         }.bind(this), 200)
-      })
+      }.bind(this))
   }
 
   startDig (block) {
@@ -39,12 +39,12 @@ module.exports = class template {
       .then(() => {
         this.isEndFinished = true
       })
-      .catch(err => {
-        botWebsocket.log(err.message)
+      .catch(function (err) {
+        botWebsocket.log(JSON.stringify(err))
         setTimeout(function () {
           this.onStateEntered()
         }.bind(this), 200)
-      })
+      }.bind(this))
   }
 
   equipToolForBlock (block) {
@@ -67,7 +67,7 @@ module.exports = class template {
           resolve()
         })
         .catch((err) => {
-          botWebsocket.log(`Error on equip tool: ${tool.name}`)
+          botWebsocket.log(`Error on equip tool: ${JSON.stringify(err)}`)
           reject(err)
         })
     })
