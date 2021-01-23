@@ -1,3 +1,5 @@
+const vec3 = require('vec3')
+
 const {
   StateTransition,
   BehaviorIdle,
@@ -214,6 +216,20 @@ function minerJobFunction (bot, targets) {
 
     new StateTransition({
       parent: currentBlock,
+      child: moveToBlock1,
+      name: 'currentBlock -> moveToBlock1',
+      onTransition: () => {
+        targets.mineBlock = targets.position.clone()
+        if (nextLayer.minerCords.tunel === 'horizontally') { // Move to base of block
+          targets.position.y = parseInt(nextLayer.minerCords.yStart)
+        }
+      },
+      shouldTransition: () => currentBlock.isFinished()
+    }),
+
+    /*
+    new StateTransition({
+      parent: currentBlock,
       child: findInteractPosition,
       name: 'currentBlock -> findInteractPosition',
       onTransition: () => {
@@ -228,6 +244,7 @@ function minerJobFunction (bot, targets) {
       name: 'findInteractPosition -> moveToBlock1',
       shouldTransition: () => true
     }),
+    */
 
     new StateTransition({
       parent: currentBlock,
@@ -241,19 +258,22 @@ function minerJobFunction (bot, targets) {
       child: mineBlock1,
       name: 'moveToBlock1 -> mineBlock1',
       onTransition: () => {
-        targets.position = targets.previousPosition
+        targets.position = targets.mineBlock
       },
-      shouldTransition: () => moveToBlock1.distanceToTarget() < 3
+      shouldTransition: () => {
+        const block = bot.blockAt(targets.mineBlock)
+        return bot.canDigBlock(block)
+      }
     }),
 
     new StateTransition({
       parent: mineBlock1,
       child: placeBlock2,
-      name: 'If down is liquid',
+      name: 'If down is liquid & Tunel is vertically',
       shouldTransition: () => {
         const block = bot.blockAt(targets.position.offset(0, -1, 0))
         const item = bot.inventory.items().find(item => blockForPlace.includes(item.name))
-        if (mineBlock1.isFinished() && placeBlocks.includes(block.name) && item) {
+        if (mineBlock1.isFinished() && placeBlocks.includes(block.name) && item && nextLayer.minerCords.tunel === 'vertically') {
           targets.item = item
           targets.position = targets.position.offset(0, -1, 0)
           return true
@@ -269,7 +289,7 @@ function minerJobFunction (bot, targets) {
       name: 'If down is solid',
       shouldTransition: () => {
         const block = bot.blockAt(targets.position.offset(0, -1, 0))
-        return mineBlock1.isFinished() && (!placeBlocks.includes(block.name) || !bot.inventory.items().find(item => blockForPlace.includes(item.name)))
+        return mineBlock1.isFinished() && (!placeBlocks.includes(block.name) || !bot.inventory.items().find(item => blockForPlace.includes(item.name)) || nextLayer.minerCords.tunel === 'horizontally')
       }
     }),
 
@@ -287,7 +307,12 @@ function minerJobFunction (bot, targets) {
       parent: moveToBlock3,
       child: minerChecks,
       name: 'moveToBlock3 -> minerChecks',
-      shouldTransition: () => moveToBlock3.isFinished()
+      shouldTransition: () => {
+        if (nextLayer.minerCords.tunel === 'horizontally') {
+          return true
+        }
+        return moveToBlock3.isFinished()
+      }
     }),
 
     new StateTransition({
