@@ -92,6 +92,16 @@ function getChest (botName, chestName) {
   }
 }
 
+function getAllChests (botName) {
+  const db = getConn(botName)
+  const chest = db.get('config.chests').value()
+  if (chest === undefined) {
+    return {}
+  } else {
+    return chest
+  }
+}
+
 function setMiner (botName, minerCords) {
   const db = getConn(botName)
   db.set('config.minerCords', minerCords).write()
@@ -116,6 +126,7 @@ module.exports = {
   getPatrol,
   setChest,
   getChest,
+  getAllChests,
   setMiner,
   getMiner
 }

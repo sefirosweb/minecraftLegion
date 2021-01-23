@@ -11,9 +11,10 @@ module.exports = class BehaviorLoadConfig {
     this.helpFriends = false
     this.distance = 10
     this.patrol = []
-    this.equipmentChest = []
-    this.foodChest = []
-    this.depositChest = []
+    this.equipmentChest = [] // TODO REMOVE
+    this.foodChest = [] // TODO REMOVE
+    this.depositChest = []// TODO REMOVE
+    this.chests = {}
     this.miner = []
   }
 
@@ -23,10 +24,12 @@ module.exports = class BehaviorLoadConfig {
     this.helpFriends = botConfig.getHelpFriend(this.bot.username)
     this.distance = botConfig.getDistance(this.bot.username)
     this.patrol = botConfig.getPatrol(this.bot.username)
-    this.equipmentChest = botConfig.getChest(this.bot.username, 'equipment')
-    this.foodChest = botConfig.getChest(this.bot.username, 'food')
-    this.depositChest = botConfig.getChest(this.bot.username, 'deposit')
+    this.equipmentChest = botConfig.getChest(this.bot.username, 'equipment') // TODO REMOVE
+    this.foodChest = botConfig.getChest(this.bot.username, 'food') // TODO REMOVE
+    this.depositChest = botConfig.getChest(this.bot.username, 'deposit') // TODO REMOVE
     this.miner = botConfig.getMiner(this.bot.username)
+
+    this.chests = botConfig.getAllChests(this.bot.username)
   }
 
   getJob () {
@@ -63,5 +66,9 @@ module.exports = class BehaviorLoadConfig {
 
   getMiner () {
     return this.miner
+  }
+
+  getChest (chest) {
+    return this.chests[chest]
   }
 }

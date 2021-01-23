@@ -209,9 +209,12 @@ function minerJobFunction (bot, targets) {
       onTransition: () => {
         targets.entity = undefined
 
-        goEquipmentChest.setPatrol(loadConfig.getEquipmentChest(), true)
-        goFoodChest.setPatrol(loadConfig.getFoodChest(), true)
-        goDepositChest.setPatrol(loadConfig.getDepositChest(), true)
+        goEquipmentChest.setPatrol(loadConfig.getChest('equipment'), true)
+        goDepositChest.setPatrol(loadConfig.getChest('deposit'), true)
+        goFoodChest.setPatrol(loadConfig.getChest('food'), true)
+        goPickChest.setPatrol(loadConfig.getChest('picks'), true)
+        goShovelChest.setPatrol(loadConfig.getChest('shovels'), true)
+
         getClosestMob.mode = loadConfig.getMode()
         getClosestMob.distance = loadConfig.getDistance()
       },
