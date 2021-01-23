@@ -221,7 +221,7 @@ function minerJobFunction (bot, targets) {
       onTransition: () => {
         targets.mineBlock = targets.position.clone()
         if (nextLayer.minerCords.tunel === 'horizontally') { // Move to base of block
-          targets.position.y = parseInt(nextLayer.minerCords.yStart)
+          targets.position.y = parseInt(checkLayer.minerCords.yStart)
         }
       },
       shouldTransition: () => currentBlock.isFinished()

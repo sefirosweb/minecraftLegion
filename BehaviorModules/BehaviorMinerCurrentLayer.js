@@ -41,9 +41,16 @@ module.exports = class BehaviorMinerCurrentLayer {
         this.currentLayer = Math.min(parseInt(this.minerCords.zStart), parseInt(this.minerCords.zEnd))
         this.endLayer = Math.max(parseInt(this.minerCords.zStart), parseInt(this.minerCords.zEnd))
       }
-      // W & E => X
-      // TODO X
-      // throw console.error('No soportado otro metodo')
+
+      if (this.minerCords.orientation === 'e') {
+        this.currentLayer = Math.min(parseInt(this.minerCords.xStart), parseInt(this.minerCords.xEnd))
+        this.endLayer = Math.max(parseInt(this.minerCords.xStart), parseInt(this.minerCords.xEnd))
+      }
+
+      if (this.minerCords.orientation === 'w') {
+        this.currentLayer = Math.max(parseInt(this.minerCords.xStart), parseInt(this.minerCords.xEnd))
+        this.endLayer = Math.min(parseInt(this.minerCords.xStart), parseInt(this.minerCords.xEnd))
+      }
     }
   }
 
@@ -59,10 +66,12 @@ module.exports = class BehaviorMinerCurrentLayer {
           case this.minerCords.tunel === 'vertically':
             this.currentLayer--
             break
-          case this.minerCords.tunel === 'horizontally' && this.minerCords.orientation === 'n':
+          case this.minerCords.tunel === 'horizontally' &&
+            (this.minerCords.orientation === 'n' || this.minerCords.orientation === 'w'):
             this.currentLayer--
             break
-          case this.minerCords.tunel === 'horizontally' && this.minerCords.orientation === 's':
+          case this.minerCords.tunel === 'horizontally' &&
+            (this.minerCords.orientation === 's' || this.minerCords.orientation === 'e'):
             this.currentLayer++
             break
         }
@@ -87,17 +96,24 @@ module.exports = class BehaviorMinerCurrentLayer {
       minerCoords.zStart = parseInt(this.minerCords.zStart)
       minerCoords.zEnd = parseInt(this.minerCords.zEnd)
     } else {
+      minerCoords.yStart = Math.min(parseInt(this.minerCords.yStart), parseInt(this.minerCords.yEnd))
+      minerCoords.yEnd = Math.max(parseInt(this.minerCords.yStart), parseInt(this.minerCords.yEnd))
+
       if (this.minerCords.orientation === 'n' || this.minerCords.orientation === 's') { // => Z Layer
-        minerCoords.xStart = this.minerCords.xStart
-        minerCoords.xEnd = this.minerCords.xEnd
+        minerCoords.xStart = parseInt(this.minerCords.xStart)
+        minerCoords.xEnd = parseInt(this.minerCords.xEnd)
 
-        minerCoords.yStart = Math.min(parseInt(this.minerCords.yStart), parseInt(this.minerCords.yEnd))
-        minerCoords.yEnd = Math.max(parseInt(this.minerCords.yStart), parseInt(this.minerCords.yEnd))
-
-        minerCoords.zStart = this.currentLayer
-        minerCoords.zEnd = this.currentLayer
+        minerCoords.zStart = parseInt(this.currentLayer)
+        minerCoords.zEnd = parseInt(this.currentLayer)
       }
 
+      if (this.minerCords.orientation === 'e' || this.minerCords.orientation === 'w') { // => X Layer
+        minerCoords.xStart = parseInt(this.currentLayer)
+        minerCoords.xEnd = parseInt(this.currentLayer)
+
+        minerCoords.zStart = parseInt(this.minerCords.zStart)
+        minerCoords.zEnd = parseInt(this.minerCords.zEnd)
+      }
       // TODO X Layer
       // throw console.error('No soportado otro metodo')
     }
