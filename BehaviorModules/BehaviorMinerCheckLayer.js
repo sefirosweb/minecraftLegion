@@ -160,7 +160,9 @@ module.exports = class BehaviorMinerCheckLayer {
       this.yEnd = parseInt(this.minerCords.yStart)
     }
     this.yStart++
-    // this.yEnd--
+    if (this.minerCords.tunel === 'horizontally') {
+      this.yEnd--
+    }
 
     if (this.minerCords.orientation === 'n' || this.minerCords.orientation === 'e') {
       this.xStart = parseInt(this.minerCords.xStart)
