@@ -6,6 +6,9 @@ function startBot (botName, password) {
   cp.exec(command, (err, stdout, stderr) => {
     if (err) {
       console.log(`Error: ${err}`)
+      console.log(`Bot broken: ${botName}`)
+      console.log(`Restarting bot ${botName}...`)
+      setTimeout(() => startBot(botName, password), 1000)
       return
     }
 
@@ -20,10 +23,10 @@ function startBot (botName, password) {
 }
 
 const botsToStart = [
-  { username: 'Miner1' },
-  { username: 'Miner2' },
-  { username: 'Miner3' },
-  { username: 'Miner4' }
+  { username: 'Miner1' }
+  // { username: 'Miner2' },
+  // { username: 'Miner3' },
+  // { username: 'Miner4' }
   // { username: 'Guard1' }
   // { username: 'Guard2' },
   // { username: 'Guard3' },
