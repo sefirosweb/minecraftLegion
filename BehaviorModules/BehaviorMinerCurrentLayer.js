@@ -25,7 +25,6 @@ module.exports = class BehaviorMinerCurrentLayer {
     this.minerCords = minerCords
     this.firstBlockLayer = true
     this.isEndFinished = false
-    this.xIsInverted = false
     this.startLayer()
   }
 
@@ -47,11 +46,6 @@ module.exports = class BehaviorMinerCurrentLayer {
         this.firstBlockLayer = false
       } else {
         this.currentLayer--
-        if (this.xIsInverted) {
-          this.xIsInverted = false
-        } else {
-          this.xIsInverted = true
-        }
       }
     }
   }
@@ -59,13 +53,9 @@ module.exports = class BehaviorMinerCurrentLayer {
   getCurrentLayerCoords () {
     if (this.minerMethod === 'vertically') {
       const minerCoords = {}
-      if (this.xIsInverted) {
-        minerCoords.xStart = this.minerCords.xStart
-        minerCoords.xEnd = this.minerCords.xEnd
-      } else {
-        minerCoords.xStart = this.minerCords.xEnd
-        minerCoords.xEnd = this.minerCords.xStart
-      }
+
+      minerCoords.xStart = this.minerCords.xEnd
+      minerCoords.xEnd = this.minerCords.xStart
 
       minerCoords.yStart = this.currentLayer
       minerCoords.zStart = this.minerCords.zStart
