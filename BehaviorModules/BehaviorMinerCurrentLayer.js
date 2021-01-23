@@ -31,13 +31,8 @@ module.exports = class BehaviorMinerCurrentLayer {
 
   startLayer () {
     if (this.minerMethod === 'vertically') {
-      if (this.minerCords.yStart > this.minerCords.yEnd) {
-        this.currentLayer = parseInt(this.minerCords.yStart)
-        this.endLayer = parseInt(this.minerCords.yEnd)
-      } else {
-        this.currentLayer = parseInt(this.minerCords.yEnd)
-        this.endLayer = parseInt(this.minerCords.yStart)
-      }
+      this.currentLayer = Math.max(parseInt(this.minerCords.yStart), parseInt(this.minerCords.yEnd))
+      this.endLayer = Math.min(parseInt(this.minerCords.yStart), parseInt(this.minerCords.yEnd))
     } else {
       throw console.error('No soportado otro metodo')
     }
