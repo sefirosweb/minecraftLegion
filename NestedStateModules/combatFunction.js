@@ -103,7 +103,7 @@ function combatFunction (bot, targets) {
     speed.y = speed.y / prevPlayerPositions.length
     speed.z = speed.z / prevPlayerPositions.length
 
-    targetGrade = bot.hawkEye.getMasterGrade(targets.entity, speed)
+    targetGrade = bot.hawkEye.getMasterGrade(targets.entity, speed, 'bow')
     longRangeAttack.setInfoShot(targetGrade)
   }
 
