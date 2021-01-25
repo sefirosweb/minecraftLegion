@@ -23,6 +23,7 @@ function createNewBot (botName, botPassword = '') {
     host: config.server,
     port: config.port
   })
+  bot.setMaxListeners(0)
   bot.loadPlugin(require('mineflayer-pathfinder').pathfinder)
 
   bot.on('kicked', (reason) => {
@@ -63,10 +64,10 @@ function createNewBot (botName, botPassword = '') {
       }
     })
 
-    const prismarineViewer = {}
+    let prismarineViewer = {}
     botWebsocket.on('startViewer', (message) => {
       if (typeof prismarineViewer !== 'function') {
-        const prismarineViewer = require('./modules/viewer')
+        prismarineViewer = require('./modules/viewer')
         prismarineViewer.start(bot, message.port)
         botWebsocket.log(`Started viewer web server at http://localhost:${message.port}`)
       }
