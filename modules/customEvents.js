@@ -2,6 +2,10 @@ const events = require('events')
 
 const eventsToListen = new events.EventEmitter()
 
+function getEventsToListen () {
+  return eventsToListen
+}
+
 function executePhysicTickEvents () {
   eventsToListen.emit('physicTick')
 }
@@ -33,7 +37,12 @@ function listenerCount (event) {
   return eventsToListen.listenerCount(event)
 }
 
+function listeners (event) {
+  return eventsToListen.listeners(event)
+}
+
 module.exports = {
+  getEventsToListen,
   addEvent,
   executePhysicTickEvents,
   executeChatEvents,
@@ -41,5 +50,6 @@ module.exports = {
   removeListener,
   removeAllListeners,
   rawListeners,
-  listenerCount
+  listenerCount,
+  listeners
 }
