@@ -20,6 +20,7 @@ const BehaviorCustomPlaceBlock = require('./../BehaviorModules/BehaviorCustomPla
 function minerJobFunction (bot, targets) {
   const placeBlocks = ['air', 'cave_air', 'lava', 'water']
   const blockForPlace = ['stone', 'cobblestone', 'dirt', 'andesite', 'diorite', 'granite']
+  let isDigging = false
   const start = new BehaviorIdle(targets)
   start.stateName = 'Start'
   start.x = 125
@@ -169,8 +170,27 @@ function minerJobFunction (bot, targets) {
       child: mineBlock2,
       name: 'If up block is solid',
       shouldTransition: () => {
-        const block = bot.blockAt(targets.position)
-        return moveToBlock2.distanceToTarget() < 2 && !placeBlocks.includes(block.name)
+        const block = bot.blockAt(targets.mineBlock)
+        if (bot.canDigBlock(block) && !placeBlocks.includes(block.name)) {
+          if (bot.pathfinder.isMining() & isDigging === false) {
+            isDigging = true
+
+            bot.on('diggingAborted', () => {
+              isDigging = false
+            })
+
+            bot.on('diggingCompleted', () => {
+              isDigging = false
+            })
+          }
+
+          if (isDigging === false && !bot.pathfinder.isMining()) {
+            bot.removeAllListeners('diggingAborted')
+            bot.removeAllListeners('diggingCompleted')
+            return true
+          }
+          bot.pathfinder.setGoal(null)
+        }
       }
     }),
 
@@ -262,8 +282,28 @@ function minerJobFunction (bot, targets) {
       },
       shouldTransition: () => {
         const block = bot.blockAt(targets.mineBlock)
-        return bot.canDigBlock(block)
+        if (bot.canDigBlock(block)) {
+          if (bot.pathfinder.isMining() & isDigging === false) {
+            isDigging = true
+
+            bot.on('diggingAborted', () => {
+              isDigging = false
+            })
+
+            bot.on('diggingCompleted', () => {
+              isDigging = false
+            })
+          }
+
+          if (isDigging === false && !bot.pathfinder.isMining()) {
+            bot.removeAllListeners('diggingAborted')
+            bot.removeAllListeners('diggingCompleted')
+            return true
+          }
+          bot.pathfinder.setGoal(null)
+        }
       }
+
     }),
 
     new StateTransition({
