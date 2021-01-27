@@ -192,6 +192,10 @@ function commandsFunction (bot, targets) {
           msg = message.split(' ')
           saveMiner(msg)
         }
+
+        if (message.match(/drop all.*/)) {
+          dropAll()
+        }
     }
   }
 
@@ -215,6 +219,21 @@ function commandsFunction (bot, targets) {
     botWebsocket.log('Point: ' + JSON.stringify(minerCoords))
     botConfig.setMiner(bot.username, minerCoords)
     bot.chat('Lets made a tunel!')
+  }
+
+  function dropAll () {
+    const excludedItems = ['fishing_rod']
+    const item = bot.inventory.items().find(item => !excludedItems.includes(item.name))
+    if (item) {
+      bot.tossStack(item)
+        .then(() => {
+          setTimeout(dropAll)
+        })
+        .catch(err => {
+          console.log(err)
+          setTimeout(dropAll, 100)
+        })
+    }
   }
 
   function saveJob (job) {
