@@ -16,11 +16,10 @@ const BehaviorMinerChecks = require('./../BehaviorModules/BehaviorMinerChecks')
 const BehaviorEatFood = require('./../BehaviorModules/BehaviorEatFood')
 const BehaviorMinerCheckLayer = require('./../BehaviorModules/BehaviorMinerCheckLayer')
 const BehaviorCustomPlaceBlock = require('./../BehaviorModules/BehaviorCustomPlaceBlock ')
-
+// let isDigging = false
 function minerJobFunction (bot, targets) {
   const placeBlocks = ['air', 'cave_air', 'lava', 'water']
   const blockForPlace = ['stone', 'cobblestone', 'dirt', 'andesite', 'diorite', 'granite']
-  let isDigging = false
   const start = new BehaviorIdle(targets)
   start.stateName = 'Start'
   start.x = 125
@@ -171,25 +170,29 @@ function minerJobFunction (bot, targets) {
       name: 'If up block is solid',
       shouldTransition: () => {
         const block = bot.blockAt(targets.mineBlock)
+        /* old version
+                if (bot.pathfinder.isMining() & isDigging === false) {
+                  isDigging = true
+
+                  bot.on('diggingAborted', () => {
+                    isDigging = false
+                  })
+
+                  bot.on('diggingCompleted', () => {
+                    isDigging = false
+                  })
+                }
+
+                if (isDigging === false && !bot.pathfinder.isMining()) {
+                  bot.removeAllListeners('diggingAborted')
+                  bot.removeAllListeners('diggingCompleted')
+                  return true
+                }
+
+                */
         if (bot.canDigBlock(block) && !placeBlocks.includes(block.name)) {
-          if (bot.pathfinder.isMining() & isDigging === false) {
-            isDigging = true
-
-            bot.on('diggingAborted', () => {
-              isDigging = false
-            })
-
-            bot.on('diggingCompleted', () => {
-              isDigging = false
-            })
-          }
-
-          if (isDigging === false && !bot.pathfinder.isMining()) {
-            bot.removeAllListeners('diggingAborted')
-            bot.removeAllListeners('diggingCompleted')
-            return true
-          }
           bot.pathfinder.setGoal(null)
+          return !bot.pathfinder.isMining()
         }
       }
     }),
@@ -283,24 +286,27 @@ function minerJobFunction (bot, targets) {
       shouldTransition: () => {
         const block = bot.blockAt(targets.mineBlock)
         if (bot.canDigBlock(block)) {
-          if (bot.pathfinder.isMining() & isDigging === false) {
-            isDigging = true
+          /* OLD VERSION
+                    if (bot.pathfinder.isMining() & isDigging === false) {
+                      isDigging = true
 
-            bot.on('diggingAborted', () => {
-              isDigging = false
-            })
+                      bot.on('diggingAborted', () => {
+                        isDigging = false
+                      })
 
-            bot.on('diggingCompleted', () => {
-              isDigging = false
-            })
-          }
+                      bot.on('diggingCompleted', () => {
+                        isDigging = false
+                      })
+                    }
 
-          if (isDigging === false && !bot.pathfinder.isMining()) {
-            bot.removeAllListeners('diggingAborted')
-            bot.removeAllListeners('diggingCompleted')
-            return true
-          }
+                    if (isDigging === false && !bot.pathfinder.isMining()) {
+                      bot.removeAllListeners('diggingAborted')
+                      bot.removeAllListeners('diggingCompleted')
+                      return true
+                    }
+              */
           bot.pathfinder.setGoal(null)
+          return !bot.pathfinder.isMining()
         }
       }
 
