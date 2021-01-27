@@ -6,7 +6,7 @@ module.exports = class BehaviorMinerCurrentBlock {
     this.targets = targets
     this.stateName = 'BehaviorMinerCurrentBlock'
 
-    this.blockInValidType = ['air', 'cave_air', 'lava', 'water', 'bedrock', 'wall_torch', 'redstone_wall_torch', 'soul_wall_torch', 'lantern']
+    this.blockInValidType = ['air', 'cave_air', 'lava', 'water', 'bedrock', 'torch', 'wall_torch', 'redstone_torch', 'redstone_wall_torch', 'soul_torch', 'soul_wall_torch', 'lantern']
     this.minerCords = false
 
     this.xStart = false
