@@ -196,6 +196,10 @@ function commandsFunction (bot, targets) {
         if (message.match(/drop all.*/)) {
           dropAll()
         }
+
+        if (message.match(/find bed.*/)) {
+          findBed()
+        }
     }
   }
 
@@ -233,6 +237,25 @@ function commandsFunction (bot, targets) {
           console.log(err)
           setTimeout(dropAll, 100)
         })
+    }
+  }
+
+  function findBed () {
+    const bedBlock = bot.findBlock({
+      matching: block => bot.isABed(block),
+      maxDistance: 3
+    })
+
+    if (bedBlock || bot.canSeeBlock(bedBlock)) {
+      bot.activateBlock(bedBlock)
+        .then(() => {
+          bot.chat('Found a bed!')
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    } else {
+      bot.chat('No nearby bed')
     }
   }
 

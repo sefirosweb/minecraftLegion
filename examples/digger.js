@@ -122,7 +122,7 @@ function equip () {
 
     const item = getItemToPlace()
     if (item === undefined) {
-      reject('No items for equip')
+      reject(new Error('No items for equip'))
       return
     }
 
