@@ -5,6 +5,8 @@ const {
   BehaviorMoveTo
 } = require('mineflayer-statemachine')
 
+const Vec3 = require('vec3')
+
 const BehaviorLoadConfig = require('./../BehaviorModules/BehaviorLoadConfig')
 const BehaviorMinerCheckLayer = require('./../BehaviorModules/BehaviorMinerCheckLayer')
 const BehaviorMinerCurrentLayer = require('./../BehaviorModules/BehaviorMinerCurrentLayer')
@@ -13,6 +15,44 @@ const BehaviorDigBlock = require('./../BehaviorModules/BehaviorDigBlock')
 const BehaviorMinerChecks = require('./../BehaviorModules/BehaviorMinerChecks')
 const BehaviorEatFood = require('./../BehaviorModules/BehaviorEatFood')
 const BehaviorCustomPlaceBlock = require('./../BehaviorModules/BehaviorCustomPlaceBlock ')
+
+const movingWhile = (bot, nextCurrentLayer) => {
+  let x, y, z
+
+  if (bot.entity.position.x < nextCurrentLayer.xStart) {
+    x = nextCurrentLayer.xStart
+  } else if (bot.entity.position.x > nextCurrentLayer.xEnd) {
+    x = nextCurrentLayer.xEnd
+  } else {
+    x = bot.entity.position.x
+  }
+
+  if (bot.entity.position.y < nextCurrentLayer.yStart) {
+    y = nextCurrentLayer.yStart
+  } else if (bot.entity.position.y > nextCurrentLayer.yEnd) {
+    y = nextCurrentLayer.yEnd
+  } else {
+    y = bot.entity.position.y
+  }
+
+  if (bot.entity.position.z < nextCurrentLayer.zStart) {
+    z = nextCurrentLayer.zStart
+  } else if (bot.entity.position.z > nextCurrentLayer.zEnd) {
+    z = nextCurrentLayer.zEnd
+  } else {
+    z = bot.entity.position.z
+  }
+
+  const mineflayerPathfinder = require('mineflayer-pathfinder')
+  const mcData = require('minecraft-data')(bot.version)
+
+  const pathfinder = bot.pathfinder
+  const goal = new mineflayerPathfinder.goals.GoalBlock(x, y, z)
+  const movements = new mineflayerPathfinder.Movements(bot, mcData)
+  pathfinder.setMovements(movements)
+  pathfinder.setGoal(goal)
+}
+
 // let isDigging = false
 function minerJobFunction (bot, targets) {
   const placeBlocks = ['air', 'cave_air', 'lava', 'water']
@@ -128,7 +168,11 @@ function minerJobFunction (bot, targets) {
       parent: nextLayer,
       child: checkLayer,
       name: 'nextLayer -> checkLayer',
-      onTransition: () => checkLayer.setMinerCords(nextLayer.getCurrentLayerCoords()),
+      onTransition: () => {
+        const nextCurrentLayer = nextLayer.getCurrentLayerCoords()
+        movingWhile(bot, nextCurrentLayer)
+        checkLayer.setMinerCords(nextCurrentLayer)
+      },
       shouldTransition: () => true
     }),
 
