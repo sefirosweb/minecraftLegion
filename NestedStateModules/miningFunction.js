@@ -52,9 +52,10 @@ const movingWhile = (bot, nextCurrentLayer) => {
 }
 
 // let isDigging = false
-function minerJobFunction (bot, targets) {
+function miningFunction (bot, targets) {
   const placeBlocks = ['air', 'cave_air', 'lava', 'water']
   const blockForPlace = ['stone', 'cobblestone', 'dirt', 'andesite', 'diorite', 'granite']
+
   const start = new BehaviorIdle(targets)
   start.stateName = 'Start'
   start.x = 125
@@ -357,9 +358,9 @@ function minerJobFunction (bot, targets) {
 
   ]
 
-  const minerJobFunction = new NestedStateMachine(transitions, start, exit)
-  minerJobFunction.stateName = 'Mining'
-  return minerJobFunction
+  const miningFunction = new NestedStateMachine(transitions, start, exit)
+  miningFunction.stateName = 'Mining'
+  return miningFunction
 }
 
-module.exports = minerJobFunction
+module.exports = miningFunction

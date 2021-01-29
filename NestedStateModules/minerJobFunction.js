@@ -3,7 +3,6 @@ const {
   BehaviorIdle,
   NestedStateMachine
 } = require('mineflayer-statemachine')
-const mineflayerpathfinder = require('mineflayer-pathfinder')
 
 const BehaviorLoadConfig = require('./../BehaviorModules/BehaviorLoadConfig')
 const BehaviorMoveToArray = require('./../BehaviorModules/BehaviorMoveToArray')
@@ -75,8 +74,6 @@ const validFood = ['cooked_chicken']
 
 function minerJobFunction (bot, targets) {
   const { getResumeInventory } = require('../modules/inventoryModule')(bot)
-  const mcData = require('minecraft-data')(bot.version)
-  const movementsForAttack = new mineflayerpathfinder.Movements(bot, mcData)
 
   const start = new BehaviorIdle(targets)
   start.stateName = 'Start'
