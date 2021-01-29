@@ -71,6 +71,11 @@ module.exports = class BehaviorMinerCurrentBlock {
 
   onStateEntered () {
     this.isEndFinished = false
+    this.startBlock()
+    this.nextBlock()
+  }
+
+  nextBlock () {
     if (
       this.yCurrent === this.yEnd &&
       this.zCurrent === this.zEnd &&
@@ -89,7 +94,7 @@ module.exports = class BehaviorMinerCurrentBlock {
       if (this.calculateIsValid()) {
         this.isEndFinished = true
       } else {
-        this.onStateEntered()
+        this.nextBlock()
       }
     }
   }
