@@ -76,8 +76,6 @@ module.exports = class BehaviorMinerCurrentLayer {
             break
         }
       }
-
-      botWebsocket.log(`Current LAYER ${this.currentLayer}`)
     }
   }
 

@@ -91,10 +91,10 @@ function miningFunction (bot, targets) {
   moveToBlock1.x = 1025
   moveToBlock1.y = 313
 
-  const moveToBlock3 = new BehaviorMoveTo(bot, targets)
-  moveToBlock3.stateName = 'Move To Blockk 3'
-  moveToBlock3.x = 725
-  moveToBlock3.y = 613
+  const moveToBlock2 = new BehaviorMoveTo(bot, targets)
+  moveToBlock2.stateName = 'Move To Block 2'
+  moveToBlock2.x = 725
+  moveToBlock2.y = 613
 
   const placeBlock2 = new BehaviorCustomPlaceBlock(bot, targets)
   placeBlock2.stateName = 'Place Block 2'
@@ -243,7 +243,7 @@ function miningFunction (bot, targets) {
 
     new StateTransition({
       parent: mineBlock1,
-      child: moveToBlock3,
+      child: moveToBlock2,
       name: 'If down is solid',
       shouldTransition: () => {
         const block = bot.blockAt(targets.position.offset(0, -1, 0))
@@ -253,8 +253,8 @@ function miningFunction (bot, targets) {
 
     new StateTransition({
       parent: placeBlock2,
-      child: moveToBlock3,
-      name: 'placeBlock2 -> moveToBlock3',
+      child: moveToBlock2,
+      name: 'placeBlock2 -> moveToBlock2',
       onTransition: () => {
         targets.position = targets.position.offset(0, 1, 0)
       },
@@ -262,21 +262,21 @@ function miningFunction (bot, targets) {
     }),
 
     new StateTransition({
-      parent: moveToBlock3,
+      parent: moveToBlock2,
       child: minerChecks,
-      name: 'moveToBlock3 -> minerChecks',
+      name: 'moveToBlock2 -> minerChecks',
       shouldTransition: () => {
         if (nextLayer.minerCords.tunel === 'horizontally') {
           return true
         }
-        return moveToBlock3.isFinished()
+        return moveToBlock2.isFinished()
       }
     }),
 
     new StateTransition({
       parent: minerChecks,
       child: eatFood,
-      name: 'moveToBlock3 -> eatFood',
+      name: 'moveToBlock2 -> eatFood',
       shouldTransition: () => minerChecks.isFinished() && minerChecks.getIsReady()
     }),
 

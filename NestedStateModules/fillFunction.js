@@ -23,6 +23,8 @@ function fillFunction (bot, targets) {
   exit.x = 125
   exit.y = 313
 
+  const interactPosition = new BehaviorFindInteractPosition(bot, targets)
+
   const moveToBlock = new BehaviorMoveTo(bot, targets)
   moveToBlock.stateName = 'Move To Block'
   moveToBlock.x = 425
@@ -46,6 +48,16 @@ function fillFunction (bot, targets) {
   const transitions = [
     new StateTransition({
       parent: start,
+      child: interactPosition,
+      name: 'start -> interactPosition',
+      onTransition: () => {
+        targets.previusBlock = targets.position.clone()
+      },
+      shouldTransition: () => true
+    }),
+
+    new StateTransition({
+      parent: interactPosition,
       child: moveToBlock,
       name: 'start -> moveToBlock',
       shouldTransition: () => true
@@ -53,10 +65,23 @@ function fillFunction (bot, targets) {
 
     new StateTransition({
       parent: moveToBlock,
+      onTransition: () => {
+        targets.position = targets.previusBlock
+      },
+      child: placeBlock2,
+      name: 'if block is liquid',
+      shouldTransition: () => {
+        const block = bot.blockAt(targets.position.offset(0, 1, 0))
+        return moveToBlock.distanceToTarget() < 3 && placeBlocks.includes(block.name)
+      }
+    }),
+
+    new StateTransition({
+      parent: moveToBlock,
       child: mineBlock,
       name: 'If up block is solid',
       onTransition: () => {
-        targets.position = targets.position.offset(0, 1, 0)
+        targets.position = targets.previusBlock.offset(0, 1, 0)
       },
       shouldTransition: () => {
         const block = bot.blockAt(targets.position.offset(0, 1, 0))
@@ -88,21 +113,12 @@ function fillFunction (bot, targets) {
     }),
 
     new StateTransition({
-      parent: moveToBlock,
-      child: placeBlock2,
-      name: 'if block is liquid',
-      shouldTransition: () => {
-        const block = bot.blockAt(targets.position.offset(0, 1, 0))
-        return moveToBlock.distanceToTarget() < 3 && placeBlocks.includes(block.name)
-      }
-    }),
-
-    new StateTransition({
       parent: placeBlock2,
       child: exit,
       name: 'placeBlock1 -> checkLayer',
       shouldTransition: () => placeBlock2.isFinished() || placeBlock2.isItemNotFound() || placeBlock2.isCantPlaceBlock()
     })
+
   ]
 
   const fillFunction = new NestedStateMachine(transitions, start, exit)

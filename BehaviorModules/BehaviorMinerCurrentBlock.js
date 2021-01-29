@@ -82,7 +82,6 @@ module.exports = class BehaviorMinerCurrentBlock {
       this.xCurrent === this.xEnd
     ) {
       this.isLayerFinished = true
-      botWebsocket.log(`Current LAYER ${this.yCurrent} finished`)
     } else {
       if (this.minerCords.orientation === 'n' || this.minerCords.orientation === 's') {
         this.zNext()
