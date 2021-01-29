@@ -77,7 +77,6 @@ function minerJobFunction (bot, targets) {
   const { getResumeInventory } = require('../modules/inventoryModule')(bot)
   const mcData = require('minecraft-data')(bot.version)
   const movementsForAttack = new mineflayerpathfinder.Movements(bot, mcData)
-  movementsForAttack.digCost = 100
 
   const start = new BehaviorIdle(targets)
   start.stateName = 'Start'

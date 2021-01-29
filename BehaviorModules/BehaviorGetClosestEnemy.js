@@ -24,7 +24,12 @@ module.exports = class BehaviorGetClosestEnemy {
       if (this.entities.length > 0) {
         const validEntity = this.getValidPath(this.entities[this.currentEntity])
         if (validEntity) {
-          this.targets.entity = this.entities[this.currentEntity]
+          const blockPosition = {
+            position: this.entities[this.currentEntity].position.offset(0, this.entities[this.currentEntity].height, 0)
+          }
+          if (this.bot.canSeeBlock(blockPosition)) {
+            this.targets.entity = this.entities[this.currentEntity]
+          }
         }
 
         this.currentEntity++
@@ -42,6 +47,7 @@ module.exports = class BehaviorGetClosestEnemy {
     const mineflayerPathfinder = require('mineflayer-pathfinder')
     this.movements = new mineflayerPathfinder.Movements(this.bot, mcData)
     this.movements.digCost = 100
+    this.movements.canDig = false
 
     const goal = new mineflayerPathfinder.goals.GoalNear(entity.position.x, entity.position.y, entity.position.z, 2)
 
