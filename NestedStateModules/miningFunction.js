@@ -118,6 +118,8 @@ function miningFunction (bot, targets) {
   eatFood.y = 313
 
   const fillBlocks = require('./fillFunction')(bot, targets)
+  fillBlocks.x = 350
+  fillBlocks.y = 313
 
   const transitions = [
     new StateTransition({
@@ -177,6 +179,13 @@ function miningFunction (bot, targets) {
         }
         return false
       }
+    }),
+
+    new StateTransition({
+      parent: fillBlocks,
+      child: checkLayer,
+      name: 'Finished fill block',
+      shouldTransition: () => fillBlocks.isFinished()
     }),
 
     new StateTransition({

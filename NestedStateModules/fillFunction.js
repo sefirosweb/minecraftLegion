@@ -2,7 +2,8 @@ const {
   StateTransition,
   BehaviorIdle,
   NestedStateMachine,
-  BehaviorMoveTo
+  BehaviorMoveTo,
+  BehaviorFindInteractPosition
 } = require('mineflayer-statemachine')
 
 const BehaviorDigBlock = require('./../BehaviorModules/BehaviorDigBlock')
@@ -24,23 +25,23 @@ function fillFunction (bot, targets) {
 
   const moveToBlock = new BehaviorMoveTo(bot, targets)
   moveToBlock.stateName = 'Move To Block'
-  moveToBlock.x = 525
-  moveToBlock.y = 363
+  moveToBlock.x = 425
+  moveToBlock.y = 113
 
   const mineBlock = new BehaviorDigBlock(bot, targets)
   mineBlock.stateName = 'Mine Block'
-  mineBlock.x = 325
-  mineBlock.y = 500
+  mineBlock.x = 625
+  mineBlock.y = 113
 
   const placeBlock1 = new BehaviorCustomPlaceBlock(bot, targets)
-  placeBlock1.stateName = 'Place Block 3'
-  placeBlock1.x = 325
-  placeBlock1.y = 400
+  placeBlock1.stateName = 'Place Block 1'
+  placeBlock1.x = 625
+  placeBlock1.y = 313
 
   const placeBlock2 = new BehaviorCustomPlaceBlock(bot, targets)
-  placeBlock2.stateName = 'Place Block 1'
-  placeBlock2.x = 325
-  placeBlock2.y = 300
+  placeBlock2.stateName = 'Place Block 2'
+  placeBlock2.x = 425
+  placeBlock2.y = 313
 
   const transitions = [
     new StateTransition({
