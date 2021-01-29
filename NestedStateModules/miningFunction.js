@@ -96,10 +96,10 @@ function miningFunction (bot, targets) {
   moveToBlock2.x = 725
   moveToBlock2.y = 613
 
-  const placeBlock2 = new BehaviorCustomPlaceBlock(bot, targets)
-  placeBlock2.stateName = 'Place Block 2'
-  placeBlock2.x = 725
-  placeBlock2.y = 513
+  const placeBlock1 = new BehaviorCustomPlaceBlock(bot, targets)
+  placeBlock1.stateName = 'Place Block 1'
+  placeBlock1.x = 725
+  placeBlock1.y = 513
 
   const minerChecks = new BehaviorMinerChecks(bot, targets)
   minerChecks.stateName = 'Miner Check'
@@ -226,7 +226,7 @@ function miningFunction (bot, targets) {
 
     new StateTransition({
       parent: mineBlock1,
-      child: placeBlock2,
+      child: placeBlock1,
       name: 'If down is liquid & Tunel is vertically',
       shouldTransition: () => {
         const block = bot.blockAt(targets.position.offset(0, -1, 0))
@@ -252,13 +252,13 @@ function miningFunction (bot, targets) {
     }),
 
     new StateTransition({
-      parent: placeBlock2,
+      parent: placeBlock1,
       child: moveToBlock2,
-      name: 'placeBlock2 -> moveToBlock2',
+      name: 'placeBlock1 -> moveToBlock2',
       onTransition: () => {
         targets.position = targets.position.offset(0, 1, 0)
       },
-      shouldTransition: () => placeBlock2.isFinished() || placeBlock2.isItemNotFound() || placeBlock2.isCantPlaceBlock()
+      shouldTransition: () => placeBlock1.isFinished() || placeBlock1.isItemNotFound() || placeBlock1.isCantPlaceBlock()
     }),
 
     new StateTransition({
