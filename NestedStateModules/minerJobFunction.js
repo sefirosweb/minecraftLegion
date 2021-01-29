@@ -342,6 +342,7 @@ function minerJobFunction (bot, targets) {
       parent: miningFunction,
       child: combatFunction,
       name: 'miningFunction -> try getClosestMob',
+      onTransition: () => bot.pathfinder.setGoal(null),
       shouldTransition: () => {
         getClosestMob.onStateEntered()
         return targets.entity !== undefined
