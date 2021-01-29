@@ -86,40 +86,20 @@ function miningFunction (bot, targets) {
   mineBlock1.x = 1025
   mineBlock1.y = 563
 
-  const mineBlock2 = new BehaviorDigBlock(bot, targets)
-  mineBlock2.stateName = 'Mine Block 2'
-  mineBlock2.x = 325
-  mineBlock2.y = 500
-
   const moveToBlock1 = new BehaviorMoveTo(bot, targets)
   moveToBlock1.stateName = 'Move To Block 1'
   moveToBlock1.x = 1025
   moveToBlock1.y = 313
-
-  const moveToBlock2 = new BehaviorMoveTo(bot, targets)
-  moveToBlock2.stateName = 'Move To Block 2'
-  moveToBlock2.x = 525
-  moveToBlock2.y = 363
 
   const moveToBlock3 = new BehaviorMoveTo(bot, targets)
   moveToBlock3.stateName = 'Move To Blockk 3'
   moveToBlock3.x = 725
   moveToBlock3.y = 613
 
-  const placeBlock1 = new BehaviorCustomPlaceBlock(bot, targets)
-  placeBlock1.stateName = 'Place Block 1'
-  placeBlock1.x = 325
-  placeBlock1.y = 300
-
   const placeBlock2 = new BehaviorCustomPlaceBlock(bot, targets)
   placeBlock2.stateName = 'Place Block 2'
   placeBlock2.x = 725
   placeBlock2.y = 513
-
-  const placeBlock3 = new BehaviorCustomPlaceBlock(bot, targets)
-  placeBlock3.stateName = 'Place Block 3'
-  placeBlock3.x = 325
-  placeBlock3.y = 400
 
   const minerChecks = new BehaviorMinerChecks(bot, targets)
   minerChecks.stateName = 'Miner Check'
@@ -136,6 +116,8 @@ function miningFunction (bot, targets) {
   eatFood.stateName = 'Eat Food'
   eatFood.x = 725
   eatFood.y = 313
+
+  const fillBlocks = require('./fillFunction')(bot, targets)
 
   const transitions = [
     new StateTransition({
@@ -185,8 +167,8 @@ function miningFunction (bot, targets) {
 
     new StateTransition({
       parent: checkLayer,
-      child: moveToBlock2,
-      name: 'checkLayer -> moveToBlock2',
+      child: fillBlocks,
+      name: 'checkLayer -> fillBlocks',
       shouldTransition: () => {
         const item = bot.inventory.items().find(item => blockForPlace.includes(item.name))
         if (checkLayer.getFoundLavaOrWater() && item) {
@@ -195,59 +177,6 @@ function miningFunction (bot, targets) {
         }
         return false
       }
-    }),
-
-    new StateTransition({
-      parent: moveToBlock2,
-      child: mineBlock2,
-      name: 'If up block is solid',
-      onTransition: () => {
-        targets.position = targets.position.offset(0, 1, 0)
-      },
-      shouldTransition: () => {
-        const block = bot.blockAt(targets.position.offset(0, 1, 0))
-        if (bot.canDigBlock(block) && !placeBlocks.includes(block.name)) {
-          bot.pathfinder.setGoal(null)
-          return !bot.pathfinder.isMining()
-        }
-      }
-    }),
-
-    new StateTransition({
-      parent: moveToBlock2,
-      child: placeBlock1,
-      name: 'if block is liquid',
-      shouldTransition: () => {
-        const block = bot.blockAt(targets.position.offset(0, 1, 0))
-        return moveToBlock2.distanceToTarget() < 3 && placeBlocks.includes(block.name)
-      }
-    }),
-
-    new StateTransition({
-      parent: mineBlock2,
-      child: placeBlock3,
-      name: 'mineBlock2 -> placeBlock3',
-      onTransition: () => {
-        targets.position = targets.position.offset(0, -1, 0)
-      },
-      shouldTransition: () => mineBlock2.isFinished()
-    }),
-
-    new StateTransition({
-      parent: placeBlock3,
-      child: placeBlock1,
-      name: 'placeBlock3 -> placeBlock1',
-      onTransition: () => {
-        targets.position = targets.position.offset(0, 1, 0)
-      },
-      shouldTransition: () => placeBlock3.isFinished() || placeBlock3.isItemNotFound() || placeBlock3.isCantPlaceBlock()
-    }),
-
-    new StateTransition({
-      parent: placeBlock1,
-      child: checkLayer,
-      name: 'placeBlock1 -> checkLayer',
-      shouldTransition: () => placeBlock1.isFinished() || placeBlock1.isItemNotFound() || placeBlock1.isCantPlaceBlock()
     }),
 
     new StateTransition({
