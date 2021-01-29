@@ -2,17 +2,16 @@ const {
   StateTransition,
   BehaviorIdle,
   NestedStateMachine,
-  BehaviorMoveTo,
-  BehaviorFindInteractPosition
+  BehaviorMoveTo
 } = require('mineflayer-statemachine')
 
 const BehaviorLoadConfig = require('./../BehaviorModules/BehaviorLoadConfig')
+const BehaviorMinerCheckLayer = require('./../BehaviorModules/BehaviorMinerCheckLayer')
 const BehaviorMinerCurrentLayer = require('./../BehaviorModules/BehaviorMinerCurrentLayer')
 const BehaviorMinerCurrentBlock = require('./../BehaviorModules/BehaviorMinerCurrentBlock')
 const BehaviorDigBlock = require('./../BehaviorModules/BehaviorDigBlock')
 const BehaviorMinerChecks = require('./../BehaviorModules/BehaviorMinerChecks')
 const BehaviorEatFood = require('./../BehaviorModules/BehaviorEatFood')
-const BehaviorMinerCheckLayer = require('./../BehaviorModules/BehaviorMinerCheckLayer')
 const BehaviorCustomPlaceBlock = require('./../BehaviorModules/BehaviorCustomPlaceBlock ')
 // let isDigging = false
 function minerJobFunction (bot, targets) {
@@ -42,10 +41,6 @@ function minerJobFunction (bot, targets) {
   currentBlock.stateName = 'Check next block'
   currentBlock.x = 725
   currentBlock.y = 113
-
-  const findInteractPosition = new BehaviorFindInteractPosition(bot, targets)
-  findInteractPosition.x = 925
-  findInteractPosition.y = 113
 
   const mineBlock1 = new BehaviorDigBlock(bot, targets)
   mineBlock1.stateName = 'Mine Block 1'
@@ -149,9 +144,6 @@ function minerJobFunction (bot, targets) {
       parent: checkLayer,
       child: moveToBlock2,
       name: 'checkLayer -> moveToBlock2',
-      onTransition: () => {
-        targets.position = targets.position.offset(0, 1, 0)
-      },
       shouldTransition: () => {
         const item = bot.inventory.items().find(item => blockForPlace.includes(item.name))
         if (checkLayer.getFoundLavaOrWater() && item) {
@@ -166,32 +158,25 @@ function minerJobFunction (bot, targets) {
       parent: moveToBlock2,
       child: mineBlock2,
       name: 'If up block is solid',
+      onTransition: () => {
+        targets.position = targets.position.offset(0, 1, 0)
+      },
       shouldTransition: () => {
-        const block = bot.blockAt(targets.mineBlock)
-        /* old version
-                if (bot.pathfinder.isMining() & isDigging === false) {
-                  isDigging = true
-
-                  bot.on('diggingAborted', () => {
-                    isDigging = false
-                  })
-
-                  bot.on('diggingCompleted', () => {
-                    isDigging = false
-                  })
-                }
-
-                if (isDigging === false && !bot.pathfinder.isMining()) {
-                  bot.removeAllListeners('diggingAborted')
-                  bot.removeAllListeners('diggingCompleted')
-                  return true
-                }
-
-                */
+        const block = bot.blockAt(targets.position.offset(0, 1, 0))
         if (bot.canDigBlock(block) && !placeBlocks.includes(block.name)) {
           bot.pathfinder.setGoal(null)
           return !bot.pathfinder.isMining()
         }
+      }
+    }),
+
+    new StateTransition({
+      parent: moveToBlock2,
+      child: placeBlock1,
+      name: 'if block is liquid',
+      shouldTransition: () => {
+        const block = bot.blockAt(targets.position.offset(0, 1, 0))
+        return moveToBlock2.distanceToTarget() < 3 && placeBlocks.includes(block.name)
       }
     }),
 
@@ -216,19 +201,6 @@ function minerJobFunction (bot, targets) {
     }),
 
     new StateTransition({
-      parent: moveToBlock2,
-      child: placeBlock1,
-      name: 'if block is liquid',
-      onTransition: () => {
-        targets.position = targets.position.offset(0, -1, 0)
-      },
-      shouldTransition: () => {
-        const block = bot.blockAt(targets.position)
-        return moveToBlock2.distanceToTarget() < 2 && bot.canSeeBlock(block) && placeBlocks.includes(block.name)
-      }
-    }),
-
-    new StateTransition({
       parent: placeBlock1,
       child: checkLayer,
       name: 'placeBlock1 -> checkLayer',
@@ -248,25 +220,6 @@ function minerJobFunction (bot, targets) {
       shouldTransition: () => currentBlock.isFinished()
     }),
 
-    /*
-    new StateTransition({
-      parent: currentBlock,
-      child: findInteractPosition,
-      name: 'currentBlock -> findInteractPosition',
-      onTransition: () => {
-        targets.previousPosition = targets.position
-      },
-      shouldTransition: () => currentBlock.isFinished()
-    }),
-
-    new StateTransition({
-      parent: findInteractPosition,
-      child: moveToBlock1,
-      name: 'findInteractPosition -> moveToBlock1',
-      shouldTransition: () => true
-    }),
-    */
-
     new StateTransition({
       parent: currentBlock,
       child: nextLayer,
@@ -284,30 +237,10 @@ function minerJobFunction (bot, targets) {
       shouldTransition: () => {
         const block = bot.blockAt(targets.mineBlock)
         if (bot.canDigBlock(block)) {
-          /* OLD VERSION
-                    if (bot.pathfinder.isMining() & isDigging === false) {
-                      isDigging = true
-
-                      bot.on('diggingAborted', () => {
-                        isDigging = false
-                      })
-
-                      bot.on('diggingCompleted', () => {
-                        isDigging = false
-                      })
-                    }
-
-                    if (isDigging === false && !bot.pathfinder.isMining()) {
-                      bot.removeAllListeners('diggingAborted')
-                      bot.removeAllListeners('diggingCompleted')
-                      return true
-                    }
-              */
           bot.pathfinder.setGoal(null)
           return !bot.pathfinder.isMining()
         }
       }
-
     }),
 
     new StateTransition({
