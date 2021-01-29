@@ -5,8 +5,6 @@ const {
   BehaviorMoveTo
 } = require('mineflayer-statemachine')
 
-const Vec3 = require('vec3')
-
 const BehaviorLoadConfig = require('./../BehaviorModules/BehaviorLoadConfig')
 const BehaviorMinerCheckLayer = require('./../BehaviorModules/BehaviorMinerCheckLayer')
 const BehaviorMinerCurrentLayer = require('./../BehaviorModules/BehaviorMinerCurrentLayer')
