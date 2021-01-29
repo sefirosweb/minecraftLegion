@@ -24,6 +24,7 @@ const excludeItemsDeposit = [
   { item: 'shield', quantity: 1 },
   { item: 'bow', quantity: 1 },
   { item: 'arrow', quantity: 128 },
+  { item: 'torch', quantity: 128 },
   { item: 'cooked_chicken', quantity: 64 },
   { item: 'cobblestone', quantity: 64 }
 ]
@@ -40,7 +41,8 @@ const itemsToBeReady = [
   { item: 'sword', quantity: 1 },
   { item: 'bow', quantity: 1 },
   { item: 'arrow', quantity: 16 },
-  { item: 'cooked_chicken', quantity: 16 }
+  { item: 'cooked_chicken', quantity: 16 },
+  { item: 'torch', quantity: 16 }
 ]
 
 // BehaviorWithdrawItemChest 1
@@ -57,7 +59,8 @@ const equipmentItems = [
 // BehaviorWithdrawItemChest 2
 const consumibleItems = [
   { item: 'arrow', quantity: 64 },
-  { item: 'cooked_chicken', quantity: 64 }
+  { item: 'cooked_chicken', quantity: 64 },
+  { item: 'torch', quantity: 64 }
 ]
 
 // BehaviorWithdrawItemChest 3
