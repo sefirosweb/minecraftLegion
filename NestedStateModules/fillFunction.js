@@ -65,7 +65,7 @@ function fillFunction (bot, targets) {
       child: mineBlock,
       name: 'If up block is solid',
       onTransition: () => {
-        targets.position = targets.previusBlock.offset(0, 1, 0)
+        targets.position = targets.position.offset(0, 1, 0)
       },
       shouldTransition: () => {
         const block = bot.blockAt(targets.position.offset(0, 1, 0))
