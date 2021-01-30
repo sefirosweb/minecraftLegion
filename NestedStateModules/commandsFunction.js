@@ -155,6 +155,10 @@ function commandsFunction (bot, targets) {
     }
   })
 
+  botWebsocket.on('drop', () => {
+    dropAll()
+  })
+
   botWebsocket.on('move', (to) => {
     const mineflayerPathfinder = require('mineflayer-pathfinder')
     const mcData = require('minecraft-data')(bot.version)
