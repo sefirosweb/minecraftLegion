@@ -227,7 +227,7 @@ function miningFunction (bot, targets) {
     new StateTransition({
       parent: mineBlock1,
       child: placeBlock1,
-      name: 'If down is liquid & Tunel is vertically',
+      name: '[Vertically] If down is liquid',
       shouldTransition: () => {
         const block = bot.blockAt(targets.position.offset(0, -1, 0))
         const item = bot.inventory.items().find(item => blockForPlace.includes(item.name))
@@ -243,11 +243,24 @@ function miningFunction (bot, targets) {
 
     new StateTransition({
       parent: mineBlock1,
+      child: minerChecks,
+      name: '[Horizontally] Continue',
+      shouldTransition: () => {
+        return mineBlock1.isFinished() && nextLayer.minerCords.tunel === 'horizontally'
+      }
+    }),
+
+    new StateTransition({
+      parent: mineBlock1,
       child: moveToBlock2,
-      name: 'If down is solid',
+      name: '[Vertically] If down is solid',
       shouldTransition: () => {
         const block = bot.blockAt(targets.position.offset(0, -1, 0))
-        return mineBlock1.isFinished() && (!placeBlocks.includes(block.name) || !bot.inventory.items().find(item => blockForPlace.includes(item.name)) || nextLayer.minerCords.tunel === 'horizontally')
+        return mineBlock1.isFinished() && nextLayer.minerCords.tunel === 'vertically' &&
+          (
+            !placeBlocks.includes(block.name) ||
+            !bot.inventory.items().find(item => blockForPlace.includes(item.name))
+          )
       }
     }),
 
