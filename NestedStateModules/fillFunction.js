@@ -2,8 +2,7 @@ const {
   StateTransition,
   BehaviorIdle,
   NestedStateMachine,
-  BehaviorMoveTo,
-  BehaviorFindInteractPosition
+  BehaviorMoveTo
 } = require('mineflayer-statemachine')
 
 const BehaviorDigBlock = require('./../BehaviorModules/BehaviorDigBlock')
@@ -22,8 +21,6 @@ function fillFunction (bot, targets) {
   exit.stateName = 'Exit'
   exit.x = 125
   exit.y = 313
-
-  const interactPosition = new BehaviorFindInteractPosition(bot, targets)
 
   const moveToBlock = new BehaviorMoveTo(bot, targets)
   moveToBlock.stateName = 'Move To Block'
@@ -48,16 +45,6 @@ function fillFunction (bot, targets) {
   const transitions = [
     new StateTransition({
       parent: start,
-      child: interactPosition,
-      name: 'start -> interactPosition',
-      onTransition: () => {
-        targets.previusBlock = targets.position.clone()
-      },
-      shouldTransition: () => true
-    }),
-
-    new StateTransition({
-      parent: interactPosition,
       child: moveToBlock,
       name: 'start -> moveToBlock',
       shouldTransition: () => true
@@ -65,9 +52,6 @@ function fillFunction (bot, targets) {
 
     new StateTransition({
       parent: moveToBlock,
-      onTransition: () => {
-        targets.position = targets.previusBlock
-      },
       child: placeBlock2,
       name: 'if block is liquid',
       shouldTransition: () => {
