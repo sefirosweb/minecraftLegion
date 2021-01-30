@@ -32,17 +32,17 @@ const excludeItemsDeposit = [
 // Check this items in inventory for go withdraw
 const itemsToBeReady = [
   { item: 'pickaxe', quantity: 1 },
-  { item: 'shovel', quantity: 1 },
-  { item: 'helmet', quantity: 1 },
-  { item: 'chest', quantity: 1 },
-  { item: 'leggings', quantity: 1 },
-  { item: 'boots', quantity: 1 },
-  { item: 'shield', quantity: 1 },
-  { item: 'sword', quantity: 1 },
-  { item: 'bow', quantity: 1 },
-  { item: 'arrow', quantity: 16 },
-  { item: 'cooked_chicken', quantity: 16 },
-  { item: 'torch', quantity: 16 }
+  { item: 'shovel', quantity: 1 }
+  // { item: 'helmet', quantity: 1 },
+  // { item: 'chest', quantity: 1 },
+  // { item: 'leggings', quantity: 1 },
+  // { item: 'boots', quantity: 1 },
+  // { item: 'shield', quantity: 1 },
+  // { item: 'sword', quantity: 1 },
+  // { item: 'bow', quantity: 1 },
+  // { item: 'arrow', quantity: 16 },
+  // { item: 'cooked_chicken', quantity: 16 },
+  // { item: 'torch', quantity: 16 }
 ]
 
 // BehaviorWithdrawItemChest 1
