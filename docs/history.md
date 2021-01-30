@@ -1,3 +1,7 @@
+## 0.1.5
+* Added minner job!
+* Fixed some combat bugs
+
 ## 0.1.4
 * Fixed some bugs
 * Polymorfed function BehaviorGetReady
