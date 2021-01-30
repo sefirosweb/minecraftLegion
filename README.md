@@ -92,6 +92,7 @@ set miner x y z x y z E horizontally
 ## Next version preview
 ### 0.1.6
 - Fix some miner bugs, (fix lava & water)
+- Add placing torchs
 ### 0.1.7
 - Change front end for configure all functions
 ### 0.1.8
