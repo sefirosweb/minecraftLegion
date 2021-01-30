@@ -93,13 +93,13 @@ function miningFunction (bot, targets) {
 
   const moveToBlock2 = new BehaviorMoveTo(bot, targets)
   moveToBlock2.stateName = 'Move To Block 2'
-  moveToBlock2.x = 725
-  moveToBlock2.y = 613
+  moveToBlock2.x = 825
+  moveToBlock2.y = 713
 
   const placeBlock1 = new BehaviorCustomPlaceBlock(bot, targets)
   placeBlock1.stateName = 'Place Block 1'
-  placeBlock1.x = 725
-  placeBlock1.y = 513
+  placeBlock1.x = 1025
+  placeBlock1.y = 713
 
   const minerChecks = new BehaviorMinerChecks(bot, targets)
   minerChecks.stateName = 'Miner Check'
