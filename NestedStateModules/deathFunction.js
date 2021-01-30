@@ -49,7 +49,6 @@ function deathFunction (bot, targets) {
       parent: playerEntity,
       child: commands,
       name: 'Transfer to sub nestered commands',
-      onTransition: () => bot.chat('Hi ' + playerEntity.getPlayerName()),
       shouldTransition: () => true
     }),
 

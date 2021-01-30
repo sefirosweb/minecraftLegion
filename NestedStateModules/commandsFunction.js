@@ -39,40 +39,34 @@ function commandsFunction (bot, targets) {
     new StateTransition({ // 0
       parent: lookAtPlayersState,
       child: exit,
-      name: 'Player say: bye',
-      onTransition: () => bot.chat('Bye Master!')
+      name: 'Player say: bye'
     }),
     new StateTransition({ // 1
       parent: followPlayer,
       child: exit,
-      name: 'Player say: bye',
-      onTransition: () => bot.chat('Bye Master!')
+      name: 'Player say: bye'
     }),
     new StateTransition({ // 2
       parent: lookAtFollowTarget,
       child: exit,
-      name: 'Player say: bye',
-      onTransition: () => bot.chat('Bye Master!')
+      name: 'Player say: bye'
     }),
 
     new StateTransition({ // 3
       parent: lookAtPlayersState,
       child: followPlayer,
-      name: 'Player say: come',
-      onTransition: () => bot.chat('Yes sr!')
+      name: 'Player say: come'
     }),
 
     new StateTransition({ // 4
       parent: lookAtFollowTarget,
       child: lookAtPlayersState,
-      name: 'Player say: stay',
-      onTransition: () => bot.chat('I wait here!')
+      name: 'Player say: stay'
     }),
     new StateTransition({ // 5
       parent: followPlayer,
       child: lookAtPlayersState,
-      name: 'Player say: stay',
-      onTransition: () => bot.chat('I wait here!')
+      name: 'Player say: stay'
     }),
     new StateTransition({ // 6
       parent: start,
@@ -207,7 +201,7 @@ function commandsFunction (bot, targets) {
 
   function saveMiner (coords) {
     if (coords.length !== 10) {
-      bot.chat('The coords is wrong')
+      // bot.chat('The coords is wrong')
       return false
     }
     const minerCoords = {}
@@ -222,7 +216,7 @@ function commandsFunction (bot, targets) {
 
     botWebsocket.log('Point: ' + JSON.stringify(minerCoords))
     botConfig.setMiner(bot.username, minerCoords)
-    bot.chat('Lets made a tunel!')
+    // bot.chat('Lets made a tunel!')
   }
 
   function dropAll () {
@@ -249,13 +243,13 @@ function commandsFunction (bot, targets) {
     if (bedBlock || bot.canSeeBlock(bedBlock)) {
       bot.activateBlock(bedBlock)
         .then(() => {
-          bot.chat('Found a bed!')
+          // bot.chat('Found a bed!')
         })
         .catch(err => {
           console.log(err)
         })
     } else {
-      bot.chat('No nearby bed')
+      // bot.chat('No nearby bed')
     }
   }
 
@@ -265,11 +259,11 @@ function commandsFunction (bot, targets) {
       case (job === 'archer'):
       case (job === 'farmer'):
       case (job === 'miner'):
-        bot.chat('I will fulfill this job')
+        // bot.chat('I will fulfill this job')
         botConfig.setJob(bot.username, job)
         break
       default:
-        bot.chat("Master, I don't know how to do this job")
+        // bot.chat("Master, I don't know how to do this job")
         break
     }
   }
@@ -279,11 +273,11 @@ function commandsFunction (bot, targets) {
       case (mode === 'none'):
       case (mode === 'pvp'):
       case (mode === 'pve'):
-        bot.chat('I understood the conflict')
+        // bot.chat('I understood the conflict')
         botConfig.setMode(bot.username, mode)
         break
       default:
-        bot.chat("Master, I don't know what you means mode")
+        // bot.chat("Master, I don't know what you means mode")
         break
     }
   }
@@ -291,15 +285,15 @@ function commandsFunction (bot, targets) {
   function saveHelp (mode) {
     switch (true) {
       case (mode === 'true'):
-        bot.chat('I will defend my friends')
+        // bot.chat('I will defend my friends')
         botConfig.setHelpFriend(bot.username, true)
         break
       case (mode === 'false'):
-        bot.chat('Its ok for my friends')
+        // bot.chat('Its ok for my friends')
         botConfig.setHelpFriend(bot.username, false)
         break
       default:
-        bot.chat("Master, I don't know friends say")
+        // bot.chat("Master, I don't know friends say")
         break
     }
   }
@@ -307,10 +301,10 @@ function commandsFunction (bot, targets) {
   function saveDistance (distance) {
     distance = parseInt(distance)
     if (!isNaN(distance)) {
-      bot.chat('I take a look!')
+      // bot.chat('I take a look!')
       botConfig.setDistance(bot.username, distance)
     } else {
-      bot.chat('I dont understood the distance')
+      // bot.chat('I dont understood the distance')
     }
   }
 
@@ -328,10 +322,10 @@ function commandsFunction (bot, targets) {
   function startGetPoints (distance = 2) {
     distance = parseInt(distance)
     if (isNaN(distance)) {
-      bot.chat('I dont understood the distance')
+      // bot.chat('I dont understood the distance')
       return false
     }
-    bot.chat('Ok, tell me the way')
+    // bot.chat('Ok, tell me the way')
 
     distancePatrol = distance
 
@@ -347,18 +341,18 @@ function commandsFunction (bot, targets) {
   function savePatrol () {
     customEvents.removeListener('move', nextPointListener)
     botConfig.setPatrol(bot.username, patrol)
-    bot.chat('Ok, I memorized the patrol')
+    // bot.chat('Ok, I memorized the patrol')
   }
 
   function saveChest (chestName) {
     const permitedChests = ['food', 'equipment', 'deposit', 'picks', 'shovels']
     if (!permitedChests.includes(chestName)) {
-      bot.chat('I don\'t know what chest is it')
+      // bot.chat('I don\'t know what chest is it')
       return
     }
     customEvents.removeListener('move', nextPointListener)
     botConfig.setChest(bot.username, patrol, chestName)
-    bot.chat('Oooh my treasure')
+    // bot.chat('Oooh my treasure')
   }
 
   const commandsFunction = new NestedStateMachine(transitions, start, exit)
