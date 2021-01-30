@@ -1,3 +1,5 @@
+const Vec3 = require('vec3')
+
 const {
   StateTransition,
   BehaviorIdle,
@@ -7,6 +9,7 @@ const {
 } = require('mineflayer-statemachine')
 const botConfig = require('../modules/botConfig')
 const botWebsocket = require('../modules/botWebsocket')
+const masters = botWebsocket.getMasters()
 const customEvents = require('../modules/customEvents')
 
 function commandsFunction (bot, targets) {
@@ -94,7 +97,20 @@ function commandsFunction (bot, targets) {
     transitions[5].trigger()
   }
 
-  function followTrigger () {
+  function followTrigger (master) {
+    const filter = e => e.type === 'player' &&
+      e.username === master &&
+      e.mobType !== 'Armor Stand'
+
+    const entity = bot.nearestEntity(filter)
+
+    if (!entity) {
+      return
+    }
+
+    botWebsocket.log(`Follow to => ${master}`)
+
+    targets.entity = entity
     transitions[3].trigger()
   }
 
@@ -110,9 +126,8 @@ function commandsFunction (bot, targets) {
     stayTrigger()
   })
 
-  botWebsocket.on('sendFollow', () => {
-    botWebsocket.log('sendFollow')
-    followTrigger()
+  botWebsocket.on('sendFollow', (master) => {
+    followTrigger(master)
   })
 
   botWebsocket.on('sendEndCommands', () => {
@@ -130,19 +145,79 @@ function commandsFunction (bot, targets) {
     savePatrol()
   })
 
+  botWebsocket.on('interact', () => {
+    const filter = e => e.type === 'player' &&
+      e.position.distanceTo(bot.entity.position) < 3 &&
+      e.mobType !== 'Armor Stand'
+    const entity = bot.nearestEntity(filter)
+    if (entity) {
+      bot.useOn(entity)
+    }
+  })
+
+  botWebsocket.on('move', (to) => {
+    const mineflayerPathfinder = require('mineflayer-pathfinder')
+    const mcData = require('minecraft-data')(bot.version)
+
+    const pathfinder = bot.pathfinder
+
+    let x = bot.entity.position.x
+    let y = bot.entity.position.y
+    let z = bot.entity.position.z
+
+    if (to === 'x+') {
+      x++
+    }
+
+    if (to === 'x-') {
+      x--
+    }
+
+    if (to === 'z+') {
+      z++
+    }
+    if (to === 'z-') {
+      z--
+    }
+
+    const airblocks = ['air', 'cave_air']
+    const frontBlock = bot.blockAt(new Vec3(x, y, z))
+    const upBlock = bot.blockAt(new Vec3(x, y + 1, z))
+    const downBlock = bot.blockAt(new Vec3(x, y - 1, z))
+
+    if (!airblocks.includes(frontBlock.name) && airblocks.includes(upBlock.name)) {
+      y++
+    } else if (airblocks.includes(frontBlock.name) && airblocks.includes(downBlock.name)) {
+      y--
+    }
+
+    const goal = new mineflayerPathfinder.goals.GoalBlock(x, y, z)
+
+    const movements = new mineflayerPathfinder.Movements(bot, mcData)
+    pathfinder.setMovements(movements)
+    pathfinder.setGoal(goal)
+  })
+
   botWebsocket.on('sendSaveChest', (chestName) => {
     botWebsocket.log('sendSaveChest')
     saveChest(chestName)
   })
 
   function botChatCommandFunctionListener (username, message) {
+    const findMaster = masters.find(e => e.name === username)
+
+    if (findMaster === undefined) {
+      botWebsocket.log(`${username} is no in master list!`)
+      return
+    }
+
     let msg
     switch (true) {
       case (message === 'bye'):
         endCommandsTrigger()
         break
       case (message === 'come'):
-        followTrigger()
+        followTrigger(findMaster.name)
         break
       case (message === 'stay'):
         stayTrigger()

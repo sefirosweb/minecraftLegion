@@ -61,33 +61,28 @@ function deathFunction (bot, targets) {
     })
   ]
 
-  function commandTrigger (master) {
-    const masters = botWebsocket.getMasters()
-    const findMaster = masters.find(e => e.name === master)
-
-    if (findMaster === undefined) {
-      botWebsocket.log(`${master} is no in master list!`)
-      return
-    }
-
-    const player = playerEntity.getPlayerEntity(master)
-    if (player) {
-      botWebsocket.log('sendStay')
-      transitions[1].trigger()
-      transitions[2].trigger()
-      botWebsocket.emitCombat(false)
-    } else {
-      botWebsocket.log(`Playername ${master} not found!`)
-    }
+  function commandTrigger () {
+    botWebsocket.log('sendStay')
+    transitions[1].trigger()
+    transitions[2].trigger()
+    botWebsocket.emitCombat(false)
   }
 
-  botWebsocket.on('sendStay', (master) => {
-    commandTrigger(master)
+  botWebsocket.on('sendStay', () => {
+    commandTrigger()
   })
 
-  bot.on('chat', (username, message) => {
+  bot.on('chat', (master, message) => {
     if (message === 'hi ' + bot.username || message === 'hi all') {
-      commandTrigger(username)
+      const masters = botWebsocket.getMasters()
+      const findMaster = masters.find(e => e.name === master)
+
+      if (findMaster === undefined) {
+        botWebsocket.log(`${master} is no in master list!`)
+        return
+      }
+
+      commandTrigger()
     }
   })
 
