@@ -7,7 +7,7 @@ function getConn (botName) {
   const db = low(adapter)
   const defaultConfig = {
     name: botName,
-    job: 'guard', // guard, archer, farmer
+    job: 'none', // guard, archer, farmer
     mode: 'none', // none, pve, pvp
     distance: 10,
     help_friends: false,
