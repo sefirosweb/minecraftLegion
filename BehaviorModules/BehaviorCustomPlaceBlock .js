@@ -57,7 +57,7 @@ module.exports = class BehaviorCustomPlaceBlock {
     }
 
     if (!this.blockCanBeReplaced.includes(block.name)) {
-      botWebsocket.log('Cant place block there!')
+      botWebsocket.log(`Cant place block there ${block.name}`)
       this.cantPlaceBlock = true
       return
     }
