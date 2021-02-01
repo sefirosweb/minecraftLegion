@@ -1,3 +1,6 @@
+## 0.1.6
+* Added security on websocket with password (see config_example.js)
+
 ## 0.1.5
 * Added minner job!
 * Fixed some combat bugs
