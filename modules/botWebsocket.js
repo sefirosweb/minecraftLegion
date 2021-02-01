@@ -1,14 +1,23 @@
-const { webServer, webServerPort } = require('../config')
+const { webServer, webServerPort, webServerPassword } = require('../config')
 const io = require('socket.io-client')
 const config = require('../config')
 const botconfig = require('./botConfig')
-let socket; let friends = []; let masters = []
+let socket; let friends = []; let masters = []; let loged = false
 
 function connect (botUsername) {
   socket = io(webServer + ':' + webServerPort)
   socket.on('connect', () => {
     console.log('Connected to webserver')
-    socket.emit('addFriend', botUsername)
+    socket.emit('login', webServerPassword)
+  })
+
+  socket.on('login', (authenticate) => {
+    if (authenticate.auth) {
+      loged = true
+      socket.emit('addFriend', botUsername)
+    } else {
+      loged = false
+    }
   })
 
   socket.on('disconnect', () => {
@@ -49,6 +58,7 @@ function connect (botUsername) {
 }
 
 function emit (chanel, data) {
+  if (!loged) { return }
   socket.emit(chanel, data)
 }
 
@@ -77,6 +87,7 @@ function emitFood (health) {
 }
 
 function log (data) {
+  if (!loged) { return }
   socket.emit('logs', data)
 }
 

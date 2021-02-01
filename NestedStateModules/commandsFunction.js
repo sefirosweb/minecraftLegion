@@ -211,7 +211,7 @@ function commandsFunction (bot, targets) {
     const findMaster = masters.find(e => e.name === username)
 
     if (findMaster === undefined) {
-      botWebsocket.log(`${username} is no in master list!`)
+      // botWebsocket.log(`${username} is no in master list!`)
       return
     }
 
