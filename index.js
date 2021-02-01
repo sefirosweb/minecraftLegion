@@ -52,13 +52,23 @@ function runNextBot () {
 runNextBot()
 
 // Master websocket for load bots
-const { webServer, webServerPort } = require('./config')
+const { webServer, webServerPort, webServerPassword } = require('./config')
 const io = require('socket.io-client')
 const socket = io(webServer + ':' + webServerPort)
+let loged = false
 
 socket.on('connect', () => {
   console.log('Connected to webserver')
   socket.emit('botMaster', 'on')
+  socket.emit('login', webServerPassword)
+})
+
+socket.on('login', (authenticate) => {
+  if (authenticate.auth) {
+    loged = true
+  } else {
+    loged = false
+  }
 })
 
 socket.on('disconnect', () => {
@@ -66,5 +76,7 @@ socket.on('disconnect', () => {
 })
 
 socket.on('botConnect', data => {
+  if (!loged) { return }
+  console.log(`Starting bot ${data.botName}`)
   startBot(data.botName, data.botPassword)
 })
