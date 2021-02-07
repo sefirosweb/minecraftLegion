@@ -52,6 +52,9 @@ function connect (botUsername) {
       case 'job':
         botconfig.setJob(botUsername, config.value)
         break
+      case 'pickUpItems':
+        botconfig.setPickUpItems(botUsername, config.value)
+        break
     }
 
     sendConfig(botUsername, config.fromSocketId)

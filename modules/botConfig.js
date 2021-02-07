@@ -58,6 +58,12 @@ function getHelpFriend (botName) {
 
 function setPickUpItems (botName, mode) {
   const db = getConn(botName)
+  if (mode === 'true') {
+    mode = true
+  } else {
+    mode = false
+  }
+
   db.set('config.pickUpItems', mode).write()
 }
 
