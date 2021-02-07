@@ -48,7 +48,7 @@ function connect (botUsername) {
   })
 
   socket.on('changeConfig', (config) => {
-    let itemsToBeReady, patrol, index, temp
+    let itemsToBeReady, patrol, index, temp, minerConfig
     switch (config.configToChange) {
       case 'job':
         botconfig.setJob(botUsername, config.value)
@@ -107,6 +107,21 @@ function connect (botUsername) {
           patrol[index - 1] = temp
           botconfig.setPatrol(botUsername, patrol)
         }
+        break
+      case 'changeTunnel':
+        minerConfig = botconfig.getMiner(botUsername)
+        minerConfig.tunel = config.value
+        botconfig.setMiner(botUsername, minerConfig)
+        break
+      case 'changeOrientation':
+        minerConfig = botconfig.getMiner(botUsername)
+        minerConfig.orientation = config.value
+        botconfig.setMiner(botUsername, minerConfig)
+        break
+      case 'changePosMiner':
+        minerConfig = botconfig.getMiner(botUsername)
+        minerConfig[config.value.coord] = config.value.pos
+        botconfig.setMiner(botUsername, minerConfig)
         break
     }
 

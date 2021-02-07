@@ -13,7 +13,16 @@ function getConn (botName) {
     help_friends: false,
     pickUpItems: false,
     itemsToBeReady: [],
-    minerCords: {},
+    minerCords: {
+      xStart: null,
+      yStart: null,
+      zStart: null,
+      xEnd: null,
+      yEnd: null,
+      zEnd: null,
+      orientation: null,
+      tunel: null
+    },
     chests: {},
     patrol: []
   }
