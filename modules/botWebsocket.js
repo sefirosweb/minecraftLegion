@@ -48,12 +48,32 @@ function connect (botUsername) {
   })
 
   socket.on('changeConfig', (config) => {
+    let itemsToBeReady
     switch (config.configToChange) {
       case 'job':
         botconfig.setJob(botUsername, config.value)
         break
       case 'pickUpItems':
         botconfig.setPickUpItems(botUsername, config.value)
+        break
+      case 'mode':
+        botconfig.setMode(botUsername, config.value)
+        break
+      case 'distance':
+        botconfig.setDistance(botUsername, config.value)
+        break
+      case 'InsertItemToBeReady':
+        itemsToBeReady = botconfig.getItemsToBeReady(botUsername)
+        itemsToBeReady.push({
+          item: config.value.item,
+          quantity: config.value.quantity
+        })
+        botconfig.setItemsToBeReady(botUsername, itemsToBeReady)
+        break
+      case 'DeleteItemToBeReady':
+        itemsToBeReady = botconfig.getItemsToBeReady(botUsername)
+        itemsToBeReady.splice(config.value, 1)
+        botconfig.setItemsToBeReady(botUsername, itemsToBeReady)
         break
     }
 

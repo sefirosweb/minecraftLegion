@@ -7,11 +7,12 @@ function getConn (botName) {
   const db = low(adapter)
   const defaultConfig = {
     name: botName,
-    job: 'none', // guard, archer, farmer
+    job: 'none', // guard, miner -- For a now...
     mode: 'none', // none, pve, pvp
     distance: 10,
     help_friends: false,
     pickUpItems: false,
+    itemsToBeReady: [],
     minerCords: {},
     chests: {},
     patrol: []
@@ -129,6 +130,16 @@ function getMiner (botName) {
   return db.get('config.minerCords').value()
 }
 
+function setItemsToBeReady (botName, itemsToBeReady) {
+  const db = getConn(botName)
+  db.set('config.itemsToBeReady', itemsToBeReady).write()
+}
+
+function getItemsToBeReady (botName) {
+  const db = getConn(botName)
+  return db.get('config.itemsToBeReady').value()
+}
+
 module.exports = {
   getAll,
   setJob,
@@ -147,5 +158,7 @@ module.exports = {
   setMiner,
   getMiner,
   setPickUpItems,
-  getPickUpItems
+  getPickUpItems,
+  setItemsToBeReady,
+  getItemsToBeReady
 }
