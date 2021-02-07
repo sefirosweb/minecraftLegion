@@ -38,6 +38,7 @@ function createNewBot (botName, botPassword = '') {
   })
 
   bot.once('spawn', () => {
+    console.log(bot.version)
     botWebsocket.connect(bot.username)
     bot.on('physicTick', customEvents.executePhysicTickEvents)
     bot.on('chat', customEvents.executeChatEvents)

@@ -47,13 +47,26 @@ function connect (botUsername) {
     masters = mastersOnline
   })
 
-  socket.on('getConfig', (socketId) => {
-    const action = {
-      action: 'sendConfig',
-      value: botconfig.getAll(botUsername),
-      socketId
+  socket.on('changeConfig', (config) => {
+    switch (config.configToChange) {
+      case 'job':
+        botconfig.setJob(botUsername, config.value)
+        break
     }
-    socket.emit('sendAction', action)
+
+    sendConfig(botUsername, config.fromSocketId)
+  })
+
+  socket.on('getConfig', (fromSocketId) => {
+    sendConfig(botUsername, fromSocketId)
+  })
+}
+
+function sendConfig (botUsername, toSocketId) {
+  socket.emit('sendAction', {
+    action: 'sendConfig',
+    socketId: toSocketId,
+    value: botconfig.getAll(botUsername)
   })
 }
 
