@@ -159,6 +159,19 @@ function connect (botUsername) {
         chests[config.chestId].position[config.coord] = config.pos
         botconfig.setChests(botUsername, chests)
         break
+      case 'insertItemInChest':
+        chests = botconfig.getChests(botUsername)
+        chests[config.chestId].items.push({
+          item: config.item,
+          quantity: config.quantity
+        })
+        botconfig.setChests(botUsername, chests)
+        break
+      case 'removeItemFromChest':
+        chests = botconfig.getChests(botUsername)
+        chests[config.chestId].items.splice(config.itemIndex, 1)
+        botconfig.setChests(botUsername, chests)
+        break
     }
 
     sendConfig(botUsername, config.fromSocketId)
