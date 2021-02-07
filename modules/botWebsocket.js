@@ -144,6 +144,21 @@ function connect (botUsername) {
         chests.splice(config.value, 1)
         botconfig.setChests(botUsername, chests)
         break
+      case 'changeChestType':
+        chests = botconfig.getChests(botUsername)
+        chests[config.chestId].type = config.value
+        botconfig.setChests(botUsername, chests)
+        break
+      case 'changeChestName':
+        chests = botconfig.getChests(botUsername)
+        chests[config.chestId].name = config.value
+        botconfig.setChests(botUsername, chests)
+        break
+      case 'changeChestPos':
+        chests = botconfig.getChests(botUsername)
+        chests[config.chestId].position[config.coord] = config.pos
+        botconfig.setChests(botUsername, chests)
+        break
     }
 
     sendConfig(botUsername, config.fromSocketId)
