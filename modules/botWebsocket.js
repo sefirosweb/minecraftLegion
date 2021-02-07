@@ -48,13 +48,16 @@ function connect (botUsername) {
   })
 
   socket.on('changeConfig', (config) => {
-    let itemsToBeReady
+    let itemsToBeReady, patrol, index, temp
     switch (config.configToChange) {
       case 'job':
         botconfig.setJob(botUsername, config.value)
         break
       case 'pickUpItems':
         botconfig.setPickUpItems(botUsername, config.value)
+        break
+      case 'helpFriend':
+        botconfig.setHelpFriend(botUsername, config.value)
         break
       case 'mode':
         botconfig.setMode(botUsername, config.value)
@@ -74,6 +77,36 @@ function connect (botUsername) {
         itemsToBeReady = botconfig.getItemsToBeReady(botUsername)
         itemsToBeReady.splice(config.value, 1)
         botconfig.setItemsToBeReady(botUsername, itemsToBeReady)
+        break
+      case 'addPatrol':
+        patrol = botconfig.getPatrol(botUsername)
+        patrol.push(config.value)
+        botconfig.setPatrol(botUsername, patrol)
+        break
+      case 'removePatrol':
+        patrol = botconfig.getPatrol(botUsername)
+        patrol.splice(config.value, 1)
+        botconfig.setPatrol(botUsername, patrol)
+        break
+      case 'movePatrolNext':
+        patrol = botconfig.getPatrol(botUsername)
+        index = config.value
+        if (patrol.length > (index + 1)) {
+          temp = patrol[index]
+          patrol[index] = patrol[index + 1]
+          patrol[index + 1] = temp
+          botconfig.setPatrol(botUsername, patrol)
+        }
+        break
+      case 'movePatrolPrev':
+        patrol = botconfig.getPatrol(botUsername)
+        index = config.value
+        if (index > 0) {
+          temp = patrol[index]
+          patrol[index] = patrol[index - 1]
+          patrol[index - 1] = temp
+          botconfig.setPatrol(botUsername, patrol)
+        }
         break
     }
 

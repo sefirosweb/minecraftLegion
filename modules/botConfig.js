@@ -49,6 +49,11 @@ function getMode (botName) {
 
 function setHelpFriend (botName, mode) {
   const db = getConn(botName)
+  if (mode === 'true') {
+    mode = true
+  } else {
+    mode = false
+  }
   db.set('config.help_friends', mode).write()
 }
 
