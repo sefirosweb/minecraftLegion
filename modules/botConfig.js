@@ -11,6 +11,7 @@ function getConn (botName) {
     mode: 'none', // none, pve, pvp
     distance: 10,
     help_friends: false,
+    pickUpItems: false,
     minerCords: {},
     chests: {},
     patrol: []
@@ -53,6 +54,16 @@ function setHelpFriend (botName, mode) {
 function getHelpFriend (botName) {
   const db = getConn(botName)
   return db.get('config.help_friends').value()
+}
+
+function setPickUpItems (botName, mode) {
+  const db = getConn(botName)
+  db.set('config.pickUpItems', mode).write()
+}
+
+function getPickUpItems (botName) {
+  const db = getConn(botName)
+  return db.get('config.pickUpItems').value()
 }
 
 function setDistance (botName, distance) {
@@ -128,5 +139,7 @@ module.exports = {
   getChest,
   getAllChests,
   setMiner,
-  getMiner
+  getMiner,
+  setPickUpItems,
+  getPickUpItems
 }
