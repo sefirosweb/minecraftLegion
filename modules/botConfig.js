@@ -23,7 +23,7 @@ function getConn (botName) {
       orientation: null,
       tunel: null
     },
-    chests: {},
+    chests: [],
     patrol: []
   }
 
@@ -107,21 +107,14 @@ function getPatrol (botName) {
   return db.get('config.patrol').value()
 }
 
-function setChest (botName, chest, chestName) {
+function getChests (botName) {
   const db = getConn(botName)
-  const chests = db.get('config.chests').value()
-  chests[chestName] = chest
-  db.set('config.chests', chests).write()
+  return db.get('config.chests').value()
 }
 
-function getChest (botName, chestName) {
+function setChests (botName, chests) {
   const db = getConn(botName)
-  const chest = db.get('config.chests').value()[chestName]
-  if (chest === undefined) {
-    return []
-  } else {
-    return chest
-  }
+  db.set('config.chests', chests).write()
 }
 
 function getAllChests (botName) {
@@ -166,13 +159,13 @@ module.exports = {
   getDistance,
   setPatrol,
   getPatrol,
-  setChest,
-  getChest,
   getAllChests,
   setMiner,
   getMiner,
   setPickUpItems,
   getPickUpItems,
   setItemsToBeReady,
-  getItemsToBeReady
+  getItemsToBeReady,
+  getChests,
+  setChests
 }

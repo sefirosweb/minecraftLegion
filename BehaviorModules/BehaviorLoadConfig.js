@@ -24,9 +24,9 @@ module.exports = class BehaviorLoadConfig {
     this.helpFriends = botConfig.getHelpFriend(this.bot.username)
     this.distance = botConfig.getDistance(this.bot.username)
     this.patrol = botConfig.getPatrol(this.bot.username)
-    this.equipmentChest = botConfig.getChest(this.bot.username, 'equipment') // TODO REMOVE
-    this.foodChest = botConfig.getChest(this.bot.username, 'food') // TODO REMOVE
-    this.depositChest = botConfig.getChest(this.bot.username, 'deposit') // TODO REMOVE
+    this.equipmentChest = botConfig.getChests(this.bot.username)
+    this.foodChest = botConfig.getChests(this.bot.username)
+    this.depositChest = botConfig.getChests(this.bot.username)
     this.miner = botConfig.getMiner(this.bot.username)
 
     this.chests = botConfig.getAllChests(this.bot.username)

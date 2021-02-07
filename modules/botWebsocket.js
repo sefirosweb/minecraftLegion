@@ -48,7 +48,7 @@ function connect (botUsername) {
   })
 
   socket.on('changeConfig', (config) => {
-    let itemsToBeReady, patrol, index, temp, minerConfig
+    let itemsToBeReady, patrol, index, temp, minerConfig, chests
     switch (config.configToChange) {
       case 'job':
         botconfig.setJob(botUsername, config.value)
@@ -122,6 +122,27 @@ function connect (botUsername) {
         minerConfig = botconfig.getMiner(botUsername)
         minerConfig[config.value.coord] = config.value.pos
         botconfig.setMiner(botUsername, minerConfig)
+        break
+      case 'insertNewChest':
+        chests = botconfig.getChests(botUsername)
+        console.log(chests)
+        chests.push({
+          name: 'Input chest name',
+          type: 'withdraw', // deposit,
+          position: {
+            x: null,
+            y: null,
+            z: null
+          },
+          items: []
+        })
+        console.log(chests)
+        botconfig.setChests(botUsername, chests)
+        break
+      case 'deleteChest':
+        chests = botconfig.getChests(botUsername)
+        chests.splice(config.value, 1)
+        botconfig.setChests(botUsername, chests)
         break
     }
 
