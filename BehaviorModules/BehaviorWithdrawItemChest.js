@@ -16,7 +16,7 @@ module.exports = class BehaviorWithdrawItemChest {
     this.indexItemsToWithdraw = 0
     this.isEndFinished = false
     botWebsocket.log('Items to withdraw ' + JSON.stringify(this.targets.items))
-    this.withdrawItems()
+    this.withdrawAllItems()
   }
 
   onStateExited () {
@@ -32,7 +32,7 @@ module.exports = class BehaviorWithdrawItemChest {
     return this.isEndFinished
   }
 
-  withdrawItems () {
+  withdrawAllItems () {
     const mcData = require('minecraft-data')(this.bot.version)
 
     const chestToOpen = this.bot.findBlock({
