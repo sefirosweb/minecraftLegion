@@ -5,7 +5,6 @@ const {
 } = require('mineflayer-statemachine')
 
 const BehaviorLoadConfig = require('./../BehaviorModules/BehaviorLoadConfig')
-const BehaviorGetClosestEnemy = require('./../BehaviorModules/BehaviorGetClosestEnemy')
 const BehaviorGetReady = require('./../BehaviorModules/BehaviorGetReady')
 const BehaviorEatFood = require('./../BehaviorModules/BehaviorEatFood')
 const BehaviorEquip = require('./../BehaviorModules/BehaviorEquip')
@@ -27,10 +26,6 @@ function minerJobFunction (bot, targets) {
   loadConfig.stateName = 'Load Bot Config'
   loadConfig.x = 325
   loadConfig.y = 113
-
-  const getClosestMob = new BehaviorGetClosestEnemy(bot, targets)
-  getClosestMob.x = 225
-  getClosestMob.y = 313
 
   const equip = new BehaviorEquip(bot, targets)
   equip.stateName = 'Equip Armor'
@@ -65,6 +60,8 @@ function minerJobFunction (bot, targets) {
   goChests.x = 225
   goChests.y = 313
 
+  const getClosestMob = require('./../modules/getClosestEnemy')(bot, targets)
+
   const transitions = [
     new StateTransition({
       parent: start,
@@ -79,8 +76,8 @@ function minerJobFunction (bot, targets) {
       name: 'loadConfig -> patrol',
       onTransition: () => {
         targets.entity = undefined
-        getClosestMob.mode = loadConfig.getMode()
-        getClosestMob.distance = loadConfig.getDistance()
+        getClosestMob.setMode(loadConfig.getMode())
+        getClosestMob.setDistance(loadConfig.getDistance())
       },
       shouldTransition: () => true
     }),
@@ -133,7 +130,7 @@ function minerJobFunction (bot, targets) {
       name: 'miningFunction -> try getClosestMob',
       onTransition: () => bot.pathfinder.setGoal(null),
       shouldTransition: () => {
-        getClosestMob.onStateEntered()
+        getClosestMob.check()
         return targets.entity !== undefined
       }
     }),
