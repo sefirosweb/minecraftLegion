@@ -3,18 +3,23 @@ module.exports = class template {
     this.bot = bot
     this.targets = targets
     this.stateName = 'template'
+
+    this.isEndFinished = false
   }
 
   onStateEntered () {
-    this.targets.targetEntity = this.bot.nearestEntity(() => true)
+    this.isEndFinished = false
   }
 
   onStateExited () {
-    this.targets.targetEntity = this.bot.nearestEntity(() => true)
+
   }
 
-  getPlayerEntity (playerName) {
-    this.targets.entity = this.checkPlayer(playerName) || undefined
-    this.playerIsFound = this.targets.entity !== undefined
+  doSomething () {
+
+  }
+
+  isFinished () {
+    return this.isEndFinished
   }
 }
