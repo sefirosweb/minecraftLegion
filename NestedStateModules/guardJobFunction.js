@@ -1,5 +1,3 @@
-// const botWebsocket = require('../modules/botWebsocket')
-
 const {
   StateTransition,
   BehaviorIdle,
@@ -7,74 +5,27 @@ const {
   BehaviorMoveTo,
   BehaviorFollowEntity
 } = require('mineflayer-statemachine')
-const mineflayerpathfinder = require('mineflayer-pathfinder')
 
 const BehaviorLoadConfig = require('./../BehaviorModules/BehaviorLoadConfig')
 const BehaviorMoveToArray = require('./../BehaviorModules/BehaviorMoveToArray')
-const BehaviorGetClosestEnemy = require('./../BehaviorModules/BehaviorGetClosestEnemy')
 const BehaviorGetReady = require('./../BehaviorModules/BehaviorGetReady')
-const BehaviorWithdrawItemChest = require('./../BehaviorModules/BehaviorWithdrawItemChest')
-const BehaviorDepositChest = require('./../BehaviorModules/BehaviorDepositChest')
 const BehaviorEatFood = require('./../BehaviorModules/BehaviorEatFood')
 const BehaviorEquip = require('./../BehaviorModules/BehaviorEquip')
 const BehaviorFindItems = require('./../BehaviorModules/BehaviorFindItems')
 const BehaviorHelpFriend = require('./../BehaviorModules/BehaviorHelpFriend')
 
-// Exclude items to deposit
-const excludeItemsDeposit = [
-  { item: 'iron_sword', quantity: 1 },
-  { item: 'shield', quantity: 1 },
-  { item: 'bow', quantity: 1 },
-  { item: 'arrow', quantity: 128 },
-  { item: 'cooked_chicken', quantity: 64 }
-]
-
 // Check this items in inventory for go withdraw
 const itemsToBeReady = [
-  { item: 'helmet', quantity: 1 },
-  { item: 'chest', quantity: 1 },
-  { item: 'leggings', quantity: 1 },
-  { item: 'boots', quantity: 1 },
-  { item: 'shield', quantity: 1 },
-  { item: 'sword', quantity: 1 },
-  { item: 'bow', quantity: 1 },
-  { item: 'arrow', quantity: 16 },
-  { item: 'cooked_chicken', quantity: 16 }
-]
-
-// BehaviorWithdrawItemChest 1
-const equipmentItems = [
-  { item: 'helmet', quantity: 1 },
-  { item: 'chest', quantity: 1 },
-  { item: 'leggings', quantity: 1 },
-  { item: 'boots', quantity: 1 },
-  { item: 'shield', quantity: 1 },
-  { item: 'sword', quantity: 1 },
-  { item: 'bow', quantity: 1 }
-]
-
-// BehaviorWithdrawItemChest 2
-const consumibleItems = [
-  { item: 'arrow', quantity: 64 },
-  { item: 'cooked_chicken', quantity: 64 }
+  { item: 'sword', quantity: 1 }
 ]
 
 const validFood = ['cooked_chicken']
 
-function guardJobFunction (bot, targets) {
-  const { getResumeInventory } = require('../modules/inventoryModule')(bot)
-  const mcData = require('minecraft-data')(bot.version)
-  const movementsForAttack = new mineflayerpathfinder.Movements(bot, mcData)
-
+function guardJobFunction(bot, targets) {
   const start = new BehaviorIdle(targets)
   start.stateName = 'Start'
   start.x = 125
   start.y = 113
-
-  const checkItemsToDeposit = new BehaviorIdle(targets)
-  checkItemsToDeposit.stateName = 'Verify Items To Deposit'
-  checkItemsToDeposit.x = 525
-  checkItemsToDeposit.y = 313
 
   const loadConfig = new BehaviorLoadConfig(bot, targets)
   loadConfig.stateName = 'Load Bot Config'
@@ -86,7 +37,7 @@ function guardJobFunction (bot, targets) {
   patrol.x = 525
   patrol.y = 513
 
-  const getClosestMob = new BehaviorGetClosestEnemy(bot, targets)
+  const getClosestMob = require('./../modules/getClosestEnemy')(bot, targets)
 
   const getReady = new BehaviorGetReady(bot, targets)
   getReady.stateName = 'Get Ready for Patrol'
@@ -94,53 +45,15 @@ function guardJobFunction (bot, targets) {
   getReady.y = 113
   getReady.itemsToBeReady = itemsToBeReady
 
-  const goEquipmentChest = new BehaviorMoveToArray(bot, targets, [], true, 1)
-  goEquipmentChest.stateName = 'Go Equipment Chest'
-  goEquipmentChest.x = 725
-  goEquipmentChest.y = 113
-
-  const goFoodChest = new BehaviorMoveToArray(bot, targets, [], true, 1)
-  goFoodChest.stateName = 'Go Food Chest'
-  goFoodChest.x = 1125
-  goFoodChest.y = 213
-
-  const goDepositChest = new BehaviorMoveToArray(bot, targets, [], true, 1)
-  goDepositChest.stateName = 'Go Deposit Chest'
-  goDepositChest.x = 325
-  goDepositChest.y = 313
-
-  const depositItems = new BehaviorDepositChest(bot, targets)
-  depositItems.stateName = 'Deposit Items'
-  depositItems.x = 325
-  depositItems.y = 213
-
   const equip = new BehaviorEquip(bot, targets)
-  equip.x = 1125
-  equip.y = 113
-
-  equip.stateName = 'Equip items 1'
-  equip.x = 1125
-  equip.y = 113
-
-  const equip2 = new BehaviorEquip(bot, targets)
-  equip2.stateName = 'Equip items 2'
-  equip2.x = 725
-  equip2.y = 413
-
-  const getEquipments = new BehaviorWithdrawItemChest(bot, targets, equipmentItems)
-  getEquipments.stateName = 'Get equipment items'
-  getEquipments.x = 925
-  getEquipments.y = 113
-
-  const getConsumibles = new BehaviorWithdrawItemChest(bot, targets, consumibleItems)
-  getConsumibles.stateName = 'Get Food and Arrows'
-  getConsumibles.x = 925
-  getConsumibles.y = 213
+  equip.stateName = 'Equip items'
+  equip.x = 725
+  equip.y = 313
 
   const eatFood = new BehaviorEatFood(bot, targets, validFood)
   eatFood.stateName = 'Eat Food'
-  eatFood.x = 725
-  eatFood.y = 213
+  eatFood.x = 225
+  eatFood.y = 513
 
   const eatFoodCombat = new BehaviorEatFood(bot, targets, validFood)
   eatFoodCombat.stateName = 'Eat Food In Combat'
@@ -169,27 +82,9 @@ function guardJobFunction (bot, targets) {
   combatFunction.x = 925
   combatFunction.y = 513
 
-  function getItemsToDeposit () {
-    const items = getResumeInventory()
-
-    const itemsToDeposit = items.reduce((currentItems, slot) => {
-      const newItems = [...currentItems]
-      const itemToExclude = excludeItemsDeposit.find(i => i.item === slot.name)
-
-      if (itemToExclude === undefined) {
-        newItems.push(slot)
-      } else {
-        slot.quantity -= itemToExclude.quantity
-        if (slot.quantity > 0) {
-          newItems.push(slot)
-        }
-      }
-
-      return newItems
-    }, [])
-
-    return itemsToDeposit
-  }
+  const goChests = require('./goChestsFunctions')(bot, targets)
+  goChests.x = 525
+  goChests.y = 313
 
   const transitions = [
     new StateTransition({
@@ -206,11 +101,8 @@ function guardJobFunction (bot, targets) {
       onTransition: () => {
         targets.entity = undefined
         patrol.setPatrol(loadConfig.getPatrol(), true)
-        goEquipmentChest.setPatrol(loadConfig.getEquipmentChest(), true)
-        goFoodChest.setPatrol(loadConfig.getFoodChest(), true)
-        goDepositChest.setPatrol(loadConfig.getDepositChest(), true)
-        getClosestMob.mode = loadConfig.getMode()
-        getClosestMob.distance = loadConfig.getDistance()
+        getClosestMob.setMode(loadConfig.getMode())
+        getClosestMob.setDistance(loadConfig.getDistance())
       },
       shouldTransition: () => true
     }),
@@ -220,7 +112,7 @@ function guardJobFunction (bot, targets) {
       child: combatFunction,
       name: 'patrol -> try getClosestMob',
       shouldTransition: () => {
-        getClosestMob.onStateEntered()
+        getClosestMob.check()
         return targets.entity !== undefined
       }
     }),
@@ -230,7 +122,7 @@ function guardJobFunction (bot, targets) {
       child: combatFunction,
       name: 'goToObject -> try getClosestMob',
       shouldTransition: () => {
-        getClosestMob.onStateEntered()
+        getClosestMob.check()
         return targets.entity !== undefined
       }
     }),
@@ -239,7 +131,6 @@ function guardJobFunction (bot, targets) {
       parent: patrol,
       child: goToObject,
       name: 'patrol -> goToObject',
-      // onTransition: () => botWebsocket.log('Item Found => ' + JSON.stringify(findItem.targets.itemDrop)),
       shouldTransition: () => findItem.search() && findItem.checkInventorySpace() > 3
     }),
 
@@ -252,8 +143,8 @@ function guardJobFunction (bot, targets) {
 
     new StateTransition({
       parent: patrol,
-      child: checkItemsToDeposit,
-      name: 'patrol -> checkItemsToDeposit',
+      child: goChests,
+      name: 'patrol -> goChests',
       shouldTransition: () => patrol.isFinished()
     }),
 
@@ -276,7 +167,7 @@ function guardJobFunction (bot, targets) {
       child: combatFunction,
       name: 'goFriend -> combatFunction',
       shouldTransition: () => {
-        getClosestMob.onStateEntered()
+        getClosestMob.check()
         return targets.entity !== undefined && !helpFriend.targetIsFriend()
       }
     }),
@@ -291,98 +182,36 @@ function guardJobFunction (bot, targets) {
     }),
 
     new StateTransition({
-      parent: checkItemsToDeposit,
-      child: goDepositChest,
-      name: 'If have more than 1 item to deposit',
-      onTransition: () => goDepositChest.sortPatrol(),
-      shouldTransition: () => getItemsToDeposit().length > 0
-    }),
-
-    new StateTransition({
-      parent: checkItemsToDeposit,
-      child: getReady,
-      name: 'No items to deposit',
-      shouldTransition: () => getItemsToDeposit().length === 0
-    }),
-
-    new StateTransition({
-      parent: goDepositChest,
-      child: depositItems,
-      name: 'goDepositChest -> depositItems',
-      onTransition: () => {
-        depositItems.setItemsToDeposit(getItemsToDeposit())
-      },
-      shouldTransition: () => goDepositChest.isFinished()
-    }),
-
-    new StateTransition({
-      parent: depositItems,
-      child: getReady,
-      name: 'depositItems -> getReady',
-      shouldTransition: () => depositItems.isFinished()
-    }),
-
-    new StateTransition({
       parent: getReady,
-      child: eatFood,
-      name: 'getReady -> eatFood',
+      child: equip,
+      name: 'Bot is ready for start patrol',
       shouldTransition: () => getReady.getIsReady()
     }),
 
     new StateTransition({
       parent: getReady,
-      child: goEquipmentChest,
-      name: 'getReady -> goEquipmentChest',
-      onTransition: () => {
-        goEquipmentChest.sortPatrol()
-      },
+      child: goChests,
+      name: 'Need get items fro mchest',
       shouldTransition: () => !getReady.getIsReady()
     }),
 
     new StateTransition({
-      parent: goEquipmentChest,
-      child: getEquipments,
-      name: 'goEquipmentChest -> getEquipments',
-      shouldTransition: () => goEquipmentChest.isFinished()
-    }),
-
-    new StateTransition({
-      parent: getEquipments,
-      child: equip,
-      name: 'getEquipments -> equip',
-      shouldTransition: () => getEquipments.isFinished()
+      parent: goChests,
+      child: getReady,
+      name: 'goChests -> getReady',
+      shouldTransition: () => goChests.isFinished()
     }),
 
     new StateTransition({
       parent: equip,
-      child: goFoodChest,
-      name: 'equip -> goFoodChest',
-      onTransition: () => {
-        goFoodChest.sortPatrol()
-      },
+      child: patrol,
+      name: 'Equip is finished',
       shouldTransition: () => equip.isFinished()
     }),
 
     new StateTransition({
-      parent: goFoodChest,
-      child: getConsumibles,
-      name: 'goFoodChest -> getConsumibles',
-      shouldTransition: () => goFoodChest.isFinished()
-    }),
-
-    new StateTransition({
-      parent: getConsumibles,
-      child: eatFood,
-      name: 'getEquipments -> eatFood',
-      onTransition: () => {
-        patrol.sortPatrol()
-      },
-      shouldTransition: () => getConsumibles.isFinished()
-    }),
-
-    new StateTransition({
       parent: combatFunction,
-      child: eatFood,
+      child: equip,
       name: 'Mob is dead',
       shouldTransition: () => combatFunction.isFinished()
     }),
@@ -403,16 +232,16 @@ function guardJobFunction (bot, targets) {
 
     new StateTransition({
       parent: eatFood,
-      child: equip2,
+      child: patrol,
       name: 'Continue patrol bot is full',
       shouldTransition: () => eatFood.isFinished()
     }),
 
     new StateTransition({
-      parent: equip2,
-      child: patrol,
-      name: 'Continue patrol bot is full',
-      shouldTransition: () => equip2.isFinished()
+      parent: patrol,
+      child: eatFood,
+      name: 'Boot need eat',
+      shouldTransition: () => bot.food !== 20
     })
 
   ]
