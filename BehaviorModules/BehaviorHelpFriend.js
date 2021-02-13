@@ -1,13 +1,12 @@
 const botWebsocket = require('../modules/botWebsocket')
 
 module.exports = class BehaviorHelpFriend {
-  constructor (bot, targets, helpFriend = false) {
+  constructor (bot, targets) {
     this.bot = bot
     this.targets = targets
     this.stateName = 'BehaviorHelpFriend'
 
-    this.helpFriend = helpFriend
-
+    this.helpFriends = false
     this.entity = undefined
   }
 
@@ -19,7 +18,12 @@ module.exports = class BehaviorHelpFriend {
     this.entity = undefined
   }
 
+  setHelpFriends (helpFriends) {
+    this.helpFriends = helpFriends
+  }
+
   findHelpFriend () {
+    if (!this.helpFriends) return false
     const friends = botWebsocket.getFriends()
     const friendsNeedHelp = friends.filter(e => e.combat === true)
     if (friendsNeedHelp.length === 0) {

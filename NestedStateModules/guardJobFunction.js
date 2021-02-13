@@ -68,7 +68,7 @@ function guardJobFunction (bot, targets) {
   const findItem = new BehaviorFindItems(bot, targets)
   findItem.stateName = 'Find Item Dropped'
 
-  const helpFriend = new BehaviorHelpFriend(bot, targets, true)
+  const helpFriend = new BehaviorHelpFriend(bot, targets)
   helpFriend.stateName = 'Check friend needs help'
   helpFriend.x = 525
   helpFriend.y = 813
@@ -103,6 +103,7 @@ function guardJobFunction (bot, targets) {
         patrol.setPatrol(loadConfig.getPatrol(), true)
         getClosestMob.setMode(loadConfig.getMode())
         getClosestMob.setDistance(loadConfig.getDistance())
+        helpFriend.setHelpFriends(loadConfig.getHelpFriend())
       },
       shouldTransition: () => true
     }),

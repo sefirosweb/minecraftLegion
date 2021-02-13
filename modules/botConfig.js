@@ -10,7 +10,7 @@ function getConn (botName) {
     job: 'none', // guard, miner -- For a now...
     mode: 'none', // none, pve, pvp
     distance: 10,
-    help_friends: false,
+    helpFriends: false,
     pickUpItems: false,
     itemsToBeReady: [],
     minerCords: {
@@ -63,12 +63,12 @@ function setHelpFriend (botName, mode) {
   } else {
     mode = false
   }
-  db.set('config.help_friends', mode).write()
+  db.set('config.helpFriends', mode).write()
 }
 
 function getHelpFriend (botName) {
   const db = getConn(botName)
-  return db.get('config.help_friends').value()
+  return db.get('config.helpFriends').value()
 }
 
 function setPickUpItems (botName, mode) {
