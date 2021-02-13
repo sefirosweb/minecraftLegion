@@ -1,29 +1,28 @@
 const botWebsocket = require('../modules/botWebsocket')
 
 module.exports = class BehaviorWithdrawItemChest {
-  constructor (bot, targets, itemsToWithdraw = []) {
+  constructor (bot, targets) {
     this.bot = bot
     this.targets = targets
     this.stateName = 'BehaviorWithdrawItemChest'
-
     this.isEndFinished = false
+
     this.chest = false
-
     this.indexItemsToWithdraw = 0
-    this.itemsToWithdraw = itemsToWithdraw
-
     this.inventory = require('../modules/inventoryModule')(this.bot)
   }
 
   onStateEntered () {
     this.indexItemsToWithdraw = 0
     this.isEndFinished = false
+    botWebsocket.log('Items to withdraw ' + JSON.stringify(this.targets.items))
     this.withdrawItems()
   }
 
   onStateExited () {
     this.indexItemsToWithdraw = 0
     this.isEndFinished = false
+    this.targets.items = []
     try {
       this.chest.removeAllListeners()
     } catch (e) { }
@@ -67,25 +66,6 @@ module.exports = class BehaviorWithdrawItemChest {
     })
   }
 
-  getItemsFromChest () {
-    return new Promise((resolve, reject) => {
-      if (this.indexItemsToWithdraw >= this.itemsToWithdraw.length) {
-        resolve()
-        return
-      }
-
-      const itemToWithdraw = this.itemsToWithdraw[this.indexItemsToWithdraw]
-      this.withdrawItem(itemToWithdraw.item, itemToWithdraw.quantity)
-        .then(() => {
-          this.indexItemsToWithdraw++
-          this.getItemsFromChest()
-            .then(() => resolve())
-            .catch((error) => reject(error))
-        })
-        .catch((error) => reject(error))
-    })
-  }
-
   withdrawItem (itemName, quantity) {
     return new Promise((resolve, reject) => {
       const currentItems = this.inventory.countItemsInInventoryOrEquipped(itemName)
@@ -107,6 +87,25 @@ module.exports = class BehaviorWithdrawItemChest {
           setTimeout(() => resolve(), 200)
         }
       })
+    })
+  }
+
+  getItemsFromChest () {
+    return new Promise((resolve, reject) => {
+      if (this.indexItemsToWithdraw >= this.targets.items.length) {
+        resolve()
+        return
+      }
+
+      const itemToWithdraw = this.targets.items[this.indexItemsToWithdraw]
+      this.withdrawItem(itemToWithdraw.item, itemToWithdraw.quantity)
+        .then(() => {
+          this.indexItemsToWithdraw++
+          this.getItemsFromChest()
+            .then(() => resolve())
+            .catch((error) => reject(error))
+        })
+        .catch((error) => reject(error))
     })
   }
 }

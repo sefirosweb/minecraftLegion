@@ -104,7 +104,6 @@ function goChestsFunction (bot, targets) {
       child: goChest,
       name: 'Go to chest',
       onTransition: () => {
-        console.log(chests[chestIndex])
         targets.position = chests[chestIndex].position
       },
       shouldTransition: () => checkItemsInInventory.isFinished() && targets.items.length > 0
