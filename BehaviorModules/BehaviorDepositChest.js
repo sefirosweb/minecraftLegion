@@ -51,7 +51,7 @@ module.exports = class BehaviorDepositChest {
     this.chest.on('close', () => {
       setTimeout(() => {
         this.isEndFinished = true
-      }, 1000)
+      }, 500)
     })
 
     this.chest.on('open', () => {
@@ -62,7 +62,7 @@ module.exports = class BehaviorDepositChest {
             botWebsocket.log(`Error Deposit items ${error}`)
             this.chest.close()
           })
-      }, 1000)
+      }, 500)
     })
   }
 

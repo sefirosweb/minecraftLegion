@@ -9,7 +9,6 @@ module.exports = class BehaviorWithdrawItemChest {
 
     this.chest = false
     this.indexItemsToWithdraw = 0
-    this.inventory = require('../modules/inventoryModule')(this.bot)
   }
 
   onStateEntered () {
@@ -51,7 +50,7 @@ module.exports = class BehaviorWithdrawItemChest {
     this.chest.on('close', () => {
       setTimeout(() => {
         this.isEndFinished = true
-      }, 1500)
+      }, 500)
     })
 
     this.chest.on('open', () => {
@@ -62,18 +61,12 @@ module.exports = class BehaviorWithdrawItemChest {
             botWebsocket.log(`Error Withdraw items  ${error}`)
             this.chest.close()
           })
-      }, 1500)
+      }, 500)
     })
   }
 
   withdrawItem (itemName, quantity) {
     return new Promise((resolve, reject) => {
-      const currentItems = this.inventory.countItemsInInventoryOrEquipped(itemName)
-      quantity -= currentItems
-      if (quantity <= 0) {
-        resolve()
-      }
-
       const foundItem = this.chest.items().find(itemtoFind => itemtoFind.name.includes(itemName))
       if (!foundItem) {
         botWebsocket.log(`No item ${itemName} in chest!`)
