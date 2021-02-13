@@ -35,7 +35,7 @@ module.exports = class BehaviorEquip {
     return new Promise((resolve, reject) => {
       this.inventory.equipItem('helmet')
         .then(() => {
-          return this.inventory.equipItem('chest')
+          return this.inventory.equipItem('chestplate')
         })
         .then(() => {
           return this.inventory.equipItem('leggings')
