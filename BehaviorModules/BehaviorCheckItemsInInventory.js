@@ -6,6 +6,7 @@ module.exports = class BehaviorCheckItemsInInventory {
     this.isEndFinished = false
     this.itemsToCheck = itemsToCheck
     this.isDeposit = isDeposit
+    this.genericItems = ['helmet', 'chestplate', 'leggings', 'boots', 'sword', 'pickaxe', 'shovel', '_axe', 'hoe']
   }
 
   setItemsToCheck (itemsToCheck) {
@@ -33,7 +34,13 @@ module.exports = class BehaviorCheckItemsInInventory {
 
     const itemsToDeposit = items.reduce((currentItems, slot) => {
       const newItems = [...currentItems]
-      const itemToExclude = this.itemsToCheck.find(i => slot.name.includes(i.item))
+      const itemToExclude = this.itemsToCheck.find(i => {
+        if (this.genericItems.includes(i.item)) {
+          return slot.name.includes(i.item)
+        }
+
+        return i.item === slot.name
+      })
 
       if (itemToExclude === undefined) {
         newItems.push(slot)
@@ -56,7 +63,13 @@ module.exports = class BehaviorCheckItemsInInventory {
 
     const itemsToWithdraw = this.itemsToCheck.reduce((currentItems, slot) => {
       const newItems = [...currentItems]
-      const itemToExclude = items.find(i => i.name.includes(slot.item))
+      const itemToExclude = items.find(i => {
+        if (this.genericItems.includes(slot.item)) {
+          return i.name.includes(slot.item)
+        }
+
+        return i.name === slot.item
+      })
 
       if (itemToExclude === undefined) {
         newItems.push(slot)
@@ -81,8 +94,20 @@ module.exports = class BehaviorCheckItemsInInventory {
     return this.isEndFinished
   }
 
+  getEquipedItems () {
+    const equipedItems = []
+
+    if (this.bot.inventory.slots[5]) equipedItems.push(this.bot.inventory.slots[5]) // helmet
+    if (this.bot.inventory.slots[6]) equipedItems.push(this.bot.inventory.slots[6]) // chestplate
+    if (this.bot.inventory.slots[7]) equipedItems.push(this.bot.inventory.slots[7]) // leggings
+    if (this.bot.inventory.slots[8]) equipedItems.push(this.bot.inventory.slots[8]) // boots
+    if (this.bot.inventory.slots[45]) equipedItems.push(this.bot.inventory.slots[45]) // shield
+
+    return equipedItems
+  }
+
   getResumeInventory () {
-    const items = this.bot.inventory.items().reduce((currentItems, slot) => {
+    const items = this.bot.inventory.items().concat(this.getEquipedItems()).reduce((currentItems, slot) => {
       const newItems = [...currentItems]
       const itemSlot = {
         name: slot.name,
