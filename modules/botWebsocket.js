@@ -109,19 +109,19 @@ function connect (botUsername) {
         }
         break
       case 'changeTunnel':
-        minerConfig = botconfig.getMiner(botUsername)
+        minerConfig = botconfig.getMinerCords(botUsername)
         minerConfig.tunel = config.value
-        botconfig.setMiner(botUsername, minerConfig)
+        botconfig.setMinerCords(botUsername, minerConfig)
         break
       case 'changeOrientation':
-        minerConfig = botconfig.getMiner(botUsername)
+        minerConfig = botconfig.getMinerCords(botUsername)
         minerConfig.orientation = config.value
-        botconfig.setMiner(botUsername, minerConfig)
+        botconfig.setMinerCords(botUsername, minerConfig)
         break
       case 'changePosMiner':
-        minerConfig = botconfig.getMiner(botUsername)
+        minerConfig = botconfig.getMinerCords(botUsername)
         minerConfig[config.value.coord] = config.value.pos
-        botconfig.setMiner(botUsername, minerConfig)
+        botconfig.setMinerCords(botUsername, minerConfig)
         break
       case 'insertNewChest':
         chests = botconfig.getChests(botUsername)

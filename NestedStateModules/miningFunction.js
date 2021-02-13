@@ -135,7 +135,7 @@ function miningFunction (bot, targets) {
       name: 'loadConfig -> nextLayer',
       onTransition: () => {
         targets.entity = undefined
-        nextLayer.setMinerCords(loadConfig.getMiner())
+        nextLayer.setMinerCords(loadConfig.getMinerCords())
       },
       shouldTransition: () => true
     }),

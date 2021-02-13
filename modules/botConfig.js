@@ -127,12 +127,12 @@ function getAllChests (botName) {
   }
 }
 
-function setMiner (botName, minerCords) {
+function setMinerCords (botName, minerCords) {
   const db = getConn(botName)
   db.set('config.minerCords', minerCords).write()
 }
 
-function getMiner (botName) {
+function getMinerCords (botName) {
   const db = getConn(botName)
   return db.get('config.minerCords').value()
 }
@@ -160,8 +160,8 @@ module.exports = {
   setPatrol,
   getPatrol,
   getAllChests,
-  setMiner,
-  getMiner,
+  setMinerCords,
+  getMinerCords,
   setPickUpItems,
   getPickUpItems,
   setItemsToBeReady,

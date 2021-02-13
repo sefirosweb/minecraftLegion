@@ -290,11 +290,11 @@ function commandsFunction (bot, targets) {
     minerCoords.xEnd = coords['5']
     minerCoords.yEnd = coords['6']
     minerCoords.zEnd = coords['7']
-    minerCoords.orientation = coords['8'] // n ||s || e || w
-    minerCoords.tunel = coords['9'] // Vertically || Horizontally
+    minerCoords.orientation = coords['8'] // x+ || x- || z+ || z-
+    minerCoords.tunel = coords['9'] // vertically || horizontally
 
     botWebsocket.log('Point: ' + JSON.stringify(minerCoords))
-    botConfig.setMiner(bot.username, minerCoords)
+    botConfig.setMinerCords(bot.username, minerCoords)
     // bot.chat('Lets made a tunel!')
   }
 

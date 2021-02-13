@@ -11,11 +11,8 @@ module.exports = class BehaviorLoadConfig {
     this.helpFriends = false
     this.distance = 10
     this.patrol = []
-    this.equipmentChest = [] // TODO REMOVE
-    this.foodChest = [] // TODO REMOVE
-    this.depositChest = []// TODO REMOVE
-    this.chests = {}
-    this.miner = []
+    this.chests = []
+    this.minerCords = {}
   }
 
   onStateEntered () {
@@ -24,11 +21,7 @@ module.exports = class BehaviorLoadConfig {
     this.helpFriends = botConfig.getHelpFriend(this.bot.username)
     this.distance = botConfig.getDistance(this.bot.username)
     this.patrol = botConfig.getPatrol(this.bot.username)
-    this.equipmentChest = botConfig.getChests(this.bot.username)
-    this.foodChest = botConfig.getChests(this.bot.username)
-    this.depositChest = botConfig.getChests(this.bot.username)
-    this.miner = botConfig.getMiner(this.bot.username)
-
+    this.minerCords = botConfig.getMinerCords(this.bot.username)
     this.chests = botConfig.getAllChests(this.bot.username)
   }
 
@@ -41,7 +34,7 @@ module.exports = class BehaviorLoadConfig {
   }
 
   getHelpFriend () {
-    return this.getHelpFriend
+    return this.helpFriends
   }
 
   getDistance () {
@@ -52,23 +45,11 @@ module.exports = class BehaviorLoadConfig {
     return this.patrol
   }
 
-  getEquipmentChest () {
-    return this.equipmentChest
+  getMinerCords () {
+    return this.minerCords
   }
 
-  getFoodChest () {
-    return this.foodChest
-  }
-
-  getDepositChest () {
-    return this.depositChest
-  }
-
-  getMiner () {
-    return this.miner
-  }
-
-  getChest (chest) {
-    return this.chests[chest]
+  getAllChests () {
+    return this.chests
   }
 }
