@@ -1,4 +1,3 @@
-const botWebsocket = require('../modules/botWebsocket')
 const Vec3 = require('vec3')
 module.exports = class BehaviorMinerCurrentBlock {
   constructor (bot, targets) {

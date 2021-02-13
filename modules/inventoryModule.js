@@ -25,7 +25,7 @@ module.exports = function (bot) {
       case 'helmet':
         slotID = 5
         break
-      case 'chest':
+      case 'chestplate':
         slotID = 6
         break
       case 'leggings':
@@ -75,7 +75,7 @@ module.exports = function (bot) {
         case 'helmet':
           location = 'head'
           break
-        case 'chest':
+        case 'chestplate':
           location = 'torso'
           break
         case 'leggings':

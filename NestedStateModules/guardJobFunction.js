@@ -21,7 +21,7 @@ const itemsToBeReady = [
 
 const validFood = ['cooked_chicken']
 
-function guardJobFunction(bot, targets) {
+function guardJobFunction (bot, targets) {
   const start = new BehaviorIdle(targets)
   start.stateName = 'Start'
   start.x = 125
