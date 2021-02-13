@@ -33,21 +33,21 @@ module.exports = class BehaviorMinerCurrentLayer {
       this.endLayer = Math.min(parseInt(this.minerCords.yStart), parseInt(this.minerCords.yEnd))
     } else {
       // N & S => Z
-      if (this.minerCords.orientation === 'n') {
+      if (this.minerCords.orientation === 'z-') {
         this.currentLayer = Math.max(parseInt(this.minerCords.zStart), parseInt(this.minerCords.zEnd))
         this.endLayer = Math.min(parseInt(this.minerCords.zStart), parseInt(this.minerCords.zEnd))
       }
-      if (this.minerCords.orientation === 's') {
+      if (this.minerCords.orientation === 'z+') {
         this.currentLayer = Math.min(parseInt(this.minerCords.zStart), parseInt(this.minerCords.zEnd))
         this.endLayer = Math.max(parseInt(this.minerCords.zStart), parseInt(this.minerCords.zEnd))
       }
 
-      if (this.minerCords.orientation === 'e') {
+      if (this.minerCords.orientation === 'x+') {
         this.currentLayer = Math.min(parseInt(this.minerCords.xStart), parseInt(this.minerCords.xEnd))
         this.endLayer = Math.max(parseInt(this.minerCords.xStart), parseInt(this.minerCords.xEnd))
       }
 
-      if (this.minerCords.orientation === 'w') {
+      if (this.minerCords.orientation === 'x-') {
         this.currentLayer = Math.max(parseInt(this.minerCords.xStart), parseInt(this.minerCords.xEnd))
         this.endLayer = Math.min(parseInt(this.minerCords.xStart), parseInt(this.minerCords.xEnd))
       }
@@ -67,11 +67,11 @@ module.exports = class BehaviorMinerCurrentLayer {
             this.currentLayer--
             break
           case this.minerCords.tunel === 'horizontally' &&
-            (this.minerCords.orientation === 'n' || this.minerCords.orientation === 'w'):
+            (this.minerCords.orientation === 'z-' || this.minerCords.orientation === 'x-'):
             this.currentLayer--
             break
           case this.minerCords.tunel === 'horizontally' &&
-            (this.minerCords.orientation === 's' || this.minerCords.orientation === 'e'):
+            (this.minerCords.orientation === 'z+' || this.minerCords.orientation === 'x+'):
             this.currentLayer++
             break
         }
@@ -97,7 +97,7 @@ module.exports = class BehaviorMinerCurrentLayer {
       minerCoords.yStart = Math.min(parseInt(this.minerCords.yStart), parseInt(this.minerCords.yEnd))
       minerCoords.yEnd = Math.max(parseInt(this.minerCords.yStart), parseInt(this.minerCords.yEnd))
 
-      if (this.minerCords.orientation === 'n' || this.minerCords.orientation === 's') { // => Z Layer
+      if (this.minerCords.orientation === 'z-' || this.minerCords.orientation === 'z+') { // => Z Layer
         minerCoords.xStart = parseInt(this.minerCords.xStart)
         minerCoords.xEnd = parseInt(this.minerCords.xEnd)
 
@@ -105,7 +105,7 @@ module.exports = class BehaviorMinerCurrentLayer {
         minerCoords.zEnd = parseInt(this.currentLayer)
       }
 
-      if (this.minerCords.orientation === 'e' || this.minerCords.orientation === 'w') { // => X Layer
+      if (this.minerCords.orientation === 'x+' || this.minerCords.orientation === 'x-') { // => X Layer
         minerCoords.xStart = parseInt(this.currentLayer)
         minerCoords.xEnd = parseInt(this.currentLayer)
 

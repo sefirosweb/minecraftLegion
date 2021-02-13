@@ -61,10 +61,10 @@ module.exports = class BehaviorMinerCheckLayer {
     ) {
       return false
     } else {
-      if (this.minerCords.orientation === 'n' || this.minerCords.orientation === 's') {
+      if (this.minerCords.orientation === 'z-' || this.minerCords.orientation === 'z+') {
         this.zNext()
       }
-      if (this.minerCords.orientation === 'e' || this.minerCords.orientation === 'w') {
+      if (this.minerCords.orientation === 'x+' || this.minerCords.orientation === 'x-') {
         this.xNext()
       }
 
@@ -95,10 +95,10 @@ module.exports = class BehaviorMinerCheckLayer {
       const temp = this.xEnd
       this.xEnd = this.xStart
       this.xStart = temp
-      if (this.minerCords.orientation === 'n' || this.minerCords.orientation === 's') {
+      if (this.minerCords.orientation === 'z-' || this.minerCords.orientation === 'z+') {
         this.yNext()
       }
-      if (this.minerCords.orientation === 'e' || this.minerCords.orientation === 'w') {
+      if (this.minerCords.orientation === 'x+' || this.minerCords.orientation === 'x-') {
         this.zNext()
       }
     } else {
@@ -119,10 +119,10 @@ module.exports = class BehaviorMinerCheckLayer {
       const temp = this.zEnd
       this.zEnd = this.zStart
       this.zStart = temp
-      if (this.minerCords.orientation === 'n' || this.minerCords.orientation === 's') {
+      if (this.minerCords.orientation === 'z-' || this.minerCords.orientation === 'z+') {
         this.xNext()
       }
-      if (this.minerCords.orientation === 'e' || this.minerCords.orientation === 'w') {
+      if (this.minerCords.orientation === 'x+' || this.minerCords.orientation === 'x-') {
         this.yNext()
       }
     } else {
@@ -164,7 +164,7 @@ module.exports = class BehaviorMinerCheckLayer {
       this.yEnd--
     }
 
-    if (this.minerCords.orientation === 'n' || this.minerCords.orientation === 'e') {
+    if (this.minerCords.orientation === 'z-' || this.minerCords.orientation === 'x+') {
       this.xStart = parseInt(this.minerCords.xStart)
       this.zStart = parseInt(this.minerCords.zStart)
 
