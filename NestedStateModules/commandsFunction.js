@@ -202,11 +202,6 @@ function commandsFunction (bot, targets) {
     pathfinder.setGoal(goal)
   })
 
-  botWebsocket.on('sendSaveChest', (chestName) => {
-    botWebsocket.log('sendSaveChest')
-    saveChest(chestName)
-  })
-
   function botChatCommandFunctionListener (username, message) {
     const findMaster = masters.find(e => e.name === username)
 
@@ -254,11 +249,6 @@ function commandsFunction (bot, targets) {
 
         if (message.match(/set save patrol.*/)) {
           savePatrol()
-        }
-
-        if (message.match(/set save chest.*/)) {
-          msg = message.split(' ')
-          saveChest(msg[3])
         }
 
         if (message.match(/set miner.*/)) {
@@ -421,17 +411,6 @@ function commandsFunction (bot, targets) {
     customEvents.removeListener('move', nextPointListener)
     botConfig.setPatrol(bot.username, patrol)
     // bot.chat('Ok, I memorized the patrol')
-  }
-
-  function saveChest (chestName) {
-    const permitedChests = ['food', 'equipment', 'deposit', 'picks', 'shovels']
-    if (!permitedChests.includes(chestName)) {
-      // bot.chat('I don\'t know what chest is it')
-      return
-    }
-    customEvents.removeListener('move', nextPointListener)
-    botConfig.setChest(bot.username, patrol, chestName)
-    // bot.chat('Oooh my treasure')
   }
 
   const commandsFunction = new NestedStateMachine(transitions, start, exit)
