@@ -35,17 +35,21 @@ module.exports = class BehaviorEatFood {
     this.isEndEating = false
   }
 
-  eat () {
-    this.isEating = true
-
+  checkFoodInInventory () {
     // Check if in inventory have food
-    const availableFood = this.bot.inventory.items().reduce((validFood, food) => {
+    return this.bot.inventory.items().reduce((validFood, food) => {
       const returnValidFood = [...validFood]
       if (this.foods.includes(food.name)) {
         returnValidFood.push(food)
       }
       return returnValidFood
     }, [])
+  }
+
+  eat () {
+    this.isEating = true
+
+    const availableFood = this.checkFoodInInventory()
 
     if (availableFood.length === 0) {
       botWebsocket.log('No food in inventory ')

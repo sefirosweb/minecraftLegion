@@ -231,7 +231,7 @@ function guardJobFunction (bot, targets) {
       parent: combatFunction,
       child: eatFoodCombat,
       name: 'Eat In Combat',
-      shouldTransition: () => bot.health < 15 && bot.food !== 20
+      shouldTransition: () => bot.health < 15 && bot.food !== 20 && eatFoodCombat.checkFoodInInventory().length > 0
     }),
 
     new StateTransition({
@@ -252,7 +252,7 @@ function guardJobFunction (bot, targets) {
       parent: patrol,
       child: eatFood,
       name: 'Boot need eat',
-      shouldTransition: () => bot.food !== 20
+      shouldTransition: () => bot.food !== 20 && eatFood.checkFoodInInventory().length > 0
     })
 
   ]
