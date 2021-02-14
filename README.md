@@ -52,15 +52,6 @@ Start memorize the positions, used for save the way to chests or patrol
 Save patrol used for guard job (Must bee execute first: set start way)
 * set save patrol
 
-For set the way to the chest of equipment (Must bee execute first: set start way)
-* set save chest equipment
-
-For set the way to the chest of food & arrows (Must bee execute first: set start way)
-* set save chest food
-
-For set the way to the chest of deposit extra items (mob drops) (Must bee execute first: set start way)
-* set save chest deposit
-
 For set max distance for attack mobs or players
 * set distance 30
 
@@ -76,8 +67,8 @@ For help other bots in combat (need use minecraftLegionWebServer)
 For finish commands
 * bye
 
-For mining xyz_start  xyz_end  start_horientantion   vertically / horizontalle
-set miner x y z x y z E horizontally
+For mining xyz_start  xyz_end  start_horientantion  vertically / horizontalle
+set miner x y z x y z x+ horizontally
 
 # TODO
 - Make a Archer Job ( Duding how have this behavior similar as guard job? )
@@ -95,6 +86,9 @@ set miner x y z x y z E horizontally
 - Check some bugs with mining job when have a too many lava or water
 ### 0.2.0
 - Add a robust documentation =P
+
+### 0.2.1
+- Think about chat commands, currently is more faster / easy with front end, but if anyone want to configure all boot via chat commands?
 
 
 
