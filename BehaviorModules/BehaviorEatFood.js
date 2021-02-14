@@ -78,7 +78,9 @@ module.exports = class BehaviorEatFood {
       })
       .catch((error) => {
         botWebsocket.log('Error on eat food ' + error)
-        this.isEndEating = true
+        setTimeout(() => {
+          this.isEndEating = true
+        }, 500)
       })
   }
 
