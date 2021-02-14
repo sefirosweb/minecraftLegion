@@ -9,8 +9,6 @@ const BehaviorGetReady = require('./../BehaviorModules/BehaviorGetReady')
 const BehaviorEatFood = require('./../BehaviorModules/BehaviorEatFood')
 const BehaviorEquip = require('./../BehaviorModules/BehaviorEquip')
 
-const validFood = ['cooked_chicken']
-
 function minerJobFunction (bot, targets) {
   const start = new BehaviorIdle(targets)
   start.stateName = 'Start'
@@ -32,12 +30,12 @@ function minerJobFunction (bot, targets) {
   getReady.x = 525
   getReady.y = 113
 
-  const eatFood = new BehaviorEatFood(bot, targets, validFood)
+  const eatFood = new BehaviorEatFood(bot, targets)
   eatFood.stateName = 'Eat Food'
   eatFood.x = 525
   eatFood.y = 375
 
-  const eatFoodCombat = new BehaviorEatFood(bot, targets, validFood)
+  const eatFoodCombat = new BehaviorEatFood(bot, targets)
   eatFoodCombat.stateName = 'Eat Food In Combat'
   eatFoodCombat.x = 725
   eatFoodCombat.y = 513
@@ -73,6 +71,8 @@ function minerJobFunction (bot, targets) {
         getClosestMob.setMode(loadConfig.getMode())
         getClosestMob.setDistance(loadConfig.getDistance())
         getReady.setItemsToBeReady(loadConfig.getItemsToBeReady())
+        eatFood.setFoods(loadConfig.getItemsCanBeEat())
+        eatFoodCombat.setFoods(loadConfig.getItemsCanBeEat())
       },
       shouldTransition: () => true
     }),

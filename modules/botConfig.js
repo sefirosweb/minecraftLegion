@@ -13,6 +13,9 @@ function getConn (botName) {
     helpFriends: false,
     pickUpItems: false,
     itemsToBeReady: [],
+    itemsCanBeEat: [],
+    chests: [],
+    patrol: [],
     minerCords: {
       xStart: null,
       yStart: null,
@@ -22,9 +25,7 @@ function getConn (botName) {
       zEnd: null,
       orientation: null,
       tunel: null
-    },
-    chests: [],
-    patrol: []
+    }
   }
 
   db.defaults({ config: defaultConfig }).write()
@@ -147,6 +148,16 @@ function getItemsToBeReady (botName) {
   return db.get('config.itemsToBeReady').value()
 }
 
+function setItemsCanBeEat (botName, itemsToBeReady) {
+  const db = getConn(botName)
+  db.set('config.itemsCanBeEat', itemsToBeReady).write()
+}
+
+function getItemsCanBeEat (botName) {
+  const db = getConn(botName)
+  return db.get('config.itemsCanBeEat').value()
+}
+
 module.exports = {
   getAll,
   setJob,
@@ -166,6 +177,8 @@ module.exports = {
   getPickUpItems,
   setItemsToBeReady,
   getItemsToBeReady,
+  getItemsCanBeEat,
+  setItemsCanBeEat,
   getChests,
   setChests
 }

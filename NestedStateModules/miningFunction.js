@@ -51,7 +51,6 @@ const movingWhile = (bot, nextCurrentLayer) => {
   pathfinder.setGoal(goal)
 }
 
-// let isDigging = false
 function miningFunction (bot, targets) {
   const placeBlocks = ['air', 'cave_air', 'lava', 'water']
   const blockForPlace = ['stone', 'cobblestone', 'dirt', 'andesite', 'diorite', 'granite']
@@ -104,15 +103,14 @@ function miningFunction (bot, targets) {
   const minerChecks = new BehaviorMinerChecks(bot, targets)
   minerChecks.stateName = 'Miner Check'
   minerChecks.x = 325
-  minerChecks.y = 613
+  minerChecks.y = 563
 
   const checkLayer = new BehaviorMinerCheckLayer(bot, targets)
   checkLayer.stateName = 'Check Layer Lava & Water'
   checkLayer.x = 525
   checkLayer.y = 213
 
-  const validFood = ['cooked_chicken']
-  const eatFood = new BehaviorEatFood(bot, targets, validFood)
+  const eatFood = new BehaviorEatFood(bot, targets)
   eatFood.stateName = 'Eat Food'
   eatFood.x = 725
   eatFood.y = 313
@@ -136,6 +134,7 @@ function miningFunction (bot, targets) {
       onTransition: () => {
         targets.entity = undefined
         nextLayer.setMinerCords(loadConfig.getMinerCords())
+        eatFood.setFoods(loadConfig.getItemsCanBeEat())
       },
       shouldTransition: () => true
     }),

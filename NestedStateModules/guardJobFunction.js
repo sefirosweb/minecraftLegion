@@ -14,8 +14,6 @@ const BehaviorEquip = require('./../BehaviorModules/BehaviorEquip')
 const BehaviorFindItems = require('./../BehaviorModules/BehaviorFindItems')
 const BehaviorHelpFriend = require('./../BehaviorModules/BehaviorHelpFriend')
 
-const validFood = ['cooked_chicken']
-
 function guardJobFunction (bot, targets) {
   const start = new BehaviorIdle(targets)
   start.stateName = 'Start'
@@ -44,12 +42,12 @@ function guardJobFunction (bot, targets) {
   equip.x = 725
   equip.y = 313
 
-  const eatFood = new BehaviorEatFood(bot, targets, validFood)
+  const eatFood = new BehaviorEatFood(bot, targets)
   eatFood.stateName = 'Eat Food'
   eatFood.x = 225
   eatFood.y = 513
 
-  const eatFoodCombat = new BehaviorEatFood(bot, targets, validFood)
+  const eatFoodCombat = new BehaviorEatFood(bot, targets)
   eatFoodCombat.stateName = 'Eat Food In Combat'
   eatFoodCombat.x = 1125
   eatFoodCombat.y = 513
@@ -100,6 +98,8 @@ function guardJobFunction (bot, targets) {
         helpFriend.setHelpFriends(loadConfig.getHelpFriend())
         getReady.setItemsToBeReady(loadConfig.getItemsToBeReady())
         findItem.setPickUpItems(loadConfig.getPickUpItems())
+        eatFood.setFoods(loadConfig.getItemsCanBeEat())
+        eatFoodCombat.setFoods(loadConfig.getItemsCanBeEat())
       },
       shouldTransition: () => true
     }),

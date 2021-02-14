@@ -48,7 +48,7 @@ function connect (botUsername) {
   })
 
   socket.on('changeConfig', (config) => {
-    let itemsToBeReady, patrol, index, temp, minerConfig, chests
+    let itemsToBeReady, patrol, index, temp, minerConfig, chests, itemsCanBeEat
     switch (config.configToChange) {
       case 'job':
         botconfig.setJob(botUsername, config.value)
@@ -77,6 +77,16 @@ function connect (botUsername) {
         itemsToBeReady = botconfig.getItemsToBeReady(botUsername)
         itemsToBeReady.splice(config.value, 1)
         botconfig.setItemsToBeReady(botUsername, itemsToBeReady)
+        break
+      case 'InsertItemCanBeEat':
+        itemsCanBeEat = botconfig.getItemsCanBeEat(botUsername)
+        itemsCanBeEat.push(config.value.item)
+        botconfig.setItemsCanBeEat(botUsername, itemsCanBeEat)
+        break
+      case 'DeleteItemCanBeEat':
+        itemsCanBeEat = botconfig.getItemsCanBeEat(botUsername)
+        itemsCanBeEat.splice(config.value, 1)
+        botconfig.setItemsCanBeEat(botUsername, itemsCanBeEat)
         break
       case 'addPatrol':
         patrol = botconfig.getPatrol(botUsername)
