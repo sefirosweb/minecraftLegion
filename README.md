@@ -80,21 +80,17 @@ For mining xyz_start  xyz_end  start_horientantion   vertically / horizontalle
 set miner x y z x y z E horizontally
 
 # TODO
-- Refactorize Front End, need add alot configuration
-- Add dynamic chest and ready function + Front End
 - Make a Archer Job (tower patrol)
 - Make a Farmer Job
 - Make a Woodcutter Job
 - Optimize combat Guard Job ( combat creepers, PVP, destroy shields)
 - Check day/night for sleep ?
 - Add bed location for sleep
+- Fix pathfinder mining / diggig bug
 
 ## Next version preview
-### 0.1.6
-- Fix some miner bugs, (fix lava & water)
-- Add placing torchs
 ### 0.1.7
-- Change front end for configure all functions
+- Add placing torchs
 ### 0.1.8
 - Add dynamic chest with front end
 ### 0.1.9

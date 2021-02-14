@@ -1,6 +1,12 @@
 ## 0.1.6
 * Added security on websocket with password (see config_example.js)
-
+* Added frontend configuration!
+  * Dynamic chest
+  * Items for get ready
+  * Configurations (select job, pvp, pickup items...)
+  * Miner job config
+  * Guard Job config
+* Optimize code of chests
 ## 0.1.5
 * Added minner job!
 * Fixed some combat bugs
