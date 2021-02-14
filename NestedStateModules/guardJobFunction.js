@@ -99,6 +99,7 @@ function guardJobFunction (bot, targets) {
         getClosestMob.setDistance(loadConfig.getDistance())
         helpFriend.setHelpFriends(loadConfig.getHelpFriend())
         getReady.setItemsToBeReady(loadConfig.getItemsToBeReady())
+        findItem.setPickUpItems(loadConfig.getPickUpItems())
       },
       shouldTransition: () => true
     }),

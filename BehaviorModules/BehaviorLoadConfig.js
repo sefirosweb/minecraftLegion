@@ -9,6 +9,7 @@ module.exports = class BehaviorLoadConfig {
     this.job = false
     this.mode = 'none'
     this.helpFriends = false
+    this.pickUpItems = false
     this.distance = 10
     this.patrol = []
     this.chests = []
@@ -25,6 +26,7 @@ module.exports = class BehaviorLoadConfig {
     this.minerCords = botConfig.getMinerCords(this.bot.username)
     this.chests = botConfig.getAllChests(this.bot.username)
     this.itemsToBeReady = botConfig.getItemsToBeReady(this.bot.username)
+    this.pickUpItems = botConfig.getPickUpItems(this.bot.username)
   }
 
   getJob () {
@@ -57,5 +59,9 @@ module.exports = class BehaviorLoadConfig {
 
   getItemsToBeReady () {
     return this.itemsToBeReady
+  }
+
+  getPickUpItems () {
+    return this.pickUpItems
   }
 }

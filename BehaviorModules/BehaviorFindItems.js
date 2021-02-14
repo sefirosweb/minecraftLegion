@@ -3,14 +3,14 @@ module.exports = class BehaviorFindItems {
     this.bot = bot
     this.targets = targets
     this.stateName = 'BehaviorFindItems'
-
     this.isEndFinished = false
+
+    this.pickUpItems = false
     this.distanceToFind = distanceToFind
   }
 
   onStateEntered () {
     this.isEndFinished = false
-    this.search()
   }
 
   onStateExited () {
@@ -21,7 +21,13 @@ module.exports = class BehaviorFindItems {
     return this.isEndFinished
   }
 
+  setPickUpItems (pickUpItems) {
+    this.pickUpItems = pickUpItems
+  }
+
   search () {
+    if (!this.pickUpItems) return false
+
     const entities = Object.keys(this.bot.entities)
     return entities.find((entityName) => {
       const entity = this.bot.entities[entityName]
