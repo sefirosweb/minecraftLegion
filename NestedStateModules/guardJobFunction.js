@@ -128,6 +128,9 @@ function guardJobFunction (bot, targets) {
       parent: patrol,
       child: goToObject,
       name: 'patrol -> goToObject',
+      onTransition: () => {
+        targets.position = targets.itemDrop.position.clone()
+      },
       shouldTransition: () => findItem.search() && findItem.checkInventorySpace() > 3
     }),
 
@@ -135,7 +138,18 @@ function guardJobFunction (bot, targets) {
       parent: goToObject,
       child: patrol,
       name: 'goToObject -> patrol',
-      shouldTransition: () => !goToObject.targets.itemDrop.isValid
+      shouldTransition: () => {
+        if (!goToObject.targets.itemDrop.isValid) {
+          return true
+        }
+
+        if (targets.position.distanceTo(targets.itemDrop.position) > 1) {
+          targets.position = targets.itemDrop.position.clone()
+          goToObject.restart()
+        }
+
+        return false
+      }
     }),
 
     new StateTransition({

@@ -35,7 +35,6 @@ module.exports = class BehaviorFindItems {
       if (entity.position.distanceTo(this.bot.entity.position) < this.distanceToFind) {
         if (entity.objectType === 'Item' /* || entity.objectType === 'Arrow' */) {
           this.targets.itemDrop = entity
-          this.targets.position = entity.position
           this.isEndFinished = true
           return true
         }
