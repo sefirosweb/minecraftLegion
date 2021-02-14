@@ -2,6 +2,8 @@ const config = require('./config')
 const mineflayer = require('mineflayer')
 const customEvents = require('./modules/customEvents')
 const botWebsocket = require('./modules/botWebsocket')
+const inventoryViewer = require('mineflayer-web-inventory')
+const prismarineViewer = require('./modules/viewer')
 
 const {
   StateTransition,
@@ -56,22 +58,14 @@ function createNewBot (botName, botPassword = '') {
 
     botWebsocket.log('Ready!')
 
-    let inventoryViewer = {}
     botWebsocket.on('startInventory', (message) => {
-      if (typeof inventoryViewer !== 'function') {
-        inventoryViewer = require('mineflayer-web-inventory')
-        inventoryViewer(bot, { port: message.port })
-        botWebsocket.log(`Started inventory web server at http://localhost:${message.port}`)
-      }
+      inventoryViewer(bot, { port: message.port })
+      botWebsocket.log(`Started inventory web server at http://localhost:${message.port}`)
     })
 
-    let prismarineViewer = {}
     botWebsocket.on('startViewer', (message) => {
-      if (typeof prismarineViewer !== 'function') {
-        prismarineViewer = require('./modules/viewer')
-        prismarineViewer.start(bot, message.port)
-        botWebsocket.log(`Started viewer web server at http://localhost:${message.port}`)
-      }
+      prismarineViewer.start(bot, message.port)
+      botWebsocket.log(`Started viewer web server at http://localhost:${message.port}`)
     })
 
     const targets = {}
