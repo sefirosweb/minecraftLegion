@@ -80,9 +80,9 @@ For mining xyz_start  xyz_end  start_horientantion   vertically / horizontalle
 set miner x y z x y z E horizontally
 
 # TODO
-- Make a Archer Job (tower patrol)
-- Make a Farmer Job
-- Make a Woodcutter Job
+- Make a Archer Job ( Duding how have this behavior similar as guard job? )
+- Make a Farmer Job ( Placing carrots, potatoes? need to think alot )
+- Make a Woodcutter Job ( Placing trees)
 - Optimize combat Guard Job ( combat creepers, PVP, destroy shields)
 - Check day/night for sleep ?
 - Add bed location for sleep
@@ -92,9 +92,7 @@ set miner x y z x y z E horizontally
 ### 0.1.7
 - Add placing torchs
 ### 0.1.8
-- Add dynamic chest with front end
-### 0.1.9
-- Add dynamic equip with front end "ready" function
+- Check some bugs with mining job when have a too many lava or water
 ### 0.2.0
 - Add a robust documentation =P
 

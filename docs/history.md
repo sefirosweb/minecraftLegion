@@ -1,11 +1,12 @@
 ## 0.1.6
 * Added security on websocket with password (see config_example.js)
 * Added frontend configuration!
-  * Dynamic chest
+  * Dynamic chest + added Deposit All items or "Deposit a spcific items" for have a custom sorting chests
   * Items for get ready
   * Configurations (select job, pvp, pickup items...)
   * Miner job config
   * Guard Job config
+  * Added food dynamic and custom eat priority
 * Optimize code of chests
 ## 0.1.5
 * Added minner job!
