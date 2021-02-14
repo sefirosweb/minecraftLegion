@@ -148,6 +148,10 @@ function guardJobFunction (bot, targets) {
           goToObject.restart()
         }
 
+        if (findItem.checkInventorySpace() === 0) {
+          return true
+        }
+
         return false
       }
     }),
