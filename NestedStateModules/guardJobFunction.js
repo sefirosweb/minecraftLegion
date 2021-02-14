@@ -14,11 +14,6 @@ const BehaviorEquip = require('./../BehaviorModules/BehaviorEquip')
 const BehaviorFindItems = require('./../BehaviorModules/BehaviorFindItems')
 const BehaviorHelpFriend = require('./../BehaviorModules/BehaviorHelpFriend')
 
-// Check this items in inventory for go withdraw
-const itemsToBeReady = [
-  { item: 'sword', quantity: 1 }
-]
-
 const validFood = ['cooked_chicken']
 
 function guardJobFunction (bot, targets) {
@@ -43,7 +38,6 @@ function guardJobFunction (bot, targets) {
   getReady.stateName = 'Get Ready for Patrol'
   getReady.x = 525
   getReady.y = 113
-  getReady.itemsToBeReady = itemsToBeReady
 
   const equip = new BehaviorEquip(bot, targets)
   equip.stateName = 'Equip items'
@@ -83,7 +77,7 @@ function guardJobFunction (bot, targets) {
   combatFunction.y = 513
 
   const goChests = require('./goChestsFunctions')(bot, targets)
-  goChests.x = 525
+  goChests.x = 325
   goChests.y = 313
 
   const transitions = [
@@ -104,6 +98,7 @@ function guardJobFunction (bot, targets) {
         getClosestMob.setMode(loadConfig.getMode())
         getClosestMob.setDistance(loadConfig.getDistance())
         helpFriend.setHelpFriends(loadConfig.getHelpFriend())
+        getReady.setItemsToBeReady(loadConfig.getItemsToBeReady())
       },
       shouldTransition: () => true
     }),
@@ -144,8 +139,8 @@ function guardJobFunction (bot, targets) {
 
     new StateTransition({
       parent: patrol,
-      child: goChests,
-      name: 'patrol -> goChests',
+      child: getReady,
+      name: 'patrol -> getReady',
       shouldTransition: () => patrol.isFinished()
     }),
 
@@ -186,14 +181,14 @@ function guardJobFunction (bot, targets) {
       parent: getReady,
       child: equip,
       name: 'Bot is ready for start patrol',
-      shouldTransition: () => getReady.getIsReady()
+      shouldTransition: () => getReady.getIsReady() && bot.inventory.items().length < 34
     }),
 
     new StateTransition({
       parent: getReady,
       child: goChests,
-      name: 'Need get items fro mchest',
-      shouldTransition: () => !getReady.getIsReady()
+      name: 'Need get items from chest or inventory is full',
+      shouldTransition: () => !getReady.getIsReady() || bot.inventory.items().length >= 34
     }),
 
     new StateTransition({

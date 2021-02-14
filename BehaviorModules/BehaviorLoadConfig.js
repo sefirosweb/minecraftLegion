@@ -12,6 +12,7 @@ module.exports = class BehaviorLoadConfig {
     this.distance = 10
     this.patrol = []
     this.chests = []
+    this.itemsToBeReady = []
     this.minerCords = {}
   }
 
@@ -23,6 +24,7 @@ module.exports = class BehaviorLoadConfig {
     this.patrol = botConfig.getPatrol(this.bot.username)
     this.minerCords = botConfig.getMinerCords(this.bot.username)
     this.chests = botConfig.getAllChests(this.bot.username)
+    this.itemsToBeReady = botConfig.getItemsToBeReady(this.bot.username)
   }
 
   getJob () {
@@ -51,5 +53,9 @@ module.exports = class BehaviorLoadConfig {
 
   getAllChests () {
     return this.chests
+  }
+
+  getItemsToBeReady () {
+    return this.itemsToBeReady
   }
 }

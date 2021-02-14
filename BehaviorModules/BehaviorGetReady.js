@@ -10,6 +10,10 @@ module.exports = class BehaviorGetReady {
     this.inventory = require('../modules/inventoryModule')(this.bot)
   }
 
+  setItemsToBeReady (itemsToBeReady) {
+    this.itemsToBeReady = itemsToBeReady
+  }
+
   onStateEntered () {
     this.checkImReady()
   }
