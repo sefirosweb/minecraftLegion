@@ -1,3 +1,4 @@
+
 # minecraftLegion
 Minecraft multipurpose bot
 
@@ -7,11 +8,13 @@ This program is part of the 3 of this project,
 Each part can be run independently, 
 The other 2 parts are <a target="_blank" href="https://github.com/sefirosweb/minecraftLegionWebServer">minecraftLegionWebServer</a> & <a href="https://github.com/sefirosweb/minecraftLegionWebClient">minecraftLegionWebClient</a>
 
-I highly recomend use the other 2 parts for comunicate the bots and coordinate the actions y manage remotly
+I recommend that you to use the other two modules to help the bots communicate and take commands through the webui
 
 ## Install:
-- Install Novde version 10+
-- npm i minecraftlegion
+- Install [Node.js](https://nodejs.dev/) version 10+ 
+- go to the directory witch you want to install into
+- run `npm i minecraftlegion` on command promt
+- make a new file caled config.js with the feilds showen below
 
 Edit config.js
 ```js
@@ -25,47 +28,49 @@ const config = {
 module.exports = config
 ```
 
-For run ONE bot:
-node start_bot.js BotName
+To run a single bot:
 
-For use a minecraftLegionWebServer
-node start
+    node start_bot.js BotName
+
+To use [minecraftLegionWebServer](https://github.com/coolbot123/minecraftLegionWebServer)
+
+    node start
 
 This method conencts automatically to minecraftLegionWebServer and via web you can add bots / disconnects and manage the behavior
 
-For manage bot vía web go to <a target="_blank" href="https://github.com/sefirosweb/minecraftLegionWebClient">minecraftLegionWebClient</a> for see more!
+To manage bots vía web go to <a target="_blank" href="https://github.com/sefirosweb/minecraftLegionWebClient">minecraftLegionWebClient</a> to see more!
 
 
-## Usage commands in chat:
-First for activate the bot atention "hi namebot" or "hi all" for activate all bots at same time
-* hi nameBot
+## Usage of commands in chat:
+First to activate the bot atention "hi namebot" or "hi all" to activate all bots at the same time
+* `hi nameBot`
 
-Bot follow you
-* come
+Make the bot/s follow you
+* `come`
 
-Bot stand in the current position
-* stay
+Make the bot/s stand in the current position
+* `stay`
 
-Start memorize the positions, used for save the way to chests or patrol
-* set start way
+Start memorizing the positions, used to save the way to chests or patrol (get the bots to follow you around)
+* `set start way`
 
-Save patrol used for guard job (Must bee execute first: set start way)
-* set save patrol
+Save patrol, used for guard job (use command `set start way` befor this one)
+* `set save patrol`
 
-For set max distance for attack mobs or players
-* set distance 30
+For set max distance to attack mobs or players
+* `set distance 30`
 
-For set mode (pvp / pve / none), if are connected to minecraftLegionWebServer it no attack to other bots
-* set mode pvp
+For set mode (pvp / pve / none), if bots are connected to minecraftLegionWebServer it wont attack other bots
+* `set mode pvp`
 
-For set job (Current only finished Guard)
-* set job guard
+Set job (Currently only finished Guard)
+* `set job guard`
 
 For help other bots in combat (need use minecraftLegionWebServer)
-* set help true
+* `set help true`
 
-For finish commands
-* bye
+to finish commands
+* `bye`
 
 For mining xyz_start  xyz_end  start_horientantion  vertically / horizontalle
 set miner x y z x y z x+ horizontally
