@@ -1,7 +1,7 @@
 ## 0.1.6
 * Added security on WebSocket with password (see config_example.js)
 * Added frontend configuration!
-  * Dynamic chest + added Deposit All items or "Deposit a spcific items" to have a custom sorting chests
+  * Dynamic chest + added Deposit All items or "Deposit specific items" to have custom sorting chests
   * Items for getting ready
   * Configurations (select job, PVP, pickup items...)
   * Miner job config
@@ -25,7 +25,7 @@
 
 ## 0.1.1
 * Added sockets for communicating all bots between server
-* Web logs of all bots at same time
+* Web logs of all bots at the same time
 * Fixed combat bug when change weapon
 * Optimized general code
 * Added config_example.js
@@ -34,6 +34,6 @@
 
 ## 0.1.0
 * Start project
-* Bot based on mineflayer and their dependencies
+* Bot based on mineflayer and its dependencies
 * Have different jobs / Behavior
 * First Functionally Job Guard added
