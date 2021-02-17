@@ -11,7 +11,7 @@ The other 2 parts are <a target="_blank" href="https://github.com/sefirosweb/min
 I recommend using the other two modules to help the bots communicate and take commands through the WebUI.
 
 ## Install:
-- Install [Node.js](https://nodejs.dev/) version 10+ 
+- Install [Node.js](https://nodejs.dev/) version 14+ 
 - go to the directory which you want to install into
 - run `npm i minecraftlegion` on command prompt
 - make a new file called config.js with the fields shown below
