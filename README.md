@@ -36,22 +36,22 @@ To use [minecraftLegionWebServer](https://github.com/coolbot123/minecraftLegionW
 
     node start
 
-This method connects automatically to minecraftLegionWebServer, and via the web, you can add bots/disconnects and manage the behaviour.
+This method connects automatically to minecraftLegionWebServer, and via the web, you can add bots/disconnects and manage the behavior.
 
 To manage bots vía web go to <a target="_blank" href="https://github.com/sefirosweb/minecraftLegionWebClient">minecraftLegionWebClient</a> to see more!
 
 
 ## Usage of commands in chat:
-First to activate the bot attention "hi namebot" or "hi all" to activate all bots at the same time
+First, activate the bot attention "hi namebot" or "hi all" to start all bots simultaneously.
 * `hi nameBot`
 
-Make the bot/s follow you
+Make the bot/s follow you.
 * `come`
 
-Make the bot/s stand in the current position
+Make the bot/s stand in the current position.
 * `stay`
 
-Start memorizing the positions, used to save the way to chests or patrol (get the bots to follow you around)
+Start memorizing the positions used to save the way to chests or patrol (get the bots to follow you around)
 * `set start way`
 
 Save patrol, used for guard job (use command `set start way` before this one)
@@ -76,7 +76,7 @@ For mining xyz_start  xyz_end  start_horientantion  vertically / horizontalle
 set miner x y z x y z x+ horizontally
 
 # TODO
-- Make an Archer Job ( During how to have this behaviour similar as guard job? )
+- Make an Archer Job ( During how to have this behavior similar to guard job? )
 - Make a Farmer Job ( Placing carrots, potatoes? need to think a lot )
 - Make a Woodcutter Job ( Placing trees)
 - Optimize combat Guard Job ( combat creepers, PVP, destroy shields)
@@ -93,8 +93,8 @@ set miner x y z x y z x+ horizontally
 - Add a robust documentation =P
 
 ### 0.2.1
-- Think about chat commands, currently is faster / comfortable with the front end, but if anyone wants to configure all boot via chat commands?
+- Think about chat commands, currently it is faster / comfortable with the front end, but if anyone wants to configure all boot via chat commands?
 
 
 
-Please keep calm I'm working hard on this project :D
+Please keep calm. I'm working hard on this project :D
