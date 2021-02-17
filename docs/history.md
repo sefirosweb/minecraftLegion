@@ -1,15 +1,15 @@
 ## 0.1.6
-* Added security on websocket with password (see config_example.js)
+* Added security on WebSocket with password (see config_example.js)
 * Added frontend configuration!
-  * Dynamic chest + added Deposit All items or "Deposit a spcific items" for have a custom sorting chests
-  * Items for get ready
-  * Configurations (select job, pvp, pickup items...)
+  * Dynamic chest + added Deposit All items or "Deposit a spcific items" to have a custom sorting chests
+  * Items for getting ready
+  * Configurations (select job, PVP, pickup items...)
   * Miner job config
   * Guard Job config
   * Added food dynamic and custom eat priority
 * Optimize code of chests
 ## 0.1.5
-* Added minner job!
+* Added miner job!
 * Fixed some combat bugs
 
 ## 0.1.4
@@ -24,16 +24,16 @@
 * Added chest for food
 
 ## 0.1.1
-* Added sockets for comunicate all bots between server
+* Added sockets for communicating all bots between server
 * Web logs of all bots at same time
 * Fixed combat bug when change weapon
-* Optiized general code
+* Optimized general code
 * Added config_example.js
 * Fixed bug on events
-* Now is a stable version for first job
+* Now is a stable version for the first job
 
 ## 0.1.0
-* Start proyect
+* Start project
 * Bot based on mineflayer and their dependencies
-* Have difent jobs / Behavior
-* First Functionaly Job Guard added
+* Have different jobs / Behavior
+* First Functionally Job Guard added
