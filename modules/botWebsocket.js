@@ -301,7 +301,7 @@ function getMasters () {
 
 let prevPoint
 function nextPointListener (master) {
-  if (prevPoint === undefined || master.position.distanceTo(prevPoint) > 5) {
+  if (prevPoint === undefined || master.position.distanceTo(prevPoint) > 3) {
     const patrol = botconfig.getPatrol(bot.username)
     patrol.push(master.position.floor())
     prevPoint = master.position.clone()
