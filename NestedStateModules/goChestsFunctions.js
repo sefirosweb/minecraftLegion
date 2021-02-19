@@ -7,7 +7,7 @@ const {
 
 const BehaviorLoadConfig = require('./../BehaviorModules/BehaviorLoadConfig')
 const BehaviorWithdrawItemChest = require('./../BehaviorModules/BehaviorWithdrawItemChest')
-const BehaviorDepositAllChest = require('./../BehaviorModules/BehaviorDepositAllChest')
+const BehaviorDepositChest = require('./../BehaviorModules/BehaviorDepositChest')
 const BehaviorCheckItemsInInventory = require('./../BehaviorModules/BehaviorCheckItemsInInventory')
 
 function goChestsFunction (bot, targets) {
@@ -46,10 +46,10 @@ function goChestsFunction (bot, targets) {
   withdrawItems.x = 325
   withdrawItems.y = 250
 
-  const depositAllItems = new BehaviorDepositAllChest(bot, targets)
-  depositAllItems.stateName = 'Deposit Items'
-  depositAllItems.x = 725
-  depositAllItems.y = 250
+  const depositItems = new BehaviorDepositChest(bot, targets)
+  depositItems.stateName = 'Deposit Items'
+  depositItems.x = 725
+  depositItems.y = 250
 
   let chests = []
   let chestIndex = 0
@@ -118,9 +118,9 @@ function goChestsFunction (bot, targets) {
 
     new StateTransition({
       parent: goChest,
-      child: depositAllItems,
-      name: 'goChest -> depositAllItems',
-      shouldTransition: () => goChest.isFinished() && !bot.pathfinder.isMining() && chests[chestIndex].type === 'depositAllItems'
+      child: depositItems,
+      name: 'goChest -> depositItems',
+      shouldTransition: () => goChest.isFinished() && !bot.pathfinder.isMining() && (chests[chestIndex].type === 'deposit' || chests[chestIndex].type === 'depositAll')
     }),
 
     new StateTransition({
@@ -132,11 +132,11 @@ function goChestsFunction (bot, targets) {
     }),
 
     new StateTransition({
-      parent: depositAllItems,
+      parent: depositItems,
       child: nextCheck,
       name: 'withdrawItems -> checkItemsInInventory',
       onTransition: () => chestIndex++,
-      shouldTransition: () => depositAllItems.isFinished()
+      shouldTransition: () => depositItems.isFinished()
     })
   ]
 
