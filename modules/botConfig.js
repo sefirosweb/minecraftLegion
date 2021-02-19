@@ -12,6 +12,7 @@ function getConn (botName) {
     distance: 10,
     helpFriends: false,
     pickUpItems: false,
+    isCopingPatrol: false,
     itemsToBeReady: [],
     itemsCanBeEat: [],
     chests: [],
@@ -158,6 +159,11 @@ function getItemsCanBeEat (botName) {
   return db.get('config.itemsCanBeEat').value()
 }
 
+function setCopingPatrol (botName, status) {
+  const db = getConn(botName)
+  db.set('config.isCopingPatrol', status).write()
+}
+
 module.exports = {
   getAll,
   setJob,
@@ -180,5 +186,6 @@ module.exports = {
   getItemsCanBeEat,
   setItemsCanBeEat,
   getChests,
-  setChests
+  setChests,
+  setCopingPatrol
 }

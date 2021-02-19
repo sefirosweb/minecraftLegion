@@ -2,6 +2,7 @@ const { webServer, webServerPort, webServerPassword } = require('../config')
 const io = require('socket.io-client')
 const config = require('../config')
 const botconfig = require('./botConfig')
+const customEvents = require('./customEvents')
 
 let bot
 let socket; let friends = []; let masters = []; let loged = false
@@ -54,7 +55,7 @@ function connect () {
   })
 
   socket.on('changeConfig', (config) => {
-    let itemsToBeReady, patrol, index, temp, minerConfig, chests, itemsCanBeEat, findMaster
+    let itemsToBeReady, patrol, index, temp, minerConfig, chests, itemsCanBeEat, findMaster, isEventLoaded
     switch (config.configToChange) {
       case 'job':
         botconfig.setJob(bot.username, config.value)
@@ -123,6 +124,25 @@ function connect () {
         patrol = botconfig.getPatrol(bot.username)
         patrol.splice(config.value, 1)
         botconfig.setPatrol(bot.username, patrol)
+        break
+      case 'copyPatrol':
+        findMaster = bot.nearestEntity(e => e.type === 'player' && e.username === config.value && e.mobType !== 'Armor Stand')
+        if (!findMaster) {
+          return
+        }
+
+        isEventLoaded = customEvents.listeners('physicTick').find(event => {
+          return event.name === 'bound nextPointListener'
+        })
+
+        if (!isEventLoaded) {
+          prevPoint = undefined
+          customEvents.addEvent('physicTick', nextPointListener.bind(this, findMaster))
+          botconfig.setCopingPatrol(bot.username, true)
+        } else {
+          customEvents.removeListener('physicTick', isEventLoaded)
+          botconfig.setCopingPatrol(bot.username, false)
+        }
         break
       case 'movePatrolNext':
         patrol = botconfig.getPatrol(bot.username)
@@ -278,6 +298,18 @@ function getMasters () {
   const allMasters = masters.concat(config.masters) // Gef offline + online config
   return allMasters
 }
+
+let prevPoint
+function nextPointListener (master) {
+  if (prevPoint === undefined || master.position.distanceTo(prevPoint) > 5) {
+    const patrol = botconfig.getPatrol(bot.username)
+    patrol.push(master.position.floor())
+    prevPoint = master.position.clone()
+    botconfig.setPatrol(bot.username, patrol)
+    sendConfig()
+  }
+}
+
 module.exports = {
   loadBot,
   connect,
