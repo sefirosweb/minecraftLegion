@@ -83,10 +83,30 @@ function connect (botUsername) {
         itemsCanBeEat.push(config.value.item)
         botconfig.setItemsCanBeEat(botUsername, itemsCanBeEat)
         break
-      case 'DeleteItemCanBeEat':
+      case 'deleteItemCanBeEat':
         itemsCanBeEat = botconfig.getItemsCanBeEat(botUsername)
         itemsCanBeEat.splice(config.value, 1)
         botconfig.setItemsCanBeEat(botUsername, itemsCanBeEat)
+        break
+      case 'moveItemCanBeEatNext':
+        itemsCanBeEat = botconfig.getItemsCanBeEat(botUsername)
+        index = config.value
+        if (itemsCanBeEat.length > (index + 1)) {
+          temp = itemsCanBeEat[index]
+          itemsCanBeEat[index] = itemsCanBeEat[index + 1]
+          itemsCanBeEat[index + 1] = temp
+          botconfig.setItemsCanBeEat(botUsername, itemsCanBeEat)
+        }
+        break
+      case 'moveItemCanBeEatPrev':
+        itemsCanBeEat = botconfig.getItemsCanBeEat(botUsername)
+        index = config.value
+        if (index > 0) {
+          temp = itemsCanBeEat[index]
+          itemsCanBeEat[index] = itemsCanBeEat[index - 1]
+          itemsCanBeEat[index - 1] = temp
+          botconfig.setItemsCanBeEat(botUsername, itemsCanBeEat)
+        }
         break
       case 'addPatrol':
         patrol = botconfig.getPatrol(botUsername)
@@ -184,18 +204,17 @@ function connect (botUsername) {
         break
     }
 
-    sendConfig(botUsername, config.fromSocketId)
+    sendConfig(botUsername)
   })
 
-  socket.on('getConfig', (fromSocketId) => {
-    sendConfig(botUsername, fromSocketId)
+  socket.on('getConfig', () => {
+    sendConfig(botUsername)
   })
 }
 
-function sendConfig (botUsername, toSocketId) {
+function sendConfig (botUsername) {
   socket.emit('sendAction', {
     action: 'sendConfig',
-    socketId: toSocketId,
     value: botconfig.getAll(botUsername)
   })
 }
