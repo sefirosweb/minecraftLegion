@@ -1,3 +1,4 @@
+const Vec3 = require('vec3')
 const { webServer, webServerPort, webServerPassword } = require('../config')
 const io = require('socket.io-client')
 const config = require('../config')
@@ -170,7 +171,7 @@ function connect () {
           return
         }
         patrol = botconfig.getPatrol(bot.username)
-        patrol.push(findMaster.position.floor())
+        patrol.push(new Vec3(Math.round(findMaster.position.x * 10) / 10, Math.round(findMaster.position.y * 10) / 10, Math.round(findMaster.position.z * 10) / 10))
         botconfig.setPatrol(bot.username, patrol)
         break
       case 'changeTunnel':
@@ -303,7 +304,7 @@ let prevPoint
 function nextPointListener (master) {
   if (prevPoint === undefined || master.position.distanceTo(prevPoint) > 3) {
     const patrol = botconfig.getPatrol(bot.username)
-    patrol.push(master.position.floor())
+    patrol.push(new Vec3(Math.round(master.position.x * 10) / 10, Math.round(master.position.y * 10) / 10, Math.round(master.position.z * 10) / 10))
     prevPoint = master.position.clone()
     botconfig.setPatrol(bot.username, patrol)
     sendConfig()
