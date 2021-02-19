@@ -25,6 +25,7 @@ function createNewBot (botName, botPassword = '') {
     host: config.server,
     port: config.port
   })
+  botWebsocket.loadBot(bot)
   bot.setMaxListeners(0)
   bot.loadPlugin(require('mineflayer-pathfinder').pathfinder)
 
@@ -41,7 +42,8 @@ function createNewBot (botName, botPassword = '') {
 
   bot.once('spawn', () => {
     console.log(bot.version)
-    botWebsocket.connect(bot.username)
+    botWebsocket.connect()
+
     bot.on('physicTick', customEvents.executePhysicTickEvents)
     bot.on('chat', customEvents.executeChatEvents)
     bot.on('move', customEvents.executeMoveEvents)
