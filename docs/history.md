@@ -8,6 +8,7 @@
   * Guard Job config
   * Added food dynamic and custom eat priority
 * Optimize code of chests
+* Dependecy updated, this fixed a lot of bug based on pathfinder and digging bugs
 ## 0.1.5
 * Added miner job!
 * Fixed some combat bugs

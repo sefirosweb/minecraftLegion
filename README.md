@@ -82,7 +82,8 @@ set miner x y z x y z x+ horizontally
 - Optimize combat Guard Job ( combat creepers, PVP, destroy shields)
 - Check day/night for sleep?
 - Add bed location for sleep
-- Fix pathfinder mining / digging bug
+- Add Job builder! based on mineflayer-builder & Schematichs
+
 
 ## Next version preview
 ### 0.1.7
