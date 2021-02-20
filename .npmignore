@@ -1,7 +1,7 @@
-examples/
+trash_files/
 unused/
 .vscode/
-.env/
+.env
 config.js
 
 # Exclude bot configurations
