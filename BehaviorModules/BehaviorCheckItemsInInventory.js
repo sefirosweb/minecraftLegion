@@ -21,6 +21,9 @@ module.exports = class BehaviorCheckItemsInInventory {
     this.isEndFinished = false
     this.targets.items = []
 
+    if (this.isDeposit === 'depositAll') {
+      this.getItemsToDepositAll()
+    }
     if (this.isDeposit === 'deposit') {
       this.getItemsToDeposit()
     }
@@ -29,7 +32,7 @@ module.exports = class BehaviorCheckItemsInInventory {
     }
   }
 
-  getItemsToDeposit () {
+  getItemsToDepositAll () {
     const items = this.getResumeInventory()
 
     const itemsToDeposit = items.reduce((currentItems, slot) => {
@@ -51,6 +54,32 @@ module.exports = class BehaviorCheckItemsInInventory {
         }
       }
 
+      return newItems
+    }, [])
+
+    this.targets.items = itemsToDeposit
+    this.isEndFinished = true
+  }
+
+  getItemsToDeposit () {
+    const items = this.getResumeInventory()
+
+    const itemsToDeposit = this.itemsToCheck.reduce((currentItems, slot) => {
+      const newItems = [...currentItems]
+      const itemToExclude = items.find(i => {
+        if (this.genericItems.includes(slot.item)) {
+          return i.name.includes(slot.item)
+        }
+
+        return i.name === slot.item
+      })
+
+      if (itemToExclude !== undefined) {
+        itemToExclude.quantity -= slot.quantity
+        if (itemToExclude.quantity > 0) {
+          newItems.push(itemToExclude)
+        }
+      }
       return newItems
     }, [])
 
