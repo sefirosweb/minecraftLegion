@@ -236,6 +236,26 @@ function connect () {
         chests[config.chestId].items.splice(config.itemIndex, 1)
         botconfig.setChests(bot.username, chests)
         break
+      case 'moveChestNext':
+        chests = botconfig.getChests(bot.username)
+        index = config.value
+        if (chests.length > (index + 1)) {
+          temp = chests[index]
+          chests[index] = chests[index + 1]
+          chests[index + 1] = temp
+          botconfig.setChests(bot.username, chests)
+        }
+        break
+      case 'moveChestPrev':
+        chests = botconfig.getChests(bot.username)
+        index = config.value
+        if (index > 0) {
+          temp = chests[index]
+          chests[index] = chests[index - 1]
+          chests[index - 1] = temp
+          botconfig.setChests(bot.username, chests)
+        }
+        break
     }
 
     sendConfig()
