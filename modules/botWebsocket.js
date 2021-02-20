@@ -1,6 +1,6 @@
 const Vec3 = require('vec3')
 const { webServer, webServerPort, webServerPassword } = require('../config')
-const io = require('socket.io-client')
+const socketIOClient = require('socket.io-client')
 const config = require('../config')
 const botconfig = require('./botConfig')
 const customEvents = require('./customEvents')
@@ -13,7 +13,11 @@ function loadBot (_bot) {
 }
 
 function connect () {
-  socket = io(webServer + ':' + webServerPort)
+  socket = socketIOClient(`${webServer}:${webServerPort}`)
+  socket.on('update', data => console.log(data))
+  socket.on('connect_error', data => console.log(data))
+  socket.on('connect_failed', data => console.log(data))
+
   socket.on('connect', () => {
     console.log('Connected to webserver')
     socket.emit('login', webServerPassword)

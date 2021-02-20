@@ -50,7 +50,7 @@ function watchChest () {
   const chest = bot.openChest(chestToOpen)
   console.log(chest)
   chest.on('open', () => {
-    sayItems(chest.items())
+    sayItems(chest.containerItems())
   })
   chest.on('updateSlot', (oldItem, newItem) => {
     bot.chat(`chest update: ${itemToString(oldItem)} -> ${itemToString(newItem)}`)

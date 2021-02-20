@@ -32,12 +32,12 @@ module.exports = class BehaviorDepositChest {
     return this.isEndFinished
   }
 
-  depositAllItems () {
+  async depositAllItems () {
     const mcData = require('minecraft-data')(this.bot.version)
 
     const chestToOpen = this.bot.findBlock({
       matching: ['chest', 'ender_chest', 'trapped_chest'].map(name => mcData.blocksByName[name].id),
-      maxDistance: 6
+      maxDistance: 3
     })
 
     if (!chestToOpen) {
@@ -46,7 +46,7 @@ module.exports = class BehaviorDepositChest {
       return
     }
 
-    this.chest = this.bot.openChest(chestToOpen)
+    this.chest = await this.bot.openChest(chestToOpen)
 
     this.chest.on('close', () => {
       setTimeout(() => {
@@ -54,48 +54,29 @@ module.exports = class BehaviorDepositChest {
       }, 500)
     })
 
-    this.chest.on('open', () => {
+    this.depositItems()
+  }
+
+  async depositItems () {
+    const itemToDeposit = this.targets.items[this.indexItemsToDeposit]
+    if (this.targets.items.length <= this.indexItemsToDeposit) {
       setTimeout(() => {
-        this.depositItems()
-          .then(() => this.chest.close())
-          .catch((error) => {
-            botWebsocket.log(`Error Deposit items ${error}`)
-            this.chest.close()
-          })
+        this.chest.close()
       }, 500)
-    })
+      return
+    }
+
+    await this.depositToChest(itemToDeposit.type, itemToDeposit.quantity)
+    this.indexItemsToDeposit++
+    this.depositItems()
   }
 
-  depositItems () {
-    return new Promise((resolve, reject) => {
-      const itemToDeposit = this.targets.items[this.indexItemsToDeposit]
-
-      if (this.targets.items.length <= this.indexItemsToDeposit) {
-        resolve()
-        return
-      }
-
-      this.indexItemsToDeposit++
-
-      this.depositToChest(itemToDeposit.type, itemToDeposit.quantity)
-        .then(() => {
-          this.depositItems()
-            .then(() => resolve())
-            .catch((error) => reject(error))
-        })
-        .catch((error) => reject(error))
-    })
-  }
-
-  depositToChest (itemType, quantity) {
-    return new Promise((resolve, reject) => {
-      this.chest.deposit(itemType, null, quantity, (error) => {
-        if (error) {
-          setTimeout(() => reject(error), 200)
-        } else {
-          setTimeout(() => resolve(), 200)
-        }
-      })
-    })
+  async depositToChest (itemType, quantity) {
+    try {
+      await this.chest.deposit(itemType, null, quantity)
+    } catch (err) {
+      console.log(err)
+      botWebsocket.log(JSON.stringify(err))
+    }
   }
 }

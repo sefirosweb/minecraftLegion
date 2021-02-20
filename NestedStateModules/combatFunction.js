@@ -18,7 +18,7 @@ function combatFunction (bot, targets) {
   const rangoBow = 60
   const rangeSword = 3
   const rangeFollowToShortAttack = 5
-  const timeBowColdown = 1500
+  const timeBowColdown = 1550
 
   const start = new BehaviorIdle(targets)
   start.stateName = 'Start'

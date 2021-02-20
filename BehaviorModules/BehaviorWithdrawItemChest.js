@@ -31,7 +31,7 @@ module.exports = class BehaviorWithdrawItemChest {
     return this.isEndFinished
   }
 
-  withdrawAllItems () {
+  async withdrawAllItems () {
     const mcData = require('minecraft-data')(this.bot.version)
 
     const chestToOpen = this.bot.findBlock({
@@ -45,7 +45,7 @@ module.exports = class BehaviorWithdrawItemChest {
       return
     }
 
-    this.chest = this.bot.openChest(chestToOpen)
+    this.chest = await this.bot.openChest(chestToOpen)
 
     this.chest.on('close', () => {
       setTimeout(() => {
@@ -53,52 +53,35 @@ module.exports = class BehaviorWithdrawItemChest {
       }, 500)
     })
 
-    this.chest.on('open', () => {
+    this.getItemsFromChest()
+  }
+
+  async withdrawItem (itemName, quantity) {
+    const foundItem = this.chest.containerItems().find(itemtoFind => itemtoFind.name.includes(itemName))
+
+    if (!foundItem) {
+      botWebsocket.log(`No item ${itemName} in chest!`)
+      return
+    }
+
+    try {
+      await this.chest.withdraw(foundItem.type, null, quantity)
+    } catch (err) {
+      botWebsocket.log(JSON.stringify(err))
+    }
+  }
+
+  async getItemsFromChest () {
+    if (this.indexItemsToWithdraw >= this.targets.items.length) {
       setTimeout(() => {
-        this.getItemsFromChest()
-          .then(() => this.chest.close())
-          .catch((error) => {
-            botWebsocket.log(`Error Withdraw items  ${error}`)
-            this.chest.close()
-          })
+        this.chest.close()
       }, 500)
-    })
-  }
+      return
+    }
 
-  withdrawItem (itemName, quantity) {
-    return new Promise((resolve, reject) => {
-      const foundItem = this.chest.items().find(itemtoFind => itemtoFind.name.includes(itemName))
-      if (!foundItem) {
-        botWebsocket.log(`No item ${itemName} in chest!`)
-        resolve()
-      }
-
-      this.chest.withdraw(foundItem.type, null, quantity, (error) => {
-        if (error) {
-          setTimeout(() => reject(error), 200)
-        } else {
-          setTimeout(() => resolve(), 200)
-        }
-      })
-    })
-  }
-
-  getItemsFromChest () {
-    return new Promise((resolve, reject) => {
-      if (this.indexItemsToWithdraw >= this.targets.items.length) {
-        resolve()
-        return
-      }
-
-      const itemToWithdraw = this.targets.items[this.indexItemsToWithdraw]
-      this.withdrawItem(itemToWithdraw.item, itemToWithdraw.quantity)
-        .then(() => {
-          this.indexItemsToWithdraw++
-          this.getItemsFromChest()
-            .then(() => resolve())
-            .catch((error) => reject(error))
-        })
-        .catch((error) => reject(error))
-    })
+    const itemToWithdraw = this.targets.items[this.indexItemsToWithdraw]
+    await this.withdrawItem(itemToWithdraw.item, itemToWithdraw.quantity)
+    this.indexItemsToWithdraw++
+    this.getItemsFromChest()
   }
 }
