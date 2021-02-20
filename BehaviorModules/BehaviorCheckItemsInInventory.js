@@ -33,7 +33,7 @@ module.exports = class BehaviorCheckItemsInInventory {
   }
 
   getItemsToDepositAll () {
-    const items = this.getResumeInventory()
+    const items = this.getResumeInventory(false)
 
     const itemsToDeposit = items.reduce((currentItems, slot) => {
       const newItems = [...currentItems]
@@ -62,7 +62,7 @@ module.exports = class BehaviorCheckItemsInInventory {
   }
 
   getItemsToDeposit () {
-    const items = this.getResumeInventory()
+    const items = this.getResumeInventory(false)
 
     const itemsToDeposit = this.itemsToCheck.reduce((currentItems, slot) => {
       const newItems = [...currentItems]
@@ -88,7 +88,7 @@ module.exports = class BehaviorCheckItemsInInventory {
   }
 
   getItemsToWithdraw () {
-    const items = this.getResumeInventory()
+    const items = this.getResumeInventory(true)
 
     const itemsToWithdraw = this.itemsToCheck.reduce((currentItems, slot) => {
       const newItems = [...currentItems]
@@ -135,8 +135,13 @@ module.exports = class BehaviorCheckItemsInInventory {
     return equipedItems
   }
 
-  getResumeInventory () {
-    const items = this.bot.inventory.items().concat(this.getEquipedItems()).reduce((currentItems, slot) => {
+  getResumeInventory (withEquip) {
+    let equipItems = []
+    if (withEquip) {
+      equipItems = this.getEquipedItems()
+    }
+
+    const items = this.bot.inventory.items().concat(equipItems).reduce((currentItems, slot) => {
       const newItems = [...currentItems]
       const itemSlot = {
         name: slot.name,
