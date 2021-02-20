@@ -75,7 +75,6 @@ module.exports = class BehaviorDepositChest {
     try {
       await this.chest.deposit(itemType, null, quantity)
     } catch (err) {
-      console.log(err)
       botWebsocket.log(JSON.stringify(err))
     }
   }
