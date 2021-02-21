@@ -14,7 +14,13 @@ const BehaviorEquip = require('./../BehaviorModules/BehaviorEquip')
 const BehaviorFindItems = require('./../BehaviorModules/BehaviorFindItems')
 const BehaviorHelpFriend = require('./../BehaviorModules/BehaviorHelpFriend')
 
+const mineflayerPathfinder = require('mineflayer-pathfinder')
+let movements
+
 function guardJobFunction (bot, targets) {
+  const mcData = require('minecraft-data')(bot.version)
+  movements = new mineflayerPathfinder.Movements(bot, mcData)
+
   const start = new BehaviorIdle(targets)
   start.stateName = 'Start'
   start.x = 125
@@ -29,6 +35,7 @@ function guardJobFunction (bot, targets) {
   patrol.stateName = 'Patrol'
   patrol.x = 525
   patrol.y = 513
+  patrol.movements = movements
 
   const getClosestMob = require('./../modules/getClosestEnemy')(bot, targets)
 
@@ -93,6 +100,8 @@ function guardJobFunction (bot, targets) {
       onTransition: () => {
         targets.entity = undefined
         patrol.setPatrol(loadConfig.getPatrol(), true)
+        movements.allowSprinting = loadConfig.getAllowSprinting(bot.username)
+        movements.canDig = loadConfig.getCanDig(bot.username)
         getClosestMob.setMode(loadConfig.getMode())
         getClosestMob.setDistance(loadConfig.getDistance())
         helpFriend.setHelpFriends(loadConfig.getHelpFriend())

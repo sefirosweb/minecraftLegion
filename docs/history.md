@@ -1,4 +1,11 @@
 ## 0.1.6
+* Added find chest and interect (save a home bed)
+  * With command line and front end
+* Adding enable / disable sprint config
+* Adding enable / disable dig (!caution the bot can stucks)
+
+
+## 0.1.6
 * Added security on WebSocket with password (see config_example.js)
 * Added frontend configuration!
   * Dynamic chest + added Deposit All items or "Deposit specific items" to have custom sorting chests

@@ -71,6 +71,12 @@ function connect () {
       case 'helpFriend':
         botconfig.setHelpFriend(bot.username, config.value)
         break
+      case 'allowSprinting':
+        botconfig.setAllowSprinting(bot.username, config.value)
+        break
+      case 'canDig':
+        botconfig.setCanDig(bot.username, config.value)
+        break
       case 'mode':
         botconfig.setMode(bot.username, config.value)
         break
@@ -275,6 +281,8 @@ function sendConfig () {
     action: 'sendConfig',
     value: botconfig.getAll(bot.username)
   })
+
+  // console.log(botconfig.getAll(bot.username))
 }
 
 function emit (chanel, data) {

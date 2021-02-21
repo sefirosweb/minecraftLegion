@@ -10,7 +10,13 @@ const BehaviorWithdrawItemChest = require('./../BehaviorModules/BehaviorWithdraw
 const BehaviorDepositChest = require('./../BehaviorModules/BehaviorDepositChest')
 const BehaviorCheckItemsInInventory = require('./../BehaviorModules/BehaviorCheckItemsInInventory')
 
+const mineflayerPathfinder = require('mineflayer-pathfinder')
+let movements
+
 function goChestsFunction (bot, targets) {
+  const mcData = require('minecraft-data')(bot.version)
+  movements = new mineflayerPathfinder.Movements(bot, mcData)
+
   const start = new BehaviorIdle()
   start.stateName = 'Start'
   start.x = 125
@@ -40,6 +46,7 @@ function goChestsFunction (bot, targets) {
   goChest.stateName = 'Go chest'
   goChest.x = 525
   goChest.y = 413
+  goChest.movements = movements
 
   const withdrawItems = new BehaviorWithdrawItemChest(bot, targets)
   withdrawItems.stateName = 'Withdraw Items'
@@ -69,6 +76,8 @@ function goChestsFunction (bot, targets) {
       onTransition: () => {
         chestIndex = 0
         chests = loadConfig.getAllChests()
+        movements.allowSprinting = loadConfig.getAllowSprinting(bot.username)
+        movements.canDig = loadConfig.getCanDig(bot.username)
       },
       shouldTransition: () => true
     }),

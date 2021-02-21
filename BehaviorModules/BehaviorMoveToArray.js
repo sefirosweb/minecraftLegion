@@ -21,7 +21,7 @@ module.exports = class BehaviorMoveToArray {
 
     this.bot.on('path_update', (r) => {
       if (r.status === 'noPath') {
-        botWebsocket.log('No path! ' + JSON.stringify(r))
+        botWebsocket.log('No path!')
       }
     })
 

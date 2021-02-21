@@ -13,6 +13,8 @@ function getConn (botName) {
     helpFriends: false,
     pickUpItems: false,
     isCopingPatrol: false,
+    canDig: true,
+    allowSprinting: true,
     itemsToBeReady: [],
     itemsCanBeEat: [],
     chests: [],
@@ -71,6 +73,36 @@ function setHelpFriend (botName, mode) {
 function getHelpFriend (botName) {
   const db = getConn(botName)
   return db.get('config.helpFriends').value()
+}
+
+function setCanDig (botName, mode) {
+  const db = getConn(botName)
+  if (mode === 'true') {
+    mode = true
+  } else {
+    mode = false
+  }
+  db.set('config.canDig', mode).write()
+}
+
+function getCanDig (botName) {
+  const db = getConn(botName)
+  return db.get('config.canDig').value()
+}
+
+function setAllowSprinting (botName, mode) {
+  const db = getConn(botName)
+  if (mode === 'true') {
+    mode = true
+  } else {
+    mode = false
+  }
+  db.set('config.allowSprinting', mode).write()
+}
+
+function getAllowSprinting (botName) {
+  const db = getConn(botName)
+  return db.get('config.allowSprinting').value()
 }
 
 function setPickUpItems (botName, mode) {
@@ -187,5 +219,9 @@ module.exports = {
   setItemsCanBeEat,
   getChests,
   setChests,
-  setCopingPatrol
+  setCopingPatrol,
+  setCanDig,
+  getCanDig,
+  setAllowSprinting,
+  getAllowSprinting
 }

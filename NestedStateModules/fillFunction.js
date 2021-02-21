@@ -7,9 +7,15 @@ const {
 
 const BehaviorDigBlock = require('./../BehaviorModules/BehaviorDigBlock')
 const BehaviorCustomPlaceBlock = require('./../BehaviorModules/BehaviorCustomPlaceBlock ')
+const BehaviorLoadConfig = require('./../BehaviorModules/BehaviorLoadConfig')
+
+const mineflayerPathfinder = require('mineflayer-pathfinder')
+let movements
 
 // let isDigging = false
 function fillFunction (bot, targets) {
+  const mcData = require('minecraft-data')(bot.version)
+  movements = new mineflayerPathfinder.Movements(bot, mcData)
   const placeBlocks = ['air', 'cave_air', 'lava', 'water']
 
   const start = new BehaviorIdle(targets)
@@ -24,29 +30,46 @@ function fillFunction (bot, targets) {
 
   const moveToBlock = new BehaviorMoveTo(bot, targets)
   moveToBlock.stateName = 'Move To Block'
-  moveToBlock.x = 425
+  moveToBlock.x = 525
   moveToBlock.y = 113
+  moveToBlock.movements = movements
 
   const mineBlock = new BehaviorDigBlock(bot, targets)
   mineBlock.stateName = 'Mine Block'
-  mineBlock.x = 625
+  mineBlock.x = 725
   mineBlock.y = 113
 
   const placeBlock1 = new BehaviorCustomPlaceBlock(bot, targets)
   placeBlock1.stateName = 'Place Block 1'
-  placeBlock1.x = 625
+  placeBlock1.x = 725
   placeBlock1.y = 313
 
   const placeBlock2 = new BehaviorCustomPlaceBlock(bot, targets)
   placeBlock2.stateName = 'Place Block 2'
-  placeBlock2.x = 425
+  placeBlock2.x = 525
   placeBlock2.y = 313
+
+  const loadConfig = new BehaviorLoadConfig(bot, targets)
+  loadConfig.stateName = 'Load Bot Config'
+  loadConfig.x = 325
+  loadConfig.y = 113
 
   const transitions = [
     new StateTransition({
       parent: start,
+      child: loadConfig,
+      name: 'start -> loadConfig',
+      shouldTransition: () => true
+    }),
+
+    new StateTransition({
+      parent: loadConfig,
       child: moveToBlock,
-      name: 'start -> moveToBlock',
+      name: 'loadConfig -> moveToBlock',
+      onTransition: () => {
+        movements.allowSprinting = loadConfig.getAllowSprinting(bot.username)
+        movements.canDig = loadConfig.getCanDig(bot.username)
+      },
       shouldTransition: () => true
     }),
 

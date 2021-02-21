@@ -10,6 +10,8 @@ module.exports = class BehaviorLoadConfig {
     this.mode = 'none'
     this.helpFriends = false
     this.pickUpItems = false
+    this.canDig = true
+    this.allowSprinting = true
     this.distance = 10
     this.patrol = []
     this.chests = []
@@ -29,6 +31,8 @@ module.exports = class BehaviorLoadConfig {
     this.itemsToBeReady = botConfig.getItemsToBeReady(this.bot.username)
     this.pickUpItems = botConfig.getPickUpItems(this.bot.username)
     this.itemsCanBeEat = botConfig.getItemsCanBeEat(this.bot.username)
+    this.canDig = botConfig.getCanDig(this.bot.username)
+    this.allowSprinting = botConfig.getAllowSprinting(this.bot.username)
   }
 
   getJob () {
@@ -69,5 +73,13 @@ module.exports = class BehaviorLoadConfig {
 
   getItemsCanBeEat () {
     return this.itemsCanBeEat
+  }
+
+  getCanDig () {
+    return this.canDig
+  }
+
+  getAllowSprinting () {
+    return this.allowSprinting
   }
 }
