@@ -76,26 +76,16 @@ For mining xyz_start  xyz_end  start_horientantion  vertically / horizontalle
 set miner x y z x y z x+ horizontally
 
 # TODO
+- Fix inventory viewer ( is a bug of old socket version)
 - Make an Archer Job ( During how to have this behavior similar to guard job? )
 - Make a Farmer Job ( Placing carrots, potatoes? need to think a lot )
 - Make a Woodcutter Job ( Placing trees)
 - Optimize combat Guard Job ( combat creepers, PVP, destroy shields)
-- Check day/night for sleep?
-- Add bed location for sleep
+- Check day/night for sleep any sleep function?
 - Add Job builder! based on mineflayer-builder & Schematichs
-
-
-## Next version preview
-### 0.1.7
 - Add placing torchs
-### 0.1.8
 - Check some bugs with mining job when have a too many lava or water
-### 0.2.0
 - Add a robust documentation =P
-
-### 0.2.1
 - Think about chat commands, currently it is faster / comfortable with the front end, but if anyone wants to configure all boot via chat commands?
-
-
 
 Please keep calm. I'm working hard on this project :D
