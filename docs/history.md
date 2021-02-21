@@ -1,4 +1,4 @@
-## 0.1.6
+## 0.1.7
 * Added find chest and interect (save a home bed)
   * With command line and front end
 * Adding enable / disable sprint config
