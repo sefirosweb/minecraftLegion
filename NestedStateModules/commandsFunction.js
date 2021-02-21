@@ -159,6 +159,10 @@ function commandsFunction (bot, targets) {
     dropAll()
   })
 
+  botWebsocket.on('findBed', () => {
+    findBed()
+  })
+
   botWebsocket.on('move', (to) => {
     const mineflayerPathfinder = require('mineflayer-pathfinder')
     const mcData = require('minecraft-data')(bot.version)
@@ -309,7 +313,7 @@ function commandsFunction (bot, targets) {
       maxDistance: 3
     })
 
-    if (bedBlock || bot.canSeeBlock(bedBlock)) {
+    if (bedBlock && bot.canSeeBlock(bedBlock)) {
       bot.activateBlock(bedBlock)
         .then(() => {
           // bot.chat('Found a bed!')
@@ -319,6 +323,7 @@ function commandsFunction (bot, targets) {
         })
     } else {
       // bot.chat('No nearby bed')
+      botWebsocket.log('No nearby bed')
     }
   }
 
