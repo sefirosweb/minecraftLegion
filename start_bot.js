@@ -34,6 +34,7 @@ function createNewBot (botName, botPassword = '') {
     console.log(reasonDecoded)
     process.exit()
   })
+
   bot.on('error', (error) => {
     botWebsocket.log('Error bot detected ' + JSON.stringify(error))
     console.log(error)
@@ -53,22 +54,7 @@ function createNewBot (botName, botPassword = '') {
       botWebsocket.emitFood(bot.food)
     })
 
-    botWebsocket.on('sendMessage', (message) => {
-      bot.chat(message)
-      botWebsocket.log(message)
-    })
-
     botWebsocket.log('Ready!')
-
-    botWebsocket.on('startInventory', (message) => {
-      inventoryViewer(bot, { port: message.port })
-      botWebsocket.log(`Started inventory web server at http://localhost:${message.port}`)
-    })
-
-    botWebsocket.on('startViewer', (message) => {
-      prismarineViewer.start(bot, message.port)
-      botWebsocket.log(`Started viewer web server at http://localhost:${message.port}`)
-    })
 
     const targets = {}
     const startState = new BehaviorIdle(targets)
@@ -127,15 +113,29 @@ function createNewBot (botName, botPassword = '') {
     const stateMachine = new BotStateMachine(bot, root)
 
     let webserver = {}
-    botWebsocket.on('startStateMachine', (message) => {
-      if (typeof webserver.isServerRunning !== 'function') {
-        webserver = new StateMachineWebserver(bot, stateMachine, message.port)
-      }
-      if (typeof webserver.isServerRunning === 'function') {
-        if (!webserver.isServerRunning()) {
-          webserver.startServer()
-        }
-        botWebsocket.log(`Started state machine web server at http://localhost:${webserver.port}`)
+
+    botWebsocket.on('action', toBotData => {
+      const { type, value } = toBotData
+      switch (type) {
+        case 'startInventory':
+          inventoryViewer(bot, { port: value.port })
+          botWebsocket.log(`Started inventory web server at http://localhost:${value.port}`)
+          break
+        case 'startViewer':
+          prismarineViewer.start(bot, value.port)
+          botWebsocket.log(`Started viewer web server at http://localhost:${value.port}`)
+          break
+        case 'startStateMachine':
+          if (typeof webserver.isServerRunning !== 'function') {
+            webserver = new StateMachineWebserver(bot, stateMachine, value.port)
+          }
+          if (typeof webserver.isServerRunning === 'function') {
+            if (!webserver.isServerRunning()) {
+              webserver.startServer()
+            }
+            botWebsocket.log(`Started state machine web server at http://localhost:${webserver.port}`)
+          }
+          break
       }
     })
   })

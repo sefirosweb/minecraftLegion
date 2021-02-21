@@ -24,7 +24,9 @@ module.exports = class BehaviorWithdrawItemChest {
     this.targets.items = []
     try {
       this.chest.removeAllListeners()
-    } catch (e) { }
+    } catch (e) {
+      console.log(e)
+    }
   }
 
   isFinished () {

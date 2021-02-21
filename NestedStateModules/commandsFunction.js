@@ -122,53 +122,43 @@ function commandsFunction (bot, targets) {
   }
 
   botWebsocket.on('action', toBotData => {
-    const { type } = toBotData
+    const { type, value } = toBotData
+
+    // Generic variables
+    let filter, entity
     switch (type) {
       case 'stay':
         botWebsocket.log('sendStay')
         stayTrigger()
         break
+      case 'follow':
+        followTrigger(value)
+        break
+      case 'endCommands':
+        endCommandsTrigger()
+        break
+      case 'interactWithPlayer':
+        filter = e => e.type === 'player' && e.position.distanceTo(bot.entity.position) < 3
+        entity = bot.nearestEntity(filter)
+        if (entity) { bot.useOn(entity) }
+        break
+      case 'interactWithBed':
+        findBed()
+        break
+      case 'tossAllItems':
+        dropAll()
+        break
+      case 'moveOneByOne':
+        moveTo(value)
+        break
+      case 'sendMessage':
+        bot.chat(value)
+        botWebsocket.log(value)
+        break
     }
   })
 
-  botWebsocket.on('sendFollow', (master) => {
-    followTrigger(master)
-  })
-
-  botWebsocket.on('sendEndCommands', () => {
-    botWebsocket.log('sendEndCommands')
-    endCommandsTrigger()
-  })
-
-  botWebsocket.on('sendStartWay', () => {
-    botWebsocket.log('sendStartWay')
-    startGetPoints()
-  })
-
-  botWebsocket.on('sendSavePatrol', () => {
-    botWebsocket.log('sendSavePatrol')
-    savePatrol()
-  })
-
-  botWebsocket.on('interact', () => {
-    const filter = e => e.type === 'player' &&
-      e.position.distanceTo(bot.entity.position) < 3 &&
-      e.mobType !== 'Armor Stand'
-    const entity = bot.nearestEntity(filter)
-    if (entity) {
-      bot.useOn(entity)
-    }
-  })
-
-  botWebsocket.on('drop', () => {
-    dropAll()
-  })
-
-  botWebsocket.on('findBed', () => {
-    findBed()
-  })
-
-  botWebsocket.on('move', (to) => {
+  const moveTo = (to) => {
     const mineflayerPathfinder = require('mineflayer-pathfinder')
     const mcData = require('minecraft-data')(bot.version)
 
@@ -209,7 +199,7 @@ function commandsFunction (bot, targets) {
     const movements = new mineflayerPathfinder.Movements(bot, mcData)
     pathfinder.setMovements(movements)
     pathfinder.setGoal(goal)
-  })
+  }
 
   function botChatCommandFunctionListener (username, message) {
     const findMaster = masters.find(e => e.name === username)
@@ -312,23 +302,31 @@ function commandsFunction (bot, targets) {
     }
   }
 
-  function findBed () {
-    const bedBlock = bot.findBlock({
+  async function findBed () {
+    const bed = bot.findBlock({
       matching: block => bot.isABed(block),
       maxDistance: 3
     })
 
-    if (bedBlock && bot.canSeeBlock(bedBlock)) {
-      bot.activateBlock(bedBlock)
-        .then(() => {
-          // bot.chat('Found a bed!')
-        })
-        .catch(err => {
-          console.log(err)
-        })
-    } else {
-      // bot.chat('No nearby bed')
-      botWebsocket.log('No nearby bed')
+    const isSleeping = () => {
+      botWebsocket.log('Set new bed point')
+      bot.removeListener('sleep', isSleeping)
+      setTimeout(() => {
+        bot.wake()
+      }, 500)
+    }
+
+    bot.on('sleep', isSleeping)
+
+    try {
+      if (bed) {
+        await bot.activateBlock(bed)
+      } else {
+        botWebsocket.log('No nearby bed')
+      }
+    } catch (err) {
+      botWebsocket.log(err.message)
+      bot.removeListener('sleep', isSleeping)
     }
   }
 

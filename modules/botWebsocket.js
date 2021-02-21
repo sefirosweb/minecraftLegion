@@ -59,17 +59,6 @@ function connect () {
     masters = mastersOnline
   })
 
-  socket.on('action', toBotData => {
-    const { value, type } = toBotData
-    console.log('action:', type)
-    switch (type) {
-      case 'reloadConfig':
-        break
-      case 'stay':
-        break
-    }
-  })
-
   socket.on('changeConfig', (config) => {
     let itemsToBeReady, patrol, index, temp, minerConfig, chests, itemsCanBeEat, findMaster, isEventLoaded
     switch (config.configToChange) {
