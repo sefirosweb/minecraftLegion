@@ -121,9 +121,14 @@ function commandsFunction (bot, targets) {
     transitions[2].trigger()
   }
 
-  botWebsocket.on('sendStay', () => {
-    botWebsocket.log('sendStay')
-    stayTrigger()
+  botWebsocket.on('action', toBotData => {
+    const { type } = toBotData
+    switch (type) {
+      case 'stay':
+        botWebsocket.log('sendStay')
+        stayTrigger()
+        break
+    }
   })
 
   botWebsocket.on('sendFollow', (master) => {

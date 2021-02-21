@@ -61,9 +61,11 @@ function connect () {
 
   socket.on('action', toBotData => {
     const { value, type } = toBotData
+    console.log('action:', type)
     switch (type) {
       case 'reloadConfig':
-        console.log(type)
+        break
+      case 'stay':
         break
     }
   })

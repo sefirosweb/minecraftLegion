@@ -80,15 +80,14 @@ function deathFunction (bot, targets) {
     botWebsocket.emitCombat(false)
   }
 
-  botWebsocket.on('sendStay', () => {
-    commandTrigger()
-  })
-
   botWebsocket.on('action', toBotData => {
     const { type } = toBotData
     switch (type) {
       case 'reloadConfig':
         reloadTrigger()
+        break
+      case 'stay':
+        commandTrigger()
         break
     }
   })
