@@ -55,8 +55,17 @@ function connect () {
     }
   })
 
-  socket.on('mastersOnline', (mastersOnline) => {
+  socket.on('mastersOnline', mastersOnline => {
     masters = mastersOnline
+  })
+
+  socket.on('action', toBotData => {
+    const { value, type } = toBotData
+    switch (type) {
+      case 'reloadConfig':
+        console.log(type)
+        break
+    }
   })
 
   socket.on('changeConfig', (config) => {

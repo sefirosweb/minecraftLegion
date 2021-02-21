@@ -27,6 +27,14 @@ function deathFunction (bot, targets) {
 
   const transitions = [
     new StateTransition({
+      parent: startWork,
+      child: startWork,
+      name: 'Reload config',
+      onTransition: () => botWebsocket.log('Reloading configuration'),
+      shouldTransition: () => false
+    }),
+
+    new StateTransition({
       parent: start,
       child: startWork,
       name: 'start -> startWork',
@@ -61,15 +69,28 @@ function deathFunction (bot, targets) {
     })
   ]
 
+  function reloadTrigger () {
+    transitions[0].trigger()
+  }
+
   function commandTrigger () {
     botWebsocket.log('sendStay')
-    transitions[1].trigger()
     transitions[2].trigger()
+    transitions[3].trigger()
     botWebsocket.emitCombat(false)
   }
 
   botWebsocket.on('sendStay', () => {
     commandTrigger()
+  })
+
+  botWebsocket.on('action', toBotData => {
+    const { type } = toBotData
+    switch (type) {
+      case 'reloadConfig':
+        reloadTrigger()
+        break
+    }
   })
 
   bot.on('chat', (master, message) => {
