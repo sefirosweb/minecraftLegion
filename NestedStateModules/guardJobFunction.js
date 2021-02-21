@@ -63,6 +63,7 @@ function guardJobFunction (bot, targets) {
   goToObject.stateName = 'Pick up item'
   goToObject.x = 725
   goToObject.y = 625
+  goToObject.movements = movements
 
   const findItem = new BehaviorFindItems(bot, targets)
   findItem.stateName = 'Find Item Dropped'
