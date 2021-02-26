@@ -2,7 +2,8 @@
 * Fixed small bug with inventory viewer
 * added script: npm run one BotName Password
   * Used for development, use a nodemon + ignorefire
-
+* Adding a Farmer Job!
+  * First version for easy harvest (potatoes, carrots..)
 
 
 
