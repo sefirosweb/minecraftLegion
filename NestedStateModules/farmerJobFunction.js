@@ -24,7 +24,7 @@ function farmerJobFunction (bot, targets) {
   getReady.y = 113
 
   const goChests = require('./goChestsFunctions')(bot, targets)
-  goChests.x = 325
+  goChests.x = 525
   goChests.y = 313
 
   const farming = require('./farmingFunction')(bot, targets)
@@ -72,8 +72,13 @@ function farmerJobFunction (bot, targets) {
     new StateTransition({
       parent: getReady,
       child: farming,
-      name: 'Start Job',
       shouldTransition: () => getReady.getIsReady() && bot.inventory.items().length < 34
+    }),
+
+    new StateTransition({
+      parent: farming,
+      child: goChests,
+      shouldTransition: () => farming.isFinished()
     })
   ]
 
