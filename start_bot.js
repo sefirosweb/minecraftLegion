@@ -14,8 +14,11 @@ const {
 } = require('mineflayer-statemachine')
 
 console.log('Usage : node start_bot.js <botName> <botPassword>')
-const botName = process.argv[2]
-const botPassword = process.argv[3]
+let botName = process.argv[2]
+let botPassword = process.argv[3]
+
+botName = process.argv[4] ? process.argv[4] : process.argv[2] // npm run one botname password
+botPassword = process.argv[5] ? process.argv[5] : process.argv[3] // npm run one botname password
 
 createNewBot(botName, botPassword)
 
