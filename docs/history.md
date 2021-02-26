@@ -1,3 +1,11 @@
+## 0.1.8
+* Fixed small bug with inventory viewer
+* added script: npm run one BotName Password
+  * Used for development, use a nodemon + ignorefire
+
+
+
+
 ## 0.1.7
 * Added find chest and interect (save a home bed)
   * With command line and front end
