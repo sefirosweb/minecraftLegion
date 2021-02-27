@@ -15,6 +15,7 @@ module.exports = class BehaviorLoadConfig {
     this.distance = 10
     this.patrol = []
     this.chests = []
+    this.plantAreas = []
     this.itemsCanBeEat = []
     this.itemsToBeReady = []
     this.minerCords = {}
@@ -33,6 +34,7 @@ module.exports = class BehaviorLoadConfig {
     this.itemsCanBeEat = botConfig.getItemsCanBeEat(this.bot.username)
     this.canDig = botConfig.getCanDig(this.bot.username)
     this.allowSprinting = botConfig.getAllowSprinting(this.bot.username)
+    this.plantAreas = botConfig.getPlantAreas(this.bot.username)
   }
 
   getJob () {
@@ -81,5 +83,9 @@ module.exports = class BehaviorLoadConfig {
 
   getAllowSprinting () {
     return this.allowSprinting
+  }
+
+  getPlantAreas () {
+    return this.plantAreas
   }
 }
