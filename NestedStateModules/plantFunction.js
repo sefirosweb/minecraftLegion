@@ -1,12 +1,14 @@
 const Vec3 = require('Vec3')
 const {
   StateTransition,
+  NestedStateMachine,
   BehaviorIdle,
   BehaviorMoveTo,
-  NestedStateMachine
+  BehaviorEquipItem
 } = require('mineflayer-statemachine')
 const BehaviorLoadConfig = require('./../BehaviorModules/BehaviorLoadConfig')
-const BehaviorCustomPlaceBlock = require('./../BehaviorModules/BehaviorCustomPlaceBlock ')
+const BehaviorCustomPlaceBlock = require('./../BehaviorModules/BehaviorCustomPlaceBlock')
+const BehaviorFertilize = require('./../BehaviorModules/BehaviorFertilize')
 const mineflayerPathfinder = require('mineflayer-pathfinder')
 let movements
 
@@ -17,18 +19,20 @@ function plantFunction (bot, targets) {
   movements = new mineflayerPathfinder.Movements(bot, mcData)
 
   let plantIsFinished = false
+  let blockToPlant
 
   function checkBlockToPlant () {
     const item = bot.inventory.items().find(item => targets.plantArea.plant === item.name)
-    const block = getBlockCanPlant()
+    blockToPlant = getBlockCanPlant()
 
-    if (block === undefined) {
+    if (blockToPlant === undefined) {
       plantIsFinished = true
       return
     }
 
     targets.item = item
-    targets.position = block.position
+    targets.position = blockToPlant.position.offset(0, 1, 0)
+    targets.block = blockToPlant
   }
 
   function getBlockCanPlant () {
@@ -44,7 +48,7 @@ function plantFunction (bot, targets) {
         if (blocksForPlant.includes(block.name)) {
           const upBlock = bot.blockAt(new Vec3(xCurrent, yLayer + 1, zCurrent))
           if (blockAir.includes(upBlock.name)) {
-            return upBlock
+            return block
           }
         }
       }
@@ -53,7 +57,7 @@ function plantFunction (bot, targets) {
     return undefined
   }
 
-  const start = new BehaviorIdle(targets)
+  const start = new BehaviorIdle()
   start.stateName = 'Start'
   start.x = 125
   start.y = 113
@@ -63,21 +67,41 @@ function plantFunction (bot, targets) {
   loadConfig.x = 325
   loadConfig.y = 113
 
-  const exit = new BehaviorIdle(targets)
+  const exit = new BehaviorIdle()
   exit.stateName = 'Exit'
+  exit.x = 125
+  exit.y = 313
 
   const goPlant = new BehaviorMoveTo(bot, targets)
   goPlant.stateName = 'Go Plant'
   goPlant.movements = movements
+  goPlant.x = 325
+  goPlant.y = 513
 
-  const checkArea = new BehaviorIdle(targets)
+  const checkArea = new BehaviorIdle()
   checkArea.stateName = 'Check Area for Plant'
+  checkArea.x = 525
+  checkArea.y = 113
 
-  const checkPlant = new BehaviorIdle(targets)
+  const checkPlant = new BehaviorIdle()
   checkPlant.stateName = 'Exsist Any Position To Plant'
+  checkPlant.x = 320
+  checkPlant.y = 313
 
-  const placePlant = new BehaviorCustomPlaceBlock(bot, targets)
-  placePlant.name = 'Place Plant'
+  const placePlant = new BehaviorCustomPlaceBlock(bot, targets, false)
+  placePlant.stateName = 'Place Plant'
+  placePlant.x = 750
+  placePlant.y = 175
+
+  const equipHoe = new BehaviorEquipItem(bot, targets)
+  equipHoe.stateName = 'Equip Hoe'
+  equipHoe.x = 525
+  equipHoe.y = 513
+
+  const fertilize = new BehaviorFertilize(bot, targets)
+  fertilize.stateName = 'Fertilize'
+  fertilize.x = 750
+  fertilize.y = 350
 
   const transitions = [
 
@@ -122,7 +146,25 @@ function plantFunction (bot, targets) {
     new StateTransition({
       parent: goPlant,
       child: placePlant,
-      shouldTransition: () => goPlant.isFinished()
+      shouldTransition: () => goPlant.isFinished() && blockToPlant.name === 'farmland'
+    }),
+
+    new StateTransition({
+      parent: goPlant,
+      child: fertilize,
+      onTransition: () => {
+        targets.position = targets.position.offset(0, -1, 0)
+      },
+      shouldTransition: () => goPlant.isFinished() && blockToPlant.name !== 'farmland'
+    }),
+
+    new StateTransition({
+      parent: fertilize,
+      child: placePlant,
+      onTransition: () => {
+        targets.position = targets.position.offset(0, 1, 0)
+      },
+      shouldTransition: () => fertilize.isFinished()
     }),
 
     new StateTransition({

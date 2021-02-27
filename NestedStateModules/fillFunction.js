@@ -6,7 +6,7 @@ const {
 } = require('mineflayer-statemachine')
 
 const BehaviorDigBlock = require('./../BehaviorModules/BehaviorDigBlock')
-const BehaviorCustomPlaceBlock = require('./../BehaviorModules/BehaviorCustomPlaceBlock ')
+const BehaviorCustomPlaceBlock = require('./../BehaviorModules/BehaviorCustomPlaceBlock')
 const BehaviorLoadConfig = require('./../BehaviorModules/BehaviorLoadConfig')
 
 const mineflayerPathfinder = require('mineflayer-pathfinder')

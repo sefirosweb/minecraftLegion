@@ -1,7 +1,7 @@
 const botWebsocket = require('../modules/botWebsocket')
 const vec3 = require('vec3')
 module.exports = class BehaviorCustomPlaceBlock {
-  constructor (bot, targets) {
+  constructor (bot, targets, canJump = true) {
     this.bot = bot
     this.targets = targets
     this.stateName = 'Custom BehaviorPlaceBlock '
@@ -10,6 +10,7 @@ module.exports = class BehaviorCustomPlaceBlock {
     this.isEndFinished = false
     this.itemNotFound = false
     this.cantPlaceBlock = false
+    this.canJump = canJump
   }
 
   isFinished () {
@@ -86,7 +87,8 @@ module.exports = class BehaviorCustomPlaceBlock {
         Math.floor(this.bot.entity.position.x) === block.position.x &&
         Math.floor(this.bot.entity.position.y) === block.position.y &&
         Math.floor(this.bot.entity.position.z) === block.position.z &&
-        this.isJumping === false
+        this.isJumping === false &&
+        this.canJump === true
       ) {
         this.isJumping = true
         this.bot.setControlState('jump', true)
@@ -124,7 +126,8 @@ module.exports = class BehaviorCustomPlaceBlock {
     if (
       Math.floor(this.bot.entity.position.x) === block.position.x &&
       Math.floor(this.bot.entity.position.y) === block.position.y &&
-      Math.floor(this.bot.entity.position.z) === block.position.z
+      Math.floor(this.bot.entity.position.z) === block.position.z &&
+      this.canJump
     ) {
       this.isJumping = true
       this.bot.setControlState('jump', true)

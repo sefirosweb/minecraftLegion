@@ -12,7 +12,7 @@ const BehaviorMinerCurrentBlock = require('./../BehaviorModules/BehaviorMinerCur
 const BehaviorDigBlock = require('./../BehaviorModules/BehaviorDigBlock')
 const BehaviorMinerChecks = require('./../BehaviorModules/BehaviorMinerChecks')
 const BehaviorEatFood = require('./../BehaviorModules/BehaviorEatFood')
-const BehaviorCustomPlaceBlock = require('./../BehaviorModules/BehaviorCustomPlaceBlock ')
+const BehaviorCustomPlaceBlock = require('./../BehaviorModules/BehaviorCustomPlaceBlock')
 
 const mineflayerPathfinder = require('mineflayer-pathfinder')
 let movements
