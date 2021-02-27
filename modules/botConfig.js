@@ -19,6 +19,7 @@ function getConn (botName) {
     itemsCanBeEat: [],
     chests: [],
     patrol: [],
+    plantAreas: [],
     minerCords: {
       xStart: null,
       yStart: null,
@@ -196,6 +197,16 @@ function setCopingPatrol (botName, status) {
   db.set('config.isCopingPatrol', status).write()
 }
 
+function getPlantAreas (botName) {
+  const db = getConn(botName)
+  return db.get('config.plantAreas').value()
+}
+
+function setPlantAreas (botName, chests) {
+  const db = getConn(botName)
+  db.set('config.plantAreas', chests).write()
+}
+
 module.exports = {
   getAll,
   setJob,
@@ -223,5 +234,7 @@ module.exports = {
   setCanDig,
   getCanDig,
   setAllowSprinting,
-  getAllowSprinting
+  getAllowSprinting,
+  getPlantAreas,
+  setPlantAreas
 }
