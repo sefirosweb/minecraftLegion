@@ -202,9 +202,20 @@ function getPlantAreas (botName) {
   return db.get('config.plantAreas').value()
 }
 
-function setPlantAreas (botName, chests) {
+function setPlantAreas (botName, plantAreas) {
+  const plantAreasConverted = plantAreas.map(plant => {
+    const copyPlant = {
+      plant: plant.plant,
+      yLayer: parseInt(plant.yLayer),
+      xStart: parseInt(plant.xStart),
+      xEnd: parseInt(plant.xEnd),
+      zStart: parseInt(plant.zStart),
+      zEnd: parseInt(plant.zEnd)
+    }
+    return copyPlant
+  })
   const db = getConn(botName)
-  db.set('config.plantAreas', chests).write()
+  db.set('config.plantAreas', plantAreasConverted).write()
 }
 
 module.exports = {
