@@ -110,7 +110,7 @@ function plantFunction (bot, targets) {
     new StateTransition({
       parent: checkPlant,
       child: exit,
-      shouldTransition: () => plantIsFinished
+      shouldTransition: () => plantIsFinished || bot.inventory.items().find(item => targets.plantArea.plant === item.name) === undefined
     }),
 
     new StateTransition({
