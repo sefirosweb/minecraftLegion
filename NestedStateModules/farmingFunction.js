@@ -27,15 +27,15 @@ function farmingFunction (bot, targets) {
   checkFarmingAreas.x = 525
   checkFarmingAreas.y = 113
 
-  const harvest = new BehaviorIdle(targets)
-  harvest.stateName = 'Harvest'
-  harvest.x = 425
-  harvest.y = 313
-
-  const plant = new BehaviorIdle(targets)
+  const plant = require('./plantFunction')(bot, targets)
   plant.stateName = 'Plant'
   plant.x = 625
   plant.y = 313
+
+  const harvest = require('./harvestFunction')(bot, targets)
+  harvest.stateName = 'Harvest'
+  harvest.x = 425
+  harvest.y = 313
 
   let plantArea = []
   let plantAreaIndex = 0
@@ -68,22 +68,23 @@ function farmingFunction (bot, targets) {
     new StateTransition({
       parent: checkFarmingAreas,
       child: harvest,
-      // onTransition: () => plantAreaIndex++,
-      onTransition: () => console.log(plantArea[plantAreaIndex].plant),
+      onTransition: () => {
+        targets.plantArea = plantArea[plantAreaIndex]
+      },
       shouldTransition: () => true
     }),
 
     new StateTransition({
       parent: harvest,
       child: plant,
-      shouldTransition: () => true
+      shouldTransition: () => harvest.isFinished()
     }),
 
     new StateTransition({
       parent: plant,
       child: checkFarmingAreas,
       onTransition: () => plantAreaIndex++,
-      shouldTransition: () => true
+      shouldTransition: () => plant.isFinished()
     })
 
   ]
