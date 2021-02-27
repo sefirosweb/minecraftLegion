@@ -130,7 +130,7 @@ function harvestFunction (bot, targets) {
     new StateTransition({
       parent: goPlant,
       child: harvestPlant,
-      shouldTransition: () => goPlant.isFinished() && !bot.pathfinder.isMining()
+      shouldTransition: () => goPlant.distanceToTarget() < 3 && !bot.pathfinder.isMining()
     }),
 
     new StateTransition({
