@@ -1,4 +1,5 @@
 const botWebsocket = require('../modules/botWebsocket')
+const { sleep } = require('../modules/utils')
 
 module.exports = class BehaviorDepositChest {
   constructor (bot, targets) {
@@ -8,24 +9,17 @@ module.exports = class BehaviorDepositChest {
     this.isEndFinished = false
 
     this.chest = false
-    this.indexItemsToDeposit = 0
-    this.inventory = require('../modules/inventoryModule')(this.bot)
   }
 
   onStateEntered () {
-    this.indexItemsToDeposit = 0
     this.isEndFinished = false
     botWebsocket.log('Items to deposit ' + JSON.stringify(this.targets.items))
     this.depositAllItems()
   }
 
   onStateExited () {
-    this.indexItemsToDeposit = 0
     this.isEndFinished = false
     this.targets.items = []
-    try {
-      this.chest.removeAllListeners()
-    } catch (e) { }
   }
 
   isFinished () {
@@ -47,35 +41,25 @@ module.exports = class BehaviorDepositChest {
     }
 
     this.chest = await this.bot.openChest(chestToOpen)
-
-    this.chest.on('close', () => {
-      setTimeout(() => {
-        this.isEndFinished = true
-      }, 500)
-    })
-
-    this.depositItems()
+    await sleep(200)
+    await this.depositItems()
+    await sleep(200)
+    await this.chest.close()
+    await sleep(500)
+    this.isEndFinished = true
   }
 
   async depositItems () {
-    const itemToDeposit = this.targets.items[this.indexItemsToDeposit]
-    if (this.targets.items.length <= this.indexItemsToDeposit) {
-      setTimeout(() => {
-        this.chest.close()
-      }, 500)
+    if (this.targets.items.length === 0) { return }
+    const itemToDeposit = this.targets.items.shift()
+
+    try {
+      await this.chest.deposit(itemToDeposit.type, null, itemToDeposit.quantity)
+    } catch (err) {
+      botWebsocket.log(JSON.stringify(err.message))
       return
     }
 
-    await this.depositToChest(itemToDeposit.type, itemToDeposit.quantity)
-    this.indexItemsToDeposit++
-    this.depositItems()
-  }
-
-  async depositToChest (itemType, quantity) {
-    try {
-      await this.chest.deposit(itemType, null, quantity)
-    } catch (err) {
-      botWebsocket.log(JSON.stringify(err))
-    }
+    await this.depositItems()
   }
 }
