@@ -60,8 +60,8 @@ function harvestFunction (bot, targets) {
       harvestIsFinished = true
       return
     }
-
-    targets.position = block.position
+    targets.digBlock = block
+    harvestIsFinished = false
   }
 
   const plantType = require('../modules/plantType')
@@ -78,7 +78,8 @@ function harvestFunction (bot, targets) {
       for (let xCurrent = xStart; xCurrent <= xEnd; xCurrent++) {
         for (let zCurrent = zStart; zCurrent <= zEnd; zCurrent++) {
           const block = bot.blockAt(new Vec3(xCurrent, yLayer, zCurrent), true)
-          if (block.name.includes(plant) && block.metadata === 7) {
+          if (block.name.includes(plant) && block.metadata === plantType[plant].age) {
+            targets.position = new Vec3(block.position.x, yLayer, block.position.z)
             return block
           }
         }
@@ -90,7 +91,22 @@ function harvestFunction (bot, targets) {
         for (let zCurrent = zStart - 1; zCurrent <= zEnd + 1; zCurrent++) {
           const block = bot.blockAt(new Vec3(xCurrent, yLayer, zCurrent), true)
           if (block.name === plant) {
+            targets.position = new Vec3(block.position.x, yLayer, block.position.z)
             return block
+          }
+        }
+      }
+    }
+
+    if (plantType[plant].type === 'tree') {
+      for (let xCurrent = xStart - 2; xCurrent <= xEnd + 2; xCurrent++) {
+        for (let zCurrent = zStart - 2; zCurrent <= zEnd + 2; zCurrent++) {
+          for (let yCurrent = yLayer; yCurrent <= yLayer + 5; yCurrent++) {
+            const block = bot.blockAt(new Vec3(xCurrent, yCurrent, zCurrent), true)
+            if (block.name.includes('log') || block.name.includes('leaves')) {
+              targets.position = new Vec3(block.position.x, yLayer, block.position.z)
+              return block
+            }
           }
         }
       }
@@ -145,7 +161,10 @@ function harvestFunction (bot, targets) {
     new StateTransition({
       parent: goPlant,
       child: harvestPlant,
-      shouldTransition: () => goPlant.distanceToTarget() < 3 && !bot.pathfinder.isMining()
+      onTransition: () => {
+        targets.position = targets.digBlock.position.clone()
+      },
+      shouldTransition: () => bot.canDigBlock(targets.digBlock) && !bot.pathfinder.isMining()
     }),
 
     new StateTransition({

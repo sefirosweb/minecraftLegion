@@ -71,6 +71,20 @@ function plantFunction (bot, targets) {
       }
     }
 
+    if (plantType[plant].type === 'tree') {
+      for (let xCurrent = xStart; xCurrent <= xEnd; xCurrent += 2) {
+        for (let zCurrent = zStart; zCurrent <= zEnd; zCurrent += 2) {
+          const block = bot.blockAt(new Vec3(xCurrent, yLayer, zCurrent))
+          if (blocksForPlant.includes(block.name)) {
+            const upBlock = bot.blockAt(new Vec3(xCurrent, yLayer + 1, zCurrent))
+            if (blockAir.includes(upBlock.name)) {
+              return block
+            }
+          }
+        }
+      }
+    }
+
     return undefined
   }
 
@@ -163,7 +177,7 @@ function plantFunction (bot, targets) {
     new StateTransition({
       parent: goPlant,
       child: placePlant,
-      shouldTransition: () => goPlant.distanceToTarget() < 3 && blockToPlant.name === 'farmland'
+      shouldTransition: () => goPlant.distanceToTarget() < 3 && (blockToPlant.name === 'farmland' || plantType[targets.plantArea.plant].type === 'tree')
     }),
 
     new StateTransition({
@@ -172,7 +186,7 @@ function plantFunction (bot, targets) {
       onTransition: () => {
         targets.position = targets.position.offset(0, -1, 0)
       },
-      shouldTransition: () => goPlant.distanceToTarget() < 3 && blockToPlant.name !== 'farmland'
+      shouldTransition: () => goPlant.distanceToTarget() < 3 && blockToPlant.name !== 'farmland' && plantType[targets.plantArea.plant].type !== 'tree'
     }),
 
     new StateTransition({

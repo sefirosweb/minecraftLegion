@@ -1,6 +1,7 @@
 ## 0.1.9
 # Added in farmerjob new plants
   * Wheat + Melon + Pumpkin
+  * Added all sapling trees
 ## 0.1.8
 * Fixed small bug with inventory viewer
 * added script: npm run one BotName Password
