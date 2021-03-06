@@ -1,6 +1,5 @@
 const config = require('./config')
-// const mineflayer = require('mineflayer')
-const mineflayer = require('../mineflayer')
+const mineflayer = require('mineflayer')
 const customEvents = require('./modules/customEvents')
 const botWebsocket = require('./modules/botWebsocket')
 const inventoryViewer = require('mineflayer-web-inventory')
@@ -117,16 +116,6 @@ function createNewBot (botName, botPassword = '') {
     const stateMachine = new BotStateMachine(bot, root)
 
     let webserver = {}
-
-    if (typeof webserver.isServerRunning !== 'function') {
-      webserver = new StateMachineWebserver(bot, stateMachine, 4125)
-    }
-    if (typeof webserver.isServerRunning === 'function') {
-      if (!webserver.isServerRunning()) {
-        webserver.startServer()
-      }
-      botWebsocket.log(`Started state machine web server at http://localhost:${4125}`)
-    }
 
     botWebsocket.on('action', toBotData => {
       const { type, value } = toBotData
