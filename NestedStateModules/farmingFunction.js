@@ -29,16 +29,18 @@ function farmingFunction (bot, targets) {
 
   const plant = require('./plantFunction')(bot, targets)
   plant.stateName = 'Plant'
-  plant.x = 625
+  plant.x = 725
   plant.y = 313
 
   const harvest = require('./harvestFunction')(bot, targets)
   harvest.stateName = 'Harvest'
-  harvest.x = 425
+  harvest.x = 325
   harvest.y = 313
 
   const findItemsAndPickup = require('./findItemsAndPickup')(bot, targets)
   findItemsAndPickup.stateName = 'Find Items'
+  findItemsAndPickup.x = 525
+  findItemsAndPickup.y = 313
 
   let plantArea = []
   let plantAreaIndex = 0

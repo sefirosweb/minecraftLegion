@@ -22,16 +22,24 @@ function findItemsAndPickup (bot, targets) {
 
   const exit = new BehaviorIdle(targets)
   exit.stateName = 'Exit'
+  exit.x = 125
+  exit.y = 313
 
   const findItem = new BehaviorFindItems(bot, targets)
   findItem.stateName = 'Find Items'
+  findItem.x = 325
+  findItem.y = 313
 
   const goToObject = new BehaviorMoveTo(bot, targets)
   goToObject.stateName = 'Pick up item'
+  goToObject.x = 525
+  goToObject.y = 313
   goToObject.movements = movements
 
   const loadConfig = new BehaviorLoadConfig(bot, targets)
   loadConfig.stateName = 'Load Bot Config'
+  loadConfig.x = 325
+  loadConfig.y = 113
 
   const transitions = [
 
@@ -58,7 +66,6 @@ function findItemsAndPickup (bot, targets) {
       child: goToObject,
       onTransition: () => {
         targets.position = targets.itemDrop.position.offset(0, 0.2, 0).clone()
-        console.log(targets.position)
       },
       shouldTransition: () => findItem.isFinished() && targets.itemDrop !== undefined
     }),
