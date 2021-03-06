@@ -31,9 +31,7 @@ module.exports = function (bot, targets) {
       if (entities.length > 0) {
         const validEntity = getValidPath(entities[currentEntity])
         if (validEntity) {
-          const blockPosition = {
-            position: entities[currentEntity].position.offset(0, entities[currentEntity].height, 0)
-          }
+          const blockPosition = bot.blockAt(entities[currentEntity].position.offset(0, entities[currentEntity].height, 0))
           if (bot.canSeeBlock(blockPosition)) {
             targets.entity = entities[currentEntity]
           }
