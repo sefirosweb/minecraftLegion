@@ -1,12 +1,12 @@
+## 0.1.9
+# Added in farmerjob new plants
+  * Wheat + Melon + Pumpkin
 ## 0.1.8
 * Fixed small bug with inventory viewer
 * added script: npm run one BotName Password
   * Used for development, use a nodemon + ignorefire
 * Adding a Farmer Job!
   * First version for easy harvest (potatoes, carrots..)
-
-
-
 ## 0.1.7
 * Added find chest and interect (save a home bed)
   * With command line and front end
@@ -14,8 +14,6 @@
 * Adding enable / disable dig (!caution the bot can stucks)
 * Adding reloading configuration button
 * Unify botWebsocket.on(XX events) to botWebsocket.on('action')
-
-
 ## 0.1.6
 * Added security on WebSocket with password (see config_example.js)
 * Added frontend configuration!
@@ -30,7 +28,6 @@
 ## 0.1.5
 * Added miner job!
 * Fixed some combat bugs
-
 ## 0.1.4
 * Fixed some bugs
 * Polymorfed function BehaviorGetReady
@@ -41,7 +38,6 @@
 * Added websocket conection
 * Added auto eat food
 * Added chest for food
-
 ## 0.1.1
 * Added sockets for communicating all bots between server
 * Web logs of all bots at the same time
@@ -50,7 +46,6 @@
 * Added config_example.js
 * Fixed bug on events
 * Now is a stable version for the first job
-
 ## 0.1.0
 * Start project
 * Bot based on mineflayer and its dependencies
