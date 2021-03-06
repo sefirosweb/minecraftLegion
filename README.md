@@ -76,7 +76,7 @@ For mining xyz_start  xyz_end  start_horientantion  vertically / horizontalle
 set miner x y z x y z x+ horizontally
 
 # TODO
-- Fix inventory viewer ( is a bug of old socket version)
+- Fix a bug when usie a mineflayer-web-inventory, they breaks "chest" functions
 - Make an Archer Job ( During how to have this behavior similar to guard job? )
 - Make a Farmer Job ( Placing carrots, potatoes? need to think a lot )
 - Make a Woodcutter Job ( Placing trees)

@@ -117,16 +117,6 @@ function createNewBot (botName, botPassword = '') {
 
     let webserver = {}
 
-    if (typeof webserver.isServerRunning !== 'function') {
-      webserver = new StateMachineWebserver(bot, stateMachine, 4125)
-    }
-    if (typeof webserver.isServerRunning === 'function') {
-      if (!webserver.isServerRunning()) {
-        webserver.startServer()
-      }
-      botWebsocket.log(`Started state machine web server at http://localhost:${4125}`)
-    }
-
     botWebsocket.on('action', toBotData => {
       const { type, value } = toBotData
       switch (type) {
