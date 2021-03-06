@@ -62,10 +62,9 @@ function harvestFunction (bot, targets) {
     }
 
     targets.position = block.position
-
-    // console.log(block)
-    // console.log('finished')
   }
+
+  const plantType = require('../modules/plantType')
 
   function getPlantBlock () {
     const xStart = targets.plantArea.xStart < targets.plantArea.xEnd ? targets.plantArea.xStart : targets.plantArea.xEnd
@@ -75,11 +74,24 @@ function harvestFunction (bot, targets) {
     const yLayer = targets.plantArea.yLayer + 1
     const plant = targets.plantArea.plant
 
-    for (let xCurrent = xStart; xCurrent <= xEnd; xCurrent++) {
-      for (let zCurrent = zStart; zCurrent <= zEnd; zCurrent++) {
-        const block = bot.blockAt(new Vec3(xCurrent, yLayer, zCurrent), true)
-        if (block.name.includes(plant) && block.metadata === 7) {
-          return block
+    if (plantType[plant].type === 'normal') {
+      for (let xCurrent = xStart; xCurrent <= xEnd; xCurrent++) {
+        for (let zCurrent = zStart; zCurrent <= zEnd; zCurrent++) {
+          const block = bot.blockAt(new Vec3(xCurrent, yLayer, zCurrent), true)
+          if (block.name.includes(plant) && block.metadata === 7) {
+            return block
+          }
+        }
+      }
+    }
+
+    if (plantType[plant].type === 'melon') {
+      for (let xCurrent = xStart - 1; xCurrent <= xEnd + 1; xCurrent++) {
+        for (let zCurrent = zStart - 1; zCurrent <= zEnd + 1; zCurrent++) {
+          const block = bot.blockAt(new Vec3(xCurrent, yLayer, zCurrent), true)
+          if (block.name === plant) {
+            return block
+          }
         }
       }
     }
@@ -92,6 +104,9 @@ function harvestFunction (bot, targets) {
     new StateTransition({
       parent: start,
       child: loadConfig,
+      onTransition: () => {
+        console.log(targets.plantArea.plant)
+      },
       shouldTransition: () => true
     }),
 

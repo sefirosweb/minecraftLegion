@@ -13,6 +13,7 @@ const mineflayerPathfinder = require('mineflayer-pathfinder')
 let movements
 
 function plantFunction (bot, targets) {
+  const plantType = require('../modules/plantType')
   const blocksForPlant = ['dirt', 'grass_block', 'farmland']
   const blockAir = ['air', 'cave_air']
   const mcData = require('minecraft-data')(bot.version)
@@ -22,7 +23,6 @@ function plantFunction (bot, targets) {
   let blockToPlant
 
   function checkBlockToPlant () {
-    const item = bot.inventory.items().find(item => targets.plantArea.plant === item.name)
     blockToPlant = getBlockCanPlant()
 
     if (blockToPlant === undefined) {
@@ -30,7 +30,7 @@ function plantFunction (bot, targets) {
       return
     }
 
-    targets.item = item
+    targets.item = bot.inventory.items().find(item => plantType[targets.plantArea.plant].seed === item.name)
     targets.position = blockToPlant.position.offset(0, 1, 0)
     targets.block = blockToPlant
   }
@@ -41,14 +41,31 @@ function plantFunction (bot, targets) {
     const zStart = targets.plantArea.zStart < targets.plantArea.zEnd ? targets.plantArea.zStart : targets.plantArea.zEnd
     const zEnd = targets.plantArea.zStart > targets.plantArea.zEnd ? targets.plantArea.zStart : targets.plantArea.zEnd
     const yLayer = targets.plantArea.yLayer
+    const plant = targets.plantArea.plant
 
-    for (let xCurrent = xStart; xCurrent <= xEnd; xCurrent++) {
-      for (let zCurrent = zStart; zCurrent <= zEnd; zCurrent++) {
-        const block = bot.blockAt(new Vec3(xCurrent, yLayer, zCurrent))
-        if (blocksForPlant.includes(block.name)) {
-          const upBlock = bot.blockAt(new Vec3(xCurrent, yLayer + 1, zCurrent))
-          if (blockAir.includes(upBlock.name)) {
-            return block
+    if (plantType[plant].type === 'normal') {
+      for (let xCurrent = xStart; xCurrent <= xEnd; xCurrent++) {
+        for (let zCurrent = zStart; zCurrent <= zEnd; zCurrent++) {
+          const block = bot.blockAt(new Vec3(xCurrent, yLayer, zCurrent))
+          if (blocksForPlant.includes(block.name)) {
+            const upBlock = bot.blockAt(new Vec3(xCurrent, yLayer + 1, zCurrent))
+            if (blockAir.includes(upBlock.name)) {
+              return block
+            }
+          }
+        }
+      }
+    }
+
+    if (plantType[plant].type === 'melon') {
+      for (let xCurrent = xStart; xCurrent <= xEnd; xCurrent += 2) {
+        for (let zCurrent = zStart; zCurrent <= zEnd; zCurrent++) {
+          const block = bot.blockAt(new Vec3(xCurrent, yLayer, zCurrent))
+          if (blocksForPlant.includes(block.name)) {
+            const upBlock = bot.blockAt(new Vec3(xCurrent, yLayer + 1, zCurrent))
+            if (blockAir.includes(upBlock.name)) {
+              return block
+            }
           }
         }
       }
@@ -134,7 +151,7 @@ function plantFunction (bot, targets) {
     new StateTransition({
       parent: checkPlant,
       child: exit,
-      shouldTransition: () => plantIsFinished || bot.inventory.items().find(item => targets.plantArea.plant === item.name) === undefined
+      shouldTransition: () => plantIsFinished || targets.item === undefined
     }),
 
     new StateTransition({
