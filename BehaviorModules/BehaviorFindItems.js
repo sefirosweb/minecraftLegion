@@ -10,7 +10,15 @@ module.exports = class BehaviorFindItems {
   }
 
   onStateEntered () {
+    this.targets.itemDrop = undefined
     this.isEndFinished = false
+    if (this.checkInventorySpace() <= 3) {
+      this.isEndFinished = true
+      return
+    }
+
+    this.search()
+    this.isEndFinished = true
   }
 
   onStateExited () {

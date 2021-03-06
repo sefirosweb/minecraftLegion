@@ -37,6 +37,9 @@ function farmingFunction (bot, targets) {
   harvest.x = 425
   harvest.y = 313
 
+  const findItemsAndPickup = require('./findItemsAndPickup')(bot, targets)
+  findItemsAndPickup.stateName = 'Find Items'
+
   let plantArea = []
   let plantAreaIndex = 0
 
@@ -76,8 +79,14 @@ function farmingFunction (bot, targets) {
 
     new StateTransition({
       parent: harvest,
-      child: plant,
+      child: findItemsAndPickup,
       shouldTransition: () => harvest.isFinished()
+    }),
+
+    new StateTransition({
+      parent: findItemsAndPickup,
+      child: plant,
+      shouldTransition: () => findItemsAndPickup.isFinished()
     }),
 
     new StateTransition({
