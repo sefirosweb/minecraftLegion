@@ -139,7 +139,7 @@ function guardJobFunction (bot, targets) {
       child: goToObject,
       name: 'patrol -> goToObject',
       onTransition: () => {
-        targets.position = targets.itemDrop.position.clone()
+        targets.position = targets.itemDrop.position.offset(0, 0.2, 0).clone()
       },
       shouldTransition: () => findItem.search() && findItem.checkInventorySpace() > 3
     }),
@@ -154,7 +154,7 @@ function guardJobFunction (bot, targets) {
         }
 
         if (targets.position.distanceTo(targets.itemDrop.position) > 1) {
-          targets.position = targets.itemDrop.position.clone()
+          targets.position = targets.itemDrop.position.offset(0, 0.2, 0).clone()
           goToObject.restart()
         }
 
