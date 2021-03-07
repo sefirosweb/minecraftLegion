@@ -74,12 +74,18 @@ to finish commands
 
 For mining xyz_start  xyz_end  start_horientantion  vertically / horizontalle
 set miner x y z x y z x+ horizontally
-
+# Current Jobs
+- Guard
+  * Do a patrol for look near enemies
+- Miner
+  * Make a tunel or hole
+- Farmer
+  * Do placing plants and sapling trees
+  * Potatoes, Carrots, Wheat, Melon, Pumpkin
+  * Sapling Trees -> Woodcutter
 # TODO
 - Fix a bug when usie a mineflayer-web-inventory, they breaks "chest" functions
 - Make an Archer Job ( During how to have this behavior similar to guard job? )
-- Make a Farmer Job ( Placing carrots, potatoes? need to think a lot )
-- Make a Woodcutter Job ( Placing trees)
 - Optimize combat Guard Job ( combat creepers, PVP, destroy shields)
 - Check day/night for sleep any sleep function?
 - Add Job builder! based on mineflayer-builder & Schematichs
@@ -87,5 +93,7 @@ set miner x y z x y z x+ horizontally
 - Check some bugs with mining job when have a too many lava or water
 - Add a robust documentation =P
 - Think about chat commands, currently it is faster / comfortable with the front end, but if anyone wants to configure all boot via chat commands?
+- Add animal farmer
+- Add back guard
 
 Please keep calm. I'm working hard on this project :D
