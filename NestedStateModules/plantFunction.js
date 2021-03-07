@@ -47,7 +47,7 @@ function plantFunction (bot, targets) {
       for (let xCurrent = xStart; xCurrent <= xEnd; xCurrent++) {
         for (let zCurrent = zStart; zCurrent <= zEnd; zCurrent++) {
           const block = bot.blockAt(new Vec3(xCurrent, yLayer, zCurrent))
-          if (blocksForPlant.includes(block.name)) {
+          if (block && blocksForPlant.includes(block.name)) {
             const upBlock = bot.blockAt(new Vec3(xCurrent, yLayer + 1, zCurrent))
             if (blockAir.includes(upBlock.name)) {
               return block
