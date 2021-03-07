@@ -6,6 +6,7 @@ const {
 
 const BehaviorLoadConfig = require('./../BehaviorModules/BehaviorLoadConfig')
 const BehaviorGetReady = require('./../BehaviorModules/BehaviorGetReady')
+const BehaviorEatFood = require('./../BehaviorModules/BehaviorEatFood')
 
 function farmerJobFunction (bot, targets) {
   const start = new BehaviorIdle(targets)
@@ -22,6 +23,9 @@ function farmerJobFunction (bot, targets) {
   getReady.stateName = 'Get Ready for Patrol'
   getReady.x = 525
   getReady.y = 113
+
+  const eatFood = new BehaviorEatFood(bot, targets)
+  eatFood.stateName = 'Eat Food'
 
   const goChests = require('./goChestsFunctions')(bot, targets)
   goChests.x = 525
@@ -48,7 +52,7 @@ function farmerJobFunction (bot, targets) {
 
         // movements.allowSprinting = loadConfig.getAllowSprinting(bot.username)
         // movements.canDig = loadConfig.getCanDig(bot.username)
-
+        eatFood.setFoods(loadConfig.getItemsCanBeEat())
         getReady.setItemsToBeReady(loadConfig.getItemsToBeReady())
         // eatFood.setFoods(loadConfig.getItemsCanBeEat())
         // eatFoodCombat.setFoods(loadConfig.getItemsCanBeEat())
@@ -71,8 +75,14 @@ function farmerJobFunction (bot, targets) {
 
     new StateTransition({
       parent: getReady,
-      child: farming,
+      child: eatFood,
       shouldTransition: () => getReady.getIsReady() && bot.inventory.items().length < 34
+    }),
+
+    new StateTransition({
+      parent: eatFood,
+      child: farming,
+      shouldTransition: () => eatFood.isFinished()
     }),
 
     new StateTransition({
