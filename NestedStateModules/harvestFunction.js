@@ -1,4 +1,4 @@
-const Vec3 = require('Vec3')
+const Vec3 = require('vec3')
 
 const {
   StateTransition,

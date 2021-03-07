@@ -1,3 +1,7 @@
+## 1.0.0
+* Realease a usable version
+* Fixed vec3 package
+
 ## 0.1.9
 # Added in farmerjob new plants
   * Wheat + Melon + Pumpkin
