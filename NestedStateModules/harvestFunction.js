@@ -120,9 +120,6 @@ function harvestFunction (bot, targets) {
     new StateTransition({
       parent: start,
       child: loadConfig,
-      onTransition: () => {
-        console.log(targets.plantArea.plant)
-      },
       shouldTransition: () => true
     }),
 
