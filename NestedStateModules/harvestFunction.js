@@ -78,7 +78,7 @@ function harvestFunction (bot, targets) {
       for (let xCurrent = xStart; xCurrent <= xEnd; xCurrent++) {
         for (let zCurrent = zStart; zCurrent <= zEnd; zCurrent++) {
           const block = bot.blockAt(new Vec3(xCurrent, yLayer, zCurrent), true)
-          if (block.name.includes(plant) && block.metadata === plantType[plant].age) {
+          if (block && block.name.includes(plant) && block.metadata === plantType[plant].age) {
             targets.position = new Vec3(block.position.x, yLayer, block.position.z)
             return block
           }
