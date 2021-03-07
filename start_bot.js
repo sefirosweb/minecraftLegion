@@ -34,11 +34,13 @@ function createNewBot (botName, botPassword = '') {
     process.exit()
   })
 
-  bot.once('spawn', () => {
+  bot.once('spawn', async () => {
     console.log(bot.version)
     botWebsocket.connect()
     botWebsocket.log('Ready!')
 
+    const customStart = require('./custom_start/custom')(bot)
+    await customStart.start()
     require('./NestedStateModules/startStateMachine')(bot)
   })
 }
