@@ -7,8 +7,6 @@ function startBot (botName, password) {
     if (err) {
       console.log(`Error: ${err}`)
       console.log(`Bot broken: ${botName}`)
-      console.log(`Restarting bot ${botName}...`)
-      setTimeout(() => startBot(botName, password), 1000)
       return
     }
 
