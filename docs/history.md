@@ -1,6 +1,7 @@
 ## 1.0.0
 * Realease a usable version
 * Fixed vec3 package
+* Some servers request a login or custom actions, added "custom start bot" do it your self
 
 ## 0.1.9
 # Added in farmerjob new plants
