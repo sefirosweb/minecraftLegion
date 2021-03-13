@@ -50,3 +50,7 @@ Para inspeccionar que contenedores están conectado a la red de docker
 ```
 docker inspect nombreDeLaRed 
 ```
+Para levantar el grupo de contenedores con docker-compose.yml
+```
+docker-compose up -d
+```
