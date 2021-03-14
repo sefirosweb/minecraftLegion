@@ -4,13 +4,21 @@ services:
   app:
     image: minecraftlegion
     environment:
-      MONGO_URL: "mongodb://db:27017/minecraftlegion"
+      MONGO_URL: "mongodb://database:27017/botConfigDatabase"
     depends_on:
-      - db
-    ports:
-      - 3000:3000
-  
-  db:
+      - database
+      - server
+      - web
+
+  database:
     image: mongo
     ports:
-      - 27017:27017
+      - "27017:27017"
+  server:
+    image: minecraftlegionwebserver
+    ports:
+      - "4001:4001"
+  web:
+    image: minecraftlegionwebclient
+    ports:
+      - "3000:3000"
