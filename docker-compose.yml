@@ -2,6 +2,7 @@ version: "3.8"
 
 services:
   app:
+    container_name: minecraftlegion
     image: minecraftlegion
     environment:
       MONGO_URL: "mongodb://database:27017/botConfigDatabase"
@@ -11,14 +12,17 @@ services:
       - web
 
   database:
+    container_name: minecraftlegiondatabase
     image: mongo
     ports:
       - "27017:27017"
   server:
+    container_name: minecraftlegionwebserver
     image: minecraftlegionwebserver
     ports:
       - "4001:4001"
   web:
+    container_name: minecraftlegionwebclient
     image: minecraftlegionwebclient
     ports:
       - "3000:3000"

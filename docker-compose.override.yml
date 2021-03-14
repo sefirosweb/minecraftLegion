@@ -2,11 +2,9 @@ version: "3.8"
 
 services:
   app:
-    container_name: minecraftlegion
     build: ./
 
   server:
-    container_name: minecraftlegionwebserver
     build: ../minecraftlegionwebserver
     command: npx nodemon -L index.js
     volumes:
@@ -14,7 +12,6 @@ services:
       - /usr/src/node_modules
 
   web:
-    container_name: minecraftlegionwebclient
     build: ../minecraftlegionwebclient
     volumes:
       - ../minecraftlegionwebclient:/usr/src

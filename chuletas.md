@@ -54,3 +54,11 @@ Para levantar el grupo de contenedores con docker-compose.yml
 ```
 docker-compose up -d
 ```
+Borrar las redes discos y contenedores no usados
+```
+minecraftlegionwebclient
+```
+Ver consumo de docker
+```
+docker stats
+```
