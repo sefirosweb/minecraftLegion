@@ -7,6 +7,7 @@ const {
 const BehaviorLoadConfig = require('./../BehaviorModules/BehaviorLoadConfig')
 
 function farmingFunction (bot, targets) {
+  const plantType = require('../modules/plantType')
   const start = new BehaviorIdle(targets)
   start.stateName = 'Start'
   start.x = 125
@@ -27,20 +28,11 @@ function farmingFunction (bot, targets) {
   checkFarmingAreas.x = 525
   checkFarmingAreas.y = 113
 
-  const plant = require('./plantFunction')(bot, targets)
-  plant.stateName = 'Plant'
-  plant.x = 725
-  plant.y = 313
+  const farmingPlantsFunction = require('./farmingPlantsFunction')(bot, targets)
+  farmingPlantsFunction.stateName = 'Farm Plants'
 
-  const harvest = require('./harvestFunction')(bot, targets)
-  harvest.stateName = 'Harvest'
-  harvest.x = 325
-  harvest.y = 313
-
-  const findItemsAndPickup = require('./findItemsAndPickup')(bot, targets)
-  findItemsAndPickup.stateName = 'Find Items'
-  findItemsAndPickup.x = 525
-  findItemsAndPickup.y = 313
+  const farmingTreesFunction = require('./farmingTreesFunction')(bot, targets)
+  farmingTreesFunction.stateName = 'Farm Trees'
 
   let plantArea = []
   let plantAreaIndex = 0
@@ -72,30 +64,34 @@ function farmingFunction (bot, targets) {
 
     new StateTransition({
       parent: checkFarmingAreas,
-      child: harvest,
+      child: farmingPlantsFunction,
       onTransition: () => {
         targets.plantArea = plantArea[plantAreaIndex]
       },
-      shouldTransition: () => true
+      shouldTransition: () => plantType[plantArea[plantAreaIndex].plant].type === 'normal'
     }),
 
     new StateTransition({
-      parent: harvest,
-      child: findItemsAndPickup,
-      shouldTransition: () => harvest.isFinished()
+      parent: checkFarmingAreas,
+      child: farmingTreesFunction,
+      onTransition: () => {
+        targets.plantArea = plantArea[plantAreaIndex]
+      },
+      shouldTransition: () => plantType[plantArea[plantAreaIndex].plant].type === 'tree'
     }),
 
     new StateTransition({
-      parent: findItemsAndPickup,
-      child: plant,
-      shouldTransition: () => findItemsAndPickup.isFinished()
-    }),
-
-    new StateTransition({
-      parent: plant,
+      parent: farmingPlantsFunction,
       child: checkFarmingAreas,
       onTransition: () => plantAreaIndex++,
-      shouldTransition: () => plant.isFinished()
+      shouldTransition: () => farmingPlantsFunction.isFinished()
+    }),
+
+    new StateTransition({
+      parent: farmingTreesFunction,
+      child: checkFarmingAreas,
+      onTransition: () => plantAreaIndex++,
+      shouldTransition: () => farmingTreesFunction.isFinished()
     })
 
   ]

@@ -148,6 +148,7 @@ function plantFunction (bot, targets) {
       onTransition: () => {
         movements.allowSprinting = loadConfig.getAllowSprinting(bot.username)
         movements.canDig = loadConfig.getCanDig(bot.username)
+        movements.blocksToAvoid.delete(152)
         plantIsFinished = false
       },
       shouldTransition: () => true
