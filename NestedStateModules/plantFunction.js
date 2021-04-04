@@ -10,14 +10,12 @@ const BehaviorLoadConfig = require('./../BehaviorModules/BehaviorLoadConfig')
 const BehaviorCustomPlaceBlock = require('./../BehaviorModules/BehaviorCustomPlaceBlock')
 const BehaviorFertilize = require('./../BehaviorModules/BehaviorFertilize')
 const mineflayerPathfinder = require('mineflayer-pathfinder')
-let movements
 
 function plantFunction (bot, targets) {
   const plantType = require('../modules/plantType')
   const blocksForPlant = ['dirt', 'grass_block', 'farmland']
   const blockAir = ['air', 'cave_air']
   const mcData = require('minecraft-data')(bot.version)
-  movements = new mineflayerPathfinder.Movements(bot, mcData)
 
   let plantIsFinished = false
   let blockToPlant
@@ -105,7 +103,7 @@ function plantFunction (bot, targets) {
 
   const goPlant = new BehaviorMoveTo(bot, targets)
   goPlant.stateName = 'Go Plant'
-  goPlant.movements = movements
+  goPlant.movements = targets.movements
   goPlant.x = 325
   goPlant.y = 513
 
@@ -146,9 +144,6 @@ function plantFunction (bot, targets) {
       parent: loadConfig,
       child: checkArea,
       onTransition: () => {
-        movements.allowSprinting = loadConfig.getAllowSprinting(bot.username)
-        movements.canDig = loadConfig.getCanDig(bot.username)
-        movements.blocksToAvoid.delete(152)
         plantIsFinished = false
       },
       shouldTransition: () => true

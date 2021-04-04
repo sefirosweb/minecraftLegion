@@ -50,8 +50,6 @@ function farmerJobFunction (bot, targets) {
       onTransition: () => {
         targets.entity = undefined
 
-        // movements.allowSprinting = loadConfig.getAllowSprinting(bot.username)
-        // movements.canDig = loadConfig.getCanDig(bot.username)
         eatFood.setFoods(loadConfig.getItemsCanBeEat())
         getReady.setItemsToBeReady(loadConfig.getItemsToBeReady())
         // eatFood.setFoods(loadConfig.getItemsCanBeEat())

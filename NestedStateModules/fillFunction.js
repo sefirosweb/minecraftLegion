@@ -9,13 +9,8 @@ const BehaviorDigBlock = require('./../BehaviorModules/BehaviorDigBlock')
 const BehaviorCustomPlaceBlock = require('./../BehaviorModules/BehaviorCustomPlaceBlock')
 const BehaviorLoadConfig = require('./../BehaviorModules/BehaviorLoadConfig')
 
-const mineflayerPathfinder = require('mineflayer-pathfinder')
-let movements
-
 // let isDigging = false
 function fillFunction (bot, targets) {
-  const mcData = require('minecraft-data')(bot.version)
-  movements = new mineflayerPathfinder.Movements(bot, mcData)
   const placeBlocks = ['air', 'cave_air', 'lava', 'water']
 
   const start = new BehaviorIdle(targets)
@@ -32,7 +27,7 @@ function fillFunction (bot, targets) {
   moveToBlock.stateName = 'Move To Block'
   moveToBlock.x = 525
   moveToBlock.y = 113
-  moveToBlock.movements = movements
+  moveToBlock.movements = targets.movements
 
   const mineBlock = new BehaviorDigBlock(bot, targets)
   mineBlock.stateName = 'Mine Block'
@@ -66,10 +61,6 @@ function fillFunction (bot, targets) {
       parent: loadConfig,
       child: moveToBlock,
       name: 'loadConfig -> moveToBlock',
-      onTransition: () => {
-        movements.allowSprinting = loadConfig.getAllowSprinting(bot.username)
-        movements.canDig = loadConfig.getCanDig(bot.username)
-      },
       shouldTransition: () => true
     }),
 

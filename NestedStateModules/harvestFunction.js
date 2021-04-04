@@ -8,13 +8,8 @@ const {
 } = require('mineflayer-statemachine')
 const BehaviorLoadConfig = require('./../BehaviorModules/BehaviorLoadConfig')
 const BehaviorDigBlock = require('./../BehaviorModules/BehaviorDigBlock')
-const mineflayerPathfinder = require('mineflayer-pathfinder')
-let movements
 
 function harvestFunction (bot, targets) {
-  const mcData = require('minecraft-data')(bot.version)
-  movements = new mineflayerPathfinder.Movements(bot, mcData)
-
   const start = new BehaviorIdle(targets)
   start.stateName = 'Start'
   start.x = 125
@@ -27,7 +22,7 @@ function harvestFunction (bot, targets) {
 
   const goPlant = new BehaviorMoveTo(bot, targets)
   goPlant.stateName = 'Go Plant'
-  goPlant.movements = movements
+  goPlant.movements = targets.movements
   goPlant.x = 725
   goPlant.y = 313
 
@@ -127,8 +122,6 @@ function harvestFunction (bot, targets) {
       parent: loadConfig,
       child: checkArea,
       onTransition: () => {
-        movements.allowSprinting = loadConfig.getAllowSprinting(bot.username)
-        movements.canDig = loadConfig.getCanDig(bot.username)
         harvestIsFinished = false
       },
       shouldTransition: () => true

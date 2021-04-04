@@ -6,7 +6,9 @@ const {
 
 const BehaviorLoadConfig = require('./../BehaviorModules/BehaviorLoadConfig')
 
-function startWorkFunction (bot, targets) {
+function startWorkFunction(bot, targets) {
+  const mcData = require('minecraft-data')(bot.version)
+
   const start = new BehaviorIdle(targets)
   start.stateName = 'Start'
   start.x = 125
@@ -38,6 +40,11 @@ function startWorkFunction (bot, targets) {
       parent: start,
       child: loadConfig,
       name: 'start -> loadConfig',
+      onTransition: () => {
+        targets.movements.allowSprinting = loadConfig.getAllowSprinting(bot.username)
+        targets.movements.canDig = loadConfig.getCanDig(bot.username)
+        targets.movements.blocksToAvoid.delete(mcData.blocksByName.wheat.id)
+      },
       shouldTransition: () => true
     }),
 

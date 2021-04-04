@@ -4,6 +4,8 @@ module.exports = (bot) => {
   const inventoryViewer = require('mineflayer-web-inventory')
   const prismarineViewer = require('../modules/viewer')
   const customEvents = require('../modules/customEvents')
+  const mineflayerPathfinder = require('mineflayer-pathfinder')
+  const mcData = require('minecraft-data')(bot.version)
 
   const {
     StateTransition,
@@ -14,6 +16,9 @@ module.exports = (bot) => {
   } = require('mineflayer-statemachine')
 
   const targets = {}
+  const movements = new mineflayerPathfinder.Movements(bot, mcData)
+  targets.movements = movements
+
   const startState = new BehaviorIdle(targets)
   startState.stateName = 'Start'
   startState.x = 125

@@ -15,9 +15,12 @@ const BehaviorEatFood = require('./../BehaviorModules/BehaviorEatFood')
 const BehaviorCustomPlaceBlock = require('./../BehaviorModules/BehaviorCustomPlaceBlock')
 
 const mineflayerPathfinder = require('mineflayer-pathfinder')
-let movements
 
+// TODO pending double check
 const movingWhile = (bot, nextCurrentLayer) => {
+  const mcData = require('minecraft-data')(bot.version)
+  const movements = new mineflayerPathfinder.Movements(bot, mcData)
+
   let x, y, z
 
   if (bot.entity.position.x < nextCurrentLayer.xStart) {
@@ -51,9 +54,6 @@ const movingWhile = (bot, nextCurrentLayer) => {
 }
 
 function miningFunction (bot, targets) {
-  const mcData = require('minecraft-data')(bot.version)
-  movements = new mineflayerPathfinder.Movements(bot, mcData)
-
   const placeBlocks = ['air', 'cave_air', 'lava', 'water']
   const blockForPlace = ['stone', 'cobblestone', 'dirt', 'andesite', 'diorite', 'granite']
 
@@ -91,13 +91,13 @@ function miningFunction (bot, targets) {
   moveToBlock1.stateName = 'Move To Block 1'
   moveToBlock1.x = 1025
   moveToBlock1.y = 313
-  moveToBlock1.movements = movements
+  moveToBlock1.movements = targets.movements
 
   const moveToBlock2 = new BehaviorMoveTo(bot, targets)
   moveToBlock2.stateName = 'Move To Block 2'
   moveToBlock2.x = 825
   moveToBlock2.y = 713
-  moveToBlock2.movements = movements
+  moveToBlock2.movements = targets.movements
 
   const placeBlock1 = new BehaviorCustomPlaceBlock(bot, targets)
   placeBlock1.stateName = 'Place Block 1'
@@ -139,8 +139,6 @@ function miningFunction (bot, targets) {
         targets.entity = undefined
         nextLayer.setMinerCords(loadConfig.getMinerCords())
         eatFood.setFoods(loadConfig.getItemsCanBeEat())
-        movements.allowSprinting = loadConfig.getAllowSprinting(bot.username)
-        movements.canDig = loadConfig.getCanDig(bot.username)
       },
       shouldTransition: () => true
     }),
