@@ -19,7 +19,7 @@ module.exports = class BehaviorFertilize {
   async fertilize () {
     try {
       const slotID = this.bot.getEquipmentDestSlot('hand')
-      if (!this.bot.inventory.slots[slotID].name.includes('hoe')) { // no have equiped hoe in off hand
+      if (this.bot.inventory.slots[slotID] === null || !this.bot.inventory.slots[slotID].name.includes('hoe')) { // no have equiped hoe in off hand
         const hoe = this.bot.inventory.items().find(item => item.name.includes('hoe'))
         await this.bot.equip(hoe, 'hand')
       }
@@ -37,7 +37,9 @@ module.exports = class BehaviorFertilize {
       }.bind(this), 500)
     } catch (err) {
       console.log(err)
-      this.isEndFinished = true
+      setTimeout(function () {
+        this.fertilize()
+      }.bind(this), 500)
     }
   }
 
