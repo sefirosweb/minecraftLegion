@@ -8,6 +8,7 @@ const {
 } = require('mineflayer-statemachine')
 const BehaviorLoadConfig = require('./../BehaviorModules/BehaviorLoadConfig')
 const BehaviorDigBlock = require('./../BehaviorModules/BehaviorDigBlock')
+const BehaviorInteractBlock = require('./../BehaviorModules/BehaviorInteractBlock')
 
 function harvestFunction (bot, targets) {
   const start = new BehaviorIdle(targets)
@@ -46,6 +47,9 @@ function harvestFunction (bot, targets) {
   harvestPlant.x = 725
   harvestPlant.y = 113
 
+  const interactWithPlant = new BehaviorInteractBlock(bot, targets)
+  interactWithPlant.stateName = 'Interact Plant'
+
   let harvestIsFinished = false
 
   function checkPlantAge () {
@@ -68,12 +72,15 @@ function harvestFunction (bot, targets) {
     const zEnd = targets.plantArea.zStart > targets.plantArea.zEnd ? targets.plantArea.zStart : targets.plantArea.zEnd
     const yLayer = targets.plantArea.yLayer + 1
     const plant = targets.plantArea.plant
+    const plantName = plantType[plant].plantName
+    const type = plantType[plant].type
+    const age = plantType[plant].age
 
-    if (plantType[plant].type === 'normal') {
+    if (type === 'normal' || type === 'sweet_berries') {
       for (let xCurrent = xStart; xCurrent <= xEnd; xCurrent++) {
         for (let zCurrent = zStart; zCurrent <= zEnd; zCurrent++) {
           const block = bot.blockAt(new Vec3(xCurrent, yLayer, zCurrent), true)
-          if (block && block.name.includes(plant) && block.metadata === plantType[plant].age) {
+          if (block && block.name === plantName && block.metadata === age) {
             targets.position = new Vec3(block.position.x, yLayer, block.position.z)
             return block
           }
@@ -81,11 +88,11 @@ function harvestFunction (bot, targets) {
       }
     }
 
-    if (plantType[plant].type === 'melon') {
+    if (type === 'melon') {
       for (let xCurrent = xStart - 1; xCurrent <= xEnd + 1; xCurrent++) {
         for (let zCurrent = zStart - 1; zCurrent <= zEnd + 1; zCurrent++) {
           const block = bot.blockAt(new Vec3(xCurrent, yLayer, zCurrent), true)
-          if (block.name === plant) {
+          if (block.name === plantName) {
             targets.position = new Vec3(block.position.x, yLayer, block.position.z)
             return block
           }
@@ -93,7 +100,7 @@ function harvestFunction (bot, targets) {
       }
     }
 
-    if (plantType[plant].type === 'tree') {
+    if (type === 'tree') {
       for (let xCurrent = xStart - 2; xCurrent <= xEnd + 2; xCurrent++) {
         for (let zCurrent = zStart - 2; zCurrent <= zEnd + 2; zCurrent++) {
           for (let yCurrent = yLayer; yCurrent <= yLayer + 6; yCurrent++) {
@@ -154,7 +161,22 @@ function harvestFunction (bot, targets) {
       onTransition: () => {
         targets.position = targets.digBlock.position.clone()
       },
-      shouldTransition: () => bot.canDigBlock(targets.digBlock) && !bot.pathfinder.isMining()
+      shouldTransition: () => bot.canDigBlock(targets.digBlock) && !bot.pathfinder.isMining() && targets.plantArea.plant !== 'sweet_berries'
+    }),
+
+    new StateTransition({
+      parent: goPlant,
+      child: interactWithPlant,
+      onTransition: () => {
+        targets.position = targets.digBlock.position.clone()
+      },
+      shouldTransition: () => bot.canDigBlock(targets.digBlock) && !bot.pathfinder.isMining() && targets.plantArea.plant === 'sweet_berries'
+    }),
+
+    new StateTransition({
+      parent: interactWithPlant,
+      child: checkArea,
+      shouldTransition: () => interactWithPlant.isFinished()
     }),
 
     new StateTransition({

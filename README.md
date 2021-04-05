@@ -81,7 +81,7 @@ set miner x y z x y z x+ horizontally
   * Make a tunel or hole
 - Farmer
   * Do placing plants and sapling trees
-  * Potatoes, Carrots, Wheat, Melon, Pumpkin
+  * Potatoes, Carrots, Wheat, Melon, Pumpkin, Sweet berries
   * Sapling Trees -> Woodcutter
 # TODO
 - Fix a bug when usie a mineflayer-web-inventory, they breaks "chest" functions

@@ -9,13 +9,11 @@ const {
 const BehaviorLoadConfig = require('./../BehaviorModules/BehaviorLoadConfig')
 const BehaviorCustomPlaceBlock = require('./../BehaviorModules/BehaviorCustomPlaceBlock')
 const BehaviorFertilize = require('./../BehaviorModules/BehaviorFertilize')
-const mineflayerPathfinder = require('mineflayer-pathfinder')
 
 function plantFunction (bot, targets) {
   const plantType = require('../modules/plantType')
   const blocksForPlant = ['dirt', 'grass_block', 'farmland']
   const blockAir = ['air', 'cave_air']
-  const mcData = require('minecraft-data')(bot.version)
 
   let plantIsFinished = false
   let blockToPlant
@@ -40,8 +38,9 @@ function plantFunction (bot, targets) {
     const zEnd = targets.plantArea.zStart > targets.plantArea.zEnd ? targets.plantArea.zStart : targets.plantArea.zEnd
     const yLayer = targets.plantArea.yLayer
     const plant = targets.plantArea.plant
+    const type = plantType[plant].type
 
-    if (plantType[plant].type === 'normal') {
+    if (type === 'normal') {
       for (let xCurrent = xStart; xCurrent <= xEnd; xCurrent++) {
         for (let zCurrent = zStart; zCurrent <= zEnd; zCurrent++) {
           const block = bot.blockAt(new Vec3(xCurrent, yLayer, zCurrent))
@@ -55,7 +54,7 @@ function plantFunction (bot, targets) {
       }
     }
 
-    if (plantType[plant].type === 'melon') {
+    if (type === 'melon' || type === 'sweet_berries') {
       for (let xCurrent = xStart; xCurrent <= xEnd; xCurrent += 2) {
         for (let zCurrent = zStart; zCurrent <= zEnd; zCurrent++) {
           const block = bot.blockAt(new Vec3(xCurrent, yLayer, zCurrent))
@@ -69,7 +68,7 @@ function plantFunction (bot, targets) {
       }
     }
 
-    if (plantType[plant].type === 'tree') {
+    if (type === 'tree') {
       for (let xCurrent = xStart; xCurrent <= xEnd; xCurrent += 2) {
         for (let zCurrent = zStart; zCurrent <= zEnd; zCurrent += 2) {
           const block = bot.blockAt(new Vec3(xCurrent, yLayer, zCurrent))

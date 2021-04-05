@@ -54,6 +54,7 @@ function startWorkFunction (bot, targets) {
         targets.movements.allowSprinting = loadConfig.getAllowSprinting(bot.username)
         targets.movements.canDig = loadConfig.getCanDig(bot.username)
         targets.movements.blocksToAvoid.delete(mcData.blocksByName.wheat.id)
+        targets.movements.blocksToAvoid.add(mcData.blocksByName.sweet_berry_bush.id)
       },
       shouldTransition: () => true
     }),

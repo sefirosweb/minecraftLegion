@@ -72,7 +72,10 @@ function farmingFunction (bot, targets) {
       onTransition: () => {
         targets.plantArea = plantArea[plantAreaIndex]
       },
-      shouldTransition: () => plantType[plantArea[plantAreaIndex].plant].type === 'normal' || plantType[plantArea[plantAreaIndex].plant].type === 'melon'
+      shouldTransition: () =>
+        plantType[plantArea[plantAreaIndex].plant].type === 'normal' ||
+        plantType[plantArea[plantAreaIndex].plant].type === 'melon' ||
+        plantType[plantArea[plantAreaIndex].plant].type === 'sweet_berries'
     }),
 
     new StateTransition({
