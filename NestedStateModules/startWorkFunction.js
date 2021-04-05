@@ -6,13 +6,23 @@ const {
 
 const BehaviorLoadConfig = require('./../BehaviorModules/BehaviorLoadConfig')
 
-function startWorkFunction(bot, targets) {
+function startWorkFunction (bot, targets) {
   const mcData = require('minecraft-data')(bot.version)
 
   const start = new BehaviorIdle(targets)
   start.stateName = 'Start'
   start.x = 125
   start.y = 113
+
+  const loadConfig = new BehaviorLoadConfig(bot, targets)
+  loadConfig.stateName = 'Load Bot Config'
+  loadConfig.x = 125
+  loadConfig.y = 213
+
+  const loadedConfig = new BehaviorIdle(targets)
+  loadedConfig.stateName = 'Loaded Config'
+  loadedConfig.x = 325
+  loadedConfig.y = 213
 
   const guardJob = require('./guardJobFunction')(bot, targets)
   guardJob.x = 525
@@ -30,16 +40,16 @@ function startWorkFunction(bot, targets) {
   minerJob.x = 325
   minerJob.y = 50
 
-  const loadConfig = new BehaviorLoadConfig(bot, targets)
-  loadConfig.stateName = 'Load Bot Config'
-  loadConfig.x = 325
-  loadConfig.y = 213
-
   const transitions = [
     new StateTransition({
       parent: start,
       child: loadConfig,
-      name: 'start -> loadConfig',
+      shouldTransition: () => true
+    }),
+
+    new StateTransition({
+      parent: loadConfig,
+      child: loadedConfig,
       onTransition: () => {
         targets.movements.allowSprinting = loadConfig.getAllowSprinting(bot.username)
         targets.movements.canDig = loadConfig.getCanDig(bot.username)
@@ -49,30 +59,26 @@ function startWorkFunction(bot, targets) {
     }),
 
     new StateTransition({
-      parent: loadConfig,
+      parent: loadedConfig,
       child: guardJob,
-      name: 'loadConfig -> guardJob',
       shouldTransition: () => loadConfig.getJob() === 'guard'
     }),
 
     new StateTransition({
-      parent: loadConfig,
+      parent: loadedConfig,
       child: archerJob,
-      name: 'loadConfig -> archerJob',
       shouldTransition: () => loadConfig.getJob() === 'archer'
     }),
 
     new StateTransition({
-      parent: loadConfig,
+      parent: loadedConfig,
       child: farmerJob,
-      name: 'loadConfig -> farmerJob',
       shouldTransition: () => loadConfig.getJob() === 'farmer'
     }),
 
     new StateTransition({
-      parent: loadConfig,
+      parent: loadedConfig,
       child: minerJob,
-      name: 'loadConfig -> minerJob',
       shouldTransition: () => loadConfig.getJob() === 'miner'
     })
 
