@@ -70,7 +70,6 @@ function minerJobFunction (bot, targets) {
         targets.entity = undefined
         getClosestMob.setMode(loadConfig.getMode())
         getClosestMob.setDistance(loadConfig.getDistance())
-        getReady.setItemsToBeReady(loadConfig.getItemsToBeReady())
       },
       shouldTransition: () => true
     }),

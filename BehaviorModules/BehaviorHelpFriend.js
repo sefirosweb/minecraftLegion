@@ -6,7 +6,6 @@ module.exports = class BehaviorHelpFriend {
     this.targets = targets
     this.stateName = 'BehaviorHelpFriend'
 
-    this.helpFriends = false
     this.entity = undefined
   }
 
@@ -18,12 +17,8 @@ module.exports = class BehaviorHelpFriend {
     this.entity = undefined
   }
 
-  setHelpFriends (helpFriends) {
-    this.helpFriends = helpFriends
-  }
-
   findHelpFriend () {
-    if (!this.helpFriends) return false
+    if (!this.targets.config.helpFriends) return false
     const friends = botWebsocket.getFriends()
     const friendsNeedHelp = friends.filter(e => e.combat === true)
     if (friendsNeedHelp.length === 0) {

@@ -5,13 +5,7 @@ module.exports = class BehaviorGetReady {
     this.stateName = 'BehaviorGetReady'
 
     this.isReady = false
-    this.itemsToBeReady = []
-
     this.inventory = require('../modules/inventoryModule')(this.bot)
-  }
-
-  setItemsToBeReady (itemsToBeReady) {
-    this.itemsToBeReady = itemsToBeReady
   }
 
   onStateEntered () {
@@ -23,8 +17,8 @@ module.exports = class BehaviorGetReady {
   }
 
   checkImReady () {
-    for (let i = 0; i < this.itemsToBeReady.length; i++) {
-      const itemToBeReady = this.itemsToBeReady[i]
+    for (let i = 0; i < this.targets.config.itemsToBeReady.length; i++) {
+      const itemToBeReady = this.targets.config.itemsToBeReady[i]
       const itemsInUse = this.inventory.countItemsInInventoryOrEquipped(itemToBeReady.item)
       if (itemsInUse < itemToBeReady.quantity) {
         this.isReady = false

@@ -47,9 +47,6 @@ function findItemsAndPickup (bot, targets) {
       parent: loadConfig,
       child: findItem,
       name: 'loadConfig -> patrol',
-      onTransition: () => {
-        findItem.setPickUpItems(loadConfig.getPickUpItems())
-      },
       shouldTransition: () => true
     }),
 

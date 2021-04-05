@@ -5,7 +5,6 @@ module.exports = class BehaviorFindItems {
     this.stateName = 'BehaviorFindItems'
     this.isEndFinished = false
 
-    this.pickUpItems = false
     this.distanceToFind = distanceToFind
   }
 
@@ -29,12 +28,8 @@ module.exports = class BehaviorFindItems {
     return this.isEndFinished
   }
 
-  setPickUpItems (pickUpItems) {
-    this.pickUpItems = pickUpItems
-  }
-
   search () {
-    if (!this.pickUpItems) return false
+    if (!this.targets.config.pickUpItems) return false
 
     const entities = Object.keys(this.bot.entities)
     return entities.find((entityName) => {
