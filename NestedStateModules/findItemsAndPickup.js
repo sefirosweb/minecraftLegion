@@ -19,7 +19,7 @@ function findItemsAndPickup (bot, targets) {
   exit.x = 125
   exit.y = 313
 
-  const findItem = new BehaviorFindItems(bot, targets)
+  const findItem = new BehaviorFindItems(bot, targets, 15, true)
   findItem.stateName = 'Find Items'
   findItem.x = 325
   findItem.y = 313

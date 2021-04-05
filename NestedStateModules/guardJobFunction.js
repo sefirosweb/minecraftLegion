@@ -59,7 +59,7 @@ function guardJobFunction (bot, targets) {
   goToObject.y = 625
   goToObject.movements = targets.movements
 
-  const findItem = new BehaviorFindItems(bot, targets)
+  const findItem = new BehaviorFindItems(bot, targets, 15, true)
   findItem.stateName = 'Find Item Dropped'
 
   const helpFriend = new BehaviorHelpFriend(bot, targets)

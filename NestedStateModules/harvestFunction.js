@@ -105,7 +105,7 @@ function harvestFunction (bot, targets) {
         for (let zCurrent = zStart - 2; zCurrent <= zEnd + 2; zCurrent++) {
           for (let yCurrent = yLayer; yCurrent <= yLayer + 6; yCurrent++) {
             const block = bot.blockAt(new Vec3(xCurrent, yCurrent, zCurrent), true)
-            if (block.name.includes('log') || block.name.includes('leave')) {
+            if (block.name.includes('log') /* || block.name.includes('leave') */) {
               targets.position = new Vec3(block.position.x, yLayer, block.position.z)
               return block
             }

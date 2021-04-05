@@ -1,11 +1,12 @@
 module.exports = class BehaviorFindItems {
-  constructor (bot, targets, distanceToFind = 15) {
+  constructor (bot, targets, distanceToFind = 15, isOnFloor = false) {
     this.bot = bot
     this.targets = targets
     this.stateName = 'BehaviorFindItems'
     this.isEndFinished = false
 
     this.distanceToFind = distanceToFind
+    this.isOnFloor = isOnFloor
   }
 
   onStateEntered () {
@@ -35,7 +36,10 @@ module.exports = class BehaviorFindItems {
     return entities.find((entityName) => {
       const entity = this.bot.entities[entityName]
 
-      if (entity.position.distanceTo(this.bot.entity.position) < this.distanceToFind) {
+      if (entity.position.distanceTo(this.bot.entity.position) < this.distanceToFind && (
+        !this.isOnFloor ||
+        Math.abs(entity.position.y - this.bot.entity.position.y) <= 1
+      )) {
         if (entity.objectType === 'Item' /* || entity.objectType === 'Arrow' */) {
           this.targets.itemDrop = entity
           this.isEndFinished = true
