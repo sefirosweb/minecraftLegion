@@ -24,9 +24,6 @@ function farmerJobFunction (bot, targets) {
   getReady.x = 525
   getReady.y = 113
 
-  const eatFood = new BehaviorEatFood(bot, targets)
-  eatFood.stateName = 'Eat Food'
-
   const goChests = require('./goChestsFunctions')(bot, targets)
   goChests.x = 525
   goChests.y = 313
@@ -34,7 +31,12 @@ function farmerJobFunction (bot, targets) {
   const farming = require('./farmingFunction')(bot, targets)
   farming.stateName = 'Farming'
   farming.x = 728
-  farming.y = 113
+  farming.y = 313
+
+  const eatFood = new BehaviorEatFood(bot, targets)
+  eatFood.stateName = 'Eat Food'
+  eatFood.x = 728
+  eatFood.y = 113
 
   const transitions = [
     new StateTransition({
@@ -49,11 +51,8 @@ function farmerJobFunction (bot, targets) {
       name: 'Loading configuration',
       onTransition: () => {
         targets.entity = undefined
-
         eatFood.setFoods(loadConfig.getItemsCanBeEat())
         getReady.setItemsToBeReady(loadConfig.getItemsToBeReady())
-        // eatFood.setFoods(loadConfig.getItemsCanBeEat())
-        // eatFoodCombat.setFoods(loadConfig.getItemsCanBeEat())
       },
       shouldTransition: () => true
     }),

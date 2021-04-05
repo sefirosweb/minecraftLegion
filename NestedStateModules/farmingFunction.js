@@ -30,9 +30,13 @@ function farmingFunction (bot, targets) {
 
   const farmingPlantsFunction = require('./farmingPlantsFunction')(bot, targets)
   farmingPlantsFunction.stateName = 'Farm Plants'
+  farmingPlantsFunction.x = 625
+  farmingPlantsFunction.y = 313
 
   const farmingTreesFunction = require('./farmingTreesFunction')(bot, targets)
   farmingTreesFunction.stateName = 'Farm Trees'
+  farmingTreesFunction.x = 425
+  farmingTreesFunction.y = 313
 
   let plantArea = []
   let plantAreaIndex = 0
