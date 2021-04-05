@@ -71,8 +71,6 @@ function minerJobFunction (bot, targets) {
         getClosestMob.setMode(loadConfig.getMode())
         getClosestMob.setDistance(loadConfig.getDistance())
         getReady.setItemsToBeReady(loadConfig.getItemsToBeReady())
-        eatFood.setFoods(loadConfig.getItemsCanBeEat())
-        eatFoodCombat.setFoods(loadConfig.getItemsCanBeEat())
       },
       shouldTransition: () => true
     }),

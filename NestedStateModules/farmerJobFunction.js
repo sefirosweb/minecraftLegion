@@ -51,7 +51,6 @@ function farmerJobFunction (bot, targets) {
       name: 'Loading configuration',
       onTransition: () => {
         targets.entity = undefined
-        eatFood.setFoods(loadConfig.getItemsCanBeEat())
         getReady.setItemsToBeReady(loadConfig.getItemsToBeReady())
       },
       shouldTransition: () => true

@@ -100,8 +100,6 @@ function guardJobFunction (bot, targets) {
         helpFriend.setHelpFriends(loadConfig.getHelpFriend())
         getReady.setItemsToBeReady(loadConfig.getItemsToBeReady())
         findItem.setPickUpItems(loadConfig.getPickUpItems())
-        eatFood.setFoods(loadConfig.getItemsCanBeEat())
-        eatFoodCombat.setFoods(loadConfig.getItemsCanBeEat())
       },
       shouldTransition: () => true
     }),

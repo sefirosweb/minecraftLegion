@@ -138,7 +138,6 @@ function miningFunction (bot, targets) {
       onTransition: () => {
         targets.entity = undefined
         nextLayer.setMinerCords(loadConfig.getMinerCords())
-        eatFood.setFoods(loadConfig.getItemsCanBeEat())
       },
       shouldTransition: () => true
     }),

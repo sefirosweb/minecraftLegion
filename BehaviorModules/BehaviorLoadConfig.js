@@ -37,6 +37,10 @@ module.exports = class BehaviorLoadConfig {
     this.plantAreas = botConfig.getPlantAreas(this.bot.username)
   }
 
+  getAllConfig () {
+    return botConfig.getAll(this.bot.username)
+  }
+
   getJob () {
     return this.job
   }

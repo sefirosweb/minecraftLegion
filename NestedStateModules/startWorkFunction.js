@@ -51,8 +51,9 @@ function startWorkFunction (bot, targets) {
       parent: loadConfig,
       child: loadedConfig,
       onTransition: () => {
-        targets.movements.allowSprinting = loadConfig.getAllowSprinting(bot.username)
-        targets.movements.canDig = loadConfig.getCanDig(bot.username)
+        targets.config = loadConfig.getAllConfig()
+        targets.movements.allowSprinting = targets.config.allowSprinting
+        targets.movements.canDig = targets.config.canDig
         targets.movements.blocksToAvoid.delete(mcData.blocksByName.wheat.id)
         targets.movements.blocksToAvoid.add(mcData.blocksByName.sweet_berry_bush.id)
       },

@@ -1,18 +1,13 @@
 const botWebsocket = require('../modules/botWebsocket')
 
 module.exports = class BehaviorEatFood {
-  constructor (bot, targets) {
+  constructor (bot, targets, foods = []) {
     this.bot = bot
     this.targets = targets
     this.stateName = 'BehaviorEatFood'
     this.isEndEating = false
 
-    this.foods = []
     this.isEating = false
-  }
-
-  setFoods (foods) {
-    this.foods = foods
   }
 
   onStateEntered () {
@@ -38,7 +33,7 @@ module.exports = class BehaviorEatFood {
     return this.bot.inventory.items().reduce((validFood, foodInventory) => {
       const returnValidFood = [...validFood]
 
-      const priority = this.foods.findIndex(food => food === foodInventory.name)
+      const priority = this.targets.config.itemsCanBeEat.findIndex(food => food === foodInventory.name)
 
       if (priority >= 0) {
         const validFoodWithPriority = {
