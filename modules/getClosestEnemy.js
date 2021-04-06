@@ -1,7 +1,5 @@
 const botWebsocket = require('../modules/botWebsocket')
 module.exports = function (bot, targets) {
-  let mode = 'none'
-  let distance = 10
   let entities = []
   let currentEntity = false
 
@@ -11,16 +9,8 @@ module.exports = function (bot, targets) {
   movements.digCost = 100
   movements.canDig = false
 
-  const setMode = (inputMode) => {
-    mode = inputMode
-  }
-
-  const setDistance = (inputDistance) => {
-    distance = inputDistance
-  }
-
   const check = () => {
-    if (mode === 'none') {
+    if (targets.config.mode === 'none') {
       targets.entity = undefined
     } else {
       if (!currentEntity || entities.length <= currentEntity) {
@@ -45,8 +35,8 @@ module.exports = function (bot, targets) {
   const getValidPath = (entity) => {
     if (entity.type === 'mob' && (
       entity.mobType === 'Phantom' ||
-            entity.mobType === 'Blaze' ||
-            entity.mobType === 'Ender Dragon'
+      entity.mobType === 'Blaze' ||
+      entity.mobType === 'Ender Dragon'
     )) { return true }
 
     const goal = new mineflayerPathfinder.goals.GoalNear(entity.position.x, entity.position.y, entity.position.z, 2)
@@ -80,13 +70,13 @@ module.exports = function (bot, targets) {
   }
 
   const filter = (entity) => {
-    if (mode === 'pvp') {
+    if (targets.config.mode === 'pvp') {
       if (
-        (entity.position.distanceTo(bot.player.entity.position) <= distance) &&
-                (entity.type === 'mob' || entity.type === 'player') &&
-                (entity.mobType !== 'Armor Stand') &&
-                (entity.kind !== 'Passive mobs') &&
-                (entity.isValid)
+        (entity.position.distanceTo(bot.player.entity.position) <= targets.config.distance) &&
+        (entity.type === 'mob' || entity.type === 'player') &&
+        (entity.mobType !== 'Armor Stand') &&
+        (entity.kind !== 'Passive mobs') &&
+        (entity.isValid)
       ) {
         const botFriends = botWebsocket.getFriends()
         const bFriend = botFriends.find(b => b.name === entity.username)
@@ -104,20 +94,18 @@ module.exports = function (bot, targets) {
       }
     }
 
-    if (mode === 'pve') {
-      return (entity.position.distanceTo(bot.player.entity.position) <= distance) &&
-                (entity.type === 'mob') &&
-                (entity.mobType !== 'Armor Stand') &&
-                (entity.kind !== 'Passive mobs') &&
-                (entity.isValid)
+    if (targets.config.mode === 'pve') {
+      return (entity.position.distanceTo(bot.player.entity.position) <= targets.config.distance) &&
+        (entity.type === 'mob') &&
+        (entity.mobType !== 'Armor Stand') &&
+        (entity.kind !== 'Passive mobs') &&
+        (entity.isValid)
     }
 
     return false
   }
 
   return {
-    check,
-    setMode,
-    setDistance
+    check
   }
 }

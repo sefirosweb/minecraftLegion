@@ -68,8 +68,6 @@ function minerJobFunction (bot, targets) {
       name: 'loadConfig -> patrol',
       onTransition: () => {
         targets.entity = undefined
-        getClosestMob.setMode(loadConfig.getMode())
-        getClosestMob.setDistance(loadConfig.getDistance())
       },
       shouldTransition: () => true
     }),
