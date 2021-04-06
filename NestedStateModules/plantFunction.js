@@ -103,8 +103,8 @@ function plantFunction (bot, targets) {
   const goPlant = new BehaviorMoveTo(bot, targets)
   goPlant.stateName = 'Go Plant'
   goPlant.movements = targets.movements
-  goPlant.x = 325
-  goPlant.y = 513
+  goPlant.x = 525
+  goPlant.y = 313
 
   const checkArea = new BehaviorIdle()
   checkArea.stateName = 'Check Area for Plant'
@@ -129,7 +129,7 @@ function plantFunction (bot, targets) {
   const fertilize = new BehaviorFertilize(bot, targets)
   fertilize.stateName = 'Fertilize'
   fertilize.x = 750
-  fertilize.y = 350
+  fertilize.y = 313
 
   const transitions = [
 

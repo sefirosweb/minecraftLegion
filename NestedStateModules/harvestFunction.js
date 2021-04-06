@@ -24,13 +24,13 @@ function harvestFunction (bot, targets) {
   const goPlant = new BehaviorMoveTo(bot, targets)
   goPlant.stateName = 'Go Plant'
   goPlant.movements = targets.movements
-  goPlant.x = 725
-  goPlant.y = 313
+  goPlant.x = 525
+  goPlant.y = 413
 
   const exit = new BehaviorIdle(targets)
   exit.stateName = 'Exit'
-  exit.x = 125
-  exit.y = 313
+  exit.x = 225
+  exit.y = 413
 
   const checkArea = new BehaviorIdle(targets)
   checkArea.stateName = 'Check Area for Harvest'
@@ -39,16 +39,18 @@ function harvestFunction (bot, targets) {
 
   const checkHarvest = new BehaviorIdle(targets)
   checkHarvest.stateName = 'Exsist Any Plant To Harvest'
-  checkHarvest.x = 525
-  checkHarvest.y = 313
+  checkHarvest.x = 225
+  checkHarvest.y = 263
 
   const harvestPlant = new BehaviorDigBlock(bot, targets)
   harvestPlant.stateName = 'Harvest Plant'
-  harvestPlant.x = 725
-  harvestPlant.y = 113
+  harvestPlant.x = 625
+  harvestPlant.y = 263
 
   const interactWithPlant = new BehaviorInteractBlock(bot, targets)
   interactWithPlant.stateName = 'Interact Plant'
+  interactWithPlant.x = 425
+  interactWithPlant.y = 263
 
   let harvestIsFinished = false
 

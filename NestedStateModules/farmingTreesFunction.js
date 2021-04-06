@@ -17,6 +17,8 @@ function farmingTreesFunction (bot, targets) {
 
   const selectTree = new BehaviorIdle(targets)
   selectTree.stateName = 'Select Tree'
+  selectTree.x = 325
+  selectTree.y = 113
 
   const checkFarmingAreas = new BehaviorIdle(targets)
   checkFarmingAreas.stateName = 'Next Area'
