@@ -33,21 +33,33 @@ module.exports = class BehaviorFindItems {
     if (!this.targets.config.pickUpItems) return false
 
     const entities = Object.keys(this.bot.entities)
-    return entities.find((entityName) => {
-      const entity = this.bot.entities[entityName]
 
-      if (entity.position.distanceTo(this.bot.entity.position) < this.distanceToFind && (
+    const itemsFound = entities.reduce((currentItems, entityName) => {
+      const newItems = [...currentItems]
+      const entity = this.bot.entities[entityName]
+      const disatanceToObject = entity.position.distanceTo(this.bot.entity.position)
+      if (disatanceToObject < this.distanceToFind && (
         !this.isOnFloor ||
         Math.abs(entity.position.y - this.bot.entity.position.y) <= 1
       )) {
         if (entity.objectType === 'Item' /* || entity.objectType === 'Arrow' */) {
-          this.targets.itemDrop = entity
-          this.isEndFinished = true
-          return true
+          entity.disatanceToObject = disatanceToObject
+          newItems.push(entity)
         }
       }
-      return false
-    })
+      return newItems
+    }, [])
+
+    if (itemsFound.length > 0) {
+      itemsFound.sort(function (a, b) {
+        return a.disatanceToObject - b.disatanceToObject
+      })
+      this.targets.itemDrop = itemsFound[0]
+      this.isEndFinished = true
+      return true
+    }
+
+    return false
   }
 
   checkInventorySpace () {
