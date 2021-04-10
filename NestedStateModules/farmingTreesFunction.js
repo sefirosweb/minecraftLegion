@@ -84,13 +84,13 @@ function farmingTreesFunction (bot, targets) {
     new StateTransition({
       parent: selectTree,
       child: exit,
-      shouldTransition: () => finished
+      shouldTransition: () => finished || bot.inventory.items().length >= 33
     }),
 
     new StateTransition({
       parent: selectTree,
       child: harvest,
-      shouldTransition: () => !finished
+      shouldTransition: () => !finished && bot.inventory.items().length < 33
     }),
 
     new StateTransition({

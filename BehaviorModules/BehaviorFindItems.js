@@ -12,7 +12,7 @@ module.exports = class BehaviorFindItems {
   onStateEntered () {
     this.targets.itemDrop = undefined
     this.isEndFinished = false
-    if (this.checkInventorySpace() <= 3) {
+    if (this.bot.inventory.items().length >= 33) {
       this.isEndFinished = true
       return
     }
@@ -60,17 +60,5 @@ module.exports = class BehaviorFindItems {
     }
 
     return false
-  }
-
-  checkInventorySpace () {
-    const inventory = this.bot.inventory.slots
-    const spaceLeft = inventory.reduce((currentSpace, slot) => {
-      if (slot === null) {
-        currentSpace++
-      }
-      return currentSpace
-    }, 0) - 5
-
-    return spaceLeft
   }
 }

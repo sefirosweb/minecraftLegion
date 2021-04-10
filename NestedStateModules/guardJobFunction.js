@@ -126,7 +126,7 @@ function guardJobFunction (bot, targets) {
       onTransition: () => {
         targets.position = targets.itemDrop.position.offset(0, 0.2, 0).clone()
       },
-      shouldTransition: () => findItem.search() && findItem.checkInventorySpace() > 3
+      shouldTransition: () => findItem.search() && bot.inventory.items().length < 33
     }),
 
     new StateTransition({
@@ -143,7 +143,7 @@ function guardJobFunction (bot, targets) {
           goToObject.restart()
         }
 
-        if (findItem.checkInventorySpace() === 0) {
+        if (bot.inventory.items().length === 36) { // full
           return true
         }
 

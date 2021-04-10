@@ -16,8 +16,8 @@ function findItemsAndPickup (bot, targets) {
 
   const exit = new BehaviorIdle(targets)
   exit.stateName = 'Exit'
-  exit.x = 125
-  exit.y = 313
+  exit.x = 325
+  exit.y = 513
 
   const findItem = new BehaviorFindItems(bot, targets, 15, true)
   findItem.stateName = 'Find Items'
@@ -25,7 +25,7 @@ function findItemsAndPickup (bot, targets) {
   findItem.y = 313
 
   const goToObject = new BehaviorMoveTo(bot, targets)
-  goToObject.stateName = 'Pick up item'
+  goToObject.stateName = 'Go to Object'
   goToObject.x = 525
   goToObject.y = 313
   goToObject.movements = targets.movements
@@ -56,13 +56,21 @@ function findItemsAndPickup (bot, targets) {
       onTransition: () => {
         targets.position = targets.itemDrop.position.offset(0, 0.2, 0).clone()
       },
-      shouldTransition: () => findItem.isFinished() && targets.itemDrop !== undefined
+      shouldTransition: () => findItem.isFinished() && targets.itemDrop !== undefined && bot.inventory.items().length < 33
     }),
 
     new StateTransition({
       parent: findItem,
       child: exit,
-      shouldTransition: () => findItem.isFinished() && targets.itemDrop === undefined
+      shouldTransition: () => (findItem.isFinished() && targets.itemDrop === undefined) || bot.inventory.items().length >= 33
+    }),
+
+    new StateTransition({
+      parent: goToObject,
+      child: exit,
+      shouldTransition: () => {
+        return bot.inventory.items().length >= 33
+      }
     }),
 
     new StateTransition({
@@ -78,7 +86,7 @@ function findItemsAndPickup (bot, targets) {
           goToObject.restart()
         }
 
-        if (findItem.checkInventorySpace() === 0) {
+        if (bot.inventory.items().length === 36) { // full
           return true
         }
 

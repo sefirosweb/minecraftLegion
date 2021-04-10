@@ -53,7 +53,7 @@ function farmingFunction (bot, targets) {
       parent: checkFarmingAreas,
       child: exit,
       name: 'All areas checked',
-      shouldTransition: () => plantAreaIndex === (plantArea.length)
+      shouldTransition: () => plantAreaIndex === (plantArea.length) || bot.inventory.items().length >= 33
     }),
 
     new StateTransition({
@@ -73,9 +73,11 @@ function farmingFunction (bot, targets) {
         targets.plantArea = plantArea[plantAreaIndex]
       },
       shouldTransition: () =>
-        plantType[plantArea[plantAreaIndex].plant].type === 'normal' ||
-        plantType[plantArea[plantAreaIndex].plant].type === 'melon' ||
-        plantType[plantArea[plantAreaIndex].plant].type === 'sweet_berries'
+        (
+          plantType[plantArea[plantAreaIndex].plant].type === 'normal' ||
+          plantType[plantArea[plantAreaIndex].plant].type === 'melon' ||
+          plantType[plantArea[plantAreaIndex].plant].type === 'sweet_berries'
+        ) && bot.inventory.items().length < 33
     }),
 
     new StateTransition({
@@ -84,7 +86,7 @@ function farmingFunction (bot, targets) {
       onTransition: () => {
         targets.plantArea = plantArea[plantAreaIndex]
       },
-      shouldTransition: () => plantType[plantArea[plantAreaIndex].plant].type === 'tree'
+      shouldTransition: () => plantType[plantArea[plantAreaIndex].plant].type === 'tree' && bot.inventory.items().length < 33
     }),
 
     new StateTransition({
