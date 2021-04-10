@@ -39,8 +39,8 @@ function createNewBot (botName, botPassword = '') {
     botWebsocket.connect()
     botWebsocket.log('Ready!')
 
-    const customStart = require('./custom_start/custom')(bot)
-    await customStart.start()
+    // const customStart = require('./custom_start/custom')(bot)
+    // await customStart.start()
     require('./NestedStateModules/startStateMachine')(bot)
   })
 }

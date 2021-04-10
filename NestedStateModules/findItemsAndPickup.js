@@ -9,6 +9,9 @@ const BehaviorFindItems = require('./../BehaviorModules/BehaviorFindItems')
 const BehaviorLoadConfig = require('./../BehaviorModules/BehaviorLoadConfig')
 
 function findItemsAndPickup (bot, targets) {
+  let botPosition = {}
+  let botPositionTime = 0
+
   const start = new BehaviorIdle(targets)
   start.stateName = 'Start'
   start.x = 125
@@ -55,6 +58,8 @@ function findItemsAndPickup (bot, targets) {
       child: goToObject,
       onTransition: () => {
         targets.position = targets.itemDrop.position.offset(0, 0.2, 0).clone()
+        botPosition = bot.entity.position.clone()
+        botPositionTime = Date.now()
       },
       shouldTransition: () => findItem.isFinished() && targets.itemDrop !== undefined && bot.inventory.items().length < 33
     }),
@@ -69,6 +74,15 @@ function findItemsAndPickup (bot, targets) {
       parent: goToObject,
       child: exit,
       shouldTransition: () => {
+        // For avoid bot stucks check if is in same position 10 secs and exit
+        if (bot.entity.position.distanceTo(botPosition) > 1) {
+          botPosition = bot.entity.position.clone()
+          botPositionTime = Date.now()
+        }
+        if (Date.now() - botPositionTime > 10000) {
+          return true
+        }
+
         return bot.inventory.items().length >= 33
       }
     }),
