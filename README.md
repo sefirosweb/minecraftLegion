@@ -34,7 +34,7 @@ To run a single bot:
 
 To use [minecraftLegionWebServer](https://github.com/coolbot123/minecraftLegionWebServer)
 
-    node start
+    node index.js
 
 This method connects automatically to minecraftLegionWebServer, and via the web, you can add bots/disconnects and manage the behavior.
 
