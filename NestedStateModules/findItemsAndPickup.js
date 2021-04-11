@@ -95,7 +95,7 @@ function findItemsAndPickup (bot, targets) {
           return true
         }
 
-        if (targets.position.distanceTo(targets.itemDrop.position) > 1) {
+        if (targets.position.distanceTo(targets.itemDrop.position) > 0.3) {
           targets.position = targets.itemDrop.position.offset(0, 0.2, 0).clone()
           goToObject.restart()
         }
