@@ -335,6 +335,14 @@ function emitFood (health) {
   emit('botStatus', data)
 }
 
+function emitEvents (events) {
+  const data = {
+    type: 'events',
+    value: events
+  }
+  emit('botStatus', data)
+}
+
 function log (data) {
   if (!loged) { return }
   socket.emit('logs', data)
@@ -373,6 +381,7 @@ module.exports = {
   emitHealth,
   emitFood,
   emitCombat,
+  emitEvents,
   getFriends,
   getMasters
 }

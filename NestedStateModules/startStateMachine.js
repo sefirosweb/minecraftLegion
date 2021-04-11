@@ -16,6 +16,7 @@ module.exports = (bot) => {
   } = require('mineflayer-statemachine')
 
   const targets = {}
+  let webserver = {}
   const movements = new mineflayerPathfinder.Movements(bot, mcData)
   targets.movements = movements
 
@@ -83,7 +84,30 @@ module.exports = (bot) => {
   bot.on('chat', (username, message) => bot.emit('customEventChat', username, message))
   bot.on('move', (position) => bot.emit('customEventMove', position))
 
-  let webserver = {}
+  if (false) { // Only enable on debug mode
+    bot.on('newListener', (e, l) => {
+      const events = bot.eventNames()
+      const eventsToSend = []
+      events.forEach(event => {
+        eventsToSend.push(`${event}: ${bot.listenerCount(event)}`)
+      })
+      botWebsocket.emitEvents(eventsToSend)
+    })
+
+    bot.on('removeListener', (e, l) => {
+      const events = bot.eventNames()
+      const eventsToSend = []
+      events.forEach(event => {
+        eventsToSend.push(`${event}: ${bot.listenerCount(event)}`)
+      })
+      botWebsocket.emitEvents(eventsToSend)
+    })
+
+    webserver = new StateMachineWebserver(bot, stateMachine, 5000) // TODO remove
+    if (!webserver.isServerRunning()) {
+      webserver.startServer()
+    }
+  }
 
   botWebsocket.on('action', toBotData => {
     const { type, value } = toBotData
