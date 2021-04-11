@@ -107,7 +107,15 @@ function combatFunction (bot, targets) {
   }
 
   function startGrades () {
-    bot.on('customEventPhysicTick', getGrades)
+    const isEventLoaded = bot.listeners('customEventPhysicTick').find(event => {
+      return event.name === 'getGrades'
+    })
+
+    console.log(isEventLoaded)
+
+    if (!isEventLoaded) {
+      bot.on('customEventPhysicTick', getGrades)
+    }
   }
 
   function stopGrades () {
