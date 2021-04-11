@@ -48,11 +48,6 @@ function guardJobFunction (bot, targets) {
   eatFood.x = 225
   eatFood.y = 513
 
-  const eatFoodCombat = new BehaviorEatFood(bot, targets)
-  eatFoodCombat.stateName = 'Eat Food In Combat'
-  eatFoodCombat.x = 1125
-  eatFoodCombat.y = 513
-
   const goToObject = new BehaviorMoveTo(bot, targets)
   goToObject.stateName = 'Pick up item'
   goToObject.x = 725
@@ -72,9 +67,9 @@ function guardJobFunction (bot, targets) {
   goFriend.x = 725
   goFriend.y = 813
 
-  const combatFunction = require('./combatFunction')(bot, targets)
-  combatFunction.x = 925
-  combatFunction.y = 513
+  const combatStrategy = require('./combatStrategyFunction')(bot, targets)
+  combatStrategy.x = 925
+  combatStrategy.y = 513
 
   const goChests = require('./goChestsFunctions')(bot, targets)
   goChests.x = 325
@@ -101,7 +96,7 @@ function guardJobFunction (bot, targets) {
 
     new StateTransition({
       parent: patrol,
-      child: combatFunction,
+      child: combatStrategy,
       name: 'patrol -> try getClosestMob',
       shouldTransition: () => {
         getClosestMob.check()
@@ -111,7 +106,7 @@ function guardJobFunction (bot, targets) {
 
     new StateTransition({
       parent: goToObject,
-      child: combatFunction,
+      child: combatStrategy,
       name: 'goToObject -> try getClosestMob',
       shouldTransition: () => {
         getClosestMob.check()
@@ -174,8 +169,8 @@ function guardJobFunction (bot, targets) {
 
     new StateTransition({
       parent: goFriend,
-      child: combatFunction,
-      name: 'goFriend -> combatFunction',
+      child: combatStrategy,
+      name: 'goFriend -> combatStrategy',
       shouldTransition: () => {
         getClosestMob.check()
         return targets.entity !== undefined && !helpFriend.targetIsFriend()
@@ -220,24 +215,10 @@ function guardJobFunction (bot, targets) {
     }),
 
     new StateTransition({
-      parent: combatFunction,
+      parent: combatStrategy,
       child: equip,
       name: 'Mob is dead',
-      shouldTransition: () => combatFunction.isFinished()
-    }),
-
-    new StateTransition({
-      parent: combatFunction,
-      child: eatFoodCombat,
-      name: 'Eat In Combat',
-      shouldTransition: () => bot.health < 15 && bot.food !== 20 && eatFoodCombat.checkFoodInInventory().length > 0
-    }),
-
-    new StateTransition({
-      parent: eatFoodCombat,
-      child: combatFunction,
-      name: 'End Eat In Combat',
-      shouldTransition: () => eatFoodCombat.isFinished()
+      shouldTransition: () => combatStrategy.isFinished()
     }),
 
     new StateTransition({

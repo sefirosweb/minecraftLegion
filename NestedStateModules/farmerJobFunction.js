@@ -39,14 +39,9 @@ function farmerJobFunction (bot, targets) {
   eatFood.y = 113
 
   const getClosestMob = require('./../modules/getClosestEnemy')(bot, targets)
-  const combatFunction = require('./combatFunction')(bot, targets)
-  combatFunction.x = 925
-  combatFunction.y = 313
-
-  const eatFoodCombat = new BehaviorEatFood(bot, targets)
-  eatFoodCombat.stateName = 'Eat Food In Combat'
-  eatFoodCombat.x = 925
-  eatFoodCombat.y = 113
+  const combatStrategy = require('./combatStrategyFunction')(bot, targets)
+  combatStrategy.x = 925
+  combatStrategy.y = 313
 
   const transitions = [
     new StateTransition({
@@ -98,7 +93,7 @@ function farmerJobFunction (bot, targets) {
 
     new StateTransition({
       parent: farming,
-      child: combatFunction,
+      child: combatStrategy,
       onTransition: () => bot.pathfinder.setGoal(null),
       shouldTransition: () => {
         getClosestMob.check()
@@ -107,25 +102,11 @@ function farmerJobFunction (bot, targets) {
     }),
 
     new StateTransition({
-      parent: combatFunction,
+      parent: combatStrategy,
       child: eatFood,
-      name: 'Mob is dead',
-      shouldTransition: () => combatFunction.isFinished()
-    }),
-
-    new StateTransition({
-      parent: combatFunction,
-      child: eatFoodCombat,
-      name: 'Eat In Combat',
-      shouldTransition: () => bot.health < 15 && bot.food !== 20
-    }),
-
-    new StateTransition({
-      parent: eatFoodCombat,
-      child: combatFunction,
-      name: 'End Eat In Combat',
-      shouldTransition: () => eatFoodCombat.isFinished()
+      shouldTransition: () => combatStrategy.isFinished()
     })
+
   ]
 
   const farmerJobFunction = new NestedStateMachine(transitions, start)

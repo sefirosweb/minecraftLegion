@@ -35,18 +35,13 @@ function minerJobFunction (bot, targets) {
   eatFood.x = 525
   eatFood.y = 375
 
-  const eatFoodCombat = new BehaviorEatFood(bot, targets)
-  eatFoodCombat.stateName = 'Eat Food In Combat'
-  eatFoodCombat.x = 725
-  eatFoodCombat.y = 513
-
   const miningFunction = require('./miningFunction')(bot, targets)
   miningFunction.x = 225
   miningFunction.y = 513
 
-  const combatFunction = require('./combatFunction')(bot, targets)
-  combatFunction.x = 525
-  combatFunction.y = 513
+  const combatStrategy = require('./combatStrategyFunction')(bot, targets)
+  combatStrategy.x = 525
+  combatStrategy.y = 513
 
   const goChests = require('./goChestsFunctions')(bot, targets)
   goChests.x = 225
@@ -116,7 +111,7 @@ function minerJobFunction (bot, targets) {
 
     new StateTransition({
       parent: miningFunction,
-      child: combatFunction,
+      child: combatStrategy,
       name: 'miningFunction -> try getClosestMob',
       onTransition: () => bot.pathfinder.setGoal(null),
       shouldTransition: () => {
@@ -126,24 +121,10 @@ function minerJobFunction (bot, targets) {
     }),
 
     new StateTransition({
-      parent: combatFunction,
+      parent: combatStrategy,
       child: eatFood,
       name: 'Mob is dead',
-      shouldTransition: () => combatFunction.isFinished()
-    }),
-
-    new StateTransition({
-      parent: combatFunction,
-      child: eatFoodCombat,
-      name: 'Eat In Combat',
-      shouldTransition: () => bot.health < 15 && bot.food !== 20
-    }),
-
-    new StateTransition({
-      parent: eatFoodCombat,
-      child: combatFunction,
-      name: 'End Eat In Combat',
-      shouldTransition: () => eatFoodCombat.isFinished()
+      shouldTransition: () => combatStrategy.isFinished()
     })
 
   ]
