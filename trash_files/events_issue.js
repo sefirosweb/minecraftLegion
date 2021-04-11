@@ -116,13 +116,6 @@ bot.once('spawn', () => {
     new StateTransition({
       parent: customBehavior,
       child: position1,
-      onTransition: () => {
-        console.clear()
-        const events = bot.eventNames()
-        events.forEach(event => {
-          console.log(`${event}: ${bot.listenerCount(event)}`)
-        })
-      },
       shouldTransition: () => true
     })
 
