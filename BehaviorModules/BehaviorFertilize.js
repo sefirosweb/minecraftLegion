@@ -36,7 +36,7 @@ module.exports = class BehaviorFertilize {
         }
       }.bind(this), 500)
     } catch (err) {
-      console.log(err)
+      console.log('Error on fertilize')
       setTimeout(function () {
         this.fertilize()
       }.bind(this), 500)
