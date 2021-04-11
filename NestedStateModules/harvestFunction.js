@@ -6,9 +6,9 @@ const {
   BehaviorMoveTo,
   NestedStateMachine
 } = require('mineflayer-statemachine')
-const BehaviorLoadConfig = require('./../BehaviorModules/BehaviorLoadConfig')
 const BehaviorDigBlock = require('./../BehaviorModules/BehaviorDigBlock')
-const BehaviorInteractBlock = require('./../BehaviorModules/BehaviorInteractBlock')
+const BehaviorEatFood = require('./../BehaviorModules/BehaviorInteractBlock')
+const BehaviorInteractBlock = require('./../BehaviorModules/BehaviorEatFood')
 
 function harvestFunction (bot, targets) {
   const start = new BehaviorIdle(targets)
@@ -16,10 +16,10 @@ function harvestFunction (bot, targets) {
   start.x = 125
   start.y = 113
 
-  const loadConfig = new BehaviorLoadConfig(bot, targets)
-  loadConfig.stateName = 'Load Bot Config'
-  loadConfig.x = 325
-  loadConfig.y = 113
+  const eatFood = new BehaviorEatFood(bot, targets)
+  eatFood.stateName = 'Eat Food'
+  eatFood.x = 325
+  eatFood.y = 113
 
   const goPlant = new BehaviorMoveTo(bot, targets)
   goPlant.stateName = 'Go Plant'
@@ -123,17 +123,17 @@ function harvestFunction (bot, targets) {
 
     new StateTransition({
       parent: start,
-      child: loadConfig,
+      child: eatFood,
       shouldTransition: () => true
     }),
 
     new StateTransition({
-      parent: loadConfig,
+      parent: eatFood,
       child: checkArea,
       onTransition: () => {
         harvestIsFinished = false
       },
-      shouldTransition: () => true
+      shouldTransition: () => eatFood.isFinished()
     }),
 
     new StateTransition({

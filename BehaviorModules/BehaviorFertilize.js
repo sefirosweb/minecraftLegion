@@ -29,7 +29,7 @@ module.exports = class BehaviorFertilize {
       setTimeout(function () {
         const block = this.bot.blockAt(this.targets.position)
         if (block.name !== 'farmland') {
-          console.log(block.name)
+          console.log(`${block.name} is not farmland!`)
           this.fertilize()
         } else {
           this.isEndFinished = true
