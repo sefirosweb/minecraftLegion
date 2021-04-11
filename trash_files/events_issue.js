@@ -12,6 +12,35 @@ const bot = mineflayer.createBot({
   username: process.argv[4] ? process.argv[4] : 'eventListener',
   password: process.argv[5]
 })
+class CustomBehavior {
+  constructor (bot, targets) {
+    this.bot = bot
+    this.targets = targets
+    this.stateName = 'customBehavior'
+  }
+
+  onStateEntered () {
+    bot.on('customEvent', this.testEvent)
+  }
+
+  testEvent () {
+    console.log('hello im a event')
+  }
+
+  onStateExited () {
+    console.log('before', bot.listenerCount('customEvent'))
+
+    // I don't recomend use removeAllListeners, because you can remove "all events" of example "chat" or something important..
+    // bot.removeAllListeners('customEvent')
+
+    bot.removeListener('customEvent', this.testEvent)
+    console.log('after', bot.listenerCount('customEvent'))
+  }
+
+  isFinished () {
+    return this.isEndFinished
+  }
+}
 
 bot.once('spawn', () => {
   bot.chat('Hello world!')
@@ -26,6 +55,7 @@ bot.once('spawn', () => {
   } = require('mineflayer-statemachine')
   const targets = {}
 
+  const customBehavior = new CustomBehavior(bot, targets)
   const startState = new BehaviorIdle(targets)
   startState.stateName = 'Start'
 
@@ -77,12 +107,18 @@ bot.once('spawn', () => {
     }),
     new StateTransition({
       parent: position4,
-      child: position1,
+      child: customBehavior,
       onTransition: () => {
         targets.position = vec3(185, 63, 110)
       },
       shouldTransition: () => position4.isFinished()
+    }),
+    new StateTransition({
+      parent: customBehavior,
+      child: position1,
+      shouldTransition: () => true
     })
+
   ]
 
   const root = new NestedStateMachine(transitions, startState)
