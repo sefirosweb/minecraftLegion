@@ -20,15 +20,17 @@ function createNewBot (botName, botPassword = '') {
 
   botWebsocket.loadBot(bot)
   bot.setMaxListeners(0)
-  bot.loadPlugin(require('mineflayer-pathfinder').pathfinder)
+  bot.once('inject_allowed', () => {
+    bot.loadPlugin(require('mineflayer-pathfinder').pathfinder)
+  })
 
-  bot.on('kicked', (reason) => {
+  bot.once('kicked', (reason) => {
     const reasonDecoded = JSON.parse(reason)
     console.log(reasonDecoded)
     process.exit()
   })
 
-  bot.on('error', (error) => {
+  bot.once('error', (error) => {
     botWebsocket.log('Error bot detected ' + JSON.stringify(error))
     console.log(error)
     process.exit()
