@@ -3,9 +3,12 @@
 * Fixed vec3 package
 * Some servers request a login or custom actions, added "custom start bot" do it your self
 * Fixed movements over "Wheat"
-* Fixed minor bugs
+* Fixed bugs
+  * Combat events stucks the bot
 * Adding sweet berries
-
+* Refactorized some functions
+  * Eat in combat
+  * Custom events
 ## 0.1.9
 # Added in farmerjob new plants
   * Wheat + Melon + Pumpkin
