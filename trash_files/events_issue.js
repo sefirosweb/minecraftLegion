@@ -20,7 +20,7 @@ class CustomBehavior {
   }
 
   onStateEntered () {
-    bot.on('customEvent', this.testEvent)
+    // bot.on('customEvent', this.testEvent)
   }
 
   testEvent () {
@@ -28,13 +28,13 @@ class CustomBehavior {
   }
 
   onStateExited () {
-    console.log('before', bot.listenerCount('customEvent'))
+    // console.log('before', bot.listenerCount('customEvent'))
 
     // I don't recomend use removeAllListeners, because you can remove "all events" of example "chat" or something important..
     // bot.removeAllListeners('customEvent')
 
-    bot.removeListener('customEvent', this.testEvent)
-    console.log('after', bot.listenerCount('customEvent'))
+    // bot.removeListener('customEvent', this.testEvent)
+    // console.log('after', bot.listenerCount('path_update'))
   }
 
   isFinished () {
@@ -116,6 +116,13 @@ bot.once('spawn', () => {
     new StateTransition({
       parent: customBehavior,
       child: position1,
+      onTransition: () => {
+        console.clear()
+        const events = bot.eventNames()
+        events.forEach(event => {
+          console.log(`${event}: ${bot.listenerCount(event)}`)
+        })
+      },
       shouldTransition: () => true
     })
 

@@ -13,7 +13,7 @@
         "minecrafthawkeye": "^1.2.7",
         "mineflayer": "^3.6.0",
         "mineflayer-pathfinder": "^1.6.1",
-        "mineflayer-statemachine": "^1.6.1",
+        "mineflayer-statemachine": "^1.6.2",
         "mineflayer-web-inventory": "^1.4.0",
         "prismarine-viewer": "^1.19.2",
         "socket.io-client": "^4.0.1",
