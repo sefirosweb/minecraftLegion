@@ -10,7 +10,6 @@ const {
 const botConfig = require('../modules/botConfig')
 const botWebsocket = require('../modules/botWebsocket')
 const masters = botWebsocket.getMasters()
-const customEvents = require('../modules/customEvents')
 
 function commandsFunction (bot, targets) {
   const start = new BehaviorIdle(targets)
@@ -75,7 +74,7 @@ function commandsFunction (bot, targets) {
       parent: start,
       child: lookAtPlayersState,
       name: 'Enter to nested',
-      onTransition: () => customEvents.addEvent('chat', botChatCommandFunctionListener),
+      onTransition: () => bot.on('customEventChat', botChatCommandFunctionListener),
       shouldTransition: () => true
     }),
     new StateTransition({
@@ -115,7 +114,7 @@ function commandsFunction (bot, targets) {
   }
 
   function endCommandsTrigger () {
-    customEvents.removeListener('chat', botChatCommandFunctionListener)
+    bot.removeListener('customEventChat', botChatCommandFunctionListener)
     transitions[0].trigger()
     transitions[1].trigger()
     transitions[2].trigger()
@@ -412,11 +411,11 @@ function commandsFunction (bot, targets) {
     prevPoint = point
     botWebsocket.log('Point: ' + JSON.stringify(point))
 
-    customEvents.addEvent('move', nextPointListener)
+    bot.on('customEventMove', nextPointListener)
   }
 
   function savePatrol () {
-    customEvents.removeListener('move', nextPointListener)
+    bot.removeListener('customEventMove', nextPointListener)
     botConfig.setPatrol(bot.username, patrol)
     // bot.chat('Ok, I memorized the patrol')
   }

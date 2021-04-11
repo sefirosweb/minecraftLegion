@@ -1,5 +1,4 @@
 const botWebsocket = require('../modules/botWebsocket')
-const customEvents = require('../modules/customEvents')
 
 const {
   StateTransition,
@@ -108,11 +107,11 @@ function combatFunction (bot, targets) {
   }
 
   function startGrades () {
-    customEvents.addEvent('physicTick', getGrades)
+    bot.on('customEventPhysicTick', getGrades)
   }
 
   function stopGrades () {
-    customEvents.removeListener('physicTick', getGrades)
+    bot.removeListener('customEventPhysicTick', getGrades)
   }
 
   function checkHandleSword () {

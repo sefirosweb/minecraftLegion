@@ -3,7 +3,6 @@ const { webServer, webServerPort, webServerPassword } = require('../config')
 const socketIOClient = require('socket.io-client')
 const config = require('../config')
 const botconfig = require('./botConfig')
-const customEvents = require('./customEvents')
 
 let bot
 let socket; let friends = []; let masters = []; let loged = false
@@ -142,16 +141,16 @@ function connect () {
           return
         }
 
-        isEventLoaded = customEvents.listeners('physicTick').find(event => {
+        isEventLoaded = bot.listeners('customEventPhysicTick').find(event => {
           return event.name === 'bound nextPointListener'
         })
 
         if (!isEventLoaded) {
           prevPoint = undefined
-          customEvents.addEvent('physicTick', nextPointListener.bind(this, findMaster))
+          bot.on('customEventPhysicTick', nextPointListener.bind(this, findMaster))
           botconfig.setCopingPatrol(bot.username, true)
         } else {
-          customEvents.removeListener('physicTick', isEventLoaded)
+          bot.removeListener('customEventPhysicTick', isEventLoaded)
           botconfig.setCopingPatrol(bot.username, false)
         }
         break

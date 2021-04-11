@@ -3,7 +3,7 @@ module.exports = (bot) => {
   const botWebsocket = require('../modules/botWebsocket')
   const inventoryViewer = require('mineflayer-web-inventory')
   const prismarineViewer = require('../modules/viewer')
-  const customEvents = require('../modules/customEvents')
+
   const mineflayerPathfinder = require('mineflayer-pathfinder')
   const mcData = require('minecraft-data')(bot.version)
 
@@ -64,9 +64,9 @@ module.exports = (bot) => {
 
   bot.on('death', function () {
     // Clear custom events when dies
-    customEvents.removeAllListeners('physicTick')
-    customEvents.removeAllListeners('chat')
-    customEvents.removeAllListeners('move')
+    bot.removeAllListeners('customEventPhysicTick')
+    bot.removeAllListeners('customEventChat')
+    bot.removeAllListeners('customEventMove')
 
     botWebsocket.log('trigger death')
     botWebsocket.emitCombat(false)
@@ -79,9 +79,9 @@ module.exports = (bot) => {
     botWebsocket.emitFood(bot.food)
   })
 
-  bot.on('physicTick', customEvents.executePhysicTickEvents)
-  bot.on('chat', customEvents.executeChatEvents)
-  bot.on('move', customEvents.executeMoveEvents)
+  bot.on('physicTick', () => bot.emit('customEventPhysicTick'))
+  bot.on('chat', (username, message) => bot.emit('customEventChat', username, message))
+  bot.on('move', (position) => bot.emit('customEventMove', position))
 
   let webserver = {}
 
