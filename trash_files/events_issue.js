@@ -55,70 +55,138 @@ bot.once('spawn', () => {
   } = require('mineflayer-statemachine')
   const targets = {}
 
-  const customBehavior = new CustomBehavior(bot, targets)
+  function walkFunction (bot, targets) {
+    const customBehavior = new CustomBehavior(bot, targets)
+    const startState = new BehaviorIdle(targets)
+    startState.stateName = 'Start'
+
+    const position1 = new BehaviorMoveTo(bot, targets)
+    position1.name = 'position1'
+
+    const position2 = new BehaviorMoveTo(bot, targets)
+    position2.name = 'position2'
+
+    const position3 = new BehaviorMoveTo(bot, targets)
+    position3.name = 'position3'
+
+    const position4 = new BehaviorMoveTo(bot, targets)
+    position4.name = 'position4'
+
+    const transitions = [
+      new StateTransition({
+        parent: startState,
+        child: position1,
+        onTransition: () => {
+          targets.position = vec3(185, 63, 110)
+        },
+        shouldTransition: () => true
+      }),
+      new StateTransition({
+        parent: position1,
+        child: position2,
+        onTransition: () => {
+          targets.position = vec3(180, 63, 110)
+        },
+        shouldTransition: () => position1.isFinished()
+      }),
+
+      new StateTransition({
+        parent: position2,
+        child: position3,
+        onTransition: () => {
+          targets.position = vec3(180, 63, 105)
+        },
+        shouldTransition: () => position2.isFinished()
+      }),
+      new StateTransition({
+        parent: position3,
+        child: position4,
+        onTransition: () => {
+          targets.position = vec3(185, 63, 105)
+        },
+        shouldTransition: () => position3.isFinished()
+      }),
+      new StateTransition({
+        parent: position4,
+        child: customBehavior,
+        onTransition: () => {
+          targets.position = vec3(185, 63, 110)
+        },
+        shouldTransition: () => position4.isFinished()
+      }),
+      new StateTransition({
+        parent: customBehavior,
+        child: position1,
+        shouldTransition: () => true
+      })
+
+    ]
+
+    const walkFunction = new NestedStateMachine(transitions, startState)
+    walkFunction.stateName = 'walkFunction'
+    return walkFunction
+  }
+
   const startState = new BehaviorIdle(targets)
   startState.stateName = 'Start'
 
-  const position1 = new BehaviorMoveTo(bot, targets)
-  position1.name = 'position1'
+  const stop = new BehaviorIdle(targets)
+  stop.stateName = 'stop'
 
-  const position2 = new BehaviorMoveTo(bot, targets)
-  position2.name = 'position2'
-
-  const position3 = new BehaviorMoveTo(bot, targets)
-  position3.name = 'position3'
-
-  const position4 = new BehaviorMoveTo(bot, targets)
-  position4.name = 'position4'
+  const walk = walkFunction(bot, targets)
+  walk.stateName = 'walk'
 
   const transitions = [
     new StateTransition({
       parent: startState,
-      child: position1,
-      onTransition: () => {
-        targets.position = vec3(185, 63, 110)
-      },
+      child: walk,
       shouldTransition: () => true
     }),
     new StateTransition({
-      parent: position1,
-      child: position2,
+      parent: startState,
+      child: stop,
       onTransition: () => {
-        targets.position = vec3(180, 63, 110)
+        const events = bot.eventNames()
+        console.log(`${Date.now()} Events:`)
+        events.forEach(event => {
+          if (event === 'path_update' || event === 'goal_reached') {
+            // @ts-expect-error
+            console.log(`${Date.now()} ${event}: ${bot.listenerCount(event)}`)
+          }
+        })
       },
-      shouldTransition: () => position1.isFinished()
-    }),
-
-    new StateTransition({
-      parent: position2,
-      child: position3,
-      onTransition: () => {
-        targets.position = vec3(180, 63, 105)
-      },
-      shouldTransition: () => position2.isFinished()
+      shouldTransition: () => false
     }),
     new StateTransition({
-      parent: position3,
-      child: position4,
+      parent: walk,
+      child: stop,
       onTransition: () => {
-        targets.position = vec3(185, 63, 105)
+        const events = bot.eventNames()
+        console.log(`${Date.now()} Events:`)
+        events.forEach(event => {
+          if (event === 'path_update' || event === 'goal_reached') {
+            // @ts-expect-error
+            console.log(`${Date.now()} ${event}: ${bot.listenerCount(event)}`)
+          }
+        })
       },
-      shouldTransition: () => position3.isFinished()
+      shouldTransition: () => false
     }),
     new StateTransition({
-      parent: position4,
-      child: customBehavior,
+      parent: stop,
+      child: walk,
       onTransition: () => {
-        targets.position = vec3(185, 63, 110)
+        const events = bot.eventNames()
+        console.log(`${Date.now()} Events:`)
+        events.forEach(event => {
+          if (event === 'path_update' || event === 'goal_reached') {
+            // @ts-expect-error
+            console.log(`${Date.now()} ${event}: ${bot.listenerCount(event)}`)
+          }
+        })
       },
-      shouldTransition: () => position4.isFinished()
-    }),
-    new StateTransition({
-      parent: customBehavior,
-      child: position1,
-      shouldTransition: () => true
+      shouldTransition: () => false
     })
-
   ]
 
   const root = new NestedStateMachine(transitions, startState)
@@ -128,4 +196,14 @@ bot.once('spawn', () => {
   if (!webserver.isServerRunning()) {
     webserver.startServer()
   }
+
+  bot.on('chat', (player, message) => {
+    if (message === 'hi all') {
+      transitions[1].trigger()
+      transitions[2].trigger()
+    }
+    if (message === 'bye') {
+      transitions[3].trigger()
+    }
+  })
 })
