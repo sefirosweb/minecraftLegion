@@ -84,7 +84,7 @@ module.exports = (bot) => {
   bot.on('chat', (username, message) => bot.emit('customEventChat', username, message))
   bot.on('move', (position) => bot.emit('customEventMove', position))
 
-  if (false) { // Only enable on debug mode
+  if (true) { // Only enable on debug mode
     bot.on('newListener', (e, l) => {
       const events = bot.eventNames()
       const eventsToSend = []

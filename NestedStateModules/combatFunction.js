@@ -111,8 +111,6 @@ function combatFunction (bot, targets) {
       return event.name === 'getGrades'
     })
 
-    console.log(isEventLoaded)
-
     if (!isEventLoaded) {
       bot.on('customEventPhysicTick', getGrades)
     }
