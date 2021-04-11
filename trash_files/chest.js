@@ -17,6 +17,10 @@ bot.once('inject_allowed', () => {
   mcData = require('minecraft-data')(bot.version)
 })
 
+bot.once('spawn', () => {
+  bot.chat('Ready!')
+})
+
 bot.on('chat', (username, message) => {
   if (username === bot.username) return
   switch (true) {
@@ -26,9 +30,13 @@ bot.on('chat', (username, message) => {
     case /^chest$/.test(message):
       watchChest()
       break
+    case /^deposit$/.test(message):
+      depositChest()
+      break
   }
 })
 
+let chestOpen
 function sayItems (items = bot.inventory.items()) {
   const output = items.map(itemToString).join(', ')
   if (output) {
@@ -38,26 +46,39 @@ function sayItems (items = bot.inventory.items()) {
   }
 }
 
-function watchChest () {
+async function openChest () {
+  if (chestOpen) {
+    console.log('Chest is already open')
+    return chestOpen
+  }
   const chestToOpen = bot.findBlock({
     matching: ['chest', 'ender_chest', 'trapped_chest'].map(name => mcData.blocksByName[name].id),
     maxDistance: 6
   })
   if (!chestToOpen) {
     bot.chat('no chest found')
-    return
+    return undefined
   }
-  const chest = bot.openChest(chestToOpen)
-  console.log(chest)
-  chest.on('open', () => {
-    sayItems(chest.containerItems())
-  })
-  chest.on('updateSlot', (oldItem, newItem) => {
+  chestOpen = await bot.openChest(chestToOpen)
+
+  chestOpen.once('updateSlot', (oldItem, newItem) => {
     bot.chat(`chest update: ${itemToString(oldItem)} -> ${itemToString(newItem)}`)
   })
-  chest.on('close', () => {
-    bot.chat('chest closed')
+  chestOpen.once('close', () => {
+    console.log('chest closed')
+    chestOpen = undefined
   })
+
+  return chestOpen
+}
+
+async function watchChest () {
+  const chest = await openChest()
+  if (!chest) {
+    return
+  }
+
+  sayItems(chest.containerItems())
 }
 
 function itemToString (item) {
@@ -66,4 +87,37 @@ function itemToString (item) {
   } else {
     return '(nothing)'
   }
+}
+
+async function depositChest () {
+  const chest = await openChest()
+
+  const itemsToDeposit = bot.inventory.items()
+
+  depositItem(chest, itemsToDeposit, 0)
+}
+
+function depositItem (chest, itemsToDeposit, currentItem) {
+  if (itemsToDeposit.length <= currentItem) {
+    setTimeout(() => {
+      chest.close()
+    }, 300)
+    return
+  }
+
+  console.log(currentItem)
+  console.log(itemsToDeposit[currentItem].name)
+  console.log(itemsToDeposit[currentItem].type)
+  console.log(itemsToDeposit[currentItem].count)
+
+  chest.deposit(itemsToDeposit[currentItem].type, null, itemsToDeposit[currentItem].count, (err) => {
+    if (err) {
+      console.log(err)
+    }
+    depositItem(chest, itemsToDeposit, currentItem + 1)
+
+    // setTimeout(() => {
+    //   depositItem(chest, itemsToDeposit, currentItem + 1)
+    // }, 200)
+  })
 }
