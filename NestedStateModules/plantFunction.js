@@ -6,7 +6,6 @@ const {
   BehaviorMoveTo,
   BehaviorEquipItem
 } = require('mineflayer-statemachine')
-const BehaviorLoadConfig = require('./../BehaviorModules/BehaviorLoadConfig')
 const BehaviorCustomPlaceBlock = require('./../BehaviorModules/BehaviorCustomPlaceBlock')
 const BehaviorFertilize = require('./../BehaviorModules/BehaviorFertilize')
 
@@ -90,11 +89,6 @@ function plantFunction (bot, targets) {
   start.x = 125
   start.y = 113
 
-  const loadConfig = new BehaviorLoadConfig(bot, targets)
-  loadConfig.stateName = 'Load Bot Config'
-  loadConfig.x = 325
-  loadConfig.y = 113
-
   const exit = new BehaviorIdle()
   exit.stateName = 'Exit'
   exit.x = 125
@@ -135,12 +129,6 @@ function plantFunction (bot, targets) {
 
     new StateTransition({
       parent: start,
-      child: loadConfig,
-      shouldTransition: () => true
-    }),
-
-    new StateTransition({
-      parent: loadConfig,
       child: checkArea,
       onTransition: () => {
         plantIsFinished = false
