@@ -7,6 +7,8 @@ module.exports = (bot) => {
   const mineflayerPathfinder = require('mineflayer-pathfinder')
   const mcData = require('minecraft-data')(bot.version)
 
+  const isInDebug = true
+
   const {
     StateTransition,
     BotStateMachine,
@@ -84,7 +86,7 @@ module.exports = (bot) => {
   bot.on('chat', (username, message) => bot.emit('customEventChat', username, message))
   bot.on('move', (position) => bot.emit('customEventMove', position))
 
-  if (true) { // Only enable on debug mode
+  if (isInDebug) { // Only enable on debug mode
     bot.on('newListener', (e, l) => {
       const events = bot.eventNames()
       const eventsToSend = []
@@ -107,6 +109,8 @@ module.exports = (bot) => {
     if (!webserver.isServerRunning()) {
       webserver.startServer()
     }
+
+    inventoryViewer(bot, { port: 5001 })
   }
 
   botWebsocket.on('action', toBotData => {
