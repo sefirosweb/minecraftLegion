@@ -56,6 +56,7 @@ function startWorkFunction (bot, targets) {
         targets.movements.canDig = targets.config.canDig
         targets.movements.blocksToAvoid.delete(mcData.blocksByName.wheat.id)
         targets.movements.blocksToAvoid.add(mcData.blocksByName.sweet_berry_bush.id)
+        targets.movements.blocksCantBreak.add(mcData.blocksByName.sweet_berry_bush.id)
       },
       shouldTransition: () => true
     }),

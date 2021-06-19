@@ -3,12 +3,12 @@ const Vec3 = require('vec3')
 const {
   StateTransition,
   BehaviorIdle,
-  BehaviorMoveTo,
   NestedStateMachine
 } = require('mineflayer-statemachine')
 const BehaviorDigBlock = require('./../BehaviorModules/BehaviorDigBlock')
 const BehaviorEatFood = require('./../BehaviorModules/BehaviorEatFood')
 const BehaviorInteractBlock = require('./../BehaviorModules/BehaviorInteractBlock')
+const BehaviorMoveTo = require('./../BehaviorModules/BehaviorMoveTo')
 
 function harvestFunction (bot, targets) {
   const start = new BehaviorIdle(targets)
@@ -21,7 +21,7 @@ function harvestFunction (bot, targets) {
   eatFood.x = 325
   eatFood.y = 113
 
-  const goPlant = new BehaviorMoveTo(bot, targets)
+  const goPlant = new BehaviorMoveTo(bot, targets, 10000)
   goPlant.stateName = 'Go Plant'
   goPlant.movements = targets.movements
   goPlant.x = 525
@@ -172,7 +172,7 @@ function harvestFunction (bot, targets) {
       onTransition: () => {
         targets.position = targets.digBlock.position.clone()
       },
-      shouldTransition: () => bot.canDigBlock(targets.digBlock) && !bot.pathfinder.isMining() && targets.plantArea.plant === 'sweet_berries'
+      shouldTransition: () => bot.canDigBlock(targets.digBlock) && bot.canSeeBlock(targets.digBlock) && !bot.pathfinder.isMining() && targets.plantArea.plant === 'sweet_berries'
     }),
 
     new StateTransition({

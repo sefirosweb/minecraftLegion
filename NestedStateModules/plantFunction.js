@@ -3,11 +3,11 @@ const {
   StateTransition,
   NestedStateMachine,
   BehaviorIdle,
-  BehaviorMoveTo,
   BehaviorEquipItem
 } = require('mineflayer-statemachine')
 const BehaviorCustomPlaceBlock = require('./../BehaviorModules/BehaviorCustomPlaceBlock')
 const BehaviorFertilize = require('./../BehaviorModules/BehaviorFertilize')
+const BehaviorMoveTo = require('./../BehaviorModules/BehaviorMoveTo')
 
 function plantFunction (bot, targets) {
   const plantType = require('../modules/plantType')
@@ -94,7 +94,7 @@ function plantFunction (bot, targets) {
   exit.x = 125
   exit.y = 313
 
-  const goPlant = new BehaviorMoveTo(bot, targets)
+  const goPlant = new BehaviorMoveTo(bot, targets, 10000)
   goPlant.stateName = 'Go Plant'
   goPlant.movements = targets.movements
   goPlant.x = 525
