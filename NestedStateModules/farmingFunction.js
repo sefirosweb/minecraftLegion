@@ -50,13 +50,6 @@ function farmingFunction (bot, targets) {
     }),
 
     new StateTransition({
-      parent: checkFarmingAreas,
-      child: exit,
-      name: 'All areas checked',
-      shouldTransition: () => plantAreaIndex === (plantArea.length) || bot.inventory.items().length >= 33
-    }),
-
-    new StateTransition({
       parent: loadConfig,
       child: checkFarmingAreas,
       onTransition: () => {
@@ -66,6 +59,20 @@ function farmingFunction (bot, targets) {
       shouldTransition: () => true
     }),
 
+    new StateTransition({
+      parent: checkFarmingAreas,
+      child: exit,
+      name: 'All areas checked',
+      shouldTransition: () => plantAreaIndex === (plantArea.length) || bot.inventory.items().length >= 33
+    }),
+
+    /** Plants **/
+    new StateTransition({
+      parent: farmingPlantsFunction,
+      child: checkFarmingAreas,
+      onTransition: () => plantAreaIndex++,
+      shouldTransition: () => farmingPlantsFunction.isFinished()
+    }),
     new StateTransition({
       parent: checkFarmingAreas,
       child: farmingPlantsFunction,
@@ -79,7 +86,9 @@ function farmingFunction (bot, targets) {
           plantType[plantArea[plantAreaIndex].plant].type === 'sweet_berries'
         ) && bot.inventory.items().length < 33
     }),
+    /** END Plants **/
 
+    /** Trees **/
     new StateTransition({
       parent: checkFarmingAreas,
       child: farmingTreesFunction,
@@ -88,20 +97,13 @@ function farmingFunction (bot, targets) {
       },
       shouldTransition: () => plantType[plantArea[plantAreaIndex].plant].type === 'tree' && bot.inventory.items().length < 33
     }),
-
-    new StateTransition({
-      parent: farmingPlantsFunction,
-      child: checkFarmingAreas,
-      onTransition: () => plantAreaIndex++,
-      shouldTransition: () => farmingPlantsFunction.isFinished()
-    }),
-
     new StateTransition({
       parent: farmingTreesFunction,
       child: checkFarmingAreas,
       onTransition: () => plantAreaIndex++,
       shouldTransition: () => farmingTreesFunction.isFinished()
     })
+    /** END Trees **/
 
   ]
 
