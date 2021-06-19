@@ -76,7 +76,6 @@ module.exports = class BehaviorDepositChest {
         return
       }
       const itemToDeposit = this.items.shift()
-      console.log(itemToDeposit)
 
       this.chest.deposit(itemToDeposit.type, null, itemToDeposit.quantity)
         .then(() => {
