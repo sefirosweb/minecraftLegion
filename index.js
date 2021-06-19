@@ -50,7 +50,7 @@ function runNextBot () {
 runNextBot()
 
 // Master websocket for load bots
-const { webServer, webServerPort, webServerPassword } = require('./config')
+const { webServer, webServerPort, webServerPassword } = require('@config')
 const io = require('socket.io-client')
 const socket = io(webServer + ':' + webServerPort)
 let loged = false

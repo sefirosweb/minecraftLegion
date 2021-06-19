@@ -5,12 +5,12 @@ const {
   BehaviorIdle,
   BehaviorEquipItem
 } = require('mineflayer-statemachine')
-const BehaviorCustomPlaceBlock = require('./../BehaviorModules/BehaviorCustomPlaceBlock')
-const BehaviorFertilize = require('./../BehaviorModules/BehaviorFertilize')
-const BehaviorMoveTo = require('./../BehaviorModules/BehaviorMoveTo')
+const BehaviorCustomPlaceBlock = require('@BehaviorModules/BehaviorCustomPlaceBlock')
+const BehaviorFertilize = require('@BehaviorModules/BehaviorFertilize')
+const BehaviorMoveTo = require('@BehaviorModules/BehaviorMoveTo')
 
 function plantFunction (bot, targets) {
-  const plantType = require('../modules/plantType')
+  const plantType = require('@modules/plantType')
   const blocksForPlant = ['dirt', 'grass_block', 'farmland']
   const blockAir = ['air', 'cave_air']
 

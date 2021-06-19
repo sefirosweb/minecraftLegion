@@ -3,7 +3,7 @@ const {
   BehaviorIdle,
   NestedStateMachine
 } = require('mineflayer-statemachine')
-const BehaviorEatFood = require('./../BehaviorModules/BehaviorEatFood')
+const BehaviorEatFood = require('@BehaviorModules/BehaviorEatFood')
 
 function combatStrategyFunction (bot, targets) {
   const start = new BehaviorIdle(targets)
@@ -16,7 +16,7 @@ function combatStrategyFunction (bot, targets) {
   exit.x = 125
   exit.y = 313
 
-  const combatFunction = require('./combatFunction')(bot, targets)
+  const combatFunction = require('@NestedStateModules/combatFunction')(bot, targets)
   combatFunction.x = 125
   combatFunction.y = 213
 

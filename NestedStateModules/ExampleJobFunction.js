@@ -4,7 +4,7 @@ const {
   NestedStateMachine
 } = require('mineflayer-statemachine')
 
-const BehaviorLoadConfig = require('./../BehaviorModules/BehaviorLoadConfig')
+const BehaviorLoadConfig = require('@BehaviorModules/BehaviorLoadConfig')
 
 function minerJobFunction (bot, targets) {
   const start = new BehaviorIdle(targets)

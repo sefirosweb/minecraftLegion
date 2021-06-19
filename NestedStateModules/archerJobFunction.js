@@ -1,4 +1,4 @@
-const botWebsocket = require('../modules/botWebsocket')
+const botWebsocket = require('@modules/botWebsocket')
 
 const {
   StateTransition,
@@ -8,7 +8,7 @@ const {
   BehaviorGetClosestEntity
 
 } = require('mineflayer-statemachine')
-const BehaviorAttack = require('../BehaviorModules/BehaviorAttack')
+const BehaviorAttack = require('@BehaviorModules/BehaviorAttack')
 
 function archerJobFunction (bot, targets) {
   const enter = new BehaviorIdle(targets)

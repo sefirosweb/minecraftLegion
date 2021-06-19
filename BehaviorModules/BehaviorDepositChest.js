@@ -1,5 +1,5 @@
-const botWebsocket = require('../modules/botWebsocket')
-const { sleep } = require('../modules/utils')
+const botWebsocket = require('@modules/botWebsocket')
+const { sleep } = require('@modules/utils')
 
 module.exports = class BehaviorDepositChest {
   constructor (bot, targets) {

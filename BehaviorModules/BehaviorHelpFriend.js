@@ -1,4 +1,4 @@
-const botWebsocket = require('../modules/botWebsocket')
+const botWebsocket = require('@modules/botWebsocket')
 
 module.exports = class BehaviorHelpFriend {
   constructor (bot, targets) {

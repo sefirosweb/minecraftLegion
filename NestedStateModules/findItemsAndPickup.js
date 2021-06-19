@@ -5,8 +5,8 @@ const {
   BehaviorMoveTo
 } = require('mineflayer-statemachine')
 
-const BehaviorFindItems = require('./../BehaviorModules/BehaviorFindItems')
-const BehaviorLoadConfig = require('./../BehaviorModules/BehaviorLoadConfig')
+const BehaviorFindItems = require('@BehaviorModules/BehaviorFindItems')
+const BehaviorLoadConfig = require('@BehaviorModules/BehaviorLoadConfig')
 
 function findItemsAndPickup (bot, targets) {
   let botPosition = {}

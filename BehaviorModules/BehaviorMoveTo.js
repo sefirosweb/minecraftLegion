@@ -1,5 +1,5 @@
 const mineflayerPathfinder = require('mineflayer-pathfinder')
-const botWebsocket = require('../modules/botWebsocket')
+const botWebsocket = require('@modules/botWebsocket')
 
 module.exports = class BehaviorMoveTo {
   constructor (bot, targets, timeout) {

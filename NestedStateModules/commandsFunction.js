@@ -7,8 +7,8 @@ const {
   BehaviorLookAtEntity,
   NestedStateMachine
 } = require('mineflayer-statemachine')
-const botConfig = require('../modules/botConfig')
-const botWebsocket = require('../modules/botWebsocket')
+const botConfig = require('@modules/botConfig')
+const botWebsocket = require('@modules/botWebsocket')
 const masters = botWebsocket.getMasters()
 
 function commandsFunction (bot, targets) {

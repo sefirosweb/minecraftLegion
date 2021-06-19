@@ -5,14 +5,14 @@ const {
   BehaviorMoveTo
 } = require('mineflayer-statemachine')
 
-const BehaviorLoadConfig = require('./../BehaviorModules/BehaviorLoadConfig')
-const BehaviorMinerCheckLayer = require('./../BehaviorModules/BehaviorMinerCheckLayer')
-const BehaviorMinerCurrentLayer = require('./../BehaviorModules/BehaviorMinerCurrentLayer')
-const BehaviorMinerCurrentBlock = require('./../BehaviorModules/BehaviorMinerCurrentBlock')
-const BehaviorDigBlock = require('./../BehaviorModules/BehaviorDigBlock')
-const BehaviorMinerChecks = require('./../BehaviorModules/BehaviorMinerChecks')
-const BehaviorEatFood = require('./../BehaviorModules/BehaviorEatFood')
-const BehaviorCustomPlaceBlock = require('./../BehaviorModules/BehaviorCustomPlaceBlock')
+const BehaviorLoadConfig = require('@BehaviorModules/BehaviorLoadConfig')
+const BehaviorMinerCheckLayer = require('@BehaviorModules/BehaviorMinerCheckLayer')
+const BehaviorMinerCurrentLayer = require('@BehaviorModules/BehaviorMinerCurrentLayer')
+const BehaviorMinerCurrentBlock = require('@BehaviorModules/BehaviorMinerCurrentBlock')
+const BehaviorDigBlock = require('@BehaviorModules/BehaviorDigBlock')
+const BehaviorMinerChecks = require('@BehaviorModules/BehaviorMinerChecks')
+const BehaviorEatFood = require('@BehaviorModules/BehaviorEatFood')
+const BehaviorCustomPlaceBlock = require('@BehaviorModules/BehaviorCustomPlaceBlock')
 
 const mineflayerPathfinder = require('mineflayer-pathfinder')
 
@@ -119,7 +119,7 @@ function miningFunction (bot, targets) {
   eatFood.x = 725
   eatFood.y = 313
 
-  const fillBlocks = require('./fillFunction')(bot, targets)
+  const fillBlocks = require('@NestedStateModules/fillFunction')(bot, targets)
   fillBlocks.x = 350
   fillBlocks.y = 313
 

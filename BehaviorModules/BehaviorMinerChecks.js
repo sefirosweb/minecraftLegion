@@ -1,12 +1,12 @@
 
-const botWebsocket = require('../modules/botWebsocket')
+const botWebsocket = require('@modules/botWebsocket')
 module.exports = class BehaviorMinerChecks {
   constructor (bot, targets) {
     this.bot = bot
     this.targets = targets
     this.stateName = 'BehaviorMinerChecks'
 
-    this.inventoryModule = require('../modules/inventoryModule')(bot)
+    this.inventoryModule = require('@modules/inventoryModule')(bot)
     this.isEndFinished = false
     this.isReady = false
   }

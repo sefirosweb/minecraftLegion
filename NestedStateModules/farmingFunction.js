@@ -1,15 +1,15 @@
-const botWebsocket = require('../modules/botWebsocket')
-const { shuffle } = require('../modules/utils')
+const botWebsocket = require('@modules/botWebsocket')
+const { shuffle } = require('@modules/utils')
 const {
   StateTransition,
   BehaviorIdle,
   NestedStateMachine
 } = require('mineflayer-statemachine')
 
-const BehaviorLoadConfig = require('./../BehaviorModules/BehaviorLoadConfig')
+const BehaviorLoadConfig = require('@BehaviorModules/BehaviorLoadConfig')
 
 function farmingFunction (bot, targets) {
-  const plantType = require('../modules/plantType')
+  const plantType = require('@modules/plantType')
   const start = new BehaviorIdle(targets)
   start.stateName = 'Start'
   start.x = 125
@@ -33,12 +33,12 @@ function farmingFunction (bot, targets) {
   const nextArea = new BehaviorIdle(targets)
   nextArea.stateName = 'Next Area'
 
-  const farmingPlantsFunction = require('./farmingPlantsFunction')(bot, targets)
+  const farmingPlantsFunction = require('@NestedStateModules/farmingPlantsFunction')(bot, targets)
   farmingPlantsFunction.stateName = 'Farm Plants'
   farmingPlantsFunction.x = 625
   farmingPlantsFunction.y = 313
 
-  const farmingTreesFunction = require('./farmingTreesFunction')(bot, targets)
+  const farmingTreesFunction = require('@NestedStateModules/farmingTreesFunction')(bot, targets)
   farmingTreesFunction.stateName = 'Farm Trees'
   farmingTreesFunction.x = 425
   farmingTreesFunction.y = 313

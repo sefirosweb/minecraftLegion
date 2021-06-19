@@ -1,4 +1,4 @@
-const botWebsocket = require('../modules/botWebsocket')
+const botWebsocket = require('@modules/botWebsocket')
 module.exports = class template {
   constructor (bot, targets) {
     this.bot = bot

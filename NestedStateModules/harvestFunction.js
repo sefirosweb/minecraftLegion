@@ -5,10 +5,10 @@ const {
   BehaviorIdle,
   NestedStateMachine
 } = require('mineflayer-statemachine')
-const BehaviorDigBlock = require('./../BehaviorModules/BehaviorDigBlock')
-const BehaviorEatFood = require('./../BehaviorModules/BehaviorEatFood')
-const BehaviorInteractBlock = require('./../BehaviorModules/BehaviorInteractBlock')
-const BehaviorMoveTo = require('./../BehaviorModules/BehaviorMoveTo')
+const BehaviorDigBlock = require('@BehaviorModules/BehaviorDigBlock')
+const BehaviorEatFood = require('@BehaviorModules/BehaviorEatFood')
+const BehaviorInteractBlock = require('@BehaviorModules/BehaviorInteractBlock')
+const BehaviorMoveTo = require('@BehaviorModules/BehaviorMoveTo')
 
 function harvestFunction (bot, targets) {
   const start = new BehaviorIdle(targets)
@@ -65,7 +65,7 @@ function harvestFunction (bot, targets) {
     harvestIsFinished = false
   }
 
-  const plantType = require('../modules/plantType')
+  const plantType = require('@modules/plantType')
 
   function getPlantBlock () {
     const xStart = targets.plantArea.xStart < targets.plantArea.xEnd ? targets.plantArea.xStart : targets.plantArea.xEnd

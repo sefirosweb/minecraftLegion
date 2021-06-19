@@ -6,13 +6,13 @@ const {
   BehaviorFollowEntity
 } = require('mineflayer-statemachine')
 
-const BehaviorLoadConfig = require('./../BehaviorModules/BehaviorLoadConfig')
-const BehaviorMoveToArray = require('./../BehaviorModules/BehaviorMoveToArray')
-const BehaviorGetReady = require('./../BehaviorModules/BehaviorGetReady')
-const BehaviorEatFood = require('./../BehaviorModules/BehaviorEatFood')
-const BehaviorEquip = require('./../BehaviorModules/BehaviorEquip')
-const BehaviorFindItems = require('./../BehaviorModules/BehaviorFindItems')
-const BehaviorHelpFriend = require('./../BehaviorModules/BehaviorHelpFriend')
+const BehaviorLoadConfig = require('@BehaviorModules/BehaviorLoadConfig')
+const BehaviorMoveToArray = require('@BehaviorModules/BehaviorMoveToArray')
+const BehaviorGetReady = require('@BehaviorModules/BehaviorGetReady')
+const BehaviorEatFood = require('@BehaviorModules/BehaviorEatFood')
+const BehaviorEquip = require('@BehaviorModules/BehaviorEquip')
+const BehaviorFindItems = require('@BehaviorModules/BehaviorFindItems')
+const BehaviorHelpFriend = require('@BehaviorModules/BehaviorHelpFriend')
 
 function guardJobFunction (bot, targets) {
   const start = new BehaviorIdle(targets)
@@ -31,7 +31,7 @@ function guardJobFunction (bot, targets) {
   patrol.y = 513
   patrol.movements = targets.movements
 
-  const getClosestMob = require('./../modules/getClosestEnemy')(bot, targets)
+  const getClosestMob = require('@modules/getClosestEnemy')(bot, targets)
 
   const getReady = new BehaviorGetReady(bot, targets)
   getReady.stateName = 'Get Ready for Patrol'
@@ -67,11 +67,11 @@ function guardJobFunction (bot, targets) {
   goFriend.x = 725
   goFriend.y = 813
 
-  const combatStrategy = require('./combatStrategyFunction')(bot, targets)
+  const combatStrategy = require('@NestedStateModules/combatStrategyFunction')(bot, targets)
   combatStrategy.x = 925
   combatStrategy.y = 513
 
-  const goChests = require('./goChestsFunctions')(bot, targets)
+  const goChests = require('@NestedStateModules/goChestsFunctions')(bot, targets)
   goChests.x = 325
   goChests.y = 313
 

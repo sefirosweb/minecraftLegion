@@ -1,4 +1,4 @@
-const botWebsocket = require('../modules/botWebsocket')
+const botWebsocket = require('@modules/botWebsocket')
 module.exports = function (bot, targets) {
   let entities = []
   let currentEntity = false

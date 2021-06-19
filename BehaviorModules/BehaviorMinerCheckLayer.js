@@ -1,4 +1,4 @@
-const botWebsocket = require('../modules/botWebsocket')
+const botWebsocket = require('@modules/botWebsocket')
 const Vec3 = require('vec3')
 
 module.exports = class BehaviorMinerCheckLayer {

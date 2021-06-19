@@ -1,8 +1,8 @@
 const Vec3 = require('vec3')
-const { webServer, webServerPort, webServerPassword } = require('../config')
+const { webServer, webServerPort, webServerPassword } = require('@config')
 const socketIOClient = require('socket.io-client')
-const config = require('../config')
-const botconfig = require('./botConfig')
+const config = require('@config')
+const botconfig = require('@modules/botConfig')
 
 let bot
 let socket; let friends = []; let masters = []; let loged = false

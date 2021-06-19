@@ -1,4 +1,4 @@
-const botWebsocket = require('../modules/botWebsocket')
+const botWebsocket = require('@modules/botWebsocket')
 class BehaviorAttack {
   constructor (bot, targets) {
     this.bot = bot
@@ -8,7 +8,7 @@ class BehaviorAttack {
     this.playerIsFound = false
     this.lastAttack = Date.now()
 
-    this.inventory = require('../modules/inventoryModule')(this.bot)
+    this.inventory = require('@modules/inventoryModule')(this.bot)
   }
 
   onStateEntered () {

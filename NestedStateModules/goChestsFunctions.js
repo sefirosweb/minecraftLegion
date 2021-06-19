@@ -5,10 +5,10 @@ const {
   NestedStateMachine
 } = require('mineflayer-statemachine')
 
-const BehaviorLoadConfig = require('./../BehaviorModules/BehaviorLoadConfig')
-const BehaviorWithdrawItemChest = require('./../BehaviorModules/BehaviorWithdrawItemChest')
-const BehaviorDepositChest = require('./../BehaviorModules/BehaviorDepositChest')
-const BehaviorCheckItemsInInventory = require('./../BehaviorModules/BehaviorCheckItemsInInventory')
+const BehaviorLoadConfig = require('@BehaviorModules/BehaviorLoadConfig')
+const BehaviorWithdrawItemChest = require('@BehaviorModules/BehaviorWithdrawItemChest')
+const BehaviorDepositChest = require('@BehaviorModules/BehaviorDepositChest')
+const BehaviorCheckItemsInInventory = require('@BehaviorModules/BehaviorCheckItemsInInventory')
 
 function goChestsFunction (bot, targets) {
   const start = new BehaviorIdle()

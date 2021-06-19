@@ -1,4 +1,4 @@
-const botWebsocket = require('../modules/botWebsocket')
+const botWebsocket = require('@modules/botWebsocket')
 const vec3 = require('vec3')
 module.exports = class BehaviorCustomPlaceBlock {
   constructor (bot, targets, canJump = true) {

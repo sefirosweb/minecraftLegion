@@ -1,4 +1,4 @@
-const botWebsocket = require('../modules/botWebsocket')
+const botWebsocket = require('@modules/botWebsocket')
 
 const {
   StateTransition,
@@ -6,11 +6,11 @@ const {
   NestedStateMachine,
   BehaviorFollowEntity
 } = require('mineflayer-statemachine')
-const BehaviorAttack = require('./../BehaviorModules/BehaviorAttack')
-const BehaviorLongAttack = require('./../BehaviorModules/BehaviorLongAttack')
+const BehaviorAttack = require('@BehaviorModules/BehaviorAttack')
+const BehaviorLongAttack = require('@BehaviorModules/BehaviorLongAttack')
 
 function combatFunction (bot, targets) {
-  const inventory = require('../modules/inventoryModule')(bot)
+  const inventory = require('@modules/inventoryModule')(bot)
   const hawkEye = require('minecrafthawkeye')
   bot.loadPlugin(hawkEye)
 

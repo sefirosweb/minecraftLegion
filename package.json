@@ -15,6 +15,7 @@
         "mineflayer-pathfinder": "^1.6.2",
         "mineflayer-statemachine": "^1.6.4",
         "mineflayer-web-inventory": "^1.4.0",
+        "module-alias": "^2.2.2",
         "prismarine-viewer": "^1.19.3",
         "socket.io-client": "^4.1.2",
         "vec3": "^0.1.7"
@@ -40,5 +41,12 @@
     "bugs": {
         "url": "https://github.com/sefirosweb/minecraftLegion/issues"
     },
-    "homepage": "https://github.com/sefirosweb/minecraftLegion#readme"
+    "homepage": "https://github.com/sefirosweb/minecraftLegion#readme",
+    "_moduleAliases": {
+        "@": ".",
+        "@modules": "./modules",
+        "@BehaviorModules": "./BehaviorModules",
+        "@NestedStateModules": "./NestedStateModules",
+        "@config": "./config"
+    }
 }

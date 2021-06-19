@@ -5,7 +5,7 @@ module.exports = class BehaviorGetReady {
     this.stateName = 'BehaviorGetReady'
 
     this.isReady = false
-    this.inventory = require('../modules/inventoryModule')(this.bot)
+    this.inventory = require('@modules/inventoryModule')(this.bot)
   }
 
   onStateEntered () {

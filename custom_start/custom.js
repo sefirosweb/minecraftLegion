@@ -1,4 +1,4 @@
-const { sleep } = require('../modules/utils')
+const { sleep } = require('@modules/utils')
 
 module.exports = (bot) => {
   const start = async () => {

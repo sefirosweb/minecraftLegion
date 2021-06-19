@@ -1,4 +1,4 @@
-const botConfig = require('../modules/botConfig')
+const botConfig = require('@modules/botConfig')
 
 module.exports = class BehaviorLoadConfig {
   constructor (bot, targets) {

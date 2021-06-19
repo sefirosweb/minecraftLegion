@@ -5,9 +5,9 @@ const {
   BehaviorMoveTo
 } = require('mineflayer-statemachine')
 
-const BehaviorDigBlock = require('./../BehaviorModules/BehaviorDigBlock')
-const BehaviorCustomPlaceBlock = require('./../BehaviorModules/BehaviorCustomPlaceBlock')
-const BehaviorLoadConfig = require('./../BehaviorModules/BehaviorLoadConfig')
+const BehaviorDigBlock = require('@BehaviorModules/BehaviorDigBlock')
+const BehaviorCustomPlaceBlock = require('@BehaviorModules/BehaviorCustomPlaceBlock')
+const BehaviorLoadConfig = require('@BehaviorModules/BehaviorLoadConfig')
 
 // let isDigging = false
 function fillFunction (bot, targets) {

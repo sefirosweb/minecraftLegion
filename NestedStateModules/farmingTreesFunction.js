@@ -25,17 +25,17 @@ function farmingTreesFunction (bot, targets) {
   checkFarmingAreas.x = 525
   checkFarmingAreas.y = 113
 
-  const plant = require('./plantFunction')(bot, targets)
+  const plant = require('@NestedStateModules/plantFunction')(bot, targets)
   plant.stateName = 'Plant'
   plant.x = 725
   plant.y = 313
 
-  const harvest = require('./harvestFunction')(bot, targets)
+  const harvest = require('@NestedStateModules/harvestFunction')(bot, targets)
   harvest.stateName = 'Harvest'
   harvest.x = 325
   harvest.y = 313
 
-  const findItemsAndPickup = require('./findItemsAndPickup')(bot, targets)
+  const findItemsAndPickup = require('@NestedStateModules/findItemsAndPickup')(bot, targets)
   findItemsAndPickup.stateName = 'Find Items'
   findItemsAndPickup.x = 525
   findItemsAndPickup.y = 313

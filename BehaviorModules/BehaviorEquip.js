@@ -1,4 +1,4 @@
-const botWebsocket = require('../modules/botWebsocket')
+const botWebsocket = require('@modules/botWebsocket')
 
 module.exports = class BehaviorEquip {
   constructor (bot, targets) {
@@ -8,7 +8,7 @@ module.exports = class BehaviorEquip {
 
     this.isEndFinished = false
 
-    this.inventory = require('../modules/inventoryModule')(this.bot)
+    this.inventory = require('@modules/inventoryModule')(this.bot)
   }
 
   onStateEntered () {

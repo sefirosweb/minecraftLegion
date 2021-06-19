@@ -1,4 +1,4 @@
-const botWebsocket = require('../modules/botWebsocket')
+const botWebsocket = require('@modules/botWebsocket')
 
 module.exports = class BehaviorLongAttack {
   constructor (bot, targets) {
@@ -9,7 +9,7 @@ module.exports = class BehaviorLongAttack {
     this.playerIsFound = false
     this.lastAttack = Date.now()
 
-    this.inventory = require('../modules/inventoryModule')(this.bot)
+    this.inventory = require('@modules/inventoryModule')(this.bot)
 
     this.preparingShot = false
     this.prevTime = false

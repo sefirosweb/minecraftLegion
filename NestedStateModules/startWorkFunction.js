@@ -4,7 +4,7 @@ const {
   NestedStateMachine
 } = require('mineflayer-statemachine')
 
-const BehaviorLoadConfig = require('./../BehaviorModules/BehaviorLoadConfig')
+const BehaviorLoadConfig = require('@BehaviorModules/BehaviorLoadConfig')
 
 function startWorkFunction (bot, targets) {
   const mcData = require('minecraft-data')(bot.version)
@@ -24,19 +24,19 @@ function startWorkFunction (bot, targets) {
   loadedConfig.x = 325
   loadedConfig.y = 213
 
-  const guardJob = require('./guardJobFunction')(bot, targets)
+  const guardJob = require('@NestedStateModules/guardJobFunction')(bot, targets)
   guardJob.x = 525
   guardJob.y = 313
 
-  const archerJob = require('./archerJobFunction')(bot, targets)
+  const archerJob = require('@NestedStateModules/archerJobFunction')(bot, targets)
   archerJob.x = 525
   archerJob.y = 113
 
-  const farmerJob = require('./farmerJobFunction')(bot, targets)
+  const farmerJob = require('@NestedStateModules/farmerJobFunction')(bot, targets)
   farmerJob.x = 325
   farmerJob.y = 350
 
-  const minerJob = require('./minerJobFunction')(bot, targets)
+  const minerJob = require('@NestedStateModules/minerJobFunction')(bot, targets)
   minerJob.x = 325
   minerJob.y = 50
 

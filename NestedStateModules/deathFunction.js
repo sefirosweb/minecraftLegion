@@ -3,8 +3,8 @@ const {
   BehaviorIdle,
   NestedStateMachine
 } = require('mineflayer-statemachine')
-const BehaviorGetPlayer = require('./../BehaviorModules/BehaviorGetPlayer')
-const botWebsocket = require('../modules/botWebsocket')
+const BehaviorGetPlayer = require('@BehaviorModules/BehaviorGetPlayer')
+const botWebsocket = require('@modules/botWebsocket')
 
 function deathFunction (bot, targets) {
   const start = new BehaviorIdle(targets)
@@ -12,11 +12,11 @@ function deathFunction (bot, targets) {
   start.x = 125
   start.y = 113
 
-  const startWork = require('./startWorkFunction')(bot, targets)
+  const startWork = require('@NestedStateModules/startWorkFunction')(bot, targets)
   startWork.x = 325
   startWork.y = 313
 
-  const commands = require('./commandsFunction')(bot, targets)
+  const commands = require('@NestedStateModules/commandsFunction')(bot, targets)
   commands.x = 525
   commands.y = 113
 

@@ -4,9 +4,9 @@ const {
   NestedStateMachine
 } = require('mineflayer-statemachine')
 
-const BehaviorLoadConfig = require('./../BehaviorModules/BehaviorLoadConfig')
-const BehaviorGetReady = require('./../BehaviorModules/BehaviorGetReady')
-const BehaviorEatFood = require('./../BehaviorModules/BehaviorEatFood')
+const BehaviorLoadConfig = require('@BehaviorModules/BehaviorLoadConfig')
+const BehaviorGetReady = require('@BehaviorModules/BehaviorGetReady')
+const BehaviorEatFood = require('@BehaviorModules/BehaviorEatFood')
 
 function farmerJobFunction (bot, targets) {
   const start = new BehaviorIdle(targets)
@@ -24,11 +24,11 @@ function farmerJobFunction (bot, targets) {
   getReady.x = 525
   getReady.y = 113
 
-  const goChests = require('./goChestsFunctions')(bot, targets)
+  const goChests = require('@NestedStateModules/goChestsFunctions')(bot, targets)
   goChests.x = 525
   goChests.y = 313
 
-  const farming = require('./farmingFunction')(bot, targets)
+  const farming = require('@NestedStateModules/farmingFunction')(bot, targets)
   farming.stateName = 'Farming'
   farming.x = 728
   farming.y = 313
@@ -38,8 +38,8 @@ function farmerJobFunction (bot, targets) {
   eatFood.x = 728
   eatFood.y = 113
 
-  const getClosestMob = require('./../modules/getClosestEnemy')(bot, targets)
-  const combatStrategy = require('./combatStrategyFunction')(bot, targets)
+  const getClosestMob = require('@modules/getClosestEnemy')(bot, targets)
+  const combatStrategy = require('@NestedStateModules/combatStrategyFunction')(bot, targets)
   combatStrategy.x = 925
   combatStrategy.y = 313
 

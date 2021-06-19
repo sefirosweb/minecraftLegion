@@ -1,8 +1,8 @@
 
 module.exports = (bot) => {
-  const botWebsocket = require('../modules/botWebsocket')
+  const botWebsocket = require('@modules/botWebsocket')
   const inventoryViewer = require('mineflayer-web-inventory')
-  const prismarineViewer = require('../modules/viewer')
+  const prismarineViewer = require('@modules/viewer')
 
   const mineflayerPathfinder = require('mineflayer-pathfinder')
   const mcData = require('minecraft-data')(bot.version)
@@ -32,7 +32,7 @@ module.exports = (bot) => {
   watiState.x = 125
   watiState.y = 313
 
-  const death = require('./deathFunction')(bot, targets)
+  const death = require('@NestedStateModules/deathFunction')(bot, targets)
   death.x = 425
   death.y = 213
 
