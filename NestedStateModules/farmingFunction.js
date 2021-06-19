@@ -7,8 +7,6 @@ const {
 
 const BehaviorLoadConfig = require('./../BehaviorModules/BehaviorLoadConfig')
 
-const validPlants = ['carrot', 'potato', 'beetroot', 'wheat', 'melon', 'sweet_berries', 'pumpkin', 'oak_sapling', 'cabirch_saplingrrot', 'jungle_sapling', 'acacia_sapling', 'dark_oak_sapling']
-
 function farmingFunction (bot, targets) {
   const plantType = require('../modules/plantType')
   const start = new BehaviorIdle(targets)
@@ -86,10 +84,14 @@ function farmingFunction (bot, targets) {
       child: nextArea,
       onTransition: () => {
         botWebsocket.log('Plant is not valid! ' + plantArea[plantAreaIndex].plant)
-        console.log('Plant detected is not valid')
       },
       // shouldTransition: () => !plantArea[plantAreaIndex].plant.includes(validPlants)
-      shouldTransition: () => !validPlants.includes(plantArea[plantAreaIndex].plant)
+      shouldTransition: () => plantType[plantArea[plantAreaIndex].plant] === undefined ||
+        !Number.isInteger(plantArea[plantAreaIndex].xStart) ||
+        !Number.isInteger(plantArea[plantAreaIndex].xEnd) ||
+        !Number.isInteger(plantArea[plantAreaIndex].yLayer) ||
+        !Number.isInteger(plantArea[plantAreaIndex].zStart) ||
+        !Number.isInteger(plantArea[plantAreaIndex].zEnd)
     }),
 
     /** Plants **/
