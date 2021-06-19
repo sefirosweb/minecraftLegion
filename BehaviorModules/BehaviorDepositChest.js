@@ -7,13 +7,14 @@ module.exports = class BehaviorDepositChest {
     this.targets = targets
     this.stateName = 'BehaviorDepositChest'
     this.isEndFinished = false
-
+    this.items = []
     this.chest = false
   }
 
   onStateEntered () {
     this.isEndFinished = false
     botWebsocket.log('Items to deposit ' + JSON.stringify(this.targets.items))
+    this.items = this.targets.items
     this.depositAllItems()
   }
 
@@ -42,24 +43,46 @@ module.exports = class BehaviorDepositChest {
 
     this.chest = await this.bot.openChest(chestToOpen)
     await sleep(200)
-    await this.depositItems()
-    await sleep(200)
-    await this.chest.close()
-    await sleep(500)
-    this.isEndFinished = true
+    this.depositItems()
+      .then(async () => {
+        await sleep(200)
+        await this.chest.close()
+        await sleep(500)
+        this.isEndFinished = true
+      })
+      .catch(err =>
+        console.log(err)
+      )
+      .then(async () => {
+        await sleep(200)
+        await this.chest.close()
+        await sleep(500)
+        this.isEndFinished = true
+      })
   }
 
-  async depositItems () {
-    if (this.targets.items.length === 0) { return }
-    const itemToDeposit = this.targets.items.shift()
+  depositItems () {
+    return new Promise((resolve, reject) => {
+      if (this.items.length === 0) {
+        resolve()
+        return
+      }
+      const itemToDeposit = this.items.shift()
+      console.log(itemToDeposit)
 
-    try {
-      await this.chest.deposit(itemToDeposit.type, null, itemToDeposit.quantity)
-    } catch (err) {
-      botWebsocket.log(JSON.stringify(err.message))
-      return
-    }
-
-    await this.depositItems()
+      this.chest.deposit(itemToDeposit.type, null, itemToDeposit.quantity)
+        .then(() => {
+          this.depositItems()
+            .then(() => {
+              resolve()
+            })
+            .catch(err => {
+              reject(err)
+            })
+        })
+        .catch(err => {
+          reject(err)
+        })
+    })
   }
 }
