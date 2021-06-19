@@ -12,6 +12,7 @@
 * Fixed bugs with deposit chets
 * Fixed bug with farming
 * Added random shuffle farming area (when you have more 1 bot farming same area configuration can start for different sites)
+* Added module aliases for optimize the code
 ## 0.1.9
 # Added in farmerjob new plants
   * Wheat + Melon + Pumpkin
