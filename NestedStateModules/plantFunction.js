@@ -55,8 +55,10 @@ function plantFunction (bot, targets) {
 
     if (type === 'melon' || type === 'sweet_berries') {
       for (let xCurrent = xStart; xCurrent <= xEnd; xCurrent += 2) {
+        let line = 0
         for (let zCurrent = zStart; zCurrent <= zEnd; zCurrent++) {
-          if (type === 'sweet_berries' && zCurrent % 5 === 0) {
+          line++
+          if (type === 'sweet_berries' && line % 5 === 0) {
             continue
           }
           const block = bot.blockAt(new Vec3(xCurrent, yLayer, zCurrent))
