@@ -9,6 +9,8 @@
 * Refactorized some functions
   * Eat in combat
   * Custom events
+* Fixed bugs with deposit chets
+* Fixed bug with farming
 ## 0.1.9
 # Added in farmerjob new plants
   * Wheat + Melon + Pumpkin
