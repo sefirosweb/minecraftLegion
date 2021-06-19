@@ -163,7 +163,12 @@ function plantFunction (bot, targets) {
     new StateTransition({
       parent: goPlant,
       child: placePlant,
-      shouldTransition: () => goPlant.distanceToTarget() < 3 && (blockToPlant.name === 'farmland' || plantType[targets.plantArea.plant].type === 'tree')
+      shouldTransition: () => goPlant.distanceToTarget() < 3 &&
+        (
+          blockToPlant.name === 'farmland' ||
+          plantType[targets.plantArea.plant].type === 'tree' ||
+          plantType[targets.plantArea.plant].type === 'sweet_berries'
+        )
     }),
 
     new StateTransition({
@@ -172,7 +177,10 @@ function plantFunction (bot, targets) {
       onTransition: () => {
         targets.position = targets.position.offset(0, -1, 0)
       },
-      shouldTransition: () => goPlant.distanceToTarget() < 3 && blockToPlant.name !== 'farmland' && plantType[targets.plantArea.plant].type !== 'tree'
+      shouldTransition: () => goPlant.distanceToTarget() < 3 &&
+        blockToPlant.name !== 'farmland' &&
+        plantType[targets.plantArea.plant].type !== 'tree' &&
+        plantType[targets.plantArea.plant].type !== 'sweet_berries'
     }),
 
     new StateTransition({
