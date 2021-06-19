@@ -1,3 +1,4 @@
+const botWebsocket = require('../modules/botWebsocket')
 const {
   StateTransition,
   BehaviorIdle,
@@ -5,6 +6,8 @@ const {
 } = require('mineflayer-statemachine')
 
 const BehaviorLoadConfig = require('./../BehaviorModules/BehaviorLoadConfig')
+
+const validPlants = ['carrot', 'potato', 'beetroot', 'wheat', 'melon', 'sweet_berries', 'pumpkin', 'oak_sapling', 'cabirch_saplingrrot', 'jungle_sapling', 'acacia_sapling', 'dark_oak_sapling']
 
 function farmingFunction (bot, targets) {
   const plantType = require('../modules/plantType')
@@ -24,9 +27,12 @@ function farmingFunction (bot, targets) {
   exit.y = 113
 
   const checkFarmingAreas = new BehaviorIdle(targets)
-  checkFarmingAreas.stateName = 'Next Area'
+  checkFarmingAreas.stateName = 'Check Area'
   checkFarmingAreas.x = 525
   checkFarmingAreas.y = 113
+
+  const nextArea = new BehaviorIdle(targets)
+  nextArea.stateName = 'Next Area'
 
   const farmingPlantsFunction = require('./farmingPlantsFunction')(bot, targets)
   farmingPlantsFunction.stateName = 'Farm Plants'
@@ -51,9 +57,9 @@ function farmingFunction (bot, targets) {
 
     new StateTransition({
       parent: loadConfig,
-      child: checkFarmingAreas,
+      child: nextArea,
       onTransition: () => {
-        plantAreaIndex = 0
+        plantAreaIndex = -1
         plantArea = loadConfig.getPlantAreas()
       },
       shouldTransition: () => true
@@ -66,11 +72,30 @@ function farmingFunction (bot, targets) {
       shouldTransition: () => plantAreaIndex === (plantArea.length) || bot.inventory.items().length >= 33
     }),
 
+    new StateTransition({
+      parent: nextArea,
+      child: checkFarmingAreas,
+      onTransition: () => {
+        plantAreaIndex++
+      },
+      shouldTransition: () => true
+    }),
+
+    new StateTransition({
+      parent: checkFarmingAreas,
+      child: nextArea,
+      onTransition: () => {
+        botWebsocket.log('Plant is not valid! ' + plantArea[plantAreaIndex].plant)
+        console.log('Plant detected is not valid')
+      },
+      // shouldTransition: () => !plantArea[plantAreaIndex].plant.includes(validPlants)
+      shouldTransition: () => !validPlants.includes(plantArea[plantAreaIndex].plant)
+    }),
+
     /** Plants **/
     new StateTransition({
       parent: farmingPlantsFunction,
-      child: checkFarmingAreas,
-      onTransition: () => plantAreaIndex++,
+      child: nextArea,
       shouldTransition: () => farmingPlantsFunction.isFinished()
     }),
     new StateTransition({
@@ -99,8 +124,7 @@ function farmingFunction (bot, targets) {
     }),
     new StateTransition({
       parent: farmingTreesFunction,
-      child: checkFarmingAreas,
-      onTransition: () => plantAreaIndex++,
+      child: nextArea,
       shouldTransition: () => farmingTreesFunction.isFinished()
     })
     /** END Trees **/
