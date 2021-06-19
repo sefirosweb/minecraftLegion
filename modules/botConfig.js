@@ -12,6 +12,7 @@ function getConn (botName) {
     distance: 10,
     helpFriends: false,
     pickUpItems: false,
+    randomFarmArea: false,
     isCopingPatrol: false,
     canDig: true,
     allowSprinting: true,
@@ -120,6 +121,22 @@ function setPickUpItems (botName, mode) {
 function getPickUpItems (botName) {
   const db = getConn(botName)
   return db.get('config.pickUpItems').value()
+}
+
+function setRandomFarmArea (botName, mode) {
+  const db = getConn(botName)
+  if (mode === 'true') {
+    mode = true
+  } else {
+    mode = false
+  }
+
+  db.set('config.randomFarmArea', mode).write()
+}
+
+function getRandomFarmArea (botName) {
+  const db = getConn(botName)
+  return db.get('config.randomFarmArea').value()
 }
 
 function setDistance (botName, distance) {
@@ -247,5 +264,7 @@ module.exports = {
   setAllowSprinting,
   getAllowSprinting,
   getPlantAreas,
-  setPlantAreas
+  setPlantAreas,
+  getRandomFarmArea,
+  setRandomFarmArea
 }

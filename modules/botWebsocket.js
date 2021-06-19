@@ -287,6 +287,9 @@ function connect () {
         plantAreas.splice(config.value, 1)
         botconfig.setPlantAreas(bot.username, plantAreas)
         break
+      case 'randomFarmArea':
+        botconfig.setRandomFarmArea(bot.username, config.value)
+        break
     }
 
     sendConfig()
