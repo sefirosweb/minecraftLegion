@@ -7,8 +7,8 @@ const {
   NestedStateMachine
 } = require('mineflayer-statemachine')
 const BehaviorDigBlock = require('./../BehaviorModules/BehaviorDigBlock')
-const BehaviorEatFood = require('./../BehaviorModules/BehaviorInteractBlock')
-const BehaviorInteractBlock = require('./../BehaviorModules/BehaviorEatFood')
+const BehaviorEatFood = require('./../BehaviorModules/BehaviorEatFood')
+const BehaviorInteractBlock = require('./../BehaviorModules/BehaviorInteractBlock')
 
 function harvestFunction (bot, targets) {
   const start = new BehaviorIdle(targets)
