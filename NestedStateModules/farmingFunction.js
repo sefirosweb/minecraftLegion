@@ -1,4 +1,5 @@
 const botWebsocket = require('../modules/botWebsocket')
+const { shuffle } = require('../modules/utils')
 const {
   StateTransition,
   BehaviorIdle,
@@ -59,6 +60,10 @@ function farmingFunction (bot, targets) {
       onTransition: () => {
         plantAreaIndex = -1
         plantArea = loadConfig.getPlantAreas()
+        const randomFarmArea = loadConfig.getRandomFarmArea()
+        if (randomFarmArea) {
+          shuffle(plantArea)
+        }
       },
       shouldTransition: () => true
     }),

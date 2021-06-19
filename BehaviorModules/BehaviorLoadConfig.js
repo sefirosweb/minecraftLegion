@@ -35,6 +35,7 @@ module.exports = class BehaviorLoadConfig {
     this.canDig = botConfig.getCanDig(this.bot.username)
     this.allowSprinting = botConfig.getAllowSprinting(this.bot.username)
     this.plantAreas = botConfig.getPlantAreas(this.bot.username)
+    this.randomFarmArea = botConfig.getRandomFarmArea(this.bot.username)
   }
 
   getAllConfig () {
@@ -91,5 +92,9 @@ module.exports = class BehaviorLoadConfig {
 
   getPlantAreas () {
     return this.plantAreas
+  }
+
+  getRandomFarmArea () {
+    return this.randomFarmArea
   }
 }
