@@ -8,10 +8,11 @@ const {
 const BehaviorCustomPlaceBlock = require('@BehaviorModules/BehaviorCustomPlaceBlock')
 const BehaviorFertilize = require('@BehaviorModules/BehaviorFertilize')
 const BehaviorMoveTo = require('@BehaviorModules/BehaviorMoveTo')
+const BehaviorCraft = require('@BehaviorModules/BehaviorCraft')
 
 function plantFunction (bot, targets) {
   const plantType = require('@modules/plantType')
-  const blocksForPlant = ['dirt', 'grass_block', 'farmland']
+  const blocksForPlant = ['dirt', 'coarse_dirt', 'grass_block', 'farmland']
   const blockAir = ['air', 'cave_air']
 
   let plantIsFinished = false
@@ -26,6 +27,15 @@ function plantFunction (bot, targets) {
     }
 
     targets.item = bot.inventory.items().find(item => plantType[targets.plantArea.plant].seed === item.name)
+    if (!targets.item && ['melon', 'pumpkin'].includes(targets.plantArea.plant)) {
+      const ingredient = bot.inventory.items().find(item => plantType[targets.plantArea.plant].plantName === item.name)
+      if (ingredient) {
+        targets.craftItem = {
+          name: plantType[targets.plantArea.plant].seed
+        }
+      }
+    }
+
     targets.position = blockToPlant.position.offset(0, 1, 0)
     targets.block = blockToPlant
   }
@@ -107,7 +117,7 @@ function plantFunction (bot, targets) {
 
   const checkArea = new BehaviorIdle()
   checkArea.stateName = 'Check Area for Plant'
-  checkArea.x = 525
+  checkArea.x = 325
   checkArea.y = 113
 
   const checkPlant = new BehaviorIdle()
@@ -117,8 +127,8 @@ function plantFunction (bot, targets) {
 
   const placePlant = new BehaviorCustomPlaceBlock(bot, targets, false)
   placePlant.stateName = 'Place Plant'
-  placePlant.x = 750
-  placePlant.y = 175
+  placePlant.x = 625
+  placePlant.y = 113
 
   const equipHoe = new BehaviorEquipItem(bot, targets)
   equipHoe.stateName = 'Equip Hoe'
@@ -129,6 +139,11 @@ function plantFunction (bot, targets) {
   fertilize.stateName = 'Fertilize'
   fertilize.x = 750
   fertilize.y = 313
+
+  const craftItem = new BehaviorCraft(bot, targets)
+  craftItem.stateName = 'Craft Item'
+  craftItem.x = 425
+  craftItem.y = 513
 
   const transitions = [
 
@@ -152,6 +167,12 @@ function plantFunction (bot, targets) {
 
     new StateTransition({
       parent: checkPlant,
+      child: craftItem,
+      shouldTransition: () => !plantIsFinished && targets.craftItem
+    }),
+
+    new StateTransition({
+      parent: checkPlant,
       child: exit,
       shouldTransition: () => plantIsFinished || targets.item === undefined
     }),
@@ -160,6 +181,22 @@ function plantFunction (bot, targets) {
       parent: checkPlant,
       child: goPlant,
       shouldTransition: () => !plantIsFinished
+    }),
+
+    new StateTransition({
+      parent: craftItem,
+      child: goPlant,
+      shouldTransition: () => {
+        return craftItem.isFinished() && craftItem.isSuccess()
+      }
+    }),
+
+    new StateTransition({
+      parent: craftItem,
+      child: checkPlant,
+      shouldTransition: () => {
+        return craftItem.isFinished() && !craftItem.isSuccess()
+      }
     }),
 
     new StateTransition({
@@ -191,7 +228,13 @@ function plantFunction (bot, targets) {
       onTransition: () => {
         targets.position = targets.position.offset(0, 1, 0)
       },
-      shouldTransition: () => fertilize.isFinished()
+      shouldTransition: () => fertilize.isFinished() && fertilize.isSuccess()
+    }),
+
+    new StateTransition({
+      parent: fertilize,
+      child: checkArea,
+      shouldTransition: () => fertilize.isFinished() && !fertilize.isSuccess()
     }),
 
     new StateTransition({
