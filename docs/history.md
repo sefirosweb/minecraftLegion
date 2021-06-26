@@ -13,6 +13,11 @@
 * Fixed bug with farming
 * Added random shuffle farming area (when you have more 1 bot farming same area configuration can start for different sites)
 * Added module aliases for optimize the code
+* Added timeout on some function for avoid stucks bot
+* Improme plant function
+* Added BehaviorCrafting items
+* Now when plant melon or punking if no have seeds they create itself if have in inventory
+
 ## 0.1.9
 # Added in farmerjob new plants
   * Wheat + Melon + Pumpkin
