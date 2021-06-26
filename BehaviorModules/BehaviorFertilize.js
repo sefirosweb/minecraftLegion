@@ -3,16 +3,24 @@ module.exports = class BehaviorFertilize {
     this.bot = bot
     this.targets = targets
     this.stateName = 'BehaviorFertilize'
-
+    this.success = false
     this.isEndFinished = false
   }
 
   onStateExited () {
-
+    this.isEndFinished = false
+    this.success = false
+    clearTimeout(this.timeLimit)
   }
 
   async onStateEntered () {
+    this.timeLimit = setTimeout(() => {
+      console.log('Time exceded for fertilize')
+      this.isEndFinished = true
+    }, 5000)
+
     this.isEndFinished = false
+    this.success = false
     await this.fertilize()
   }
 
@@ -45,5 +53,9 @@ module.exports = class BehaviorFertilize {
 
   isFinished () {
     return this.isEndFinished
+  }
+
+  isSuccess () {
+    return this.success
   }
 }
