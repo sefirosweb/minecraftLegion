@@ -5,6 +5,7 @@ module.exports = class BehaviorFertilize {
     this.stateName = 'BehaviorFertilize'
     this.success = false
     this.isEndFinished = false
+    this.blocksCanFertilize = ['dirt', 'coarse_dirt', 'grass_block']
   }
 
   onStateExited () {
@@ -36,12 +37,19 @@ module.exports = class BehaviorFertilize {
 
       setTimeout(function () {
         const block = this.bot.blockAt(this.targets.position)
-        if (block.name !== 'farmland') {
-          console.log(`${block.name} is not farmland!`)
-          this.fertilize()
-        } else {
+        if (block.name === 'farmland') {
+          this.success = true
           this.isEndFinished = true
+          return
         }
+
+        if (!this.blocksCanFertilize.includes(block.name)) {
+          console.log(`${block.name} can't be fertilized!`)
+          this.isEndFinished = true
+          return
+        }
+
+        this.fertilize()
       }.bind(this), 500)
     } catch (err) {
       console.log('Error on fertilize')
