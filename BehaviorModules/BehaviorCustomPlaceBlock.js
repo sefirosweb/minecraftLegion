@@ -25,7 +25,19 @@ module.exports = class BehaviorCustomPlaceBlock {
     return this.cantPlaceBlock
   }
 
+  onStateExited () {
+    this.isEndFinished = false
+    this.itemNotFound = false
+    this.cantPlaceBlock = false
+    clearTimeout(this.timeLimit)
+  }
+
   onStateEntered () {
+    this.timeLimit = setTimeout(() => {
+      console.log('Time exceded for place item')
+      this.isEndFinished = true
+    }, 5000)
+
     this.isEndFinished = false
     this.itemNotFound = false
     this.cantPlaceBlock = false
