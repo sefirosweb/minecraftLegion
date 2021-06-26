@@ -16,6 +16,12 @@ module.exports = class BehaviorWithdrawItemChest {
     this.isEndFinished = false
     this.success = false
     this.craftingTable = null
+
+    this.timeLimit = setTimeout(() => {
+      console.log('Time exceded for craft item')
+      this.isEndFinished = true
+    }, 5000)
+
     this.craft()
   }
 
@@ -24,10 +30,15 @@ module.exports = class BehaviorWithdrawItemChest {
     this.success = false
     this.craftingTable = null
     this.targets.craftItem = null
+    clearTimeout(this.timeLimit)
   }
 
   isFinished () {
     return this.isEndFinished
+  }
+
+  isSuccess () {
+    return this.success
   }
 
   craft () {
@@ -55,9 +66,7 @@ module.exports = class BehaviorWithdrawItemChest {
       .then(() => {
         botWebsocket.log(`did the recipe for ${this.targets.craftItem.name}`)
         this.success = true
-        console.log(this.isEndFinished)
         this.isEndFinished = true
-        console.log(this.isEndFinished)
       })
       .catch((err) => {
         console.log(err)
