@@ -11,7 +11,7 @@ const BehaviorMoveTo = require('@BehaviorModules/BehaviorMoveTo')
 const BehaviorCraft = require('@BehaviorModules/BehaviorCraft')
 
 function plantFunction (bot, targets) {
-  const plantType = require('@modules/plantType')
+  const { harvestMode, plants } = require('@modules/plantType')
   const blocksForPlant = ['dirt', 'coarse_dirt', 'grass_block', 'farmland']
   const blockAir = ['air', 'cave_air']
 
@@ -26,12 +26,12 @@ function plantFunction (bot, targets) {
       return
     }
 
-    targets.item = bot.inventory.items().find(item => plantType[targets.plantArea.plant].seed === item.name)
+    targets.item = bot.inventory.items().find(item => plants[targets.plantArea.plant].seed === item.name)
     if (!targets.item && ['melon', 'pumpkin'].includes(targets.plantArea.plant)) {
-      const ingredient = bot.inventory.items().find(item => plantType[targets.plantArea.plant].craftedBy === item.name)
+      const ingredient = bot.inventory.items().find(item => plants[targets.plantArea.plant].craftedBy === item.name)
       if (ingredient) {
         targets.craftItem = {
-          name: plantType[targets.plantArea.plant].seed
+          name: plants[targets.plantArea.plant].seed
         }
       }
     }
@@ -47,7 +47,7 @@ function plantFunction (bot, targets) {
     const zEnd = targets.plantArea.zStart > targets.plantArea.zEnd ? targets.plantArea.zStart : targets.plantArea.zEnd
     const yLayer = targets.plantArea.yLayer
     const plant = targets.plantArea.plant
-    const type = plantType[plant].type
+    const type = plants[plant].type
 
     if (type === 'normal') {
       for (let xCurrent = xStart; xCurrent <= xEnd; xCurrent++) {
@@ -205,8 +205,8 @@ function plantFunction (bot, targets) {
       shouldTransition: () => goPlant.distanceToTarget() < 3 &&
         (
           blockToPlant.name === 'farmland' ||
-          plantType[targets.plantArea.plant].type === 'tree' ||
-          plantType[targets.plantArea.plant].type === 'sweet_berries'
+          plants[targets.plantArea.plant].type === 'tree' ||
+          plants[targets.plantArea.plant].type === 'sweet_berries'
         )
     }),
 
@@ -218,8 +218,8 @@ function plantFunction (bot, targets) {
       },
       shouldTransition: () => goPlant.distanceToTarget() < 3 &&
         blockToPlant.name !== 'farmland' &&
-        plantType[targets.plantArea.plant].type !== 'tree' &&
-        plantType[targets.plantArea.plant].type !== 'sweet_berries'
+        plants[targets.plantArea.plant].type !== 'tree' &&
+        plants[targets.plantArea.plant].type !== 'sweet_berries'
     }),
 
     new StateTransition({

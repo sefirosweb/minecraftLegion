@@ -9,7 +9,7 @@ const {
 const BehaviorLoadConfig = require('@BehaviorModules/BehaviorLoadConfig')
 
 function farmingFunction (bot, targets) {
-  const plantType = require('@modules/plantType')
+  const { harvestMode, plants } = require('@modules/plantType')
   const start = new BehaviorIdle(targets)
   start.stateName = 'Start'
   start.x = 125
@@ -93,7 +93,7 @@ function farmingFunction (bot, targets) {
         botWebsocket.log('Plant is not valid! ' + plantArea[plantAreaIndex].plant)
       },
       // shouldTransition: () => !plantArea[plantAreaIndex].plant.includes(validPlants)
-      shouldTransition: () => plantType[plantArea[plantAreaIndex].plant] === undefined ||
+      shouldTransition: () => plants[plantArea[plantAreaIndex].plant] === undefined ||
         !Number.isInteger(plantArea[plantAreaIndex].xStart) ||
         !Number.isInteger(plantArea[plantAreaIndex].xEnd) ||
         !Number.isInteger(plantArea[plantAreaIndex].yLayer) ||
@@ -115,9 +115,9 @@ function farmingFunction (bot, targets) {
       },
       shouldTransition: () =>
         (
-          plantType[plantArea[plantAreaIndex].plant].type === 'normal' ||
-          plantType[plantArea[plantAreaIndex].plant].type === 'melon' ||
-          plantType[plantArea[plantAreaIndex].plant].type === 'sweet_berries'
+          plants[plantArea[plantAreaIndex].plant].type === 'normal' ||
+          plants[plantArea[plantAreaIndex].plant].type === 'melon' ||
+          plants[plantArea[plantAreaIndex].plant].type === 'sweet_berries'
         ) && bot.inventory.items().length < 33
     }),
     /** END Plants **/
@@ -129,7 +129,7 @@ function farmingFunction (bot, targets) {
       onTransition: () => {
         targets.plantArea = plantArea[plantAreaIndex]
       },
-      shouldTransition: () => plantType[plantArea[plantAreaIndex].plant].type === 'tree' && bot.inventory.items().length < 33
+      shouldTransition: () => plants[plantArea[plantAreaIndex].plant].type === 'tree' && bot.inventory.items().length < 33
     }),
     new StateTransition({
       parent: farmingTreesFunction,

@@ -65,7 +65,7 @@ function harvestFunction (bot, targets) {
     harvestIsFinished = false
   }
 
-  const plantType = require('@modules/plantType')
+  const { plants, harvestMode } = require('@modules/plantType')
 
   function getPlantBlock () {
     const xStart = targets.plantArea.xStart < targets.plantArea.xEnd ? targets.plantArea.xStart : targets.plantArea.xEnd
@@ -74,9 +74,9 @@ function harvestFunction (bot, targets) {
     const zEnd = targets.plantArea.zStart > targets.plantArea.zEnd ? targets.plantArea.zStart : targets.plantArea.zEnd
     const yLayer = targets.plantArea.yLayer + 1
     const plant = targets.plantArea.plant
-    const plantName = plantType[plant].plantName
-    const type = plantType[plant].type
-    const age = plantType[plant].age
+    const plantName = plants[plant].plantName
+    const type = plants[plant].type
+    const age = plants[plant].age
 
     if (type === 'normal' || type === 'sweet_berries') {
       for (let xCurrent = xStart; xCurrent <= xEnd; xCurrent++) {
