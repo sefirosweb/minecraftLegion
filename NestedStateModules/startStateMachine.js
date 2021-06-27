@@ -3,11 +3,12 @@ module.exports = (bot) => {
   const botWebsocket = require('@modules/botWebsocket')
   const inventoryViewer = require('mineflayer-web-inventory')
   const prismarineViewer = require('@modules/viewer')
+  const { debugMode } = require('@config')
 
   const mineflayerPathfinder = require('mineflayer-pathfinder')
   const mcData = require('minecraft-data')(bot.version)
 
-  const isInDebug = false
+  const isInDebug = debugMode ? : debugMode : false
 
   const {
     StateTransition,

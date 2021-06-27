@@ -4,6 +4,7 @@ const config = {
   masters: [{ name: 'PlayerName' }, { name: 'SecondPlayerName' }], // Is requeried for manage the bot in game, offline mode
   webServer: 'http://localhost', // minecraftLegionWebServer Web
   webServerPort: '4001', // minecraftLegionWebServer PORT
-  webServerPassword: 'admin' // password for websocket
+  webServerPassword: 'admin', // password for websocket
+  debugMode: true
 }
 module.exports = config
