@@ -114,11 +114,7 @@ function farmingFunction (bot, targets) {
         targets.plantArea = plantArea[plantAreaIndex]
       },
       shouldTransition: () =>
-        (
-          plants[plantArea[plantAreaIndex].plant].type === 'normal' ||
-          plants[plantArea[plantAreaIndex].plant].type === 'melon' ||
-          plants[plantArea[plantAreaIndex].plant].type === 'sweet_berries'
-        ) && bot.inventory.items().length < 33
+        harvestMode.massive.includes(plants[plantArea[plantAreaIndex].plant].type) && bot.inventory.items().length < 33
     }),
     /** END Plants **/
 
@@ -129,7 +125,7 @@ function farmingFunction (bot, targets) {
       onTransition: () => {
         targets.plantArea = plantArea[plantAreaIndex]
       },
-      shouldTransition: () => plants[plantArea[plantAreaIndex].plant].type === 'tree' && bot.inventory.items().length < 33
+      shouldTransition: () => harvestMode.onebyone.includes(plants[plantArea[plantAreaIndex].plant].type) && bot.inventory.items().length < 33
     }),
     new StateTransition({
       parent: farmingTreesFunction,
