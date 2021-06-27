@@ -171,6 +171,12 @@ function harvestFunction (bot, targets) {
 
     new StateTransition({
       parent: goPlant,
+      child: exit,
+      shouldTransition: () => goPlant.isFinished() && !goPlant.isSuccess()
+    }),
+
+    new StateTransition({
+      parent: goPlant,
       child: harvestPlant,
       onTransition: () => {
         targets.position = targets.digBlock.position.clone()
