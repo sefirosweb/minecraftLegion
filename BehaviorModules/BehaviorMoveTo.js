@@ -2,7 +2,7 @@ const mineflayerPathfinder = require('mineflayer-pathfinder')
 const botWebsocket = require('@modules/botWebsocket')
 
 module.exports = class BehaviorMoveTo {
-  constructor (bot, targets, timeout) {
+  constructor(bot, targets, timeout) {
     this.stateName = 'moveTo'
     this.active = false
     this.timeout = timeout
@@ -16,15 +16,16 @@ module.exports = class BehaviorMoveTo {
     this.movements = new mineflayerPathfinder.Movements(bot, mcData)
   }
 
-  onStateEntered () {
+  onStateEntered() {
     this.isEndFinished = false
+    this.success = false
     this.bot.on('pathUpdate', this.pathUpdate)
     this.bot.on('goalReached', this.goalReached)
 
     if (this.timeout) {
       this.timeLimit = setTimeout(() => {
         this.stopMoving()
-        console.log('Excede time limit of move')
+        botWebsocket.log('Excede time limit of move')
         this.isEndFinished = true
       }, this.timeout)
     }
@@ -32,27 +33,28 @@ module.exports = class BehaviorMoveTo {
     this.startMoving()
   }
 
-  onStateExited () {
+  onStateExited() {
     this.isEndFinished = false
+    this.success = false
     this.bot.removeListener('pathUpdate', this.pathUpdate)
     this.bot.removeListener('goalReached', this.goalReached)
     this.stopMoving()
     clearTimeout(this.timeLimit)
   }
 
-  pathUpdate (r) {
+  pathUpdate(r) {
     if (r.status === 'noPath') {
       botWebsocket.log('[MoveTo] No path to target!')
     }
   }
 
-  goalReached () {
+  goalReached() {
     botWebsocket.log('[MoveTo] Target reached.')
     this.success = true
     this.isEndFinished = true
   }
 
-  setMoveTarget (position) {
+  setMoveTarget(position) {
     if (this.targets.position === position) {
       return
     }
@@ -60,12 +62,12 @@ module.exports = class BehaviorMoveTo {
     this.restart()
   }
 
-  stopMoving () {
+  stopMoving() {
     const pathfinder = this.bot.pathfinder
     pathfinder.setGoal(null)
   }
 
-  startMoving () {
+  startMoving() {
     const position = this.targets.position
     if (position == null) {
       botWebsocket.log('[MoveTo] Target not defined. Skipping.')
@@ -84,7 +86,7 @@ module.exports = class BehaviorMoveTo {
     pathfinder.setGoal(goal)
   }
 
-  restart () {
+  restart() {
     if (!this.active) {
       return
     }
@@ -92,16 +94,15 @@ module.exports = class BehaviorMoveTo {
     this.startMoving()
   }
 
-  isFinished () {
-    const pathfinder = this.bot.pathfinder
-    return !pathfinder.isMoving() || this.isEndFinished
+  isFinished() {
+    return this.isEndFinished
   }
 
-  isSuccess () {
-    return this.success
+  isSuccess() {
+    return false
   }
 
-  distanceToTarget () {
+  distanceToTarget() {
     const position = this.targets.position
     if (position == null) { return 0 }
     return this.isEndFinished ? 0 : this.bot.entity.position.distanceTo(position)
