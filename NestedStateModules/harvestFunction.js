@@ -90,6 +90,18 @@ function harvestFunction (bot, targets) {
       }
     }
 
+    if (type === 'sapling') {
+      for (let xCurrent = xStart; xCurrent <= xEnd; xCurrent++) {
+        for (let zCurrent = zStart; zCurrent <= zEnd; zCurrent++) {
+          const block = bot.blockAt(new Vec3(xCurrent, yLayer + 1, zCurrent), true)
+          if (block && block.name === plantName) {
+            targets.position = new Vec3(block.position.x, yLayer + 1, block.position.z)
+            return block
+          }
+        }
+      }
+    }
+
     if (type === 'melon') {
       for (let xCurrent = xStart - 1; xCurrent <= xEnd + 1; xCurrent++) {
         for (let zCurrent = zStart - 1; zCurrent <= zEnd + 1; zCurrent++) {
