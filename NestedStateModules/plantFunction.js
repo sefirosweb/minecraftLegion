@@ -173,8 +173,21 @@ function plantFunction (bot, targets) {
     new StateTransition({
       parent: goPlant,
       child: placePlant,
+      onTransition: () => {
+        if (targets.plantArea.plant === 'cactus') {
+          placePlant.setCanJump(true)
+        } else {
+          placePlant.setCanJump(false)
+        }
+      },
       shouldTransition: () => goPlant.distanceToTarget() < 3 &&
         plants[targets.plantArea.plant].plantIn.includes(blockToPlant.name)
+    }),
+
+    new StateTransition({
+      parent: goPlant,
+      child: checkArea,
+      shouldTransition: () => goPlant.isFinished() && !goPlant.isSuccess()
     }),
 
     new StateTransition({
@@ -194,6 +207,11 @@ function plantFunction (bot, targets) {
       child: placePlant,
       onTransition: () => {
         targets.position = targets.position.offset(0, 1, 0)
+        if (targets.plantArea.plant === 'cactus') {
+          placePlant.setCanJump(true)
+        } else {
+          placePlant.setCanJump(false)
+        }
       },
       shouldTransition: () => fertilize.isFinished() && fertilize.isSuccess()
     }),
