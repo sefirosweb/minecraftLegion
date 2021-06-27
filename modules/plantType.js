@@ -10,5 +10,6 @@ module.exports = {
   birch_sapling: { plantName: 'birch_sapling', type: 'tree', seed: 'birch_sapling', age: null, craftedBy: null },
   jungle_sapling: { plantName: 'jungle_sapling', type: 'tree', seed: 'jungle_sapling', age: null, craftedBy: null },
   acacia_sapling: { plantName: 'acacia_sapling', type: 'tree', seed: 'acacia_sapling', age: null, craftedBy: null },
-  dark_oak_sapling: { plantName: 'dark_oak_sapling', type: 'tree', seed: 'dark_oak_sapling', age: null, craftedBy: null }
+  dark_oak_sapling: { plantName: 'dark_oak_sapling', type: 'tree', seed: 'dark_oak_sapling', age: null, craftedBy: null },
+  cactus: { plantName: 'cactus', type: 'sapling', seed: 'cactus', age: null, craftedBy: null }
 }
