@@ -7,6 +7,7 @@ module.exports = class BehaviorMoveTo {
     this.active = false
     this.timeout = timeout
     this.isEndFinished = false
+    this.success = false
 
     this.distance = 0
     this.bot = bot
@@ -47,6 +48,8 @@ module.exports = class BehaviorMoveTo {
 
   goalReached () {
     botWebsocket.log('[MoveTo] Target reached.')
+    this.success = true
+    this.isEndFinished = true
   }
 
   setMoveTarget (position) {
@@ -92,6 +95,10 @@ module.exports = class BehaviorMoveTo {
   isFinished () {
     const pathfinder = this.bot.pathfinder
     return !pathfinder.isMoving() || this.isEndFinished
+  }
+
+  isSuccess () {
+    return this.success
   }
 
   distanceToTarget () {
