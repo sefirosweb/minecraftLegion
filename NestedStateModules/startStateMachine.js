@@ -7,7 +7,7 @@ module.exports = (bot) => {
   const mineflayerPathfinder = require('mineflayer-pathfinder')
   const mcData = require('minecraft-data')(bot.version)
 
-  const isInDebug = true
+  const isInDebug = false
 
   const {
     StateTransition,
