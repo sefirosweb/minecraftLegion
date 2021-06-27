@@ -11,8 +11,7 @@ const BehaviorMoveTo = require('@BehaviorModules/BehaviorMoveTo')
 const BehaviorCraft = require('@BehaviorModules/BehaviorCraft')
 
 function plantFunction (bot, targets) {
-  const { harvestMode, plants } = require('@modules/plantType')
-  const blocksForPlant = ['dirt', 'coarse_dirt', 'grass_block', 'farmland']
+  const { plants } = require('@modules/plantType')
   const blockAir = ['air', 'cave_air']
 
   let plantIsFinished = false
@@ -48,49 +47,21 @@ function plantFunction (bot, targets) {
     const yLayer = targets.plantArea.yLayer
     const plant = targets.plantArea.plant
     const type = plants[plant].type
+    const marginPlant = plants[plant].marginPlant
+    const blocksForPlant = plants[plant].canPlantIn
 
-    if (type === 'normal') {
-      for (let xCurrent = xStart; xCurrent <= xEnd; xCurrent++) {
-        for (let zCurrent = zStart; zCurrent <= zEnd; zCurrent++) {
-          const block = bot.blockAt(new Vec3(xCurrent, yLayer, zCurrent))
-          if (block && blocksForPlant.includes(block.name)) {
-            const upBlock = bot.blockAt(new Vec3(xCurrent, yLayer + 1, zCurrent))
-            if (blockAir.includes(upBlock.name)) {
-              return block
-            }
-          }
+    for (let xCurrent = xStart; xCurrent <= xEnd; xCurrent += marginPlant.x + 1) {
+      let line = 0
+      for (let zCurrent = zStart; zCurrent <= zEnd; zCurrent += marginPlant.z + 1) {
+        line++
+        if (type === 'sweet_berries' && line % 5 === 0) {
+          continue
         }
-      }
-    }
-
-    if (type === 'melon' || type === 'sweet_berries') {
-      for (let xCurrent = xStart; xCurrent <= xEnd; xCurrent += 2) {
-        let line = 0
-        for (let zCurrent = zStart; zCurrent <= zEnd; zCurrent++) {
-          line++
-          if (type === 'sweet_berries' && line % 5 === 0) {
-            continue
-          }
-          const block = bot.blockAt(new Vec3(xCurrent, yLayer, zCurrent))
-          if (block && blocksForPlant.includes(block.name)) {
-            const upBlock = bot.blockAt(new Vec3(xCurrent, yLayer + 1, zCurrent))
-            if (blockAir.includes(upBlock.name)) {
-              return block
-            }
-          }
-        }
-      }
-    }
-
-    if (type === 'tree') {
-      for (let xCurrent = xStart; xCurrent <= xEnd; xCurrent += 2) {
-        for (let zCurrent = zStart; zCurrent <= zEnd; zCurrent += 2) {
-          const block = bot.blockAt(new Vec3(xCurrent, yLayer, zCurrent))
-          if (block && blocksForPlant.includes(block.name)) {
-            const upBlock = bot.blockAt(new Vec3(xCurrent, yLayer + 1, zCurrent))
-            if (blockAir.includes(upBlock.name)) {
-              return block
-            }
+        const block = bot.blockAt(new Vec3(xCurrent, yLayer, zCurrent))
+        if (block && blocksForPlant.includes(block.name)) {
+          const upBlock = bot.blockAt(new Vec3(xCurrent, yLayer + 1, zCurrent))
+          if (blockAir.includes(upBlock.name)) {
+            return block
           }
         }
       }
@@ -206,7 +177,8 @@ function plantFunction (bot, targets) {
         (
           blockToPlant.name === 'farmland' ||
           plants[targets.plantArea.plant].type === 'tree' ||
-          plants[targets.plantArea.plant].type === 'sweet_berries'
+          plants[targets.plantArea.plant].type === 'sweet_berries' ||
+          targets.plantArea.plant === 'cactus'
         )
     }),
 
@@ -219,7 +191,8 @@ function plantFunction (bot, targets) {
       shouldTransition: () => goPlant.distanceToTarget() < 3 &&
         blockToPlant.name !== 'farmland' &&
         plants[targets.plantArea.plant].type !== 'tree' &&
-        plants[targets.plantArea.plant].type !== 'sweet_berries'
+        plants[targets.plantArea.plant].type !== 'sweet_berries' &&
+        targets.plantArea.plant !== 'cactus'
     }),
 
     new StateTransition({
