@@ -22,26 +22,28 @@ function farmingFunction (bot, targets) {
 
   const exit = new BehaviorIdle(targets)
   exit.stateName = 'Exit'
-  exit.x = 725
-  exit.y = 113
+  exit.x = 325
+  exit.y = 613
 
   const checkFarmingAreas = new BehaviorIdle(targets)
   checkFarmingAreas.stateName = 'Check Area'
-  checkFarmingAreas.x = 525
-  checkFarmingAreas.y = 113
+  checkFarmingAreas.x = 325
+  checkFarmingAreas.y = 450
 
   const nextArea = new BehaviorIdle(targets)
   nextArea.stateName = 'Next Area'
+  nextArea.x = 325
+  nextArea.y = 250
 
   const farmingPlantsFunction = require('@NestedStateModules/farmingPlantsFunction')(bot, targets)
   farmingPlantsFunction.stateName = 'Farm Plants'
-  farmingPlantsFunction.x = 625
-  farmingPlantsFunction.y = 313
+  farmingPlantsFunction.x = 125
+  farmingPlantsFunction.y = 350
 
   const farmingTreesFunction = require('@NestedStateModules/farmingTreesFunction')(bot, targets)
   farmingTreesFunction.stateName = 'Farm Trees'
-  farmingTreesFunction.x = 425
-  farmingTreesFunction.y = 313
+  farmingTreesFunction.x = 525
+  farmingTreesFunction.y = 350
 
   let plantArea = []
   let plantAreaIndex = 0
