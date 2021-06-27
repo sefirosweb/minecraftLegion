@@ -59,7 +59,7 @@ module.exports = class BehaviorDepositChest {
         this.isEndFinished = true
       })
       .catch(err =>
-        console.log(err)
+        botWebsocket.log('Internal error on deposit items')
       )
       .then(async () => {
         await sleep(200)
