@@ -1,6 +1,7 @@
 
 const dirtType = {
   dirt: ['dirt', 'coarse_dirt', 'grass_block', 'farmland'],
+  dirtCanBefertilized: ['coarse_dirt', 'grass_block', 'farmland'],
   all: ['dirt', 'coarse_dirt', 'grass_block', 'farmland'],
   farmland: ['farmland'],
   sand: ['sand']
@@ -27,5 +28,7 @@ module.exports = {
   harvestMode: {
     massive: ['normal', 'sweet_berries', 'melon', 'sapling'],
     onebyone: ['tree']
-  }
+  },
+
+  dirtCanBefertilized: dirtType.dirtCanBefertilized
 }

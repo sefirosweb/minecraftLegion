@@ -25,6 +25,10 @@ module.exports = class BehaviorCustomPlaceBlock {
     return this.cantPlaceBlock
   }
 
+  setCanJump (canJump) {
+    this.canJump = canJump
+  }
+
   onStateExited () {
     this.isEndFinished = false
     this.itemNotFound = false

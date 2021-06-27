@@ -9,9 +9,9 @@ const BehaviorCustomPlaceBlock = require('@BehaviorModules/BehaviorCustomPlaceBl
 const BehaviorFertilize = require('@BehaviorModules/BehaviorFertilize')
 const BehaviorMoveTo = require('@BehaviorModules/BehaviorMoveTo')
 const BehaviorCraft = require('@BehaviorModules/BehaviorCraft')
+const { plants, dirtCanBefertilized } = require('@modules/plantType')
 
 function plantFunction (bot, targets) {
-  const { plants } = require('@modules/plantType')
   const blockAir = ['air', 'cave_air']
 
   let plantIsFinished = false
@@ -174,12 +174,7 @@ function plantFunction (bot, targets) {
       parent: goPlant,
       child: placePlant,
       shouldTransition: () => goPlant.distanceToTarget() < 3 &&
-        (
-          blockToPlant.name === 'farmland' ||
-          plants[targets.plantArea.plant].type === 'tree' ||
-          plants[targets.plantArea.plant].type === 'sweet_berries' ||
-          targets.plantArea.plant === 'cactus'
-        )
+        plants[targets.plantArea.plant].plantIn.includes(blockToPlant.name)
     }),
 
     new StateTransition({
@@ -189,10 +184,9 @@ function plantFunction (bot, targets) {
         targets.position = targets.position.offset(0, -1, 0)
       },
       shouldTransition: () => goPlant.distanceToTarget() < 3 &&
-        blockToPlant.name !== 'farmland' &&
-        plants[targets.plantArea.plant].type !== 'tree' &&
-        plants[targets.plantArea.plant].type !== 'sweet_berries' &&
-        targets.plantArea.plant !== 'cactus'
+        !plants[targets.plantArea.plant].plantIn.includes(blockToPlant.name) &&
+        plants[targets.plantArea.plant].canPlantIn.includes(blockToPlant.name) &&
+        dirtCanBefertilized.includes(blockToPlant.name)
     }),
 
     new StateTransition({
