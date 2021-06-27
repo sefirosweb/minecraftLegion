@@ -17,7 +17,7 @@ module.exports = class BehaviorDepositChest {
     this.items = this.targets.items
 
     this.timeLimit = setTimeout(() => {
-      console.log('Time exceded for deposit items, forcing close')
+      botWebsocket.log('Time exceded for deposit items, forcing close')
       this.chest.close()
       this.isEndFinished = true
     }, 5000)
