@@ -17,6 +17,10 @@
 * Improme plant function
 * Added BehaviorCrafting items
 * Now when plant melon or punking if no have seeds they create itself if have in inventory
+* Added cactus farm
+* Added bamboo farm
+* Fixed some bugs improve avoid stucks bot
+
 
 ## 0.1.9
 # Added in farmerjob new plants
