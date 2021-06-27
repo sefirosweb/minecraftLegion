@@ -22,6 +22,7 @@ module.exports = {
     jungle_sapling: { plantName: 'jungle_sapling', type: 'tree', seed: 'jungle_sapling', age: null, craftedBy: null, marginPlant: { x: 1, z: 1 }, plantIn: dirtType.all, canPlantIn: dirtType.all },
     acacia_sapling: { plantName: 'acacia_sapling', type: 'tree', seed: 'acacia_sapling', age: null, craftedBy: null, marginPlant: { x: 1, z: 1 }, plantIn: dirtType.all, canPlantIn: dirtType.all },
     dark_oak_sapling: { plantName: 'dark_oak_sapling', type: 'tree', seed: 'dark_oak_sapling', age: null, craftedBy: null, marginPlant: { x: 1, z: 1 }, plantIn: dirtType.all, canPlantIn: dirtType.all },
+    spruce_sapling: { plantName: 'spruce_sapling', type: 'tree', seed: 'spruce_sapling', age: null, craftedBy: null, marginPlant: { x: 1, z: 1 }, plantIn: dirtType.all, canPlantIn: dirtType.all },
     cactus: { plantName: 'cactus', type: 'sapling', seed: 'cactus', age: null, craftedBy: null, marginPlant: { x: 2, z: 2 }, plantIn: dirtType.sand, canPlantIn: dirtType.sand }
   },
 
