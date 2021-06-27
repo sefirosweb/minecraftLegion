@@ -4,7 +4,6 @@ const {
   NestedStateMachine
 } = require('mineflayer-statemachine')
 
-const BehaviorLoadConfig = require('@BehaviorModules/BehaviorLoadConfig')
 const BehaviorGetReady = require('@BehaviorModules/BehaviorGetReady')
 const BehaviorEatFood = require('@BehaviorModules/BehaviorEatFood')
 
@@ -14,46 +13,34 @@ function farmerJobFunction (bot, targets) {
   start.x = 125
   start.y = 113
 
-  const loadConfig = new BehaviorLoadConfig(bot, targets)
-  loadConfig.stateName = 'Load Bot Config'
-  loadConfig.x = 325
-  loadConfig.y = 113
-
   const getReady = new BehaviorGetReady(bot, targets)
-  getReady.stateName = 'Get Ready for Patrol'
-  getReady.x = 525
-  getReady.y = 113
+  getReady.stateName = 'Get Ready'
+  getReady.x = 125
+  getReady.y = 213
 
   const goChests = require('@NestedStateModules/goChestsFunctions')(bot, targets)
-  goChests.x = 525
-  goChests.y = 313
+  goChests.x = 325
+  goChests.y = 213
 
   const farming = require('@NestedStateModules/farmingFunction')(bot, targets)
   farming.stateName = 'Farming'
-  farming.x = 728
+  farming.x = 325
   farming.y = 313
 
   const eatFood = new BehaviorEatFood(bot, targets)
   eatFood.stateName = 'Eat Food'
-  eatFood.x = 728
-  eatFood.y = 113
+  eatFood.x = 125
+  eatFood.y = 413
 
   const getClosestMob = require('@modules/getClosestEnemy')(bot, targets)
   const combatStrategy = require('@NestedStateModules/combatStrategyFunction')(bot, targets)
-  combatStrategy.x = 925
-  combatStrategy.y = 313
+  combatStrategy.x = 325
+  combatStrategy.y = 413
 
   const transitions = [
     new StateTransition({
       parent: start,
-      child: loadConfig,
-      shouldTransition: () => true
-    }),
-
-    new StateTransition({
-      parent: loadConfig,
       child: getReady,
-      name: 'Loading configuration',
       onTransition: () => {
         targets.entity = undefined
       },
@@ -61,16 +48,16 @@ function farmerJobFunction (bot, targets) {
     }),
 
     new StateTransition({
+      parent: getReady,
+      child: goChests,
+      shouldTransition: () => !getReady.getIsReady() || bot.inventory.items().length >= 34
+    }),
+
+    new StateTransition({
       parent: goChests,
       child: getReady,
       name: 'Go to chests',
       shouldTransition: () => goChests.isFinished()
-    }),
-
-    new StateTransition({
-      parent: getReady,
-      child: goChests,
-      shouldTransition: () => !getReady.getIsReady() || bot.inventory.items().length >= 34
     }),
 
     new StateTransition({
