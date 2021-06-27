@@ -1,7 +1,7 @@
 
 const dirtType = {
   dirt: ['dirt', 'coarse_dirt', 'grass_block', 'farmland'],
-  dirtCanBefertilized: ['coarse_dirt', 'grass_block', 'farmland'],
+  dirtCanBefertilized: ['dirt', 'coarse_dirt', 'grass_block'],
   all: ['dirt', 'coarse_dirt', 'grass_block', 'farmland'],
   farmland: ['farmland'],
   sand: ['sand']
