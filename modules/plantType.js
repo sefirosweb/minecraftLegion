@@ -3,7 +3,7 @@ const dirtType = {
   dirt: ['dirt', 'coarse_dirt', 'grass_block', 'farmland'],
   dirtCanBefertilized: ['dirt', 'coarse_dirt', 'grass_block'],
   all: ['dirt', 'coarse_dirt', 'grass_block', 'farmland'],
-  bamboo: ['dirt', 'coarse_dirt', 'grass_block', 'sand'],
+  bamboo: ['dirt', 'coarse_dirt', 'grass_block', 'sand', 'podzol'],
   farmland: ['farmland'],
   sand: ['sand']
 }
@@ -25,7 +25,8 @@ module.exports = {
     dark_oak_sapling: { plantName: 'dark_oak_sapling', type: 'tree', seed: 'dark_oak_sapling', harvestMode: 'onebyone', age: null, craftedBy: null, marginPlant: { x: 1, z: 1 }, plantIn: dirtType.all, canPlantIn: dirtType.all },
     spruce_sapling: { plantName: 'spruce_sapling', type: 'tree', seed: 'spruce_sapling', harvestMode: 'onebyone', age: null, craftedBy: null, marginPlant: { x: 1, z: 1 }, plantIn: dirtType.all, canPlantIn: dirtType.all },
     cactus: { plantName: 'cactus', type: 'sapling', seed: 'cactus', harvestMode: 'massive', age: null, craftedBy: null, marginPlant: { x: 2, z: 2 }, plantIn: dirtType.sand, canPlantIn: dirtType.sand },
-    bamboo: { plantName: 'bamboo', type: 'sapling', seed: 'bamboo', harvestMode: 'onebyone', age: null, craftedBy: null, marginPlant: { x: 1, z: 1 }, plantIn: dirtType.bamboo, canPlantIn: dirtType.bamboo }
+    bamboo: { plantName: 'bamboo', type: 'sapling', seed: 'bamboo', harvestMode: 'onebyone', age: null, craftedBy: null, marginPlant: { x: 1, z: 1 }, plantIn: dirtType.bamboo, canPlantIn: dirtType.bamboo },
+    sugar_cane: { plantName: 'sugar_cane', type: 'sapling', seed: 'sugar_cane', harvestMode: 'massive', age: null, craftedBy: null, marginPlant: { x: 0, z: 0 }, plantIn: dirtType.bamboo, canPlantIn: dirtType.bamboo }
   },
 
   dirtCanBefertilized: dirtType.dirtCanBefertilized
