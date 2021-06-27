@@ -113,8 +113,7 @@ function farmingFunction (bot, targets) {
       onTransition: () => {
         targets.plantArea = plantArea[plantAreaIndex]
       },
-      shouldTransition: () =>
-        harvestMode.massive.includes(plants[plantArea[plantAreaIndex].plant].type) && bot.inventory.items().length < 33
+      shouldTransition: () => harvestMode.massive.includes(plants[plantArea[plantAreaIndex].plant].type) && bot.inventory.items().length < 33
     }),
     /** END Plants **/
 

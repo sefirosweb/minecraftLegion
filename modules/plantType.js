@@ -25,7 +25,7 @@ module.exports = {
   },
 
   harvestMode: {
-    massive: ['normal', 'sweet_berry_bush', 'melon', 'sapling'],
+    massive: ['normal', 'sweet_berries', 'melon', 'sapling'],
     onebyone: ['tree']
   }
 }
