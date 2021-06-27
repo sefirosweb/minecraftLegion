@@ -45,8 +45,7 @@ module.exports = class BehaviorCustomPlaceBlock {
     this.isEndFinished = false
     this.itemNotFound = false
     this.cantPlaceBlock = false
-    botWebsocket.log('Placing block')
-
+    
     if (this.targets.item == null) {
       botWebsocket.log('No exists targets.item')
       this.isEndFinished = true
