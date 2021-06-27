@@ -105,6 +105,6 @@ module.exports = class BehaviorMoveTo {
   distanceToTarget() {
     const position = this.targets.position
     if (position == null) { return 0 }
-    return this.isEndFinished ? 0 : this.bot.entity.position.distanceTo(position)
+    return this.bot.entity.position.distanceTo(position)
   }
 }

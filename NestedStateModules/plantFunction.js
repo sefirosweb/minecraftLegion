@@ -77,8 +77,8 @@ function plantFunction (bot, targets) {
 
   const exit = new BehaviorIdle()
   exit.stateName = 'Exit'
-  exit.x = 125
-  exit.y = 313
+  exit.x = 325
+  exit.y = 513
 
   const goPlant = new BehaviorMoveTo(bot, targets, 10000)
   goPlant.stateName = 'Go Plant'
@@ -113,7 +113,7 @@ function plantFunction (bot, targets) {
 
   const craftItem = new BehaviorCraft(bot, targets)
   craftItem.stateName = 'Craft Item'
-  craftItem.x = 425
+  craftItem.x = 525
   craftItem.y = 513
 
   const transitions = [
@@ -186,7 +186,7 @@ function plantFunction (bot, targets) {
 
     new StateTransition({
       parent: goPlant,
-      child: checkArea,
+      child: exit,
       shouldTransition: () => goPlant.isFinished() && !goPlant.isSuccess()
     }),
 
