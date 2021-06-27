@@ -9,7 +9,7 @@ const {
 const BehaviorLoadConfig = require('@BehaviorModules/BehaviorLoadConfig')
 
 function farmingFunction (bot, targets) {
-  const { harvestMode, plants } = require('@modules/plantType')
+  const { plants } = require('@modules/plantType')
   const start = new BehaviorIdle(targets)
   start.stateName = 'Start'
   start.x = 125
@@ -113,7 +113,7 @@ function farmingFunction (bot, targets) {
       onTransition: () => {
         targets.plantArea = plantArea[plantAreaIndex]
       },
-      shouldTransition: () => harvestMode.massive.includes(plants[plantArea[plantAreaIndex].plant].type) && bot.inventory.items().length < 33
+      shouldTransition: () => plants[plantArea[plantAreaIndex].plant].harvestMode === 'massive' && bot.inventory.items().length < 33
     }),
     /** END Plants **/
 
@@ -124,7 +124,7 @@ function farmingFunction (bot, targets) {
       onTransition: () => {
         targets.plantArea = plantArea[plantAreaIndex]
       },
-      shouldTransition: () => harvestMode.onebyone.includes(plants[plantArea[plantAreaIndex].plant].type) && bot.inventory.items().length < 33
+      shouldTransition: () => plants[plantArea[plantAreaIndex].plant].harvestMode === 'onebyone' && bot.inventory.items().length < 33
     }),
     new StateTransition({
       parent: farmingTreesFunction,

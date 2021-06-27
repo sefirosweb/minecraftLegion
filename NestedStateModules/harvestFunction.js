@@ -65,7 +65,7 @@ function harvestFunction (bot, targets) {
     harvestIsFinished = false
   }
 
-  const { plants, harvestMode } = require('@modules/plantType')
+  const { plants } = require('@modules/plantType')
 
   function getPlantBlock () {
     const xStart = targets.plantArea.xStart < targets.plantArea.xEnd ? targets.plantArea.xStart : targets.plantArea.xEnd
