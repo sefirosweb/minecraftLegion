@@ -18,7 +18,29 @@ module.exports = (bot) => {
     NestedStateMachine
   } = require('mineflayer-statemachine')
 
-  const targets = {}
+  const targets = {
+    aListener: function (object, val) {
+      if (!debugMode) return
+      console.log(`Detected change ${object} value:`, val)
+    },
+
+    set position(val) {
+      this.positionVal = val;
+      this.aListener('position', val);
+    },
+    get position() {
+      return this.positionVal;
+    },
+
+    set entity(val) {
+      this.entityVal = val;
+      this.aListener('entity', val);
+    },
+    get entity() {
+      return this.entityVal;
+    }
+  }
+
   let webserver = {}
   const movements = new mineflayerPathfinder.Movements(bot, mcData)
   targets.movements = movements
