@@ -82,6 +82,9 @@ function farmingFunction (bot, targets) {
       child: checkFarmingAreas,
       onTransition: () => {
         plantAreaIndex++
+        if (plantArea[plantAreaIndex]) {
+          botWebsocket.log(`Farming: ${plantArea[plantAreaIndex].plant}`)
+        }
       },
       shouldTransition: () => true
     }),
