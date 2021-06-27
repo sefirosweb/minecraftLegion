@@ -38,7 +38,7 @@ module.exports = class BehaviorCustomPlaceBlock {
 
   onStateEntered () {
     this.timeLimit = setTimeout(() => {
-      console.log('Time exceded for place item')
+      botWebsocket.log('Time exceded for place item')
       this.isEndFinished = true
     }, 5000)
 
@@ -73,7 +73,7 @@ module.exports = class BehaviorCustomPlaceBlock {
     }
 
     if (!this.blockCanBeReplaced.includes(block.name)) {
-      botWebsocket.log(`Cant place block there ${block.name}`)
+      botWebsocket.log(`Cant s block there ${block.name}`)
       this.cantPlaceBlock = true
       return
     }

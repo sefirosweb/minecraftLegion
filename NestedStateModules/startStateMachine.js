@@ -38,6 +38,14 @@ module.exports = (bot) => {
     },
     get entity() {
       return this.entityVal;
+    },
+    
+    set item(val) {
+      this.itemVal = val;
+      this.aListener('item', val);
+    },
+    get item() {
+      return this.itemVal;
     }
   }
 
