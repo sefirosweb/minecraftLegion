@@ -63,8 +63,7 @@ module.exports = class BehaviorMoveTo {
   }
 
   stopMoving() {
-    const pathfinder = this.bot.pathfinder
-    pathfinder.setGoal(null)
+    this.bot.pathfinder.setGoal(null)
   }
 
   startMoving() {
@@ -75,15 +74,14 @@ module.exports = class BehaviorMoveTo {
     }
     // botWebsocket.log(`[MoveTo] Moving from ${this.bot.entity.position.toString()} to ${position.toString()}`)
 
-    const pathfinder = this.bot.pathfinder
     let goal
     if (this.distance === 0) {
       goal = new mineflayerPathfinder.goals.GoalBlock(position.x, position.y, position.z)
     } else {
       goal = new mineflayerPathfinder.goals.GoalNear(position.x, position.y, position.z, this.distance)
     }
-    pathfinder.setMovements(this.movements)
-    pathfinder.setGoal(goal)
+    this.bot.pathfinder.setMovements(this.movements)
+    this.bot.pathfinder.setGoal(goal)
   }
 
   restart() {
