@@ -20,6 +20,7 @@
 * Added cactus farm
 * Added bamboo farm
 * Fixed some bugs improve avoid stucks bot
+* Added sugar cane farm
 
 
 ## 0.1.9
