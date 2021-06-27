@@ -28,7 +28,7 @@ function plantFunction (bot, targets) {
 
     targets.item = bot.inventory.items().find(item => plantType[targets.plantArea.plant].seed === item.name)
     if (!targets.item && ['melon', 'pumpkin'].includes(targets.plantArea.plant)) {
-      const ingredient = bot.inventory.items().find(item => plantType[targets.plantArea.plant].plantName === item.name)
+      const ingredient = bot.inventory.items().find(item => plantType[targets.plantArea.plant].craftedBy === item.name)
       if (ingredient) {
         targets.craftItem = {
           name: plantType[targets.plantArea.plant].seed
