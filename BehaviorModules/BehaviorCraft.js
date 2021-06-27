@@ -64,13 +64,12 @@ module.exports = class BehaviorWithdrawItemChest {
 
     this.bot.craft(recipe, 1, this.getCraftingTable())
       .then(() => {
-        botWebsocket.log(`did the recipe for ${this.targets.craftItem.name}`)
         this.success = true
         this.isEndFinished = true
       })
       .catch((err) => {
         console.log(err)
-        botWebsocket.log(`error making ${this.targets.craftItem.name}`)
+        botWebsocket.log(`Error crafting ${this.targets.craftItem.name}`)
         this.isEndFinished = true
       })
   }
