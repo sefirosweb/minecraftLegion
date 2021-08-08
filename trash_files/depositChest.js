@@ -17,7 +17,12 @@ bot.once('spawn', () => {
   let chest, itemsToDeposit
 
   function getRandomItems() {
-    bot.chat(`/give ${bot.username} minecraft:potion 36`)
+    const items = mcData.itemsArray
+    for (let i = 0; i < 36; i++) {
+      const item = items[Math.floor(Math.random() * items.length)];
+      const stack = Math.floor(Math.random() * item.stackSize)
+      bot.chat(`/give ${bot.username} minecraft:${item.name} ${stack}`)
+    }
   }
 
   async function openChest() {
