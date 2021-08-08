@@ -14,12 +14,13 @@ const bot = mineflayer.createBot({
 
 bot.once('spawn', () => {
   const mcData = require('minecraft-data')(bot.version)
-  setTimeout(() => {
-    openChest()
-  }, 1000)
-
   let chest, itemsToDeposit
-  async function openChest () {
+
+  function getRandomItems() {
+    bot.chat(`/give ${bot.username} minecraft:potion 36`)
+  }
+
+  async function openChest() {
     const chestToOpen = bot.findBlock({
       matching: ['chest', 'ender_chest', 'trapped_chest'].map(name => mcData.blocksByName[name].id),
       maxDistance: 3
@@ -27,23 +28,32 @@ bot.once('spawn', () => {
 
     chest = await bot.openChest(chestToOpen)
     itemsToDeposit = bot.inventory.items()
+    console.log('items to deposit', itemsToDeposit.map(i => `${i.name} x ${i.count}`))
     depositItems()
   }
 
-  async function depositItems () {
+  async function depositItems() {
     if (itemsToDeposit.length === 0) {
       chest.close()
       return
     }
 
     const itemToDeposit = itemsToDeposit.shift()
-
-    console.log(itemToDeposit.name)
-    console.log(itemToDeposit.type)
-    console.log(itemToDeposit.count)
-
+    console.log(`${itemToDeposit.name} x ${itemToDeposit.count} => ${itemToDeposit.type}`)
     await chest.deposit(itemToDeposit.type, null, itemToDeposit.count)
 
     depositItems()
+
   }
+
+
+  bot.chat('Hi im ready!')
+  getRandomItems()
+  bot.chat(`/kill @e[type=minecraft:item]`)
+
+  setTimeout(() => {
+    openChest()
+  }, 1000)
+
+
 })
