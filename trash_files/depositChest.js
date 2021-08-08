@@ -1,4 +1,5 @@
 const mineflayer = require('mineflayer')
+const inventoryViewer = require('mineflayer-web-inventory')
 
 if (process.argv.length < 3 || process.argv.length > 6) {
   console.log('Usage : node chest.js <host> <port> [<name>] [<password>]')
@@ -14,6 +15,7 @@ const bot = mineflayer.createBot({
 
 bot.once('spawn', () => {
   const mcData = require('minecraft-data')(bot.version)
+  inventoryViewer(bot, { port: 3001 })
   let chest, itemsToDeposit
 
   function getRandomItems() {
@@ -34,31 +36,34 @@ bot.once('spawn', () => {
     chest = await bot.openChest(chestToOpen)
     itemsToDeposit = bot.inventory.items()
     console.log('items to deposit', itemsToDeposit.map(i => `${i.name} x ${i.count}`))
-    depositItems()
+    setTimeout(() => {
+      depositItems()
+    }, 350)
   }
 
   async function depositItems() {
     if (itemsToDeposit.length === 0) {
-      chest.close()
+      setTimeout(() => {
+        chest.close()
+      }, 350)
       return
     }
 
     const itemToDeposit = itemsToDeposit.shift()
     console.log(`${itemToDeposit.name} x ${itemToDeposit.count} => ${itemToDeposit.type}`)
     await chest.deposit(itemToDeposit.type, null, itemToDeposit.count)
-
-    depositItems()
-
+    setTimeout(() => {
+      depositItems()
+    }, 0)
   }
 
-
-  bot.chat('Hi im ready!')
   getRandomItems()
   bot.chat(`/kill @e[type=minecraft:item]`)
+  bot.chat('Hi im ready!')
 
-  setTimeout(() => {
-    openChest()
-  }, 1000)
-
-
+  bot.on('chat', (username, message) => {
+    if (message === 'start') {
+      openChest();
+    }
+  })
 })
