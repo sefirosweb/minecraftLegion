@@ -14,7 +14,7 @@
         "mineflayer": "^3.9.0",
         "mineflayer-pathfinder": "^1.7.0",
         "mineflayer-statemachine": "^1.6.4",
-        "mineflayer-web-inventory": "git+https://github.com/imharvol/mineflayer-web-inventory.git#remove-path",
+        "mineflayer-web-inventory": "^1.6.0",
         "module-alias": "^2.2.2",
         "prismarine-viewer": "^1.19.3",
         "socket.io-client": "^4.1.3",
