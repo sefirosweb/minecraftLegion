@@ -20,7 +20,7 @@ module.exports = class BehaviorDepositChest {
       botWebsocket.log('Time exceded for deposit items, forcing close')
       this.chest.close()
       this.isEndFinished = true
-    }, 5000)
+    }, 10000)
 
     this.depositAllItems()
   }
