@@ -2,8 +2,7 @@ const Vec3 = require('vec3')
 const {
   StateTransition,
   NestedStateMachine,
-  BehaviorIdle,
-  BehaviorEquipItem
+  BehaviorIdle
 } = require('mineflayer-statemachine')
 const BehaviorCustomPlaceBlock = require('@BehaviorModules/BehaviorCustomPlaceBlock')
 const BehaviorFertilize = require('@BehaviorModules/BehaviorFertilize')
@@ -100,11 +99,6 @@ function plantFunction (bot, targets) {
   placePlant.stateName = 'Place Plant'
   placePlant.x = 625
   placePlant.y = 113
-
-  const equipHoe = new BehaviorEquipItem(bot, targets)
-  equipHoe.stateName = 'Equip Hoe'
-  equipHoe.x = 525
-  equipHoe.y = 513
 
   const fertilize = new BehaviorFertilize(bot, targets)
   fertilize.stateName = 'Fertilize'
