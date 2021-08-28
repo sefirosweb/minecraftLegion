@@ -92,7 +92,6 @@ function breederFunction (bot, targets) {
         targets.farmAnimal = loadConfig.getFarmAnimal()
         targets.farmAreas = loadConfig.getFarmAreas()
         targets.animalsToBeFeed = getAnimalsToBeFeed()
-        console.log('total animals', targets.animalsToBeFeed.length)
       },
       shouldTransition: () => true
     }),
