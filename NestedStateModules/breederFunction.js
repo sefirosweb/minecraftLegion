@@ -35,9 +35,6 @@ function breederFunction (bot, targets) {
   feedAnimal.y = 213
 
   const getAnimalsToBeFeed = () => {
-    console.log(targets.farmAnimal)
-    console.log(targets.farmAreas)
-
     const area = targets.farmAreas[0]
 
     const xStart = area.xStart > area.xEnd ? area.xEnd : area.xStart
@@ -77,7 +74,6 @@ function breederFunction (bot, targets) {
       }
     }
 
-    console.log(animalsToFeed)
     return animalsToFeed
   }
 
