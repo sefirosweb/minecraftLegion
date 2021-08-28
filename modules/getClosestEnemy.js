@@ -63,7 +63,7 @@ module.exports = function (bot, targets) {
 
       const dist = entity.position.distanceTo(bot.entity.position)
       entity.distance = dist
-
+      entity.isEnemy = true
       entities.push(entity)
     }
     return entities
