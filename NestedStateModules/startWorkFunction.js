@@ -36,6 +36,10 @@ function startWorkFunction (bot, targets) {
   farmerJob.x = 325
   farmerJob.y = 350
 
+  const breederJob = require('@NestedStateModules/breederJobFunction')(bot, targets)
+  breederJob.x = 325
+  breederJob.y = 350
+
   const minerJob = require('@NestedStateModules/minerJobFunction')(bot, targets)
   minerJob.x = 325
   minerJob.y = 50
@@ -78,6 +82,12 @@ function startWorkFunction (bot, targets) {
       parent: loadedConfig,
       child: farmerJob,
       shouldTransition: () => loadConfig.getJob() === 'farmer'
+    }),
+
+    new StateTransition({
+      parent: loadedConfig,
+      child: farmerJob,
+      shouldTransition: () => loadConfig.getJob() === 'breeder'
     }),
 
     new StateTransition({

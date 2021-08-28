@@ -93,7 +93,7 @@ set miner x y z x y z x+ horizontally
 - Check some bugs with mining job when have a too many lava or water
 - Add a robust documentation =P
 - Think about chat commands, currently it is faster / comfortable with the front end, but if anyone wants to configure all boot via chat commands?
-- Add animal farmer
+- Add animal farmer => breeder Job
 - Add back guard
 
 Please keep calm. I'm working hard on this project :D

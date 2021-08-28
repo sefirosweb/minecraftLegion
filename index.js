@@ -22,10 +22,11 @@ function startBot (botName, password) {
 }
 
 const botsToStart = [
-  // { username: 'Miner1' },
-  { username: 'Guard' }
-  // { username: 'Miner3' },
-  // { username: 'Miner4' },
+  { username: 'Farmer' },
+  { username: 'Guard' },
+  { username: 'Breeder'},
+  { username: 'Guard2' },
+  { username: 'Guard3' },
   // { username: 'Miner5' },
   // { username: 'Guard1' }
   // { username: 'Guard2' },
