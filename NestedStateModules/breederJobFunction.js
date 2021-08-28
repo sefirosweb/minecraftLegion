@@ -22,10 +22,10 @@ function breederJobFunction (bot, targets) {
   goChests.x = 325
   goChests.y = 213
 
-  const farming = require('@NestedStateModules/farmingFunction')(bot, targets)
-  farming.stateName = 'Farming'
-  farming.x = 325
-  farming.y = 313
+  const breeder = require('@NestedStateModules/breederFunction')(bot, targets)
+  breeder.stateName = 'Breeding'
+  breeder.x = 325
+  breeder.y = 313
 
   const eatFood = new BehaviorEatFood(bot, targets)
   eatFood.stateName = 'Eat Food'
@@ -68,18 +68,18 @@ function breederJobFunction (bot, targets) {
 
     new StateTransition({
       parent: eatFood,
-      child: farming,
+      child: breeder,
       shouldTransition: () => eatFood.isFinished()
     }),
 
     new StateTransition({
-      parent: farming,
+      parent: breeder,
       child: goChests,
-      shouldTransition: () => farming.isFinished()
+      shouldTransition: () => breeder.isFinished()
     }),
 
     new StateTransition({
-      parent: farming,
+      parent: breeder,
       child: combatStrategy,
       onTransition: () => bot.pathfinder.setGoal(null),
       shouldTransition: () => {
