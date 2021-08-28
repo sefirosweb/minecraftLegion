@@ -260,6 +260,16 @@ function setFarmAreas (botName, farmAreas) {
   db.set('config.farmAreas', farmAreasConverted).write()
 }
 
+function getFarmAnimal (botName) {
+  const db = getConn(botName)
+  return db.get('config.farmAnimal').value()
+}
+
+function setFarmAnimal (botName, farmAnimal) {
+  const db = getConn(botName)
+  db.set('config.farmAnimal', farmAnimal).write()
+}
+
 module.exports = {
   getAll,
   setJob,
@@ -292,6 +302,8 @@ module.exports = {
   setPlantAreas,
   getFarmAreas,
   setFarmAreas,
+  getFarmAnimal,
+  setFarmAnimal,
   getRandomFarmArea,
   setRandomFarmArea
 }
