@@ -59,7 +59,7 @@ function connect () {
   })
 
   socket.on('changeConfig', (config) => {
-    let itemsToBeReady, patrol, index, temp, minerConfig, chests, itemsCanBeEat, findMaster, isEventLoaded, plantAreas
+    let itemsToBeReady, patrol, index, temp, minerConfig, chests, itemsCanBeEat, findMaster, isEventLoaded, plantAreas, farmAreas
     switch (config.configToChange) {
       case 'job':
         botconfig.setJob(bot.username, config.value)
@@ -286,6 +286,27 @@ function connect () {
         plantAreas = botconfig.getPlantAreas(bot.username)
         plantAreas.splice(config.value, 1)
         botconfig.setPlantAreas(bot.username, plantAreas)
+        break
+      case 'insertNewFarmArea':
+        farmAreas = botconfig.getFarmAreas(bot.username)
+        farmAreas.push({
+          yLayer: null,
+          xStart: null,
+          xEnd: null,
+          zStart: null,
+          zEnd: null
+        })
+        botconfig.setFarmAreas(bot.username, farmAreas)
+        break
+      case 'changeFarmArea':
+        farmAreas = botconfig.getFarmAreas(bot.username)
+        farmAreas[config.value.id] = config.value.plantArea
+        botconfig.setFarmAreas(bot.username, farmAreas)
+        break
+      case 'deleteFarmArea':
+        farmAreas = botconfig.getFarmAreas(bot.username)
+        farmAreas.splice(config.value, 1)
+        botconfig.setFarmAreas(bot.username, farmAreas)
         break
       case 'randomFarmArea':
         botconfig.setRandomFarmArea(bot.username, config.value)
