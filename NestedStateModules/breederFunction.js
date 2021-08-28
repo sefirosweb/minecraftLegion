@@ -25,6 +25,15 @@ function breederFunction (bot, targets) {
   exit.x = 325
   exit.y = 613
 
+  const checkFarmAreas = new BehaviorIdle(targets)
+  checkFarmAreas.stateName = 'Check Animals'
+  checkFarmAreas.x = 12
+  checkFarmAreas.y = 11
+
+  const feedAnimal = require('@NestedStateModules/feedAnimalFunction')(bot, targets)
+  feedAnimal.x = 325
+  feedAnimal.y = 213
+
   const getAnimalsToBeFeed = () => {
     console.log(targets.farmAnimal)
     console.log(targets.farmAreas)
@@ -81,13 +90,44 @@ function breederFunction (bot, targets) {
 
     new StateTransition({
       parent: loadConfig,
-      child: exit,
+      child: checkFarmAreas,
       onTransition: () => {
         targets.farmAnimal = loadConfig.getFarmAnimal()
         targets.farmAreas = loadConfig.getFarmAreas()
         targets.animalsToBeFeed = getAnimalsToBeFeed()
+        console.log('total animals', targets.animalsToBeFeed.length)
       },
       shouldTransition: () => true
+    }),
+
+    new StateTransition({
+      parent: checkFarmAreas,
+      child: feedAnimal,
+      onTransition: () => {
+        targets.entity = targets.animalsToBeFeed.shift()
+      },
+      shouldTransition: () => targets.animalsToBeFeed.length > 0
+    }),
+
+    new StateTransition({
+      parent: checkFarmAreas,
+      child: exit,
+      shouldTransition: () => targets.animalsToBeFeed.length === 0
+    }),
+
+    new StateTransition({
+      parent: feedAnimal,
+      child: exit,
+      shouldTransition: () => feedAnimal.isFinished() && targets.animalsToBeFeed.length === 0
+    }),
+
+    new StateTransition({
+      parent: feedAnimal,
+      child: feedAnimal,
+      onTransition: () => {
+        targets.entity = targets.animalsToBeFeed.shift()
+      },
+      shouldTransition: () => feedAnimal.isFinished() && targets.animalsToBeFeed.length > 0
     })
 
   ]
