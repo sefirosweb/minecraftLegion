@@ -23,6 +23,7 @@ function getConn (botName) {
     plantAreas: [],
     farmAreas: [],
     farmAnimal: {
+      seconds: 60,
       cow: 10,
       sheep: 10
     },
