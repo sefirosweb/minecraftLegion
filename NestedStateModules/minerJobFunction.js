@@ -7,7 +7,7 @@ const {
 const BehaviorLoadConfig = require('@BehaviorModules/BehaviorLoadConfig')
 const BehaviorGetReady = require('@BehaviorModules/BehaviorGetReady')
 const BehaviorEatFood = require('@BehaviorModules/BehaviorEatFood')
-const BehaviorEquip = require('@BehaviorModules/BehaviorEquip')
+const BehaviorEquipAll = require('@BehaviorModules/BehaviorEquipAll')
 
 function minerJobFunction (bot, targets) {
   const start = new BehaviorIdle(targets)
@@ -20,7 +20,7 @@ function minerJobFunction (bot, targets) {
   loadConfig.x = 325
   loadConfig.y = 113
 
-  const equip = new BehaviorEquip(bot, targets)
+  const equip = new BehaviorEquipAll(bot, targets)
   equip.stateName = 'Equip Armor'
   equip.x = 525
   equip.y = 250

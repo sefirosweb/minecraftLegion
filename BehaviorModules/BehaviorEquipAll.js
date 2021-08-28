@@ -1,10 +1,10 @@
 const botWebsocket = require('@modules/botWebsocket')
 
-module.exports = class BehaviorEquip {
+module.exports = class BehaviorEquipAll {
   constructor (bot, targets) {
     this.bot = bot
     this.targets = targets
-    this.stateName = 'BehaviorEquip'
+    this.stateName = 'BehaviorEquipAll'
 
     this.isEndFinished = false
 

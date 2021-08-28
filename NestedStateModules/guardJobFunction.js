@@ -10,7 +10,7 @@ const BehaviorLoadConfig = require('@BehaviorModules/BehaviorLoadConfig')
 const BehaviorMoveToArray = require('@BehaviorModules/BehaviorMoveToArray')
 const BehaviorGetReady = require('@BehaviorModules/BehaviorGetReady')
 const BehaviorEatFood = require('@BehaviorModules/BehaviorEatFood')
-const BehaviorEquip = require('@BehaviorModules/BehaviorEquip')
+const BehaviorEquipAll = require('@BehaviorModules/BehaviorEquipAll')
 const BehaviorFindItems = require('@BehaviorModules/BehaviorFindItems')
 const BehaviorHelpFriend = require('@BehaviorModules/BehaviorHelpFriend')
 
@@ -38,7 +38,7 @@ function guardJobFunction (bot, targets) {
   getReady.x = 525
   getReady.y = 113
 
-  const equip = new BehaviorEquip(bot, targets)
+  const equip = new BehaviorEquipAll(bot, targets)
   equip.stateName = 'Equip items'
   equip.x = 725
   equip.y = 313
