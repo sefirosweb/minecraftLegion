@@ -7,7 +7,7 @@ const {
 const BehaviorGetReady = require('@BehaviorModules/BehaviorGetReady')
 const BehaviorEatFood = require('@BehaviorModules/BehaviorEatFood')
 
-function breederJobFunction(bot, targets) {
+function breederJobFunction (bot, targets) {
   const start = new BehaviorIdle(targets)
   start.stateName = 'Start'
   start.x = 125

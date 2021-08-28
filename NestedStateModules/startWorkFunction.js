@@ -86,7 +86,7 @@ function startWorkFunction (bot, targets) {
 
     new StateTransition({
       parent: loadedConfig,
-      child: farmerJob,
+      child: breederJob,
       shouldTransition: () => loadConfig.getJob() === 'breeder'
     }),
 
