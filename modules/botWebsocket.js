@@ -300,7 +300,7 @@ function connect () {
         break
       case 'changeFarmArea':
         farmAreas = botconfig.getFarmAreas(bot.username)
-        farmAreas[config.value.id] = config.value.plantArea
+        farmAreas[config.value.id] = config.value.farmArea
         botconfig.setFarmAreas(bot.username, farmAreas)
         break
       case 'deleteFarmArea':
