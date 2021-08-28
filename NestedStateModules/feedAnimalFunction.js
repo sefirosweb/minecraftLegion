@@ -8,6 +8,7 @@ const {
 
 const BehaviorLoadConfig = require('@BehaviorModules/BehaviorLoadConfig')
 const BehaviorEquip = require('@BehaviorModules/BehaviorEquip')
+const BehaviorInteractEntity = require('@BehaviorModules/BehaviorInteractEntity')
 
 function feedAnimalFunction (bot, targets) {
   targets.breededAnimals = []
@@ -32,6 +33,11 @@ function feedAnimalFunction (bot, targets) {
   equip.stateName = 'Equip'
   equip.x = 11
   equip.y = 11
+
+  const interactEntity = new BehaviorInteractEntity(bot, targets)
+  interactEntity.stateName = 'Interact'
+  interactEntity.x = 11
+  interactEntity.y = 11
 
   const followAnimal = new BehaviorFollowEntity(bot, targets)
   followAnimal.stateName = 'Follow Animal'
@@ -69,8 +75,14 @@ function feedAnimalFunction (bot, targets) {
 
     new StateTransition({
       parent: followAnimal,
-      child: exit,
+      child: interactEntity,
       shouldTransition: () => targets.entity && followAnimal.distanceToTarget() < 2 && targets.entity.isValid
+    }),
+
+    new StateTransition({
+      parent: interactEntity,
+      child: exit,
+      shouldTransition: () => interactEntity.isFinished()
     })
 
   ]
