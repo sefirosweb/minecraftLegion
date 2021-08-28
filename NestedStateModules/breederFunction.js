@@ -22,18 +22,18 @@ function breederFunction (bot, targets) {
 
   const exit = new BehaviorIdle(targets)
   exit.stateName = 'Exit'
-  exit.x = 325
-  exit.y = 613
+  exit.x = 525
+  exit.y = 263
 
   const checkFarmAreas = new BehaviorIdle(targets)
   checkFarmAreas.stateName = 'Check Animals'
-  checkFarmAreas.x = 12
-  checkFarmAreas.y = 11
+  checkFarmAreas.x = 325
+  checkFarmAreas.y = 263
 
   const feedAnimal = require('@NestedStateModules/feedAnimalFunction')(bot, targets)
   feedAnimal.stateName = 'Feed'
   feedAnimal.x = 325
-  feedAnimal.y = 213
+  feedAnimal.y = 413
 
   const getAnimalsToBeFeed = () => {
     const area = targets.farmAreas[0]
