@@ -31,6 +31,7 @@ function breederFunction (bot, targets) {
   checkFarmAreas.y = 11
 
   const feedAnimal = require('@NestedStateModules/feedAnimalFunction')(bot, targets)
+  feedAnimal.stateName = 'Feed'
   feedAnimal.x = 325
   feedAnimal.y = 213
 

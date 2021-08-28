@@ -1,4 +1,3 @@
-const botWebsocket = require('@modules/botWebsocket')
 const {
   StateTransition,
   BehaviorIdle,
@@ -6,7 +5,6 @@ const {
   NestedStateMachine
 } = require('mineflayer-statemachine')
 
-const BehaviorLoadConfig = require('@BehaviorModules/BehaviorLoadConfig')
 const BehaviorEquip = require('@BehaviorModules/BehaviorEquip')
 const BehaviorInteractEntity = require('@BehaviorModules/BehaviorInteractEntity')
 
@@ -19,30 +17,25 @@ function feedAnimalFunction (bot, targets) {
   start.x = 125
   start.y = 113
 
-  const loadConfig = new BehaviorLoadConfig(bot, targets)
-  loadConfig.stateName = 'Load Bot Config'
-  loadConfig.x = 325
-  loadConfig.y = 113
-
   const exit = new BehaviorIdle(targets)
   exit.stateName = 'Exit'
-  exit.x = 325
-  exit.y = 613
+  exit.x = 350
+  exit.y = 313
 
   const equip = new BehaviorEquip(bot, targets)
   equip.stateName = 'Equip'
-  equip.x = 11
-  equip.y = 11
+  equip.x = 350
+  equip.y = 113
 
   const interactEntity = new BehaviorInteractEntity(bot, targets)
   interactEntity.stateName = 'Interact'
-  interactEntity.x = 11
-  interactEntity.y = 11
+  interactEntity.x = 575
+  interactEntity.y = 313
 
   const followAnimal = new BehaviorFollowEntity(bot, targets)
   followAnimal.stateName = 'Follow Animal'
-  followAnimal.x = 100
-  followAnimal.y = 100
+  followAnimal.x = 575
+  followAnimal.y = 113
 
   const transitions = [
     new StateTransition({
