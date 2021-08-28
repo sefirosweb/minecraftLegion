@@ -38,7 +38,7 @@ module.exports = class BehaviorEquip {
 
   equip () {
     return new Promise((resolve, reject) => {
-      this.bot.equip(this.targets.item, this.destination)
+      this.bot.equip(this.targets.item.id, this.destination)
         .then(() => {
           resolve()
         }).catch(function (err) {
