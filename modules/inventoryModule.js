@@ -41,12 +41,14 @@ module.exports = function (bot) {
         slotID = bot.getEquipmentDestSlot('hand')
         swordEquiped = bot.inventory.slots[slotID]
         if (swordEquiped === null) { return false }
+        if (swordEquiped === undefined) { return false }
         isSword = swordEquiped.name.includes('sword')
         return isSword
       case 'bow':
         slotID = bot.getEquipmentDestSlot('hand')
         bowEquiped = bot.inventory.slots[slotID]
         if (bowEquiped === null) { return false }
+        if (bowEquiped === undefined) { return false }
         isBow = bowEquiped.name.includes('bow')
         return isBow
       default:
