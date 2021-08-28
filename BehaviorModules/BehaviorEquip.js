@@ -63,6 +63,10 @@ module.exports = class BehaviorEquip {
     return this.isEndFinished
   }
 
+  isWasEquipped () {
+    return this.wasEquipped
+  }
+
   getEquipDestination (item) {
     if (this.isHelmet(item)) return 'head'
     if (this.isChestplate(item)) return 'torso'
