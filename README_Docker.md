@@ -4,8 +4,17 @@ docker rm app
 docker exec -it app bash
 
 # Install dependencies for execute bot
+
+# Node.js v16.x
 apt-get update &&
 apt-get install curl -y &&
 curl -fsSL https://deb.nodesource.com/setup_16.x | bash - &&
+apt-get install -y nodejs &&
+npm install -g npm-check-updates
+
+# Node.js v14.x
+apt-get update &&
+apt-get install curl -y &&
+curl -fsSL https://deb.nodesource.com/setup_14.x | bash - &&
 apt-get install -y nodejs &&
 npm install -g npm-check-updates
