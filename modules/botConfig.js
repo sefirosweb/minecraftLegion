@@ -22,6 +22,10 @@ function getConn (botName) {
     patrol: [],
     plantAreas: [],
     farmAreas: [],
+    farmAnimal: {
+      cow: 10,
+      sheep: 10
+    },
     minerCords: {
       xStart: null,
       yStart: null,
