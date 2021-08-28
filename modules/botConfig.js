@@ -21,6 +21,7 @@ function getConn (botName) {
     chests: [],
     patrol: [],
     plantAreas: [],
+    farmAreas: [],
     minerCords: {
       xStart: null,
       yStart: null,
@@ -235,6 +236,26 @@ function setPlantAreas (botName, plantAreas) {
   db.set('config.plantAreas', plantAreasConverted).write()
 }
 
+function getFarmAreas (botName) {
+  const db = getConn(botName)
+  return db.get('config.farmAreas').value()
+}
+
+function setFarmAreas (botName, farmAreas) {
+  const farmAreasConverted = farmAreas.map(plant => {
+    const copyFarm = {
+      yLayer: parseInt(plant.yLayer),
+      xStart: parseInt(plant.xStart),
+      xEnd: parseInt(plant.xEnd),
+      zStart: parseInt(plant.zStart),
+      zEnd: parseInt(plant.zEnd)
+    }
+    return copyFarm
+  })
+  const db = getConn(botName)
+  db.set('config.farmAreas', farmAreasConverted).write()
+}
+
 module.exports = {
   getAll,
   setJob,
@@ -265,6 +286,8 @@ module.exports = {
   getAllowSprinting,
   getPlantAreas,
   setPlantAreas,
+  getFarmAreas,
+  setFarmAreas,
   getRandomFarmArea,
   setRandomFarmArea
 }
