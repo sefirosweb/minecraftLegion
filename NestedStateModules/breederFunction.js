@@ -5,6 +5,8 @@ const {
 } = require('mineflayer-statemachine')
 
 const BehaviorLoadConfig = require('@BehaviorModules/BehaviorLoadConfig')
+const animalType = require('@modules/animalType')
+const animalTypes = Object.keys(animalType)
 
 function breederFunction (bot, targets) {
   targets.breededAnimals = []
@@ -50,7 +52,7 @@ function breederFunction (bot, targets) {
       const entity = bot.entities[entityName]
       if (entity === bot.entity) { continue }
       if (
-        ['cow', 'sheep'].includes(entity.name) &&
+        animalTypes.includes(entity.name) &&
         entity.position.x >= xStart && entity.position.x <= xEnd &&
         entity.position.y >= yStart && entity.position.y <= yEnd &&
         entity.position.z >= zStart && entity.position.z <= zEnd
