@@ -36,11 +36,7 @@ function slaughterhouseFunction (bot, targets) {
   equip.y = 263
 
   const checkWeapon = () => {
-    let weapon = bot.inventory.items().find(item => item.name.includes('sword'))
-    if (weapon) {
-      targets.item = weapon
-      return
-    }
+    let weapon
 
     weapon = bot.inventory.items().find(item => item.name.includes('axe'))
     if (weapon) {
@@ -49,6 +45,11 @@ function slaughterhouseFunction (bot, targets) {
     }
 
     weapon = bot.inventory.items().find(item => item.name.includes('hoe'))
+    if (weapon) {
+      targets.item = weapon
+      return
+    }
+    weapon = bot.inventory.items().find(item => item.name.includes('sword'))
     if (weapon) {
       targets.item = weapon
       return
@@ -70,6 +71,9 @@ function slaughterhouseFunction (bot, targets) {
     new StateTransition({
       parent: start,
       child: equip,
+      onTransition: () => {
+        checkWeapon()
+      },
       shouldTransition: () => true
     }),
 
@@ -92,9 +96,6 @@ function slaughterhouseFunction (bot, targets) {
     new StateTransition({
       parent: followMob,
       child: attack,
-      onTransition: () => {
-        checkWeapon()
-      },
       shouldTransition: () => targets.entity && followMob.distanceToTarget() < rangeSword && attack.nextAttack() && targets.entity.isValid
     }),
 
