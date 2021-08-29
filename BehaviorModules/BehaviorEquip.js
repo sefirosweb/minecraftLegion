@@ -38,7 +38,8 @@ module.exports = class BehaviorEquip {
 
   equip () {
     return new Promise((resolve, reject) => {
-      this.bot.equip(this.targets.item.id, this.destination)
+      const itemId = this.mcData.itemsByName[this.targets.item.name].id
+      this.bot.equip(itemId, this.destination)
         .then(() => {
           resolve()
         }).catch(function (err) {
