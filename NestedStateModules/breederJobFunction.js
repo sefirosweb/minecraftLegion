@@ -27,6 +27,16 @@ function breederJobFunction (bot, targets) {
   breeder.x = 325
   breeder.y = 313
 
+  const slaughterhouse = require('@NestedStateModules/slaughterhouseFunction')(bot, targets)
+  slaughterhouse.stateName = 'Slaughterhouse'
+  slaughterhouse.x = 525
+  slaughterhouse.y = 313
+
+  const findItemsAndPickup = require('@NestedStateModules/findItemsAndPickup')(bot, targets)
+  findItemsAndPickup.stateName = 'Find Items'
+  findItemsAndPickup.x = 525
+  findItemsAndPickup.y = 213
+
   const eatFood = new BehaviorEatFood(bot, targets)
   eatFood.stateName = 'Eat Food'
   eatFood.x = 125
@@ -74,8 +84,20 @@ function breederJobFunction (bot, targets) {
 
     new StateTransition({
       parent: breeder,
-      child: goChests,
+      child: slaughterhouse,
       shouldTransition: () => breeder.isFinished()
+    }),
+
+    new StateTransition({
+      parent: slaughterhouse,
+      child: findItemsAndPickup,
+      shouldTransition: () => slaughterhouse.isFinished()
+    }),
+
+    new StateTransition({
+      parent: findItemsAndPickup,
+      child: goChests,
+      shouldTransition: () => findItemsAndPickup.isFinished()
     }),
 
     new StateTransition({
