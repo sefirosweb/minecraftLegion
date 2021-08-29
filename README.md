@@ -83,17 +83,21 @@ set miner x y z x y z x+ horizontally
   * Do placing plants and sapling trees
   * Potatoes, Carrots, Wheat, Melon, Pumpkin, Sweet berries
   * Sapling Trees -> Woodcutter
+- Breeder
+  * Feed animals
+    - For a now only cow & sheep
+  * When there is surplus, sacrifice the surplus
 # TODO
-- Fix a bug when usie a mineflayer-web-inventory, they breaks "chest" functions
 - Make an Archer Job ( During how to have this behavior similar to guard job? )
 - Optimize combat Guard Job ( combat creepers, PVP, destroy shields)
-- Check day/night for sleep any sleep function?
+- Check day/night for sleep any sleep function? Add "general config" for send all bots to sleep for all jobs
 - Add Job builder! based on mineflayer-builder & Schematichs
+- Add Job sorter chest, have an a bot for sort all chest
+- Add "store" and "share" the chest containes, and when bot need some item go to find directly, also must be update the container chest info when any bot open/close the chest and share the rest of bots
 - Add placing torchs
 - Check some bugs with mining job when have a too many lava or water
 - Add a robust documentation =P
 - Think about chat commands, currently it is faster / comfortable with the front end, but if anyone wants to configure all boot via chat commands?
-- Add animal farmer => breeder Job
 - Add back guard
 
 Please keep calm. I'm working hard on this project :D

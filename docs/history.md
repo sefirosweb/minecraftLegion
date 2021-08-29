@@ -1,3 +1,6 @@
+## 1.1.0
+* Fixed bug with mineflater-inventory
+* Added breeder job
 ## 1.0.0
 * Realease a usable version
 * Fixed vec3 package
