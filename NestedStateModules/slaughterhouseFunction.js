@@ -27,16 +27,23 @@ function slaughterhouseFunction (bot, targets) {
   slaughter.x = 325
   slaughter.y = 263
 
-  let cows, sheeps
+  let animalsToKill
 
   const getSpareAnimals = () => {
-    cows = targets.breededAnimals.filter(e => {
-      return e.name === 'cow'
+    const spareAnimals = []
+    let spare
+    Object.keys(targets.farmAnimal).forEach(animalName => {
+      const animalQuantity = targets.farmAnimal[animalName]
+      spare = targets.breededAnimals.filter(e => {
+        return e.name === animalName
+      })
+      if (spare.length > animalQuantity) {
+        spare.splice(0, animalQuantity)
+        spareAnimals.push(...spare)
+      }
     })
 
-    sheeps = targets.breededAnimals.filter(e => {
-      return e.name === 'sheep'
-    })
+    return spareAnimals
   }
 
   const transitions = [
@@ -44,7 +51,7 @@ function slaughterhouseFunction (bot, targets) {
       parent: start,
       child: check,
       onTransition: () => {
-        getSpareAnimals()
+        animalsToKill = getSpareAnimals()
       },
       shouldTransition: () => true
     }),
@@ -53,27 +60,30 @@ function slaughterhouseFunction (bot, targets) {
       parent: check,
       child: slaughter,
       onTransition: () => {
-        if (cows.length > targets.farmAnimal.cow) {
-          targets.entity = cows.shift()
-        } else {
-          if (sheeps.length > targets.farmAnimal.sheep) {
-            targets.entity = sheeps.shift()
-          }
-        }
+        targets.entity = animalsToKill.shift()
       },
-      shouldTransition: () => cows.length > targets.farmAnimal.cow || sheeps.length > targets.farmAnimal.sheep
-    }),
-
-    new StateTransition({
-      parent: slaughter,
-      child: check,
-      shouldTransition: () => slaughter.isFinished()
+      shouldTransition: () => animalsToKill.length > 0
     }),
 
     new StateTransition({
       parent: check,
       child: exit,
-      shouldTransition: () => cows.length <= targets.farmAnimal.cow && sheeps.length <= targets.farmAnimal.sheep
+      shouldTransition: () => animalsToKill.length === 0
+    }),
+
+    new StateTransition({
+      parent: slaughter,
+      child: slaughter,
+      onTransition: () => {
+        targets.entity = animalsToKill.shift()
+      },
+      shouldTransition: () => slaughter.isFinished() && animalsToKill.length > 0
+    }),
+
+    new StateTransition({
+      parent: slaughter,
+      child: exit,
+      shouldTransition: () => slaughter.isFinished() && animalsToKill.length === 0
     })
   ]
 
