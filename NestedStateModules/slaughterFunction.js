@@ -57,6 +57,15 @@ function slaughterhouseFunction (bot, targets) {
     targets.item = undefined
   }
 
+  const removeAnimal = () => {
+    const animalId = targets.breededAnimals.findIndex(b => {
+      return b.id === targets.entity.id
+    })
+    if (animalId >= 0) {
+      targets.breededAnimals.splice(animalId, 1)
+    }
+  }
+
   const transitions = [
     new StateTransition({
       parent: start,
@@ -68,6 +77,7 @@ function slaughterhouseFunction (bot, targets) {
       parent: equip,
       child: exit,
       onTransition: () => {
+        removeAnimal()
         targets.entity = undefined
       },
       shouldTransition: () => equip.isFinished() && !equip.isWasEquipped()
@@ -103,6 +113,10 @@ function slaughterhouseFunction (bot, targets) {
     new StateTransition({
       parent: attack,
       child: exit,
+      onTransition: () => {
+        removeAnimal()
+        targets.entity = undefined
+      },
       shouldTransition: () => !targets.entity || targets.entity.isValid === false
     }),
 
@@ -110,6 +124,7 @@ function slaughterhouseFunction (bot, targets) {
       parent: followMob,
       child: exit,
       onTransition: () => {
+        removeAnimal()
         targets.entity = undefined
       },
       shouldTransition: () => !targets.entity || targets.entity.isValid === false
