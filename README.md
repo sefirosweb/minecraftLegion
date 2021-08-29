@@ -81,11 +81,10 @@ set miner x y z x y z x+ horizontally
   * Make a tunel or hole
 - Farmer
   * Do placing plants and sapling trees
-  * Potatoes, Carrots, Wheat, Melon, Pumpkin, Sweet berries
+  * Potatoes, Carrots, Wheat, Melon, Pumpkin, Sweet berries..
   * Sapling Trees -> Woodcutter
 - Breeder
-  * Feed animals
-    - For a now only cow & sheep
+  * Feed animals! all types!
   * When there is surplus, sacrifice the surplus
 # TODO
 - Make an Archer Job ( During how to have this behavior similar to guard job? )
