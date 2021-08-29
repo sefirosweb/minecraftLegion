@@ -13,14 +13,14 @@ module.exports = class template {
   }
 
   async interactEntity () {
-    if (this.targets.position == null) {
+    if (this.targets.interactEntity == null) {
       this.isEndFinished = true
-      console.log('Entity is null')
+      console.log('interactEntity is null')
       return
     }
 
-    await this.bot.lookAt(this.targets.entity.position)
-    await this.bot.useOn(this.targets.entity)
+    await this.bot.lookAt(this.targets.interactEntity.position)
+    await this.bot.useOn(this.targets.interactEntity)
     this.isEndFinished = true
   }
 
