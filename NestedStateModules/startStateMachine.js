@@ -8,7 +8,7 @@ module.exports = (bot) => {
   const mineflayerPathfinder = require('mineflayer-pathfinder')
   const mcData = require('minecraft-data')(bot.version)
 
-  const isInDebug = debugMode ? debugMode : false
+  const isInDebug = debugMode || false
 
   const {
     StateTransition,
@@ -24,28 +24,28 @@ module.exports = (bot) => {
       console.log(`Detected change ${object} value:`, val)
     },
 
-    set position(val) {
-      this.positionVal = val;
-      this.aListener('position', val);
+    set position (val) {
+      this.positionVal = val
+      this.aListener('position', val)
     },
-    get position() {
-      return this.positionVal;
+    get position () {
+      return this.positionVal
     },
 
-    set entity(val) {
-      this.entityVal = val;
-      this.aListener('entity', val);
+    set entity (val) {
+      this.entityVal = val
+      this.aListener('entity', val)
     },
-    get entity() {
-      return this.entityVal;
+    get entity () {
+      return this.entityVal
     },
-    
-    set item(val) {
-      this.itemVal = val;
-      this.aListener('item', val);
+
+    set item (val) {
+      this.itemVal = val
+      this.aListener('item', val)
     },
-    get item() {
-      return this.itemVal;
+    get item () {
+      return this.itemVal
     }
   }
 
