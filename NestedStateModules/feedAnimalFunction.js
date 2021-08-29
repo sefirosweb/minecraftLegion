@@ -63,17 +63,25 @@ function feedAnimalFunction (bot, targets) {
     new StateTransition({
       parent: followAnimal,
       child: exit,
-      shouldTransition: () => !targets.entity || !targets.entity.isValid
+      shouldTransition: () => {
+        return !targets.feedEntity || !targets.feedEntity.isValid
+      }
     }),
 
     new StateTransition({
       parent: followAnimal,
       child: interactEntity,
-      shouldTransition: () => targets.entity && followAnimal.distanceToTarget() < 2 && targets.entity.isValid
+      onTransition: () => {
+        targets.interactEntity = targets.feedEntity
+      },
+      shouldTransition: () => targets.feedEntity && followAnimal.distanceToTarget() < 2 && targets.feedEntity.isValid
     }),
 
     new StateTransition({
       parent: interactEntity,
+      onTransition: () => {
+        targets.interactEntity = null
+      },
       child: exit,
       shouldTransition: () => interactEntity.isFinished()
     })

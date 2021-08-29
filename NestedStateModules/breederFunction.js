@@ -99,7 +99,7 @@ function breederFunction (bot, targets) {
       parent: checkFarmAreas,
       child: feedAnimal,
       onTransition: () => {
-        targets.entity = targets.animalsToBeFeed.shift()
+        targets.feedEntity = targets.animalsToBeFeed.shift()
       },
       shouldTransition: () => targets.animalsToBeFeed.length > 0
     }),
@@ -115,7 +115,7 @@ function breederFunction (bot, targets) {
       child: exit,
       onTransition: () => {
         const animalBreeded = targets.breededAnimals.findIndex(b => {
-          return b.id === targets.entity.id
+          return b.id === targets.feedEntity.id
         })
 
         if (animalBreeded >= 0) {
@@ -130,7 +130,7 @@ function breederFunction (bot, targets) {
       child: feedAnimal,
       onTransition: () => {
         const animalBreeded = targets.breededAnimals.findIndex(b => {
-          return b.id === targets.entity.id
+          return b.id === targets.feedEntity.id
         })
 
         if (animalBreeded >= 0) {
@@ -139,7 +139,9 @@ function breederFunction (bot, targets) {
 
         targets.entity = targets.animalsToBeFeed.shift()
       },
-      shouldTransition: () => feedAnimal.isFinished() && targets.animalsToBeFeed.length > 0
+      shouldTransition: () => {
+        return feedAnimal.isFinished() && targets.animalsToBeFeed.length > 0
+      }
     })
 
   ]
