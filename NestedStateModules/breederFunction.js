@@ -1,4 +1,3 @@
-const botWebsocket = require('@modules/botWebsocket')
 const {
   StateTransition,
   BehaviorIdle,
@@ -63,7 +62,7 @@ function breederFunction (bot, targets) {
         if (animalBreeded >= 0) {
           if (
             !entity.breededDate ||
-            Date.now() - entity.breededDate > 10000
+            Date.now() - entity.breededDate > targets.farmAnimal.seconds * 1000
           ) {
             targets.breededAnimals[animalBreeded] = entity
             animalsToFeed.push(entity)
@@ -114,6 +113,15 @@ function breederFunction (bot, targets) {
     new StateTransition({
       parent: feedAnimal,
       child: exit,
+      onTransition: () => {
+        const animalBreeded = targets.breededAnimals.findIndex(b => {
+          return b.id === targets.entity.id
+        })
+
+        if (animalBreeded >= 0) {
+          targets.breededAnimals[animalBreeded].breededDate = Date.now()
+        }
+      },
       shouldTransition: () => feedAnimal.isFinished() && targets.animalsToBeFeed.length === 0
     }),
 
@@ -121,6 +129,14 @@ function breederFunction (bot, targets) {
       parent: feedAnimal,
       child: feedAnimal,
       onTransition: () => {
+        const animalBreeded = targets.breededAnimals.findIndex(b => {
+          return b.id === targets.entity.id
+        })
+
+        if (animalBreeded >= 0) {
+          targets.breededAnimals[animalBreeded].breededDate = Date.now()
+        }
+
         targets.entity = targets.animalsToBeFeed.shift()
       },
       shouldTransition: () => feedAnimal.isFinished() && targets.animalsToBeFeed.length > 0
