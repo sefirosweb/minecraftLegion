@@ -37,6 +37,7 @@ function feedAnimalFunction (bot, targets) {
   followAnimal.stateName = 'Follow Animal'
   followAnimal.x = 575
   followAnimal.y = 113
+  followAnimal.movements = targets.movements
 
   const transitions = [
     new StateTransition({

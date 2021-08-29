@@ -24,6 +24,7 @@ function slaughterhouseFunction (bot, targets) {
   followMob.stateName = 'Follow Enemy'
   followMob.x = 325
   followMob.y = 263
+  followMob.movements = targets.movements
 
   const attack = new BehaviorAttack(bot, targets)
   attack.stateName = 'Attack'
