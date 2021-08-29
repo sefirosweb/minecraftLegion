@@ -37,44 +37,44 @@ function breederFunction (bot, targets) {
   feedAnimal.y = 413
 
   const getAnimalsToBeFeed = () => {
-    const area = targets.farmAreas[0]
-
-    const xStart = area.xStart > area.xEnd ? area.xEnd : area.xStart
-    const xEnd = area.xStart > area.xEnd ? area.xStart : area.xEnd
-    const zStart = area.zStart > area.zEnd ? area.zEnd : area.zStart
-    const zEnd = area.zStart > area.zEnd ? area.zStart : area.zEnd
-    const yStart = area.yLayer - 1
-    const yEnd = area.yLayer + 1
-
     const animalsToFeed = []
+    let xStart, xEnd, zStart, zEnd, yStart, yEnd
 
-    for (const entityName of Object.keys(bot.entities)) {
-      const entity = bot.entities[entityName]
-      if (entity === bot.entity) { continue }
-      if (
-        animalTypes.includes(entity.name) &&
-        entity.position.x >= xStart && entity.position.x <= xEnd &&
-        entity.position.y >= yStart && entity.position.y <= yEnd &&
-        entity.position.z >= zStart && entity.position.z <= zEnd
-      ) {
-        const animalId = targets.breededAnimals.findIndex(b => {
-          return b.id === entity.id
-        })
+    targets.farmAreas.forEach(area => {
+      xStart = area.xStart > area.xEnd ? area.xEnd : area.xStart
+      xEnd = area.xStart > area.xEnd ? area.xStart : area.xEnd
+      zStart = area.zStart > area.zEnd ? area.zEnd : area.zStart
+      zEnd = area.zStart > area.zEnd ? area.zStart : area.zEnd
+      yStart = area.yLayer - 1
+      yEnd = area.yLayer + 1
 
-        if (animalId >= 0) {
-          if (
-            !targets.breededAnimals[animalId].breededDate ||
-            Date.now() - targets.breededAnimals[animalId].breededDate > targets.farmAnimal.seconds * 1000
-          ) {
-            animalsToFeed.push(targets.breededAnimals[animalId])
+      for (const entityName of Object.keys(bot.entities)) {
+        const entity = bot.entities[entityName]
+        if (entity === bot.entity) { continue }
+        if (
+          animalTypes.includes(entity.name) &&
+          entity.position.x >= xStart && entity.position.x <= xEnd &&
+          entity.position.y >= yStart && entity.position.y <= yEnd &&
+          entity.position.z >= zStart && entity.position.z <= zEnd
+        ) {
+          const animalId = targets.breededAnimals.findIndex(b => {
+            return b.id === entity.id
+          })
+
+          if (animalId >= 0) {
+            if (
+              !targets.breededAnimals[animalId].breededDate ||
+              Date.now() - targets.breededAnimals[animalId].breededDate > targets.farmAnimal.seconds * 1000
+            ) {
+              animalsToFeed.push(targets.breededAnimals[animalId])
+            }
+          } else {
+            targets.breededAnimals.push(entity)
+            animalsToFeed.push(entity)
           }
-        } else {
-          targets.breededAnimals.push(entity)
-          animalsToFeed.push(entity)
         }
       }
-    }
-
+    })
     return animalsToFeed
   }
 
