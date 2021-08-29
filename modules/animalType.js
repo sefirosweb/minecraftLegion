@@ -6,39 +6,39 @@ module.exports = {
     foods: ['wheat']
   },
   wolf: {
-    food: ['beef', 'chicken', 'rabbit', 'porkchop']
+    foods: ['beef', 'chicken', 'rabbit', 'porkchop']
   },
   chicken: {
-    food: ['wheat_seeds']
+    foods: ['wheat_seeds']
   },
   cat: {
-    food: ['cod', 'salmon']
+    foods: ['cod', 'salmon']
   },
   horse: {
-    food: ['golden_carrot', 'golden_apple']
+    foods: ['golden_carrot', 'golden_apple']
   },
   donkey: {
-    food: ['golden_carrot', 'golden_apple']
+    foods: ['golden_carrot', 'golden_apple']
   },
   llama: {
-    food: ['hay_block']
+    foods: ['hay_block']
   },
   pig: {
-    food: ['carrot', 'potato', 'beetroot']
+    foods: ['carrot', 'potato', 'beetroot']
   },
   rabbit: {
-    food: ['carrot', 'golden_carrot', 'dandelion']
+    foods: ['carrot', 'golden_carrot', 'dandelion']
   },
   turtles: {
-    food: ['seagrass']
+    foods: ['seagrass']
   },
   panda: {
-    food: ['bamboo']
+    foods: ['bamboo']
   },
   fox: {
-    food: ['sweet_berries']
+    foods: ['sweet_berries']
   },
   bee: {
-    food: ['dandelion', 'poppy', 'blue_orchid', 'allium', 'azure_bluet', 'orange_tulip', 'pink_tulip', 'red_tulip', 'white_tulip', 'cornflower', 'lily_of_the_valley', 'oxeye_daisy']
+    foods: ['dandelion', 'poppy', 'blue_orchid', 'allium', 'azure_bluet', 'orange_tulip', 'pink_tulip', 'red_tulip', 'white_tulip', 'cornflower', 'lily_of_the_valley', 'oxeye_daisy']
   }
 }
