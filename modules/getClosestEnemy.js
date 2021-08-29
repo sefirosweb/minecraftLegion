@@ -10,25 +10,21 @@ module.exports = function (bot, targets) {
   movements.canDig = false
 
   const check = () => {
-    if (targets.config.mode === 'none') {
-      targets.entity = undefined
-    } else {
-      if (!currentEntity || entities.length <= currentEntity) {
-        entities = sortEntitiesDistance()
-        currentEntity = 0
-      }
+    if (!currentEntity || entities.length <= currentEntity) {
+      entities = sortEntitiesDistance()
+      currentEntity = 0
+    }
 
-      if (entities.length > 0) {
-        const validEntity = getValidPath(entities[currentEntity])
-        if (validEntity) {
-          const blockPosition = bot.blockAt(entities[currentEntity].position.offset(0, entities[currentEntity].height, 0))
-          if (bot.canSeeBlock(blockPosition)) {
-            targets.entity = entities[currentEntity]
-          }
+    if (entities.length > 0) {
+      const validEntity = getValidPath(entities[currentEntity])
+      if (validEntity) {
+        const blockPosition = bot.blockAt(entities[currentEntity].position.offset(0, entities[currentEntity].height, 0))
+        if (bot.canSeeBlock(blockPosition)) {
+          targets.entity = entities[currentEntity]
         }
-
-        currentEntity++
       }
+
+      currentEntity++
     }
   }
 

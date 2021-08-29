@@ -51,6 +51,9 @@ function feedAnimalFunction (bot, targets) {
     new StateTransition({
       parent: equip,
       child: followAnimal,
+      onTransition: () => {
+        targets.entity = targets.feedEntity
+      },
       shouldTransition: () => equip.isFinished() && equip.isWasEquipped()
     }),
 
@@ -63,8 +66,16 @@ function feedAnimalFunction (bot, targets) {
     new StateTransition({
       parent: followAnimal,
       child: exit,
+      onTransition: () => {
+        const animalId = targets.breededAnimals.findIndex(b => {
+          return b.id === targets.feedEntity.id
+        })
+        if (animalId >= 0) {
+          targets.breededAnimals.splice(animalId, 1)
+        }
+      },
       shouldTransition: () => {
-        return !targets.feedEntity || !targets.feedEntity.isValid
+        return !targets.entity || !targets.entity.isValid
       }
     }),
 
@@ -74,15 +85,23 @@ function feedAnimalFunction (bot, targets) {
       onTransition: () => {
         targets.interactEntity = targets.feedEntity
       },
-      shouldTransition: () => targets.feedEntity && followAnimal.distanceToTarget() < 2 && targets.feedEntity.isValid
+      shouldTransition: () => targets.entity && followAnimal.distanceToTarget() < 2 && targets.entity.isValid
     }),
 
     new StateTransition({
       parent: interactEntity,
+      child: exit,
       onTransition: () => {
+        const animalId = targets.breededAnimals.findIndex(b => {
+          return b.id === targets.feedEntity.id
+        })
+
+        if (animalId >= 0) {
+          targets.breededAnimals[animalId].breededDate = Date.now()
+        }
+
         targets.interactEntity = null
       },
-      child: exit,
       shouldTransition: () => interactEntity.isFinished()
     })
 

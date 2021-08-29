@@ -23,7 +23,7 @@ function breederJobFunction (bot, targets) {
   goChests.y = 213
 
   const breeder = require('@NestedStateModules/breederFunction')(bot, targets)
-  breeder.stateName = 'Breeding'
+  breeder.stateName = 'Breeder'
   breeder.x = 325
   breeder.y = 313
 

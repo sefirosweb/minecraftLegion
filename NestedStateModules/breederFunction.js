@@ -55,17 +55,16 @@ function breederFunction (bot, targets) {
         entity.position.y >= yStart && entity.position.y <= yEnd &&
         entity.position.z >= zStart && entity.position.z <= zEnd
       ) {
-        const animalBreeded = targets.breededAnimals.findIndex(b => {
+        const animalId = targets.breededAnimals.findIndex(b => {
           return b.id === entity.id
         })
 
-        if (animalBreeded >= 0) {
+        if (animalId >= 0) {
           if (
-            !entity.breededDate ||
-            Date.now() - entity.breededDate > targets.farmAnimal.seconds * 1000
+            !targets.breededAnimals[animalId].breededDate ||
+            Date.now() - targets.breededAnimals[animalId].breededDate > targets.farmAnimal.seconds * 1000
           ) {
-            targets.breededAnimals[animalBreeded] = entity
-            animalsToFeed.push(entity)
+            animalsToFeed.push(targets.breededAnimals[animalId])
           }
         } else {
           targets.breededAnimals.push(entity)
@@ -113,15 +112,6 @@ function breederFunction (bot, targets) {
     new StateTransition({
       parent: feedAnimal,
       child: exit,
-      onTransition: () => {
-        const animalBreeded = targets.breededAnimals.findIndex(b => {
-          return b.id === targets.feedEntity.id
-        })
-
-        if (animalBreeded >= 0) {
-          targets.breededAnimals[animalBreeded].breededDate = Date.now()
-        }
-      },
       shouldTransition: () => feedAnimal.isFinished() && targets.animalsToBeFeed.length === 0
     }),
 
@@ -129,15 +119,7 @@ function breederFunction (bot, targets) {
       parent: feedAnimal,
       child: feedAnimal,
       onTransition: () => {
-        const animalBreeded = targets.breededAnimals.findIndex(b => {
-          return b.id === targets.feedEntity.id
-        })
-
-        if (animalBreeded >= 0) {
-          targets.breededAnimals[animalBreeded].breededDate = Date.now()
-        }
-
-        targets.entity = targets.animalsToBeFeed.shift()
+        targets.feedEntity = targets.animalsToBeFeed.shift()
       },
       shouldTransition: () => {
         return feedAnimal.isFinished() && targets.animalsToBeFeed.length > 0
