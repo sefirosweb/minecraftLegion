@@ -7,6 +7,7 @@ const {
 
 const BehaviorEquip = require('@BehaviorModules/BehaviorEquip')
 const BehaviorInteractEntity = require('@BehaviorModules/BehaviorInteractEntity')
+const animalType = require('@modules/animalType')
 
 function feedAnimalFunction (bot, targets) {
   targets.breededAnimals = []
@@ -43,7 +44,13 @@ function feedAnimalFunction (bot, targets) {
       child: equip,
       onTransition: () => {
         // Select item to give food
-        targets.item = mcData.itemsByName.wheat
+        const validFoods = animalType[targets.feedEntity.name].foods
+        const validFood = bot.inventory.items().find(item => validFoods.includes(item.name))
+        if (validFood) {
+          targets.item = mcData.itemsByName[validFood.name]
+        } else {
+          targets.item = null
+        }
       },
       shouldTransition: () => true
     }),
