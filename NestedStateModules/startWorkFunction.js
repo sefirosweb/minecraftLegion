@@ -44,6 +44,10 @@ function startWorkFunction (bot, targets) {
   minerJob.x = 325
   minerJob.y = 50
 
+  const sorterJob = require('@NestedStateModules/sorterJobFunction')(bot, targets)
+  sorterJob.x = 535
+  sorterJob.y = 213
+
   const transitions = [
     new StateTransition({
       parent: start,
@@ -94,6 +98,12 @@ function startWorkFunction (bot, targets) {
       parent: loadedConfig,
       child: minerJob,
       shouldTransition: () => loadConfig.getJob() === 'miner'
+    }),
+
+    new StateTransition({
+      parent: loadedConfig,
+      child: sorterJob,
+      shouldTransition: () => loadConfig.getJob() === 'sorter'
     })
 
   ]

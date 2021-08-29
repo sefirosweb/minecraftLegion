@@ -4,7 +4,7 @@ const {
   NestedStateMachine
 } = require('mineflayer-statemachine')
 
-function sorterJob (bot, targets) {
+function sorterJobFunction (bot, targets) {
   const start = new BehaviorIdle(targets)
   start.stateName = 'Start'
   start.x = 125
@@ -30,4 +30,4 @@ function sorterJob (bot, targets) {
   return sorterJob
 }
 
-module.exports = sorterJob
+module.exports = sorterJobFunction
