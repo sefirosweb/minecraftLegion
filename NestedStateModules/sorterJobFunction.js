@@ -65,8 +65,8 @@ function sorterJobFunction (bot, targets) {
       parent: checkNewChests,
       child: goChest,
       onTransition: () => {
-        const chest = targets.newChests.shift()
-        targets.position = chest.position.clone()
+        targets.chest = targets.newChests.shift()
+        targets.position = targets.chest.position.clone()
       },
       shouldTransition: () => targets.newChests.length > 0
     }),
@@ -84,9 +84,9 @@ function sorterJobFunction (bot, targets) {
     }),
 
     new StateTransition({
-      parent: goChest,
+      parent: checkItemsInChest,
       child: checkNewChests,
-      shouldTransition: () => goChest.isFinished() && !bot.pathfinder.isMining()
+      shouldTransition: () => checkItemsInChest.isFinished()
     })
 
   ]
