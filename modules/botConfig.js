@@ -21,6 +21,7 @@ function getConn (botName) {
     chests: [],
     patrol: [],
     plantAreas: [],
+    chestAreas: [],
     farmAreas: [],
     farmAnimal: {
       seconds: 60,
@@ -283,6 +284,26 @@ function setFarmAnimal (botName, farmAnimal) {
   db.set('config.farmAnimal', farmAnimal).write()
 }
 
+function getChestArea (botName) {
+  const db = getConn(botName)
+  return db.get('config.chestAreas').value()
+}
+
+function setChestArea (botName, farmAreas) {
+  const area = farmAreas.map(plant => {
+    const copyArea = {
+      yLayer: parseInt(plant.yLayer),
+      xStart: parseInt(plant.xStart),
+      xEnd: parseInt(plant.xEnd),
+      zStart: parseInt(plant.zStart),
+      zEnd: parseInt(plant.zEnd)
+    }
+    return copyArea
+  })
+  const db = getConn(botName)
+  db.set('config.chestAreas', area).write()
+}
+
 module.exports = {
   getAll,
   setJob,
@@ -318,5 +339,7 @@ module.exports = {
   getFarmAnimal,
   setFarmAnimal,
   getRandomFarmArea,
-  setRandomFarmArea
+  setRandomFarmArea,
+  getChestArea,
+  setChestArea
 }
