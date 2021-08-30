@@ -15,6 +15,13 @@ function sorterJobFunction (bot, targets) {
   start.x = 125
   start.y = 113
 
+  const d = new BehaviorIdle(targets)
+
+  const calculateSort = new BehaviorIdle(targets)
+  calculateSort.stateName = 'Calculate if chest is sorted'
+  calculateSort.x = 125
+  calculateSort.y = 113
+
   const checkNewChests = new BehaviorIdle(targets)
   checkNewChests.stateName = 'Check new chests'
   checkNewChests.x = 525
@@ -74,7 +81,7 @@ function sorterJobFunction (bot, targets) {
 
     new StateTransition({
       parent: checkNewChests,
-      child: start,
+      child: calculateSort,
       shouldTransition: () => targets.newChests.length === 0
     }),
 
@@ -88,6 +95,15 @@ function sorterJobFunction (bot, targets) {
       parent: checkItemsInChest,
       child: checkNewChests,
       shouldTransition: () => checkItemsInChest.isFinished()
+    }),
+
+    new StateTransition({
+      parent: calculateSort,
+      child: d,
+      onTransition: () => {
+        targets.chests.map(chest => console.log(chest.slots))
+      },
+      shouldTransition: () => true
     })
 
   ]
