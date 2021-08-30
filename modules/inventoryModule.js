@@ -1,4 +1,6 @@
 module.exports = function (bot) {
+  const mcData = require('minecraft-data')(bot.version)
+
   function countItemsInInventoryOrEquipped (item) {
     let currentItems = 0
 
@@ -125,11 +127,88 @@ module.exports = function (bot) {
     return items
   }
 
+  const findChests = (options) => {
+    options = options || {}
+    const matching = options.matching || ['chest', 'ender_chest', 'trapped_chest'].map(name => mcData.blocksByName[name].id)
+    const point = (options.point || bot.entity.position).floored()
+    const maxDistance = options.maxDistance || 16
+    const count = options.count || 1
+    const useExtraInfo = options.useExtraInfo || false
+
+    const blocksFound = bot.findBlocks({
+      matching,
+      maxDistance,
+      point,
+      count: count * 2,
+      useExtraInfo
+    }).map(chest => bot.blockAt(chest))
+
+    const chests = []
+    let block, secondBlock, secondBlockIndex, props
+    while (blocksFound.length > 0) {
+      if (chests.length >= count) {
+        break
+      }
+
+      block = blocksFound.shift()
+      props = block.getProperties()
+
+      if (props.type === 'single') {
+        chests.push(block)
+        continue
+      }
+
+      if (props.facing === 'south' && props.type === 'right') {
+        secondBlock = block.position.offset(1, 0, 0)
+      }
+
+      if (props.facing === 'south' && props.type === 'left') {
+        secondBlock = block.position.offset(-1, 0, 0)
+      }
+
+      if (props.facing === 'north' && props.type === 'left') {
+        secondBlock = block.position.offset(1, 0, 0)
+      }
+
+      if (props.facing === 'north' && props.type === 'right') {
+        secondBlock = block.position.offset(-1, 0, 0)
+      }
+
+      if (props.facing === 'east' && props.type === 'right') {
+        secondBlock = block.position.offset(0, 0, -1)
+      }
+
+      if (props.facing === 'east' && props.type === 'left') {
+        secondBlock = block.position.offset(0, 0, 1)
+      }
+
+      if (props.facing === 'west' && props.type === 'left') {
+        secondBlock = block.position.offset(0, 0, -1)
+      }
+
+      if (props.facing === 'west' && props.type === 'right') {
+        secondBlock = block.position.offset(0, 0, 1)
+      }
+
+      secondBlockIndex = blocksFound.findIndex(chest => chest.position.equals(secondBlock))
+      if (secondBlockIndex >= 0) {
+        blocksFound.splice(secondBlockIndex, 1)
+      }
+
+      block.secondBlock = bot.blockAt(secondBlock)
+
+      chests.push(block)
+    }
+
+    return chests
+  }
+
   return {
     countItemsInInventoryOrEquipped,
     countItemsInInventory,
     checkItemEquiped,
     equipItem,
-    getResumeInventory
+    getResumeInventory,
+    findChests
   }
 }
