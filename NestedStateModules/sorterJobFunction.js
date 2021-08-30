@@ -32,7 +32,7 @@ function sorterJobFunction (bot, targets) {
   goChest.movements = targets.movements
 
   const findNewChests = () => {
-    const currentChests = targets.chests || []
+    const currentChests = targets.chests
 
     const chests = findChests({
       count: 9999,
@@ -42,7 +42,7 @@ function sorterJobFunction (bot, targets) {
     const newChests = []
 
     chests.forEach(chest => {
-      const haveChest = currentChests.find(currentChest => currentChests.position.equals(chest.position))
+      const haveChest = currentChests.find(currentChest => currentChest.position.equals(chest.position))
       if (!haveChest) {
         newChests.push(chest)
       }
@@ -56,6 +56,7 @@ function sorterJobFunction (bot, targets) {
       parent: start,
       child: checkNewChests,
       onTransition: () => {
+        targets.chests = targets.chests || []
         targets.newChests = findNewChests()
       },
       shouldTransition: () => true
