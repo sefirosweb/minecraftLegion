@@ -15,27 +15,29 @@ function sorterJobFunction (bot, targets) {
   start.x = 125
   start.y = 113
 
-  const d = new BehaviorIdle(targets)
-
-  const calculateSort = new BehaviorIdle(targets)
-  calculateSort.stateName = 'Calculate if chest is sorted'
-  calculateSort.x = 125
-  calculateSort.y = 113
-
   const checkNewChests = new BehaviorIdle(targets)
   checkNewChests.stateName = 'Check new chests'
-  checkNewChests.x = 525
-  checkNewChests.y = 413
+  checkNewChests.x = 325
+  checkNewChests.y = 113
 
   const checkItemsInChest = new BehaviorcCheckItemsInChest(bot, targets)
   checkItemsInChest.stateName = 'Check items in chests'
-  checkItemsInChest.x = 1
-  checkItemsInChest.y = 1
+  checkItemsInChest.x = 125
+  checkItemsInChest.y = 313
+
+  const d = new BehaviorIdle(targets)
+  d.x = 725
+  d.y = 113
+
+  const calculateSort = new BehaviorIdle(targets)
+  calculateSort.stateName = 'Calculate if chest is sorted'
+  calculateSort.x = 525
+  calculateSort.y = 113
 
   const goChest = new BehaviorMoveTo(bot, targets)
   goChest.stateName = 'Go chest'
   goChest.x = 525
-  goChest.y = 413
+  goChest.y = 313
   goChest.movements = targets.movements
 
   const findNewChests = () => {
@@ -94,6 +96,9 @@ function sorterJobFunction (bot, targets) {
     new StateTransition({
       parent: checkItemsInChest,
       child: checkNewChests,
+      onTransition: () => {
+        console.log('checkItemsInChest', checkItemsInChest.getCanOpenChest())
+      },
       shouldTransition: () => checkItemsInChest.isFinished()
     }),
 
@@ -101,7 +106,7 @@ function sorterJobFunction (bot, targets) {
       parent: calculateSort,
       child: d,
       onTransition: () => {
-        targets.chests.map(chest => console.log(chest.slots))
+        // targets.chests.map(chest => console.log(chest.slots))
       },
       shouldTransition: () => true
     })
