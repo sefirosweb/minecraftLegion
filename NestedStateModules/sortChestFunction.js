@@ -26,28 +26,25 @@ function sortChestFunction (bot, targets) {
       child: checkChestsToSort,
       onTransition: () => {
         const slotsToSort = []
-
-        targets.chests.every((chest, chestIndex) => {
-          if (!targets.newChestSort[chestIndex]) return false
-          chest.slots.every((slot, slotIndex) => {
-            if (!targets.newChestSort[chestIndex][slotIndex]) return false
+        targets.newChestSort.every((chest, chestIndex) => {
+          chest.every((slot, slotIndex) => {
             if (
-              !slot ||
-              slot.type !== targets.newChestSort[chestIndex][slotIndex].type
+              !targets.chests[chestIndex].slots[slotIndex] ||
+              slot.type !== targets.chests[chestIndex].slots[slotIndex].type
             ) {
               slotsToSort.push({
                 chest: chestIndex,
                 slot: slotIndex,
-                type: targets.newChestSort[chestIndex][slotIndex].type,
-                count: targets.newChestSort[chestIndex][slotIndex].count,
+                type: slot.type,
+                count: slot.count,
                 method: 'set'
               })
-            } else if (slot.count !== targets.newChestSort[chestIndex][slotIndex].count) {
+            } else if (slot.count !== targets.chests[chestIndex].slots[slotIndex].count) {
               slotsToSort.push({
                 chest: chestIndex,
                 slot: slotIndex,
-                type: targets.newChestSort[chestIndex][slotIndex].type,
-                count: targets.newChestSort[chestIndex][slotIndex].count - slot.count,
+                type: slot.type,
+                count: slot.count - targets.chests[chestIndex].slots[slotIndex].count,
                 method: 'add'
               })
             }
@@ -59,7 +56,6 @@ function sortChestFunction (bot, targets) {
           if (slotsToSort.length < 25) return true
           return false
         })
-
         targets.slotsToSort = slotsToSort
       },
       shouldTransition: () => true
