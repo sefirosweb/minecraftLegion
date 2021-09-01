@@ -97,7 +97,12 @@ function sorterJobFunction (bot, targets) {
       parent: checkItemsInChest,
       child: checkNewChests,
       onTransition: () => {
-        console.log('checkItemsInChest', checkItemsInChest.getCanOpenChest())
+        if (!checkItemsInChest.getCanOpenChest()) {
+          const chestIndex = targets.chests.findIndex(c => c.position.equals(targets.chest.position))
+          if (chestIndex >= 0) {
+            targets.chests.splice(chestIndex, 1)
+          }
+        }
       },
       shouldTransition: () => checkItemsInChest.isFinished()
     }),
