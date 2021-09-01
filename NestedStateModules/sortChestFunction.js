@@ -28,6 +28,7 @@ function sortChestFunction (bot, targets) {
         const slotsToSort = []
 
         targets.chests.every((chest, chestIndex) => {
+          if (!targets.newChestSort[chestIndex]) return false
           chest.slots.every((slot, slotIndex) => {
             if (!targets.newChestSort[chestIndex][slotIndex]) return false
             if (
