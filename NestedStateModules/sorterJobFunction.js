@@ -51,7 +51,11 @@ function sorterJobFunction (bot, targets) {
     const newChests = []
 
     chests.forEach(chest => {
-      const haveChest = currentChests.find(currentChest => currentChest.position.equals(chest.position))
+      const haveChest = currentChests.find(c => {
+        if (c.position.equals(chest.position)) return true
+        if (chest.secondBlock && c.position.equals(chest.secondBlock.position)) return true
+        return false
+      })
       if (!haveChest) {
         newChests.push(chest)
       }
@@ -98,9 +102,9 @@ function sorterJobFunction (bot, targets) {
       child: checkNewChests,
       onTransition: () => {
         if (!checkItemsInChest.getCanOpenChest()) {
-          const chestIndex = this.targets.chests.findIndex(c => {
-            if (c.position.equals(this.targets.chest.position)) return true
-            if (this.targets.chest.secondBlock && c.position.equals(this.targets.chest.secondBlock.position)) return true
+          const chestIndex = targets.chests.findIndex(c => {
+            if (c.position.equals(targets.chest.position)) return true
+            if (targets.chest.secondBlock && c.position.equals(targets.chest.secondBlock.position)) return true
             return false
           })
           if (chestIndex >= 0) {
@@ -114,6 +118,15 @@ function sorterJobFunction (bot, targets) {
     new StateTransition({
       parent: calculateSort,
       child: d,
+      onTransition: () => {
+        // targets.chests.map(chest => console.log(chest.slots))
+      },
+      shouldTransition: () => true
+    }),
+
+    new StateTransition({
+      parent: d,
+      child: start,
       onTransition: () => {
         // targets.chests.map(chest => console.log(chest.slots))
       },
