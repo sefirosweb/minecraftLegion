@@ -192,7 +192,7 @@ function sorterJobFunction (bot, targets) {
         //   console.log(err, arr)
         // })
 
-        console.log(newChestSort)
+        targets.newChestSort = newChestSort
       },
       shouldTransition: () => true
     }),
