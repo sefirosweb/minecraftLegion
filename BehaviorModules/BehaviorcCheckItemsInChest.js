@@ -20,7 +20,7 @@ module.exports = class BehaviorcCheckItemsInChest {
     }, 5000)
 
     this.bot.openContainer(this.targets.chest).then((container, i) => {
-      const slots = container.slots
+      const slots = container.slots.slice(0, container.inventoryStart)
       const chestIndex = this.targets.chests.findIndex(c => {
         if (c.position.equals(this.targets.chest.position)) return true
         if (this.targets.chest.secondBlock && c.position.equals(this.targets.chest.secondBlock.position)) return true
