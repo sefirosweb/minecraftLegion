@@ -128,7 +128,7 @@ function sorterJobFunction (bot, targets) {
             if (indexItem >= 0) {
               items[indexItem].count += item.count
             } else {
-              items.push(item)
+              items.push({ ...item })
             }
           })
           return items
