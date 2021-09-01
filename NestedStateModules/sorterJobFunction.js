@@ -30,7 +30,7 @@ function sorterJobFunction (bot, targets) {
   d.y = 113
 
   const calculateSort = new BehaviorIdle(targets)
-  calculateSort.stateName = 'Calculate if chest is sorted'
+  calculateSort.stateName = 'Calculate items in chests'
   calculateSort.x = 525
   calculateSort.y = 113
 
@@ -121,18 +121,20 @@ function sorterJobFunction (bot, targets) {
       onTransition: () => {
         const allChests = targets.chests.map(chest => chest.slots)
 
-        const allItems = allChests.reduce((items, chest) => {
-          chest.forEach(item => {
-            if (item === null) return
-            const indexItem = items.findIndex(i => i.type === item.type)
-            if (indexItem >= 0) {
-              items[indexItem].count += item.count
-            } else {
-              items.push({ ...item })
-            }
-          })
-          return items
-        }, []).sort((a, b) => a.type - b.type)
+        const allItems = allChests
+          .concat([bot.inventory.slots.slice(9, 45)]) // Adding current inventory items
+          .reduce((items, chest) => {
+            chest.forEach(item => {
+              if (item === null) return
+              const indexItem = items.findIndex(i => i.type === item.type)
+              if (indexItem >= 0) {
+                items[indexItem].count += item.count
+              } else {
+                items.push({ ...item })
+              }
+            })
+            return items
+          }, []).sort((a, b) => a.type - b.type)
 
         let chestIndex = 0
         const newChestSort = []
@@ -180,6 +182,10 @@ function sorterJobFunction (bot, targets) {
         })
 
         newChestSort.push(newSlots)
+
+        // bot.moveSlotItem(10, 36, (err, arr) => {
+        //   console.log(err, arr)
+        // })
 
         console.log(newChestSort)
       },
