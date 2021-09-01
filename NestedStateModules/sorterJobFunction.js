@@ -40,6 +40,11 @@ function sorterJobFunction (bot, targets) {
   goChest.y = 313
   goChest.movements = targets.movements
 
+  const sortChestFunction = require('@NestedStateModules/sortChestFunction')(bot, targets)
+  sortChestFunction.stateName = 'Sort chests'
+  sortChestFunction.x = 525
+  sortChestFunction.y = 350
+
   const findNewChests = () => {
     const currentChests = targets.chests
 
@@ -117,7 +122,7 @@ function sorterJobFunction (bot, targets) {
 
     new StateTransition({
       parent: calculateSort,
-      child: d,
+      child: sortChestFunction,
       onTransition: () => {
         const allChests = targets.chests.map(chest => chest.slots)
 
@@ -193,12 +198,9 @@ function sorterJobFunction (bot, targets) {
     }),
 
     new StateTransition({
-      parent: d,
+      parent: sortChestFunction,
       child: start,
-      onTransition: () => {
-        // targets.chests.map(chest => console.log(chest.slots))
-      },
-      shouldTransition: () => true
+      shouldTransition: () => sortChestFunction.isFinished()
     })
 
   ]
