@@ -25,9 +25,28 @@ function sortChestFunction (bot, targets) {
       parent: start,
       child: checkChestsToSort,
       onTransition: () => {
+        targets.correctChests = targets.chests.map(chest => chest.slots.map(slot => { return { correct: false } }))
+
         const slotsToSort = []
         targets.newChestSort.every((chest, chestIndex) => {
           chest.every((slot, slotIndex) => {
+            if (
+              !targets.chests[chestIndex].slots[slotIndex] ||
+              slot.type !== targets.chests[chestIndex].slots[slotIndex].type ||
+              slot.count !== targets.chests[chestIndex].slots[slotIndex].count
+            ) {
+              slotsToSort.push({
+                chest: chestIndex,
+                slot: slotIndex,
+                type: slot.type,
+                count: slot.count,
+                method: 'set'
+              })
+            } else {
+              targets.correctChests[chestIndex][slotIndex].correct = true
+            }
+
+            /* OLD
             if (
               !targets.chests[chestIndex].slots[slotIndex] ||
               slot.type !== targets.chests[chestIndex].slots[slotIndex].type
@@ -48,6 +67,7 @@ function sortChestFunction (bot, targets) {
                 method: 'add'
               })
             }
+            */
 
             if (slotsToSort.length < 25) return true
             return false
