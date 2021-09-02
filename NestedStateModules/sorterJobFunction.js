@@ -125,10 +125,7 @@ function sorterJobFunction (bot, targets) {
       child: sortChestFunction,
       onTransition: () => {
         const allChests = targets.chests.map(chest => chest.slots)
-        targets.inventorySlots = bot.inventory.slots.slice(9, 45)
-
         const allItems = allChests
-          .concat([targets.inventorySlots])
           .reduce((items, chest) => {
             chest.forEach(item => {
               if (item === null) return
