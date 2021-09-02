@@ -23,6 +23,9 @@ function sortChestFunction (bot, targets) {
   const findItems = new BehaviorIdle(targets)
   findItems.stateName = 'Find items in chests'
 
+  const pickUpItems = require('@NestedStateModules/sorterJob/pickUpItems')(bot, targets)
+  pickUpItems.stateName = 'Sort chests'
+
   const transitions = [
     new StateTransition({
       parent: start,
@@ -88,13 +91,19 @@ function sortChestFunction (bot, targets) {
       parent: checkChestsToSort,
       child: findItems,
       onTransition: () => {
-        const transactions = findItemsInChests(targets.chests, targets.slotsToSort, targets.correctChests)
+        targets.sorterJob.transactions = findItemsInChests(targets.chests, targets.slotsToSort, targets.correctChests)
       },
       shouldTransition: () => true
     }),
 
     new StateTransition({
       parent: findItems,
+      child: pickUpItems,
+      shouldTransition: () => true
+    }),
+
+    new StateTransition({
+      parent: pickUpItems,
       child: exit,
       shouldTransition: () => false
     })
