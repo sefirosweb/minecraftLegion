@@ -73,36 +73,54 @@ function startWorkFunction (bot, targets) {
     new StateTransition({
       parent: loadedConfig,
       child: guardJob,
+      onTransition: () => {
+        targets.guardJob = {}
+      },
       shouldTransition: () => loadConfig.getJob() === 'guard'
     }),
 
     new StateTransition({
       parent: loadedConfig,
       child: archerJob,
+      onTransition: () => {
+        targets.archerJob = {}
+      },
       shouldTransition: () => loadConfig.getJob() === 'archer'
     }),
 
     new StateTransition({
       parent: loadedConfig,
       child: farmerJob,
+      onTransition: () => {
+        targets.farmerJob = {}
+      },
       shouldTransition: () => loadConfig.getJob() === 'farmer'
     }),
 
     new StateTransition({
       parent: loadedConfig,
       child: breederJob,
+      onTransition: () => {
+        targets.breederJob = {}
+      },
       shouldTransition: () => loadConfig.getJob() === 'breeder'
     }),
 
     new StateTransition({
       parent: loadedConfig,
       child: minerJob,
+      onTransition: () => {
+        targets.minerJob = {}
+      },
       shouldTransition: () => loadConfig.getJob() === 'miner'
     }),
 
     new StateTransition({
       parent: loadedConfig,
       child: sorterJob,
+      onTransition: () => {
+        targets.sorterJob = {}
+      },
       shouldTransition: () => loadConfig.getJob() === 'sorter'
     })
 
