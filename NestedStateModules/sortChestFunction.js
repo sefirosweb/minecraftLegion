@@ -88,7 +88,7 @@ function sortChestFunction (bot, targets) {
       parent: checkChestsToSort,
       child: findItems,
       onTransition: () => {
-        const result = findItemsInChests(targets.chests, targets.slotsToSort, targets.correctChests)
+        const transactions = findItemsInChests(targets.chests, targets.slotsToSort, targets.correctChests)
       },
       shouldTransition: () => true
     }),

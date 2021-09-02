@@ -209,7 +209,7 @@ module.exports = function (bot) {
 
     const transactions = []
 
-    items.forEach(item => {
+    items.forEach((item, itemIndex) => {
       chests.forEach((chest, chestIndex) => {
         chest.slots.every((slot, slotIndex) => {
           if (item.count === 0) return false
@@ -218,14 +218,19 @@ module.exports = function (bot) {
             const count = slot.count < item.count ? slot.count : item.count
             slot.count -= count
             item.count -= count
-            console.log('Chest Items')
+            transactions.push({
+              toSlot: itemIndex,
+              fromChest: chestIndex,
+              fromSlot: slotIndex,
+              quantity: count
+            })
           }
           return true
         })
       })
     })
 
-    console.log('a')
+    return transactions
   }
 
   return {
