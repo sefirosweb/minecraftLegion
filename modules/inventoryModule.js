@@ -203,12 +203,38 @@ module.exports = function (bot) {
     return chests
   }
 
+  const findItemsInChests = (chestInput, itemsInput, exclude) => {
+    const chests = [...chestInput]
+    const items = [...itemsInput]
+
+    const transactions = []
+
+    items.forEach(item => {
+      chests.forEach((chest, chestIndex) => {
+        chest.slots.every((slot, slotIndex) => {
+          if (item.count === 0) return false
+          if (!slot) return true
+          if (slot.type === item.type && slot.count > 0) {
+            const count = slot.count < item.count ? slot.count : item.count
+            slot.count -= count
+            item.count -= count
+            console.log('Chest Items')
+          }
+          return true
+        })
+      })
+    })
+
+    console.log('a')
+  }
+
   return {
     countItemsInInventoryOrEquipped,
     countItemsInInventory,
     checkItemEquiped,
     equipItem,
     getResumeInventory,
-    findChests
+    findChests,
+    findItemsInChests
   }
 }

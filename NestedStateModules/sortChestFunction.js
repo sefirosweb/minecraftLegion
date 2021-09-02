@@ -5,6 +5,8 @@ const {
 } = require('mineflayer-statemachine')
 
 function sortChestFunction (bot, targets) {
+  const { findItemsInChests } = require('@modules/inventoryModule')(bot)
+
   const start = new BehaviorIdle(targets)
   start.stateName = 'Start'
   start.x = 125
@@ -17,8 +19,9 @@ function sortChestFunction (bot, targets) {
 
   const checkChestsToSort = new BehaviorIdle(targets)
   checkChestsToSort.stateName = 'Check Chests mus be sorted'
-  checkChestsToSort.x = 225
-  checkChestsToSort.y = 413
+
+  const findItems = new BehaviorIdle(targets)
+  findItems.stateName = 'Find items in chests'
 
   const transitions = [
     new StateTransition({
@@ -83,6 +86,15 @@ function sortChestFunction (bot, targets) {
 
     new StateTransition({
       parent: checkChestsToSort,
+      child: findItems,
+      onTransition: () => {
+        const result = findItemsInChests(targets.chests, targets.slotsToSort, targets.correctChests)
+      },
+      shouldTransition: () => true
+    }),
+
+    new StateTransition({
+      parent: findItems,
       child: exit,
       shouldTransition: () => false
     })
