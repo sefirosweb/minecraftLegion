@@ -16,30 +16,67 @@ function pickUpItems (bot, targets) {
   exit.x = 225
   exit.y = 413
 
-  const moveToBlock = new BehaviorMoveTo(bot, targets)
-  moveToBlock.stateName = 'Move To Block'
-  moveToBlock.x = 525
-  moveToBlock.y = 113
-  moveToBlock.movements = targets.movements
+  const goChest = new BehaviorMoveTo(bot, targets)
+  goChest.stateName = 'Move To Block'
+  goChest.x = 525
+  goChest.y = 113
+  goChest.movements = targets.movements
+
+  const startCheckNextChest = new BehaviorIdle(targets)
+  startCheckNextChest.stateName = 'Start Check Next Chest'
 
   const checkNextChest = new BehaviorIdle(targets)
   checkNextChest.stateName = 'Check Next Chest'
+
+  let indexChest
+
+  const checkNextTransactions = () => {
+    indexChest++
+    while (indexChest < targets.chests.length) {
+      targets.sorterJob.nextTransactions = targets.sorterJob.transactions.filter(c => c.fromChest === indexChest)
+      if (targets.sorterJob.nextTransactions.length > 0) {
+        targets.position = targets.chests[indexChest].position
+        return true
+      }
+    }
+    targets.sorterJob.nextTransactions = []
+    return false
+  }
 
   const transitions = [
 
     new StateTransition({
       parent: start,
-      child: checkNextChest,
+      child: startCheckNextChest,
       onTransition: () => {
-        console.log(targets)
+        indexChest = -1
       },
       shouldTransition: () => true
     }),
 
     new StateTransition({
+      parent: startCheckNextChest,
+      child: checkNextChest,
+      onTransition: () => checkNextTransactions(),
+      shouldTransition: () => true
+    }),
+
+    new StateTransition({
+      parent: checkNextChest,
+      child: goChest,
+      shouldTransition: () => targets.sorterJob.nextTransactions.length > 0
+    }),
+
+    new StateTransition({
+      parent: goChest,
+      child: startCheckNextChest,
+      shouldTransition: () => goChest.isFinished() && !bot.pathfinder.isMining()
+    }),
+
+    new StateTransition({
       parent: checkNextChest,
       child: exit,
-      shouldTransition: () => false
+      shouldTransition: () => targets.sorterJob.nextTransactions.length === 0
     })
   ]
 
