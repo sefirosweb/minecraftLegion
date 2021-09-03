@@ -19,34 +19,34 @@ module.exports = (bot) => {
   } = require('mineflayer-statemachine')
 
   const targets = {
-    aListener: function (object, val) {
-      if (!debugMode) return
-      console.log(`Detected change ${object} value:`, val)
-    },
+    // aListener: function (object, val) {
+    //   if (!debugMode) return
+    //   console.log(`Detected change ${object} value:`, val)
+    // },
 
-    set position (val) {
-      this.positionVal = val
-      this.aListener('position', val)
-    },
-    get position () {
-      return this.positionVal
-    },
+    // set position (val) {
+    //   this.positionVal = val
+    //   this.aListener('position', val)
+    // },
+    // get position () {
+    //   return this.positionVal
+    // },
 
-    set entity (val) {
-      this.entityVal = val
-      this.aListener('entity', val)
-    },
-    get entity () {
-      return this.entityVal
-    },
+    // set entity (val) {
+    //   this.entityVal = val
+    //   this.aListener('entity', val)
+    // },
+    // get entity () {
+    //   return this.entityVal
+    // },
 
-    set item (val) {
-      this.itemVal = val
-      this.aListener('item', val)
-    },
-    get item () {
-      return this.itemVal
-    }
+    // set item (val) {
+    //   this.itemVal = val
+    //   this.aListener('item', val)
+    // },
+    // get item () {
+    //   return this.itemVal
+    // }
   }
 
   let webserver = {}
