@@ -82,7 +82,7 @@ function sortChestFunction (bot, targets) {
           if (slotsToSort.length < 25) return true
           return false
         })
-        targets.slotsToSort = slotsToSort
+        targets.sorterJob.slotsToSort = slotsToSort
       },
       shouldTransition: () => true
     }),
@@ -91,7 +91,7 @@ function sortChestFunction (bot, targets) {
       parent: checkChestsToSort,
       child: findItems,
       onTransition: () => {
-        targets.sorterJob.transactions = findItemsInChests(targets.sorterJob.chests, targets.slotsToSort, targets.correctChests)
+        targets.sorterJob.transactions = findItemsInChests(targets.sorterJob.chests, targets.sorterJob.slotsToSort, targets.correctChests)
       },
       shouldTransition: () => true
     }),
