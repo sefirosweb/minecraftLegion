@@ -19,7 +19,7 @@ function pickUpItems (bot, targets) {
   exit.y = 413
 
   const goChest = new BehaviorMoveTo(bot, targets)
-  goChest.stateName = 'Move To Block'
+  goChest.stateName = 'Move To Chest'
   goChest.x = 825
   goChest.y = 413
   goChest.movements = targets.movements
@@ -36,7 +36,7 @@ function pickUpItems (bot, targets) {
 
   const transactionBetweenInventoryChest = new BehaviorTransactionBetweenInventoryChest(bot, targets)
   transactionBetweenInventoryChest.stateName = 'Transaction Inventory Chest'
-  transactionBetweenInventoryChest.y = 825
+  transactionBetweenInventoryChest.X = 825
   transactionBetweenInventoryChest.y = 113
 
   let indexChest
@@ -79,22 +79,29 @@ function pickUpItems (bot, targets) {
     }),
 
     new StateTransition({
+      parent: checkNextChest,
+      child: exit,
+      shouldTransition: () => false // targets.sorterJob.nextTransactions.length === 0
+    }),
+
+    new StateTransition({
       parent: goChest,
       child: transactionBetweenInventoryChest,
+      onTransition: () => {
+        console.log('finished to go chest')
+      },
       shouldTransition: () => goChest.isFinished() && !bot.pathfinder.isMining()
     }),
 
     new StateTransition({
       parent: transactionBetweenInventoryChest,
       child: startCheckNextChest,
+      onTransition: () => {
+        console.log('finished to go a')
+      },
       shouldTransition: () => transactionBetweenInventoryChest.isFinished()
-    }),
-
-    new StateTransition({
-      parent: checkNextChest,
-      child: exit,
-      shouldTransition: () => false // targets.sorterJob.nextTransactions.length === 0
     })
+
   ]
 
   const pickUpItems = new NestedStateMachine(transitions, start)
