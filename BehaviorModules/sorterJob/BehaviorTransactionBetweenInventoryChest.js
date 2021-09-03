@@ -6,6 +6,7 @@ module.exports = class BehaviorTransactionBetweenInventoryChest {
     this.isEndFinished = false
     this.success = false
     this.pendinTransactions = []
+    this.speed = 50
   }
 
   onStateExited () {
@@ -43,10 +44,12 @@ module.exports = class BehaviorTransactionBetweenInventoryChest {
       const destSlot = transaction.toSlot + container.inventoryStart
       this.bot.moveSlotItem(sourceSlot, destSlot)
         .then(() => {
-          this.pickNextItem(container)
-            .then(() => {
-              resolve()
-            })
+          setTimeout(() => {
+            this.pickNextItem(container)
+              .then(() => {
+                resolve()
+              })
+          }, this.speed)
         })
     })
   }

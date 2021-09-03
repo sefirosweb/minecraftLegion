@@ -57,30 +57,6 @@ function sortChestFunction (bot, targets) {
             } else {
               targets.sorterJob.correctChests[chestIndex][slotIndex].correct = true
             }
-
-            /* OLD
-            if (
-              !targets.chests[chestIndex].slots[slotIndex] ||
-              slot.type !== targets.chests[chestIndex].slots[slotIndex].type
-            ) {
-              slotsToSort.push({
-                chest: chestIndex,
-                slot: slotIndex,
-                type: slot.type,
-                count: slot.count,
-                method: 'set'
-              })
-            } else if (slot.count !== targets.chests[chestIndex].slots[slotIndex].count) {
-              slotsToSort.push({
-                chest: chestIndex,
-                slot: slotIndex,
-                type: slot.type,
-                count: slot.count - targets.chests[chestIndex].slots[slotIndex].count,
-                method: 'add'
-              })
-            }
-            */
-
             if (slotsToSort.length < 25) return true
             return false
           })
@@ -111,7 +87,9 @@ function sortChestFunction (bot, targets) {
     new StateTransition({
       parent: pickUpItems,
       child: exit,
-      shouldTransition: () => false
+      shouldTransition: () => {
+        return false
+      }
     })
   ]
 
