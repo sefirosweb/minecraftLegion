@@ -212,6 +212,7 @@ module.exports = function (bot) {
     items.forEach((item, itemIndex) => {
       chests.forEach((chest, chestIndex) => {
         chest.slots.every((slot, slotIndex) => {
+          if (exclude[chestIndex][slotIndex].correct === true) return true
           if (item.count === 0) return false
           if (!slot) return true
           if (slot.type === item.type && slot.count > 0) {
