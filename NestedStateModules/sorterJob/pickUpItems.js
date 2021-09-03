@@ -36,7 +36,7 @@ function pickUpItems (bot, targets) {
 
   const transactionBetweenInventoryChest = new BehaviorTransactionBetweenInventoryChest(bot, targets)
   transactionBetweenInventoryChest.stateName = 'Transaction Inventory Chest'
-  transactionBetweenInventoryChest.X = 825
+  transactionBetweenInventoryChest.x = 825
   transactionBetweenInventoryChest.y = 113
 
   let indexChest
@@ -49,6 +49,7 @@ function pickUpItems (bot, targets) {
         targets.position = targets.chests[indexChest].position
         return true
       }
+      indexChest++
     }
     targets.sorterJob.nextTransactions = []
     return false
@@ -81,24 +82,18 @@ function pickUpItems (bot, targets) {
     new StateTransition({
       parent: checkNextChest,
       child: exit,
-      shouldTransition: () => false // targets.sorterJob.nextTransactions.length === 0
+      shouldTransition: () => targets.sorterJob.nextTransactions.length === 0
     }),
 
     new StateTransition({
       parent: goChest,
       child: transactionBetweenInventoryChest,
-      onTransition: () => {
-        console.log('finished to go chest')
-      },
       shouldTransition: () => goChest.isFinished() && !bot.pathfinder.isMining()
     }),
 
     new StateTransition({
       parent: transactionBetweenInventoryChest,
       child: startCheckNextChest,
-      onTransition: () => {
-        console.log('finished to go a')
-      },
       shouldTransition: () => transactionBetweenInventoryChest.isFinished()
     })
 
