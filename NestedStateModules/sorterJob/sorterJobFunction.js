@@ -42,8 +42,8 @@ function sorterJobFunction (bot, targets) {
 
   const sortChestFunction = require('@NestedStateModules/sorterJob/sortChestFunction')(bot, targets)
   sortChestFunction.stateName = 'Sort chests'
-  sortChestFunction.x = 525
-  sortChestFunction.y = 350
+  sortChestFunction.x = 325
+  sortChestFunction.y = 10
 
   const findNewChests = () => {
     const currentChests = targets.chests

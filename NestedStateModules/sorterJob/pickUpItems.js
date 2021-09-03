@@ -15,23 +15,29 @@ function pickUpItems (bot, targets) {
 
   const exit = new BehaviorIdle(targets)
   exit.stateName = 'Exit'
-  exit.x = 225
+  exit.x = 125
   exit.y = 413
 
   const goChest = new BehaviorMoveTo(bot, targets)
   goChest.stateName = 'Move To Block'
-  goChest.x = 525
-  goChest.y = 113
+  goChest.x = 825
+  goChest.y = 413
   goChest.movements = targets.movements
 
   const startCheckNextChest = new BehaviorIdle(targets)
   startCheckNextChest.stateName = 'Start Check Next Chest'
+  startCheckNextChest.x = 525
+  startCheckNextChest.y = 113
 
   const checkNextChest = new BehaviorIdle(targets)
   checkNextChest.stateName = 'Check Next Chest'
+  checkNextChest.x = 525
+  checkNextChest.y = 413
 
   const transactionBetweenInventoryChest = new BehaviorTransactionBetweenInventoryChest(bot, targets)
   transactionBetweenInventoryChest.stateName = 'Transaction Inventory Chest'
+  transactionBetweenInventoryChest.y = 825
+  transactionBetweenInventoryChest.y = 113
 
   let indexChest
 

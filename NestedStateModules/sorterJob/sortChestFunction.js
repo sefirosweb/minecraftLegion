@@ -14,17 +14,23 @@ function sortChestFunction (bot, targets) {
 
   const exit = new BehaviorIdle(targets)
   exit.stateName = 'Exit'
-  exit.x = 225
+  exit.x = 125
   exit.y = 413
 
   const checkChestsToSort = new BehaviorIdle(targets)
   checkChestsToSort.stateName = 'Check Chests mus be sorted'
+  checkChestsToSort.x = 525
+  checkChestsToSort.y = 113
 
   const findItems = new BehaviorIdle(targets)
   findItems.stateName = 'Find items in chests'
+  findItems.x = 525
+  findItems.y = 263
 
   const pickUpItems = require('@NestedStateModules/sorterJob/pickUpItems')(bot, targets)
-  pickUpItems.stateName = 'Sort chests'
+  pickUpItems.stateName = 'Pick Up Items'
+  pickUpItems.x = 525
+  pickUpItems.y = 413
 
   const transitions = [
     new StateTransition({
