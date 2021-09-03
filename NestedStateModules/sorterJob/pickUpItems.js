@@ -5,6 +5,8 @@ const {
   NestedStateMachine
 } = require('mineflayer-statemachine')
 
+const BehaviorTransactionBetweenInventoryChest = require('@BehaviorModules/sorterJob/BehaviorTransactionBetweenInventoryChest')
+
 function pickUpItems (bot, targets) {
   const start = new BehaviorIdle(targets)
   start.stateName = 'Start'
@@ -27,6 +29,9 @@ function pickUpItems (bot, targets) {
 
   const checkNextChest = new BehaviorIdle(targets)
   checkNextChest.stateName = 'Check Next Chest'
+
+  const transactionBetweenInventoryChest = new BehaviorTransactionBetweenInventoryChest(bot, targets)
+  transactionBetweenInventoryChest.stateName = 'Transaction Inventory Chest'
 
   let indexChest
 
@@ -69,14 +74,20 @@ function pickUpItems (bot, targets) {
 
     new StateTransition({
       parent: goChest,
-      child: startCheckNextChest,
+      child: transactionBetweenInventoryChest,
       shouldTransition: () => goChest.isFinished() && !bot.pathfinder.isMining()
+    }),
+
+    new StateTransition({
+      parent: transactionBetweenInventoryChest,
+      child: startCheckNextChest,
+      shouldTransition: () => transactionBetweenInventoryChest.isFinished()
     }),
 
     new StateTransition({
       parent: checkNextChest,
       child: exit,
-      shouldTransition: () => targets.sorterJob.nextTransactions.length === 0
+      shouldTransition: () => false // targets.sorterJob.nextTransactions.length === 0
     })
   ]
 
