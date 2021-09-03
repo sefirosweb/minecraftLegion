@@ -1,11 +1,11 @@
 const botWebsocket = require('@modules/botWebsocket')
 const { sleep } = require('@modules/utils')
 
-module.exports = class BehaviorDepositChest {
+module.exports = class BehaviorDepositItemChest {
   constructor (bot, targets) {
     this.bot = bot
     this.targets = targets
-    this.stateName = 'BehaviorDepositChest'
+    this.stateName = 'BehaviorDepositItemChest'
     this.isEndFinished = false
 
     this.items = []

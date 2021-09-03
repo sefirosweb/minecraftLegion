@@ -5,7 +5,7 @@ const {
   NestedStateMachine
 } = require('mineflayer-statemachine')
 
-const BehaviorDepositChest = require('@BehaviorModules/BehaviorDepositChest')
+const BehaviorDepositItemChest = require('@BehaviorModules/BehaviorDepositItemChest')
 
 function depositItemsInInventory (bot, targets) {
   const { findChests } = require('@modules/inventoryModule')(bot)
@@ -31,7 +31,7 @@ function depositItemsInInventory (bot, targets) {
   goChest.y = 313
   goChest.movements = targets.movements
 
-  const depositChest = new BehaviorDepositChest(bot, targets)
+  const depositChest = new BehaviorDepositItemChest(bot, targets)
   depositChest.stateName = 'Deposit Items In chest'
   depositChest.x = 125
   depositChest.y = 313
@@ -67,7 +67,12 @@ function depositItemsInInventory (bot, targets) {
       parent: goChest,
       child: depositChest,
       onTransition: () => {
-        targets.items = bot.inventory.items()
+        targets.items = bot.inventory.items().map(i => {
+          return {
+            type: i.type,
+            quantity: i.count
+          }
+        })
       },
       shouldTransition: () => goChest.isFinished() && !bot.pathfinder.isMining()
     }),

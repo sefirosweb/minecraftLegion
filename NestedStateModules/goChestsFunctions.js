@@ -7,7 +7,7 @@ const {
 
 const BehaviorLoadConfig = require('@BehaviorModules/BehaviorLoadConfig')
 const BehaviorWithdrawItemChest = require('@BehaviorModules/BehaviorWithdrawItemChest')
-const BehaviorDepositChest = require('@BehaviorModules/BehaviorDepositChest')
+const BehaviorDepositItemChest = require('@BehaviorModules/BehaviorDepositItemChest')
 const BehaviorCheckItemsInInventory = require('@BehaviorModules/BehaviorCheckItemsInInventory')
 
 function goChestsFunction (bot, targets) {
@@ -47,7 +47,7 @@ function goChestsFunction (bot, targets) {
   withdrawItems.x = 325
   withdrawItems.y = 250
 
-  const depositItems = new BehaviorDepositChest(bot, targets)
+  const depositItems = new BehaviorDepositItemChest(bot, targets)
   depositItems.stateName = 'Deposit Items'
   depositItems.x = 725
   depositItems.y = 250
