@@ -7,18 +7,19 @@ module.exports = class BehaviorDepositChest {
     this.targets = targets
     this.stateName = 'BehaviorDepositChest'
     this.isEndFinished = false
+
     this.items = []
   }
 
   onStateEntered () {
     this.isEndFinished = false
     botWebsocket.log('Items to deposit ' + JSON.stringify(this.targets.items))
-    this.items = this.targets.items
+    this.items = [...this.targets.items]
 
     this.timeLimit = setTimeout(() => {
       botWebsocket.log('Time exceded for deposit items, forcing close')
       this.isEndFinished = true
-    }, 10000)
+    }, 5000)
 
     this.depositAllItems()
   }

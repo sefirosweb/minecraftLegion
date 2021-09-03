@@ -1,4 +1,5 @@
 const botWebsocket = require('@modules/botWebsocket')
+const { sleep } = require('@modules/utils')
 
 module.exports = class BehaviorWithdrawItemChest {
   constructor (bot, targets) {
@@ -7,18 +8,16 @@ module.exports = class BehaviorWithdrawItemChest {
     this.stateName = 'BehaviorWithdrawItemChest'
     this.isEndFinished = false
 
-    this.chest = false
-    this.indexItemsToWithdraw = 0
+    this.items = []
   }
 
   onStateEntered () {
-    this.indexItemsToWithdraw = 0
     this.isEndFinished = false
     botWebsocket.log('Items to withdraw ' + JSON.stringify(this.targets.items))
+    this.items = [...this.targets.items]
 
     this.timeLimit = setTimeout(() => {
-      console.log('Time exceded for get items, forcing close')
-      this.chest.close()
+      botWebsocket.log('Time exceded for get items, forcing close')
       this.isEndFinished = true
     }, 5000)
 
@@ -26,15 +25,8 @@ module.exports = class BehaviorWithdrawItemChest {
   }
 
   onStateExited () {
-    this.indexItemsToWithdraw = 0
     this.isEndFinished = false
     this.targets.items = []
-    try {
-      this.chest.removeAllListeners()
-    } catch (e) {
-      console.log(e)
-    }
-
     clearTimeout(this.timeLimit)
   }
 
@@ -56,43 +48,54 @@ module.exports = class BehaviorWithdrawItemChest {
       return
     }
 
-    this.chest = await this.bot.openChest(chestToOpen)
+    this.bot.openContainer(chestToOpen)
+      .then((container) => {
+        this.withdrawItem(container)
+          .then(async () => {
+            await sleep(200)
+            await container.close()
+            await sleep(500)
+            this.isEndFinished = true
+          })
+      })
+  }
 
-    this.chest.on('close', () => {
-      setTimeout(() => {
-        this.isEndFinished = true
-      }, 500)
+  withdrawItem (container) {
+    return new Promise((resolve, reject) => {
+      if (this.items.length === 0) {
+        resolve()
+        return
+      }
+
+      const itemToWithdraw = this.items.shift()
+
+      const foundItem = container.items().find(i => i.type === itemToWithdraw.type)
+      if (!foundItem) {
+        this.withdrawItem(container)
+          .then(() => {
+            resolve()
+          })
+          .catch(err => {
+            reject(err)
+          })
+        return
+      }
+
+      const quantity = foundItem.count < itemToWithdraw.quantity ? foundItem.count : itemToWithdraw.quantity
+
+      container.withdraw(foundItem.type, null, quantity)
+        .then(() => {
+          this.withdrawItem(container)
+            .then(() => {
+              resolve()
+            })
+            .catch(err => {
+              reject(err)
+            })
+        })
+        .catch(err => {
+          reject(err)
+        })
     })
-
-    this.getItemsFromChest()
-  }
-
-  async withdrawItem (itemName, quantity) {
-    const foundItem = this.chest.containerItems().find(itemtoFind => itemtoFind.name.includes(itemName))
-
-    if (!foundItem) {
-      botWebsocket.log(`No item ${itemName} in chest!`)
-      return
-    }
-
-    try {
-      await this.chest.withdraw(foundItem.type, null, quantity)
-    } catch (err) {
-      botWebsocket.log(JSON.stringify(err))
-    }
-  }
-
-  async getItemsFromChest () {
-    if (this.indexItemsToWithdraw >= this.targets.items.length) {
-      setTimeout(() => {
-        this.chest.close()
-      }, 500)
-      return
-    }
-
-    const itemToWithdraw = this.targets.items[this.indexItemsToWithdraw]
-    await this.withdrawItem(itemToWithdraw.item, itemToWithdraw.quantity)
-    this.indexItemsToWithdraw++
-    this.getItemsFromChest()
   }
 }
