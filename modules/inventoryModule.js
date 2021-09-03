@@ -223,6 +223,7 @@ module.exports = function (bot) {
               toSlot: itemIndex,
               fromChest: chestIndex,
               fromSlot: slotIndex,
+              name: slot.name,
               quantity: count,
               type: item.type
             })
