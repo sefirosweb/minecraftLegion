@@ -8,7 +8,6 @@ module.exports = class BehaviorDepositChest {
     this.stateName = 'BehaviorDepositChest'
     this.isEndFinished = false
     this.items = []
-    this.chest = false
   }
 
   onStateEntered () {
@@ -18,7 +17,6 @@ module.exports = class BehaviorDepositChest {
 
     this.timeLimit = setTimeout(() => {
       botWebsocket.log('Time exceded for deposit items, forcing close')
-      this.chest.close()
       this.isEndFinished = true
     }, 10000)
 
@@ -49,27 +47,19 @@ module.exports = class BehaviorDepositChest {
       return
     }
 
-    this.chest = await this.bot.openChest(chestToOpen)
-    await sleep(200)
-    this.depositItems()
-      .then(async () => {
-        await sleep(200)
-        await this.chest.close()
-        await sleep(500)
-        this.isEndFinished = true
-      })
-      .catch(err =>
-        botWebsocket.log('Internal error on deposit items')
-      )
-      .then(async () => {
-        await sleep(200)
-        await this.chest.close()
-        await sleep(500)
-        this.isEndFinished = true
+    this.bot.openContainer(chestToOpen)
+      .then((container) => {
+        this.depositItems(container)
+          .then(async () => {
+            await sleep(200)
+            await container.close()
+            await sleep(500)
+            this.isEndFinished = true
+          })
       })
   }
 
-  depositItems () {
+  depositItems (container) {
     return new Promise((resolve, reject) => {
       if (this.items.length === 0) {
         resolve()
@@ -77,9 +67,9 @@ module.exports = class BehaviorDepositChest {
       }
       const itemToDeposit = this.items.shift()
 
-      this.chest.deposit(itemToDeposit.type, null, itemToDeposit.quantity)
+      container.deposit(itemToDeposit.type, null, itemToDeposit.quantity)
         .then(() => {
-          this.depositItems()
+          this.depositItems(container)
             .then(() => {
               resolve()
             })
