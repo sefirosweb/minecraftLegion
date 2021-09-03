@@ -1,6 +1,7 @@
 const {
   StateTransition,
   BehaviorIdle,
+  BehaviorMoveTo,
   NestedStateMachine
 } = require('mineflayer-statemachine')
 
@@ -15,6 +16,12 @@ function pickUpItems (bot, targets) {
   exit.x = 225
   exit.y = 413
 
+  const moveToBlock = new BehaviorMoveTo(bot, targets)
+  moveToBlock.stateName = 'Move To Block'
+  moveToBlock.x = 525
+  moveToBlock.y = 113
+  moveToBlock.movements = targets.movements
+
   const checkNextChest = new BehaviorIdle(targets)
   checkNextChest.stateName = 'Check Next Chest'
 
@@ -23,6 +30,9 @@ function pickUpItems (bot, targets) {
     new StateTransition({
       parent: start,
       child: checkNextChest,
+      onTransition: () => {
+        console.log(targets)
+      },
       shouldTransition: () => true
     }),
 
