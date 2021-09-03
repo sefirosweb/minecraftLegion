@@ -84,8 +84,8 @@ function sorterJobFunction (bot, targets) {
       parent: checkNewChests,
       child: goChest,
       onTransition: () => {
-        targets.chest = targets.newChests.shift()
-        targets.position = targets.chest.position.clone()
+        targets.sorterJob.chest = targets.newChests.shift()
+        targets.position = targets.sorterJob.chest.position.clone()
       },
       shouldTransition: () => targets.newChests.length > 0
     }),
@@ -108,8 +108,8 @@ function sorterJobFunction (bot, targets) {
       onTransition: () => {
         if (!checkItemsInChest.getCanOpenChest()) {
           const chestIndex = targets.sorterJob.chests.findIndex(c => {
-            if (c.position.equals(targets.chest.position)) return true
-            if (targets.chest.secondBlock && c.position.equals(targets.chest.secondBlock.position)) return true
+            if (c.position.equals(targets.sorterJob.chest.position)) return true
+            if (targets.sorterJob.chest.secondBlock && c.position.equals(targets.sorterJob.chest.secondBlock.position)) return true
             return false
           })
           if (chestIndex >= 0) {

@@ -19,18 +19,18 @@ module.exports = class BehaviorcCheckItemsInChest {
       this.isEndFinished = true
     }, 5000)
 
-    this.bot.openContainer(this.targets.chest).then((container, i) => {
+    this.bot.openContainer(this.targets.sorterJob.chest).then((container, i) => {
       const slots = container.slots.slice(0, container.inventoryStart)
       const chestIndex = this.targets.sorterJob.chests.findIndex(c => {
-        if (c.position.equals(this.targets.chest.position)) return true
-        if (this.targets.chest.secondBlock && c.position.equals(this.targets.chest.secondBlock.position)) return true
+        if (c.position.equals(this.targets.sorterJob.chest.position)) return true
+        if (this.targets.sorterJob.chest.secondBlock && c.position.equals(this.targets.sorterJob.chest.secondBlock.position)) return true
         return false
       })
       if (chestIndex >= 0) {
         this.targets.sorterJob.chests[chestIndex].slots = slots
       } else {
-        this.targets.chest.slots = slots
-        this.targets.sorterJob.chests.push(this.targets.chest)
+        this.targets.sorterJob.chest.slots = slots
+        this.targets.sorterJob.chests.push(this.targets.sorterJob.chest)
       }
 
       setTimeout(() => {
