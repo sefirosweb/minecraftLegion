@@ -75,7 +75,7 @@ function sorterJobFunction (bot, targets) {
       child: checkNewChests,
       onTransition: () => {
         targets.sorterJob.chests = targets.sorterJob.chests || []
-        targets.newChests = findNewChests()
+        targets.sorterJob.newChests = findNewChests()
       },
       shouldTransition: () => true
     }),
@@ -84,16 +84,16 @@ function sorterJobFunction (bot, targets) {
       parent: checkNewChests,
       child: goChest,
       onTransition: () => {
-        targets.sorterJob.chest = targets.newChests.shift()
+        targets.sorterJob.chest = targets.sorterJob.newChests.shift()
         targets.position = targets.sorterJob.chest.position.clone()
       },
-      shouldTransition: () => targets.newChests.length > 0
+      shouldTransition: () => targets.sorterJob.newChests.length > 0
     }),
 
     new StateTransition({
       parent: checkNewChests,
       child: calculateSort,
-      shouldTransition: () => targets.newChests.length === 0
+      shouldTransition: () => targets.sorterJob.newChests.length === 0
     }),
 
     new StateTransition({
