@@ -40,7 +40,7 @@ function sorterJobFunction (bot, targets) {
   goChest.y = 313
   goChest.movements = targets.movements
 
-  const sortChestFunction = require('@NestedStateModules/sortChestFunction')(bot, targets)
+  const sortChestFunction = require('@NestedStateModules/sorterJob/sortChestFunction')(bot, targets)
   sortChestFunction.stateName = 'Sort chests'
   sortChestFunction.x = 525
   sortChestFunction.y = 350

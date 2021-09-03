@@ -44,7 +44,7 @@ function startWorkFunction (bot, targets) {
   minerJob.x = 325
   minerJob.y = 50
 
-  const sorterJob = require('@NestedStateModules/sorterJobFunction')(bot, targets)
+  const sorterJob = require('@NestedStateModules/sorterJob/sorterJobFunction')(bot, targets)
   sorterJob.x = 535
   sorterJob.y = 213
 
