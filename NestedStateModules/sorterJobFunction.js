@@ -46,7 +46,7 @@ function sorterJobFunction (bot, targets) {
   sortChestFunction.y = 350
 
   const findNewChests = () => {
-    const currentChests = targets.sorterJob.chests
+    const currentChests = targets.chests
 
     const chests = findChests({
       count: 9999,
@@ -74,7 +74,7 @@ function sorterJobFunction (bot, targets) {
       parent: start,
       child: checkNewChests,
       onTransition: () => {
-        targets.sorterJob.chests = targets.sorterJob.chests || []
+        targets.chests = targets.chests || []
         targets.sorterJob.newChests = findNewChests()
       },
       shouldTransition: () => true
@@ -107,13 +107,13 @@ function sorterJobFunction (bot, targets) {
       child: checkNewChests,
       onTransition: () => {
         if (!checkItemsInChest.getCanOpenChest()) {
-          const chestIndex = targets.sorterJob.chests.findIndex(c => {
+          const chestIndex = targets.chests.findIndex(c => {
             if (c.position.equals(targets.sorterJob.chest.position)) return true
             if (targets.sorterJob.chest.secondBlock && c.position.equals(targets.sorterJob.chest.secondBlock.position)) return true
             return false
           })
           if (chestIndex >= 0) {
-            targets.sorterJob.chests.splice(chestIndex, 1)
+            targets.chests.splice(chestIndex, 1)
           }
         }
       },
@@ -124,7 +124,7 @@ function sorterJobFunction (bot, targets) {
       parent: calculateSort,
       child: sortChestFunction,
       onTransition: () => {
-        const allChests = targets.sorterJob.chests.map(chest => chest.slots)
+        const allChests = targets.chests.map(chest => chest.slots)
         const allItems = allChests
           .reduce((items, chest) => {
             chest.forEach(item => {

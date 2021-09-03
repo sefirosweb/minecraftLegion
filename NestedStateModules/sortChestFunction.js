@@ -31,15 +31,15 @@ function sortChestFunction (bot, targets) {
       parent: start,
       child: checkChestsToSort,
       onTransition: () => {
-        targets.sorterJob.correctChests = targets.sorterJob.chests.map(chest => chest.slots.map(slot => { return { correct: false } }))
+        targets.sorterJob.correctChests = targets.chests.map(chest => chest.slots.map(slot => { return { correct: false } }))
 
         const slotsToSort = []
         targets.sorterJob.newChestSort.every((chest, chestIndex) => {
           chest.every((slot, slotIndex) => {
             if (
-              !targets.sorterJob.chests[chestIndex].slots[slotIndex] ||
-              slot.type !== targets.sorterJob.chests[chestIndex].slots[slotIndex].type ||
-              slot.count !== targets.sorterJob.chests[chestIndex].slots[slotIndex].count
+              !targets.chests[chestIndex].slots[slotIndex] ||
+              slot.type !== targets.chests[chestIndex].slots[slotIndex].type ||
+              slot.count !== targets.chests[chestIndex].slots[slotIndex].count
             ) {
               slotsToSort.push({
                 chest: chestIndex,
@@ -54,8 +54,8 @@ function sortChestFunction (bot, targets) {
 
             /* OLD
             if (
-              !targets.sorterJob.chests[chestIndex].slots[slotIndex] ||
-              slot.type !== targets.sorterJob.chests[chestIndex].slots[slotIndex].type
+              !targets.chests[chestIndex].slots[slotIndex] ||
+              slot.type !== targets.chests[chestIndex].slots[slotIndex].type
             ) {
               slotsToSort.push({
                 chest: chestIndex,
@@ -64,12 +64,12 @@ function sortChestFunction (bot, targets) {
                 count: slot.count,
                 method: 'set'
               })
-            } else if (slot.count !== targets.sorterJob.chests[chestIndex].slots[slotIndex].count) {
+            } else if (slot.count !== targets.chests[chestIndex].slots[slotIndex].count) {
               slotsToSort.push({
                 chest: chestIndex,
                 slot: slotIndex,
                 type: slot.type,
-                count: slot.count - targets.sorterJob.chests[chestIndex].slots[slotIndex].count,
+                count: slot.count - targets.chests[chestIndex].slots[slotIndex].count,
                 method: 'add'
               })
             }
@@ -91,7 +91,7 @@ function sortChestFunction (bot, targets) {
       parent: checkChestsToSort,
       child: findItems,
       onTransition: () => {
-        targets.sorterJob.transactions = findItemsInChests(targets.sorterJob.chests, targets.sorterJob.slotsToSort, targets.sorterJob.correctChests)
+        targets.sorterJob.transactions = findItemsInChests(targets.chests, targets.sorterJob.slotsToSort, targets.sorterJob.correctChests)
       },
       shouldTransition: () => true
     }),
