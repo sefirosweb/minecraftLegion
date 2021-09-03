@@ -35,14 +35,8 @@ module.exports = class BehaviorWithdrawItemChest {
   }
 
   async withdrawAllItems () {
-    const mcData = require('minecraft-data')(this.bot.version)
-
-    const chestToOpen = this.bot.findBlock({
-      matching: ['chest', 'ender_chest', 'trapped_chest'].map(name => mcData.blocksByName[name].id),
-      maxDistance: 3
-    })
-
-    if (!chestToOpen) {
+    const chestToOpen = this.bot.blockAt(this.targets.position)
+    if (!['chest', 'ender_chest', 'trapped_chest'].includes(chestToOpen.name)) {
       botWebsocket.log('No chest found')
       this.isEndFinished = true
       return

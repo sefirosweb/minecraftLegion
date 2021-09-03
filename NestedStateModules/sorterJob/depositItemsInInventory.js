@@ -1,11 +1,8 @@
 const {
   StateTransition,
   BehaviorIdle,
-  BehaviorMoveTo,
   NestedStateMachine
 } = require('mineflayer-statemachine')
-
-const BehaviorDepositItemChest = require('@BehaviorModules/BehaviorDepositItemChest')
 
 function depositItemsInInventory (bot, targets) {
   const { findChests } = require('@modules/inventoryModule')(bot)
@@ -25,16 +22,10 @@ function depositItemsInInventory (bot, targets) {
   exit.x = 325
   exit.y = 213
 
-  const goChest = new BehaviorMoveTo(bot, targets)
-  goChest.stateName = 'Move To Chest'
-  goChest.x = 325
-  goChest.y = 313
-  goChest.movements = targets.movements
-
-  const depositChest = new BehaviorDepositItemChest(bot, targets)
-  depositChest.stateName = 'Deposit Items In chest'
-  depositChest.x = 125
-  depositChest.y = 313
+  const goAndDeposit = require('@NestedStateModules/goAndDeposit')(bot, targets)
+  goAndDeposit.stateName = 'Deposit Items In chest'
+  goAndDeposit.x = 125
+  goAndDeposit.y = 313
 
   let chestsFound
   let currentChest
@@ -56,17 +47,9 @@ function depositItemsInInventory (bot, targets) {
 
     new StateTransition({
       parent: nextChest,
-      child: goChest,
+      child: goAndDeposit,
       onTransition: () => {
         targets.position = currentChest.position
-      },
-      shouldTransition: () => bot.inventory.items().length > 0
-    }),
-
-    new StateTransition({
-      parent: goChest,
-      child: depositChest,
-      onTransition: () => {
         targets.items = bot.inventory.items().map(i => {
           return {
             type: i.type,
@@ -74,16 +57,13 @@ function depositItemsInInventory (bot, targets) {
           }
         })
       },
-      shouldTransition: () => goChest.isFinished() && !bot.pathfinder.isMining()
+      shouldTransition: () => bot.inventory.items().length > 0
     }),
 
     new StateTransition({
-      parent: depositChest,
+      parent: goAndDeposit,
       child: nextChest,
-      onTransition: () => {
-        currentChest = chestsFound.shift()
-      },
-      shouldTransition: () => depositChest.isFinished() && chestsFound.length > 0
+      shouldTransition: () => goAndDeposit.isFinished() && chestsFound.length > 0
     }),
 
     new StateTransition({
