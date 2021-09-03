@@ -185,7 +185,7 @@ function sorterJobFunction (bot, targets) {
         })
 
         newChestSort.push(newSlots)
-        targets.newChestSort = newChestSort
+        targets.sorterJob.newChestSort = newChestSort
       },
       shouldTransition: () => true
     }),

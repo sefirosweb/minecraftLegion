@@ -31,10 +31,10 @@ function sortChestFunction (bot, targets) {
       parent: start,
       child: checkChestsToSort,
       onTransition: () => {
-        targets.correctChests = targets.sorterJob.chests.map(chest => chest.slots.map(slot => { return { correct: false } }))
+        targets.sorterJob.correctChests = targets.sorterJob.chests.map(chest => chest.slots.map(slot => { return { correct: false } }))
 
         const slotsToSort = []
-        targets.newChestSort.every((chest, chestIndex) => {
+        targets.sorterJob.newChestSort.every((chest, chestIndex) => {
           chest.every((slot, slotIndex) => {
             if (
               !targets.sorterJob.chests[chestIndex].slots[slotIndex] ||
@@ -49,7 +49,7 @@ function sortChestFunction (bot, targets) {
                 method: 'set'
               })
             } else {
-              targets.correctChests[chestIndex][slotIndex].correct = true
+              targets.sorterJob.correctChests[chestIndex][slotIndex].correct = true
             }
 
             /* OLD
@@ -91,7 +91,7 @@ function sortChestFunction (bot, targets) {
       parent: checkChestsToSort,
       child: findItems,
       onTransition: () => {
-        targets.sorterJob.transactions = findItemsInChests(targets.sorterJob.chests, targets.sorterJob.slotsToSort, targets.correctChests)
+        targets.sorterJob.transactions = findItemsInChests(targets.sorterJob.chests, targets.sorterJob.slotsToSort, targets.sorterJob.correctChests)
       },
       shouldTransition: () => true
     }),
