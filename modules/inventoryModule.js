@@ -222,7 +222,8 @@ module.exports = function (bot) {
               toSlot: itemIndex,
               fromChest: chestIndex,
               fromSlot: slotIndex,
-              quantity: count
+              quantity: count,
+              type: item.type
             })
           }
           return true
