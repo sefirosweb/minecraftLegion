@@ -5,7 +5,7 @@ const {
   NestedStateMachine
 } = require('mineflayer-statemachine')
 
-const BehaviorcCheckItemsInChest = require('@BehaviorModules/BehaviorcCheckItemsInChest')
+const BehaviorcCheckItemsInChest = require('@BehaviorModules/sorterJob/BehaviorcCheckItemsInChest')
 
 function sorterJobFunction (bot, targets) {
   const { findChests } = require('@modules/inventoryModule')(bot)
