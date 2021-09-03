@@ -104,7 +104,7 @@ function sortChestFunction (bot, targets) {
     })
   ]
 
-  const sortChestFunction = new NestedStateMachine(transitions, start)
+  const sortChestFunction = new NestedStateMachine(transitions, start, exit)
   sortChestFunction.stateName = 'sortChestFunction'
   return sortChestFunction
 }

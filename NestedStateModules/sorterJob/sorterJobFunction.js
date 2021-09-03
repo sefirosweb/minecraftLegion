@@ -15,6 +15,16 @@ function sorterJobFunction (bot, targets) {
   start.x = 125
   start.y = 113
 
+  const checkItemsInInventory = new BehaviorIdle(targets)
+  checkItemsInInventory.stateName = 'Check Items In Inventory'
+  checkItemsInInventory.x = 11
+  checkItemsInInventory.y = 11
+
+  const depositItemsInInventory = require('@NestedStateModules/sorterJob/depositItemsInInventory')(bot, targets)
+  depositItemsInInventory.stateName = 'Deposit Items In Inventory'
+  depositItemsInInventory.x = 11
+  depositItemsInInventory.y = 11
+
   const checkNewChests = new BehaviorIdle(targets)
   checkNewChests.stateName = 'Check new chests'
   checkNewChests.x = 325
@@ -24,10 +34,6 @@ function sorterJobFunction (bot, targets) {
   checkItemsInChest.stateName = 'Check items in chests'
   checkItemsInChest.x = 125
   checkItemsInChest.y = 313
-
-  const d = new BehaviorIdle(targets)
-  d.x = 725
-  d.y = 113
 
   const calculateSort = new BehaviorIdle(targets)
   calculateSort.stateName = 'Calculate items in chests'
@@ -72,12 +78,30 @@ function sorterJobFunction (bot, targets) {
   const transitions = [
     new StateTransition({
       parent: start,
+      child: checkItemsInInventory,
+      shouldTransition: () => true
+    }),
+
+    new StateTransition({
+      parent: checkItemsInInventory,
+      child: depositItemsInInventory,
+      shouldTransition: () => bot.inventory.items().length > 0
+    }),
+
+    new StateTransition({
+      parent: depositItemsInInventory,
+      child: checkItemsInInventory,
+      shouldTransition: () => depositItemsInInventory.isFinished()
+    }),
+
+    new StateTransition({
+      parent: checkItemsInInventory,
       child: checkNewChests,
       onTransition: () => {
         targets.chests = targets.chests || []
         targets.sorterJob.newChests = findNewChests()
       },
-      shouldTransition: () => true
+      shouldTransition: () => bot.inventory.items().length === 0
     }),
 
     new StateTransition({
@@ -192,7 +216,7 @@ function sorterJobFunction (bot, targets) {
 
     new StateTransition({
       parent: sortChestFunction,
-      child: start,
+      child: checkItemsInInventory,
       shouldTransition: () => sortChestFunction.isFinished()
     })
 
