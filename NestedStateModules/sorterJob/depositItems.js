@@ -7,7 +7,7 @@ const {
 
 const BehaviorTransactionBetweenInventoryChest = require('@BehaviorModules/sorterJob/BehaviorTransactionBetweenInventoryChest')
 
-function pickUpItems (bot, targets) {
+function depositItems (bot, targets) {
   const start = new BehaviorIdle(targets)
   start.stateName = 'Start'
   start.x = 125
@@ -99,9 +99,9 @@ function pickUpItems (bot, targets) {
 
   ]
 
-  const pickUpItems = new NestedStateMachine(transitions, start, exit)
-  pickUpItems.stateName = 'pickUpItems'
-  return pickUpItems
+  const depositItems = new NestedStateMachine(transitions, start)
+  depositItems.stateName = 'depositItems'
+  return depositItems
 }
 
-module.exports = pickUpItems
+module.exports = depositItems

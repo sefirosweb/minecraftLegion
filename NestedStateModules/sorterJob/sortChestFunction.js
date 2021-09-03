@@ -32,6 +32,11 @@ function sortChestFunction (bot, targets) {
   pickUpItems.x = 525
   pickUpItems.y = 413
 
+  const depositItems = require('@NestedStateModules/sorterJob/depositItems')(bot, targets)
+  depositItems.stateName = 'Deposit Items'
+  depositItems.x = 325
+  depositItems.y = 413
+
   const transitions = [
     new StateTransition({
       parent: start,
@@ -86,6 +91,12 @@ function sortChestFunction (bot, targets) {
 
     new StateTransition({
       parent: pickUpItems,
+      child: depositItems,
+      shouldTransition: () => pickUpItems.isFinished()
+    }),
+
+    new StateTransition({
+      parent: depositItems,
       child: exit,
       shouldTransition: () => {
         return false
