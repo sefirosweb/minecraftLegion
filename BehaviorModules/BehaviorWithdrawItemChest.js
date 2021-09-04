@@ -63,7 +63,7 @@ module.exports = class BehaviorWithdrawItemChest {
 
       const itemToWithdraw = this.items.shift()
 
-      const foundItem = container.items().find(i => i.type === itemToWithdraw.type)
+      const foundItem = container.containerItems().find(i => i.type === itemToWithdraw.type)
       if (!foundItem) {
         this.withdrawItem(container)
           .then(() => {
