@@ -92,7 +92,7 @@ function sortChestFunction (bot, targets) {
     new StateTransition({
       parent: pickUpItems,
       child: depositItems,
-      shouldTransition: () => false // pickUpItems.isFinished()
+      shouldTransition: () => pickUpItems.isFinished()
     }),
 
     new StateTransition({
