@@ -220,9 +220,10 @@ module.exports = function (bot) {
             slot.count -= count
             item.count -= count
             transactions.push({
-              toSlot: itemIndex,
               fromChest: chestIndex,
+              toChest: item.chest,
               fromSlot: slotIndex,
+              toSlot: itemIndex,
               name: slot.name,
               quantity: count,
               type: item.type
