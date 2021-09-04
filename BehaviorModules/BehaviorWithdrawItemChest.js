@@ -114,6 +114,7 @@ module.exports = class BehaviorWithdrawItemChest {
       const quantity = foundItem.count < itemToWithdraw.quantity ? foundItem.count : itemToWithdraw.quantity
 
       if (itemToWithdraw.fromSlot !== undefined) {
+        // If the source is specific
         const options = {
           windows: container,
           itemType: foundItem.type,
@@ -124,8 +125,6 @@ module.exports = class BehaviorWithdrawItemChest {
           destStart: container.inventoryStart,
           destEnd: container.inventoryEnd
         }
-
-        // container.withdraw(foundItem.type, null, quantity)
         this.bot.transfer(options)
           .then(() => {
             this.withdrawItem(container)
@@ -140,6 +139,7 @@ module.exports = class BehaviorWithdrawItemChest {
             reject(err)
           })
       } else {
+        // If the source is NOT specific
         container.withdraw(foundItem.type, null, quantity)
           .then(() => {
             this.withdrawItem(container)
