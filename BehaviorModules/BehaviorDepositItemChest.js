@@ -117,6 +117,7 @@ module.exports = class BehaviorDepositItemChest {
       const itemToDeposit = this.items.shift()
 
       if (itemToDeposit.toSlot !== undefined) {
+        // If the destination is specific
         const options = {
           windows: container,
           itemType: itemToDeposit.type,
@@ -148,6 +149,7 @@ module.exports = class BehaviorDepositItemChest {
             reject(err)
           })
       } else {
+        // If the destination is NOT specific
         if (container.containerItems().length === container.inventoryStart) {
           reject(new Error('The chest is full'))
           return
