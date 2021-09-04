@@ -1,3 +1,5 @@
+const { getSecondBlockPosition } = require('@modules/utils')
+
 module.exports = function (bot) {
   const mcData = require('minecraft-data')(bot.version)
 
@@ -153,42 +155,14 @@ module.exports = function (bot) {
       block = blocksFound.shift()
       props = block.getProperties()
 
-      if (props.type === 'single') {
+      const offset = getSecondBlockPosition(props.facing, props.type)
+
+      if (offset === false) {
         chests.push(block)
         continue
       }
 
-      if (props.facing === 'south' && props.type === 'right') {
-        secondBlock = block.position.offset(1, 0, 0)
-      }
-
-      if (props.facing === 'south' && props.type === 'left') {
-        secondBlock = block.position.offset(-1, 0, 0)
-      }
-
-      if (props.facing === 'north' && props.type === 'left') {
-        secondBlock = block.position.offset(1, 0, 0)
-      }
-
-      if (props.facing === 'north' && props.type === 'right') {
-        secondBlock = block.position.offset(-1, 0, 0)
-      }
-
-      if (props.facing === 'east' && props.type === 'right') {
-        secondBlock = block.position.offset(0, 0, -1)
-      }
-
-      if (props.facing === 'east' && props.type === 'left') {
-        secondBlock = block.position.offset(0, 0, 1)
-      }
-
-      if (props.facing === 'west' && props.type === 'left') {
-        secondBlock = block.position.offset(0, 0, -1)
-      }
-
-      if (props.facing === 'west' && props.type === 'right') {
-        secondBlock = block.position.offset(0, 0, 1)
-      }
+      secondBlock = block.position.offset(offset.x, offset.y, offset.z)
 
       secondBlockIndex = blocksFound.findIndex(chest => chest.position.equals(secondBlock))
       if (secondBlockIndex >= 0) {
@@ -209,6 +183,7 @@ module.exports = function (bot) {
     checkItemEquiped,
     equipItem,
     getResumeInventory,
-    findChests
+    findChests,
+    getSecondBlockPosition
   }
 }
