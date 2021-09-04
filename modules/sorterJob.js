@@ -13,7 +13,8 @@ module.exports = function (bot) {
           if (!slot) return true
           if (slot.type === item.type && slot.count > 0) {
             const count = slot.count < item.count ? slot.count : item.count
-            slot.count -= count
+            const slotCount = slot.count
+            slot.count = 0
             item.count -= count
             transactions.push({
               fromChest: chestIndex,
@@ -21,7 +22,7 @@ module.exports = function (bot) {
               fromSlot: slotIndex,
               toSlot: item.slot,
               name: slot.name,
-              quantity: count,
+              quantity: slotCount,
               type: item.type
             })
           }
