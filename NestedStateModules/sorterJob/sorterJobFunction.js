@@ -9,6 +9,7 @@ const BehaviorcCheckItemsInChest = require('@BehaviorModules/sorterJob/Behaviorc
 
 function sorterJobFunction (bot, targets) {
   const { findChests } = require('@modules/inventoryModule')(bot)
+  const { sortChestVec } = require('@modules/sorterJob')(bot)
 
   const start = new BehaviorIdle(targets)
   start.stateName = 'Start'
@@ -148,6 +149,7 @@ function sorterJobFunction (bot, targets) {
       parent: calculateSort,
       child: sortChestFunction,
       onTransition: () => {
+        targets.chests.sort((a, b) => sortChestVec(a, b, 'z', 'asc'))
         const allChests = targets.chests.map(chest => chest.slots)
         const allItems = allChests
           .reduce((items, chest) => {
