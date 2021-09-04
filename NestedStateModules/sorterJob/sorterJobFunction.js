@@ -36,7 +36,7 @@ function sorterJobFunction (bot, targets) {
   checkItemsInChest.y = 613
 
   const calculateSort = new BehaviorIdle(targets)
-  calculateSort.stateName = 'Calculate items in chests'
+  calculateSort.stateName = 'Calculate sorted items in chests'
   calculateSort.x = 525
   calculateSort.y = 263
 
