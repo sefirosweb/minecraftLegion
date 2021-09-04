@@ -12,8 +12,8 @@ function pickUpItems (bot, targets) {
 
   const exit = new BehaviorIdle(targets)
   exit.stateName = 'Exit'
-  exit.x = 125
-  exit.y = 563
+  exit.x = 325
+  exit.y = 313
 
   const startCheckNextChest = new BehaviorIdle(targets)
   startCheckNextChest.stateName = 'Start Check Next Chest'
@@ -58,7 +58,7 @@ function pickUpItems (bot, targets) {
         targets.position = currentChest.chest.position
         targets.items = currentChest.items
       },
-      shouldTransition: () => true
+      shouldTransition: () => pendingTransaction.length > 0
     }),
 
     new StateTransition({
@@ -71,6 +71,12 @@ function pickUpItems (bot, targets) {
       parent: goAndWithdraw,
       child: exit,
       shouldTransition: () => goAndWithdraw.isFinished() && pendingTransaction.length === 0
+    }),
+
+    new StateTransition({
+      parent: startCheckNextChest,
+      child: exit,
+      shouldTransition: () => pendingTransaction.length === 0
     })
   ]
 
