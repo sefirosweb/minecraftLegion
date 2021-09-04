@@ -51,6 +51,13 @@ module.exports = class BehaviorDepositItemChest {
             await sleep(500)
             this.isEndFinished = true
           })
+          .catch(async (err) => {
+            console.log(err)
+            await sleep(200)
+            await container.close()
+            await sleep(500)
+            this.isEndFinished = true
+          })
       })
   }
 
@@ -61,6 +68,11 @@ module.exports = class BehaviorDepositItemChest {
         return
       }
       const itemToDeposit = this.items.shift()
+
+      if (container.containerItems().length === container.inventoryStart) {
+        reject(new Error('The chest is full'))
+        return
+      }
 
       container.deposit(itemToDeposit.type, null, itemToDeposit.quantity)
         .then(() => {
