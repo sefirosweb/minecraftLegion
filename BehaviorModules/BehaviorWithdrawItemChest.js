@@ -84,19 +84,47 @@ module.exports = class BehaviorWithdrawItemChest {
 
       const quantity = foundItem.count < itemToWithdraw.quantity ? foundItem.count : itemToWithdraw.quantity
 
-      container.withdraw(foundItem.type, null, quantity)
-        .then(() => {
-          this.withdrawItem(container)
-            .then(() => {
-              resolve()
-            })
-            .catch(err => {
-              reject(err)
-            })
-        })
-        .catch(err => {
-          reject(err)
-        })
+      if (itemToWithdraw.fromSlot !== undefined) {
+        const options = {
+          windows: container,
+          itemType: foundItem.type,
+          metadata: null,
+          count: quantity,
+          sourceStart: itemToWithdraw.fromSlot,
+          sourceEnd: itemToWithdraw.fromSlot + 1,
+          destStart: container.inventoryStart,
+          destEnd: container.inventoryEnd
+        }
+
+        // container.withdraw(foundItem.type, null, quantity)
+        this.bot.transfer(options)
+          .then(() => {
+            this.withdrawItem(container)
+              .then(() => {
+                resolve()
+              })
+              .catch(err => {
+                reject(err)
+              })
+          })
+          .catch(err => {
+            reject(err)
+          })
+      } else {
+        container.withdraw(foundItem.type, null, quantity)
+          .then(() => {
+            this.withdrawItem(container)
+              .then(() => {
+                resolve()
+              })
+              .catch(err => {
+                reject(err)
+              })
+          })
+          .catch(err => {
+            reject(err)
+          })
+      }
     })
   }
 }
