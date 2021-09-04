@@ -40,7 +40,6 @@ function depositItemsInInventory (bot, targets) {
           count: 9999,
           maxDistance: 40
         })
-        currentChest = chestsFound.shift()
       },
       shouldTransition: () => true
     }),
@@ -49,6 +48,7 @@ function depositItemsInInventory (bot, targets) {
       parent: nextChest,
       child: goAndDeposit,
       onTransition: () => {
+        currentChest = chestsFound.shift()
         targets.position = currentChest.position
         targets.items = bot.inventory.items().map(i => {
           return {
@@ -63,13 +63,13 @@ function depositItemsInInventory (bot, targets) {
     new StateTransition({
       parent: goAndDeposit,
       child: nextChest,
-      shouldTransition: () => goAndDeposit.isFinished() && chestsFound.length > 0
+      shouldTransition: () => goAndDeposit.isFinished()
     }),
 
     new StateTransition({
       parent: nextChest,
       child: exit,
-      shouldTransition: () => bot.inventory.items().length === 0
+      shouldTransition: () => bot.inventory.items().length === 0 || chestsFound.length === 0
     })
 
   ]
