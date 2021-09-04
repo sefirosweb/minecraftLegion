@@ -13,22 +13,17 @@ function pickUpItems (bot, targets) {
   const exit = new BehaviorIdle(targets)
   exit.stateName = 'Exit'
   exit.x = 125
-  exit.y = 413
+  exit.y = 563
 
   const startCheckNextChest = new BehaviorIdle(targets)
   startCheckNextChest.stateName = 'Start Check Next Chest'
-  startCheckNextChest.x = 525
-  startCheckNextChest.y = 113
-
-  const checkNextChest = new BehaviorIdle(targets)
-  checkNextChest.stateName = 'Check Next Chest'
-  checkNextChest.x = 525
-  checkNextChest.y = 413
+  startCheckNextChest.x = 125
+  startCheckNextChest.y = 263
 
   const goAndWithdraw = require('@NestedStateModules/goAndWithdraw')(bot, targets)
   goAndWithdraw.stateName = 'Go chest and Withdraw'
-  goAndWithdraw.x = 1
-  goAndWithdraw.y = 1
+  goAndWithdraw.x = 125
+  goAndWithdraw.y = 413
 
   let pendingTransaction
   const findChests = () => {
