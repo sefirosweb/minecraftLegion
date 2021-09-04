@@ -58,6 +58,7 @@ function sortChestFunction (bot, targets) {
                 chest: chestIndex,
                 slot: slotIndex,
                 type: slot.type,
+                name: slot.name,
                 count: slot.count,
                 method: 'set'
               })
