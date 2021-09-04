@@ -5,7 +5,7 @@ const {
 } = require('mineflayer-statemachine')
 
 function sortChestFunction (bot, targets) {
-  const { findItemsInChests } = require('@modules/inventoryModule')(bot)
+  const { findItemsInChests } = require('@modules/sorterJob')(bot)
 
   const start = new BehaviorIdle(targets)
   start.stateName = 'Start'
