@@ -33,7 +33,31 @@ module.exports = function (bot) {
     return transactions
   }
 
+  const sortChestVec = (a, b, sortBy, sort) => {
+    let tempA = a
+    let tempB = b
+    if (sort === 'desc') {
+      tempA = b
+      tempB = a
+    }
+
+    if (sortBy === 'z') {
+      if (tempA.position.z - tempB.position.z !== 0) {
+        return tempA.position.z - tempB.position.z
+      }
+
+      return tempA.position.x - tempB.position.x
+    }
+
+    if (tempA.position.x - tempB.position.x !== 0) {
+      return tempA.position.x - tempB.position.x
+    }
+
+    return tempA.position.z - tempB.position.z
+  }
+
   return {
-    findItemsInChests
+    findItemsInChests,
+    sortChestVec
   }
 }

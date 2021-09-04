@@ -5,7 +5,7 @@ const {
 } = require('mineflayer-statemachine')
 
 function sortChestFunction (bot, targets) {
-  const { findItemsInChests } = require('@modules/sorterJob')(bot)
+  const { findItemsInChests, sortChestVec } = require('@modules/sorterJob')(bot)
 
   const start = new BehaviorIdle(targets)
   start.stateName = 'Start'
@@ -42,6 +42,8 @@ function sortChestFunction (bot, targets) {
       parent: start,
       child: checkChestsToSort,
       onTransition: () => {
+        targets.chests.sort((a, b) => sortChestVec(a, b, 'z', 'asc'))
+
         targets.sorterJob.correctChests = targets.chests.map(chest => chest.slots.map(slot => { return { correct: false } }))
 
         const slotsToSort = []
