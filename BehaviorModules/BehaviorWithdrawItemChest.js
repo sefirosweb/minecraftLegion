@@ -51,6 +51,13 @@ module.exports = class BehaviorWithdrawItemChest {
             await sleep(500)
             this.isEndFinished = true
           })
+          .catch(async (err) => {
+            console.log(err)
+            await sleep(200)
+            await container.close()
+            await sleep(500)
+            this.isEndFinished = true
+          })
       })
   }
 
