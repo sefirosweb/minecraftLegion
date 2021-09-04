@@ -1,5 +1,5 @@
 const botWebsocket = require('@modules/botWebsocket')
-const { sleep } = require('@modules/utils')
+const { sleep, getSecondBlockPosition } = require('@modules/utils')
 
 module.exports = class BehaviorWithdrawItemChest {
   constructor (bot, targets) {
@@ -46,12 +46,14 @@ module.exports = class BehaviorWithdrawItemChest {
       .then((container) => {
         this.withdrawItem(container)
           .then(async () => {
+            this.refreshChest(chestToOpen, container)
             await sleep(200)
             await container.close()
             await sleep(500)
             this.isEndFinished = true
           })
           .catch(async (err) => {
+            this.refreshChest(chestToOpen, container)
             console.log(err)
             await sleep(200)
             await container.close()
@@ -59,6 +61,33 @@ module.exports = class BehaviorWithdrawItemChest {
             this.isEndFinished = true
           })
       })
+  }
+
+  refreshChest (chestToOpen, container) {
+    if (!this.targets.chests) {
+      this.targets.chests = []
+    }
+
+    const chest = this.targets.chests.find(c => {
+      if (c.position.equals(chestToOpen.position)) return true
+      if (c.secondBlock && c.secondBlock.position.equals(chestToOpen.position)) return true
+      return false
+    })
+
+    const slots = container.slots.slice(0, container.inventoryStart)
+    if (!chest) {
+      chestToOpen.slots = slots
+
+      const props = chestToOpen.getProperties()
+      const offset = getSecondBlockPosition(props.facing, props.type)
+      if (offset) {
+        chestToOpen.secondBlock = this.bot.blockAt(chestToOpen.position.offset(offset.x, offset.y, offset.z))
+      }
+
+      this.targets.chests.push(chestToOpen)
+    } else {
+      chest.slots = slots
+    }
   }
 
   withdrawItem (container) {
