@@ -1,11 +1,8 @@
 const {
   StateTransition,
   BehaviorIdle,
-  BehaviorMoveTo,
   NestedStateMachine
 } = require('mineflayer-statemachine')
-
-const BehaviorTransactionBetweenInventoryChest = require('@BehaviorModules/sorterJob/BehaviorTransactionBetweenInventoryChest')
 
 function depositItems (bot, targets) {
   const start = new BehaviorIdle(targets)
@@ -15,44 +12,31 @@ function depositItems (bot, targets) {
 
   const exit = new BehaviorIdle(targets)
   exit.stateName = 'Exit'
-  exit.x = 125
-  exit.y = 413
-
-  const goChest = new BehaviorMoveTo(bot, targets)
-  goChest.stateName = 'Move To Chest'
-  goChest.x = 825
-  goChest.y = 413
-  goChest.movements = targets.movements
+  exit.x = 325
+  exit.y = 313
 
   const startCheckNextChest = new BehaviorIdle(targets)
   startCheckNextChest.stateName = 'Start Check Next Chest'
-  startCheckNextChest.x = 525
-  startCheckNextChest.y = 113
+  startCheckNextChest.x = 125
+  startCheckNextChest.y = 263
 
-  const checkNextChest = new BehaviorIdle(targets)
-  checkNextChest.stateName = 'Check Next Chest'
-  checkNextChest.x = 525
-  checkNextChest.y = 413
+  const goAndDeposit = require('@NestedStateModules/goAndDeposit')(bot, targets)
+  goAndDeposit.stateName = 'Go chest and Deposit'
+  goAndDeposit.x = 125
+  goAndDeposit.y = 413
 
-  const transactionBetweenInventoryChest = new BehaviorTransactionBetweenInventoryChest(bot, targets)
-  transactionBetweenInventoryChest.stateName = 'Transaction Inventory Chest'
-  transactionBetweenInventoryChest.x = 825
-  transactionBetweenInventoryChest.y = 113
-
-  let indexChest
-
-  const checkNextTransactions = () => {
-    indexChest++
-    while (indexChest < targets.chests.length) {
-      targets.sorterJob.nextTransactions = targets.sorterJob.transactions.filter(c => c.fromChest === indexChest)
-      if (targets.sorterJob.nextTransactions.length > 0) {
-        targets.position = targets.chests[indexChest].position
-        return true
+  let pendingTransaction
+  const findChests = () => {
+    pendingTransaction = []
+    targets.chests.forEach((chest, chestIndex) => {
+      const items = targets.sorterJob.transactions.filter(c => c.toChest === chestIndex)
+      if (items.length > 0) {
+        pendingTransaction.push({
+          chest,
+          items
+        })
       }
-      indexChest++
-    }
-    targets.sorterJob.nextTransactions = []
-    return false
+    })
   }
 
   const transitions = [
@@ -61,45 +45,42 @@ function depositItems (bot, targets) {
       parent: start,
       child: startCheckNextChest,
       onTransition: () => {
-        indexChest = -1
+        findChests()
       },
       shouldTransition: () => true
     }),
 
     new StateTransition({
       parent: startCheckNextChest,
-      child: checkNextChest,
-      onTransition: () => checkNextTransactions(),
-      shouldTransition: () => true
+      child: goAndDeposit,
+      onTransition: () => {
+        const currentChest = pendingTransaction.shift()
+        targets.position = currentChest.chest.position
+        targets.items = currentChest.items
+      },
+      shouldTransition: () => pendingTransaction.length > 0
     }),
 
     new StateTransition({
-      parent: checkNextChest,
-      child: goChest,
-      shouldTransition: () => targets.sorterJob.nextTransactions.length > 0
-    }),
-
-    new StateTransition({
-      parent: checkNextChest,
-      child: exit,
-      shouldTransition: () => targets.sorterJob.nextTransactions.length === 0
-    }),
-
-    new StateTransition({
-      parent: goChest,
-      child: transactionBetweenInventoryChest,
-      shouldTransition: () => goChest.isFinished() && !bot.pathfinder.isMining()
-    }),
-
-    new StateTransition({
-      parent: transactionBetweenInventoryChest,
+      parent: goAndDeposit,
       child: startCheckNextChest,
-      shouldTransition: () => transactionBetweenInventoryChest.isFinished()
-    })
+      shouldTransition: () => goAndDeposit.isFinished() && pendingTransaction.length > 0
+    }),
 
+    new StateTransition({
+      parent: goAndDeposit,
+      child: exit,
+      shouldTransition: () => goAndDeposit.isFinished() && pendingTransaction.length === 0
+    }),
+
+    new StateTransition({
+      parent: startCheckNextChest,
+      child: exit,
+      shouldTransition: () => pendingTransaction.length === 0
+    })
   ]
 
-  const depositItems = new NestedStateMachine(transitions, start)
+  const depositItems = new NestedStateMachine(transitions, start, exit)
   depositItems.stateName = 'depositItems'
   return depositItems
 }
