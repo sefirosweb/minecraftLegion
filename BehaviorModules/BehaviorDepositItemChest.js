@@ -98,24 +98,77 @@ module.exports = class BehaviorDepositItemChest {
       }
       const itemToDeposit = this.items.shift()
 
-      if (container.containerItems().length === container.inventoryStart) {
-        reject(new Error('The chest is full'))
-        return
-      }
+      if (itemToDeposit.toSlot !== undefined) {
+        const options = {
+          windows: container,
+          itemType: itemToDeposit.type,
+          metadata: null,
+          count: itemToDeposit.quantity,
+          sourceStart: container.inventoryStart,
+          sourceEnd: container.inventoryEnd,
+          destStart: itemToDeposit.toSlot,
+          destEnd: itemToDeposit.toSlot + 1
+        }
 
-      container.deposit(itemToDeposit.type, null, itemToDeposit.quantity)
-        .then(() => {
-          this.depositItems(container)
+        if (container.slots[itemToDeposit.toSlot] !== null) {
+          console.log('Detected slot is in use ', itemToDeposit.toSlot)
+          const emptySlot = container.slots.findIndex((s, sIndex) => s === null && sIndex > container.inventoryStart)
+          console.log('Moving to ', emptySlot)
+          this.bot.moveSlotItem(itemToDeposit.toSlot, emptySlot)
             .then(() => {
-              resolve()
+              this.bot.transfer(options)
+                .then(() => {
+                  this.depositItems(container)
+                    .then(() => {
+                      resolve()
+                    })
+                    .catch(err => {
+                      reject(err)
+                    })
+                })
+                .catch(err => {
+                  reject(err)
+                })
             })
             .catch(err => {
               reject(err)
             })
-        })
-        .catch(err => {
-          reject(err)
-        })
+        } else {
+          console.log('transfering items')
+          this.bot.transfer(options)
+            .then(() => {
+              this.depositItems(container)
+                .then(() => {
+                  resolve()
+                })
+                .catch(err => {
+                  reject(err)
+                })
+            })
+            .catch(err => {
+              reject(err)
+            })
+        }
+      } else {
+        if (container.containerItems().length === container.inventoryStart) {
+          reject(new Error('The chest is full'))
+          return
+        }
+
+        container.deposit(itemToDeposit.type, null, itemToDeposit.quantity)
+          .then(() => {
+            this.depositItems(container)
+              .then(() => {
+                resolve()
+              })
+              .catch(err => {
+                reject(err)
+              })
+          })
+          .catch(err => {
+            reject(err)
+          })
+      }
     })
   }
 }
