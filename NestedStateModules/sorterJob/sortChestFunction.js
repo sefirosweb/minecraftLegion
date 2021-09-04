@@ -100,9 +100,7 @@ function sortChestFunction (bot, targets) {
     new StateTransition({
       parent: depositItems,
       child: exit,
-      shouldTransition: () => {
-        return false
-      }
+      shouldTransition: () => depositItems.isFinished()
     })
   ]
 
