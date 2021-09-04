@@ -17,39 +17,39 @@ function sorterJobFunction (bot, targets) {
 
   const checkItemsInInventory = new BehaviorIdle(targets)
   checkItemsInInventory.stateName = 'Check Items In Inventory'
-  checkItemsInInventory.x = 11
-  checkItemsInInventory.y = 11
+  checkItemsInInventory.x = 125
+  checkItemsInInventory.y = 263
 
   const depositItemsInInventory = require('@NestedStateModules/sorterJob/depositItemsInInventory')(bot, targets)
   depositItemsInInventory.stateName = 'Deposit Items In Inventory'
-  depositItemsInInventory.x = 11
-  depositItemsInInventory.y = 11
+  depositItemsInInventory.x = 125
+  depositItemsInInventory.y = 463
 
   const checkNewChests = new BehaviorIdle(targets)
   checkNewChests.stateName = 'Check new chests'
   checkNewChests.x = 325
-  checkNewChests.y = 113
+  checkNewChests.y = 463
 
   const checkItemsInChest = new BehaviorcCheckItemsInChest(bot, targets)
   checkItemsInChest.stateName = 'Check items in chests'
-  checkItemsInChest.x = 125
-  checkItemsInChest.y = 313
+  checkItemsInChest.x = 525
+  checkItemsInChest.y = 613
 
   const calculateSort = new BehaviorIdle(targets)
   calculateSort.stateName = 'Calculate items in chests'
   calculateSort.x = 525
-  calculateSort.y = 113
+  calculateSort.y = 263
 
   const goChest = new BehaviorMoveTo(bot, targets)
   goChest.stateName = 'Go chest'
-  goChest.x = 525
-  goChest.y = 313
+  goChest.x = 125
+  goChest.y = 613
   goChest.movements = targets.movements
 
   const sortChestFunction = require('@NestedStateModules/sorterJob/sortChestFunction')(bot, targets)
   sortChestFunction.stateName = 'Sort chests'
   sortChestFunction.x = 325
-  sortChestFunction.y = 10
+  sortChestFunction.y = 263
 
   const findNewChests = () => {
     const currentChests = targets.chests
