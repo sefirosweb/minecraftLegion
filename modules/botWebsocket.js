@@ -356,6 +356,10 @@ function sendConfig () {
   // console.log(botconfig.getAll(bot.username))
 }
 
+function sendAction (action, value) {
+  socket.emit('sendAction', { action, value })
+}
+
 function emit (chanel, data) {
   if (!loged) { return }
   socket.emit(chanel, data)
@@ -433,5 +437,6 @@ module.exports = {
   emitCombat,
   emitEvents,
   getFriends,
-  getMasters
+  getMasters,
+  sendAction
 }

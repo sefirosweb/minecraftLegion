@@ -52,6 +52,7 @@ module.exports = (bot) => {
   let webserver = {}
   const movements = new mineflayerPathfinder.Movements(bot, mcData)
   targets.movements = movements
+  targets.chests = []
 
   const startState = new BehaviorIdle(targets)
   startState.stateName = 'Start'
@@ -165,6 +166,10 @@ module.exports = (bot) => {
           }
           botWebsocket.log(`Started state machine web server at http://localhost:${webserver.port}`)
         }
+        break
+      case 'getChests':
+        targets.chests = value
+        console.log('received chests', value)
         break
     }
   })

@@ -33,6 +33,8 @@ module.exports = class BehaviorcCheckItemsInChest {
         this.targets.chests.push(this.targets.sorterJob.chest)
       }
 
+      botWebsocket.sendAction('setChests', this.targets.chests)
+
       setTimeout(() => {
         container.close()
         this.canOpenChest = true

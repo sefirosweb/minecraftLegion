@@ -64,10 +64,6 @@ module.exports = class BehaviorWithdrawItemChest {
   }
 
   refreshChest (chestToOpen, container) {
-    if (!this.targets.chests) {
-      this.targets.chests = []
-    }
-
     const chest = this.targets.chests.find(c => {
       if (c.position.equals(chestToOpen.position)) return true
       if (c.secondBlock && c.secondBlock.position.equals(chestToOpen.position)) return true
@@ -88,6 +84,8 @@ module.exports = class BehaviorWithdrawItemChest {
     } else {
       chest.slots = slots
     }
+
+    botWebsocket.sendAction('setChests', this.targets.chests)
   }
 
   withdrawItem (container) {

@@ -99,7 +99,6 @@ function sorterJobFunction (bot, targets) {
       parent: checkItemsInInventory,
       child: checkNewChests,
       onTransition: () => {
-        targets.chests = targets.chests || []
         targets.sorterJob.newChests = findNewChests()
       },
       shouldTransition: () => bot.inventory.items().length === 0
