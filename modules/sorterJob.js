@@ -1,7 +1,7 @@
 module.exports = function (bot) {
   const findItemsInChests = (chestInput, itemsInput, exclude) => {
-    const chests = [...chestInput]
-    const items = [...itemsInput]
+    const chests = JSON.parse(JSON.stringify(chestInput))
+    const items = JSON.parse(JSON.stringify(itemsInput))
 
     const transactions = []
 
