@@ -14,8 +14,8 @@ module.exports = class BehaviorWithdrawItemChest {
 
   onStateEntered () {
     this.isEndFinished = false
-    botWebsocket.log('Items to withdraw ' + JSON.stringify(this.targets.items))
     this.items = [...this.targets.items]
+    botWebsocket.log('Items to withdraw ' + JSON.stringify(this.items))
 
     this.timeLimit = setTimeout(() => {
       botWebsocket.log('Time exceded for get items, forcing close')
@@ -27,7 +27,6 @@ module.exports = class BehaviorWithdrawItemChest {
 
   onStateExited () {
     this.isEndFinished = false
-    this.targets.items = []
     clearTimeout(this.timeLimit)
   }
 
