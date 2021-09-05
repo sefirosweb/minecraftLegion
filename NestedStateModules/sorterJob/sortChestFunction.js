@@ -53,12 +53,11 @@ function sortChestFunction (bot, targets) {
               slot.count !== targets.chests[chestIndex].slots[slotIndex].count
             ) {
               slotsToSort.push({
-                chest: chestIndex,
-                slot: slotIndex,
+                toChest: chestIndex,
+                toSlot: slotIndex,
                 type: slot.type,
                 name: slot.name,
-                count: slot.count,
-                method: 'set'
+                quantity: slot.count
               })
             } else {
               targets.sorterJob.correctChests[chestIndex][slotIndex].correct = true

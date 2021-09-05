@@ -29,17 +29,7 @@ function depositItems (bot, targets) {
   const findChests = () => {
     pendingTransaction = []
     targets.chests.forEach((chest, chestIndex) => {
-      const items = targets.sorterJob.transactions
-        .filter(c => c.toChest === chestIndex)
-        .reduce((returnData, i) => {
-          const item = returnData.find(d => d.toSlot === i.toSlot)
-          if (item) {
-            item.quantity += i.quantity
-          } else {
-            returnData.push(i)
-          }
-          return returnData
-        }, [])
+      const items = targets.sorterJob.slotsToSort.filter(i => i.toChest === chestIndex)
       if (items.length > 0) {
         pendingTransaction.push({
           chest,
