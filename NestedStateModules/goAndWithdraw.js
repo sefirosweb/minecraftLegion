@@ -25,7 +25,7 @@ function goAndWithdraw (bot, targets) {
   goChest.movements = targets.movements
 
   const withdrawItemChest = new BehaviorWithdrawItemChest(bot, targets)
-  withdrawItemChest.stateName = 'Deposit Items'
+  withdrawItemChest.stateName = 'Withdraw Items'
   withdrawItemChest.x = 125
   withdrawItemChest.y = 313
 
