@@ -70,11 +70,32 @@ function sorterJobFunction (bot, targets) {
         return false
       })
       if (!haveChest) {
-        newChests.push(chest)
+        targets.sorterJob.newChests.push(chest)
       }
     })
 
     return newChests
+  }
+
+  const customSortJobAddNewChestToCheck = (chest, isOpen, secondBlock) => {
+    if (!isOpen) {
+      if (
+        /* Check if this chest closed is last chest closed by bot */
+        (!targets.sorterJob.chest ||
+          (
+            !chest.position.equals(targets.sorterJob.chest.position) &&
+            !(secondBlock && secondBlock.position.equals(targets.sorterJob.position))
+          )) &&
+        /* Check if pending chest to open is in list */
+        !targets.sorterJob.newChests.find(c => {
+          if (vec3(c.position).equals(chest.position)) return true
+          if (secondBlock && vec3(c.position).equals(secondBlock.position)) return true
+          return false
+        })
+      ) {
+        targets.sorterJob.newChests.push(chest)
+      }
+    }
   }
 
   const transitions = [
@@ -83,6 +104,9 @@ function sorterJobFunction (bot, targets) {
       child: checkItemsInInventory,
       onTransition: () => {
         targets.sorterJob.emptyChests = []
+        targets.sorterJob.newChests = []
+        bot.removeListener('chestLidMove', customSortJobAddNewChestToCheck)
+        bot.on('chestLidMove', customSortJobAddNewChestToCheck)
       },
       shouldTransition: () => true
     }),
@@ -104,7 +128,7 @@ function sorterJobFunction (bot, targets) {
       child: checkNewChests,
       name: 'No chests for deposit the items',
       onTransition: () => {
-        targets.sorterJob.newChests = findNewChests()
+        findNewChests()
       },
       shouldTransition: () => depositItemsInInventory.isFinished() && targets.sorterJob.emptyChests.length === 0
     }),
@@ -113,7 +137,7 @@ function sorterJobFunction (bot, targets) {
       parent: checkItemsInInventory,
       child: checkNewChests,
       onTransition: () => {
-        targets.sorterJob.newChests = findNewChests()
+        findNewChests()
       },
       shouldTransition: () => bot.inventory.items().length === 0
     }),
