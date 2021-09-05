@@ -5,8 +5,6 @@ const {
 } = require('mineflayer-statemachine')
 
 function depositItemsInInventory (bot, targets) {
-  const { findChests } = require('@modules/inventoryModule')(bot)
-
   const start = new BehaviorIdle(targets)
   start.stateName = 'Start'
   start.x = 125
