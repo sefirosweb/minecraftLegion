@@ -6,7 +6,6 @@ const botconfig = require('@modules/botConfig')
 
 let bot
 let socket; let friends = []; let masters = []; let loged = false
-
 function loadBot (_bot) {
   bot = _bot
 }
@@ -26,6 +25,7 @@ function connect () {
     if (authenticate.auth) {
       loged = true
       socket.emit('addFriend', bot.username)
+      bot.emit('webSocketLogin')
     } else {
       loged = false
     }
@@ -347,6 +347,10 @@ function connect () {
   })
 }
 
+function getLoged () {
+  return loged
+}
+
 function sendConfig () {
   socket.emit('sendAction', {
     action: 'sendConfig',
@@ -429,6 +433,7 @@ function nextPointListener (master) {
 module.exports = {
   loadBot,
   connect,
+  getLoged,
   on,
   emit,
   log,
