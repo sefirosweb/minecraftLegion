@@ -42,19 +42,29 @@ module.exports = function (bot) {
       tempB = a
     }
 
+    // Sort by Z
     if (sortBy === 'z') {
       if (tempA.position.z - tempB.position.z !== 0) {
         return tempA.position.z - tempB.position.z
       }
 
-      return tempA.position.x - tempB.position.x
+      if (tempA.position.x - tempB.position.x !== 0) {
+        return tempA.position.x - tempB.position.x
+      }
+
+      return tempA.position.y - tempB.position.y
     }
 
+    // Sort by X
     if (tempA.position.x - tempB.position.x !== 0) {
       return tempA.position.x - tempB.position.x
     }
 
-    return tempA.position.z - tempB.position.z
+    if (tempA.position.z - tempB.position.z !== 0) {
+      return tempA.position.z - tempB.position.z
+    }
+
+    return tempA.position.y - tempB.position.y
   }
 
   return {
