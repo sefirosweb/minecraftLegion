@@ -1,4 +1,5 @@
 const botWebsocket = require('@modules/botWebsocket')
+const vec3 = require('vec3')
 module.exports = class BehaviorcCheckItemsInChest {
   constructor (bot, targets) {
     this.bot = bot
@@ -22,8 +23,8 @@ module.exports = class BehaviorcCheckItemsInChest {
     this.bot.openContainer(this.targets.sorterJob.chest).then((container, i) => {
       const slots = container.slots.slice(0, container.inventoryStart)
       const chestIndex = this.targets.chests.findIndex(c => {
-        if (c.position.equals(this.targets.sorterJob.chest.position)) return true
-        if (this.targets.sorterJob.chest.secondBlock && c.position.equals(this.targets.sorterJob.chest.secondBlock.position)) return true
+        if (vec3(c.position).equals(this.targets.sorterJob.chest.position)) return true
+        if (this.targets.sorterJob.chest.secondBlock && vec3(c.position).equals(this.targets.sorterJob.chest.secondBlock.position)) return true
         return false
       })
       if (chestIndex >= 0) {

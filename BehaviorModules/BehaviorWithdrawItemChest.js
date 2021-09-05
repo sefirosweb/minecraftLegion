@@ -1,5 +1,6 @@
 const botWebsocket = require('@modules/botWebsocket')
 const { sleep, getSecondBlockPosition } = require('@modules/utils')
+const vec3 = require('vec3')
 
 module.exports = class BehaviorWithdrawItemChest {
   constructor (bot, targets) {
@@ -35,7 +36,7 @@ module.exports = class BehaviorWithdrawItemChest {
   }
 
   async withdrawAllItems () {
-    const chestToOpen = this.bot.blockAt(this.targets.position)
+    const chestToOpen = this.bot.blockAt(vec3(this.targets.position))
     if (!['chest', 'ender_chest', 'trapped_chest'].includes(chestToOpen.name)) {
       botWebsocket.log('No chest found')
       this.isEndFinished = true
@@ -65,8 +66,8 @@ module.exports = class BehaviorWithdrawItemChest {
 
   refreshChest (chestToOpen, container) {
     const chest = this.targets.chests.find(c => {
-      if (c.position.equals(chestToOpen.position)) return true
-      if (c.secondBlock && c.secondBlock.position.equals(chestToOpen.position)) return true
+      if (vec3(c.position).equals(chestToOpen.position)) return true
+      if (c.secondBlock && vec3(c.secondBlock.position).equals(chestToOpen.position)) return true
       return false
     })
 

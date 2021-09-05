@@ -173,4 +173,19 @@ module.exports = (bot) => {
         break
     }
   })
+
+  function getChests () {
+    botWebsocket.emit('sendAction', {
+      action: 'getChests',
+      value: ''
+    })
+  }
+
+  if (botWebsocket.getLoged()) {
+    getChests()
+  } else {
+    bot.once('webSocketLogin', function () {
+      getChests()
+    })
+  }
 }

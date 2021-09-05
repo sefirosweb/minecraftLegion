@@ -1,3 +1,4 @@
+const vec3 = require('vec3')
 const {
   StateTransition,
   BehaviorIdle,
@@ -64,8 +65,8 @@ function sorterJobFunction (bot, targets) {
 
     chests.forEach(chest => {
       const haveChest = currentChests.find(c => {
-        if (c.position.equals(chest.position)) return true
-        if (chest.secondBlock && c.position.equals(chest.secondBlock.position)) return true
+        if (vec3(c.position).equals(chest.position)) return true
+        if (chest.secondBlock && vec3(c.position).equals(chest.secondBlock.position)) return true
         return false
       })
       if (!haveChest) {
@@ -132,8 +133,8 @@ function sorterJobFunction (bot, targets) {
       onTransition: () => {
         if (!checkItemsInChest.getCanOpenChest()) {
           const chestIndex = targets.chests.findIndex(c => {
-            if (c.position.equals(targets.sorterJob.chest.position)) return true
-            if (targets.sorterJob.chest.secondBlock && c.position.equals(targets.sorterJob.chest.secondBlock.position)) return true
+            if (vec3(c.position).equals(targets.sorterJob.chest.position)) return true
+            if (targets.sorterJob.chest.secondBlock && vec3(c.position).equals(targets.sorterJob.chest.secondBlock.position)) return true
             return false
           })
           if (chestIndex >= 0) {
