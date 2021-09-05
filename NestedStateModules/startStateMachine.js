@@ -169,7 +169,6 @@ module.exports = (bot) => {
         break
       case 'getChests':
         targets.chests = value
-        console.log('received chests', value)
         break
     }
   })
