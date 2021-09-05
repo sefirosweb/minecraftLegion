@@ -81,6 +81,9 @@ function sorterJobFunction (bot, targets) {
     new StateTransition({
       parent: start,
       child: checkItemsInInventory,
+      onTransition: () => {
+        targets.sorterJob.emptyChests = []
+      },
       shouldTransition: () => true
     }),
 
@@ -93,7 +96,17 @@ function sorterJobFunction (bot, targets) {
     new StateTransition({
       parent: depositItemsInInventory,
       child: checkItemsInInventory,
-      shouldTransition: () => depositItemsInInventory.isFinished()
+      shouldTransition: () => depositItemsInInventory.isFinished() && targets.sorterJob.emptyChests.length > 0
+    }),
+
+    new StateTransition({
+      parent: depositItemsInInventory,
+      child: checkNewChests,
+      name: 'No chests for deposit the items',
+      onTransition: () => {
+        targets.sorterJob.newChests = findNewChests()
+      },
+      shouldTransition: () => depositItemsInInventory.isFinished() && targets.sorterJob.emptyChests.length === 0
     }),
 
     new StateTransition({
@@ -118,7 +131,14 @@ function sorterJobFunction (bot, targets) {
     new StateTransition({
       parent: checkNewChests,
       child: calculateSort,
-      shouldTransition: () => targets.sorterJob.newChests.length === 0
+      shouldTransition: () => targets.sorterJob.newChests.length === 0 && bot.inventory.items().length === 0
+    }),
+
+    new StateTransition({
+      parent: checkNewChests,
+      child: checkItemsInInventory,
+      name: 'Found items in inventory',
+      shouldTransition: () => targets.sorterJob.newChests.length === 0 && bot.inventory.items().length > 0
     }),
 
     new StateTransition({

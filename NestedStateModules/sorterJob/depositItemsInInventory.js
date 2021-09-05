@@ -30,16 +30,21 @@ function depositItemsInInventory (bot, targets) {
   let chestsFound
   let currentChest
 
+  const findEmptychests = () => {
+    const chests = JSON.parse(JSON.stringify(targets.chests))
+    return chests
+      .filter(c => c.slots.filter(s => s === null).length > 0)
+      .sort((a, b) => b.slots.filter(s => s === null).length - a.slots.filter(s => s === null).length)
+  }
+
   const transitions = [
 
     new StateTransition({
       parent: start,
       child: nextChest,
       onTransition: () => {
-        chestsFound = findChests({
-          count: 9999,
-          maxDistance: 40
-        })
+        chestsFound = findEmptychests()
+        targets.sorterJob.emptyChests = chestsFound
       },
       shouldTransition: () => true
     }),
@@ -57,7 +62,7 @@ function depositItemsInInventory (bot, targets) {
           }
         })
       },
-      shouldTransition: () => bot.inventory.items().length > 0
+      shouldTransition: () => bot.inventory.items().length > 0 && chestsFound.length > 0
     }),
 
     new StateTransition({
