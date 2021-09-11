@@ -86,13 +86,18 @@ set miner x y z x y z x+ horizontally
 - Breeder
   * Feed animals! all types!
   * When there is surplus, sacrifice the surplus
+- Sorter Job
+  * The bot search all nearest chest and they sort all items based on ID item
+  * Also send to the server and other bots you have in each chest, NOW ALL BOTS GO DIRECTLY TO THE CHEST THAT STORES THE ITEM!
+
 # TODO
+- Optimize Sorter Job, need too many interaction with chests for sort all the items
+- Add custom Sort Items in chest, based on... any idea?
+- Add more behavior into Sorter Job, -> Craft items? if detect in chests no have enough of XXX items then craft it if they can? (Example swords?)
 - Make an Archer Job ( During how to have this behavior similar to guard job? )
 - Optimize combat Guard Job ( combat creepers, PVP, destroy shields)
 - Check day/night for sleep any sleep function? Add "general config" for send all bots to sleep for all jobs
 - Add Job builder! based on mineflayer-builder & Schematichs
-- Add Job sorter chest, have an a bot for sort all chest
-- Add "store" and "share" the chest containes, and when bot need some item go to find directly, also must be update the container chest info when any bot open/close the chest and share the rest of bots
 - Add placing torchs
 - Check some bugs with mining job when have a too many lava or water
 - Add a robust documentation =P

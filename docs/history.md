@@ -1,3 +1,14 @@
+## 1.2.0
+* Added Sorter Job
+  * This job search nearest chest and they sort them automatically
+  * Also send to other bots wich have each chest
+* All bots when pickup items / deposit send to all bots the final status of chest
+* All bots when start to check if have enough items go directly the chest they have the item needed, if can't find them, then go "old" version and try to find in the chest selected
+* Fixed minor bugs in combat
+* Refactorized some code into folder
+* Refacotorized targets. Variables for custom variables (we have alot of variables, I start to sort this variables for each JOB) ex: targets.sorterJob, only "global" variables are on targets.XXX (example targets.movements)
+* Refactorize "getReady" + "Deposit" + "Withdraw" items now uses a "low level" of inventory, and have less bugs (inventory / chest full etc)
+
 ## 1.1.0
 * Fixed bug with mineflater-inventory
 * Added breeder job can feed all pets
