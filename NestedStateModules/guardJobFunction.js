@@ -8,7 +8,6 @@ const {
 
 const BehaviorLoadConfig = require('@BehaviorModules/BehaviorLoadConfig')
 const BehaviorMoveToArray = require('@BehaviorModules/BehaviorMoveToArray')
-const BehaviorGetReady = require('@BehaviorModules/BehaviorGetReady')
 const BehaviorEatFood = require('@BehaviorModules/BehaviorEatFood')
 const BehaviorEquipAll = require('@BehaviorModules/BehaviorEquipAll')
 const BehaviorFindItems = require('@BehaviorModules/BehaviorFindItems')
@@ -32,11 +31,6 @@ function guardJobFunction (bot, targets) {
   patrol.movements = targets.movements
 
   const getClosestMob = require('@modules/getClosestEnemy')(bot, targets)
-
-  const getReady = new BehaviorGetReady(bot, targets)
-  getReady.stateName = 'Get Ready for Patrol'
-  getReady.x = 525
-  getReady.y = 113
 
   const equip = new BehaviorEquipAll(bot, targets)
   equip.stateName = 'Equip items'
@@ -71,9 +65,10 @@ function guardJobFunction (bot, targets) {
   combatStrategy.x = 925
   combatStrategy.y = 513
 
-  const goChests = require('@NestedStateModules/goChestsFunctions')(bot, targets)
-  goChests.x = 325
-  goChests.y = 313
+  const getReady = require('@NestedStateModules/getReady/getReadyFunction')(bot, targets)
+  getReady.stateName = 'Get Ready'
+  getReady.x = 525
+  getReady.y = 213
 
   const transitions = [
     new StateTransition({
@@ -190,21 +185,7 @@ function guardJobFunction (bot, targets) {
       parent: getReady,
       child: equip,
       name: 'Bot is ready for start patrol',
-      shouldTransition: () => getReady.getIsReady() && bot.inventory.items().length < 34
-    }),
-
-    new StateTransition({
-      parent: getReady,
-      child: goChests,
-      name: 'Need get items from chest or inventory is full',
-      shouldTransition: () => !getReady.getIsReady() || bot.inventory.items().length >= 34
-    }),
-
-    new StateTransition({
-      parent: goChests,
-      child: getReady,
-      name: 'goChests -> getReady',
-      shouldTransition: () => goChests.isFinished()
+      shouldTransition: () => getReady.isFinished()
     }),
 
     new StateTransition({

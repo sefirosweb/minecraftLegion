@@ -43,7 +43,7 @@ function minerJobFunction (bot, targets) {
   combatStrategy.x = 525
   combatStrategy.y = 513
 
-  const goChests = require('@NestedStateModules/goChestsFunctions')(bot, targets)
+  const goChests = require('@NestedStateModules/getReady/goChestsFunctions')(bot, targets)
   goChests.x = 225
   goChests.y = 313
 
