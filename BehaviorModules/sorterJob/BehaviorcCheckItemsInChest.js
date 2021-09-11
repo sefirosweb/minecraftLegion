@@ -24,7 +24,9 @@ module.exports = class BehaviorcCheckItemsInChest {
       const slots = container.slots.slice(0, container.inventoryStart)
       const chestIndex = this.targets.chests.findIndex(c => {
         if (vec3(c.position).equals(this.targets.sorterJob.chest.position)) return true
+        if (c.secondBlock && vec3(c.secondBlock.position).equals(this.targets.sorterJob.chest.position)) return true
         if (this.targets.sorterJob.chest.secondBlock && vec3(c.position).equals(this.targets.sorterJob.chest.secondBlock.position)) return true
+        if (c.secondBlock && this.targets.sorterJob.chest.secondBlock && vec3(c.secondBlock.position).equals(this.targets.sorterJob.chest.secondBlock.position)) return true
         return false
       })
       if (chestIndex >= 0) {
