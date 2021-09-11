@@ -8,21 +8,37 @@ module.exports = function (bot) {
     items.forEach((item, itemIndex) => {
       chests.forEach((chest, chestIndex) => {
         chest.slots.every((slot, slotIndex) => {
-          if (exclude[chestIndex][slotIndex].correct === true) return true
+          if (exclude && exclude[chestIndex][slotIndex].correct === true) return true
           if (item.quantity === 0) return false
           if (!slot) return true
-          if (slot.type === item.type && slot.count > 0) {
-            const count = slot.count < item.quantity ? slot.count : item.quantity
-            const slotCount = slot.count
-            slot.count = 0
-            item.quantity -= count
-            transactions.push({
-              fromChest: chestIndex,
-              fromSlot: slotIndex,
-              name: slot.name,
-              quantity: slotCount,
-              type: item.type
-            })
+          if (item.type) {
+            if (slot.type === item.type && slot.count > 0) {
+              const count = slot.count < item.quantity ? slot.count : item.quantity
+              const slotCount = slot.count
+              slot.count = 0
+              item.quantity -= count
+              transactions.push({
+                fromChest: chestIndex,
+                fromSlot: slotIndex,
+                name: slot.name,
+                quantity: slotCount,
+                type: slot.type
+              })
+            }
+          } else {
+            if (slot.name.includes(item.item) && slot.count > 0) {
+              const count = slot.count < item.quantity ? slot.count : item.quantity
+              const slotCount = slot.count
+              slot.count = 0
+              item.quantity -= count
+              transactions.push({
+                fromChest: chestIndex,
+                fromSlot: slotIndex,
+                name: slot.name,
+                quantity: slotCount,
+                type: slot.type
+              })
+            }
           }
           return true
         })
