@@ -55,9 +55,7 @@ function sorterJobFunction (bot, targets) {
   sortChestFunction.y = 263
 
   const findNewChests = () => {
-    const currentChests = targets.chests
-
-    currentChests.forEach(c => {
+    targets.chests.forEach(c => {
       c.chestFound = false
     })
 
@@ -67,30 +65,36 @@ function sorterJobFunction (bot, targets) {
     })
 
     chests.forEach(chest => {
-      const cKey = currentChests.findIndex(c => {
-        if (vec3(c.position).equals(chest.position)) return true
-        if (chest.secondBlock && vec3(c.position).equals(chest.secondBlock.position)) return true
+      // Find chest in targets.chests
+      const cKey = targets.chests.findIndex(tc => {
+        if (vec3(tc.position).equals(chest.position)) {
+          return true
+        }
+
         return false
       })
+
       if (cKey >= 0) {
-        currentChests[cKey].chestFound = true
+        targets.chests[cKey].chestFound = true
       } else {
         chest.chestFound = true
         targets.sorterJob.newChests.push(chest)
       }
     })
 
-    let detectedChestChanged = false
-
-    currentChests.forEach((c, cKey) => {
+    const removeValFromIndex = []
+    targets.chests.forEach((c, cKey) => {
       if (c.chestFound === false) {
-        currentChests.splice(cKey, 1)
-        detectedChestChanged = true
+        removeValFromIndex.push(cKey)
       }
     })
 
-    if (detectedChestChanged) {
-      console.log(currentChests)
+    if (removeValFromIndex.length > 0) {
+      for (let i = removeValFromIndex.length - 1; i >= 0; i--) {
+        targets.chests.splice(removeValFromIndex[i], 1)
+      }
+
+      console.log(targets.chests)
       botWebsocket.sendAction('setChests', targets.chests)
     }
   }
