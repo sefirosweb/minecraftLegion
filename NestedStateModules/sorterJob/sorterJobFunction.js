@@ -67,7 +67,16 @@ function sorterJobFunction (bot, targets) {
     chests.forEach(chest => {
       // Find chest in targets.chests
       const cKey = targets.chests.findIndex(tc => {
-        if (vec3(tc.position).equals(chest.position)) {
+        if (
+          // Both must be second block or not
+          (tc.secondBlock === undefined) === (chest.secondBlock === undefined) &&
+          (
+            vec3(tc.position).equals(chest.position) ||
+            (tc.secondBlock && vec3(tc.secondBlock.position).equals(chest.position)) ||
+            (chest.secondBlock && vec3(tc.position).equals(chest.secondBlock.position)) ||
+            (tc.secondBlock && chest.secondBlock && vec3(tc.secondBlock.position).equals(chest.secondBlock.position))
+          )
+        ) {
           return true
         }
 
