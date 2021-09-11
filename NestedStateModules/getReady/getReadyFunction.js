@@ -36,13 +36,13 @@ function getReadyFunction (bot, targets) {
     new StateTransition({
       parent: getReady,
       child: goChests,
-      shouldTransition: () => !getReady.getIsReady() || bot.inventory.items().length >= 34
+      shouldTransition: () => !getReady.getIsReady() || bot.inventory.items().length >= 33
     }),
 
     new StateTransition({
       parent: getReady,
       child: exit,
-      shouldTransition: () => getReady.getIsReady() && bot.inventory.items().length < 34
+      shouldTransition: () => getReady.getIsReady() && bot.inventory.items().length < 33
     }),
 
     new StateTransition({

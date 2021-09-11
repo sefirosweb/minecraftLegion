@@ -50,7 +50,7 @@ function farmerJobFunction (bot, targets) {
     new StateTransition({
       parent: getReady,
       child: goChests,
-      shouldTransition: () => !getReady.getIsReady() || bot.inventory.items().length >= 34
+      shouldTransition: () => !getReady.getIsReady() || bot.inventory.items().length >= 33
     }),
 
     new StateTransition({
@@ -63,7 +63,7 @@ function farmerJobFunction (bot, targets) {
     new StateTransition({
       parent: getReady,
       child: eatFood,
-      shouldTransition: () => getReady.getIsReady() && bot.inventory.items().length < 34
+      shouldTransition: () => getReady.getIsReady() && bot.inventory.items().length < 33
     }),
 
     new StateTransition({

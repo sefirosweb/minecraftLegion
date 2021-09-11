@@ -53,7 +53,7 @@ module.exports = class BehaviorMinerChecks {
 
   isIventoryFull () {
     const items = this.bot.inventory.items()
-    if (items.length >= 34) {
+    if (items.length >= 33) {
       return true
     }
     return false
