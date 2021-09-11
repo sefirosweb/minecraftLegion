@@ -36,6 +36,10 @@ module.exports = class BehaviorWithdrawItemChest {
 
   async withdrawAllItems () {
     const chestToOpen = this.bot.blockAt(vec3(this.targets.position))
+    if (!chestToOpen) {
+      return
+    }
+
     if (!['chest', 'ender_chest', 'trapped_chest'].includes(chestToOpen.name)) {
       botWebsocket.log('No chest found')
       this.isEndFinished = true
@@ -97,7 +101,10 @@ module.exports = class BehaviorWithdrawItemChest {
 
       const itemToWithdraw = this.items.shift()
 
-      const foundItem = container.containerItems().find(i => i.type === itemToWithdraw.type)
+      const foundItem = itemToWithdraw.type
+        ? container.containerItems().find(i => i.type === itemToWithdraw.type)
+        : container.containerItems().find(i => i.name.includes(itemToWithdraw.item))
+
       if (!foundItem) {
         this.withdrawItem(container)
           .then(() => {
