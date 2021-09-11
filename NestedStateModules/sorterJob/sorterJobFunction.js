@@ -103,7 +103,6 @@ function sorterJobFunction (bot, targets) {
         targets.chests.splice(removeValFromIndex[i], 1)
       }
 
-      console.log(targets.chests)
       botWebsocket.sendAction('setChests', targets.chests)
     }
   }
