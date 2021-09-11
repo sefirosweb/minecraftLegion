@@ -62,11 +62,11 @@ function sortChestFunction (bot, targets) {
             } else {
               targets.sorterJob.correctChests[chestIndex][slotIndex].correct = true
             }
-            if (slotsToSort.length < 25) return true
+            if (slotsToSort.length < 27) return true
             return false
           })
 
-          if (slotsToSort.length < 25) return true
+          if (slotsToSort.length < 27) return true
           return false
         })
         targets.sorterJob.slotsToSort = slotsToSort
