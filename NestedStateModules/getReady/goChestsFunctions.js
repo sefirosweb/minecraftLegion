@@ -11,10 +11,13 @@ const BehaviorDepositItemChest = require('@BehaviorModules/BehaviorDepositItemCh
 const BehaviorCheckItemsInInventory = require('@BehaviorModules/BehaviorCheckItemsInInventory')
 
 function goChestsFunction (bot, targets) {
+  const { findItemsInChests } = require('@modules/sorterJob')(bot)
+  const { getResumeInventory } = require('@modules/inventoryModule')(bot)
+
   const start = new BehaviorIdle()
   start.stateName = 'Start'
   start.x = 125
-  start.y = 113
+  start.y = 313
 
   const exit = new BehaviorIdle()
   exit.stateName = 'Exit'
@@ -28,7 +31,7 @@ function goChestsFunction (bot, targets) {
 
   const loadConfig = new BehaviorLoadConfig(bot, targets)
   loadConfig.stateName = 'Load Bot Config'
-  loadConfig.x = 325
+  loadConfig.x = 125
   loadConfig.y = 113
 
   const checkItemsInInventory = new BehaviorCheckItemsInInventory(bot, targets)
@@ -52,8 +55,39 @@ function goChestsFunction (bot, targets) {
   depositItems.x = 725
   depositItems.y = 250
 
+  const pickUpItems = require('@NestedStateModules/getReady/pickUpItems')(bot, targets)
+  pickUpItems.stateName = 'Pick Up Items'
+  pickUpItems.x = 325
+  pickUpItems.y = 113
+
   let chests = []
   let chestIndex = 0
+
+  const getItemsToWithdrawInChests = () => {
+    return chests.filter(c => c.type === 'withdraw').reduce((returnData, c) => {
+      c.items.forEach(i => {
+        const key = returnData.findIndex(r => r.item === i.item)
+        if (key >= 0) {
+          returnData[key].quantity += i.quantity
+        } else {
+          returnData.push(i)
+        }
+      })
+      return returnData
+    }, [])
+  }
+
+  const findChestsToWithdraw = () => {
+    const resumeInventory = getResumeInventory()
+    const itemsToWithdrawInChests = getItemsToWithdrawInChests()
+    const itemsToWithdraw = itemsToWithdrawInChests.reduce((returnData, i) => {
+      const invItem = resumeInventory.find(inv => inv.name.includes(i.item))
+      i.quantity = invItem ? i.quantity - invItem.quantity : i.quantity
+      if (i.quantity > 0) returnData.push(i)
+      return returnData
+    }, [])
+    targets.pickUpItems = findItemsInChests(targets.chests, itemsToWithdraw)
+  }
 
   const transitions = [
     new StateTransition({
@@ -65,13 +99,20 @@ function goChestsFunction (bot, targets) {
 
     new StateTransition({
       parent: loadConfig,
-      child: nextCheck,
+      child: pickUpItems,
       name: 'loadConfig -> checkItemsInInventory',
       onTransition: () => {
         chestIndex = 0
         chests = loadConfig.getAllChests()
+        findChestsToWithdraw()
       },
       shouldTransition: () => true
+    }),
+
+    new StateTransition({
+      parent: pickUpItems,
+      child: nextCheck,
+      shouldTransition: () => pickUpItems.isFinished()
     }),
 
     new StateTransition({
