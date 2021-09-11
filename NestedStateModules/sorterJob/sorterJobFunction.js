@@ -1,4 +1,5 @@
 const vec3 = require('vec3')
+const botWebsocket = require('@modules/botWebsocket')
 const {
   StateTransition,
   BehaviorIdle,
@@ -56,25 +57,42 @@ function sorterJobFunction (bot, targets) {
   const findNewChests = () => {
     const currentChests = targets.chests
 
+    currentChests.forEach(c => {
+      c.chestFound = false
+    })
+
     const chests = findChests({
       count: 9999,
       maxDistance: 40
     })
 
-    const newChests = []
-
     chests.forEach(chest => {
-      const haveChest = currentChests.find(c => {
+      const cKey = currentChests.findIndex(c => {
         if (vec3(c.position).equals(chest.position)) return true
         if (chest.secondBlock && vec3(c.position).equals(chest.secondBlock.position)) return true
         return false
       })
-      if (!haveChest) {
+      if (cKey >= 0) {
+        currentChests[cKey].chestFound = true
+      } else {
+        chest.chestFound = true
         targets.sorterJob.newChests.push(chest)
       }
     })
 
-    return newChests
+    let detectedChestChanged = false
+
+    currentChests.forEach((c, cKey) => {
+      if (c.chestFound === false) {
+        currentChests.splice(cKey, 1)
+        detectedChestChanged = true
+      }
+    })
+
+    if (detectedChestChanged) {
+      console.log(currentChests)
+      botWebsocket.sendAction('setChests', targets.chests)
+    }
   }
 
   const customSortJobAddNewChestToCheck = (chest, isOpen, secondBlock) => {
