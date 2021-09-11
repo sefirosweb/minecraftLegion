@@ -50,7 +50,7 @@ function combatFunction (bot, targets) {
   let newTargetColdDown = Date.now()
 
   const filter = e => e.type === 'mob' &&
-    e.position.distanceTo(bot.entity.position) < 5 &&
+    e.position.distanceTo(bot.entity.position) < 10 &&
     e.mobType !== 'Armor Stand'
 
   const getGrades = function () {
