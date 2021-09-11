@@ -29,7 +29,7 @@ function pickUpItems (bot, targets) {
   const findChests = () => {
     pendingTransaction = []
     targets.chests.forEach((chest, chestIndex) => {
-      const items = targets.sorterJob.transactions.filter(c => c.fromChest === chestIndex)
+      const items = targets.pickUpItems.filter(c => c.fromChest === chestIndex)
       if (items.length > 0) {
         pendingTransaction.push({
           chest,

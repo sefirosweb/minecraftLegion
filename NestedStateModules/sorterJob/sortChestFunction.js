@@ -27,7 +27,7 @@ function sortChestFunction (bot, targets) {
   findItems.x = 525
   findItems.y = 263
 
-  const pickUpItems = require('@NestedStateModules/sorterJob/pickUpItems')(bot, targets)
+  const pickUpItems = require('@NestedStateModules/getReady/pickUpItems')(bot, targets)
   pickUpItems.stateName = 'Pick Up Items'
   pickUpItems.x = 525
   pickUpItems.y = 413
@@ -78,7 +78,7 @@ function sortChestFunction (bot, targets) {
       parent: checkChestsToSort,
       child: findItems,
       onTransition: () => {
-        targets.sorterJob.transactions = findItemsInChests(targets.chests, targets.sorterJob.slotsToSort, targets.sorterJob.correctChests)
+        targets.pickUpItems = findItemsInChests(targets.chests, targets.sorterJob.slotsToSort, targets.sorterJob.correctChests)
       },
       shouldTransition: () => true
     }),
