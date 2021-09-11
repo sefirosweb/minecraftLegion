@@ -99,11 +99,10 @@ function sorterJobFunction (bot, targets) {
     if (!isOpen) {
       if (
         /* Check if this chest closed is last chest closed by bot */
-        (!targets.sorterJob.chest ||
-          (
-            !chest.position.equals(targets.sorterJob.chest.position) &&
-            !(secondBlock && secondBlock.position.equals(targets.sorterJob.position))
-          )) &&
+        (
+          !targets.sorterJob.chest ||
+          !chest.position.equals(targets.sorterJob.chest.position)
+        ) &&
         /* Check if pending chest to open is in list */
         !targets.sorterJob.newChests.find(c => {
           if (vec3(c.position).equals(chest.position)) return true
