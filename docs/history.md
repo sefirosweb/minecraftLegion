@@ -8,6 +8,7 @@
 * Refactorized some code into folder
 * Refacotorized targets. Variables for custom variables (we have alot of variables, I start to sort this variables for each JOB) ex: targets.sorterJob, only "global" variables are on targets.XXX (example targets.movements)
 * Refactorize "getReady" + "Deposit" + "Withdraw" items now uses a "low level" of inventory, and have less bugs (inventory / chest full etc)
+* New "placeblock" system added, and fixed some bugs
 
 ## 1.1.0
 * Fixed bug with mineflater-inventory
