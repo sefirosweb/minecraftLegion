@@ -15,7 +15,6 @@ const BehaviorEatFood = require('@BehaviorModules/BehaviorEatFood')
 const BehaviorCustomPlaceBlock = require('@BehaviorModules/BehaviorCustomPlaceBlock')
 
 const mineflayerPathfinder = require('mineflayer-pathfinder')
-const Vec3 = require('vec3')
 
 // TODO pending double check
 const movingWhile = (bot, nextCurrentLayer) => {
@@ -54,7 +53,10 @@ const movingWhile = (bot, nextCurrentLayer) => {
   pathfinder.setGoal(goal)
 }
 
+let blockOffset
+
 function miningFunction (bot, targets) {
+  const { getOffsetPlaceBlock } = require('@modules/placeBlockModule')(bot)
   const placeBlocks = ['air', 'cave_air', 'lava', 'water']
   const blockForPlace = ['stone', 'cobblestone', 'dirt', 'andesite', 'diorite', 'granite']
 
@@ -100,11 +102,10 @@ function miningFunction (bot, targets) {
   moveToBlock2.y = 713
   moveToBlock2.movements = targets.movements
 
-  const placeBlock1 = new BehaviorCustomPlaceBlock(bot, targets)
-  placeBlock1.stateName = 'Place Block 1'
-  placeBlock1.x = 1025
-  placeBlock1.y = 713
-  placeBlock1.setOffset(Vec3(0, 1, 0))
+  const placeBlock = new BehaviorCustomPlaceBlock(bot, targets)
+  placeBlock.stateName = 'Place Block'
+  placeBlock.x = 1025
+  placeBlock.y = 713
 
   const minerChecks = new BehaviorMinerChecks(bot, targets)
   minerChecks.stateName = 'Miner Check'
@@ -230,14 +231,24 @@ function miningFunction (bot, targets) {
 
     new StateTransition({
       parent: mineBlock1,
-      child: placeBlock1,
+      child: placeBlock,
       name: '[Vertically] If down is liquid',
       shouldTransition: () => {
         const block = bot.blockAt(targets.position.offset(0, -1, 0))
         const item = bot.inventory.items().find(item => blockForPlace.includes(item.name))
         if (mineBlock1.isFinished() && placeBlocks.includes(block.name) && item && nextLayer.minerCords.tunel === 'vertically') {
           targets.item = item
-          targets.position = targets.position.offset(0, -2, 0)
+          targets.position = targets.position.offset(0, -1, 0)
+          blockOffset = getOffsetPlaceBlock(bot.blockAt(targets.position))
+          targets.position = targets.position.add(blockOffset)
+
+          blockOffset = {
+            x: blockOffset.x * -1,
+            y: blockOffset.y * -1,
+            z: blockOffset.z * -1
+          }
+
+          placeBlock.setOffset(blockOffset)
           return true
         }
 
@@ -269,13 +280,13 @@ function miningFunction (bot, targets) {
     }),
 
     new StateTransition({
-      parent: placeBlock1,
+      parent: placeBlock,
       child: moveToBlock2,
-      name: 'placeBlock1 -> moveToBlock2',
+      name: 'placeBlock -> moveToBlock2',
       onTransition: () => {
-        targets.position = targets.position.offset(0, 2, 0)
+        targets.position.add(blockOffset)
       },
-      shouldTransition: () => placeBlock1.isFinished() || placeBlock1.isItemNotFound() || placeBlock1.isCantPlaceBlock()
+      shouldTransition: () => placeBlock.isFinished() || placeBlock.isItemNotFound() || placeBlock.isCantPlaceBlock()
     }),
 
     new StateTransition({
