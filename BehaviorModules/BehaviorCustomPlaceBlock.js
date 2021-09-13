@@ -103,7 +103,7 @@ module.exports = class BehaviorCustomPlaceBlock {
       }
 
       if (
-        Math.floor(this.bot.entity.position.y) > blockOffset.position.y &&
+        Math.floor(this.bot.entity.position.y) === blockOffset.position.y &&
         this.bot.entity.position.distanceTo(blockOffset.position) < 1.8 &&
         this.isJumping === false &&
         this.canJump === true
