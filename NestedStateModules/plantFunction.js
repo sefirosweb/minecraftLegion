@@ -34,7 +34,7 @@ function plantFunction (bot, targets) {
       }
     }
 
-    targets.position = blockToPlant.position.offset(0, 1, 0)
+    targets.position = blockToPlant.position
     targets.block = blockToPlant
   }
 
@@ -99,6 +99,7 @@ function plantFunction (bot, targets) {
   placePlant.stateName = 'Place Plant'
   placePlant.x = 625
   placePlant.y = 113
+  placePlant.setOffset(Vec3(0, 1, 0))
 
   const fertilize = new BehaviorFertilize(bot, targets)
   fertilize.stateName = 'Fertilize'
@@ -187,9 +188,6 @@ function plantFunction (bot, targets) {
     new StateTransition({
       parent: goPlant,
       child: fertilize,
-      onTransition: () => {
-        targets.position = targets.position.offset(0, -1, 0)
-      },
       shouldTransition: () => goPlant.distanceToTarget() < 3 &&
         !plants[targets.plantArea.plant].plantIn.includes(blockToPlant.name) &&
         plants[targets.plantArea.plant].canPlantIn.includes(blockToPlant.name) &&
@@ -200,7 +198,6 @@ function plantFunction (bot, targets) {
       parent: fertilize,
       child: placePlant,
       onTransition: () => {
-        targets.position = targets.position.offset(0, 1, 0)
         if (targets.plantArea.plant === 'cactus') {
           placePlant.setCanJump(true)
         } else {

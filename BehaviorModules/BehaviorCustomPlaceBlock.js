@@ -29,6 +29,10 @@ module.exports = class BehaviorCustomPlaceBlock {
     this.canJump = canJump
   }
 
+  setOffset (offset) {
+    this.offset = offset
+  }
+
   onStateExited () {
     this.isEndFinished = false
     this.itemNotFound = false
@@ -40,7 +44,9 @@ module.exports = class BehaviorCustomPlaceBlock {
     this.timeLimit = setTimeout(() => {
       botWebsocket.log('Time exceded for place item')
       this.isEndFinished = true
-    }, 5000)
+    }, 7000)
+
+    const offset = this.offset
 
     this.isEndFinished = false
     this.itemNotFound = false
@@ -58,7 +64,7 @@ module.exports = class BehaviorCustomPlaceBlock {
       return
     }
 
-    const block = this.bot.blockAt(this.targets.position)
+    const block = this.bot.blockAt(this.targets.position.offset(offset.x, offset.y, offset.z))
 
     if (block == null) {
       botWebsocket.log('Cant find block')
@@ -80,19 +86,20 @@ module.exports = class BehaviorCustomPlaceBlock {
 
     this.equip()
       .then(() => {
-        this.placeBlock(block)
+        this.placeBlock(block, this.offset)
       })
   }
 
-  place () {
+  place (offset) {
     return new Promise((resolve, reject) => {
+      const blockOffset = this.bot.blockAt(this.targets.position.offset(offset.x, offset.y, offset.z))
       const block = this.bot.blockAt(this.targets.position)
-      if (block == null || block.name === this.targets.item.name) {
+      if (blockOffset == null || blockOffset.name === this.targets.item.name) {
         resolve(true)
         return
       }
 
-      if (!this.blockCanBeReplaced.includes(block.name)) {
+      if (!this.blockCanBeReplaced.includes(blockOffset.name)) {
         botWebsocket.log('Cant place block there!!')
         resolve(false)
         return
@@ -112,7 +119,7 @@ module.exports = class BehaviorCustomPlaceBlock {
       if (hand == null && hand.name !== this.targets.item.name) {
         this.equip()
           .then(() => {
-            this.place()
+            this.place(offset)
               .then(() => {
                 resolve()
               })
@@ -123,9 +130,10 @@ module.exports = class BehaviorCustomPlaceBlock {
         .then(() => {
           resolve()
         })
-        .catch(() => {
+        .catch((err) => {
+          console.log(err)
           setTimeout(function () {
-            this.place()
+            this.place(offset)
               .then(canBePlaced => {
                 resolve(canBePlaced)
               })
@@ -134,7 +142,7 @@ module.exports = class BehaviorCustomPlaceBlock {
     })
   }
 
-  placeBlock (block) {
+  placeBlock (block, offset) {
     // Jump if this on same position
     this.isJumping = false
     if (
@@ -146,7 +154,7 @@ module.exports = class BehaviorCustomPlaceBlock {
       this.isJumping = true
       this.bot.setControlState('jump', true)
     }
-    this.place()
+    this.place(offset)
       .then((canBePlaced) => {
         if (this.isJumping) {
           this.bot.setControlState('jump', false)
