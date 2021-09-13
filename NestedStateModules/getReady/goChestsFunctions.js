@@ -12,7 +12,7 @@ const BehaviorCheckItemsInInventory = require('@BehaviorModules/BehaviorCheckIte
 
 function goChestsFunction (bot, targets) {
   const { findItemsInChests } = require('@modules/sorterJob')(bot)
-  const { getResumeInventory } = require('@modules/inventoryModule')(bot)
+  const { getResumeInventory, getGenericItems } = require('@modules/inventoryModule')(bot)
 
   const start = new BehaviorIdle()
   start.stateName = 'Start'
@@ -81,7 +81,12 @@ function goChestsFunction (bot, targets) {
     const resumeInventory = getResumeInventory()
     const itemsToWithdrawInChests = getItemsToWithdrawInChests()
     const itemsToWithdraw = itemsToWithdrawInChests.reduce((returnData, i) => {
-      const invItem = resumeInventory.find(inv => inv.name.includes(i.item))
+      let invItem
+      if (getGenericItems().includes[i.item]) {
+        invItem = resumeInventory.find(inv => inv.name.includes(i.item))
+      } else {
+        invItem = resumeInventory.find(inv => inv.name === i.item)
+      }
       i.quantity = invItem ? i.quantity - invItem.quantity : i.quantity
       if (i.quantity > 0) returnData.push(i)
       return returnData
