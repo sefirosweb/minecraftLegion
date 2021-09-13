@@ -24,6 +24,7 @@ function startBot (botName, password) {
 const botsToStart = [
   { username: 'Farmer' },
   { username: 'Breeder' },
+  { username: 'Sorter' },
   { username: 'Guard1' },
   { username: 'Guard2' },
   { username: 'Guard3' }
