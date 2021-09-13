@@ -1,5 +1,4 @@
 const botWebsocket = require('@modules/botWebsocket')
-const vec3 = require('vec3')
 module.exports = class BehaviorCustomPlaceBlock {
   constructor (bot, targets, canJump = true) {
     this.bot = bot
@@ -46,8 +45,6 @@ module.exports = class BehaviorCustomPlaceBlock {
       this.isEndFinished = true
     }, 7000)
 
-    const offset = this.offset
-
     this.isEndFinished = false
     this.itemNotFound = false
     this.cantPlaceBlock = false
@@ -64,7 +61,7 @@ module.exports = class BehaviorCustomPlaceBlock {
       return
     }
 
-    const block = this.bot.blockAt(this.targets.position.offset(offset.x, offset.y, offset.z))
+    const block = this.bot.blockAt(this.targets.position.clone().add(this.offset))
 
     if (block == null) {
       botWebsocket.log('Cant find block')
@@ -86,13 +83,13 @@ module.exports = class BehaviorCustomPlaceBlock {
 
     this.equip()
       .then(() => {
-        this.placeBlock(block, this.offset)
+        this.placeBlock(block)
       })
   }
 
   place (offset) {
     return new Promise((resolve, reject) => {
-      const blockOffset = this.bot.blockAt(this.targets.position.offset(offset.x, offset.y, offset.z))
+      const blockOffset = this.bot.blockAt(this.targets.position.clone().add(this.offset))
       const block = this.bot.blockAt(this.targets.position)
       if (blockOffset == null || blockOffset.name === this.targets.item.name) {
         resolve(true)
@@ -106,8 +103,8 @@ module.exports = class BehaviorCustomPlaceBlock {
       }
 
       if (
-        Math.floor(this.bot.entity.position.y) > block.position.y &&
-        this.bot.entity.position.distanceTo(block.position) < 1.8 &&
+        Math.floor(this.bot.entity.position.y) > blockOffset.position.y &&
+        this.bot.entity.position.distanceTo(blockOffset.position) < 1.8 &&
         this.isJumping === false &&
         this.canJump === true
       ) {
@@ -119,21 +116,21 @@ module.exports = class BehaviorCustomPlaceBlock {
       if (hand == null && hand.name !== this.targets.item.name) {
         this.equip()
           .then(() => {
-            this.place(offset)
+            this.place()
               .then(() => {
                 resolve()
               })
           })
       }
 
-      this.bot.placeBlock(block, vec3(0, 1, 0))
+      this.bot.placeBlock(block, this.offset)
         .then(() => {
           resolve()
         })
         .catch((err) => {
           console.log(err)
           setTimeout(function () {
-            this.place(offset)
+            this.place()
               .then(canBePlaced => {
                 resolve(canBePlaced)
               })
@@ -142,7 +139,7 @@ module.exports = class BehaviorCustomPlaceBlock {
     })
   }
 
-  placeBlock (block, offset) {
+  placeBlock (block) {
     // Jump if this on same position
     this.isJumping = false
     if (
@@ -154,7 +151,7 @@ module.exports = class BehaviorCustomPlaceBlock {
       this.isJumping = true
       this.bot.setControlState('jump', true)
     }
-    this.place(offset)
+    this.place()
       .then((canBePlaced) => {
         if (this.isJumping) {
           this.bot.setControlState('jump', false)
