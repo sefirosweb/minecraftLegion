@@ -2,6 +2,7 @@ require('module-alias/register')
 const config = require('@config')
 const mineflayer = require('mineflayer')
 const botWebsocket = require('@modules/botWebsocket')
+const { customStart } = require('@config')
 
 console.log('Usage : node start_bot.js <botName> <botPassword>')
 let botName = process.argv[2]
@@ -42,8 +43,11 @@ function createNewBot (botName, botPassword = '') {
     botWebsocket.connect()
     botWebsocket.log('Ready!')
 
-    // const customStart = require('./custom_start/custom')(bot)
-    // await customStart.start()
+    if (customStart) {
+      const customStart = require('./custom_start/custom')(bot)
+      await customStart.start()
+    }
+
     require('@NestedStateModules/startStateMachine')(bot)
   })
 }
