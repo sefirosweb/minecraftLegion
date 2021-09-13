@@ -15,7 +15,13 @@ module.exports = function (bot) {
   }
 
   function countItemsInInventory (itemToCount) {
-    let currentItems = bot.inventory.items().filter(item => item.name.includes(itemToCount))
+    let currentItems
+    if (getGenericItems().includes(itemToCount)) {
+      currentItems = bot.inventory.items().filter(item => item.name.includes(itemToCount))
+    } else {
+      currentItems = bot.inventory.items().filter(item => item.name === itemToCount)
+    }
+
     currentItems = currentItems.map(x => x.count)
     currentItems = currentItems.reduce((total, num) => { return total + num }, 0)
     return currentItems
@@ -177,6 +183,10 @@ module.exports = function (bot) {
     return chests
   }
 
+  const getGenericItems = () => {
+    return ['helmet', 'chestplate', 'leggings', 'boots', 'sword', 'pickaxe', 'shovel', '_axe', 'hoe']
+  }
+
   return {
     countItemsInInventoryOrEquipped,
     countItemsInInventory,
@@ -184,6 +194,7 @@ module.exports = function (bot) {
     equipItem,
     getResumeInventory,
     findChests,
-    getSecondBlockPosition
+    getSecondBlockPosition,
+    getGenericItems
   }
 }
