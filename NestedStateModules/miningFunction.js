@@ -15,6 +15,7 @@ const BehaviorEatFood = require('@BehaviorModules/BehaviorEatFood')
 const BehaviorCustomPlaceBlock = require('@BehaviorModules/BehaviorCustomPlaceBlock')
 
 const mineflayerPathfinder = require('mineflayer-pathfinder')
+const vec3 = require('vec3')
 
 // TODO pending double check
 const movingWhile = (bot, nextCurrentLayer) => {
@@ -284,7 +285,7 @@ function miningFunction (bot, targets) {
       child: moveToBlock2,
       name: 'placeBlock -> moveToBlock2',
       onTransition: () => {
-        targets.position.add(blockOffset)
+        targets.position.add(blockOffset).add(vec3(0, 1, 0))
       },
       shouldTransition: () => placeBlock.isFinished() || placeBlock.isItemNotFound() || placeBlock.isCantPlaceBlock()
     }),
