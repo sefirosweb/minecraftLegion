@@ -15,6 +15,7 @@ const BehaviorEatFood = require('@BehaviorModules/BehaviorEatFood')
 const BehaviorCustomPlaceBlock = require('@BehaviorModules/BehaviorCustomPlaceBlock')
 
 const mineflayerPathfinder = require('mineflayer-pathfinder')
+const Vec3 = require('vec3')
 
 // TODO pending double check
 const movingWhile = (bot, nextCurrentLayer) => {
@@ -103,6 +104,7 @@ function miningFunction (bot, targets) {
   placeBlock1.stateName = 'Place Block 1'
   placeBlock1.x = 1025
   placeBlock1.y = 713
+  placeBlock1.setOffset(Vec3(0, 1, 0))
 
   const minerChecks = new BehaviorMinerChecks(bot, targets)
   minerChecks.stateName = 'Miner Check'
