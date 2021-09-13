@@ -6,7 +6,9 @@ module.exports = class BehaviorCheckItemsInInventory {
     this.isEndFinished = false
     this.itemsToCheck = itemsToCheck
     this.isDeposit = isDeposit
-    this.genericItems = ['helmet', 'chestplate', 'leggings', 'boots', 'sword', 'pickaxe', 'shovel', '_axe', 'hoe']
+
+    this.inventoryModule = require('@modules/inventoryModule')(this.bot)
+    this.genericItems = this.inventoryModule.getGenericItems()
   }
 
   setItemsToCheck (itemsToCheck) {
