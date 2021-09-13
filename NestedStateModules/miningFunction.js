@@ -237,7 +237,7 @@ function miningFunction (bot, targets) {
         const item = bot.inventory.items().find(item => blockForPlace.includes(item.name))
         if (mineBlock1.isFinished() && placeBlocks.includes(block.name) && item && nextLayer.minerCords.tunel === 'vertically') {
           targets.item = item
-          targets.position = targets.position.offset(0, -1, 0)
+          targets.position = targets.position.offset(0, -2, 0)
           return true
         }
 
@@ -273,7 +273,7 @@ function miningFunction (bot, targets) {
       child: moveToBlock2,
       name: 'placeBlock1 -> moveToBlock2',
       onTransition: () => {
-        targets.position = targets.position.offset(0, 1, 0)
+        targets.position = targets.position.offset(0, 2, 0)
       },
       shouldTransition: () => placeBlock1.isFinished() || placeBlock1.isItemNotFound() || placeBlock1.isCantPlaceBlock()
     }),
