@@ -4,6 +4,7 @@ const {
   NestedStateMachine
 } = require('mineflayer-statemachine')
 const BehaviorGetReady = require('@BehaviorModules/BehaviorGetReady')
+const BehaviorEquipAll = require('@BehaviorModules/BehaviorEquipAll')
 
 function getReadyFunction (bot, targets) {
   const start = new BehaviorIdle(targets)
@@ -13,7 +14,7 @@ function getReadyFunction (bot, targets) {
 
   const exit = new BehaviorIdle(targets)
   exit.stateName = 'Exit'
-  exit.x = 325
+  exit.x = 125
   exit.y = 313
 
   const goChests = require('@NestedStateModules/getReady/goChestsFunctions')(bot, targets)
@@ -24,6 +25,10 @@ function getReadyFunction (bot, targets) {
   getReady.stateName = 'Get Ready for Patrol'
   getReady.x = 525
   getReady.y = 113
+
+  const equipAll = new BehaviorEquipAll(bot, targets)
+  equipAll.x = 325
+  equipAll.y = 313
 
   const transitions = [
 
@@ -41,8 +46,14 @@ function getReadyFunction (bot, targets) {
 
     new StateTransition({
       parent: getReady,
-      child: exit,
+      child: equipAll,
       shouldTransition: () => getReady.getIsReady() && bot.inventory.items().length < 33
+    }),
+
+    new StateTransition({
+      parent: equipAll,
+      child: exit,
+      shouldTransition: () => equipAll.isFinished()
     }),
 
     new StateTransition({
