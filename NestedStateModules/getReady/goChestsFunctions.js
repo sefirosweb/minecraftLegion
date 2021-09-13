@@ -82,7 +82,7 @@ function goChestsFunction (bot, targets) {
     const itemsToWithdrawInChests = getItemsToWithdrawInChests()
     const itemsToWithdraw = itemsToWithdrawInChests.reduce((returnData, i) => {
       let invItem
-      if (getGenericItems().includes[i.item]) {
+      if (getGenericItems().includes(i.item)) {
         invItem = resumeInventory.find(inv => inv.name.includes(i.item))
       } else {
         invItem = resumeInventory.find(inv => inv.name === i.item)
