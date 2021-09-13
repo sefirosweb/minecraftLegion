@@ -1,4 +1,6 @@
 module.exports = function (bot) {
+  const { getGenericItems } = require('@modules/inventoryModule')(bot)
+
   const findItemsInChests = (chestInput, itemsInput, exclude) => {
     const chests = JSON.parse(JSON.stringify(chestInput))
     const items = JSON.parse(JSON.stringify(itemsInput))
@@ -26,7 +28,12 @@ module.exports = function (bot) {
               })
             }
           } else {
-            if (slot.name.includes(item.item) && slot.count > 0) {
+            if (
+              (
+                (
+                  getGenericItems().includes(item.item) && slot.name.includes(item.item)
+                ) || slot.name === item.item
+              ) && slot.count > 0) {
               const count = slot.count < item.quantity ? slot.count : item.quantity
               const slotCount = slot.count
               slot.count = 0
