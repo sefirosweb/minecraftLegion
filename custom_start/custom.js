@@ -3,6 +3,47 @@ const { sleep } = require('@modules/utils')
 module.exports = (bot) => {
   const start = async () => {
     // Login
+    bot.chat('/login legion')
+    await sleep(500)
+
+    await goPosition()
+
+    await sleep(500)
+
+    // Click To
+    const filter = e => e.type === 'player' && e.position.distanceTo(bot.entity.position) < 3
+    const entity = bot.nearestEntity(filter)
+    if (entity) { bot.useOn(entity) }
+    await sleep(500)
+  }
+
+  const goPosition = () => {
+    const mcData = require('minecraft-data')(bot.version)
+    const { pathfinder, Movements, goals } = require('mineflayer-pathfinder')
+    bot.loadPlugin(pathfinder)
+    bot.pathfinder.setMovements(new Movements(bot, mcData))
+    bot.pathfinder.setGoal(new goals.GoalBlock(37, 51, 11))
+
+    return new Promise(resolve => {
+      bot.on('goal_reached', (goal) => {
+        resolve()
+      })
+    })
+  }
+
+  return {
+    start
+  }
+}
+
+/*
+OLD
+
+const { sleep } = require('@modules/utils')
+
+module.exports = (bot) => {
+  const start = async () => {
+    // Login
     bot.chat('/login XXX')
     await sleep(500)
 
@@ -37,3 +78,4 @@ module.exports = (bot) => {
     start
   }
 }
+*/
