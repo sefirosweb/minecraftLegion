@@ -1,8 +1,7 @@
 require('module-alias/register')
-const config = require('@config')
 const mineflayer = require('mineflayer')
 const botWebsocket = require('@modules/botWebsocket')
-const { customStart } = require('@config')
+const { server, port, customStart } = require('@config')
 
 console.log('Usage : node start_bot.js <botName> <botPassword>')
 let botName = process.argv[2]
@@ -16,8 +15,8 @@ createNewBot(botName, botPassword)
 function createNewBot (botName, botPassword = '') {
   const bot = mineflayer.createBot({
     username: botName,
-    host: config.server,
-    port: config.port
+    host: server,
+    port: port
   })
 
   botWebsocket.loadBot(bot)
