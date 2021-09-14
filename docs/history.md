@@ -1,3 +1,5 @@
+## 1.2.1
+* Add button for clear all positions of Guard
 ## 1.2.0
 * Added Sorter Job
   * This job search nearest chest and they sort them automatically
