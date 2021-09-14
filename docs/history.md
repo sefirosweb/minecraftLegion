@@ -2,6 +2,7 @@
 * Add button for clear all positions of Guard
 * Refactorized breederJob
 * Refactorized farmerJob
+* Added auto restart if bot disconnects
 ## 1.2.0
 * Added Sorter Job
   * This job search nearest chest and they sort them automatically

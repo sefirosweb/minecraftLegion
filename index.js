@@ -1,4 +1,5 @@
 require('module-alias/register')
+const { autoRestart } = require('@config')
 const cp = require('child_process')
 const path = require('path')
 
@@ -13,6 +14,9 @@ function startBot (botName, password) {
 
     if (stdout) {
       console.log(`Stdout: ${stdout}`)
+      if (autoRestart) {
+        startBot(botName, password)
+      }
     }
 
     if (stderr) {
@@ -22,13 +26,14 @@ function startBot (botName, password) {
 }
 
 const botsToStart = [
-  { username: 'Farmer' },
-  { username: 'Breeder' },
-  { username: 'Sorter' },
-  { username: 'Guard1' },
-  { username: 'Guard2' },
-  { username: 'Guard3' },
-  { username: 'Miner' }
+  { username: 'Sephi' }
+  // { username: 'Farmer' },
+  // { username: 'Breeder' },
+  // { username: 'Sorter' },
+  // { username: 'Guard1' },
+  // { username: 'Guard2' },
+  // { username: 'Guard3' },
+  // { username: 'Miner' }
   // { username: 'Miner5' },
   // { username: 'Guard1' }
   // { username: 'Guard2' },

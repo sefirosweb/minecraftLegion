@@ -6,6 +6,7 @@ const config = {
   webServerPort: '4001', // minecraftLegionWebServer PORT
   webServerPassword: 'admin', // password for websocket
   debugMode: false,
-  customStart: false
+  customStart: false,
+  autoRestart: true
 }
 module.exports = config
