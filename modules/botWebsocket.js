@@ -135,6 +135,9 @@ function connect () {
         patrol.splice(config.value, 1)
         botconfig.setPatrol(bot.username, patrol)
         break
+      case 'clearAllPositions':
+        botconfig.setPatrol(bot.username, [])
+        break
       case 'copyPatrol':
         findMaster = bot.nearestEntity(e => e.type === 'player' && e.username === config.value && e.mobType !== 'Armor Stand')
         if (!findMaster) {
