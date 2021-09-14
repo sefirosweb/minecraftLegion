@@ -60,11 +60,11 @@ function slaughterhouseFunction (bot, targets) {
   }
 
   const removeAnimal = () => {
-    const animalId = targets.breededAnimals.findIndex(b => {
+    const animalId = targets.breederJob.breededAnimals.findIndex(b => {
       return b.id === targets.entity.id
     })
     if (animalId >= 0) {
-      targets.breededAnimals.splice(animalId, 1)
+      targets.breederJob.breededAnimals.splice(animalId, 1)
     }
   }
 

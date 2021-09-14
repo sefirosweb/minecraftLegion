@@ -36,7 +36,7 @@ function startWorkFunction (bot, targets) {
   farmerJob.x = 325
   farmerJob.y = 350
 
-  const breederJob = require('@NestedStateModules/breederJobFunction')(bot, targets)
+  const breederJob = require('@NestedStateModules/breederJob/breederJobFunction')(bot, targets)
   breederJob.x = 135
   breederJob.y = 320
 

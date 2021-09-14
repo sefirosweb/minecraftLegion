@@ -10,7 +10,6 @@ const BehaviorInteractEntity = require('@BehaviorModules/BehaviorInteractEntity'
 const animalType = require('@modules/animalType')
 
 function feedAnimalFunction (bot, targets) {
-  targets.breededAnimals = []
   const mcData = require('minecraft-data')(bot.version)
 
   const start = new BehaviorIdle(targets)
@@ -44,8 +43,9 @@ function feedAnimalFunction (bot, targets) {
       parent: start,
       child: equip,
       onTransition: () => {
+        targets.breederJob.breededAnimals = []
         // Select item to give food
-        const validFoods = animalType[targets.feedEntity.name].foods
+        const validFoods = animalType[targets.breederJob.feedEntity.name].foods
         const validFood = bot.inventory.items().find(item => validFoods.includes(item.name))
         if (validFood) {
           targets.item = mcData.itemsByName[validFood.name]
@@ -60,7 +60,7 @@ function feedAnimalFunction (bot, targets) {
       parent: equip,
       child: followAnimal,
       onTransition: () => {
-        targets.entity = targets.feedEntity
+        targets.entity = targets.breederJob.feedEntity
       },
       shouldTransition: () => equip.isFinished() && equip.isWasEquipped()
     }),
@@ -75,11 +75,11 @@ function feedAnimalFunction (bot, targets) {
       parent: followAnimal,
       child: exit,
       onTransition: () => {
-        const animalId = targets.breededAnimals.findIndex(b => {
-          return b.id === targets.feedEntity.id
+        const animalId = targets.breederJob.breededAnimals.findIndex(b => {
+          return b.id === targets.breederJob.feedEntity.id
         })
         if (animalId >= 0) {
-          targets.breededAnimals.splice(animalId, 1)
+          targets.breederJob.breededAnimals.splice(animalId, 1)
         }
       },
       shouldTransition: () => {
@@ -91,7 +91,7 @@ function feedAnimalFunction (bot, targets) {
       parent: followAnimal,
       child: interactEntity,
       onTransition: () => {
-        targets.interactEntity = targets.feedEntity
+        targets.interactEntity = targets.breederJob.feedEntity
       },
       shouldTransition: () => targets.entity && followAnimal.distanceToTarget() < 2 && targets.entity.isValid
     }),
@@ -100,12 +100,12 @@ function feedAnimalFunction (bot, targets) {
       parent: interactEntity,
       child: exit,
       onTransition: () => {
-        const animalId = targets.breededAnimals.findIndex(b => {
-          return b.id === targets.feedEntity.id
+        const animalId = targets.breederJob.breededAnimals.findIndex(b => {
+          return b.id === targets.breederJob.feedEntity.id
         })
 
         if (animalId >= 0) {
-          targets.breededAnimals[animalId].breededDate = Date.now()
+          targets.breederJob.breededAnimals[animalId].breededDate = Date.now()
         }
 
         targets.interactEntity = null

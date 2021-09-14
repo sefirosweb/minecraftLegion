@@ -9,8 +9,6 @@ const animalType = require('@modules/animalType')
 const animalTypes = Object.keys(animalType)
 
 function breederFunction (bot, targets) {
-  targets.breededAnimals = []
-
   const start = new BehaviorIdle(targets)
   start.stateName = 'Start'
   start.x = 125
@@ -31,7 +29,7 @@ function breederFunction (bot, targets) {
   checkFarmAreas.x = 325
   checkFarmAreas.y = 263
 
-  const feedAnimal = require('@NestedStateModules/feedAnimalFunction')(bot, targets)
+  const feedAnimal = require('@NestedStateModules/breederJob/feedAnimalFunction')(bot, targets)
   feedAnimal.stateName = 'Feed'
   feedAnimal.x = 325
   feedAnimal.y = 413
@@ -40,7 +38,7 @@ function breederFunction (bot, targets) {
     const animalsToFeed = []
     let xStart, xEnd, zStart, zEnd, yStart, yEnd
 
-    targets.farmAreas.forEach(area => {
+    targets.breederJob.farmAreas.forEach(area => {
       xStart = area.xStart > area.xEnd ? area.xEnd : area.xStart
       xEnd = area.xStart > area.xEnd ? area.xStart : area.xEnd
       zStart = area.zStart > area.zEnd ? area.zEnd : area.zStart
@@ -57,19 +55,19 @@ function breederFunction (bot, targets) {
           entity.position.y >= yStart && entity.position.y <= yEnd &&
           entity.position.z >= zStart && entity.position.z <= zEnd
         ) {
-          const animalId = targets.breededAnimals.findIndex(b => {
+          const animalId = targets.breederJob.breededAnimals.findIndex(b => {
             return b.id === entity.id
           })
 
           if (animalId >= 0) {
             if (
-              !targets.breededAnimals[animalId].breededDate ||
-              Date.now() - targets.breededAnimals[animalId].breededDate > targets.farmAnimal.seconds * 1000
+              !targets.breederJob.breededAnimals[animalId].breededDate ||
+              Date.now() - targets.breederJob.breededAnimals[animalId].breededDate > targets.breederJob.farmAnimal.seconds * 1000
             ) {
-              animalsToFeed.push(targets.breededAnimals[animalId])
+              animalsToFeed.push(targets.breederJob.breededAnimals[animalId])
             }
           } else {
-            targets.breededAnimals.push(entity)
+            targets.breederJob.breededAnimals.push(entity)
             animalsToFeed.push(entity)
           }
         }
@@ -82,6 +80,9 @@ function breederFunction (bot, targets) {
     new StateTransition({
       parent: start,
       child: loadConfig,
+      onTransition: () => {
+        targets.breederJob.breededAnimals = []
+      },
       shouldTransition: () => true
     }),
 
@@ -89,9 +90,9 @@ function breederFunction (bot, targets) {
       parent: loadConfig,
       child: checkFarmAreas,
       onTransition: () => {
-        targets.farmAnimal = loadConfig.getFarmAnimal()
-        targets.farmAreas = loadConfig.getFarmAreas()
-        targets.animalsToBeFeed = getAnimalsToBeFeed()
+        targets.breederJob.farmAnimal = loadConfig.getFarmAnimal()
+        targets.breederJob.farmAreas = loadConfig.getFarmAreas()
+        targets.breederJob.animalsToBeFeed = getAnimalsToBeFeed()
       },
       shouldTransition: () => true
     }),
@@ -100,31 +101,31 @@ function breederFunction (bot, targets) {
       parent: checkFarmAreas,
       child: feedAnimal,
       onTransition: () => {
-        targets.feedEntity = targets.animalsToBeFeed.shift()
+        targets.breederJob.feedEntity = targets.breederJob.animalsToBeFeed.shift()
       },
-      shouldTransition: () => targets.animalsToBeFeed.length > 0
+      shouldTransition: () => targets.breederJob.animalsToBeFeed.length > 0
     }),
 
     new StateTransition({
       parent: checkFarmAreas,
       child: exit,
-      shouldTransition: () => targets.animalsToBeFeed.length === 0
+      shouldTransition: () => targets.breederJob.animalsToBeFeed.length === 0
     }),
 
     new StateTransition({
       parent: feedAnimal,
       child: exit,
-      shouldTransition: () => feedAnimal.isFinished() && targets.animalsToBeFeed.length === 0
+      shouldTransition: () => feedAnimal.isFinished() && targets.breederJob.animalsToBeFeed.length === 0
     }),
 
     new StateTransition({
       parent: feedAnimal,
       child: feedAnimal,
       onTransition: () => {
-        targets.feedEntity = targets.animalsToBeFeed.shift()
+        targets.breederJob.feedEntity = targets.breederJob.animalsToBeFeed.shift()
       },
       shouldTransition: () => {
-        return feedAnimal.isFinished() && targets.animalsToBeFeed.length > 0
+        return feedAnimal.isFinished() && targets.breederJob.animalsToBeFeed.length > 0
       }
     })
 

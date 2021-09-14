@@ -17,12 +17,12 @@ function breederJobFunction (bot, targets) {
   getReady.x = 125
   getReady.y = 213
 
-  const breeder = require('@NestedStateModules/breederFunction')(bot, targets)
+  const breeder = require('@NestedStateModules/breederJob/breederFunction')(bot, targets)
   breeder.stateName = 'Breeder'
   breeder.x = 525
   breeder.y = 313
 
-  const slaughterhouse = require('@NestedStateModules/slaughterhouseFunction')(bot, targets)
+  const slaughterhouse = require('@NestedStateModules/breederJob/slaughterhouseFunction')(bot, targets)
   slaughterhouse.stateName = 'Slaughterhouse'
   slaughterhouse.x = 525
   slaughterhouse.y = 213

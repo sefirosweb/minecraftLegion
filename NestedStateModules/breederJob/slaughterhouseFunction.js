@@ -5,8 +5,6 @@ const {
 } = require('mineflayer-statemachine')
 
 function slaughterhouseFunction (bot, targets) {
-  targets.breededAnimals = []
-
   const start = new BehaviorIdle(targets)
   start.stateName = 'Start'
   start.x = 125
@@ -22,7 +20,7 @@ function slaughterhouseFunction (bot, targets) {
   check.x = 325
   check.y = 113
 
-  const slaughter = require('@NestedStateModules/slaughterFunction')(bot, targets)
+  const slaughter = require('@NestedStateModules/breederJob/slaughterFunction')(bot, targets)
   slaughter.stateName = 'Slaughter'
   slaughter.x = 325
   slaughter.y = 263
@@ -32,9 +30,9 @@ function slaughterhouseFunction (bot, targets) {
   const getSpareAnimals = () => {
     const spareAnimals = []
     let spare
-    Object.keys(targets.farmAnimal).forEach(animalName => {
-      const animalQuantity = targets.farmAnimal[animalName]
-      spare = targets.breededAnimals.filter(e => {
+    Object.keys(targets.breederJob.farmAnimal).forEach(animalName => {
+      const animalQuantity = targets.breederJob.farmAnimal[animalName]
+      spare = targets.breederJob.breededAnimals.filter(e => {
         return e.name === animalName
       })
       if (spare.length > animalQuantity) {
@@ -51,6 +49,7 @@ function slaughterhouseFunction (bot, targets) {
       parent: start,
       child: check,
       onTransition: () => {
+        targets.breederJob.breededAnimals = []
         animalsToKill = getSpareAnimals()
       },
       shouldTransition: () => true
