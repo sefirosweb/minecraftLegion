@@ -35,12 +35,12 @@ function farmingFunction (bot, targets) {
   nextArea.x = 325
   nextArea.y = 250
 
-  const farmingPlantsFunction = require('@NestedStateModules/farmingPlantsFunction')(bot, targets)
+  const farmingPlantsFunction = require('@NestedStateModules/farmerJob/farmingPlantsFunction')(bot, targets)
   farmingPlantsFunction.stateName = 'Farm Plants'
   farmingPlantsFunction.x = 125
   farmingPlantsFunction.y = 350
 
-  const farmingTreesFunction = require('@NestedStateModules/farmingTreesFunction')(bot, targets)
+  const farmingTreesFunction = require('@NestedStateModules/farmerJob/farmingTreesFunction')(bot, targets)
   farmingTreesFunction.stateName = 'Farm Trees'
   farmingTreesFunction.x = 525
   farmingTreesFunction.y = 350
@@ -114,7 +114,7 @@ function farmingFunction (bot, targets) {
       parent: checkFarmingAreas,
       child: farmingPlantsFunction,
       onTransition: () => {
-        targets.plantArea = plantArea[plantAreaIndex]
+        targets.farmerJob.plantArea = plantArea[plantAreaIndex]
       },
       shouldTransition: () => plants[plantArea[plantAreaIndex].plant].harvestMode === 'massive' && bot.inventory.items().length < 33
     }),
@@ -125,7 +125,7 @@ function farmingFunction (bot, targets) {
       parent: checkFarmingAreas,
       child: farmingTreesFunction,
       onTransition: () => {
-        targets.plantArea = plantArea[plantAreaIndex]
+        targets.farmerJob.plantArea = plantArea[plantAreaIndex]
       },
       shouldTransition: () => plants[plantArea[plantAreaIndex].plant].harvestMode === 'onebyone' && bot.inventory.items().length < 33
     }),

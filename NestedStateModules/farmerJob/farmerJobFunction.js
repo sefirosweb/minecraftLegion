@@ -22,7 +22,7 @@ function farmerJobFunction (bot, targets) {
   goChests.x = 325
   goChests.y = 213
 
-  const farming = require('@NestedStateModules/farmingFunction')(bot, targets)
+  const farming = require('@NestedStateModules/farmerJob/farmingFunction')(bot, targets)
   farming.stateName = 'Farming'
   farming.x = 325
   farming.y = 313

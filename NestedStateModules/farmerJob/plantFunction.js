@@ -24,12 +24,12 @@ function plantFunction (bot, targets) {
       return
     }
 
-    targets.item = bot.inventory.items().find(item => plants[targets.plantArea.plant].seed === item.name)
-    if (!targets.item && ['melon', 'pumpkin'].includes(targets.plantArea.plant)) {
-      const ingredient = bot.inventory.items().find(item => plants[targets.plantArea.plant].craftedBy === item.name)
+    targets.item = bot.inventory.items().find(item => plants[targets.farmerJob.plantArea.plant].seed === item.name)
+    if (!targets.item && ['melon', 'pumpkin'].includes(targets.farmerJob.plantArea.plant)) {
+      const ingredient = bot.inventory.items().find(item => plants[targets.farmerJob.plantArea.plant].craftedBy === item.name)
       if (ingredient) {
         targets.craftItem = {
-          name: plants[targets.plantArea.plant].seed
+          name: plants[targets.farmerJob.plantArea.plant].seed
         }
       }
     }
@@ -39,12 +39,12 @@ function plantFunction (bot, targets) {
   }
 
   function getBlockCanPlant () {
-    const xStart = targets.plantArea.xStart < targets.plantArea.xEnd ? targets.plantArea.xStart : targets.plantArea.xEnd
-    const xEnd = targets.plantArea.xStart > targets.plantArea.xEnd ? targets.plantArea.xStart : targets.plantArea.xEnd
-    const zStart = targets.plantArea.zStart < targets.plantArea.zEnd ? targets.plantArea.zStart : targets.plantArea.zEnd
-    const zEnd = targets.plantArea.zStart > targets.plantArea.zEnd ? targets.plantArea.zStart : targets.plantArea.zEnd
-    const yLayer = targets.plantArea.yLayer
-    const plant = targets.plantArea.plant
+    const xStart = targets.farmerJob.plantArea.xStart < targets.farmerJob.plantArea.xEnd ? targets.farmerJob.plantArea.xStart : targets.farmerJob.plantArea.xEnd
+    const xEnd = targets.farmerJob.plantArea.xStart > targets.farmerJob.plantArea.xEnd ? targets.farmerJob.plantArea.xStart : targets.farmerJob.plantArea.xEnd
+    const zStart = targets.farmerJob.plantArea.zStart < targets.farmerJob.plantArea.zEnd ? targets.farmerJob.plantArea.zStart : targets.farmerJob.plantArea.zEnd
+    const zEnd = targets.farmerJob.plantArea.zStart > targets.farmerJob.plantArea.zEnd ? targets.farmerJob.plantArea.zStart : targets.farmerJob.plantArea.zEnd
+    const yLayer = targets.farmerJob.plantArea.yLayer
+    const plant = targets.farmerJob.plantArea.plant
     const type = plants[plant].type
     const marginPlant = plants[plant].marginPlant
     const blocksForPlant = plants[plant].canPlantIn
@@ -169,14 +169,14 @@ function plantFunction (bot, targets) {
       parent: goPlant,
       child: placePlant,
       onTransition: () => {
-        if (targets.plantArea.plant === 'cactus') {
+        if (targets.farmerJob.plantArea.plant === 'cactus') {
           placePlant.setCanJump(true)
         } else {
           placePlant.setCanJump(false)
         }
       },
       shouldTransition: () => goPlant.distanceToTarget() < 3 &&
-        plants[targets.plantArea.plant].plantIn.includes(blockToPlant.name)
+        plants[targets.farmerJob.plantArea.plant].plantIn.includes(blockToPlant.name)
     }),
 
     new StateTransition({
@@ -189,8 +189,8 @@ function plantFunction (bot, targets) {
       parent: goPlant,
       child: fertilize,
       shouldTransition: () => goPlant.distanceToTarget() < 3 &&
-        !plants[targets.plantArea.plant].plantIn.includes(blockToPlant.name) &&
-        plants[targets.plantArea.plant].canPlantIn.includes(blockToPlant.name) &&
+        !plants[targets.farmerJob.plantArea.plant].plantIn.includes(blockToPlant.name) &&
+        plants[targets.farmerJob.plantArea.plant].canPlantIn.includes(blockToPlant.name) &&
         dirtCanBefertilized.includes(blockToPlant.name)
     }),
 
@@ -198,7 +198,7 @@ function plantFunction (bot, targets) {
       parent: fertilize,
       child: placePlant,
       onTransition: () => {
-        if (targets.plantArea.plant === 'cactus') {
+        if (targets.farmerJob.plantArea.plant === 'cactus') {
           placePlant.setCanJump(true)
         } else {
           placePlant.setCanJump(false)

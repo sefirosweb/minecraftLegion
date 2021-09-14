@@ -69,12 +69,12 @@ function harvestFunction (bot, targets) {
   const { plants } = require('@modules/plantType')
 
   function getPlantBlock () {
-    const xStart = targets.plantArea.xStart < targets.plantArea.xEnd ? targets.plantArea.xStart : targets.plantArea.xEnd
-    const xEnd = targets.plantArea.xStart > targets.plantArea.xEnd ? targets.plantArea.xStart : targets.plantArea.xEnd
-    const zStart = targets.plantArea.zStart < targets.plantArea.zEnd ? targets.plantArea.zStart : targets.plantArea.zEnd
-    const zEnd = targets.plantArea.zStart > targets.plantArea.zEnd ? targets.plantArea.zStart : targets.plantArea.zEnd
-    const yLayer = targets.plantArea.yLayer + 1
-    const plant = targets.plantArea.plant
+    const xStart = targets.farmerJob.plantArea.xStart < targets.farmerJob.plantArea.xEnd ? targets.farmerJob.plantArea.xStart : targets.farmerJob.plantArea.xEnd
+    const xEnd = targets.farmerJob.plantArea.xStart > targets.farmerJob.plantArea.xEnd ? targets.farmerJob.plantArea.xStart : targets.farmerJob.plantArea.xEnd
+    const zStart = targets.farmerJob.plantArea.zStart < targets.farmerJob.plantArea.zEnd ? targets.farmerJob.plantArea.zStart : targets.farmerJob.plantArea.zEnd
+    const zEnd = targets.farmerJob.plantArea.zStart > targets.farmerJob.plantArea.zEnd ? targets.farmerJob.plantArea.zStart : targets.farmerJob.plantArea.zEnd
+    const yLayer = targets.farmerJob.plantArea.yLayer + 1
+    const plant = targets.farmerJob.plantArea.plant
     const plantName = plants[plant].plantName
     const type = plants[plant].type
     const age = plants[plant].age
@@ -175,9 +175,9 @@ function harvestFunction (bot, targets) {
       child: harvestPlant,
       onTransition: () => {
         targets.position = targets.digBlock.position.clone()
-        // botWebsocket.log(`Error on go to plant ${targets.plantArea.plant}`)
+        // botWebsocket.log(`Error on go to plant ${targets.farmerJob.plantArea.plant}`)
       },
-      shouldTransition: () => bot.canDigBlock(targets.digBlock) && !bot.pathfinder.isMining() && targets.plantArea.plant !== 'sweet_berries'
+      shouldTransition: () => bot.canDigBlock(targets.digBlock) && !bot.pathfinder.isMining() && targets.farmerJob.plantArea.plant !== 'sweet_berries'
     }),
 
     new StateTransition({
@@ -186,14 +186,14 @@ function harvestFunction (bot, targets) {
       onTransition: () => {
         targets.position = targets.digBlock.position.clone()
       },
-      shouldTransition: () => bot.canDigBlock(targets.digBlock) && bot.canSeeBlock(targets.digBlock) && !bot.pathfinder.isMining() && targets.plantArea.plant === 'sweet_berries'
+      shouldTransition: () => bot.canDigBlock(targets.digBlock) && bot.canSeeBlock(targets.digBlock) && !bot.pathfinder.isMining() && targets.farmerJob.plantArea.plant === 'sweet_berries'
     }),
 
     new StateTransition({
       parent: goPlant,
       child: exit,
       onTransition:() => {
-        botWebsocket.log(`Error on go to plant ${targets.plantArea.plant}`)
+        botWebsocket.log(`Error on go to plant ${targets.farmerJob.plantArea.plant}`)
       },
       shouldTransition: () => goPlant.isFinished() && !goPlant.isSuccess()
     }),

@@ -25,12 +25,12 @@ function farmingTreesFunction (bot, targets) {
   checkFarmingAreas.x = 525
   checkFarmingAreas.y = 113
 
-  const plant = require('@NestedStateModules/plantFunction')(bot, targets)
+  const plant = require('@NestedStateModules/farmerJob/plantFunction')(bot, targets)
   plant.stateName = 'Plant'
   plant.x = 725
   plant.y = 313
 
-  const harvest = require('@NestedStateModules/harvestFunction')(bot, targets)
+  const harvest = require('@NestedStateModules/farmerJob/harvestFunction')(bot, targets)
   harvest.stateName = 'Harvest'
   harvest.x = 325
   harvest.y = 313
@@ -53,10 +53,10 @@ function farmingTreesFunction (bot, targets) {
       finished = true
     }
 
-    targets.plantArea.xStart = xCurrent
-    targets.plantArea.xEnd = xCurrent
-    targets.plantArea.zStart = zCurrent
-    targets.plantArea.zEnd = zCurrent
+    targets.farmerJob.plantArea.xStart = xCurrent
+    targets.farmerJob.plantArea.xEnd = xCurrent
+    targets.farmerJob.plantArea.zStart = zCurrent
+    targets.farmerJob.plantArea.zEnd = zCurrent
   }
 
   const transitions = [
@@ -65,18 +65,18 @@ function farmingTreesFunction (bot, targets) {
       parent: start,
       child: selectTree,
       onTransition: () => {
-        xStart = targets.plantArea.xStart < targets.plantArea.xEnd ? targets.plantArea.xStart : targets.plantArea.xEnd
-        xEnd = targets.plantArea.xStart > targets.plantArea.xEnd ? targets.plantArea.xStart : targets.plantArea.xEnd
-        zStart = targets.plantArea.zStart < targets.plantArea.zEnd ? targets.plantArea.zStart : targets.plantArea.zEnd
-        zEnd = targets.plantArea.zStart > targets.plantArea.zEnd ? targets.plantArea.zStart : targets.plantArea.zEnd
+        xStart = targets.farmerJob.plantArea.xStart < targets.farmerJob.plantArea.xEnd ? targets.farmerJob.plantArea.xStart : targets.farmerJob.plantArea.xEnd
+        xEnd = targets.farmerJob.plantArea.xStart > targets.farmerJob.plantArea.xEnd ? targets.farmerJob.plantArea.xStart : targets.farmerJob.plantArea.xEnd
+        zStart = targets.farmerJob.plantArea.zStart < targets.farmerJob.plantArea.zEnd ? targets.farmerJob.plantArea.zStart : targets.farmerJob.plantArea.zEnd
+        zEnd = targets.farmerJob.plantArea.zStart > targets.farmerJob.plantArea.zEnd ? targets.farmerJob.plantArea.zStart : targets.farmerJob.plantArea.zEnd
         xCurrent = xStart
         zCurrent = zStart
         finished = false
 
-        targets.plantArea.xStart = xCurrent
-        targets.plantArea.xEnd = xCurrent
-        targets.plantArea.zStart = zCurrent
-        targets.plantArea.zEnd = zCurrent
+        targets.farmerJob.plantArea.xStart = xCurrent
+        targets.farmerJob.plantArea.xEnd = xCurrent
+        targets.farmerJob.plantArea.zStart = zCurrent
+        targets.farmerJob.plantArea.zEnd = zCurrent
       },
       shouldTransition: () => true
     }),
