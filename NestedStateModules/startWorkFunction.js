@@ -28,7 +28,7 @@ function startWorkFunction (bot, targets) {
   guardJob.x = 525
   guardJob.y = 313
 
-  const archerJob = require('@NestedStateModules/archerJobFunction')(bot, targets)
+  const archerJob = require('@NestedStateModules/archerJob/archerJobFunction')(bot, targets)
   archerJob.x = 525
   archerJob.y = 113
 
