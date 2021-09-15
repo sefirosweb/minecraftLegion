@@ -1,28 +1,8 @@
-version: "3.8"
+version: "3"
 
 services:
   app:
-    container_name: minecraftlegion
-    image: minecraftlegion
-    environment:
-      MONGO_URL: "mongodb://database:27017/botConfigDatabase"
-    depends_on:
-      - database
-      - server
-      - web
-
-  database:
-    container_name: minecraftlegiondatabase
-    image: mongo
-    ports:
-      - "27017:27017"
-  server:
-    container_name: minecraftlegionwebserver
-    image: minecraftlegionwebserver
-    ports:
-      - "4001:4001"
-  web:
-    container_name: minecraftlegionwebclient
-    image: minecraftlegionwebclient
-    ports:
-      - "3000:3000"
+    build:
+            context: .
+            dockerfile: Dockerfile
+    image: minecraftlegion:latest
