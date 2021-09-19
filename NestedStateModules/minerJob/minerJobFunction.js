@@ -16,7 +16,7 @@ function minerJobFunction (bot, targets) {
   eatFood.x = 325
   eatFood.y = 113
 
-  const miningFunction = require('@NestedStateModules/miningFunction')(bot, targets)
+  const miningFunction = require('@NestedStateModules/minerJob/miningFunction')(bot, targets)
   miningFunction.x = 125
   miningFunction.y = 213
 
