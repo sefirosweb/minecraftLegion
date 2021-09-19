@@ -52,15 +52,7 @@ function fillFunction (bot, targets) {
   const transitions = [
     new StateTransition({
       parent: start,
-      child: loadConfig,
-      name: 'start -> loadConfig',
-      shouldTransition: () => true
-    }),
-
-    new StateTransition({
-      parent: loadConfig,
       child: moveToBlock,
-      name: 'loadConfig -> moveToBlock',
       shouldTransition: () => true
     }),
 
