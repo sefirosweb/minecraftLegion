@@ -20,7 +20,7 @@ function depositItems (bot, targets) {
   startCheckNextChest.x = 125
   startCheckNextChest.y = 263
 
-  const goAndDeposit = require('@NestedStateModules/goAndDeposit')(bot, targets)
+  const goAndDeposit = require('@NestedStateModules/getReady/goAndDeposit')(bot, targets)
   goAndDeposit.stateName = 'Go chest and Deposit'
   goAndDeposit.x = 125
   goAndDeposit.y = 413

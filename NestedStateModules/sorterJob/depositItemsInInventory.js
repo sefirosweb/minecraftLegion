@@ -20,7 +20,7 @@ function depositItemsInInventory (bot, targets) {
   exit.x = 325
   exit.y = 213
 
-  const goAndDeposit = require('@NestedStateModules/goAndDeposit')(bot, targets)
+  const goAndDeposit = require('@NestedStateModules/getReady/goAndDeposit')(bot, targets)
   goAndDeposit.stateName = 'Go chest and Deposit'
   goAndDeposit.x = 125
   goAndDeposit.y = 313

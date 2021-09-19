@@ -26,7 +26,7 @@
     },
     "scripts": {
         "start": "nodemon index.js --ignore botConfig/",
-        "one": "nodemon start_bot.js Miner password --ignore botConfig/",
+        "one": "nodemon start_bot.js Sorter password --ignore botConfig/",
         "test": "echo \"Error: no test specified\" && exit 1",
         "standard": "standard --fix",
         "dockerbuild": "docker build -t minecraftlegion .",

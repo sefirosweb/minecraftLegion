@@ -20,7 +20,7 @@ function pickUpItems (bot, targets) {
   startCheckNextChest.x = 125
   startCheckNextChest.y = 263
 
-  const goAndWithdraw = require('@NestedStateModules/goAndWithdraw')(bot, targets)
+  const goAndWithdraw = require('@NestedStateModules/getReady/goAndWithdraw')(bot, targets)
   goAndWithdraw.stateName = 'Go chest and Withdraw'
   goAndWithdraw.x = 125
   goAndWithdraw.y = 413
