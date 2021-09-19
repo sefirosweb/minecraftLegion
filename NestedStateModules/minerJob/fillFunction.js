@@ -11,6 +11,7 @@ const BehaviorLoadConfig = require('@BehaviorModules/BehaviorLoadConfig')
 
 // let isDigging = false
 function fillFunction (bot, targets) {
+  let placeBlock2Position
   const { getNewPositionForPlaceBlock, blocksCanBeReplaced } = require('@modules/placeBlockModule')(bot)
   const placeBlocks = blocksCanBeReplaced
 
@@ -93,9 +94,8 @@ function fillFunction (bot, targets) {
       child: placeBlock1,
       name: 'mineBlock -> placeBlock1',
       onTransition: () => {
-        targets.position = targets.position.offset(0, -1, 0)
-
-        const positionForPlaceBlock = getNewPositionForPlaceBlock(targets.position)
+        placeBlock2Position = targets.position.clone()
+        const positionForPlaceBlock = getNewPositionForPlaceBlock(targets.position.offset(0, -1, 0))
         targets.position = positionForPlaceBlock.newPosition
         placeBlock1.setOffset(positionForPlaceBlock.blockOffset)
       },
@@ -107,7 +107,7 @@ function fillFunction (bot, targets) {
       child: placeBlock2,
       name: 'placeBlock1 -> placeBlock2',
       onTransition: () => {
-        targets.position = targets.position.offset(0, 1, 0)
+        targets.position = placeBlock2Position
         const positionForPlaceBlock = getNewPositionForPlaceBlock(targets.position)
         targets.position = positionForPlaceBlock.newPosition
         placeBlock2.setOffset(positionForPlaceBlock.blockOffset)
