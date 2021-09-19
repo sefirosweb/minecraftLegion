@@ -1,9 +1,11 @@
 ## 1.2.1
 * Add button for clear all positions of Guard
-* Refactorized breederJob
-* Refactorized farmerJob
+* Refactorized targets variables and jobs folder (nested jobs functions)
 * Added auto restart if bot disconnects
 * Added docker
+* Added huge optimization for sorter
+* Fixed big bugs in minerJob
+
 ## 1.2.0
 * Added Sorter Job
   * This job search nearest chest and they sort them automatically
