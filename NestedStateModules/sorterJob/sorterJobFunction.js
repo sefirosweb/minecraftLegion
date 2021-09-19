@@ -11,7 +11,7 @@ const BehaviorcCheckItemsInChest = require('@BehaviorModules/sorterJob/Behaviorc
 
 function sorterJobFunction (bot, targets) {
   const { findChests } = require('@modules/inventoryModule')(bot)
-  const { sortChestVec } = require('@modules/sorterJob')(bot)
+  const { sortChests } = require('@modules/sorterJob')(bot)
 
   const start = new BehaviorIdle(targets)
   start.stateName = 'Start'
@@ -222,68 +222,7 @@ function sorterJobFunction (bot, targets) {
       parent: calculateSort,
       child: sortChestFunction,
       onTransition: () => {
-        targets.chests.sort((a, b) => sortChestVec(a, b, 'z', 'asc'))
-        const allChests = targets.chests.map(chest => chest.slots)
-        const allItems = allChests
-          .reduce((items, chest) => {
-            chest.forEach(item => {
-              if (item === null) return
-              const indexItem = items.findIndex(i => i.type === item.type)
-              if (indexItem >= 0) {
-                items[indexItem].count += item.count
-              } else {
-                items.push({ ...item })
-              }
-            })
-            return items
-          }, []).sort((a, b) => a.type - b.type)
-
-        let chestIndex = 0
-        const newChestSort = []
-        let newSlots = []
-
-        allItems.forEach(item => {
-          let count = item.count
-
-          if (newSlots.length === 0) {
-            while (count > 0) {
-              const itemToDeposit = { ...item }
-              itemToDeposit.count = count > item.stackSize ? item.stackSize : count
-              count -= itemToDeposit.count
-              newSlots.push(itemToDeposit)
-
-              if (newSlots.length === allChests[chestIndex].length) {
-                newChestSort.push(newSlots)
-                chestIndex++
-                newSlots = []
-              }
-            }
-          } else {
-            const slotNeeded = Math.ceil(count / item.stackSize)
-            const freeSlots = allChests[chestIndex].length - newSlots.length
-
-            if (slotNeeded > freeSlots) {
-              newChestSort.push(newSlots)
-              chestIndex++
-              newSlots = []
-            }
-
-            while (count > 0) {
-              const itemToDeposit = { ...item }
-              itemToDeposit.count = count > item.stackSize ? item.stackSize : count
-              count -= itemToDeposit.count
-              newSlots.push(itemToDeposit)
-
-              if (newSlots.length === allChests[chestIndex].length) {
-                newChestSort.push(newSlots)
-                chestIndex++
-                newSlots = []
-              }
-            }
-          }
-        })
-
-        newChestSort.push(newSlots)
+        const newChestSort = sortChests(targets.chests)
         targets.sorterJob.newChestSort = newChestSort
       },
       shouldTransition: () => true
