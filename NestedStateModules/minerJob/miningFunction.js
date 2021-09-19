@@ -58,7 +58,7 @@ let blockOffset
 
 function miningFunction (bot, targets) {
   const { getOffsetPlaceBlock } = require('@modules/placeBlockModule')(bot)
-  const placeBlocks = ['air', 'cave_air', 'lava', 'water']
+  const placeBlocks = require('@modules/placeBlockModule')(bot).blocksCanBeReplaced
   const blockForPlace = ['stone', 'cobblestone', 'dirt', 'andesite', 'diorite', 'granite']
 
   const start = new BehaviorIdle(targets)

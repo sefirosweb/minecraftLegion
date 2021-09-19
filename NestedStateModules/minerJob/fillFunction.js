@@ -11,7 +11,7 @@ const BehaviorLoadConfig = require('@BehaviorModules/BehaviorLoadConfig')
 
 // let isDigging = false
 function fillFunction (bot, targets) {
-  const placeBlocks = ['air', 'cave_air', 'lava', 'water']
+  const placeBlocks = require('@modules/placeBlockModule')(bot).blocksCanBeReplaced
 
   const start = new BehaviorIdle(targets)
   start.stateName = 'Start'

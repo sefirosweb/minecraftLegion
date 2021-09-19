@@ -1,10 +1,11 @@
 const botWebsocket = require('@modules/botWebsocket')
+
 module.exports = class BehaviorCustomPlaceBlock {
   constructor (bot, targets, canJump = true) {
     this.bot = bot
     this.targets = targets
     this.stateName = 'Custom BehaviorPlaceBlock '
-    this.blockCanBeReplaced = ['air', 'cave_air', 'lava', 'water']
+    this.blockCanBeReplaced = require('@modules/placeBlockModule')(bot).blocksCanBeReplaced
 
     this.isEndFinished = false
     this.itemNotFound = false
