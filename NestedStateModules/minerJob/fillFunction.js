@@ -11,7 +11,8 @@ const BehaviorLoadConfig = require('@BehaviorModules/BehaviorLoadConfig')
 
 // let isDigging = false
 function fillFunction (bot, targets) {
-  const placeBlocks = require('@modules/placeBlockModule')(bot).blocksCanBeReplaced
+  const { getNewPositionForPlaceBlock, blocksCanBeReplaced } = require('@modules/placeBlockModule')(bot)
+  const placeBlocks = blocksCanBeReplaced
 
   const start = new BehaviorIdle(targets)
   start.stateName = 'Start'
@@ -60,6 +61,11 @@ function fillFunction (bot, targets) {
       parent: moveToBlock,
       child: placeBlock2,
       name: 'if block is liquid',
+      onTransition: () => {
+        const positionForPlaceBlock = getNewPositionForPlaceBlock(targets.position)
+        targets.position = positionForPlaceBlock.newPosition
+        placeBlock2.setOffset(positionForPlaceBlock.blockOffset)
+      },
       shouldTransition: () => {
         const block = bot.blockAt(targets.position.offset(0, 1, 0))
         return moveToBlock.distanceToTarget() < 3 && placeBlocks.includes(block.name)
@@ -88,6 +94,10 @@ function fillFunction (bot, targets) {
       name: 'mineBlock -> placeBlock1',
       onTransition: () => {
         targets.position = targets.position.offset(0, -1, 0)
+
+        const positionForPlaceBlock = getNewPositionForPlaceBlock(targets.position)
+        targets.position = positionForPlaceBlock.newPosition
+        placeBlock1.setOffset(positionForPlaceBlock.blockOffset)
       },
       shouldTransition: () => mineBlock.isFinished()
     }),
@@ -98,6 +108,9 @@ function fillFunction (bot, targets) {
       name: 'placeBlock1 -> placeBlock2',
       onTransition: () => {
         targets.position = targets.position.offset(0, 1, 0)
+        const positionForPlaceBlock = getNewPositionForPlaceBlock(targets.position)
+        targets.position = positionForPlaceBlock.newPosition
+        placeBlock2.setOffset(positionForPlaceBlock.blockOffset)
       },
       shouldTransition: () => placeBlock1.isFinished() || placeBlock1.isItemNotFound() || placeBlock1.isCantPlaceBlock()
     }),
