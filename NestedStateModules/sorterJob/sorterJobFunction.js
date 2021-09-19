@@ -232,7 +232,28 @@ function sorterJobFunction (bot, targets) {
           }
         }
       },
-      shouldTransition: () => checkItemsInChest.isFinished()
+      shouldTransition: () => checkItemsInChest.isFinished() && targets.sorterJob.newChests.length === 0
+    }),
+
+    new StateTransition({
+      parent: checkItemsInChest,
+      child: goChest,
+      onTransition: () => {
+        if (!checkItemsInChest.getCanOpenChest()) {
+          const chestIndex = targets.chests.findIndex(c => {
+            if (vec3(c.position).equals(targets.sorterJob.chest.position)) return true
+            if (targets.sorterJob.chest.secondBlock && vec3(c.position).equals(targets.sorterJob.chest.secondBlock.position)) return true
+            return false
+          })
+          if (chestIndex >= 0) {
+            targets.chests.splice(chestIndex, 1)
+          }
+        }
+
+        targets.sorterJob.chest = targets.sorterJob.newChests.shift()
+        targets.position = targets.sorterJob.chest.position.clone()
+      },
+      shouldTransition: () => checkItemsInChest.isFinished() && targets.sorterJob.newChests.length > 0
     }),
 
     new StateTransition({
