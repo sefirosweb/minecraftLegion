@@ -154,9 +154,45 @@ module.exports = function (bot) {
     return newChestSort
   }
 
+  const calculateSlotsToSort = (chests, newChestSort) => {
+    const correctChests = chests.map(chest => chest.slots.map(slot => { return { correct: false } }))
+
+    const slotsToSort = []
+    newChestSort.every((chest, chestIndex) => {
+      chest.every((slot, slotIndex) => {
+        if (
+          !chests[chestIndex].slots[slotIndex] ||
+          slot.type !== chests[chestIndex].slots[slotIndex].type ||
+          slot.count !== chests[chestIndex].slots[slotIndex].count
+        ) {
+          slotsToSort.push({
+            toChest: chestIndex,
+            toSlot: slotIndex,
+            type: slot.type,
+            name: slot.name,
+            quantity: slot.count
+          })
+        } else {
+          correctChests[chestIndex][slotIndex].correct = true
+        }
+        if (slotsToSort.length < 27) return true
+        return false
+      })
+
+      if (slotsToSort.length < 27) return true
+      return false
+    })
+
+    return {
+      correctChests,
+      slotsToSort
+    }
+  }
+
   return {
     findItemsInChests,
     sortChestVec,
-    sortChests
+    sortChests,
+    calculateSlotsToSort
   }
 }

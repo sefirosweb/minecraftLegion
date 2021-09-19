@@ -5,7 +5,7 @@ const {
 } = require('mineflayer-statemachine')
 
 function sortChestFunction (bot, targets) {
-  const { findItemsInChests } = require('@modules/sorterJob')(bot)
+  const { findItemsInChests, calculateSlotsToSort } = require('@modules/sorterJob')(bot)
 
   const start = new BehaviorIdle(targets)
   start.stateName = 'Start'
@@ -42,34 +42,9 @@ function sortChestFunction (bot, targets) {
       parent: start,
       child: checkChestsToSort,
       onTransition: () => {
-        targets.sorterJob.correctChests = targets.chests.map(chest => chest.slots.map(slot => { return { correct: false } }))
-
-        const slotsToSort = []
-        targets.sorterJob.newChestSort.every((chest, chestIndex) => {
-          chest.every((slot, slotIndex) => {
-            if (
-              !targets.chests[chestIndex].slots[slotIndex] ||
-              slot.type !== targets.chests[chestIndex].slots[slotIndex].type ||
-              slot.count !== targets.chests[chestIndex].slots[slotIndex].count
-            ) {
-              slotsToSort.push({
-                toChest: chestIndex,
-                toSlot: slotIndex,
-                type: slot.type,
-                name: slot.name,
-                quantity: slot.count
-              })
-            } else {
-              targets.sorterJob.correctChests[chestIndex][slotIndex].correct = true
-            }
-            if (slotsToSort.length < 27) return true
-            return false
-          })
-
-          if (slotsToSort.length < 27) return true
-          return false
-        })
-        targets.sorterJob.slotsToSort = slotsToSort
+        const calculatedSlotsToSort = calculateSlotsToSort(targets.chests, targets.sorterJob.newChestSort)
+        targets.sorterJob.correctChests = calculatedSlotsToSort.correctChests
+        targets.sorterJob.slotsToSort = calculatedSlotsToSort.slotsToSort
       },
       shouldTransition: () => true
     }),
