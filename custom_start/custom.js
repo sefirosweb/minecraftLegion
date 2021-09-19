@@ -3,6 +3,9 @@ const { sleep } = require('@modules/utils')
 module.exports = (bot) => {
   const start = async () => {
     // Login
+    // await sleep(500)
+    // bot.chat('/register legion legion')
+    await sleep(500)
     bot.chat('/login legion')
     await sleep(500)
 
