@@ -199,7 +199,7 @@ function miningFunction (bot, targets) {
       child: moveToBlock1,
       name: 'currentBlock -> moveToBlock1',
       onTransition: () => {
-        targets.mineBlock = targets.position.clone()
+        targets.minerJob.mineBlock = targets.position.clone()
         if (nextLayer.minerCords.tunel === 'horizontally') { // Move to base of block
           targets.position.y = parseInt(checkLayer.minerCords.yStart)
         }
@@ -219,10 +219,10 @@ function miningFunction (bot, targets) {
       child: mineBlock1,
       name: 'moveToBlock1 -> mineBlock1',
       onTransition: () => {
-        targets.position = targets.mineBlock
+        targets.position = targets.minerJob.mineBlock
       },
       shouldTransition: () => {
-        const block = bot.blockAt(targets.mineBlock)
+        const block = bot.blockAt(targets.minerJob.mineBlock)
         if (bot.canDigBlock(block)) {
           bot.pathfinder.setGoal(null)
           return !bot.pathfinder.isMining()
