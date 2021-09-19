@@ -13,7 +13,7 @@ module.exports = class BehaviorMinerCheckLayer {
     this.firstBlockOnLayer = true
 
     this.blocksToFind = ['water', 'lava']
-    this.blockForPlace = ['stone', 'cobblestone', 'dirt', 'andesite', 'diorite', 'granite']
+    this.blockForPlace = ['stone', 'cobblestone', 'dirt', 'andesite', 'diorite', 'granite', 'sandstone']
   }
 
   isFinished () {
