@@ -11,7 +11,7 @@ const BehaviorcCheckItemsInChest = require('@BehaviorModules/sorterJob/Behaviorc
 
 function sorterJobFunction (bot, targets) {
   const { findChests } = require('@modules/inventoryModule')(bot)
-  const { sortChests } = require('@modules/sorterJob')(bot)
+  const { sortChests, calculateSlotsToSort } = require('@modules/sorterJob')(bot)
 
   const start = new BehaviorIdle(targets)
   start.stateName = 'Start'
@@ -178,20 +178,37 @@ function sorterJobFunction (bot, targets) {
         targets.sorterJob.chest = targets.sorterJob.newChests.shift()
         targets.position = targets.sorterJob.chest.position.clone()
       },
-      shouldTransition: () => targets.sorterJob.newChests.length > 0
+      shouldTransition: () => {
+        const newChestSort = sortChests(targets.chests)
+        const calculatedSlotsToSort = calculateSlotsToSort(targets.chests, newChestSort)
+        if (calculatedSlotsToSort.slotsToSort.length > 0) {
+          return false
+        }
+        return targets.sorterJob.newChests.length > 0
+      }
     }),
 
     new StateTransition({
       parent: checkNewChests,
-      child: calculateSort,
-      shouldTransition: () => targets.sorterJob.newChests.length === 0 && bot.inventory.items().length === 0
+      child: sortChestFunction,
+      shouldTransition: () => {
+        if (bot.inventory.items().length === 0) {
+          const newChestSort = sortChests(targets.chests)
+          const calculatedSlotsToSort = calculateSlotsToSort(targets.chests, newChestSort)
+          if (calculatedSlotsToSort.slotsToSort.length > 0) {
+            targets.sorterJob.newChestSort = newChestSort
+            return true
+          }
+        }
+        return false
+      }
     }),
 
     new StateTransition({
       parent: checkNewChests,
       child: checkItemsInInventory,
       name: 'Found items in inventory',
-      shouldTransition: () => targets.sorterJob.newChests.length === 0 && bot.inventory.items().length > 0
+      shouldTransition: () => bot.inventory.items().length > 0
     }),
 
     new StateTransition({
@@ -216,16 +233,6 @@ function sorterJobFunction (bot, targets) {
         }
       },
       shouldTransition: () => checkItemsInChest.isFinished()
-    }),
-
-    new StateTransition({
-      parent: calculateSort,
-      child: sortChestFunction,
-      onTransition: () => {
-        const newChestSort = sortChests(targets.chests)
-        targets.sorterJob.newChestSort = newChestSort
-      },
-      shouldTransition: () => true
     }),
 
     new StateTransition({
