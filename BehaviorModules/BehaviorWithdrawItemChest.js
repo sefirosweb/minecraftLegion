@@ -77,6 +77,7 @@ module.exports = class BehaviorWithdrawItemChest {
     const slots = container.slots.slice(0, container.inventoryStart)
     if (!chest) {
       chestToOpen.slots = slots
+      chestToOpen.lastTimeOpen = Date.now()
 
       const props = chestToOpen.getProperties()
       const offset = getSecondBlockPosition(props.facing, props.type)
@@ -87,6 +88,7 @@ module.exports = class BehaviorWithdrawItemChest {
       this.targets.chests.push(chestToOpen)
     } else {
       chest.slots = slots
+      chest.lastTimeOpen = Date.now()
     }
 
     botWebsocket.sendAction('setChests', this.targets.chests)

@@ -31,8 +31,10 @@ module.exports = class BehaviorcCheckItemsInChest {
       })
       if (chestIndex >= 0) {
         this.targets.chests[chestIndex].slots = slots
+        this.targets.chests[chestIndex].lastTimeOpen = Date.now()
       } else {
         this.targets.sorterJob.chest.slots = slots
+        this.targets.sorterJob.chest.lastTimeOpen = Date.now()
         this.targets.chests.push(this.targets.sorterJob.chest)
       }
 

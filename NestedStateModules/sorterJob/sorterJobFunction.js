@@ -122,7 +122,14 @@ function sorterJobFunction (bot, targets) {
           return false
         })
       ) {
-        targets.sorterJob.newChests.push(chest)
+        const chestInfo = targets.chests.find(c => {
+          if (vec3(c.position).equals(chest.position)) return true
+          if (secondBlock && vec3(c.position).equals(secondBlock.position)) return true
+          return false
+        })
+        if (!chestInfo || Date.now() - chestInfo.lastTimeOpen > 5000) {
+          targets.sorterJob.newChests.push(chest)
+        }
       }
     }
   }
