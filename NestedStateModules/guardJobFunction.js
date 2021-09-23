@@ -2,7 +2,6 @@ const {
   StateTransition,
   BehaviorIdle,
   NestedStateMachine,
-  BehaviorMoveTo,
   BehaviorFollowEntity
 } = require('mineflayer-statemachine')
 
@@ -12,6 +11,7 @@ const BehaviorEatFood = require('@BehaviorModules/BehaviorEatFood')
 const BehaviorEquipAll = require('@BehaviorModules/BehaviorEquipAll')
 const BehaviorFindItems = require('@BehaviorModules/BehaviorFindItems')
 const BehaviorHelpFriend = require('@BehaviorModules/BehaviorHelpFriend')
+const BehaviorMoveTo = require('@BehaviorModules/BehaviorMoveTo')
 
 function guardJobFunction (bot, targets) {
   const start = new BehaviorIdle(targets)

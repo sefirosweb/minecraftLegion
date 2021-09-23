@@ -1,12 +1,12 @@
 const {
   StateTransition,
   BehaviorIdle,
-  NestedStateMachine,
-  BehaviorMoveTo
+  NestedStateMachine
 } = require('mineflayer-statemachine')
 
 const BehaviorFindItems = require('@BehaviorModules/BehaviorFindItems')
 const BehaviorLoadConfig = require('@BehaviorModules/BehaviorLoadConfig')
+const BehaviorMoveTo = require('@BehaviorModules/BehaviorMoveTo')
 
 function findItemsAndPickup (bot, targets) {
   let botPosition = {}

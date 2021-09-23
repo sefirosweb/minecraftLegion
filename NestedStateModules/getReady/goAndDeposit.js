@@ -1,11 +1,11 @@
 const {
   StateTransition,
   BehaviorIdle,
-  BehaviorMoveTo,
   NestedStateMachine
 } = require('mineflayer-statemachine')
 
 const BehaviorDepositItemChest = require('@BehaviorModules/BehaviorDepositItemChest')
+const BehaviorMoveTo = require('@BehaviorModules/BehaviorMoveTo')
 
 function goAndDeposit (bot, targets) {
   const start = new BehaviorIdle()
@@ -39,7 +39,7 @@ function goAndDeposit (bot, targets) {
     new StateTransition({
       parent: goChest,
       child: depositItemChest,
-      shouldTransition: () => goChest.isFinished() && !bot.pathfinder.isMining()
+      shouldTransition: () => (goChest.isFinished() || goChest.distanceToTarget() < 3) && !bot.pathfinder.isMining()
     }),
 
     new StateTransition({

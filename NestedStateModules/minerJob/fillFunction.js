@@ -1,13 +1,13 @@
 const {
   StateTransition,
   BehaviorIdle,
-  NestedStateMachine,
-  BehaviorMoveTo
+  NestedStateMachine
 } = require('mineflayer-statemachine')
 
 const BehaviorDigBlock = require('@BehaviorModules/BehaviorDigBlock')
 const BehaviorCustomPlaceBlock = require('@BehaviorModules/BehaviorCustomPlaceBlock')
 const BehaviorLoadConfig = require('@BehaviorModules/BehaviorLoadConfig')
+const BehaviorMoveTo = require('@BehaviorModules/BehaviorMoveTo')
 
 // let isDigging = false
 function fillFunction (bot, targets) {
@@ -69,7 +69,7 @@ function fillFunction (bot, targets) {
       },
       shouldTransition: () => {
         const block = bot.blockAt(targets.position.offset(0, 1, 0))
-        return moveToBlock.distanceToTarget() < 3 && placeBlocks.includes(block.name)
+        return (moveToBlock.isFinished() || moveToBlock.distanceToTarget() < 3) && placeBlocks.includes(block.name)
       }
     }),
 

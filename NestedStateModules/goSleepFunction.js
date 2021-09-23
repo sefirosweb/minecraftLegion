@@ -1,11 +1,11 @@
 const {
   StateTransition,
   BehaviorIdle,
-  NestedStateMachine,
-  BehaviorMoveTo
+  NestedStateMachine
 } = require('mineflayer-statemachine')
 const BehaviorGoToBed = require('@BehaviorModules/BehaviorGoToBed')
 const BehaviorIsNight = require('@BehaviorModules/BehaviorIsNight')
+const BehaviorMoveTo = require('@BehaviorModules/BehaviorMoveTo')
 
 const goSleepFunction = function (bot) {
   const enter = new BehaviorIdle()

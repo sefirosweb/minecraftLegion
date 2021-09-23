@@ -1,8 +1,7 @@
 const {
   StateTransition,
   BehaviorIdle,
-  NestedStateMachine,
-  BehaviorMoveTo
+  NestedStateMachine
 } = require('mineflayer-statemachine')
 
 const BehaviorLoadConfig = require('@BehaviorModules/BehaviorLoadConfig')
@@ -13,6 +12,7 @@ const BehaviorDigBlock = require('@BehaviorModules/BehaviorDigBlock')
 const BehaviorMinerChecks = require('@BehaviorModules/BehaviorMinerChecks')
 const BehaviorEatFood = require('@BehaviorModules/BehaviorEatFood')
 const BehaviorCustomPlaceBlock = require('@BehaviorModules/BehaviorCustomPlaceBlock')
+const BehaviorMoveTo = require('@BehaviorModules/BehaviorMoveTo')
 
 const mineflayerPathfinder = require('mineflayer-pathfinder')
 const vec3 = require('vec3')
@@ -298,7 +298,7 @@ function miningFunction (bot, targets) {
         if (nextLayer.minerCords.tunel === 'horizontally') {
           return true
         }
-        return moveToBlock2.isFinished()
+        return (moveToBlock2.isFinished() || moveToBlock2.distanceToTarget() < 3)
       }
     }),
 

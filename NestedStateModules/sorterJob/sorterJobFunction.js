@@ -3,11 +3,11 @@ const botWebsocket = require('@modules/botWebsocket')
 const {
   StateTransition,
   BehaviorIdle,
-  BehaviorMoveTo,
   NestedStateMachine
 } = require('mineflayer-statemachine')
 
 const BehaviorcCheckItemsInChest = require('@BehaviorModules/sorterJob/BehaviorcCheckItemsInChest')
+const BehaviorMoveTo = require('@BehaviorModules/BehaviorMoveTo')
 
 function sorterJobFunction (bot, targets) {
   const { findChests } = require('@modules/inventoryModule')(bot)
@@ -221,7 +221,7 @@ function sorterJobFunction (bot, targets) {
     new StateTransition({
       parent: goChest,
       child: checkItemsInChest,
-      shouldTransition: () => goChest.isFinished() && !bot.pathfinder.isMining()
+      shouldTransition: () => (goChest.isFinished() || goChest.distanceToTarget() < 3) && !bot.pathfinder.isMining()
     }),
 
     new StateTransition({

@@ -1,11 +1,11 @@
 const {
   StateTransition,
   BehaviorIdle,
-  BehaviorMoveTo,
   NestedStateMachine
 } = require('mineflayer-statemachine')
 
 const BehaviorWithdrawItemChest = require('@BehaviorModules/BehaviorWithdrawItemChest')
+const BehaviorMoveTo = require('@BehaviorModules/BehaviorMoveTo')
 
 function goAndWithdraw (bot, targets) {
   const start = new BehaviorIdle()
@@ -39,7 +39,7 @@ function goAndWithdraw (bot, targets) {
     new StateTransition({
       parent: goChest,
       child: withdrawItemChest,
-      shouldTransition: () => goChest.isFinished() && !bot.pathfinder.isMining()
+      shouldTransition: () => (goChest.isFinished() || goChest.distanceToTarget() < 3) && !bot.pathfinder.isMining()
     }),
 
     new StateTransition({
