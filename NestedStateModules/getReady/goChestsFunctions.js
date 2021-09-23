@@ -1,7 +1,6 @@
 const {
   StateTransition,
   BehaviorIdle,
-  BehaviorMoveTo,
   NestedStateMachine
 } = require('mineflayer-statemachine')
 
@@ -9,6 +8,7 @@ const BehaviorLoadConfig = require('@BehaviorModules/BehaviorLoadConfig')
 const BehaviorWithdrawItemChest = require('@BehaviorModules/BehaviorWithdrawItemChest')
 const BehaviorDepositItemChest = require('@BehaviorModules/BehaviorDepositItemChest')
 const BehaviorCheckItemsInInventory = require('@BehaviorModules/BehaviorCheckItemsInInventory')
+const BehaviorMoveTo = require('@BehaviorModules/BehaviorMoveTo')
 
 function goChestsFunction (bot, targets) {
   const { findItemsInChests } = require('@modules/sorterJob')(bot)
@@ -160,14 +160,14 @@ function goChestsFunction (bot, targets) {
       parent: goChest,
       child: withdrawItems,
       name: 'goChest -> withdrawItems',
-      shouldTransition: () => goChest.isFinished() && !bot.pathfinder.isMining() && chests[chestIndex].type === 'withdraw'
+      shouldTransition: () => (goChest.isFinished() || goChest.distanceToTarget() < 3) && !goChest.isSuccess() && !bot.pathfinder.isMining() && chests[chestIndex].type === 'withdraw'
     }),
 
     new StateTransition({
       parent: goChest,
       child: depositItems,
       name: 'goChest -> depositItems',
-      shouldTransition: () => goChest.isFinished() && !bot.pathfinder.isMining() && (chests[chestIndex].type === 'deposit' || chests[chestIndex].type === 'depositAll')
+      shouldTransition: () => (goChest.isFinished() || goChest.distanceToTarget() < 3) && !goChest.isSuccess() && !bot.pathfinder.isMining() && (chests[chestIndex].type === 'deposit' || chests[chestIndex].type === 'depositAll')
     }),
 
     new StateTransition({
