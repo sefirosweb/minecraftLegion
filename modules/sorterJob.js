@@ -154,6 +154,56 @@ module.exports = function (bot) {
     return newChestSort
   }
 
+  const calculateInventoryToSort = (inventoryItemsInput, inputChests, newChestSort) => {
+    // Function in tests
+    const chests = JSON.parse(JSON.stringify(inputChests))
+    const inventoryItems = JSON.parse(JSON.stringify(inventoryItemsInput))
+
+    const slotsToSort = []
+    inventoryItems.forEach((everyInventoryItem) => {
+      newChestSort.every((chest, chestIndex) => {
+        chest.every((slot, slotIndex) => {
+          if (slot.type !== everyInventoryItem.type) return true
+
+          if (
+            (
+              !chests[chestIndex].slots[slotIndex] ||
+              slot.type !== chests[chestIndex].slots[slotIndex].type ||
+              slot.count !== chests[chestIndex].slots[slotIndex].count
+            )
+          ) {
+            const currentStock = chests[chestIndex].slots[slotIndex] && chests[chestIndex].slots[slotIndex].type === everyInventoryItem.type ? chests[chestIndex].slots[slotIndex].count : 0
+            const stackSize = everyInventoryItem.stackSize
+            const freeSpace = stackSize - currentStock
+            const quantity = freeSpace >= everyInventoryItem.count ? everyInventoryItem.count : freeSpace
+            everyInventoryItem.count -= quantity
+
+            if (!chests[chestIndex].slots[slotIndex] || chests[chestIndex].slots[slotIndex].type !== everyInventoryItem.type) {
+              chests[chestIndex].slots[slotIndex] = everyInventoryItem
+            } else {
+              chests[chestIndex].slots[slotIndex].count += quantity
+            }
+
+            slotsToSort.push({
+              toChest: chestIndex,
+              toSlot: slotIndex,
+              type: slot.type,
+              name: slot.name,
+              quantity: quantity
+            })
+          }
+          if (everyInventoryItem.count === 0) return false
+          return true
+        })
+
+        if (everyInventoryItem.count === 0) return false
+        return true
+      })
+    })
+
+    return slotsToSort
+  }
+
   const calculateSlotsToSort = (chests, newChestSort) => {
     const correctChests = chests.map(chest => chest.slots.map(slot => { return { correct: false } }))
 
@@ -193,6 +243,7 @@ module.exports = function (bot) {
     findItemsInChests,
     sortChestVec,
     sortChests,
-    calculateSlotsToSort
+    calculateSlotsToSort,
+    calculateInventoryToSort
   }
 }
