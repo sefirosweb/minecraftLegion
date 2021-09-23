@@ -5,6 +5,7 @@
 * Added docker
 * Added huge optimization for sorter
 * Fixed big bugs in minerJob
+* Fixed bug with movements and is optimized
 
 ## 1.2.0
 * Added Sorter Job
