@@ -7,11 +7,7 @@ module.exports = function (bot) {
     const offset = getOffsetPlaceBlock(bot.blockAt(position))
     const newPosition = position.clone().add(offset)
 
-    const blockOffset = {
-      x: offset.x * -1,
-      y: offset.y * -1,
-      z: offset.z * -1
-    }
+    const blockOffset = vec3(offset.x * -1, offset.y * -1, offset.z * -1)
 
     return {
       newPosition,
