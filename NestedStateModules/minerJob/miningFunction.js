@@ -11,13 +11,10 @@ const BehaviorMinerCurrentBlock = require('@BehaviorModules/BehaviorMinerCurrent
 const BehaviorDigBlock = require('@BehaviorModules/BehaviorDigBlock')
 const BehaviorMinerChecks = require('@BehaviorModules/BehaviorMinerChecks')
 const BehaviorEatFood = require('@BehaviorModules/BehaviorEatFood')
-const BehaviorCustomPlaceBlock = require('@BehaviorModules/BehaviorCustomPlaceBlock')
 const BehaviorMoveTo = require('@BehaviorModules/BehaviorMoveTo')
 
 const mineflayerPathfinder = require('mineflayer-pathfinder')
-const vec3 = require('vec3')
 
-// TODO pending double check
 const movingWhile = (bot, nextCurrentLayer) => {
   const mcData = require('minecraft-data')(bot.version)
   const movements = new mineflayerPathfinder.Movements(bot, mcData)
@@ -54,13 +51,7 @@ const movingWhile = (bot, nextCurrentLayer) => {
   pathfinder.setGoal(goal)
 }
 
-let blockOffset
-
 function miningFunction (bot, targets) {
-  const { getOffsetPlaceBlock } = require('@modules/placeBlockModule')(bot)
-  const placeBlocks = require('@modules/placeBlockModule')(bot).blocksCanBeReplaced
-  const blockForPlace = ['stone', 'cobblestone', 'dirt', 'andesite', 'diorite', 'granite']
-
   const start = new BehaviorIdle(targets)
   start.stateName = 'Start'
   start.x = 125
@@ -86,27 +77,16 @@ function miningFunction (bot, targets) {
   currentBlock.x = 725
   currentBlock.y = 113
 
-  const mineBlock1 = new BehaviorDigBlock(bot, targets)
-  mineBlock1.stateName = 'Mine Block 1'
-  mineBlock1.x = 1025
-  mineBlock1.y = 563
+  const digBlock = new BehaviorDigBlock(bot, targets)
+  digBlock.stateName = 'Dig Block'
+  digBlock.x = 1025
+  digBlock.y = 563
 
-  const moveToBlock1 = new BehaviorMoveTo(bot, targets)
-  moveToBlock1.stateName = 'Move To Block 1'
-  moveToBlock1.x = 1025
-  moveToBlock1.y = 313
-  moveToBlock1.movements = targets.movements
-
-  const moveToBlock2 = new BehaviorMoveTo(bot, targets)
-  moveToBlock2.stateName = 'Move To Block 2'
-  moveToBlock2.x = 825
-  moveToBlock2.y = 713
-  moveToBlock2.movements = targets.movements
-
-  const placeBlock = new BehaviorCustomPlaceBlock(bot, targets)
-  placeBlock.stateName = 'Place Block'
-  placeBlock.x = 1025
-  placeBlock.y = 713
+  const moveToBlock = new BehaviorMoveTo(bot, targets)
+  moveToBlock.stateName = 'Move To Block'
+  moveToBlock.x = 1025
+  moveToBlock.y = 313
+  moveToBlock.movements = targets.movements
 
   const minerChecks = new BehaviorMinerChecks(bot, targets)
   minerChecks.stateName = 'Miner Check'
@@ -127,11 +107,19 @@ function miningFunction (bot, targets) {
   fillBlocks.x = 350
   fillBlocks.y = 313
 
+  const placeBlockAfterDig = require('@NestedStateModules/minerJob/placeBlockAfterDig')(bot, targets)
+  placeBlockAfterDig.x = 725
+  placeBlockAfterDig.y = 563
+
   const transitions = [
     new StateTransition({
       parent: start,
       child: loadConfig,
       name: 'start -> loadConfig',
+      onTransition: () => {
+        targets.minerJob.blockForPlace = ['stone', 'cobblestone', 'dirt', 'andesite', 'diorite', 'granite']
+        targets.minerJob.nextLayer = nextLayer
+      },
       shouldTransition: () => true
     }),
 
@@ -170,7 +158,7 @@ function miningFunction (bot, targets) {
       child: eatFood,
       name: 'checkLayer -> eatFood',
       onTransition: () => currentBlock.setMinerCords(nextLayer.getCurrentLayerCoords()),
-      shouldTransition: () => checkLayer.isFinished() || !bot.inventory.items().find(item => blockForPlace.includes(item.name))
+      shouldTransition: () => checkLayer.isFinished() || !bot.inventory.items().find(item => targets.minerJob.blockForPlace.includes(item.name))
     }),
 
     new StateTransition({
@@ -178,7 +166,7 @@ function miningFunction (bot, targets) {
       child: fillBlocks,
       name: 'checkLayer -> fillBlocks',
       shouldTransition: () => {
-        const item = bot.inventory.items().find(item => blockForPlace.includes(item.name))
+        const item = bot.inventory.items().find(item => targets.minerJob.blockForPlace.includes(item.name))
         if (checkLayer.getFoundLavaOrWater() && item) {
           targets.item = item
           return true
@@ -196,8 +184,8 @@ function miningFunction (bot, targets) {
 
     new StateTransition({
       parent: currentBlock,
-      child: moveToBlock1,
-      name: 'currentBlock -> moveToBlock1',
+      child: moveToBlock,
+      name: 'currentBlock -> moveToBlock',
       onTransition: () => {
         targets.minerJob.mineBlock = targets.position.clone()
         if (nextLayer.minerCords.tunel === 'horizontally') { // Move to base of block
@@ -215,9 +203,8 @@ function miningFunction (bot, targets) {
     }),
 
     new StateTransition({
-      parent: moveToBlock1,
-      child: mineBlock1,
-      name: 'moveToBlock1 -> mineBlock1',
+      parent: moveToBlock,
+      child: digBlock,
       onTransition: () => {
         targets.position = targets.minerJob.mineBlock
       },
@@ -231,99 +218,26 @@ function miningFunction (bot, targets) {
     }),
 
     new StateTransition({
-      parent: mineBlock1,
-      child: placeBlock,
-      name: '[Vertically] If down is liquid',
-      shouldTransition: () => {
-        const block = bot.blockAt(targets.position.offset(0, -1, 0))
-        const item = bot.inventory.items().find(item => blockForPlace.includes(item.name))
-
-        if (
-          (
-            nextLayer.minerCords.tunel === 'vertically' ||
-            (
-              nextLayer.minerCords.tunel === 'horizontally' &&
-              parseInt(targets.position.y) === parseInt(nextLayer.minerCords.yStart)
-            )
-          ) &&
-          mineBlock1.isFinished() &&
-          placeBlocks.includes(block.name) &&
-          item
-        ) {
-          targets.item = item
-          targets.position = targets.position.offset(0, -1, 0)
-          blockOffset = getOffsetPlaceBlock(bot.blockAt(targets.position))
-          targets.position = targets.position.add(blockOffset)
-
-          blockOffset = {
-            x: blockOffset.x * -1,
-            y: blockOffset.y * -1,
-            z: blockOffset.z * -1
-          }
-
-          placeBlock.setOffset(blockOffset)
-          return true
-        }
-        return false
-      }
+      parent: digBlock,
+      child: placeBlockAfterDig,
+      shouldTransition: () => digBlock.isFinished()
     }),
 
     new StateTransition({
-      parent: mineBlock1,
+      parent: placeBlockAfterDig,
       child: minerChecks,
-      name: '[Horizontally] Continue',
-      shouldTransition: () => {
-        return mineBlock1.isFinished() && nextLayer.minerCords.tunel === 'horizontally'
-      }
-    }),
-
-    new StateTransition({
-      parent: mineBlock1,
-      child: moveToBlock2,
-      name: '[Vertically] If down is solid',
-      shouldTransition: () => {
-        const block = bot.blockAt(targets.position.offset(0, -1, 0))
-        return mineBlock1.isFinished() && nextLayer.minerCords.tunel === 'vertically' &&
-          (
-            !placeBlocks.includes(block.name) ||
-            !bot.inventory.items().find(item => blockForPlace.includes(item.name))
-          )
-      }
-    }),
-
-    new StateTransition({
-      parent: placeBlock,
-      child: moveToBlock2,
-      name: 'placeBlock -> moveToBlock2',
-      onTransition: () => {
-        targets.position.add(blockOffset).add(vec3(0, 1, 0))
-      },
-      shouldTransition: () => placeBlock.isFinished() || placeBlock.isItemNotFound() || placeBlock.isCantPlaceBlock()
-    }),
-
-    new StateTransition({
-      parent: moveToBlock2,
-      child: minerChecks,
-      name: 'moveToBlock2 -> minerChecks',
-      shouldTransition: () => {
-        if (nextLayer.minerCords.tunel === 'horizontally') {
-          return true
-        }
-        return (moveToBlock2.isFinished() || moveToBlock2.distanceToTarget() < 3)
-      }
+      shouldTransition: () => placeBlockAfterDig.isFinished()
     }),
 
     new StateTransition({
       parent: minerChecks,
       child: eatFood,
-      name: 'moveToBlock2 -> eatFood',
       shouldTransition: () => minerChecks.isFinished() && minerChecks.getIsReady()
     }),
 
     new StateTransition({
       parent: eatFood,
       child: currentBlock,
-      name: 'eatFood -> currentBlock',
       shouldTransition: () => eatFood.isFinished()
     }),
 
