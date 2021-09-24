@@ -71,10 +71,13 @@ module.exports = class BehaviorMinerCheckLayer {
 
       // 4 extreme position => omit
       if (
-        (this.xCurrent === this.xEnd && this.zCurrent === this.zEnd) ||
-        (this.xCurrent === this.xStart && this.zCurrent === this.zStart) ||
-        (this.xCurrent === this.xEnd && this.zCurrent === this.zStart) ||
-        (this.xCurrent === this.xStart && this.zCurrent === this.zEnd)
+        this.minerCords.tunel === 'vertically' &&
+        (
+          (this.xCurrent === this.xEnd && this.zCurrent === this.zEnd) ||
+          (this.xCurrent === this.xStart && this.zCurrent === this.zStart) ||
+          (this.xCurrent === this.xEnd && this.zCurrent === this.zStart) ||
+          (this.xCurrent === this.xStart && this.zCurrent === this.zEnd)
+        )
       ) {
         return this.checkArea()
       }
@@ -185,19 +188,27 @@ module.exports = class BehaviorMinerCheckLayer {
     }
 
     if (this.xStart > this.xEnd) {
-      this.xStart++
-      this.xEnd--
+      if (this.minerCords.tunel === 'vertically' || this.minerCords.orientation === 'z+') {
+        this.xStart++
+        this.xEnd--
+      }
     } else {
-      this.xStart--
-      this.xEnd++
+      if (this.minerCords.tunel === 'vertically' || this.minerCords.orientation === 'z-') {
+        this.xStart--
+        this.xEnd++
+      }
     }
 
     if (this.zStart > this.zEnd) {
-      this.zStart++
-      this.zEnd--
+      if (this.minerCords.tunel === 'vertically' || this.minerCords.orientation === 'x-') {
+        this.zStart++
+        this.zEnd--
+      }
     } else {
-      this.zStart--
-      this.zEnd++
+      if (this.minerCords.tunel === 'vertically' || this.minerCords.orientation === 'x+') {
+        this.zStart--
+        this.zEnd++
+      }
     }
 
     this.yCurrent = parseInt(this.yStart)
