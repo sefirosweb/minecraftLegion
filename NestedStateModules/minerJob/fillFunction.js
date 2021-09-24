@@ -13,7 +13,6 @@ const BehaviorMoveTo = require('@BehaviorModules/BehaviorMoveTo')
 function fillFunction (bot, targets) {
   let placeBlock2Position
   const { getNewPositionForPlaceBlock, blocksCanBeReplaced } = require('@modules/placeBlockModule')(bot)
-  const placeBlocks = blocksCanBeReplaced
 
   const start = new BehaviorIdle(targets)
   start.stateName = 'Start'
@@ -69,7 +68,7 @@ function fillFunction (bot, targets) {
       },
       shouldTransition: () => {
         const block = bot.blockAt(targets.position.offset(0, 1, 0))
-        return (moveToBlock.isFinished() || moveToBlock.distanceToTarget() < 3) && placeBlocks.includes(block.name)
+        return (moveToBlock.isFinished() || moveToBlock.distanceToTarget() < 3) && blocksCanBeReplaced.includes(block.name)
       }
     }),
 
@@ -82,7 +81,7 @@ function fillFunction (bot, targets) {
       },
       shouldTransition: () => {
         const block = bot.blockAt(targets.position.offset(0, 1, 0))
-        if (bot.canDigBlock(block) && !placeBlocks.includes(block.name)) {
+        if (bot.canDigBlock(block) && !blocksCanBeReplaced.includes(block.name)) {
           bot.pathfinder.setGoal(null)
           return !bot.pathfinder.isMining()
         }
