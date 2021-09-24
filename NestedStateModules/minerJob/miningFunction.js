@@ -237,7 +237,19 @@ function miningFunction (bot, targets) {
       shouldTransition: () => {
         const block = bot.blockAt(targets.position.offset(0, -1, 0))
         const item = bot.inventory.items().find(item => blockForPlace.includes(item.name))
-        if (mineBlock1.isFinished() && placeBlocks.includes(block.name) && item && nextLayer.minerCords.tunel === 'vertically') {
+
+        if (
+          (
+            nextLayer.minerCords.tunel === 'vertically' ||
+            (
+              nextLayer.minerCords.tunel === 'horizontally' &&
+              parseInt(targets.position.y) === parseInt(nextLayer.minerCords.yStart)
+            )
+          ) &&
+          mineBlock1.isFinished() &&
+          placeBlocks.includes(block.name) &&
+          item
+        ) {
           targets.item = item
           targets.position = targets.position.offset(0, -1, 0)
           blockOffset = getOffsetPlaceBlock(bot.blockAt(targets.position))
@@ -252,7 +264,6 @@ function miningFunction (bot, targets) {
           placeBlock.setOffset(blockOffset)
           return true
         }
-
         return false
       }
     }),
