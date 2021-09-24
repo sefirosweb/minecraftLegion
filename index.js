@@ -27,13 +27,13 @@ function startBot (botName, password) {
 
 const botsToStart = [
   // { username: 'Sephi' }
-  { username: 'Farmer' },
-  { username: 'Breeder' },
-  { username: 'Sorter' },
-  { username: 'Guard1' },
-  { username: 'Guard2' },
-  { username: 'Guard3' },
-  { username: 'Miner' }
+  { username: 'Miner2' }
+  // { username: 'Breeder' },
+  // { username: 'Sorter' },
+  // { username: 'Guard1' },
+  // { username: 'Guard2' },
+  // { username: 'Guard3' },
+  // { username: 'Miner' }
   // { username: 'Miner5' },
   // { username: 'Guard1' }
   // { username: 'Guard2' },

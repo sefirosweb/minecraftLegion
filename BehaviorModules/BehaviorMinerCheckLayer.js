@@ -12,7 +12,8 @@ module.exports = class BehaviorMinerCheckLayer {
     this.foundLavaOrWater = false
     this.firstBlockOnLayer = true
 
-    this.blocksToFind = ['water', 'lava']
+    this.blocksToFind = ['lava', 'water']
+    this.floorBlocksToFind = ['air', 'cave_air']
     this.blockForPlace = ['stone', 'cobblestone', 'dirt', 'andesite', 'diorite', 'granite', 'sandstone']
   }
 
@@ -79,7 +80,17 @@ module.exports = class BehaviorMinerCheckLayer {
       }
 
       const block = this.getBlockType()
-      if (block && this.blocksToFind.includes(block.name)) {
+      if (
+        block &&
+        (
+          this.blocksToFind.includes(block.name) ||
+          (
+            this.floorBlocksToFind.includes(block.name) &&
+            this.minerCords.tunel === 'horizontally' &&
+            (this.minerCords.yStart - 1) === this.yCurrent
+          )
+        )
+      ) {
         botWebsocket.log(`Found: ${block.name} on X:${this.xCurrent} Y:${this.yCurrent} Z:${this.zCurrent}`)
         this.targets.position = block.position
         this.foundLavaOrWater = true
