@@ -6,6 +6,7 @@
 * Added huge optimization for sorter
 * Fixed big bugs in minerJob
 * Fixed bug with movements and is optimized
+* Update mineflayer to 3.11.1
 
 ## 1.2.0
 * Added Sorter Job
