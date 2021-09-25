@@ -124,6 +124,24 @@ function miningFunction (bot, targets) {
       onTransition: () => {
         targets.minerJob.blockForPlace = ['stone', 'cobblestone', 'dirt', 'andesite', 'diorite', 'granite']
         targets.minerJob.nextLayer = nextLayer
+
+        const yStart = parseInt(targets.config.minerCords.yStart) > parseInt(targets.config.minerCords.yEnd) ? parseInt(targets.config.minerCords.yEnd) : parseInt(targets.config.minerCords.yStart)
+        const yEnd = parseInt(targets.config.minerCords.yStart) > parseInt(targets.config.minerCords.yEnd) ? parseInt(targets.config.minerCords.yStart) : parseInt(targets.config.minerCords.yEnd)
+
+        const xStart = parseInt(targets.config.minerCords.xStart) > parseInt(targets.config.minerCords.xEnd) ? parseInt(targets.config.minerCords.xEnd) : parseInt(targets.config.minerCords.xStart)
+        const xEnd = parseInt(targets.config.minerCords.xStart) > parseInt(targets.config.minerCords.xEnd) ? parseInt(targets.config.minerCords.xStart) : parseInt(targets.config.minerCords.xEnd)
+
+        const zStart = parseInt(targets.config.minerCords.zStart) > parseInt(targets.config.minerCords.zEnd) ? parseInt(targets.config.minerCords.zEnd) : parseInt(targets.config.minerCords.zStart)
+        const zEnd = parseInt(targets.config.minerCords.zStart) > parseInt(targets.config.minerCords.zEnd) ? parseInt(targets.config.minerCords.zStart) : parseInt(targets.config.minerCords.zEnd)
+
+        targets.minerJob.original = {
+          xStart,
+          xEnd,
+          yStart,
+          yEnd,
+          zStart,
+          zEnd
+        }
       },
       shouldTransition: () => true
     }),
