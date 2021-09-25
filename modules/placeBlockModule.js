@@ -1,7 +1,7 @@
 const vec3 = require('vec3')
 
 module.exports = function (bot) {
-  const blocksCanBeReplaced = ['air', 'cave_air', 'lava', 'water']
+  const blocksCanBeReplaced = ['air', 'cave_air', 'lava', 'water', 'seagrass']
 
   const getNewPositionForPlaceBlock = (position) => {
     const offset = getOffsetPlaceBlock(bot.blockAt(position))
