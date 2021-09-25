@@ -173,19 +173,11 @@ module.exports = class BehaviorMinerCheckLayer {
       this.yEnd--
     }
 
-    if (this.minerCords.orientation === 'z-' || this.minerCords.orientation === 'x+') {
-      this.xStart = parseInt(this.minerCords.xStart)
-      this.zStart = parseInt(this.minerCords.zStart)
+    this.xStart = parseInt(this.minerCords.xStart) > parseInt(this.minerCords.xEnd) ? parseInt(this.minerCords.xStart) : parseInt(this.minerCords.xEnd)
+    this.xEnd = parseInt(this.minerCords.xStart) > parseInt(this.minerCords.xEnd) ? parseInt(this.minerCords.xEnd) : parseInt(this.minerCords.xStart)
 
-      this.xEnd = parseInt(this.minerCords.xEnd)
-      this.zEnd = parseInt(this.minerCords.zEnd)
-    } else { // S & W
-      this.xStart = parseInt(this.minerCords.xEnd)
-      this.zStart = parseInt(this.minerCords.zEnd)
-
-      this.xEnd = parseInt(this.minerCords.xStart)
-      this.zEnd = parseInt(this.minerCords.zStart)
-    }
+    this.zStart = parseInt(this.minerCords.zStart) > parseInt(this.minerCords.zEnd) ? parseInt(this.minerCords.zStart) : parseInt(this.minerCords.zEnd)
+    this.zEnd = parseInt(this.minerCords.zStart) > parseInt(this.minerCords.zEnd) ? parseInt(this.minerCords.zEnd) : parseInt(this.minerCords.zStart)
 
     if (this.minerCords.tunel === 'vertically') {
       if (this.xStart > this.xEnd) {

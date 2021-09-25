@@ -6,6 +6,7 @@ const {
 
 const BehaviorCustomPlaceBlock = require('@BehaviorModules/BehaviorCustomPlaceBlock')
 const BehaviorMoveTo = require('@BehaviorModules/BehaviorMoveTo')
+const vec3 = require('vec3')
 
 let originalPosition
 let sidesToCheck
@@ -60,14 +61,17 @@ function placeBlockAfterDig (bot, targets) {
         originalPosition = targets.position.clone()
         sidesToCheck = []
 
-        const offsetX = targets.minerJob.nextLayer.minerCords.orientation === 'x+' ? 1 : targets.minerJob.nextLayer.minerCords.orientation === 'x-' ? -1 : 0
-        const offsetZ = targets.minerJob.nextLayer.minerCords.orientation === 'z+' ? 1 : targets.minerJob.nextLayer.minerCords.orientation === 'z-' ? -1 : 0
+        let off
+        const offsetX = targets.config.minerCords.orientation === 'x+' ? 1 : targets.config.minerCords.orientation === 'x-' ? -1 : 0
+        const offsetZ = targets.config.minerCords.orientation === 'z+' ? 1 : targets.config.minerCords.orientation === 'z-' ? -1 : 0
+
+        const backOffset = vec3(offsetX, 0, offsetZ)
 
         if (
-          targets.minerJob.nextLayer.minerCords.tunel === 'vertically' ||
+          targets.config.minerCords.tunel === 'vertically' ||
           (
-            targets.minerJob.nextLayer.minerCords.tunel === 'horizontally' &&
-            parseInt(originalPosition.y) === parseInt(targets.minerJob.nextLayer.minerCords.yStart)
+            targets.config.minerCords.tunel === 'horizontally' &&
+            parseInt(originalPosition.y) === parseInt(targets.minerJob.original.yStart)
           )
         ) {
           sidesToCheck.push({
@@ -81,8 +85,8 @@ function placeBlockAfterDig (bot, targets) {
         }
 
         if (
-          targets.minerJob.nextLayer.minerCords.tunel === 'horizontally' &&
-          parseInt(originalPosition.y) === parseInt(targets.minerJob.nextLayer.minerCords.yEnd)
+          targets.config.minerCords.tunel === 'horizontally' &&
+          parseInt(originalPosition.y) === parseInt(targets.minerJob.original.yEnd)
         ) {
           sidesToCheck.push({
             side: 'top',
@@ -95,52 +99,74 @@ function placeBlockAfterDig (bot, targets) {
         }
 
         if (
-          targets.minerJob.nextLayer.minerCords.tunel === 'horizontally' &&
+          targets.config.minerCords.tunel === 'horizontally' &&
           (
-            (
-              (
-                targets.minerJob.nextLayer.minerCords.orientation === 'x+' || targets.minerJob.nextLayer.minerCords.orientation === 'x-'
-              ) &&
-              parseInt(originalPosition.z) === parseInt(targets.minerJob.nextLayer.minerCords.zStart)
-            )
+            (targets.config.minerCords.orientation === 'x+' && parseInt(originalPosition.z) === parseInt(targets.minerJob.original.zStart)) ||
+            (targets.config.minerCords.orientation === 'x-' && parseInt(originalPosition.z) === parseInt(targets.minerJob.original.zEnd)) ||
+            (targets.config.minerCords.orientation === 'z+' && parseInt(originalPosition.x) === parseInt(targets.minerJob.original.xEnd)) ||
+            (targets.config.minerCords.orientation === 'z-' && parseInt(originalPosition.x) === parseInt(targets.minerJob.original.xStart))
           )
         ) {
-          const off = targets.minerJob.nextLayer.minerCords.orientation === 'x+' ? -1 : 1
+          switch (targets.config.minerCords.orientation) {
+            case 'x+':
+              off = vec3(0, 0, -1)
+              break
+            case 'x-':
+              off = vec3(0, 0, 1)
+              break
+            case 'z+':
+              off = vec3(1, 0, 0)
+              break
+            case 'z-':
+              off = vec3(-1, 0, 0)
+              break
+          }
 
           sidesToCheck.push({
             side: 'left',
-            position: originalPosition.offset(0, 0, off)
+            position: originalPosition.clone().add(off)
           })
           sidesToCheck.push({
             side: 'backLeft',
-            position: originalPosition.offset(offsetX, 0, off)
+            position: originalPosition.clone().add(backOffset).add(off)
           })
         }
 
         if (
-          targets.minerJob.nextLayer.minerCords.tunel === 'horizontally' &&
+          targets.config.minerCords.tunel === 'horizontally' &&
           (
-            (
-              (
-                targets.minerJob.nextLayer.minerCords.orientation === 'x+' || targets.minerJob.nextLayer.minerCords.orientation === 'x-'
-              ) &&
-              parseInt(originalPosition.z) === parseInt(targets.minerJob.nextLayer.minerCords.zEnd)
-            )
+            (targets.config.minerCords.orientation === 'x+' && parseInt(originalPosition.z) === parseInt(targets.minerJob.original.zEnd)) ||
+            (targets.config.minerCords.orientation === 'x-' && parseInt(originalPosition.z) === parseInt(targets.minerJob.original.zStart)) ||
+            (targets.config.minerCords.orientation === 'z+' && parseInt(originalPosition.x) === parseInt(targets.minerJob.original.xStart)) ||
+            (targets.config.minerCords.orientation === 'z-' && parseInt(originalPosition.x) === parseInt(targets.minerJob.original.xEnd))
           )
         ) {
-          const off = targets.minerJob.nextLayer.minerCords.orientation === 'x+' ? 1 : -1
+          switch (targets.config.minerCords.orientation) {
+            case 'x+':
+              off = vec3(0, 0, 1)
+              break
+            case 'x-':
+              off = vec3(0, 0, -1)
+              break
+            case 'z+':
+              off = vec3(-1, 0, 0)
+              break
+            case 'z-':
+              off = vec3(1, 0, 0)
+              break
+          }
 
           sidesToCheck.push({
             side: 'right',
-            position: originalPosition.offset(0, 0, off)
+            position: originalPosition.clone().add(off)
           })
           sidesToCheck.push({
             side: 'backRight',
-            position: originalPosition.offset(offsetX, 0, off)
+            position: originalPosition.clone().add(backOffset).add(off)
           })
         }
 
-        if (targets.minerJob.nextLayer.minerCords.tunel === 'horizontally') {
+        if (targets.config.minerCords.tunel === 'horizontally') {
           sidesToCheck.push({
             side: 'back',
             position: originalPosition.offset(offsetX, 0, offsetZ)
@@ -181,8 +207,8 @@ function placeBlockAfterDig (bot, targets) {
         const item = bot.inventory.items().find(item => targets.minerJob.blockForPlace.includes(item.name))
         if (placeBlocks.includes(block.name) && item) {
           const goPosition = originalPosition.clone()
-          if (targets.minerJob.nextLayer.minerCords.tunel === 'horizontally') {
-            goPosition.y = parseInt(targets.minerJob.nextLayer.minerCords.yStart)
+          if (targets.config.minerCords.tunel === 'horizontally') {
+            goPosition.y = parseInt(targets.minerJob.original.yStart)
           }
 
           targets.position = goPosition
