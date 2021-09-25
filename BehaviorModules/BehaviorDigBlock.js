@@ -71,7 +71,6 @@ module.exports = class template {
         })
         .catch(() => {
           console.log('Error found! cant equip for digging')
-          // console.log(err)
           reject(new Error('Error on equip tool'))
         })
     })
