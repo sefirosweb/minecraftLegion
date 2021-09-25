@@ -101,7 +101,7 @@ function miningFunction (bot, targets) {
   const eatFood = new BehaviorEatFood(bot, targets)
   eatFood.stateName = 'Eat Food'
   eatFood.x = 725
-  eatFood.y = 313
+  eatFood.y = 363
 
   const fillBlocks = require('@NestedStateModules/minerJob/fillFunction')(bot, targets)
   fillBlocks.x = 350
@@ -110,6 +110,11 @@ function miningFunction (bot, targets) {
   const placeBlockAfterDig = require('@NestedStateModules/minerJob/placeBlockAfterDig')(bot, targets)
   placeBlockAfterDig.x = 725
   placeBlockAfterDig.y = 563
+
+  const findItemsAndPickup = require('@NestedStateModules/findItemsAndPickup')(bot, targets)
+  findItemsAndPickup.stateName = 'Find Items'
+  findItemsAndPickup.x = 525
+  findItemsAndPickup.y = 363
 
   const transitions = [
     new StateTransition({
@@ -155,10 +160,15 @@ function miningFunction (bot, targets) {
 
     new StateTransition({
       parent: checkLayer,
-      child: eatFood,
-      name: 'checkLayer -> eatFood',
+      child: findItemsAndPickup,
       onTransition: () => currentBlock.setMinerCords(nextLayer.getCurrentLayerCoords()),
       shouldTransition: () => checkLayer.isFinished() || !bot.inventory.items().find(item => targets.minerJob.blockForPlace.includes(item.name))
+    }),
+
+    new StateTransition({
+      parent: findItemsAndPickup,
+      child: eatFood,
+      shouldTransition: () => findItemsAndPickup.isFinished()
     }),
 
     new StateTransition({
