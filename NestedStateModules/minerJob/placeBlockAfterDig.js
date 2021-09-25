@@ -5,7 +5,9 @@ const {
 } = require('mineflayer-statemachine')
 
 const BehaviorCustomPlaceBlock = require('@BehaviorModules/BehaviorCustomPlaceBlock')
+const BehaviorDigBlock = require('@BehaviorModules/BehaviorDigBlock')
 const BehaviorMoveTo = require('@BehaviorModules/BehaviorMoveTo')
+
 const vec3 = require('vec3')
 
 let originalPosition
@@ -45,6 +47,11 @@ function placeBlockAfterDig (bot, targets) {
   placeBlock.stateName = 'Place Block'
   placeBlock.x = 225
   placeBlock.y = 413
+
+  const harvestPlant = new BehaviorDigBlock(bot, targets)
+  harvestPlant.stateName = 'Harvest Plant'
+  harvestPlant.x = 225
+  harvestPlant.y = 525
 
   const moveToBlock = new BehaviorMoveTo(bot, targets)
   moveToBlock.stateName = 'Move To Block'
@@ -239,6 +246,15 @@ function placeBlockAfterDig (bot, targets) {
 
     new StateTransition({
       parent: moveToBlock,
+      child: harvestPlant,
+      onTransition: () => {
+        targets.position = currentSideToCheck.position
+      },
+      shouldTransition: () => (moveToBlock.isFinished() || moveToBlock.distanceToTarget() < 3) && !bot.pathfinder.isMining()
+    }),
+
+    new StateTransition({
+      parent: harvestPlant,
       child: placeBlock,
       onTransition: () => {
         targets.item = bot.inventory.items().find(item => targets.minerJob.blockForPlace.includes(item.name))
@@ -246,7 +262,7 @@ function placeBlockAfterDig (bot, targets) {
         targets.position = newPosition
         placeBlock.setOffset(blockOffset)
       },
-      shouldTransition: () => (moveToBlock.isFinished() || moveToBlock.distanceToTarget() < 3) && !bot.pathfinder.isMining()
+      shouldTransition: () => harvestPlant.isFinished() || !['kelp_plant'].includes(bot.blockAt(targets.position).name)
     }),
 
     new StateTransition({
