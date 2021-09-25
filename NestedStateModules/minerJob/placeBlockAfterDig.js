@@ -98,18 +98,22 @@ function placeBlockAfterDig (bot, targets) {
           targets.minerJob.nextLayer.minerCords.tunel === 'horizontally' &&
           (
             (
-              targets.minerJob.nextLayer.minerCords.orientation === 'x+' &&
+              (
+                targets.minerJob.nextLayer.minerCords.orientation === 'x+' || targets.minerJob.nextLayer.minerCords.orientation === 'x-'
+              ) &&
               parseInt(originalPosition.z) === parseInt(targets.minerJob.nextLayer.minerCords.zStart)
             )
           )
         ) {
+          const off = targets.minerJob.nextLayer.minerCords.orientation === 'x+' ? -1 : 1
+
           sidesToCheck.push({
             side: 'left',
-            position: originalPosition.offset(0, 0, -1)
+            position: originalPosition.offset(0, 0, off)
           })
           sidesToCheck.push({
             side: 'backLeft',
-            position: originalPosition.offset(offsetX, 0, -1)
+            position: originalPosition.offset(offsetX, 0, off)
           })
         }
 
@@ -117,18 +121,22 @@ function placeBlockAfterDig (bot, targets) {
           targets.minerJob.nextLayer.minerCords.tunel === 'horizontally' &&
           (
             (
-              targets.minerJob.nextLayer.minerCords.orientation === 'x+' &&
+              (
+                targets.minerJob.nextLayer.minerCords.orientation === 'x+' || targets.minerJob.nextLayer.minerCords.orientation === 'x-'
+              ) &&
               parseInt(originalPosition.z) === parseInt(targets.minerJob.nextLayer.minerCords.zEnd)
             )
           )
         ) {
+          const off = targets.minerJob.nextLayer.minerCords.orientation === 'x+' ? 1 : -1
+
           sidesToCheck.push({
             side: 'right',
-            position: originalPosition.offset(0, 0, 1)
+            position: originalPosition.offset(0, 0, off)
           })
           sidesToCheck.push({
             side: 'backRight',
-            position: originalPosition.offset(offsetX, 0, 1)
+            position: originalPosition.offset(offsetX, 0, off)
           })
         }
 
