@@ -7,6 +7,7 @@
 * Fixed big bugs in minerJob
 * Fixed bug with movements and is optimized
 * Update mineflayer to 3.11.1
+* Adding version 2.0 of tunel, now is better making tunels, avoid lava and water with new logic
 
 ## 1.2.0
 * Added Sorter Job

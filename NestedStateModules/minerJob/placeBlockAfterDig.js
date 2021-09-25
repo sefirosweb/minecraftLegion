@@ -8,6 +8,8 @@ const BehaviorCustomPlaceBlock = require('@BehaviorModules/BehaviorCustomPlaceBl
 const BehaviorMoveTo = require('@BehaviorModules/BehaviorMoveTo')
 
 let originalPosition
+let sidesToCheck
+let currentSideToCheck
 
 function placeBlockAfterDig (bot, targets) {
   const { getNewPositionForPlaceBlock } = require('@modules/placeBlockModule')(bot)
@@ -16,47 +18,38 @@ function placeBlockAfterDig (bot, targets) {
   const start = new BehaviorIdle(targets)
   start.stateName = 'Start'
   start.x = 125
-  start.y = 13
+  start.y = 113
 
   const load = new BehaviorIdle(targets)
   load.stateName = 'Load'
   load.x = 125
-  load.y = 113
+  load.y = 213
+
+  const checkPendingSides = new BehaviorIdle(targets)
+  checkPendingSides.stateName = 'Check Pending Sides'
+  checkPendingSides.x = 425
+  checkPendingSides.y = 213
 
   const exit = new BehaviorIdle(targets)
   exit.stateName = 'exit'
-  exit.x = 625
-  exit.y = 113
+  exit.x = 725
+  exit.y = 213
 
-  const checkCorner = new BehaviorIdle(targets)
-  checkCorner.stateName = 'Check Corner'
-  exit.stateName = 'exit'
-  checkCorner.x = 125
-  checkCorner.y = 263
+  const checkBlockOffset = new BehaviorIdle(targets)
+  checkBlockOffset.stateName = 'Check Block Offset'
+  checkBlockOffset.x = 625
+  checkBlockOffset.y = 413
 
-  const checkBack = new BehaviorIdle(targets)
-  checkBack.stateName = 'Check Back'
-  checkBack.x = 125
-  checkBack.y = 413
-
-  const placeBlockBottom = new BehaviorCustomPlaceBlock(bot, targets)
-  placeBlockBottom.stateName = 'Place Block Bottom'
-  placeBlockBottom.x = 425
-  placeBlockBottom.y = 263
-
-  const placeBlockCorner = new BehaviorCustomPlaceBlock(bot, targets)
-  placeBlockCorner.stateName = 'Place Block Corner'
-  placeBlockCorner.x = 425
-  placeBlockCorner.y = 413
-
-  const placeBlockBack = new BehaviorCustomPlaceBlock(bot, targets)
-  placeBlockBack.stateName = 'Place Block Back'
-  placeBlockBack.x = 625
-  placeBlockBack.y = 563
+  const placeBlock = new BehaviorCustomPlaceBlock(bot, targets)
+  placeBlock.stateName = 'Place Block'
+  placeBlock.x = 225
+  placeBlock.y = 413
 
   const moveToBlock = new BehaviorMoveTo(bot, targets)
   moveToBlock.stateName = 'Move To Block'
   moveToBlock.movements = targets.movements
+  moveToBlock.x = 425
+  moveToBlock.y = 613
 
   const transitions = [
 
@@ -65,140 +58,140 @@ function placeBlockAfterDig (bot, targets) {
       child: load,
       onTransition: () => {
         originalPosition = targets.position.clone()
+        sidesToCheck = []
+
+        const offsetX = targets.minerJob.nextLayer.minerCords.orientation === 'x+' ? 1 : targets.minerJob.nextLayer.minerCords.orientation === 'x-' ? -1 : 0
+        const offsetZ = targets.minerJob.nextLayer.minerCords.orientation === 'z+' ? 1 : targets.minerJob.nextLayer.minerCords.orientation === 'z-' ? -1 : 0
+
+        if (
+          targets.minerJob.nextLayer.minerCords.tunel === 'vertically' ||
+          (
+            targets.minerJob.nextLayer.minerCords.tunel === 'horizontally' &&
+            parseInt(originalPosition.y) === parseInt(targets.minerJob.nextLayer.minerCords.yStart)
+          )
+        ) {
+          sidesToCheck.push({
+            side: 'bottom',
+            position: originalPosition.offset(0, -1, 0)
+          })
+          sidesToCheck.push({
+            side: 'backBottom',
+            position: originalPosition.offset(offsetX, -1, offsetZ)
+          })
+        }
+
+        if (
+          targets.minerJob.nextLayer.minerCords.tunel === 'horizontally' &&
+          parseInt(originalPosition.y) === parseInt(targets.minerJob.nextLayer.minerCords.yEnd)
+        ) {
+          sidesToCheck.push({
+            side: 'top',
+            position: originalPosition.offset(0, 1, 0)
+          })
+          sidesToCheck.push({
+            side: 'backTop',
+            position: originalPosition.offset(offsetX, 1, offsetZ)
+          })
+        }
+
+        if (
+          targets.minerJob.nextLayer.minerCords.tunel === 'horizontally' &&
+          (
+            (
+              targets.minerJob.nextLayer.minerCords.orientation === 'x+' &&
+              parseInt(originalPosition.z) === parseInt(targets.minerJob.nextLayer.minerCords.zStart)
+            )
+          )
+        ) {
+          sidesToCheck.push({
+            side: 'left',
+            position: originalPosition.offset(0, 0, -1)
+          })
+          sidesToCheck.push({
+            side: 'backLeft',
+            position: originalPosition.offset(offsetX, 0, -1)
+          })
+        }
+
+        if (
+          targets.minerJob.nextLayer.minerCords.tunel === 'horizontally' &&
+          (
+            (
+              targets.minerJob.nextLayer.minerCords.orientation === 'x+' &&
+              parseInt(originalPosition.z) === parseInt(targets.minerJob.nextLayer.minerCords.zEnd)
+            )
+          )
+        ) {
+          sidesToCheck.push({
+            side: 'right',
+            position: originalPosition.offset(0, 0, 1)
+          })
+          sidesToCheck.push({
+            side: 'backRight',
+            position: originalPosition.offset(offsetX, 0, 1)
+          })
+        }
+
+        if (targets.minerJob.nextLayer.minerCords.tunel === 'horizontally') {
+          sidesToCheck.push({
+            side: 'back',
+            position: originalPosition.offset(offsetX, 0, offsetZ)
+          })
+        }
       },
       shouldTransition: () => true
     }),
 
     new StateTransition({
       parent: load,
-      child: placeBlockBottom,
-      shouldTransition: () => {
-        const block = bot.blockAt(originalPosition.offset(0, -1, 0))
-        const item = bot.inventory.items().find(item => targets.minerJob.blockForPlace.includes(item.name))
-
-        if (
-          (
-            targets.minerJob.nextLayer.minerCords.tunel === 'vertically' ||
-            (
-              targets.minerJob.nextLayer.minerCords.tunel === 'horizontally' &&
-              parseInt(originalPosition.y) === parseInt(targets.minerJob.nextLayer.minerCords.yStart)
-            )
-          ) &&
-          placeBlocks.includes(block.name) &&
-          item
-        ) {
-          targets.item = item
-          const positionForPlaceBlock = getNewPositionForPlaceBlock(originalPosition.offset(0, -1, 0))
-          targets.position = positionForPlaceBlock.newPosition
-          placeBlockBottom.setOffset(positionForPlaceBlock.blockOffset)
-          return true
-        }
-        return false
-      }
+      child: checkPendingSides,
+      shouldTransition: () => true
     }),
 
     new StateTransition({
-      parent: load,
-      child: checkBack,
-      shouldTransition: () => {
-        if (
-          targets.minerJob.nextLayer.minerCords.tunel === 'horizontally' &&
-          parseInt(originalPosition.y) !== parseInt(targets.minerJob.nextLayer.minerCords.yStart)
-        ) {
-          return true
-        }
-
-        return false
-      }
-    }),
-
-    new StateTransition({
-      parent: placeBlockBottom,
-      child: exit,
+      parent: checkPendingSides,
+      child: checkBlockOffset,
       onTransition: () => {
-        targets.position = originalPosition
+        currentSideToCheck = sidesToCheck.shift()
       },
-      shouldTransition: () =>
-        targets.minerJob.nextLayer.minerCords.tunel === 'vertically' &&
-        (
-          placeBlockBottom.isFinished() ||
-          placeBlockBottom.isItemNotFound() ||
-          placeBlockBottom.isCantPlaceBlock()
-        )
+      shouldTransition: () => sidesToCheck.length > 0
     }),
 
     new StateTransition({
-      parent: placeBlockBottom,
-      child: checkCorner,
-      shouldTransition: () =>
-        targets.minerJob.nextLayer.minerCords.tunel === 'horizontally' &&
-        (
-          placeBlockBottom.isFinished() ||
-          placeBlockBottom.isItemNotFound() ||
-          placeBlockBottom.isCantPlaceBlock()
-        )
-    }),
-
-    new StateTransition({
-      parent: load,
+      parent: checkPendingSides,
       child: exit,
       shouldTransition: () => {
-        const block = bot.blockAt(originalPosition.offset(0, -1, 0))
-        const item = bot.inventory.items().find(item => targets.minerJob.blockForPlace.includes(item.name))
-
-        if (
-          targets.minerJob.nextLayer.minerCords.tunel === 'vertically' &&
-          (
-            !placeBlocks.includes(block.name) ||
-            !item
-          )
-        ) {
-          return true
-        }
-
-        return false
+        return sidesToCheck.length === 0
       }
     }),
 
     new StateTransition({
-      parent: load,
-      child: checkCorner,
+      parent: checkBlockOffset,
+      child: moveToBlock,
       shouldTransition: () => {
-        const block = bot.blockAt(originalPosition.offset(0, -1, 0))
+        const block = bot.blockAt(currentSideToCheck.position)
         const item = bot.inventory.items().find(item => targets.minerJob.blockForPlace.includes(item.name))
+        if (placeBlocks.includes(block.name) && item) {
+          const goPosition = originalPosition.clone()
+          if (targets.minerJob.nextLayer.minerCords.tunel === 'horizontally') {
+            goPosition.y = parseInt(targets.minerJob.nextLayer.minerCords.yStart)
+          }
 
-        if (
-          targets.minerJob.nextLayer.minerCords.tunel === 'horizontally' &&
-          (
-            !placeBlocks.includes(block.name) ||
-            !item
-          )
-        ) {
+          targets.position = goPosition
           return true
         }
-
         return false
       }
     }),
 
     new StateTransition({
-      parent: checkCorner,
-      child: checkBack,
+      parent: checkBlockOffset,
+      child: checkPendingSides,
       shouldTransition: () => {
-        const offsetX = targets.minerJob.nextLayer.minerCords.orientation === 'x+'
-          ? 1 : targets.minerJob.nextLayer.minerCords.orientation === 'x-' ? -1 : 0
-        const offsetZ = targets.minerJob.nextLayer.minerCords.orientation === 'z+'
-          ? 1 : targets.minerJob.nextLayer.minerCords.orientation === 'z-' ? -1 : 0
-        const block = bot.blockAt(originalPosition.offset(offsetX, -1, offsetZ))
+        const block = bot.blockAt(currentSideToCheck.position)
         const item = bot.inventory.items().find(item => targets.minerJob.blockForPlace.includes(item.name))
 
-        if (
-          targets.minerJob.nextLayer.minerCords.tunel === 'horizontally' &&
-          (
-            !placeBlocks.includes(block.name) ||
-            !item
-          )
-        ) {
+        if (!placeBlocks.includes(block.name) || !item) {
           return true
         }
 
@@ -207,103 +200,21 @@ function placeBlockAfterDig (bot, targets) {
     }),
 
     new StateTransition({
-      parent: checkCorner,
-      child: placeBlockCorner,
-      shouldTransition: () => {
-        const offsetX = targets.minerJob.nextLayer.minerCords.orientation === 'x+' ? 1 : targets.minerJob.nextLayer.minerCords.orientation === 'x-' ? -1 : 0
-        const offsetZ = targets.minerJob.nextLayer.minerCords.orientation === 'z+' ? 1 : targets.minerJob.nextLayer.minerCords.orientation === 'z-' ? -1 : 0
-        const block = bot.blockAt(originalPosition.offset(offsetX, -1, offsetZ))
-        const item = bot.inventory.items().find(item => targets.minerJob.blockForPlace.includes(item.name))
-
-        if (
-          targets.minerJob.nextLayer.minerCords.tunel === 'horizontally' &&
-          placeBlocks.includes(block.name) &&
-          item
-        ) {
-          targets.item = item
-          const { newPosition, blockOffset } = getNewPositionForPlaceBlock(originalPosition.offset(offsetX, -1, offsetZ))
-          targets.position = newPosition
-          placeBlockCorner.setOffset(blockOffset.clone())
-          return true
-        }
-
-        return false
-      }
-    }),
-
-    new StateTransition({
-      parent: placeBlockCorner,
-      child: checkBack,
-      shouldTransition: () =>
-        targets.minerJob.nextLayer.minerCords.tunel === 'horizontally' &&
-        (
-          placeBlockCorner.isFinished() ||
-          placeBlockCorner.isItemNotFound() ||
-          placeBlockCorner.isCantPlaceBlock()
-        )
-    }),
-
-    new StateTransition({
-      parent: checkBack,
-      child: placeBlockBack,
-      shouldTransition: () => {
-        const offsetX = targets.minerJob.nextLayer.minerCords.orientation === 'x+' ? 1 : targets.minerJob.nextLayer.minerCords.orientation === 'x-' ? -1 : 0
-        const offsetZ = targets.minerJob.nextLayer.minerCords.orientation === 'z+' ? 1 : targets.minerJob.nextLayer.minerCords.orientation === 'z-' ? -1 : 0
-        const block = bot.blockAt(originalPosition.offset(offsetX, 0, offsetZ))
-        const item = bot.inventory.items().find(item => targets.minerJob.blockForPlace.includes(item.name))
-
-        if (
-          targets.minerJob.nextLayer.minerCords.tunel === 'horizontally' &&
-          placeBlocks.includes(block.name) &&
-          item
-        ) {
-          targets.item = item
-          const { newPosition, blockOffset } = getNewPositionForPlaceBlock(originalPosition.offset(offsetX, 0, offsetZ))
-          targets.position = newPosition
-          placeBlockBack.setOffset(blockOffset.clone())
-          return true
-        }
-
-        return false
-      }
-    }),
-
-    new StateTransition({
-      parent: checkBack,
-      child: exit,
-      shouldTransition: () => {
-        const offsetX = targets.minerJob.nextLayer.minerCords.orientation === 'x+' ? 1 : targets.minerJob.nextLayer.minerCords.orientation === 'x-' ? -1 : 0
-        const offsetZ = targets.minerJob.nextLayer.minerCords.orientation === 'z+' ? 1 : targets.minerJob.nextLayer.minerCords.orientation === 'z-' ? -1 : 0
-        const block = bot.blockAt(originalPosition.offset(offsetX, 0, offsetZ))
-        const item = bot.inventory.items().find(item => targets.minerJob.blockForPlace.includes(item.name))
-
-        if (
-          targets.minerJob.nextLayer.minerCords.tunel === 'horizontally' &&
-          (
-            !placeBlocks.includes(block.name) ||
-            !item
-          )
-        ) {
-          return true
-        }
-
-        return false
-      }
-    }),
-
-    new StateTransition({
-      parent: placeBlockBack,
-      child: exit,
+      parent: moveToBlock,
+      child: placeBlock,
       onTransition: () => {
-        targets.position = originalPosition
+        targets.item = bot.inventory.items().find(item => targets.minerJob.blockForPlace.includes(item.name))
+        const { newPosition, blockOffset } = getNewPositionForPlaceBlock(currentSideToCheck.position)
+        targets.position = newPosition
+        placeBlock.setOffset(blockOffset)
       },
-      shouldTransition: () =>
-        targets.minerJob.nextLayer.minerCords.tunel === 'horizontally' &&
-        (
-          placeBlockBack.isFinished() ||
-          placeBlockBack.isItemNotFound() ||
-          placeBlockBack.isCantPlaceBlock()
-        )
+      shouldTransition: () => (moveToBlock.isFinished() || moveToBlock.distanceToTarget() < 3) && !bot.pathfinder.isMining()
+    }),
+
+    new StateTransition({
+      parent: placeBlock,
+      child: checkPendingSides,
+      shouldTransition: () => placeBlock.isFinished() || placeBlock.isItemNotFound() || placeBlock.isCantPlaceBlock()
     })
 
   ]

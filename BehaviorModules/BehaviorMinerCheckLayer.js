@@ -187,25 +187,19 @@ module.exports = class BehaviorMinerCheckLayer {
       this.zEnd = parseInt(this.minerCords.zStart)
     }
 
-    if (this.xStart > this.xEnd) {
-      if (this.minerCords.tunel === 'vertically' || this.minerCords.orientation === 'z+') {
+    if (this.minerCords.tunel === 'vertically') {
+      if (this.xStart > this.xEnd) {
         this.xStart++
         this.xEnd--
-      }
-    } else {
-      if (this.minerCords.tunel === 'vertically' || this.minerCords.orientation === 'z-') {
+      } else {
         this.xStart--
         this.xEnd++
       }
-    }
 
-    if (this.zStart > this.zEnd) {
-      if (this.minerCords.tunel === 'vertically' || this.minerCords.orientation === 'x-') {
+      if (this.zStart > this.zEnd) {
         this.zStart++
         this.zEnd--
-      }
-    } else {
-      if (this.minerCords.tunel === 'vertically' || this.minerCords.orientation === 'x+') {
+      } else {
         this.zStart--
         this.zEnd++
       }
