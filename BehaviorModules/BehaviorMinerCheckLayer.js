@@ -165,8 +165,8 @@ module.exports = class BehaviorMinerCheckLayer {
   }
 
   startBlock () {
-    this.yStart = this.minerCords.yStart > this.minerCords.yEnd ? parseInt(this.minerCords.yStart) : parseInt(this.minerCords.yEnd)
-    this.yEnd = this.minerCords.yStart > this.minerCords.yEnd ? parseInt(this.minerCords.yEnd) : parseInt(this.minerCords.yStart)
+    this.yStart = parseInt(this.minerCords.yStart) > parseInt(this.minerCords.yEnd) ? parseInt(this.minerCords.yStart) : parseInt(this.minerCords.yEnd)
+    this.yEnd = parseInt(this.minerCords.yStart) > parseInt(this.minerCords.yEnd) ? parseInt(this.minerCords.yEnd) : parseInt(this.minerCords.yStart)
 
     this.yStart++
     if (this.minerCords.tunel === 'horizontally') {
