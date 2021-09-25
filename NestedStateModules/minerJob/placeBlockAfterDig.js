@@ -61,6 +61,10 @@ function placeBlockAfterDig (bot, targets) {
         originalPosition = targets.position.clone()
         sidesToCheck = []
 
+        if (targets.config.minerCords.tunel === 'horizontally') {
+          moveToBlock.movements.canDig = false
+        }
+
         let off
         const offsetX = targets.config.minerCords.orientation === 'x+' ? 1 : targets.config.minerCords.orientation === 'x-' ? -1 : 0
         const offsetZ = targets.config.minerCords.orientation === 'z+' ? 1 : targets.config.minerCords.orientation === 'z-' ? -1 : 0
