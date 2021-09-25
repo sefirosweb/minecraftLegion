@@ -21,12 +21,7 @@ function placeBlockAfterDig (bot, targets) {
   const start = new BehaviorIdle(targets)
   start.stateName = 'Start'
   start.x = 125
-  start.y = 113
-
-  const load = new BehaviorIdle(targets)
-  load.stateName = 'Load'
-  load.x = 125
-  load.y = 213
+  start.y = 213
 
   const checkPendingSides = new BehaviorIdle(targets)
   checkPendingSides.stateName = 'Check Pending Sides'
@@ -63,7 +58,7 @@ function placeBlockAfterDig (bot, targets) {
 
     new StateTransition({
       parent: start,
-      child: load,
+      child: checkPendingSides,
       onTransition: () => {
         originalPosition = targets.position.clone()
         sidesToCheck = []
@@ -184,12 +179,6 @@ function placeBlockAfterDig (bot, targets) {
           })
         }
       },
-      shouldTransition: () => true
-    }),
-
-    new StateTransition({
-      parent: load,
-      child: checkPendingSides,
       shouldTransition: () => true
     }),
 
