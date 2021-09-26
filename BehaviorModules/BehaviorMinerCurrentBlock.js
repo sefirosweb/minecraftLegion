@@ -42,30 +42,18 @@ module.exports = class BehaviorMinerCurrentBlock {
 
   startBlock () {
     // For Horizontally go down to up
-    this.yStart = this.minerCords.yStart
-    this.yEnd = this.minerCords.yEnd
+    this.yStart = parseInt(this.minerCords.yStart) > parseInt(this.minerCords.yEnd) ? parseInt(this.minerCords.yEnd) : parseInt(this.minerCords.yStart)
+    this.yEnd = parseInt(this.minerCords.yStart) > parseInt(this.minerCords.yEnd) ? parseInt(this.minerCords.yStart) : parseInt(this.minerCords.yEnd)
+
+    this.xStart = parseInt(this.minerCords.xStart) > parseInt(this.minerCords.xEnd) ? parseInt(this.minerCords.xEnd) : parseInt(this.minerCords.xStart)
+    this.xEnd = parseInt(this.minerCords.xStart) > parseInt(this.minerCords.xEnd) ? parseInt(this.minerCords.xStart) : parseInt(this.minerCords.xEnd)
+
+    this.zStart = parseInt(this.minerCords.zStart) > parseInt(this.minerCords.zEnd) ? parseInt(this.minerCords.zEnd) : parseInt(this.minerCords.zStart)
+    this.zEnd = parseInt(this.minerCords.zStart) > parseInt(this.minerCords.zEnd) ? parseInt(this.minerCords.zStart) : parseInt(this.minerCords.zEnd)
 
     this.yCurrent = parseInt(this.yStart)
-
-    if (this.minerCords.orientation === 'z-' || this.minerCords.orientation === 'x+') {
-      this.xStart = parseInt(this.minerCords.xStart)
-      this.zStart = parseInt(this.minerCords.zStart)
-
-      this.xEnd = parseInt(this.minerCords.xEnd)
-      this.zEnd = parseInt(this.minerCords.zEnd)
-
-      this.xCurrent = parseInt(this.xStart)
-      this.zCurrent = parseInt(this.zStart)
-    } else { // S & W
-      this.xStart = parseInt(this.minerCords.xEnd)
-      this.zStart = parseInt(this.minerCords.zEnd)
-
-      this.xEnd = parseInt(this.minerCords.xStart)
-      this.zEnd = parseInt(this.minerCords.zStart)
-
-      this.xCurrent = parseInt(this.xStart)
-      this.zCurrent = parseInt(this.zStart)
-    }
+    this.xCurrent = parseInt(this.xStart)
+    this.zCurrent = parseInt(this.zStart)
   }
 
   onStateEntered () {
