@@ -31,7 +31,10 @@ const botsToStart = [
   { username: 'MinerX-' },
   { username: 'MinerZ+' },
   { username: 'MinerZ-' },
-  { username: 'MinerY' }
+  { username: 'MinerY1' },
+  { username: 'MinerY2' },
+  { username: 'MinerY3' },
+  { username: 'MinerY4' }
   // { username: 'Breeder' },
   // { username: 'Sorter' },
   // { username: 'Guard1' },
