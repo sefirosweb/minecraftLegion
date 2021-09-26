@@ -67,8 +67,8 @@ module.exports = class BehaviorMinerCurrentBlock {
   }
 
   checkSand () {
-    if (this.minerCords.tunel !== 'horizontally') {
-      return
+    if (this.minerCords.tunel === 'vertically') {
+      return false
     }
 
     const temp = this.yEnd
