@@ -1,4 +1,4 @@
-## 1.2.1
+## 1.3
 * Add button for clear all positions of Guard
 * Refactorized targets variables and jobs folder (nested jobs functions)
 * Added auto restart if bot disconnects
@@ -8,6 +8,7 @@
 * Fixed bug with movements and is optimized
 * Update mineflayer to 3.11.1
 * Adding version 2.0 of tunel, now is better making tunels, avoid lava and water with new logic
+* Adding support for prevent the gravel and sand when making tunels
 
 ## 1.2.0
 * Added Sorter Job
