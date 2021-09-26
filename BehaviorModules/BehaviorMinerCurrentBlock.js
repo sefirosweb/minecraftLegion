@@ -50,9 +50,22 @@ module.exports = class BehaviorMinerCurrentBlock {
     this.zStart = parseInt(this.minerCords.zStart) > parseInt(this.minerCords.zEnd) ? parseInt(this.minerCords.zEnd) : parseInt(this.minerCords.zStart)
     this.zEnd = parseInt(this.minerCords.zStart) > parseInt(this.minerCords.zEnd) ? parseInt(this.minerCords.zStart) : parseInt(this.minerCords.zEnd)
 
-    this.yCurrent = parseInt(this.yStart)
-    this.xCurrent = parseInt(this.xStart)
-    this.zCurrent = parseInt(this.zStart)
+    if (this.minerCords.tunel === 'vertically') {
+      if (this.minerCords.orientation === 'z+' || this.minerCords.orientation === 'x-') {
+        let temp = this.xStart
+
+        this.xStart = this.xEnd
+        this.xEnd = temp
+
+        temp = this.zStart
+        this.zStart = this.zEnd
+        this.zEnd = temp
+      }
+    }
+
+    this.yCurrent = this.yStart
+    this.xCurrent = this.xStart
+    this.zCurrent = this.zStart
   }
 
   onStateEntered () {
