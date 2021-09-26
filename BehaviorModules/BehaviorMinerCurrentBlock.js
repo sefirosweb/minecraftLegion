@@ -111,10 +111,6 @@ module.exports = class BehaviorMinerCurrentBlock {
       position.add(Vec3(0, 1, 0))
     }
 
-    if (allBlocks) {
-      console.log(position)
-    }
-
     const block = this.bot.blockAt(position)
     if (!block) {
       return false
