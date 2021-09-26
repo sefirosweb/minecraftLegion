@@ -41,7 +41,6 @@ module.exports = class BehaviorMinerCurrentBlock {
   }
 
   startBlock () {
-    // For Horizontally go down to up
     this.yStart = parseInt(this.minerCords.yStart) > parseInt(this.minerCords.yEnd) ? parseInt(this.minerCords.yEnd) : parseInt(this.minerCords.yStart)
     this.yEnd = parseInt(this.minerCords.yStart) > parseInt(this.minerCords.yEnd) ? parseInt(this.minerCords.yStart) : parseInt(this.minerCords.yEnd)
 
