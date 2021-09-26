@@ -58,16 +58,36 @@ module.exports = class BehaviorMinerCurrentBlock {
   onStateEntered () {
     this.isEndFinished = false
     this.startBlock()
-    this.nextBlock()
+    this.isEndFinished = this.checkSand()
+    if (!this.isEndFinished) {
+      this.firstBlockOnLayer = true
+      this.startBlock()
+      this.isEndFinished = this.nextBlock(true)
+    }
   }
 
-  nextBlock () {
+  checkSand () {
+    if (this.minerCords.tunel !== 'horizontally') {
+      return
+    }
+
+    const temp = this.yEnd
+    this.yEnd = this.yStart
+    this.yStart = temp
+    this.yCurrent = parseInt(this.yStart)
+
+    return this.nextBlock(false)
+  }
+
+  nextBlock (allBlocks) {
     if (
       this.yCurrent === this.yEnd &&
       this.zCurrent === this.zEnd &&
       this.xCurrent === this.xEnd
     ) {
-      this.isLayerFinished = true
+      if (allBlocks) {
+        this.isLayerFinished = true
+      }
     } else {
       if (this.minerCords.orientation === 'z-' || this.minerCords.orientation === 'z+') {
         this.zNext()
@@ -76,26 +96,35 @@ module.exports = class BehaviorMinerCurrentBlock {
         this.xNext()
       }
 
-      if (this.calculateIsValid()) {
-        this.isEndFinished = true
+      if (this.calculateIsValid(allBlocks)) {
+        return true
       } else {
-        this.nextBlock()
+        return this.nextBlock(allBlocks)
       }
     }
   }
 
-  getBlockType () {
+  calculateIsValid (allBlocks) {
     const position = new Vec3(this.xCurrent, this.yCurrent, this.zCurrent)
-    return this.bot.blockAt(position)
-  }
 
-  calculateIsValid () {
-    const block = this.getBlockType()
+    if (!allBlocks) { // Check over block is sand
+      position.add(Vec3(0, 1, 0))
+    }
+
+    if (allBlocks) {
+      console.log(position)
+    }
+
+    const block = this.bot.blockAt(position)
     if (!block) {
       return false
     }
     const isValidBlockType = this.blockInValidType.find(b => b === block.name)
-    if (isValidBlockType === undefined) {
+    if (isValidBlockType === undefined &&
+      (
+        allBlocks || ['sand', 'gravel'].includes(block.name)
+      )
+    ) {
       this.targets.position = block.position // I detect is not air / lava / water then go to this position
       return true
     }
@@ -104,7 +133,11 @@ module.exports = class BehaviorMinerCurrentBlock {
   }
 
   yNext () {
-    this.yCurrent++
+    if (this.yCurrent < this.yEnd) {
+      this.yCurrent++
+    } else {
+      this.yCurrent--
+    }
   }
 
   xNext () {
