@@ -1,6 +1,8 @@
 const vec3 = require('vec3')
 
 module.exports = function (bot, targets) {
+  const placeBlocks = require('@modules/placeBlockModule')(bot).blocksCanBeReplaced
+
   const getSidesToCheck = (originalPosition) => {
     const sidesToCheck = []
 
@@ -119,7 +121,22 @@ module.exports = function (bot, targets) {
     return sidesToCheck
   }
 
+  const calculateSideToPlaceBlock = (position) => {
+    const sidesToPlaceBlock = []
+
+    const sidesToCheck = getSidesToCheck(position.clone())
+    sidesToCheck.forEach((currentSideToCheck) => {
+      const block = bot.blockAt(currentSideToCheck.position)
+      if (placeBlocks.includes(block.name)) {
+        sidesToPlaceBlock.push(currentSideToCheck.position.clone())
+      }
+    })
+
+    return sidesToPlaceBlock
+  }
+
   return {
+    calculateSideToPlaceBlock,
     getSidesToCheck
   }
 }
