@@ -6,6 +6,7 @@ module.exports = class BehaviorCustomPlaceBlock {
     this.targets = targets
     this.stateName = 'Custom BehaviorPlaceBlock '
     this.blockCanBeReplaced = require('@modules/placeBlockModule')(bot).blocksCanBeReplaced
+    this.equipHeldItem = require('@modules/inventoryModule')(bot).equipHeldItem
 
     this.isEndFinished = false
     this.itemNotFound = false
@@ -82,7 +83,7 @@ module.exports = class BehaviorCustomPlaceBlock {
       return
     }
 
-    this.equip()
+    this.equipHeldItem(this.targets.item.name)
       .then(() => {
         this.placeBlock(block)
       })
@@ -111,17 +112,6 @@ module.exports = class BehaviorCustomPlaceBlock {
       ) {
         this.isJumping = true
         this.bot.setControlState('jump', true)
-      }
-
-      const hand = this.bot.heldItem
-      if (hand == null && hand.name !== this.targets.item.name) {
-        this.equip()
-          .then(() => {
-            this.place()
-              .then(() => {
-                resolve()
-              })
-          })
       }
 
       this.bot.placeBlock(block, this.offset)
@@ -163,37 +153,5 @@ module.exports = class BehaviorCustomPlaceBlock {
           this.cantPlaceBlock = true
         }
       })
-  }
-
-  equip () {
-    return new Promise((resolve, reject) => {
-      const hand = this.bot.heldItem
-
-      if (hand != null && hand.name === this.targets.item.name) {
-        resolve()
-        return
-      }
-
-      const item = this.bot.inventory.items().find(item => this.targets.item.name === item.name)
-
-      if (item === undefined) {
-        botWebsocket.log(`Item not found ${this.targets.item}`)
-        this.itemNotFound = true
-      } else {
-        this.bot.equip(item, 'hand')
-          .then(() => {
-            resolve()
-          })
-          .catch(function (err) {
-            botWebsocket.log(`Error on change item ${this.targets.item.name} ${err.message}`)
-            setTimeout(function () {
-              this.equip()
-                .then(() => {
-                  resolve()
-                })
-            }.bind(this), 200)
-          }.bind(this))
-      }
-    })
   }
 }
