@@ -2,6 +2,7 @@ const vec3 = require('vec3')
 
 module.exports = function (bot) {
   const blocksCanBeReplaced = ['air', 'cave_air', 'lava', 'water', 'seagrass', 'tall_seagrass', 'kelp_plant']
+  let isJumping
 
   const getNewPositionForPlaceBlock = (position) => {
     const offset = getOffsetPlaceBlock(bot.blockAt(position))
@@ -64,9 +65,43 @@ module.exports = function (bot) {
     return false
   }
 
+  const place = (position, offset, canJump = true) => {
+    return new Promise((resolve, reject) => {
+      const block = bot.blockAt(position)
+
+      if (!block) {
+        reject(new Error('Error on block!'))
+        return
+      }
+
+      isJumping = false
+
+      if (
+        Math.floor(bot.entity.position.x) === block.position.x &&
+        Math.floor(bot.entity.position.y) === block.position.y &&
+        Math.floor(bot.entity.position.z) === block.position.z &&
+        canJump
+      ) {
+        isJumping = true
+        bot.setControlState('jump', true)
+      }
+
+      bot.placeBlock(block, offset)
+        .then(() => {
+          if (isJumping) { bot.setControlState('jump', false) }
+          resolve()
+        })
+        .catch(err => {
+          if (isJumping) { bot.setControlState('jump', false) }
+          reject(err)
+        })
+    })
+  }
+
   return {
     getNewPositionForPlaceBlock,
     getOffsetPlaceBlock,
-    blocksCanBeReplaced
+    blocksCanBeReplaced,
+    place
   }
 }

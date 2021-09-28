@@ -7,6 +7,7 @@ module.exports = class BehaviorCustomPlaceBlock {
     this.stateName = 'Custom BehaviorPlaceBlock '
     this.blockCanBeReplaced = require('@modules/placeBlockModule')(bot).blocksCanBeReplaced
     this.equipHeldItem = require('@modules/inventoryModule')(bot).equipHeldItem
+    this.place = require('@modules/placeBlockModule')(bot).place
 
     this.isEndFinished = false
     this.itemNotFound = false
@@ -85,73 +86,14 @@ module.exports = class BehaviorCustomPlaceBlock {
 
     this.equipHeldItem(this.targets.item.name)
       .then(() => {
-        this.placeBlock(block)
-      })
-  }
-
-  place (offset) {
-    return new Promise((resolve, reject) => {
-      const blockOffset = this.bot.blockAt(this.targets.position.clone().add(this.offset))
-      const block = this.bot.blockAt(this.targets.position)
-      if (blockOffset == null || blockOffset.name === this.targets.item.name) {
-        resolve(true)
-        return
-      }
-
-      if (!this.blockCanBeReplaced.includes(blockOffset.name)) {
-        botWebsocket.log('Cant place block there!!')
-        resolve(false)
-        return
-      }
-
-      if (
-        Math.floor(this.bot.entity.position.y) === blockOffset.position.y &&
-        this.bot.entity.position.distanceTo(blockOffset.position) < 1.8 &&
-        this.isJumping === false &&
-        this.canJump === true
-      ) {
-        this.isJumping = true
-        this.bot.setControlState('jump', true)
-      }
-
-      this.bot.placeBlock(block, this.offset)
-        .then(() => {
-          resolve()
-        })
-        .catch((err) => {
-          console.log(err)
-          setTimeout(function () {
-            this.place()
-              .then(canBePlaced => {
-                resolve(canBePlaced)
-              })
-          }.bind(this), 200)
-        })
-    })
-  }
-
-  placeBlock (block) {
-    // Jump if this on same position
-    this.isJumping = false
-    if (
-      Math.floor(this.bot.entity.position.x) === block.position.x &&
-      Math.floor(this.bot.entity.position.y) === block.position.y &&
-      Math.floor(this.bot.entity.position.z) === block.position.z &&
-      this.canJump
-    ) {
-      this.isJumping = true
-      this.bot.setControlState('jump', true)
-    }
-    this.place()
-      .then((canBePlaced) => {
-        if (this.isJumping) {
-          this.bot.setControlState('jump', false)
-        }
-        if (canBePlaced) {
-          this.isEndFinished = true
-        } else {
-          this.cantPlaceBlock = true
-        }
+        this.place(this.targets.position, this.offset)
+          .then(() => {
+            this.isEndFinished = true
+          })
+          .catch(() => {
+            this.cantPlaceBlock = true
+            this.isEndFinished = true
+          })
       })
   }
 }
