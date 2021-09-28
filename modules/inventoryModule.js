@@ -187,6 +187,37 @@ module.exports = function (bot) {
     return ['helmet', 'chestplate', 'leggings', 'boots', 'sword', 'pickaxe', 'shovel', '_axe', 'hoe']
   }
 
+  const equipHeldItem = (itemName) => {
+    return new Promise((resolve, reject) => {
+      const hand = bot.heldItem
+
+      if (hand != null && hand.name === itemName) {
+        resolve()
+        return
+      }
+
+      const item = bot.inventory.items().find(item => itemName === item.name)
+
+      if (item === undefined) {
+        reject(new Error(`Item not found ${itemName}`))
+        return
+      }
+
+      bot.equip(item, 'hand')
+        .then(() => {
+          resolve()
+        })
+        .catch(function () {
+          setTimeout(function () {
+            equipHeldItem(itemName)
+              .then(() => {
+                resolve()
+              })
+          }, 200)
+        })
+    })
+  }
+
   return {
     countItemsInInventoryOrEquipped,
     countItemsInInventory,
@@ -195,6 +226,7 @@ module.exports = function (bot) {
     getResumeInventory,
     findChests,
     getSecondBlockPosition,
-    getGenericItems
+    getGenericItems,
+    equipHeldItem
   }
 }
