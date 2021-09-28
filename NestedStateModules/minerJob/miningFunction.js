@@ -12,6 +12,7 @@ const BehaviorDigBlock = require('@BehaviorModules/BehaviorDigBlock')
 const BehaviorMinerChecks = require('@BehaviorModules/BehaviorMinerChecks')
 const BehaviorEatFood = require('@BehaviorModules/BehaviorEatFood')
 const BehaviorMoveTo = require('@BehaviorModules/BehaviorMoveTo')
+const BehaviorCustomPlaceBlock = require('@BehaviorModules/BehaviorCustomPlaceBlock')
 
 const mineflayerPathfinder = require('mineflayer-pathfinder')
 
@@ -52,6 +53,10 @@ const movingWhile = (bot, nextCurrentLayer) => {
 }
 
 function miningFunction (bot, targets) {
+  const placeBlocks = require('@modules/placeBlockModule')(bot).blocksCanBeReplaced
+  const { getNewPositionForPlaceBlock } = require('@modules/placeBlockModule')(bot)
+  const { getSidesToCheck } = require('@modules/minerModule')(bot, targets)
+
   const start = new BehaviorIdle(targets)
   start.stateName = 'Start'
   start.x = 125
@@ -107,14 +112,38 @@ function miningFunction (bot, targets) {
   fillBlocks.x = 350
   fillBlocks.y = 313
 
-  const placeBlockAfterDig = require('@NestedStateModules/minerJob/placeBlockAfterDig')(bot, targets)
-  placeBlockAfterDig.x = 725
-  placeBlockAfterDig.y = 563
-
   const findItemsAndPickup = require('@NestedStateModules/findItemsAndPickup')(bot, targets)
   findItemsAndPickup.stateName = 'Find Items'
   findItemsAndPickup.x = 525
   findItemsAndPickup.y = 363
+
+  const checkPendingSides = new BehaviorIdle(targets)
+  checkPendingSides.stateName = 'Check Pending Sides'
+  checkPendingSides.x = 650
+  checkPendingSides.y = 563
+
+  const harvestPlant = new BehaviorDigBlock(bot, targets)
+  harvestPlant.stateName = 'Harvest Plant'
+  harvestPlant.x = 525
+  harvestPlant.y = 713
+
+  const placeBlock = new BehaviorCustomPlaceBlock(bot, targets)
+  placeBlock.stateName = 'Place Block'
+  placeBlock.x = 725
+  placeBlock.y = 713
+
+  let sidesToPlaceBlock, currentSideToPlaceBlock
+  const calculateSideToPlaceBlock = () => {
+    sidesToPlaceBlock = []
+
+    const sidesToCheck = getSidesToCheck(targets.minerJob.mineBlock.clone())
+    sidesToCheck.forEach((currentSideToCheck) => {
+      const block = bot.blockAt(currentSideToCheck.position)
+      if (placeBlocks.includes(block.name)) {
+        sidesToPlaceBlock.push(currentSideToCheck.position.clone())
+      }
+    })
+  }
 
   const transitions = [
     new StateTransition({
@@ -235,26 +264,49 @@ function miningFunction (bot, targets) {
       child: digBlock,
       onTransition: () => {
         targets.position = targets.minerJob.mineBlock
+        calculateSideToPlaceBlock()
       },
-      shouldTransition: () => {
-        const block = bot.blockAt(targets.minerJob.mineBlock)
-        if (bot.canDigBlock(block)) {
-          bot.pathfinder.setGoal(null)
-          return !bot.pathfinder.isMining()
-        }
-      }
+      shouldTransition: () => (moveToBlock.isFinished() || moveToBlock.distanceToTarget() < 3) && !bot.pathfinder.isMining()
     }),
 
     new StateTransition({
       parent: digBlock,
-      child: placeBlockAfterDig,
+      child: checkPendingSides,
       shouldTransition: () => digBlock.isFinished()
     }),
 
     new StateTransition({
-      parent: placeBlockAfterDig,
+      parent: checkPendingSides,
+      child: harvestPlant,
+      onTransition: () => {
+        currentSideToPlaceBlock = sidesToPlaceBlock.shift()
+        targets.position = currentSideToPlaceBlock
+      },
+      shouldTransition: () => sidesToPlaceBlock.length > 0 && bot.inventory.items().find(item => targets.minerJob.blockForPlace.includes(item.name))
+    }),
+
+    new StateTransition({
+      parent: checkPendingSides,
       child: minerChecks,
-      shouldTransition: () => placeBlockAfterDig.isFinished()
+      shouldTransition: () => sidesToPlaceBlock.length === 0 || !bot.inventory.items().find(item => targets.minerJob.blockForPlace.includes(item.name))
+    }),
+
+    new StateTransition({
+      parent: harvestPlant,
+      child: placeBlock,
+      onTransition: () => {
+        targets.item = bot.inventory.items().find(item => targets.minerJob.blockForPlace.includes(item.name))
+        const { newPosition, blockOffset } = getNewPositionForPlaceBlock(currentSideToPlaceBlock)
+        targets.position = newPosition
+        placeBlock.setOffset(blockOffset)
+      },
+      shouldTransition: () => harvestPlant.isFinished() || !['kelp_plant'].includes(bot.blockAt(targets.position).name)
+    }),
+
+    new StateTransition({
+      parent: placeBlock,
+      child: checkPendingSides,
+      shouldTransition: () => placeBlock.isFinished() || placeBlock.isItemNotFound() || placeBlock.isCantPlaceBlock()
     }),
 
     new StateTransition({
