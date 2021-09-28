@@ -53,9 +53,8 @@ const movingWhile = (bot, nextCurrentLayer) => {
 }
 
 function miningFunction (bot, targets) {
-  const placeBlocks = require('@modules/placeBlockModule')(bot).blocksCanBeReplaced
   const { getNewPositionForPlaceBlock } = require('@modules/placeBlockModule')(bot)
-  const { getSidesToCheck } = require('@modules/minerModule')(bot, targets)
+  const { calculateSideToPlaceBlock } = require('@modules/minerModule')(bot, targets)
 
   const start = new BehaviorIdle(targets)
   start.stateName = 'Start'
@@ -133,17 +132,6 @@ function miningFunction (bot, targets) {
   placeBlock.y = 713
 
   let sidesToPlaceBlock, currentSideToPlaceBlock
-  const calculateSideToPlaceBlock = () => {
-    sidesToPlaceBlock = []
-
-    const sidesToCheck = getSidesToCheck(targets.minerJob.mineBlock.clone())
-    sidesToCheck.forEach((currentSideToCheck) => {
-      const block = bot.blockAt(currentSideToCheck.position)
-      if (placeBlocks.includes(block.name)) {
-        sidesToPlaceBlock.push(currentSideToCheck.position.clone())
-      }
-    })
-  }
 
   const transitions = [
     new StateTransition({
@@ -264,7 +252,7 @@ function miningFunction (bot, targets) {
       child: digBlock,
       onTransition: () => {
         targets.position = targets.minerJob.mineBlock
-        calculateSideToPlaceBlock()
+        sidesToPlaceBlock = calculateSideToPlaceBlock(targets.minerJob.mineBlock.clone())
       },
       shouldTransition: () => (moveToBlock.isFinished() || moveToBlock.distanceToTarget() < 3) && !bot.pathfinder.isMining()
     }),
