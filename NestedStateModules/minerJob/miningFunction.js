@@ -12,14 +12,11 @@ const BehaviorDigBlock = require('@BehaviorModules/BehaviorDigBlock')
 const BehaviorMinerChecks = require('@BehaviorModules/BehaviorMinerChecks')
 const BehaviorEatFood = require('@BehaviorModules/BehaviorEatFood')
 const BehaviorMoveTo = require('@BehaviorModules/BehaviorMoveTo')
-const BehaviorCustomPlaceBlock = require('@BehaviorModules/BehaviorCustomPlaceBlock')
+const BehaviorDigAndPlaceBlock = require('@BehaviorModules/BehaviorDigAndPlaceBlock')
 
 const mineflayerPathfinder = require('mineflayer-pathfinder')
 
-const movingWhile = (bot, nextCurrentLayer) => {
-  const mcData = require('minecraft-data')(bot.version)
-  const movements = new mineflayerPathfinder.Movements(bot, mcData)
-
+const movingWhile = (bot, nextCurrentLayer, targets) => {
   let x, y, z
 
   if (bot.entity.position.x < nextCurrentLayer.xStart) {
@@ -48,14 +45,11 @@ const movingWhile = (bot, nextCurrentLayer) => {
 
   const pathfinder = bot.pathfinder
   const goal = new mineflayerPathfinder.goals.GoalBlock(x, y, z)
-  pathfinder.setMovements(movements)
+  pathfinder.setMovements(targets.movements)
   pathfinder.setGoal(goal)
 }
 
 function miningFunction (bot, targets) {
-  const { getNewPositionForPlaceBlock } = require('@modules/placeBlockModule')(bot)
-  const { calculateSideToPlaceBlock } = require('@modules/minerModule')(bot, targets)
-
   const start = new BehaviorIdle(targets)
   start.stateName = 'Start'
   start.x = 125
@@ -86,9 +80,14 @@ function miningFunction (bot, targets) {
   digBlock.x = 1025
   digBlock.y = 563
 
+  const digAndPlaceBlock = new BehaviorDigAndPlaceBlock(bot, targets)
+  digAndPlaceBlock.stateName = 'Dig Block & Place'
+  digAndPlaceBlock.x = 925
+  digAndPlaceBlock.y = 563
+
   const moveToBlock = new BehaviorMoveTo(bot, targets)
   moveToBlock.stateName = 'Move To Block'
-  moveToBlock.x = 1025
+  moveToBlock.x = 925
   moveToBlock.y = 313
   moveToBlock.movements = targets.movements
 
@@ -115,23 +114,6 @@ function miningFunction (bot, targets) {
   findItemsAndPickup.stateName = 'Find Items'
   findItemsAndPickup.x = 525
   findItemsAndPickup.y = 363
-
-  const checkPendingSides = new BehaviorIdle(targets)
-  checkPendingSides.stateName = 'Check Pending Sides'
-  checkPendingSides.x = 650
-  checkPendingSides.y = 563
-
-  const harvestPlant = new BehaviorDigBlock(bot, targets)
-  harvestPlant.stateName = 'Harvest Plant'
-  harvestPlant.x = 525
-  harvestPlant.y = 713
-
-  const placeBlock = new BehaviorCustomPlaceBlock(bot, targets)
-  placeBlock.stateName = 'Place Block'
-  placeBlock.x = 725
-  placeBlock.y = 713
-
-  let sidesToPlaceBlock, currentSideToPlaceBlock
 
   const transitions = [
     new StateTransition({
@@ -187,7 +169,7 @@ function miningFunction (bot, targets) {
       name: 'nextLayer -> checkLayer',
       onTransition: () => {
         const nextCurrentLayer = nextLayer.getCurrentLayerCoords()
-        movingWhile(bot, nextCurrentLayer)
+        movingWhile(bot, nextCurrentLayer, targets)
         checkLayer.setMinerCords(nextCurrentLayer)
       },
       shouldTransition: () => true
@@ -249,52 +231,17 @@ function miningFunction (bot, targets) {
 
     new StateTransition({
       parent: moveToBlock,
-      child: digBlock,
+      child: digAndPlaceBlock,
       onTransition: () => {
         targets.position = targets.minerJob.mineBlock
-        sidesToPlaceBlock = calculateSideToPlaceBlock(targets.minerJob.mineBlock.clone())
       },
       shouldTransition: () => (moveToBlock.isFinished() || moveToBlock.distanceToTarget() < 3) && !bot.pathfinder.isMining()
     }),
 
     new StateTransition({
-      parent: digBlock,
-      child: checkPendingSides,
-      shouldTransition: () => digBlock.isFinished()
-    }),
-
-    new StateTransition({
-      parent: checkPendingSides,
-      child: harvestPlant,
-      onTransition: () => {
-        currentSideToPlaceBlock = sidesToPlaceBlock.shift()
-        targets.position = currentSideToPlaceBlock
-      },
-      shouldTransition: () => sidesToPlaceBlock.length > 0 && bot.inventory.items().find(item => targets.minerJob.blockForPlace.includes(item.name))
-    }),
-
-    new StateTransition({
-      parent: checkPendingSides,
+      parent: digAndPlaceBlock,
       child: minerChecks,
-      shouldTransition: () => sidesToPlaceBlock.length === 0 || !bot.inventory.items().find(item => targets.minerJob.blockForPlace.includes(item.name))
-    }),
-
-    new StateTransition({
-      parent: harvestPlant,
-      child: placeBlock,
-      onTransition: () => {
-        targets.item = bot.inventory.items().find(item => targets.minerJob.blockForPlace.includes(item.name))
-        const { newPosition, blockOffset } = getNewPositionForPlaceBlock(currentSideToPlaceBlock)
-        targets.position = newPosition
-        placeBlock.setOffset(blockOffset)
-      },
-      shouldTransition: () => harvestPlant.isFinished() || !['kelp_plant'].includes(bot.blockAt(targets.position).name)
-    }),
-
-    new StateTransition({
-      parent: placeBlock,
-      child: checkPendingSides,
-      shouldTransition: () => placeBlock.isFinished() || placeBlock.isItemNotFound() || placeBlock.isCantPlaceBlock()
+      shouldTransition: () => digAndPlaceBlock.isFinished()
     }),
 
     new StateTransition({
