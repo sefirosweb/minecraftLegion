@@ -9,6 +9,7 @@
 * Update mineflayer to 3.11.1
 * Adding version 2.0 of tunel, now is better making tunels, avoid lava and water with new logic
 * Adding support for prevent the gravel and sand when making tunels
+* Fixed bug with commands
 
 ## 1.2.0
 * Added Sorter Job

@@ -168,7 +168,7 @@ function guardJobFunction (bot, targets) {
       name: 'goFriend -> combatStrategy',
       shouldTransition: () => {
         getClosestMob.check()
-        return targets.entity !== undefined && !helpFriend.targetIsFriend()
+        return targets.entity !== undefined && !helpFriend.targetIsFriend() && targets.entity.isEnemy === true
       }
     }),
 

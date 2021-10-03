@@ -84,7 +84,7 @@ function farmerJobFunction (bot, targets) {
       onTransition: () => bot.pathfinder.setGoal(null),
       shouldTransition: () => {
         getClosestMob.check()
-        return targets.entity !== undefined
+        return targets.entity !== undefined && targets.entity.isEnemy === true
       }
     }),
 

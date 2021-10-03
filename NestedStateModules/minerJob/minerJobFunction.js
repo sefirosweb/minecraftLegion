@@ -54,7 +54,7 @@ function minerJobFunction (bot, targets) {
       },
       shouldTransition: () => {
         getClosestMob.check()
-        return targets.entity !== undefined
+        return targets.entity !== undefined && targets.entity.isEnemy === true
       }
     }),
 
