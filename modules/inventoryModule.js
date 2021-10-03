@@ -207,8 +207,8 @@ module.exports = function (bot) {
         .then(() => {
           resolve()
         })
-        .catch(function () {
-          setTimeout(function () {
+        .catch(() => {
+          setTimeout(() => {
             equipHeldItem(itemName)
               .then(() => {
                 resolve()
