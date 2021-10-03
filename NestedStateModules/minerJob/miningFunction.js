@@ -89,7 +89,8 @@ function miningFunction (bot, targets) {
   moveToBlock.stateName = 'Move To Block'
   moveToBlock.x = 925
   moveToBlock.y = 313
-  moveToBlock.movements = targets.movements
+  moveToBlock.movements.canDig = false
+  moveToBlock.movements.allowSprinting = targets.movements.allowSprinting
 
   const minerChecks = new BehaviorMinerChecks(bot, targets)
   minerChecks.stateName = 'Miner Check'
