@@ -16,7 +16,7 @@ const BehaviorDigAndPlaceBlock = require('@BehaviorModules/BehaviorDigAndPlaceBl
 
 const mineflayerPathfinder = require('mineflayer-pathfinder')
 
-const movingWhile = (bot, nextCurrentLayer, targets) => {
+const movingWhile = (bot, nextCurrentLayer, movements) => {
   let x, y, z
 
   if (bot.entity.position.x < nextCurrentLayer.xStart) {
@@ -45,11 +45,16 @@ const movingWhile = (bot, nextCurrentLayer, targets) => {
 
   const pathfinder = bot.pathfinder
   const goal = new mineflayerPathfinder.goals.GoalBlock(x, y, z)
-  pathfinder.setMovements(targets.movements)
+  pathfinder.setMovements(movements)
   pathfinder.setGoal(goal)
 }
 
 function miningFunction (bot, targets) {
+  const mcData = require('minecraft-data')(bot.version)
+  const movements = new mineflayerPathfinder.Movements(bot, mcData)
+  movements.canDig = false
+  movements.allowSprinting = targets.movements.allowSprinting
+
   const start = new BehaviorIdle(targets)
   start.stateName = 'Start'
   start.x = 125
@@ -89,8 +94,7 @@ function miningFunction (bot, targets) {
   moveToBlock.stateName = 'Move To Block'
   moveToBlock.x = 925
   moveToBlock.y = 313
-  moveToBlock.movements.canDig = false
-  moveToBlock.movements.allowSprinting = targets.movements.allowSprinting
+  moveToBlock.movements = movements
 
   const minerChecks = new BehaviorMinerChecks(bot, targets)
   minerChecks.stateName = 'Miner Check'
@@ -170,7 +174,7 @@ function miningFunction (bot, targets) {
       name: 'nextLayer -> checkLayer',
       onTransition: () => {
         const nextCurrentLayer = nextLayer.getCurrentLayerCoords()
-        movingWhile(bot, nextCurrentLayer, targets)
+        movingWhile(bot, nextCurrentLayer, movements)
         checkLayer.setMinerCords(nextCurrentLayer)
       },
       shouldTransition: () => true
