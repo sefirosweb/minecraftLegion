@@ -196,7 +196,11 @@ module.exports = function (bot) {
         return
       }
 
-      const item = bot.inventory.items().find(item => itemName === item.name)
+      let item = bot.inventory.items().find(item => itemName === item.name && item.slot >= bot.inventory.hotbarStart)
+
+      if (!item) {
+        item = bot.inventory.items().find(item => itemName === item.name)
+      }
 
       if (item === undefined) {
         reject(new Error(`Item not found ${itemName}`))
