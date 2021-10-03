@@ -121,7 +121,7 @@ function miningFunction (bot, targets) {
       child: loadConfig,
       name: 'start -> loadConfig',
       onTransition: () => {
-        targets.minerJob.blockForPlace = ['stone', 'cobblestone', 'dirt', 'andesite', 'diorite', 'granite']
+        targets.minerJob.blockForPlace = ['netherrack', 'stone', 'cobblestone', 'dirt', 'andesite', 'diorite', 'granite', 'sandstone']
         targets.minerJob.nextLayer = nextLayer
 
         const yStart = parseInt(targets.config.minerCords.yStart) > parseInt(targets.config.minerCords.yEnd) ? parseInt(targets.config.minerCords.yEnd) : parseInt(targets.config.minerCords.yStart)

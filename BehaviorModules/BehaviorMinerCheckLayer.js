@@ -14,7 +14,6 @@ module.exports = class BehaviorMinerCheckLayer {
 
     this.blocksToFind = ['lava', 'water']
     this.floorBlocksToFind = ['air', 'cave_air']
-    this.blockForPlace = ['stone', 'cobblestone', 'dirt', 'andesite', 'diorite', 'granite', 'sandstone']
   }
 
   isFinished () {
@@ -51,7 +50,7 @@ module.exports = class BehaviorMinerCheckLayer {
   }
 
   checkStoneInInventory () {
-    return this.bot.inventory.items().find(item => this.blockForPlace.includes(item.name))
+    return this.bot.inventory.items().find(item => this.targets.minerJob.blockForPlace.includes(item.name))
   }
 
   checkArea () {
