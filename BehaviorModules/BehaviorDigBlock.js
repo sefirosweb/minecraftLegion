@@ -20,9 +20,8 @@ module.exports = class template {
       .then(() => {
         this.isEndFinished = true
       })
-      .catch((err) => {
-        console.log(err)
-        botWebsocket.log(err)
+      .catch(() => {
+        botWebsocket.log(`Error on dig block ${this.targets.position}`)
       })
   }
 }
