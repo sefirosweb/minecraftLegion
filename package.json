@@ -7,22 +7,22 @@
         "example": "examples"
     },
     "dependencies": {
-        "express": "^4.17.1",
-        "lowdb": "^1.0.0",
-        "minecraft-data": "^2.94.0",
-        "minecrafthawkeye": "^1.2.7",
-        "mineflayer": "^3.11.2",
-        "mineflayer-pathfinder": "^1.8.0",
-        "mineflayer-statemachine": "^1.6.4",
-        "mineflayer-web-inventory": "^1.6.3",
-        "module-alias": "^2.2.2",
-        "prismarine-viewer": "^1.20.0",
-        "socket.io-client": "^4.2.0",
-        "vec3": "^0.1.7"
+        "express": "4.17.1",
+        "lowdb": "1.0.0",
+        "minecraft-data": "2.94.0",
+        "minecrafthawkeye": "1.2.7",
+        "mineflayer": "3.11.2",
+        "mineflayer-pathfinder": "1.8.0",
+        "mineflayer-statemachine": "1.6.4",
+        "mineflayer-web-inventory": "1.6.3",
+        "module-alias": "2.2.2",
+        "prismarine-viewer": "1.20.0",
+        "socket.io-client": "4.2.0",
+        "vec3": "0.1.7"
     },
     "devDependencies": {
-        "nodemon": "^2.0.13",
-        "standard": "^16.0.4"
+        "nodemon": "2.0.13",
+        "standard": "16.0.4"
     },
     "scripts": {
         "start": "nodemon index.js --ignore botConfig/",
