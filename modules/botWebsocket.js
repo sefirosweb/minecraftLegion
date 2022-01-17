@@ -235,6 +235,17 @@ function connect () {
         chests[config.chestId].position[config.coord] = config.pos
         botconfig.setChests(bot.username, chests)
         break
+      case 'changeChestPosMaster':
+        findMaster = bot.nearestEntity(e => e.type === 'player' && e.username === config.value && e.mobType !== 'Armor Stand')
+        if (!findMaster) {
+          return
+        }
+        
+        chests = botconfig.getChests(bot.username)
+        chests[config.chestId].position = findMaster.position.floored()
+        botconfig.setChests(bot.username, chests)
+        
+        break
       case 'insertItemInChest':
         chests = botconfig.getChests(bot.username)
         chests[config.chestId].items.push({
