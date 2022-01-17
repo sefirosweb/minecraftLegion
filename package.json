@@ -30,7 +30,8 @@
         "test": "echo \"Error: no test specified\" && exit 1",
         "standard": "standard --fix",
         "dockerbuild": "docker build -t minecraftlegion .",
-        "dockerrun": "docker run --rm -p:3000:3000 minecraftlegion"
+        "dockerrun": "docker run --rm -p:3000:3000 minecraftlegion",
+        "docker": "docker run --rm -it --name minecraftLegion -v ~/.gitconfig:/etc/gitconfig -v $PWD:/home/app -w /home/app -u node node:16.13-bullseye /bin/bash"
     },
     "repository": {
         "type": "git",

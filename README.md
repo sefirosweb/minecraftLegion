@@ -105,3 +105,11 @@ set miner x y z x y z x+ horizontally
 - Add back guard
 
 Please keep calm. I'm working hard on this project :D
+
+
+# Adding new docker system
+## For develop
+```
+npm run docker
+npm start // npm run one
+```
