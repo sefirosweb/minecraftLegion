@@ -1,31 +1,33 @@
-
 # minecraftLegion
+
 Minecraft multipurpose bot
 
 This project are based on <a target="_blank" href="https://github.com/PrismarineJS/mineflayer">mineflayer</a> & PrismarineJS repository
 
 This program is part of the 3 of this project,
-Each part can be run independently, 
+Each part can be run independently,
 The other 2 parts are <a target="_blank" href="https://github.com/sefirosweb/minecraftLegionWebServer">minecraftLegionWebServer</a> & <a href="https://github.com/sefirosweb/minecraftLegionWebClient">minecraftLegionWebClient</a>
 
 I recommend using the other two modules to help the bots communicate and take commands through the WebUI.
 
 ## Install:
-- Install [Node.js](https://nodejs.dev/) version 14+ 
+
+- Install [Node.js](https://nodejs.dev/) version 14+
 - go to the directory which you want to install into
 - run `npm i minecraftlegion` on command prompt
 - make a new file called config.js with the fields shown below
 
 Edit config.js
+
 ```js
 const config = {
-  server: '127.0.0.1', // Minecraft Server
-  port: '', // Minecraft Port
-  masters: [{ name: 'PlayerName' }, { name: 'SecondPlayerName' }], // Is requeried for manage the bot in game, *offline mode
-  webServer: 'http://localhost', // minecraftLegionWebServer Web - Optional
-  webServerPort: '3000' // minecraftLegionWebServer PORT - Optional
-}
-module.exports = config
+  server: "127.0.0.1", // Minecraft Server
+  port: "", // Minecraft Port
+  masters: [{ name: "PlayerName" }, { name: "SecondPlayerName" }], // Is requeried for manage the bot in game, *offline mode
+  webServer: "http://localhost", // minecraftLegionWebServer Web - Optional
+  webServerPort: "3000", // minecraftLegionWebServer PORT - Optional
+};
+module.exports = config;
 ```
 
 To run a single bot:
@@ -40,57 +42,70 @@ This method connects automatically to minecraftLegionWebServer, and via the web,
 
 To manage bots vía web go to <a target="_blank" href="https://github.com/sefirosweb/minecraftLegionWebClient">minecraftLegionWebClient</a> to see more!
 
-
 ## Usage of commands in chat:
+
 First, activate the bot attention "hi namebot" or "hi all" to start all bots simultaneously.
-* `hi nameBot`
+
+- `hi nameBot`
 
 Make the bot/s follow you.
-* `come`
+
+- `come`
 
 Make the bot/s stand in the current position.
-* `stay`
+
+- `stay`
 
 Start memorizing the positions used to save the way to chests or patrol (get the bots to follow you around)
-* `set start way`
+
+- `set start way`
 
 Save patrol, used for guard job (use command `set start way` before this one)
-* `set save patrol`
+
+- `set save patrol`
 
 For set max distance to attack mobs or players
-* `set distance 30`
+
+- `set distance 30`
 
 For set mode (pvp / pve / none), if bots are connected to minecraftLegionWebServer it wont attack other bots
-* `set mode pvp`
+
+- `set mode pvp`
 
 Set job (Currently only finished Guard)
-* `set job guard`
+
+- `set job guard`
 
 To help other bots in combat (need use minecraftLegionWebServer)
-* `set help true`
+
+- `set help true`
 
 to finish commands
-* `bye`
 
-For mining xyz_start  xyz_end  start_horientantion  vertically / horizontalle
+- `bye`
+
+For mining xyz_start xyz_end start_horientantion vertically / horizontalle
 set miner x y z x y z x+ horizontally
+
 # Current Jobs
+
 - Guard
-  * Do a patrol for look near enemies
+  - Do a patrol for look near enemies
 - Miner
-  * Make a tunel or hole
+  - Make a tunel or hole
 - Farmer
-  * Do placing plants and sapling trees
-  * Potatoes, Carrots, Wheat, Melon, Pumpkin, Sweet berries..
-  * Sapling Trees -> Woodcutter
+  - Do placing plants and sapling trees
+  - Potatoes, Carrots, Wheat, Melon, Pumpkin, Sweet berries..
+  - Sapling Trees -> Woodcutter
 - Breeder
-  * Feed animals! all types!
-  * When there is surplus, sacrifice the surplus
+  - Feed animals! all types!
+  - When there is surplus, sacrifice the surplus
 - Sorter Job
-  * The bot search all nearest chest and they sort all items based on ID item
-  * Also send to the server and other bots you have in each chest, NOW ALL BOTS GO DIRECTLY TO THE CHEST THAT STORES THE ITEM!
+  - The bot search all nearest chest and they sort all items based on ID item
+  - Also send to the server and other bots you have in each chest, NOW ALL BOTS GO DIRECTLY TO THE CHEST THAT STORES THE ITEM!
 
 # TODO
+
 - Optimize Sorter Job, need too many interaction with chests for sort all the items
 - Add custom Sort Items in chest, based on... any idea?
 - Add more behavior into Sorter Job, -> Craft items? if detect in chests no have enough of XXX items then craft it if they can? (Example swords?)
@@ -106,9 +121,18 @@ set miner x y z x y z x+ horizontally
 
 Please keep calm. I'm working hard on this project :D
 
-
 # Adding new docker system
+
 ## For develop
+
+Need to be create docker network:
+
+```
+docker network create minecraftLegionNetwork
+```
+
+Start docker container and start watch
+
 ```
 npm run docker
 npm start // npm run one
