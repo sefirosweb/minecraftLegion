@@ -115,7 +115,7 @@ function getHelpFriend(botName) {
 
 function setCanDig(botName, mode) {
   const db = getConn(botName);
-  if (mode === "true") {
+  if (mode === true) {
     mode = true;
   } else {
     mode = false;
@@ -130,7 +130,7 @@ function getCanDig(botName) {
 
 function setAllowSprinting(botName, mode) {
   const db = getConn(botName);
-  if (mode === "true") {
+  if (mode === true) {
     mode = true;
   } else {
     mode = false;
