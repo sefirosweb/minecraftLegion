@@ -7,21 +7,21 @@
         "example": "examples"
     },
     "dependencies": {
-        "express": "4.17.1",
+        "express": "4.17.2",
         "lowdb": "1.0.0",
-        "minecraft-data": "2.94.0",
+        "minecraft-data": "2.109.0",
         "minecrafthawkeye": "1.2.7",
-        "mineflayer": "3.11.2",
-        "mineflayer-pathfinder": "1.8.0",
-        "mineflayer-statemachine": "1.6.4",
+        "mineflayer": "3.15.0",
+        "mineflayer-pathfinder": "1.9.1",
+        "mineflayer-statemachine": "1.6.5",
         "mineflayer-web-inventory": "1.6.3",
         "module-alias": "2.2.2",
-        "prismarine-viewer": "1.20.0",
-        "socket.io-client": "4.2.0",
+        "prismarine-viewer": "1.21.0",
+        "socket.io-client": "4.4.1",
         "vec3": "0.1.7"
     },
     "devDependencies": {
-        "nodemon": "2.0.13",
+        "nodemon": "2.0.15",
         "standard": "16.0.4"
     },
     "scripts": {
@@ -31,7 +31,8 @@
         "standard": "standard --fix",
         "dockerbuild": "docker build -t minecraftlegion .",
         "dockerrun": "docker run --rm -p:3000:3000 minecraftlegion",
-        "docker": "docker run --rm -it --name minecraftLegion  -v ~/.gitconfig:/etc/gitconfig --network minecraftLegionNetwork -v $PWD:/home/app -w /home/app -u node -p 4500-4550:4500-4550 node:16.13-bullseye /bin/bash"
+        "docker": "docker run --rm -it --name minecraftLegion  -v ~/.gitconfig:/etc/gitconfig --network minecraftLegionNetwork -v $PWD:/home/app -w /home/app -u node -p 4500-4550:4500-4550 node:16.13-bullseye /bin/bash",
+        "update": "npx npm-check-updates"
     },
     "repository": {
         "type": "git",
