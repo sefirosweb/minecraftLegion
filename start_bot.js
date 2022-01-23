@@ -1,52 +1,52 @@
-require('module-alias/register')
-const mineflayer = require('mineflayer')
-const botWebsocket = require('@modules/botWebsocket')
-const { server, port, customStart } = require('@config')
+require("module-alias/register");
+const mineflayer = require("mineflayer");
+const botWebsocket = require("@modules/botWebsocket");
+const { server, port, customStart } = require("@config");
 
-console.log('Usage : node start_bot.js <botName> <botPassword>')
-let botName = process.argv[2]
-let botPassword = process.argv[3]
+console.log("Usage : node start_bot.js <botName> <botPassword>");
+let botName = process.argv[2];
+let botPassword = process.argv[3];
 
-botName = process.argv[4] ? process.argv[4] : process.argv[2] // npm run one botname password
-botPassword = process.argv[5] ? process.argv[5] : process.argv[3] // npm run one botname password
+botName = process.argv[4] ? process.argv[4] : process.argv[2]; // npm run one botname password
+botPassword = process.argv[5] ? process.argv[5] : process.argv[3]; // npm run one botname password
 
-createNewBot(botName, botPassword)
+createNewBot(botName, botPassword);
 
-function createNewBot (botName, botPassword = '') {
+function createNewBot(botName, botPassword = "") {
   const bot = mineflayer.createBot({
     username: botName,
     host: server,
-    port: port
-  })
+    port: port,
+  });
 
-  botWebsocket.loadBot(bot)
-  bot.setMaxListeners(0)
-  bot.once('inject_allowed', () => {
-    bot.loadPlugin(require('mineflayer-pathfinder').pathfinder)
-  })
+  botWebsocket.loadBot(bot);
+  bot.setMaxListeners(0);
+  bot.once("inject_allowed", () => {
+    bot.loadPlugin(require("mineflayer-pathfinder").pathfinder);
+  });
 
-  bot.once('kicked', (reason) => {
-    const reasonDecoded = JSON.parse(reason)
-    console.log(reasonDecoded)
-    process.exit()
-  })
+  bot.once("kicked", (reason) => {
+    const reasonDecoded = JSON.parse(reason);
+    console.log(reasonDecoded);
+    process.exit();
+  });
 
-  bot.once('error', (error) => {
-    botWebsocket.log('Error bot detected ' + JSON.stringify(error))
-    console.log(error)
-    process.exit()
-  })
+  bot.once("error", (error) => {
+    botWebsocket.log("Error bot detected " + JSON.stringify(error));
+    console.log(error);
+    process.exit();
+  });
 
-  bot.once('spawn', async () => {
-    console.log(bot.version)
-    botWebsocket.connect()
-    botWebsocket.log('Ready!')
+  bot.once("spawn", async () => {
+    console.log(bot.version);
+    botWebsocket.connect();
+    botWebsocket.log("Ready!");
 
     if (customStart) {
-      const customStart = require('./custom_start/custom')(bot)
-      await customStart.start()
+      const customStart = require("./custom_start/custom")(bot);
+      await customStart.start();
     }
 
-    require('@NestedStateModules/startStateMachine')(bot)
-  })
+    require("@NestedStateModules/startStateMachine")(bot);
+  });
 }
