@@ -161,7 +161,7 @@ function getPickUpItems(botName) {
 
 function setRandomFarmArea(botName, mode) {
   const db = getConn(botName);
-  if (mode === "true") {
+  if (mode === true) {
     mode = true;
   } else {
     mode = false;
