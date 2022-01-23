@@ -25,13 +25,13 @@
         "standard": "16.0.4"
     },
     "scripts": {
-        "start": "nodemon index.js --ignore botConfig/",
-        "one": "nodemon start_bot.js Miner password --ignore botConfig/",
+        "start": "nodemon index.js --ignore botConfig/ --ignore custom_start/",
+        "one": "nodemon --inspect=0.0.0.0:9229 start_bot.js Miner password --ignore botConfig/ --ignore custom_start/",
         "test": "echo \"Error: no test specified\" && exit 1",
         "standard": "standard --fix",
         "dockerbuild": "docker build -t minecraftlegion .",
         "dockerrun": "docker run --rm -p:3000:3000 minecraftlegion",
-        "docker": "docker run --rm -it --name minecraftLegion  -v ~/.gitconfig:/etc/gitconfig --network minecraftLegionNetwork -v $PWD:/home/app -w /home/app -u node -p 4500-4550:4500-4550 node:16.13-bullseye /bin/bash",
+        "docker": "docker run --rm -it --name minecraftLegion  -v ~/.gitconfig:/etc/gitconfig --network minecraftLegionNetwork -v $PWD:/home/app -w /home/app -u node -p 4500-4550:4500-4550 -p 9229:9229 node:16.13-bullseye /bin/bash",
         "update": "npx npm-check-updates"
     },
     "repository": {
