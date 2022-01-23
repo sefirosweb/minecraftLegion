@@ -24,7 +24,7 @@ module.exports = class BehaviorLoadConfig {
   onStateEntered () {
     this.job = botConfig.getJob(this.bot.username)
     this.mode = botConfig.getMode(this.bot.username)
-    this.helpFriends = botConfig.getHelpFriend(this.bot.username)
+    this.helpFriends = botConfig.getHelpFriends(this.bot.username)
     this.distance = botConfig.getDistance(this.bot.username)
     this.patrol = botConfig.getPatrol(this.bot.username)
     this.minerCords = botConfig.getMinerCords(this.bot.username)

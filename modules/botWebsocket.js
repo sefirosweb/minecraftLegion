@@ -67,8 +67,8 @@ function connect () {
       case 'pickUpItems':
         botconfig.setPickUpItems(bot.username, config.value)
         break
-      case 'helpFriend':
-        botconfig.setHelpFriend(bot.username, config.value)
+      case 'helpFriends':
+        botconfig.setHelpFriends(bot.username, config.value)
         break
       case 'allowSprinting':
         botconfig.setAllowSprinting(bot.username, config.value)

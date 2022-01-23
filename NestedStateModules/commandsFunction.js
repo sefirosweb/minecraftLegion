@@ -362,11 +362,11 @@ function commandsFunction (bot, targets) {
     switch (true) {
       case (mode === 'true'):
         // bot.chat('I will defend my friends')
-        botConfig.setHelpFriend(bot.username, true)
+        botConfig.setHelpFriends(bot.username, true)
         break
       case (mode === 'false'):
         // bot.chat('Its ok for my friends')
-        botConfig.setHelpFriend(bot.username, false)
+        botConfig.setHelpFriends(bot.username, false)
         break
       default:
         // bot.chat("Master, I don't know friends say")
