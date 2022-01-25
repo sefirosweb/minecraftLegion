@@ -48,6 +48,10 @@ function startWorkFunction (bot, targets) {
   sorterJob.x = 535
   sorterJob.y = 213
 
+  const crafterJobFunction = require('@NestedStateModules/crafterJob/crafterJobFunction')(bot, targets)
+  // sorterJob.x = 535
+  // sorterJob.y = 213
+
   const transitions = [
     new StateTransition({
       parent: start,
@@ -122,7 +126,16 @@ function startWorkFunction (bot, targets) {
         targets.sorterJob = {}
       },
       shouldTransition: () => loadConfig.getJob() === 'sorter'
-    })
+    }),
+
+    new StateTransition({
+      parent: loadedConfig,
+      child: crafterJobFunction,
+      onTransition: () => {
+        targets.crafterJob = {}
+      },
+      shouldTransition: () => loadConfig.getJob() === 'crafter'
+    }),
 
   ]
 

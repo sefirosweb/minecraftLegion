@@ -137,7 +137,7 @@ module.exports = (bot) => {
       botWebsocket.emitEvents(eventsToSend)
     })
 
-    webserver = new StateMachineWebserver(bot, stateMachine, 5000) // TODO remove
+    webserver = new StateMachineWebserver(bot, stateMachine, 4550)
     if (!webserver.isServerRunning()) {
       webserver.startServer()
     }
