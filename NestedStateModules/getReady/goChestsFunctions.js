@@ -79,8 +79,8 @@ function goChestsFunction (bot, targets) {
 
   const findChestsToWithdraw = () => {
     const resumeInventory = getResumeInventory()
-    const itemsToWithdrawInChests = getItemsToWithdrawInChests()
-    const itemsToWithdraw = itemsToWithdrawInChests.reduce((returnData, i) => {
+    const itemsToWithdrawInChests = getItemsToWithdrawInChests() // bsca que items hay que sacar
+    const itemsToWithdraw = itemsToWithdrawInChests.reduce((returnData, i) => { // resta los items que hay que sacar - inventario
       let invItem
       if (getGenericItems().includes(i.item)) {
         invItem = resumeInventory.find(inv => inv.name.includes(i.item))
@@ -91,7 +91,7 @@ function goChestsFunction (bot, targets) {
       if (i.quantity > 0) returnData.push(i)
       return returnData
     }, [])
-    targets.pickUpItems = findItemsInChests(targets.chests, itemsToWithdraw)
+    targets.pickUpItems = findItemsInChests(targets.chests, itemsToWithdraw) // busca en todos los cofres que items hay que sacar
   }
 
   const transitions = [
