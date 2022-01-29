@@ -9,14 +9,14 @@
     "dependencies": {
         "express": "4.17.2",
         "lowdb": "1.0.0",
-        "minecraft-data": "2.109.0",
+        "minecraft-data": "2.112.0",
         "minecrafthawkeye": "1.2.7",
         "mineflayer": "3.15.0",
         "mineflayer-pathfinder": "1.9.1",
         "mineflayer-statemachine": "1.6.5",
         "mineflayer-web-inventory": "1.6.3",
         "module-alias": "2.2.2",
-        "prismarine-viewer": "1.21.0",
+        "prismarine-viewer": "1.22.0",
         "socket.io-client": "4.4.1",
         "vec3": "0.1.7"
     },
