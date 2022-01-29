@@ -11,8 +11,7 @@ const BehaviorCheckItemsInInventory = require('@BehaviorModules/BehaviorCheckIte
 const BehaviorMoveTo = require('@BehaviorModules/BehaviorMoveTo')
 
 function goChestsFunction (bot, targets) {
-  const { findItemsInChests } = require('@modules/sorterJob')(bot)
-  const { getResumeInventory, getGenericItems } = require('@modules/inventoryModule')(bot)
+  const { findChestsToWithdraw } = require('@modules/chestModule')(bot)
 
   const start = new BehaviorIdle()
   start.stateName = 'Start'
@@ -58,41 +57,10 @@ function goChestsFunction (bot, targets) {
   const pickUpItems = require('@NestedStateModules/getReady/pickUpItems')(bot, targets)
   pickUpItems.stateName = 'Pick Up Items'
   pickUpItems.x = 325
-  pickUpItems.y = 113
+  pickUpItems.y = 50
 
   let chests = []
   let chestIndex = 0
-
-  const getItemsToWithdrawInChests = () => {
-    return chests.filter(c => c.type === 'withdraw').reduce((returnData, c) => {
-      c.items.forEach(i => {
-        const key = returnData.findIndex(r => r.item === i.item)
-        if (key >= 0) {
-          returnData[key].quantity += i.quantity
-        } else {
-          returnData.push(i)
-        }
-      })
-      return returnData
-    }, [])
-  }
-
-  const findChestsToWithdraw = () => {
-    const resumeInventory = getResumeInventory()
-    const itemsToWithdrawInChests = getItemsToWithdrawInChests() // bsca que items hay que sacar
-    const itemsToWithdraw = itemsToWithdrawInChests.reduce((returnData, i) => { // resta los items que hay que sacar - inventario
-      let invItem
-      if (getGenericItems().includes(i.item)) {
-        invItem = resumeInventory.find(inv => inv.name.includes(i.item))
-      } else {
-        invItem = resumeInventory.find(inv => inv.name === i.item)
-      }
-      i.quantity = invItem ? i.quantity - invItem.quantity : i.quantity
-      if (i.quantity > 0) returnData.push(i)
-      return returnData
-    }, [])
-    targets.pickUpItems = findItemsInChests(targets.chests, itemsToWithdraw) // busca en todos los cofres que items hay que sacar
-  }
 
   const transitions = [
     new StateTransition({
@@ -114,11 +82,11 @@ function goChestsFunction (bot, targets) {
     new StateTransition({
       parent: loadConfig,
       child: pickUpItems,
-      name: 'loadConfig -> checkItemsInInventory',
+      name: 'Is enabled first pickup items from know chests',
       onTransition: () => {
         chestIndex = 0
         chests = loadConfig.getAllChests()
-        findChestsToWithdraw()
+        targets.pickUpItems = findChestsToWithdraw(chests, targets.chests)
       },
       shouldTransition: () => loadConfig.getFirstPickUpItemsFromKnownChests()
     }),
@@ -132,14 +100,12 @@ function goChestsFunction (bot, targets) {
     new StateTransition({
       parent: nextCheck,
       child: exit,
-      name: 'All chest checked',
       shouldTransition: () => chestIndex === (chests.length)
     }),
 
     new StateTransition({
       parent: nextCheck,
       child: checkItemsInInventory,
-      name: 'All chest checked',
       onTransition: () => {
         checkItemsInInventory.setItemsToCheck(chests[chestIndex].items)
         checkItemsInInventory.setIsDeposit(chests[chestIndex].type)
@@ -150,7 +116,6 @@ function goChestsFunction (bot, targets) {
     new StateTransition({
       parent: checkItemsInInventory,
       child: nextCheck,
-      name: 'Check next chest',
       onTransition: () => chestIndex++,
       shouldTransition: () => checkItemsInInventory.isFinished() && targets.items.length === 0
     }),
@@ -158,7 +123,6 @@ function goChestsFunction (bot, targets) {
     new StateTransition({
       parent: checkItemsInInventory,
       child: goChest,
-      name: 'Go to chest',
       onTransition: () => {
         targets.position = chests[chestIndex].position
       },
@@ -168,21 +132,18 @@ function goChestsFunction (bot, targets) {
     new StateTransition({
       parent: goChest,
       child: withdrawItems,
-      name: 'goChest -> withdrawItems',
       shouldTransition: () => (goChest.isFinished() || goChest.distanceToTarget() < 3) && !goChest.isSuccess() && !bot.pathfinder.isMining() && chests[chestIndex].type === 'withdraw'
     }),
 
     new StateTransition({
       parent: goChest,
       child: depositItems,
-      name: 'goChest -> depositItems',
       shouldTransition: () => (goChest.isFinished() || goChest.distanceToTarget() < 3) && !goChest.isSuccess() && !bot.pathfinder.isMining() && (chests[chestIndex].type === 'deposit' || chests[chestIndex].type === 'depositAll')
     }),
 
     new StateTransition({
       parent: withdrawItems,
       child: nextCheck,
-      name: 'withdrawItems -> checkItemsInInventory',
       onTransition: () => chestIndex++,
       shouldTransition: () => withdrawItems.isFinished()
     }),
@@ -190,7 +151,6 @@ function goChestsFunction (bot, targets) {
     new StateTransition({
       parent: depositItems,
       child: nextCheck,
-      name: 'withdrawItems -> checkItemsInInventory',
       onTransition: () => chestIndex++,
       shouldTransition: () => depositItems.isFinished()
     })
