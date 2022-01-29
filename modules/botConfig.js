@@ -18,6 +18,7 @@ function getConn(botName) {
     isCopingPatrol: false,
     canDig: false,
     allowSprinting: false,
+    firstPickUpItemsFromKnownChests: true,
     itemsToBeReady: [
       {
         item: "sword",
@@ -126,6 +127,21 @@ function setCanDig(botName, mode) {
 function getCanDig(botName) {
   const db = getConn(botName);
   return db.get("config.canDig").value();
+}
+
+function setFirstPickUpItemsFromKnownChests(botName, mode) {
+  const db = getConn(botName);
+  if (mode === true) {
+    mode = true;
+  } else {
+    mode = false;
+  }
+  db.set("config.firstPickUpItemsFromKnownChests", mode).write();
+}
+
+function getFirstPickUpItemsFromKnownChests(botName) {
+  const db = getConn(botName);
+  return db.get("config.firstPickUpItemsFromKnownChests").value();
 }
 
 function setAllowSprinting(botName, mode) {
@@ -347,6 +363,8 @@ module.exports = {
   setCopingPatrol,
   setCanDig,
   getCanDig,
+  setFirstPickUpItemsFromKnownChests,
+  getFirstPickUpItemsFromKnownChests,
   setAllowSprinting,
   getAllowSprinting,
   getPlantAreas,

@@ -89,6 +89,12 @@ function connect() {
       case "canDig":
         botconfig.setCanDig(bot.username, config.value);
         break;
+      case "firstPickUpItemsFromKnownChests":
+        botconfig.setFirstPickUpItemsFromKnownChests(
+          bot.username,
+          config.value
+        );
+        break;
       case "mode":
         botconfig.setMode(bot.username, config.value);
         break;
