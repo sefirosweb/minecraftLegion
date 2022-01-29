@@ -14,17 +14,15 @@ module.exports = function (bot) {
       for (let i = 0; i < aviableRecipes[r].delta.length; i++) {
         if (aviableRecipes[r].delta[i].count > 0) {
           result = {
-            displayName: mcData.findItemOrBlockById(
-              aviableRecipes[r].delta[i].id
-            ).displayName,
+            name: mcData.findItemOrBlockById(aviableRecipes[r].delta[i].id)
+              .name,
             id: aviableRecipes[r].delta[i].id,
             count: Math.abs(aviableRecipes[r].delta[i].count),
           };
           continue;
         }
         items.push({
-          displayName: mcData.findItemOrBlockById(aviableRecipes[r].delta[i].id)
-            .displayName,
+          name: mcData.findItemOrBlockById(aviableRecipes[r].delta[i].id).name,
           id: aviableRecipes[r].delta[i].id,
           count: Math.abs(aviableRecipes[r].delta[i].count),
         });

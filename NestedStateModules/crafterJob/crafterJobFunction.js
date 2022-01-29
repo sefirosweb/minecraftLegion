@@ -29,7 +29,7 @@ function crafterJobFunction(bot, targets) {
           item: "iron_block",
           quantit: 1,
         };
-        checkItemsNecesaryToCraft('stick')
+        checkItemsNecesaryToCraft('iron_sword')
       },
       shouldTransition: () => true,
     }),
