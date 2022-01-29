@@ -248,9 +248,9 @@ function connect () {
         break
       case 'insertItemInChest':
         chests = botconfig.getChests(bot.username)
-        chests[config.chestId].items.push({
-          item: config.item,
-          quantity: config.quantity
+        chests[config.value.chestId].items.push({
+          item: config.value.item,
+          quantity: config.value.quantity
         })
         botconfig.setChests(bot.username, chests)
         break
