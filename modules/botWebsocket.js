@@ -254,24 +254,25 @@ function connect() {
         break;
       case "changeChestType":
         chests = botconfig.getChests(bot.username);
-        chests[config.chestId].type = config.value;
+        chests[config.value.chestId].type = config.value.value;
         botconfig.setChests(bot.username, chests);
         break;
       case "changeChestName":
         chests = botconfig.getChests(bot.username);
-        chests[config.chestId].name = config.value;
+        chests[config.value.chestId].name = config.value.value;
         botconfig.setChests(bot.username, chests);
         break;
       case "changeChestPos":
         chests = botconfig.getChests(bot.username);
-        chests[config.chestId].position[config.coord] = config.pos;
+        chests[config.value.chestId].position[config.value.coord] =
+          config.value.pos;
         botconfig.setChests(bot.username, chests);
         break;
       case "changeChestPosMaster":
         findMaster = bot.nearestEntity(
           (e) =>
             e.type === "player" &&
-            e.username === config.value &&
+            e.username === config.value.master &&
             e.mobType !== "Armor Stand"
         );
         if (!findMaster) {
@@ -279,7 +280,7 @@ function connect() {
         }
 
         chests = botconfig.getChests(bot.username);
-        chests[config.chestId].position = findMaster.position.floored();
+        chests[config.value.chestId].position = findMaster.position.floored();
         botconfig.setChests(bot.username, chests);
 
         break;
@@ -293,7 +294,7 @@ function connect() {
         break;
       case "removeItemFromChest":
         chests = botconfig.getChests(bot.username);
-        chests[config.chestId].items.splice(config.itemIndex, 1);
+        chests[config.value.chestId].items.splice(config.value.itemIndex, 1);
         botconfig.setChests(bot.username, chests);
         break;
       case "moveChestNext":
