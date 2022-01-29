@@ -29,6 +29,7 @@ module.exports = class BehaviorLoadConfig {
     this.patrol = botConfig.getPatrol(this.bot.username)
     this.minerCords = botConfig.getMinerCords(this.bot.username)
     this.chests = botConfig.getAllChests(this.bot.username)
+    this.firstPickUpItemsFromKnownChests = botConfig.getFirstPickUpItemsFromKnownChests(this.bot.username)
     this.itemsToBeReady = botConfig.getItemsToBeReady(this.bot.username)
     this.pickUpItems = botConfig.getPickUpItems(this.bot.username)
     this.itemsCanBeEat = botConfig.getItemsCanBeEat(this.bot.username)
@@ -106,5 +107,9 @@ module.exports = class BehaviorLoadConfig {
 
   getFarmAreas () {
     return this.farmAreas
+  }
+
+  getFirstPickUpItemsFromKnownChests () {
+    return this.firstPickUpItemsFromKnownChests
   }
 }

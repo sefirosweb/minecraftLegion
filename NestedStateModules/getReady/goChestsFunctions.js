@@ -98,8 +98,17 @@ function goChestsFunction (bot, targets) {
     new StateTransition({
       parent: start,
       child: loadConfig,
-      name: 'start -> loadConfig',
       shouldTransition: () => true
+    }),
+
+    new StateTransition({
+      parent: loadConfig,
+      child: nextCheck,
+      onTransition: () => {
+        chestIndex = 0
+        chests = loadConfig.getAllChests()
+      },
+      shouldTransition: () => !loadConfig.getFirstPickUpItemsFromKnownChests()
     }),
 
     new StateTransition({
@@ -111,7 +120,7 @@ function goChestsFunction (bot, targets) {
         chests = loadConfig.getAllChests()
         findChestsToWithdraw()
       },
-      shouldTransition: () => true
+      shouldTransition: () => loadConfig.getFirstPickUpItemsFromKnownChests()
     }),
 
     new StateTransition({
