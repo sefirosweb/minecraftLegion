@@ -99,7 +99,7 @@ module.exports = function (bot) {
     const resumeInventory = getResumeInventory();
     const fullTreeCraftToItem = getFullTreeCraftToItem(itemName);
 
-    const itemToPickup = getItemsToPickUpRecursive(
+    const resultItemToPickup = getItemsToPickUpRecursive(
       resumeInventory,
       fullTreeCraftToItem,
       sharedChests,
@@ -107,14 +107,14 @@ module.exports = function (bot) {
       []
     );
 
-    if (itemToPickup) {
-      console.log(itemToPickup.itemToPickup);
-      console.log(itemToPickup.repicesUsed);
-    } else {
-      console.log("cant craft the item");
+    if (resultItemToPickup) {
+      return {
+        itemToPickup: resultItemToPickup.itemToPickup,
+        repicesUsed: resultItemToPickup.repicesUsed,
+      };
     }
 
-    return itemToPickup;
+    return false;
   };
 
   const getItemsToPickUpRecursive = (
@@ -124,18 +124,20 @@ module.exports = function (bot) {
     InputItemToPickup,
     InputRepicesUsed
   ) => {
-    const treeCraftToItem = JSON.parse(JSON.stringify(inputTreeCraftToItem))
+    const treeCraftToItem = JSON.parse(JSON.stringify(inputTreeCraftToItem));
 
     let haveAllItems, recipe, item;
 
     for (let r = 0; r < treeCraftToItem.recipes.length; r++) {
       recipe = treeCraftToItem.recipes[r];
 
-      let currentInventoryStatus = JSON.parse(JSON.stringify(InputCurrentInventoryStatus))
-      let sharedChests = JSON.parse(JSON.stringify(InputSharedChests))
-      let itemToPickup = JSON.parse(JSON.stringify(InputItemToPickup))
-      let repicesUsed = JSON.parse(JSON.stringify(InputRepicesUsed))
-  
+      let currentInventoryStatus = JSON.parse(
+        JSON.stringify(InputCurrentInventoryStatus)
+      );
+      let sharedChests = JSON.parse(JSON.stringify(InputSharedChests));
+      let itemToPickup = JSON.parse(JSON.stringify(InputItemToPickup));
+      let repicesUsed = JSON.parse(JSON.stringify(InputRepicesUsed));
+
       haveAllItems = true;
 
       for (let i = 0; i < recipe.items.length; i++) {
