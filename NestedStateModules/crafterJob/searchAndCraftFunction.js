@@ -8,7 +8,6 @@ const BehaviorMoveTo = require("@BehaviorModules/BehaviorMoveTo");
 
 function searchAndCraftFunction(bot, targets) {
   const { getItemsToPickUp } = require("@modules/craftModule")(bot);
-  const mcData = require("minecraft-data")(bot.version);
 
   const start = new BehaviorIdle(targets);
   start.stateName = "Start";
@@ -19,12 +18,6 @@ function searchAndCraftFunction(bot, targets) {
   exit.stateName = "exit";
   exit.x = 125;
   exit.y = 713;
-
-  const goTable = new BehaviorMoveTo(bot, targets);
-  goTable.stateName = "Go crafting table";
-  goTable.movements = targets.movements;
-  goTable.x = 550;
-  goTable.y = 450;
 
   const checkRecipes = new BehaviorIdle(targets);
   checkRecipes.stateName = "checkRecipes";
@@ -63,6 +56,15 @@ function searchAndCraftFunction(bot, targets) {
   pickUpItems.stateName = "Pick Up Items";
   pickUpItems.x = 125;
   pickUpItems.y = 213;
+
+  const goTable =
+    require("@NestedStateModules/crafterJob/goCraftingTableFunction")(
+      bot,
+      targets
+    );
+  goTable.stateName = "Go crafting table";
+  goTable.x = 550;
+  goTable.y = 450;
 
   let recipes = [];
   let checkPickupItems;
@@ -144,31 +146,15 @@ function searchAndCraftFunction(bot, targets) {
 
     new StateTransition({
       parent: checkRecipes,
-      child: checkCraftingTable,
-      onTransition: () => {
-        const craftingTableID = mcData.blocksByName.crafting_table.id;
-        craftingTable = bot.findBlock({
-          matching: craftingTableID,
-          maxDistance: 15,
-        });
-      },
+      child: goTable,
       shouldTransition: () => !checkPickupItems.recipesFound,
     }),
 
-    new StateTransition({
-      parent: checkCraftingTable,
-      child: exit,
-      shouldTransition: () => !craftingTable,
-    }),
-
-    new StateTransition({
-      parent: checkCraftingTable,
-      child: goTable,
-      onTransition: () => {
-        targets.position = craftingTable.position;
-      },
-      shouldTransition: () => craftingTable,
-    }),
+    // new StateTransition({
+    //   parent: goTable,
+    //   child: exit,
+    //   shouldTransition: () => goTable.isFinished() && !goTable.craftingTable,
+    // }),
 
     new StateTransition({
       parent: goTable,
@@ -176,10 +162,7 @@ function searchAndCraftFunction(bot, targets) {
       onTransition: () => {
         checkPickupItems = getItemsToPickUp("iron_sword", targets.chests);
       },
-      shouldTransition: () =>
-        (goTable.isFinished() || goTable.distanceToTarget() < 1) &&
-        !goTable.isSuccess() &&
-        !bot.pathfinder.isMining(),
+      shouldTransition: () => goTable.isFinished(),
     }),
 
     new StateTransition({
