@@ -228,7 +228,22 @@ module.exports = function (bot) {
               sharedChests = itemsPickupRecursive.sharedChests;
               currentInventoryStatus =
                 itemsPickupRecursive.currentInventoryStatus;
+
+              itemsPickupRecursive.recipedUsed.result.count -= item.count;
+              const spareItem = itemsPickupRecursive.recipedUsed.result;
               item.count = 0;
+
+              if (spareItem.count > 0) {
+                const itemInventory = currentInventoryStatus.find(
+                  (i) => i.type === spareItem.type
+                );
+
+                if (itemInventory) {
+                  itemInventory.count += spareItem.count;
+                } else {
+                  currentInventoryStatus.push(spareItem);
+                }
+              }
             }
           }
 
@@ -245,6 +260,7 @@ module.exports = function (bot) {
           currentInventoryStatus,
           sharedChests,
           repicesUsed,
+          recipedUsed: recipe,
         };
       }
     }
