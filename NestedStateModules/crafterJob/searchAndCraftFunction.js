@@ -41,8 +41,6 @@ function searchAndCraftFunction(bot, targets) {
 
   const checkCraftingTable = new BehaviorIdle(targets);
   checkCraftingTable.stateName = "checkCraftingTable";
-  checkCraftingTable.x = 650;
-  checkCraftingTable.y = 713;
 
   const craftItem = new BehaviorCraft(bot, targets);
   craftItem.stateName = "Craft Item";
@@ -62,9 +60,18 @@ function searchAndCraftFunction(bot, targets) {
       bot,
       targets
     );
-  goTable.stateName = "Go crafting table";
+  goTable.stateName = "Go check recipes";
   goTable.x = 550;
   goTable.y = 450;
+
+  const goTableToCraft =
+    require("@NestedStateModules/crafterJob/goCraftingTableFunction")(
+      bot,
+      targets
+    );
+  goTableToCraft.stateName = "Go to Craft";
+  goTableToCraft.x = 550;
+  goTableToCraft.y = 450;
 
   let recipes = [];
   let checkPickupItems;
@@ -106,7 +113,7 @@ function searchAndCraftFunction(bot, targets) {
 
     new StateTransition({
       parent: checkPickUpItems,
-      child: craftItem,
+      child: checkCraftingTable,
       shouldTransition: () => targets.pickUpItems.length === 0,
     }),
 
@@ -117,8 +124,27 @@ function searchAndCraftFunction(bot, targets) {
     }),
 
     new StateTransition({
-      parent: pickUpItems,
+      parent: checkCraftingTable,
       child: craftItem,
+      shouldTransition: () => !checkPickupItems.needCraftingTable,
+    }),
+
+    new StateTransition({
+      parent: checkCraftingTable,
+      child: goTableToCraft,
+      shouldTransition: () => checkPickupItems.needCraftingTable,
+    }),
+
+    new StateTransition({
+      parent: goTableToCraft,
+      child: craftItem,
+      shouldTransition: () =>
+        checkPickupItems.needCraftingTable && goTableToCraft.isFinished(),
+    }),
+
+    new StateTransition({
+      parent: pickUpItems,
+      child: checkCraftingTable,
       onTransition: () => {
         targets.craftItem = {
           name: recipes.shift().result.name,
