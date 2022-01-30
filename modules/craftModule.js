@@ -96,9 +96,18 @@ module.exports = function (bot) {
   };
 
   const getItemsToPickUp = (itemName, sharedChests) => {
-    const resumeInventory = getResumeInventory();
     const fullTreeCraftToItem = getFullTreeCraftToItem(itemName);
 
+    if (fullTreeCraftToItem.recipes.length === 0) {
+      return {
+        recipesFound: false,
+        haveMaterials: null,
+        itemToPickup: null,
+        repicesUsed: null,
+      };
+    }
+
+    const resumeInventory = getResumeInventory();
     const resultItemToPickup = getItemsToPickUpRecursive(
       resumeInventory,
       fullTreeCraftToItem,
@@ -107,14 +116,21 @@ module.exports = function (bot) {
       []
     );
 
-    if (resultItemToPickup) {
+    if (!resultItemToPickup) {
       return {
-        itemToPickup: resultItemToPickup.itemToPickup,
-        repicesUsed: resultItemToPickup.repicesUsed,
+        recipesFound: true,
+        haveMaterials: false,
+        itemToPickup: null,
+        repicesUsed: null,
       };
     }
 
-    return false;
+    return {
+      recipesFound: true,
+      haveMaterials: true,
+      itemToPickup: resultItemToPickup.itemToPickup,
+      repicesUsed: resultItemToPickup.repicesUsed,
+    };
   };
 
   const getItemsToPickUpRecursive = (
