@@ -124,18 +124,18 @@ module.exports = function (bot) {
     InputItemToPickup,
     InputRepicesUsed
   ) => {
-    const treeCraftToItem = { ...inputTreeCraftToItem };
+    const treeCraftToItem = JSON.parse(JSON.stringify(inputTreeCraftToItem))
 
     let haveAllItems, recipe, item;
 
     for (let r = 0; r < treeCraftToItem.recipes.length; r++) {
       recipe = treeCraftToItem.recipes[r];
 
-      let currentInventoryStatus = [...InputCurrentInventoryStatus];
-      let sharedChests = [...InputSharedChests];
-      let itemToPickup = [...InputItemToPickup];
-      let repicesUsed = [...InputRepicesUsed];
-
+      let currentInventoryStatus = JSON.parse(JSON.stringify(InputCurrentInventoryStatus))
+      let sharedChests = JSON.parse(JSON.stringify(InputSharedChests))
+      let itemToPickup = JSON.parse(JSON.stringify(InputItemToPickup))
+      let repicesUsed = JSON.parse(JSON.stringify(InputRepicesUsed))
+  
       haveAllItems = true;
 
       for (let i = 0; i < recipe.items.length; i++) {
@@ -150,7 +150,7 @@ module.exports = function (bot) {
             invItem.quantity > item.count ? item.count : invItem.quantity;
 
           item.count -= itemToDiscount;
-          invItem -= itemToDiscount;
+          invItem.quantity -= itemToDiscount;
         }
 
         if (item.count > 0) {
