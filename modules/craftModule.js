@@ -144,7 +144,7 @@ module.exports = function (bot) {
         item = recipe.items[i];
 
         const invItem = currentInventoryStatus.find(
-          (inv) => (inv.id = item.id)
+          (inv) => (inv.type === item.type)
         );
 
         if (invItem) {
