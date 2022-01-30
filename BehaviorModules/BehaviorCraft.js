@@ -1,6 +1,6 @@
 const botWebsocket = require('@modules/botWebsocket')
 
-module.exports = class BehaviorWithdrawItemChest {
+module.exports = class BehaviorCraft {
   constructor (bot, targets) {
     this.bot = bot
     this.targets = targets
