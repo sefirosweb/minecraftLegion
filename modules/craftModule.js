@@ -96,44 +96,6 @@ module.exports = function (bot) {
     return craftingTable;
   };
 
-  const getItemsToPickUp = (itemName, sharedChests, quantity) => {
-    const fullTreeCraftToItem = getFullTreeCraftToItem(itemName);
-
-    if (fullTreeCraftToItem.recipes.length === 0) {
-      return {
-        recipesFound: false,
-      };
-    }
-
-    const resumeInventory = getResumeInventory();
-    const resultItemToPickup = getItemsToPickUpRecursive(
-      resumeInventory,
-      fullTreeCraftToItem,
-      sharedChests,
-      [],
-      []
-    );
-
-    if (!resultItemToPickup) {
-      return {
-        recipesFound: true,
-        haveMaterials: false,
-      };
-    }
-
-    const needCraftingTable = checkCraftingTableNeeded(
-      resultItemToPickup.repicesUsed
-    );
-
-    return {
-      recipesFound: true,
-      haveMaterials: true,
-      needCraftingTable: needCraftingTable,
-      itemToPickup: resultItemToPickup.itemToPickup,
-      repicesUsed: resultItemToPickup.repicesUsed,
-    };
-  };
-
   const checkCraftingTableNeeded = (recipes) => {
     let craftinTableNeeded = false;
 
@@ -153,6 +115,91 @@ module.exports = function (bot) {
     }
 
     return false;
+  };
+
+  const getItemsToPickUp = (itemName, sharedChests, quantity) => {
+    const fullTreeCraftToItem = getFullTreeCraftToItem(itemName);
+
+    if (fullTreeCraftToItem.recipes.length === 0) {
+      return {
+        recipesFound: false,
+      };
+    }
+
+    const resumeInventory = getResumeInventory();
+    const resultItemToPickup = calculateHowManyItemsCanBeCraft(
+      resumeInventory,
+      fullTreeCraftToItem,
+      sharedChests,
+      quantity
+    );
+
+    const needCraftingTable = checkCraftingTableNeeded(
+      resultItemToPickup.repicesUsed
+    );
+
+    return {
+      recipesFound: true,
+      needCraftingTable: needCraftingTable,
+      haveMaterials: resultItemToPickup.haveMaterials,
+      itemToPickup: resultItemToPickup.itemToPickup,
+      repicesUsed: resultItemToPickup.repicesUsed,
+    };
+  };
+
+  const calculateHowManyItemsCanBeCraft = (
+    InputCurrentInventoryStatus,
+    fullTreeCraftToItem,
+    InputSharedChests,
+    quantity
+  ) => {
+    let resumeInventory = JSON.parse(
+      JSON.stringify(InputCurrentInventoryStatus)
+    );
+    let sharedChests = JSON.parse(JSON.stringify(InputSharedChests));
+
+    let resultItemToPickup;
+    let allItemsToPickUp = [];
+    let allRecpiesUsed = [];
+
+    let haveMaterials = true;
+
+    for (let q = 0; q < quantity; q++) {
+      resultItemToPickup = getItemsToPickUpRecursive(
+        resumeInventory,
+        fullTreeCraftToItem,
+        sharedChests,
+        [],
+        []
+      );
+
+      if (!resultItemToPickup) {
+        haveMaterials = false;
+        break;
+      }
+
+      allItemsToPickUp = allItemsToPickUp.concat(
+        resultItemToPickup.itemToPickup
+      );
+      allRecpiesUsed = allRecpiesUsed.concat(resultItemToPickup.repicesUsed);
+
+      resumeInventory = resultItemToPickup.currentInventoryStatus;
+      sharedChests = resultItemToPickup.sharedChests;
+    }
+
+    if (haveMaterials) {
+      haveMaterials = "all";
+    } else if (!haveMaterials && q === 0) {
+      haveMaterials = "none";
+    } else {
+      haveMaterials = "some";
+    }
+
+    return {
+      haveMaterials: haveMaterials,
+      itemToPickup: allItemsToPickUp,
+      repicesUsed: allRecpiesUsed,
+    };
   };
 
   const getItemsToPickUpRecursive = (
