@@ -96,7 +96,7 @@ module.exports = function (bot) {
     return craftingTable;
   };
 
-  const getItemsToPickUp = (itemName, sharedChests) => {
+  const getItemsToPickUp = (itemName, sharedChests, quantity) => {
     const fullTreeCraftToItem = getFullTreeCraftToItem(itemName);
 
     if (fullTreeCraftToItem.recipes.length === 0) {

@@ -30,6 +30,12 @@ function crafterJobFunction(bot, targets) {
     new StateTransition({
       parent: start,
       child: searchAndCraft,
+      onTransition: () => {
+        targets.craftItemBatch = {
+          name: "iron_sword",
+          quantity: 5,
+        };
+      },
       shouldTransition: () => true,
     }),
     new StateTransition({

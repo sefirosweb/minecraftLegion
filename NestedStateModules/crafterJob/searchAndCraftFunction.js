@@ -84,7 +84,11 @@ function searchAndCraftFunction(bot, targets) {
       parent: start,
       child: checkRecipes,
       onTransition: () => {
-        checkPickupItems = getItemsToPickUp("iron_sword", targets.chests);
+        checkPickupItems = getItemsToPickUp(
+          targets.craftItemBatch.name,
+          targets.chests,
+          targets.craftItemBatch.quantity
+        );
       },
       shouldTransition: () => true,
     }),
@@ -188,7 +192,11 @@ function searchAndCraftFunction(bot, targets) {
       parent: goTable,
       child: checkRecipesWithTable,
       onTransition: () => {
-        checkPickupItems = getItemsToPickUp("iron_sword", targets.chests);
+        checkPickupItems = getItemsToPickUp(
+          targets.craftItemBatch.name,
+          targets.chests,
+          targets.craftItemBatch.quantity
+        );
       },
       shouldTransition: () => goTable.isFinished(),
     }),
