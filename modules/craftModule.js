@@ -55,6 +55,8 @@ module.exports = function (bot) {
 
     const itemsToRemove = [];
     for (let r = 0; r < recipes.length; r++) {
+      recipes[r].needCraftingTable = needCraftingTable;
+
       for (let i = 0; i < recipes[r].items.length; i++) {
         subItem = mcData.findItemOrBlockById(recipes[r].items[i].id);
         if (previousItem && subItem.id === previousItem.id) {
@@ -74,7 +76,6 @@ module.exports = function (bot) {
     });
 
     return {
-      needCraftingTable,
       recipes: finalRecipes,
     };
   };
@@ -101,9 +102,6 @@ module.exports = function (bot) {
     if (fullTreeCraftToItem.recipes.length === 0) {
       return {
         recipesFound: false,
-        haveMaterials: null,
-        itemToPickup: null,
-        repicesUsed: null,
       };
     }
 
@@ -120,17 +118,43 @@ module.exports = function (bot) {
       return {
         recipesFound: true,
         haveMaterials: false,
-        itemToPickup: null,
-        repicesUsed: null,
       };
     }
+
+    const needCraftingTable = checkCraftingTableNeeded(
+      resultItemToPickup.repicesUsed
+    );
+
+    console.log({ needCraftingTable });
 
     return {
       recipesFound: true,
       haveMaterials: true,
+      needCraftingTable: needCraftingTable,
       itemToPickup: resultItemToPickup.itemToPickup,
       repicesUsed: resultItemToPickup.repicesUsed,
     };
+  };
+
+  const checkCraftingTableNeeded = (recipes) => {
+    let craftinTableNeeded = false;
+
+    for (let r = 0; r < recipes.length; r++) {
+      const recipe = recipes[r];
+      if (recipe.needCraftingTable) {
+        return true;
+      }
+
+      for (let i = 0; i < recipe.items.length; i++) {
+        const item = recipe.items[i];
+
+        if (checkCraftingTableNeeded(item.subRecipes)) {
+          return true;
+        }
+      }
+    }
+
+    return false;
   };
 
   const getItemsToPickUpRecursive = (
