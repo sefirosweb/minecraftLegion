@@ -234,10 +234,10 @@ module.exports = function (bot) {
 
         if (invItem) {
           const itemToDiscount =
-            invItem.quantity > item.count ? item.count : invItem.quantity;
+            invItem.count > item.count ? item.count : invItem.count;
 
           item.count -= itemToDiscount;
-          invItem.quantity -= itemToDiscount;
+          invItem.count -= itemToDiscount;
         }
 
         if (item.count > 0) {
