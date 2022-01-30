@@ -95,6 +95,12 @@ function connect() {
           config.value
         );
         break;
+      case "canCraftItemWithdrawChest":
+        botconfig.setCanCraftItemWithdrawChest(
+          bot.username,
+          config.value
+        );
+        break;
       case "mode":
         botconfig.setMode(bot.username, config.value);
         break;

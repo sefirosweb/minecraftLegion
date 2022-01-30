@@ -19,6 +19,7 @@ function getConn(botName) {
     canDig: false,
     allowSprinting: false,
     firstPickUpItemsFromKnownChests: true,
+    canCraftItemWithdrawChest: true,
     itemsToBeReady: [
       {
         item: "sword",
@@ -142,6 +143,21 @@ function setFirstPickUpItemsFromKnownChests(botName, mode) {
 function getFirstPickUpItemsFromKnownChests(botName) {
   const db = getConn(botName);
   return db.get("config.firstPickUpItemsFromKnownChests").value();
+}
+
+function setCanCraftItemWithdrawChest(botName, mode) {
+  const db = getConn(botName);
+  if (mode === true) {
+    mode = true;
+  } else {
+    mode = false;
+  }
+  db.set("config.canCraftItemWithdrawChest", mode).write();
+}
+
+function getCanCraftItemWithdrawChest(botName) {
+  const db = getConn(botName);
+  return db.get("config.canCraftItemWithdrawChest").value();
 }
 
 function setAllowSprinting(botName, mode) {
@@ -365,6 +381,8 @@ module.exports = {
   getCanDig,
   setFirstPickUpItemsFromKnownChests,
   getFirstPickUpItemsFromKnownChests,
+  setCanCraftItemWithdrawChest,
+  getCanCraftItemWithdrawChest,
   setAllowSprinting,
   getAllowSprinting,
   getPlantAreas,
