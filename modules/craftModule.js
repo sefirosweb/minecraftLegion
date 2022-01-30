@@ -125,8 +125,6 @@ module.exports = function (bot) {
       resultItemToPickup.repicesUsed
     );
 
-    console.log({ needCraftingTable });
-
     return {
       recipesFound: true,
       haveMaterials: true,

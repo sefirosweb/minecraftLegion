@@ -20,14 +20,14 @@ function goCraftingTableFunction(bot, targets) {
 
   const checkCraftingTable = new BehaviorIdle(targets);
   checkCraftingTable.stateName = "Check near crafting table";
-  checkCraftingTable.x = 325
-  checkCraftingTable.y = 113
+  checkCraftingTable.x = 325;
+  checkCraftingTable.y = 113;
 
   const goTable = new BehaviorMoveTo(bot, targets);
   goTable.stateName = "Go crafting table";
   goTable.movements = targets.movements;
-  goTable.x = 325
-  goTable.y = 213
+  goTable.x = 325;
+  goTable.y = 213;
 
   let craftingTable = false;
 

@@ -17,11 +17,11 @@ function searchAndCraftFunction(bot, targets) {
   const exit = new BehaviorIdle(targets);
   exit.stateName = "exit";
   exit.x = 125;
-  exit.y = 713;
+  exit.y = 575;
 
   const checkRecipes = new BehaviorIdle(targets);
   checkRecipes.stateName = "checkRecipes";
-  checkRecipes.x = 650;
+  checkRecipes.x = 625;
   checkRecipes.y = 113;
 
   const checkRecipesWithTable = new BehaviorIdle(targets);
@@ -31,8 +31,8 @@ function searchAndCraftFunction(bot, targets) {
 
   const checkMaterials = new BehaviorIdle(targets);
   checkMaterials.stateName = "checkMaterials";
-  checkMaterials.x = 355;
-  checkMaterials.y = 375;
+  checkMaterials.x = 525;
+  checkMaterials.y = 350;
 
   const checkPickUpItems = new BehaviorIdle(targets);
   checkPickUpItems.stateName = "checkPickUpItems";
@@ -41,11 +41,13 @@ function searchAndCraftFunction(bot, targets) {
 
   const checkCraftingTable = new BehaviorIdle(targets);
   checkCraftingTable.stateName = "checkCraftingTable";
+  checkCraftingTable.x = 125;
+  checkCraftingTable.y = 350;
 
   const craftItem = new BehaviorCraft(bot, targets);
   craftItem.stateName = "Craft Item";
   craftItem.x = 125;
-  craftItem.y = 375;
+  craftItem.y = 462;
 
   const pickUpItems = require("@NestedStateModules/getReady/pickUpItems")(
     bot,
@@ -61,8 +63,8 @@ function searchAndCraftFunction(bot, targets) {
       targets
     );
   goTable.stateName = "Go check recipes";
-  goTable.x = 550;
-  goTable.y = 450;
+  goTable.x = 625;
+  goTable.y = 462;
 
   const goTableToCraft =
     require("@NestedStateModules/crafterJob/goCraftingTableFunction")(
@@ -70,8 +72,8 @@ function searchAndCraftFunction(bot, targets) {
       targets
     );
   goTableToCraft.stateName = "Go to Craft";
-  goTableToCraft.x = 550;
-  goTableToCraft.y = 450;
+  goTableToCraft.x = 325;
+  goTableToCraft.y = 350;
 
   let recipes = [];
   let checkPickupItems;
