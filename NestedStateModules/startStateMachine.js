@@ -142,7 +142,7 @@ module.exports = (bot) => {
       webserver.startServer()
     }
 
-    inventoryViewer(bot, { port: 5001 })
+    inventoryViewer(bot, { port: 4540 })
   }
 
   botWebsocket.on('action', toBotData => {
