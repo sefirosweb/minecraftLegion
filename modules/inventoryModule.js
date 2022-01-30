@@ -113,6 +113,29 @@ module.exports = function (bot) {
     })
   }
 
+  
+  function getResumeInventoryV2 () {
+    const items = bot.inventory.items().reduce((currentItems, slot) => {
+      const newItems = [...currentItems]
+      const itemSlot = {
+        name: slot.name,
+        type: slot.type,
+        count: slot.count
+      }
+
+      const index = currentItems.findIndex(i => i.type === slot.type)
+      if (index >= 0) {
+        currentItems[index].count += slot.count
+      } else {
+        newItems.push(itemSlot)
+      }
+
+      return newItems
+    }, [])
+
+    return items
+  }
+
   function getResumeInventory () {
     const items = bot.inventory.items().reduce((currentItems, slot) => {
       const newItems = [...currentItems]
@@ -228,6 +251,7 @@ module.exports = function (bot) {
     checkItemEquiped,
     equipItem,
     getResumeInventory,
+    getResumeInventoryV2,
     findChests,
     getSecondBlockPosition,
     getGenericItems,

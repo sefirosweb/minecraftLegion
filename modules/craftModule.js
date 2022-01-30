@@ -1,6 +1,6 @@
 module.exports = function (bot) {
   const mcData = require("minecraft-data")(bot.version);
-  const { getResumeInventory } = require("@modules/inventoryModule")(bot);
+  const { getResumeInventoryV2 } = require("@modules/inventoryModule")(bot);
   const { findItemsInChests } = require("@modules/sorterJob")(bot);
 
   const getRecipes = (item, craftingTable) => {
@@ -126,7 +126,7 @@ module.exports = function (bot) {
       };
     }
 
-    const resumeInventory = getResumeInventory();
+    const resumeInventory = getResumeInventoryV2();
     const resultItemToPickup = calculateHowManyItemsCanBeCraft(
       resumeInventory,
       fullTreeCraftToItem,
