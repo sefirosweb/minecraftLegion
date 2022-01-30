@@ -32,8 +32,8 @@ function crafterJobFunction(bot, targets) {
       child: searchAndCraft,
       onTransition: () => {
         targets.craftItemBatch = {
-          name: "stick",
-          quantity: 3,
+          name: "iron_sword",
+          quantity: 18,
         };
       },
       shouldTransition: () => true,
