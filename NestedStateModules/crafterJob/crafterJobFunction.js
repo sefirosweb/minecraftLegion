@@ -5,8 +5,6 @@ const {
 } = require("mineflayer-statemachine");
 
 function crafterJobFunction(bot, targets) {
-  const { getItemsToPickUp } = require("@modules/craftModule")(bot);
-
   const start = new BehaviorIdle(targets);
   start.stateName = "Start";
   start.x = 125;
@@ -24,13 +22,6 @@ function crafterJobFunction(bot, targets) {
     new StateTransition({
       parent: start,
       child: searchAndCraft,
-      onTransition: () => {
-        targets.crafterJob.craftItem = {
-          item: "iron_block",
-          quantit: 1,
-        };
-        getItemsToPickUp("iron_sword", targets.chests);
-      },
       shouldTransition: () => true,
     }),
   ];
