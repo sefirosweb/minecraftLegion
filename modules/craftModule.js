@@ -164,7 +164,8 @@ module.exports = function (bot) {
 
     let haveMaterials = true;
 
-    for (let q = 0; q < quantity; q++) {
+    let q
+    for (q = 0; q < quantity; q++) {
       resultItemToPickup = getItemsToPickUpRecursive(
         resumeInventory,
         fullTreeCraftToItem,
