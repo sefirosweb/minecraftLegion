@@ -182,12 +182,6 @@ function searchAndCraftFunction(bot, targets) {
       shouldTransition: () => !checkPickupItems.recipesFound,
     }),
 
-    // new StateTransition({
-    //   parent: goTable,
-    //   child: exit,
-    //   shouldTransition: () => goTable.isFinished() && !goTable.craftingTable,
-    // }),
-
     new StateTransition({
       parent: goTable,
       child: checkRecipesWithTable,
