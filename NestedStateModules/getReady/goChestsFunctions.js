@@ -12,11 +12,17 @@ const BehaviorMoveTo = require('@BehaviorModules/BehaviorMoveTo')
 
 function goChestsFunction (bot, targets) {
   const { findChestsToWithdraw } = require('@modules/chestModule')(bot)
+  const { getResumeInventoryV2 } = require("@modules/inventoryModule")(bot);
 
   const start = new BehaviorIdle()
   start.stateName = 'Start'
   start.x = 125
   start.y = 313
+
+  const checkCraftItem = new BehaviorIdle()
+  checkCraftItem.stateName = 'Check Craft Item'
+  checkCraftItem.x = 125
+  checkCraftItem.y = 313
 
   const exit = new BehaviorIdle()
   exit.stateName = 'Exit'
@@ -59,8 +65,16 @@ function goChestsFunction (bot, targets) {
   pickUpItems.x = 325
   pickUpItems.y = 50
 
+  const searchAndCraft =
+  require("@NestedStateModules/crafterJob/searchAndCraftFunction")(
+    bot,
+    targets
+  );
+
+
   let chests = []
   let chestIndex = 0
+  let itemsToCraft = []
 
   const transitions = [
     new StateTransition({
@@ -143,9 +157,64 @@ function goChestsFunction (bot, targets) {
 
     new StateTransition({
       parent: withdrawItems,
+      child: checkCraftItem,
+      onTransition: () =>{
+      const itemInChest = chests[chestIndex].items
+      const resumeInventory = getResumeInventoryV2()
+
+      itemsToCraft = []
+      
+      itemInChest.forEach(ic => {
+          if(ic.quantity > 0) {
+          itemsToCraft.push({
+            name: ic.item,
+            quantity: ic.quantity
+          })
+        }
+      });
+        
+      },
+      shouldTransition: () => withdrawItems.isFinished()
+    }),
+
+    new StateTransition({
+      parent: checkCraftItem,
       child: nextCheck,
       onTransition: () => chestIndex++,
-      shouldTransition: () => withdrawItems.isFinished()
+      shouldTransition: () => itemsToCraft.length === 0 || !targets.config.canCraftItemWithdrawChest
+    }),
+
+    new StateTransition({
+      parent: checkCraftItem,
+      child: searchAndCraft,
+      onTransition: () => {
+        const craftItem = itemsToCraft.shift()
+        targets.craftItemBatch = {
+          name: craftItem.name,
+          quantity: craftItem.quantity,
+        };
+      },
+      shouldTransition: () => itemsToCraft.length > 0 && targets.config.canCraftItemWithdrawChest
+    }),
+
+    new StateTransition({
+      parent: searchAndCraft,
+      child: searchAndCraft,
+      onTransition: () => {
+        const craftItem = itemsToCraft.shift()
+        targets.craftItemBatch = {
+          name: craftItem.name,
+          quantity: craftItem.quantity,
+        };
+      },
+      shouldTransition: () => itemsToCraft.length > 0 && searchAndCraft.isFinished()
+    }),
+
+    new StateTransition({
+       parent: searchAndCraft,
+      child: nextCheck,
+      onTransition: () => chestIndex++,
+      shouldTransition: () => itemsToCraft.length === 0 && searchAndCraft.isFinished()
     }),
 
     new StateTransition({
