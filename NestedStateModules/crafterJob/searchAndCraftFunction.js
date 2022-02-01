@@ -7,7 +7,7 @@ const BehaviorCraft = require("@BehaviorModules/BehaviorCraft");
 const BehaviorMoveTo = require("@BehaviorModules/BehaviorMoveTo");
 
 function searchAndCraftFunction(bot, targets) {
-  const { getItemsToPickUp } = require("@modules/craftModule")(bot);
+  const { getItemsToPickUpBatch } = require("@modules/craftModule")(bot);
 
   const start = new BehaviorIdle(targets);
   start.stateName = "Start";
@@ -76,7 +76,7 @@ function searchAndCraftFunction(bot, targets) {
   goTableToCraft.y = 350;
 
   let recipes = [];
-  let checkPickupItems;
+  let itemsToPickUpBatch;
   let craftingTable;
 
   const transitions = [
@@ -84,10 +84,9 @@ function searchAndCraftFunction(bot, targets) {
       parent: start,
       child: checkRecipes,
       onTransition: () => {
-        checkPickupItems = getItemsToPickUp(
-          targets.craftItemBatch.name,
-          targets.chests,
-          targets.craftItemBatch.quantity
+        itemsToPickUpBatch = getItemsToPickUpBatch(
+          targets.craftItemBatch,
+          targets.chests
         );
       },
       shouldTransition: () => true,
@@ -97,24 +96,24 @@ function searchAndCraftFunction(bot, targets) {
       parent: checkRecipes,
       child: checkMaterials,
       onTransition: () => {
-        recipes = checkPickupItems.repicesUsed;
+        recipes = itemsToPickUpBatch.repicesUsed;
       },
-      shouldTransition: () => checkPickupItems.recipesFound,
+      shouldTransition: () => itemsToPickUpBatch.repicesUsed.length > 0,
     }),
 
     new StateTransition({
       parent: checkMaterials,
       child: exit,
-      shouldTransition: () => !checkPickupItems.haveMaterials,
+      shouldTransition: () => itemsToPickUpBatch.itemToPickup.length === 0,
     }),
 
     new StateTransition({
       parent: checkMaterials,
       child: checkPickUpItems,
       onTransition: () => {
-        targets.pickUpItems = checkPickupItems.itemToPickup;
+        targets.pickUpItems = itemsToPickUpBatch.itemToPickup;
       },
-      shouldTransition: () => checkPickupItems.haveMaterials,
+      shouldTransition: () => itemsToPickUpBatch.itemToPickup.length > 0,
     }),
 
     new StateTransition({
@@ -132,20 +131,20 @@ function searchAndCraftFunction(bot, targets) {
     new StateTransition({
       parent: checkCraftingTable,
       child: craftItem,
-      shouldTransition: () => !checkPickupItems.needCraftingTable,
+      shouldTransition: () => !itemsToPickUpBatch.needCraftingTable,
     }),
 
     new StateTransition({
       parent: checkCraftingTable,
       child: goTableToCraft,
-      shouldTransition: () => checkPickupItems.needCraftingTable,
+      shouldTransition: () => itemsToPickUpBatch.needCraftingTable,
     }),
 
     new StateTransition({
       parent: goTableToCraft,
       child: craftItem,
       shouldTransition: () =>
-        checkPickupItems.needCraftingTable && goTableToCraft.isFinished(),
+        itemsToPickUpBatch.needCraftingTable && goTableToCraft.isFinished(),
     }),
 
     new StateTransition({
@@ -179,17 +178,16 @@ function searchAndCraftFunction(bot, targets) {
     new StateTransition({
       parent: checkRecipes,
       child: goTable,
-      shouldTransition: () => !checkPickupItems.recipesFound,
+      shouldTransition: () => itemsToPickUpBatch.repicesUsed.length === 0,
     }),
 
     new StateTransition({
       parent: goTable,
       child: checkRecipesWithTable,
       onTransition: () => {
-        checkPickupItems = getItemsToPickUp(
-          targets.craftItemBatch.name,
-          targets.chests,
-          targets.craftItemBatch.quantity
+        itemsToPickUpBatch = getItemsToPickUpBatch(
+          targets.craftItemBatch,
+          targets.chests
         );
       },
       shouldTransition: () => goTable.isFinished(),
@@ -198,16 +196,16 @@ function searchAndCraftFunction(bot, targets) {
     new StateTransition({
       parent: checkRecipesWithTable,
       child: exit,
-      shouldTransition: () => !checkPickupItems.recipesFound,
+      shouldTransition: () => itemsToPickUpBatch.repicesUsed.length === 0,
     }),
 
     new StateTransition({
       parent: checkRecipesWithTable,
       child: checkMaterials,
       onTransition: () => {
-        recipes = checkPickupItems.repicesUsed;
+        recipes = itemsToPickUpBatch.repicesUsed;
       },
-      shouldTransition: () => checkPickupItems.recipesFound,
+      shouldTransition: () => itemsToPickUpBatch.repicesUsed.length > 0,
     }),
   ];
 

@@ -31,10 +31,12 @@ function crafterJobFunction(bot, targets) {
       parent: start,
       child: searchAndCraft,
       onTransition: () => {
-        targets.craftItemBatch = {
-          name: "iron_sword",
-          quantity: 18,
-        };
+        targets.craftItemBatch = [
+          {
+            name: "iron_sword",
+            quantity: 18,
+          },
+        ];
       },
       shouldTransition: () => true,
     }),

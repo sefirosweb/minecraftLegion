@@ -117,16 +117,31 @@ module.exports = function (bot) {
     return false;
   };
 
-  const getItemsToPickUp = (itemName, sharedChests, quantity) => {
+  const getItemsToPickUp = (
+    itemName,
+    sharedChests,
+    quantity,
+    InputResumeInventory
+  ) => {
     const fullTreeCraftToItem = getFullTreeCraftToItem(itemName);
 
     if (fullTreeCraftToItem.recipes.length === 0) {
       return {
         recipesFound: false,
+        needCraftingTable: null,
+        haveMaterials: null,
+        itemToPickup: null,
+        repicesUsed: null,
+        sharedChests: null,
+        resumeInventory: null,
       };
     }
 
-    const resumeInventory = getResumeInventoryV2();
+    const resumeInventory =
+      InputResumeInventory === undefined
+        ? getResumeInventoryV2()
+        : InputResumeInventory;
+
     const resultItemToPickup = calculateHowManyItemsCanBeCraft(
       resumeInventory,
       fullTreeCraftToItem,
@@ -144,6 +159,58 @@ module.exports = function (bot) {
       haveMaterials: resultItemToPickup.haveMaterials,
       itemToPickup: resultItemToPickup.itemToPickup,
       repicesUsed: resultItemToPickup.repicesUsed,
+      sharedChests: resultItemToPickup.sharedChests,
+      resumeInventory: resultItemToPickup.resumeInventory,
+    };
+  };
+
+  const getItemsToPickUpBatch = (itemsToCraft, InputSharedChests) => {
+    let resumeInventory = getResumeInventoryV2();
+
+    let sharedChests = JSON.parse(JSON.stringify(InputSharedChests));
+
+    let allItemsToPickUp = [];
+    let allRecpiesUsed = [];
+
+    let resultItemToPickup;
+    let itemToCraft;
+    let i;
+    let recipesFound = itemsToCraft.length;
+    let needCraftingTable = false;
+
+    for (i = 0; i < itemsToCraft.length; i++) {
+      itemToCraft = itemsToCraft[i];
+      resultItemToPickup = getItemsToPickUp(
+        itemToCraft.name,
+        sharedChests,
+        itemToCraft.quantity,
+        resumeInventory
+      );
+
+      itemsToCraft[i].resultItemToPickup = resultItemToPickup;
+
+      if (!resultItemToPickup.recipesFound) {
+        continue;
+      }
+
+      allRecpiesUsed = allRecpiesUsed.concat(resultItemToPickup.repicesUsed);
+      allItemsToPickUp = allItemsToPickUp.concat(
+        resultItemToPickup.itemToPickup
+      );
+
+      if (resultItemToPickup.needCraftingTable) {
+        needCraftingTable = true;
+      }
+
+      sharedChests = resultItemToPickup.sharedChests;
+      resumeInventory = resultItemToPickup.resumeInventory;
+    }
+
+    return {
+      itemsToCraft,
+      needCraftingTable,
+      itemToPickup: allItemsToPickUp,
+      repicesUsed: allRecpiesUsed,
     };
   };
 
@@ -164,7 +231,7 @@ module.exports = function (bot) {
 
     let haveMaterials = true;
 
-    let q
+    let q;
     for (q = 0; q < quantity; q++) {
       resultItemToPickup = getItemsToPickUpRecursive(
         resumeInventory,
@@ -200,6 +267,8 @@ module.exports = function (bot) {
       haveMaterials: haveMaterials,
       itemToPickup: allItemsToPickUp,
       repicesUsed: allRecpiesUsed,
+      sharedChests,
+      resumeInventory,
     };
   };
 
@@ -318,6 +387,7 @@ module.exports = function (bot) {
 
   return {
     getItemsToPickUp,
+    getItemsToPickUpBatch,
     getFullTreeCraftToItem,
     getCraftingTable,
   };

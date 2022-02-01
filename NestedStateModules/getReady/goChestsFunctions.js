@@ -188,33 +188,16 @@ function goChestsFunction (bot, targets) {
       parent: checkCraftItem,
       child: searchAndCraft,
       onTransition: () => {
-        const craftItem = itemsToCraft.shift()
-        targets.craftItemBatch = {
-          name: craftItem.name,
-          quantity: craftItem.quantity,
-        };
+        targets.craftItemBatch = itemsToCraft
       },
       shouldTransition: () => itemsToCraft.length > 0 && targets.config.canCraftItemWithdrawChest
-    }),
-
-    new StateTransition({
-      parent: searchAndCraft,
-      child: searchAndCraft,
-      onTransition: () => {
-        const craftItem = itemsToCraft.shift()
-        targets.craftItemBatch = {
-          name: craftItem.name,
-          quantity: craftItem.quantity,
-        };
-      },
-      shouldTransition: () => itemsToCraft.length > 0 && searchAndCraft.isFinished()
     }),
 
     new StateTransition({
        parent: searchAndCraft,
       child: nextCheck,
       onTransition: () => chestIndex++,
-      shouldTransition: () => itemsToCraft.length === 0 && searchAndCraft.isFinished()
+      shouldTransition: () => searchAndCraft.isFinished()
     }),
 
     new StateTransition({
