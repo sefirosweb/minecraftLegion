@@ -34,7 +34,15 @@ function crafterJobFunction(bot, targets) {
         targets.craftItemBatch = [
           {
             name: "iron_sword",
-            quantity: 18,
+            quantity: 3,
+          },
+          {
+            name: "iron_axe",
+            quantity: 2,
+          },
+          {
+            name: "iron_pickaxe",
+            quantity: 2,
           },
         ];
       },
