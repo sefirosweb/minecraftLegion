@@ -64,7 +64,7 @@ function goCraftingTableFunction(bot, targets) {
       parent: goTable,
       child: exit,
       shouldTransition: () =>
-        (goTable.isFinished() || goTable.distanceToTarget() < 3) &&
+        (goTable.isFinished() || goTable.distanceToTarget() < 2) &&
         !goTable.isSuccess() &&
         !bot.pathfinder.isMining(),
     }),
