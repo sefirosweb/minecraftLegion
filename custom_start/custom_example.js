@@ -5,9 +5,9 @@ module.exports = (bot) => {
     return new Promise(async (resolve) => {
       // Login
       // await sleep(500)
-      // bot.chat('/register legion legion') // First time for register to the server
+      // bot.chat('/register password password') // First time for register to the server
       await sleep(500);
-      bot.chat("/login legion");
+      bot.chat("/login password");
       await sleep(500);
       bot.chat("Hello World");
       resolve();

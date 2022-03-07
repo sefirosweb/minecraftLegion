@@ -10,39 +10,71 @@ The other 2 parts are <a target="_blank" href="https://github.com/sefirosweb/min
 
 I recommend using the other two modules to help the bots communicate and take commands through the WebUI.
 
-## Install:
+## Install with docker
 
-- Install [Node.js](https://nodejs.dev/) version 14+
-- go to the directory which you want to install into
-- run `npm i minecraftlegion` on command prompt
-- make a new file called config.js with the fields shown below
+1. You need to have installed [docker](https://docs.docker.com/desktop/windows/wsl/), you can go to official docker site and follow the installation guide for you OS
+2. Create docker network if you have all services in same computer and if you not have already created
 
-Edit config.js
-
-```js
-const config = {
-  server: "127.0.0.1", // Minecraft Server
-  port: "", // Minecraft Port
-  masters: [{ name: "PlayerName" }, { name: "SecondPlayerName" }], // Is requeried for manage the bot in game, *offline mode
-  webServer: "http://localhost", // minecraftLegionWebServer Web - Optional
-  webServerPort: "3000", // minecraftLegionWebServer PORT - Optional
-};
-module.exports = config;
+```
+docker network create minecraftLegionNetwork
 ```
 
-To run a single bot:
+3. Clone the repository
 
-    node start_bot.js BotName
+```
+git clone https://github.com/sefirosweb/minecraftLegion.git
+cd minecraftLegion
+```
 
-To use [minecraftLegionWebServer](https://github.com/coolbot123/minecraftLegionWebServer)
+4. Copy and edit the config.js file
 
-    node index.js
+```js
+ cp config_example.js config.js
 
-This method connects automatically to minecraftLegionWebServer, and via the web, you can add bots/disconnects and manage the behavior.
+ const config = {
+  server: '127.0.0.1', // Minecraft Server
+  port: '25565', // Minecraft Port
+  masters: [{ name: 'PlayerName' }, { name: 'SecondPlayerName' }], // Optional when front end is not opened
+  webServer: 'http://minecraftlegionwebserver', // host minecraftLegionWebServer Web, if is in docker locak you must use a default config
+  webServerPort: '4001', // minecraftLegionWebServer PORT
+  webServerPassword: 'admin', // password for websocket
+  debugMode: false,
+  customStart: false, // If server have a login or other system to play you can add your self start Ex: login pass pass (see custom_start/custom_example.js)
+  autoRestart: true // When bot breaks they auto reconnect
+}
+module.exports = config
 
-To manage bots vía web go to <a target="_blank" href="https://github.com/sefirosweb/minecraftLegionWebClient">minecraftLegionWebClient</a> to see more!
+```
 
-## Usage of commands in chat:
+5. Start docker with node
+
+```
+docker run --rm -it --name minecraftLegion  --network minecraftLegionNetwork -v $PWD:/home/app -w /home/app -u node -p 4500-4550:4500-4550 -p 9229:9229 node:16.13-bullseye /bin/bash
+```
+
+6. Install dependencies
+
+```
+npm install
+```
+
+7. Start connection to server
+
+```
+node index.js
+```
+
+Now you can manage the bots via front end
+
+Click on Load New Bot and select name (password is not working for now)
+
+For download and install frontend go to <a target="_blank" href="https://github.com/sefirosweb/minecraftLegionWebClient">minecraftLegionWebClient</a>
+
+![image](https://raw.githubusercontent.com/sefirosweb/minecraftLegion/master/docs/LoadBot.png)
+
+# Usage of commands in chat:
+
+**There only are the basic comands for full manage you must need to use a front end <a target="_blank" href="https://github.com/sefirosweb/minecraftLegionWebClient">minecraftLegionWebClient</a>**
 
 First, activate the bot attention "hi namebot" or "hi all" to start all bots simultaneously.
 
@@ -118,22 +150,8 @@ set miner x y z x y z x+ horizontally
 - Add a robust documentation =P
 - Think about chat commands, currently it is faster / comfortable with the front end, but if anyone wants to configure all boot via chat commands?
 - Add back guard
+- Add "world" for the position, now the bots don't know if chest or positions is in nether / overworld / end, they breaks when is corring the portals
+
+* Update mineflayer verion to latest
 
 Please keep calm. I'm working hard on this project :D
-
-# Adding new docker system
-
-## For develop
-
-Need to be create docker network:
-
-```
-docker network create minecraftLegionNetwork
-```
-
-Start docker container and start watch
-
-```
-npm run docker
-npm start // npm run one
-```

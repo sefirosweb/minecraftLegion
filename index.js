@@ -44,17 +44,17 @@ const start_bot = () => {
 
   const botsToStart = [
     // { username: 'Sephi' }
-    { username: 'Sorter' },
-    { username: "MinerY1" },
-    { username: "MinerY2" },
-    { username: "MinerY3" },
-    { username: "MinerY4" },
-    { username: "MinerX+" },
-    { username: "MinerX-" },
-    { username: "MinerZ+" },
-    { username: "MinerZ-" },
-    { username: 'Breeder' },
-    { username: 'Guard1' },
+    // { username: 'Sorter' },
+    // { username: "MinerY1" },
+    // { username: "MinerY2" },
+    // { username: "MinerY3" },
+    // { username: "MinerY4" },
+    // { username: "MinerX+" },
+    // { username: "MinerX-" },
+    // { username: "MinerZ+" },
+    // { username: "MinerZ-" },
+    // { username: 'Breeder' },
+    // { username: 'Guard1' },
     // { username: 'Guard2' },
     // { username: 'Guard3' },
     // { username: 'Guard1' }
