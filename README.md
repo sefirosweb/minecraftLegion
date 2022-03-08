@@ -72,6 +72,36 @@ For download and install frontend go to <a target="_blank" href="https://github.
 
 ![image](https://raw.githubusercontent.com/sefirosweb/minecraftLegion/master/docs/LoadBot.png)
 
+## Next usages
+For start again the bot only you need to start docker and start the node:
+```
+docker run --rm -it --name minecraftLegion  --network minecraftLegionNetwork -v $PWD:/home/app -w /home/app -u node -p 4500-4550:4500-4550 -p 9229:9229 node:16.13-bullseye /bin/bash
+```
+
+```
+node index.js
+```
+
+## Manual update
+You need to "pull" the new code and install the new dependencies
+
+```
+git pull
+```
+Start docker:
+
+```
+docker run --rm -it --name minecraftLegion  --network minecraftLegionNetwork -v $PWD:/home/app -w /home/app -u node -p 4500-4550:4500-4550 -p 9229:9229 node:16.13-bullseye /bin/bash
+```
+Install new dependencies:
+```
+npm install
+```
+Start bot
+```
+node index.js
+```
+
 # Usage of commands in chat:
 
 **There only are the basic comands for full manage you must need to use a front end <a target="_blank" href="https://github.com/sefirosweb/minecraftLegionWebClient">minecraftLegionWebClient</a>**
