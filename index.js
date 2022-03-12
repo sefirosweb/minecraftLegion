@@ -70,7 +70,7 @@ const start_bot = () => {
       setTimeout(() => {
         startBot(botToStart.username);
         runNextBot();
-      }, 3000);
+      }, 7000);
     }
   }
 
