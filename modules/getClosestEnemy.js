@@ -71,6 +71,7 @@ module.exports = function (bot, targets) {
         (entity.position.distanceTo(bot.player.entity.position) <= targets.config.distance) &&
         (entity.type === 'mob' || entity.type === 'player') &&
         (entity.mobType !== 'Armor Stand') &&
+        (entity.mobType !== 'Iron Golem') &&
         (entity.kind !== 'Passive mobs') &&
         (entity.isValid)
       ) {
