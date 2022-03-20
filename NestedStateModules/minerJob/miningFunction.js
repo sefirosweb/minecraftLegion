@@ -315,6 +315,7 @@ function miningFunction(bot, targets) {
       parent: currentBlock,
       child: nextLayer,
       name: "Finished chunk",
+      onTransition: () => saveCurrentLayer(),
       shouldTransition: () => currentBlock.getLayerIsFinished(),
     }),
 
