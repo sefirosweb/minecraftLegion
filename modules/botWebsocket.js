@@ -284,8 +284,7 @@ function connect() {
         findMaster = bot.nearestEntity(
           (e) =>
             e.type === "player" &&
-            e.username === config.value.master &&
-            e.mobType !== "Armor Stand"
+            e.username === config.value.master
         );
         if (!findMaster) {
           return;
