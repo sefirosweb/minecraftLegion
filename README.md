@@ -10,6 +10,9 @@ The other 2 parts are <a target="_blank" href="https://github.com/sefirosweb/min
 
 I recommend using the other two modules to help the bots communicate and take commands through the WebUI.
 
+## Watch the videos so you can see what it can do for you
+https://www.youtube.com/watch?v=QIz6o7cJITg&list=PLPwIRDkD3kwSdQ04LnzcGrLrlST9XoKjk&index=5
+
 ## Install with docker
 
 1. You need to have installed [docker](https://docs.docker.com/desktop/windows/wsl/), you can go to official docker site and follow the installation guide for you OS
