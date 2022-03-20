@@ -85,6 +85,8 @@ module.exports = class BehaviorWithdrawItemChest {
         chestToOpen.secondBlock = this.bot.blockAt(chestToOpen.position.offset(offset.x, offset.y, offset.z))
       }
 
+      chestToOpen.dimension = this.bot.game.dimension
+      
       this.targets.chests.push(chestToOpen)
     } else {
       chest.slots = slots
