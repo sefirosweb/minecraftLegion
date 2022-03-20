@@ -15,6 +15,7 @@ const BehaviorMoveTo = require("@BehaviorModules/BehaviorMoveTo");
 const BehaviorDigAndPlaceBlock = require("@BehaviorModules/BehaviorDigAndPlaceBlock");
 
 const mineflayerPathfinder = require("mineflayer-pathfinder");
+const { setMinerCords } = require("@modules/botConfig");
 
 const movingWhile = (bot, nextCurrentLayer, movements) => {
   let x, y, z;
@@ -126,6 +127,40 @@ function miningFunction(bot, targets) {
   findItemsAndPickup.x = 525;
   findItemsAndPickup.y = 363;
 
+  const saveCurrentLayer = () => {
+    const tunel = targets.config.minerCords.tunel
+    const orientation = targets.config.minerCords.orientation
+    const newMineCords = { ...targets.minerJob.original }
+
+
+    if (tunel === 'horizontally') {
+      if (orientation === 'z+') newMineCords.zEnd++
+      if (orientation === 'z-') newMineCords.zEnd--
+      if (orientation === 'z+') newMineCords.xEnd++
+      if (orientation === 'x-') newMineCords.xEnd--
+    }
+
+    if (tunel === 'vertically') {
+      newMineCords.yStart--
+    }
+
+    newMineCords.yStart = newMineCords.yStart.toString()
+    newMineCords.yEnd = newMineCords.yEnd.toString()
+    newMineCords.zStart = newMineCords.zStart.toString()
+    newMineCords.zEnd = newMineCords.zEnd.toString()
+    newMineCords.xStart = newMineCords.xStart.toString()
+    newMineCords.xEnd = newMineCords.xEnd.toString()
+
+    targets.minerJob.original = newMineCords
+
+
+    newMineCords.tunel = tunel
+    newMineCords.orientation = orientation
+    setMinerCords(bot.username, newMineCords)
+
+    targets.config.minerCords = newMineCords
+  }
+
   const transitions = [
     new StateTransition({
       parent: start,
@@ -148,34 +183,34 @@ function miningFunction(bot, targets) {
 
         const yStart =
           parseInt(targets.config.minerCords.yStart) >
-          parseInt(targets.config.minerCords.yEnd)
+            parseInt(targets.config.minerCords.yEnd)
             ? parseInt(targets.config.minerCords.yEnd)
             : parseInt(targets.config.minerCords.yStart);
         const yEnd =
           parseInt(targets.config.minerCords.yStart) >
-          parseInt(targets.config.minerCords.yEnd)
+            parseInt(targets.config.minerCords.yEnd)
             ? parseInt(targets.config.minerCords.yStart)
             : parseInt(targets.config.minerCords.yEnd);
 
         const xStart =
           parseInt(targets.config.minerCords.xStart) >
-          parseInt(targets.config.minerCords.xEnd)
+            parseInt(targets.config.minerCords.xEnd)
             ? parseInt(targets.config.minerCords.xEnd)
             : parseInt(targets.config.minerCords.xStart);
         const xEnd =
           parseInt(targets.config.minerCords.xStart) >
-          parseInt(targets.config.minerCords.xEnd)
+            parseInt(targets.config.minerCords.xEnd)
             ? parseInt(targets.config.minerCords.xStart)
             : parseInt(targets.config.minerCords.xEnd);
 
         const zStart =
           parseInt(targets.config.minerCords.zStart) >
-          parseInt(targets.config.minerCords.zEnd)
+            parseInt(targets.config.minerCords.zEnd)
             ? parseInt(targets.config.minerCords.zEnd)
             : parseInt(targets.config.minerCords.zStart);
         const zEnd =
           parseInt(targets.config.minerCords.zStart) >
-          parseInt(targets.config.minerCords.zEnd)
+            parseInt(targets.config.minerCords.zEnd)
             ? parseInt(targets.config.minerCords.zStart)
             : parseInt(targets.config.minerCords.zEnd);
 
