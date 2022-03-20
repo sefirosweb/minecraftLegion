@@ -104,12 +104,9 @@ module.exports = function (bot) {
           break
       }
 
-      bot.equip(armor, location, (error) => {
-        if (error === undefined) {
-          resolve()
-        }
-        reject(error)
-      })
+      bot.equip(armor, location)
+        .then(() => resolve())
+        .catch((error) => reject(error))
     })
   }
 
