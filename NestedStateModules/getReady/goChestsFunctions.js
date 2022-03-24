@@ -10,7 +10,7 @@ const BehaviorDepositItemChest = require('@BehaviorModules/BehaviorDepositItemCh
 const BehaviorCheckItemsInInventory = require('@BehaviorModules/BehaviorCheckItemsInInventory')
 const BehaviorMoveTo = require('@BehaviorModules/BehaviorMoveTo')
 
-function goChestsFunction (bot, targets) {
+function goChestsFunction(bot, targets) {
   const { findChestsToWithdraw } = require('@modules/chestModule')(bot)
   const { getResumeInventoryV2 } = require("@modules/inventoryModule")(bot);
 
@@ -66,10 +66,10 @@ function goChestsFunction (bot, targets) {
   pickUpItems.y = 50
 
   const searchAndCraft =
-  require("@NestedStateModules/crafterJob/searchAndCraftFunction")(
-    bot,
-    targets
-  );
+    require("@NestedStateModules/crafterJob/searchAndCraftFunction")(
+      bot,
+      targets
+    );
 
 
   let chests = []
@@ -158,21 +158,21 @@ function goChestsFunction (bot, targets) {
     new StateTransition({
       parent: withdrawItems,
       child: checkCraftItem,
-      onTransition: () =>{
-      const itemInChest = chests[chestIndex].items
-      const resumeInventory = getResumeInventoryV2()
+      onTransition: () => {
+        const itemInChest = chests[chestIndex].items
+        const resumeInventory = getResumeInventoryV2()
 
-      itemsToCraft = []
-      
-      itemInChest.forEach(ic => {
-          if(ic.quantity > 0) {
-          itemsToCraft.push({
-            name: ic.item,
-            quantity: ic.quantity
-          })
-        }
-      });
-        
+        itemsToCraft = []
+
+        itemInChest.forEach(ic => {
+          if (ic.quantity > 0) {
+            itemsToCraft.push({
+              name: ic.item,
+              quantity: ic.quantity
+            })
+          }
+        });
+
       },
       shouldTransition: () => withdrawItems.isFinished()
     }),
@@ -194,7 +194,7 @@ function goChestsFunction (bot, targets) {
     }),
 
     new StateTransition({
-       parent: searchAndCraft,
+      parent: searchAndCraft,
       child: nextCheck,
       onTransition: () => chestIndex++,
       shouldTransition: () => searchAndCraft.isFinished()
