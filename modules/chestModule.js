@@ -39,7 +39,7 @@ module.exports = function (bot, targets) {
 
   const nearChests = () => {
     return targets.chests.filter(c => {
-      return c.dimension === bot.game.dimension && bot.entity.position.distanceTo(c.position) < 10
+      return c.dimension === bot.game.dimension && bot.entity.position.distanceTo(c.position) < 128
     })
   }
 
