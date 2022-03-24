@@ -1,4 +1,4 @@
-module.exports = function (bot) {
+module.exports = function (bot, targets) {
   const { findItemsInChests } = require("@modules/sorterJob")(bot);
   const { getResumeInventory, getGenericItems } =
     require("@modules/inventoryModule")(bot);
@@ -37,7 +37,14 @@ module.exports = function (bot) {
     return findItemsInChests(sharedChests, itemsToWithdraw); // busca en todos los cofres que items hay que sacar
   };
 
+  const nearChests = () => {
+    return targets.chests.filter(c => {
+      return c.dimension === bot.game.dimension && bot.entity.position.distanceTo(c.position) < 10
+    })
+  }
+
   return {
+    nearChests,
     findChestsToWithdraw,
   };
 };

@@ -11,7 +11,7 @@ const BehaviorCheckItemsInInventory = require('@BehaviorModules/BehaviorCheckIte
 const BehaviorMoveTo = require('@BehaviorModules/BehaviorMoveTo')
 
 function goChestsFunction(bot, targets) {
-  const { findChestsToWithdraw } = require('@modules/chestModule')(bot)
+  const { findChestsToWithdraw } = require('@modules/chestModule')(bot, targets)
   const { getResumeInventoryV2 } = require("@modules/inventoryModule")(bot);
 
   const start = new BehaviorIdle()
