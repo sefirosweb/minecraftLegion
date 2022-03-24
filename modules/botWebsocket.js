@@ -240,6 +240,11 @@ function connect() {
         minerConfig.orientation = config.value;
         botconfig.setMinerCords(bot.username, minerConfig);
         break;
+      case "changeWorldMiner":
+        minerConfig = botconfig.getMinerCords(bot.username);
+        minerConfig.world = config.value;
+        botconfig.setMinerCords(bot.username, minerConfig);
+        break;
       case "changePosMiner":
         minerConfig = botconfig.getMinerCords(bot.username);
         minerConfig[config.value.coord] = config.value.pos;
