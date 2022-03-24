@@ -169,6 +169,8 @@ function miningFunction(bot, targets) {
       onTransition: () => {
         targets.minerJob.blockForPlace = [
           "netherrack",
+          "basalt",
+          "blackstone",
           "stone",
           "cobblestone",
           "cobbled_deepslate",
