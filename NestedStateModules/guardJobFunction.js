@@ -13,7 +13,7 @@ const BehaviorFindItems = require('@BehaviorModules/BehaviorFindItems')
 const BehaviorHelpFriend = require('@BehaviorModules/BehaviorHelpFriend')
 const BehaviorMoveTo = require('@BehaviorModules/BehaviorMoveTo')
 
-function guardJobFunction (bot, targets) {
+function guardJobFunction(bot, targets) {
   const start = new BehaviorIdle(targets)
   start.stateName = 'Start'
   start.x = 125
@@ -35,7 +35,7 @@ function guardJobFunction (bot, targets) {
   const equip = new BehaviorEquipAll(bot, targets)
   equip.stateName = 'Equip items'
   equip.x = 725
-  equip.y = 313
+  equip.y = 363
 
   const eatFood = new BehaviorEatFood(bot, targets)
   eatFood.stateName = 'Eat Food'
@@ -69,6 +69,10 @@ function guardJobFunction (bot, targets) {
   getReady.stateName = 'Get Ready'
   getReady.x = 525
   getReady.y = 213
+
+  const goChests = require('@NestedStateModules/getReady/goChestsFunctions')(bot, targets)
+  goChests.x = 725
+  goChests.y = 213
 
   const transitions = [
     new StateTransition({
@@ -183,9 +187,15 @@ function guardJobFunction (bot, targets) {
 
     new StateTransition({
       parent: getReady,
-      child: equip,
+      child: goChests,
       name: 'Bot is ready for start patrol',
       shouldTransition: () => getReady.isFinished()
+    }),
+
+    new StateTransition({
+      parent: goChests,
+      child: equip,
+      shouldTransition: () => goChests.isFinished()
     }),
 
     new StateTransition({
