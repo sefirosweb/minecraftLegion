@@ -22,7 +22,7 @@ function getReadyFunction (bot, targets) {
   goChests.y = 313
 
   const getReady = new BehaviorGetReady(bot, targets)
-  getReady.stateName = 'Get Ready for Patrol'
+  getReady.stateName = 'Check if bot is ready'
   getReady.x = 525
   getReady.y = 113
 
