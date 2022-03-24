@@ -8,6 +8,7 @@ const BehaviorMoveTo = require("@BehaviorModules/BehaviorMoveTo");
 
 function searchAndCraftFunction(bot, targets) {
   const { getItemsToPickUpBatch } = require("@modules/craftModule")(bot);
+  const { nearChests } = require('@modules/chestModule')(bot, targets)
 
   const start = new BehaviorIdle(targets);
   start.stateName = "Start";
@@ -86,7 +87,7 @@ function searchAndCraftFunction(bot, targets) {
       onTransition: () => {
         itemsToPickUpBatch = getItemsToPickUpBatch(
           targets.craftItemBatch,
-          targets.chests
+          nearChests()
         );
       },
       shouldTransition: () => true,
@@ -187,7 +188,7 @@ function searchAndCraftFunction(bot, targets) {
       onTransition: () => {
         itemsToPickUpBatch = getItemsToPickUpBatch(
           targets.craftItemBatch,
-          targets.chests
+          nearChests()
         );
       },
       shouldTransition: () => goTable.isFinished(),
