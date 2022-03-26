@@ -2,7 +2,7 @@ const mineflayerPathfinder = require('mineflayer-pathfinder')
 const botWebsocket = require('@modules/botWebsocket')
 
 module.exports = class BehaviorMoveTo {
-  constructor (bot, targets, timeout) {
+  constructor(bot, targets, timeout) {
     this.stateName = 'moveTo'
     this.active = false
     this.timeout = timeout
@@ -12,11 +12,11 @@ module.exports = class BehaviorMoveTo {
     this.distance = 0
     this.bot = bot
     this.targets = targets
-    const mcData = require('minecraft-data')(this.bot.version)
-    this.movements = new mineflayerPathfinder.Movements(bot, mcData)
+    this.mcData = require('minecraft-data')(this.bot.version)
+    this.movements = new mineflayerPathfinder.Movements(bot, this.mcData)
   }
 
-  onStateEntered () {
+  onStateEntered() {
     this.isEndFinished = false
     this.success = false
     this.bot.on('pathUpdate', this.pathUpdate)
@@ -33,7 +33,7 @@ module.exports = class BehaviorMoveTo {
     this.startMoving()
   }
 
-  onStateExited () {
+  onStateExited() {
     this.isEndFinished = false
     this.success = false
     this.bot.removeListener('pathUpdate', this.pathUpdate)
@@ -42,19 +42,19 @@ module.exports = class BehaviorMoveTo {
     clearTimeout(this.timeLimit)
   }
 
-  pathUpdate (r) {
+  pathUpdate(r) {
     if (r.status === 'noPath') {
       botWebsocket.log('[MoveTo] No path to target!')
     }
   }
 
-  goalReached () {
+  goalReached() {
     botWebsocket.log('[MoveTo] Target reached.')
     this.success = true
     this.isEndFinished = true
   }
 
-  setMoveTarget (position) {
+  setMoveTarget(position) {
     if (this.targets.position === position) {
       return
     }
@@ -62,17 +62,16 @@ module.exports = class BehaviorMoveTo {
     this.restart()
   }
 
-  stopMoving () {
+  stopMoving() {
     this.bot.pathfinder.setGoal(null)
   }
 
-  startMoving () {
+  startMoving() {
     const position = this.targets.position
     if (position == null) {
       botWebsocket.log('[MoveTo] Target not defined. Skipping.')
       return
     }
-    // botWebsocket.log(`[MoveTo] Moving from ${this.bot.entity.position.toString()} to ${position.toString()}`)
 
     let goal
     if (this.distance === 0) {
@@ -80,11 +79,84 @@ module.exports = class BehaviorMoveTo {
     } else {
       goal = new mineflayerPathfinder.goals.GoalNear(position.x, position.y, position.z, this.distance)
     }
-    this.bot.pathfinder.setMovements(this.movements)
-    this.bot.pathfinder.setGoal(goal)
+
+    const dimension = position.dimension ? position.dimension : this.bot.game.dimension
+
+    if (dimension === this.bot.game.dimension) {
+      this.bot.pathfinder.setMovements(this.movements)
+      this.bot.pathfinder.setGoal(goal)
+    } else {
+      this.corssThePortal(dimension)
+    }
   }
 
-  restart () {
+  corssThePortal(dimension) {
+    let matching
+    if ( //Nether portal
+      dimension === 'minecraft:the_nether' && this.bot.game.dimension === 'minecraft:overworld'
+      || dimension === 'minecraft:overworld' && this.bot.game.dimenion === 'minecraft:the_nether'
+      || dimension === 'minecraft:the_end' && this.bot.game.dimenion === 'minecraft:the_nether'
+    ) {
+      matching = ['nether_portal'].map(name => this.mcData.blocksByName[name].id)
+    }
+
+    if ( // End Portal
+      dimension === 'minecraft:the_end' && this.bot.game.dimension === 'minecraft:overworld'
+      || dimension === 'minecraft:overworld' && this.bot.game.dimenion === 'minecraft:the_end'
+      || dimension === 'minecraft:the_nether' && this.bot.game.dimenion === 'minecraft:the_end'
+    ) {
+      matching = ['end_portal'].map(name => this.mcData.blocksByName[name].id)
+    }
+
+    const blocksFound = this.bot.findBlocks({
+      matching,
+      maxDistance: 128,
+      count: 16
+    })
+
+    if (blocksFound.length === 0) {
+      this.stopMoving()
+      botWebsocket.log(`[MoveTo] Can't find the portal to dimension ${dimension}`)
+      this.isEndFinished = true
+      return
+    }
+
+    blocksFound.sort(
+      (a, b) => {
+        return a.y - b.y
+      }
+    )
+
+    const portal = blocksFound[0]
+
+    this.goPosition(portal)
+      .then(() => {
+        return new Promise((resolve) => {
+          this.bot.once('spawn', () => {
+            setTimeout(() => {
+              resolve();
+            })
+          })
+        });
+      })
+      .then(() => {
+        this.startMoving()
+      })
+  }
+
+  goPosition(position) {
+    const goal = new mineflayerPathfinder.goals.GoalBlock(position.x, position.y, position.z)
+    this.bot.pathfinder.setMovements(this.movements);
+    this.bot.pathfinder.setGoal(goal);
+
+    return new Promise((resolve) => {
+      this.bot.once("goal_reached", () => {
+        resolve();
+      });
+    });
+  }
+
+  restart() {
     if (!this.active) {
       return
     }
@@ -92,15 +164,15 @@ module.exports = class BehaviorMoveTo {
     this.startMoving()
   }
 
-  isFinished () {
+  isFinished() {
     return this.isEndFinished
   }
 
-  isSuccess () {
+  isSuccess() {
     return false
   }
 
-  distanceToTarget () {
+  distanceToTarget() {
     const position = this.targets.position
     if (position == null) { return 0 }
     return this.bot.entity.position.distanceTo(position)
