@@ -94,16 +94,16 @@ module.exports = class BehaviorMoveTo {
     let matching
     if ( //Nether portal
       dimension === 'minecraft:the_nether' && this.bot.game.dimension === 'minecraft:overworld'
-      || dimension === 'minecraft:overworld' && this.bot.game.dimenion === 'minecraft:the_nether'
-      || dimension === 'minecraft:the_end' && this.bot.game.dimenion === 'minecraft:the_nether'
+      || dimension === 'minecraft:overworld' && this.bot.game.dimension === 'minecraft:the_nether'
+      || dimension === 'minecraft:the_end' && this.bot.game.dimension === 'minecraft:the_nether'
     ) {
       matching = ['nether_portal'].map(name => this.mcData.blocksByName[name].id)
     }
 
     if ( // End Portal
       dimension === 'minecraft:the_end' && this.bot.game.dimension === 'minecraft:overworld'
-      || dimension === 'minecraft:overworld' && this.bot.game.dimenion === 'minecraft:the_end'
-      || dimension === 'minecraft:the_nether' && this.bot.game.dimenion === 'minecraft:the_end'
+      || dimension === 'minecraft:overworld' && this.bot.game.dimension === 'minecraft:the_end'
+      || dimension === 'minecraft:the_nether' && this.bot.game.dimension === 'minecraft:the_end'
     ) {
       matching = ['end_portal'].map(name => this.mcData.blocksByName[name].id)
     }
