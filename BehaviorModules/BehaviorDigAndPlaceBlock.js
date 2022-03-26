@@ -64,7 +64,7 @@ module.exports = class template {
         .then(() => this.place(newPosition, blockOffset))
         .then(() => this.placeBlocksBucle())
         .then(resolve)
-        .catch(reject)
+        .catch(() => this.equipAndPlace(newPosition, blockOffset))
     })
   }
 
