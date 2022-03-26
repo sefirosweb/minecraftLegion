@@ -36,7 +36,7 @@ bot.once('spawn', () => {
     });
   }
 
-  const matching = ['nether_portal'].map(name => mcData.blocksByName[name].id)
+  const matching = ['nether_portal', 'end_portal'].map(name => mcData.blocksByName[name].id)
   const point = bot.entity.position.floored()
 
   const blocksFound = bot.findBlocks({
