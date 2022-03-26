@@ -38,9 +38,15 @@ module.exports = function (bot, targets) {
   };
 
   const nearChests = () => {
-    return targets.chests.filter(c => {
-      return c.dimension === bot.game.dimension && bot.entity.position.distanceTo(c.position) < 128
+    const chests = {}
+
+    Object.values(targets.chests).forEach((c, index) => {
+      if (c.dimension === bot.game.dimension && bot.entity.position.distanceTo(c.position) < 128) {
+        chests[index] = c
+      }
     })
+
+    return chests;
   }
 
   return {

@@ -3,7 +3,7 @@ const { sleep, getSecondBlockPosition } = require('@modules/utils')
 const vec3 = require('vec3')
 
 module.exports = class BehaviorWithdrawItemChest {
-  constructor (bot, targets) {
+  constructor(bot, targets) {
     this.bot = bot
     this.targets = targets
     this.stateName = 'BehaviorWithdrawItemChest'
@@ -12,7 +12,7 @@ module.exports = class BehaviorWithdrawItemChest {
     this.items = []
   }
 
-  onStateEntered () {
+  onStateEntered() {
     this.isEndFinished = false
     this.items = [...this.targets.items]
     botWebsocket.log('Items to withdraw ' + JSON.stringify(this.items))
@@ -25,16 +25,16 @@ module.exports = class BehaviorWithdrawItemChest {
     this.withdrawAllItems()
   }
 
-  onStateExited () {
+  onStateExited() {
     this.isEndFinished = false
     clearTimeout(this.timeLimit)
   }
 
-  isFinished () {
+  isFinished() {
     return this.isEndFinished
   }
 
-  async withdrawAllItems () {
+  async withdrawAllItems() {
     const chestToOpen = this.bot.blockAt(vec3(this.targets.position))
     if (!chestToOpen) {
       return
@@ -67,8 +67,8 @@ module.exports = class BehaviorWithdrawItemChest {
       })
   }
 
-  refreshChest (chestToOpen, container) {
-    const chest = this.targets.chests.find(c => {
+  refreshChest(chestToOpen, container) {
+    const chest = Object.values(this.targets.chests).find(c => {
       if (vec3(c.position).equals(chestToOpen.position)) return true
       if (c.secondBlock && vec3(c.secondBlock.position).equals(chestToOpen.position)) return true
       return false
@@ -86,8 +86,9 @@ module.exports = class BehaviorWithdrawItemChest {
       }
 
       chestToOpen.dimension = this.bot.game.dimension
-      
-      this.targets.chests.push(chestToOpen)
+
+      const chestIndext = Object.keys(this.targets.chests).length
+      this.targets.chests[chestIndext] = chestToOpen
     } else {
       chest.slots = slots
       chest.lastTimeOpen = Date.now()
@@ -96,7 +97,7 @@ module.exports = class BehaviorWithdrawItemChest {
     botWebsocket.sendAction('setChests', this.targets.chests)
   }
 
-  withdrawItem (container) {
+  withdrawItem(container) {
     return new Promise((resolve, reject) => {
       if (this.items.length === 0) {
         resolve()

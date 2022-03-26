@@ -37,7 +37,7 @@ function getConn(botName) {
       "cooked_mutton",
       "golden_carrot",
     ],
-    chests: [],
+    chests: {},
     patrol: [],
     plantAreas: [],
     chestAreas: [],

@@ -64,7 +64,7 @@ module.exports = class BehaviorDepositItemChest {
   }
 
   refreshChest (chestToOpen, container) {
-    const chest = this.targets.chests.find(c => {
+    const chest = Object.values(this.targets.chests).find(c => {
       if (vec3(c.position).equals(chestToOpen.position)) return true
       if (c.secondBlock && vec3(c.secondBlock.position).equals(chestToOpen.position)) return true
       return false
@@ -83,7 +83,8 @@ module.exports = class BehaviorDepositItemChest {
 
       chestToOpen.dimension = this.bot.game.dimension
 
-      this.targets.chests.push(chestToOpen)
+      const chestIndext = Object.keys(this.targets.chests).length
+      this.targets.chests[chestIndext] = chestToOpen
     } else {
       chest.slots = slots
       chest.lastTimeOpen = Date.now()

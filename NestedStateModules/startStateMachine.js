@@ -52,7 +52,7 @@ module.exports = (bot) => {
   let webserver = {}
   const movements = new mineflayerPathfinder.Movements(bot, mcData)
   targets.movements = movements
-  targets.chests = []
+  targets.chests = {}
 
   const startState = new BehaviorIdle(targets)
   startState.stateName = 'Start'

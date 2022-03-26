@@ -22,7 +22,7 @@ module.exports = class BehaviorcCheckItemsInChest {
 
     this.bot.openContainer(this.targets.sorterJob.chest).then((container, i) => {
       const slots = container.slots.slice(0, container.inventoryStart)
-      const chestIndex = this.targets.chests.findIndex(c => {
+      const chestIndex = Object.values(this.targets.chests).findIndex(c => {
         if (vec3(c.position).equals(this.targets.sorterJob.chest.position)) return true
         if (c.secondBlock && vec3(c.secondBlock.position).equals(this.targets.sorterJob.chest.position)) return true
         if (this.targets.sorterJob.chest.secondBlock && vec3(c.position).equals(this.targets.sorterJob.chest.secondBlock.position)) return true
@@ -35,7 +35,9 @@ module.exports = class BehaviorcCheckItemsInChest {
       } else {
         this.targets.sorterJob.chest.slots = slots
         this.targets.sorterJob.chest.lastTimeOpen = Date.now()
-        this.targets.chests.push(this.targets.sorterJob.chest)
+
+        const chestIndext = Object.keys(this.targets.chests).length
+        this.targets.chests[chestIndext] = this.targets.sorterJob.chest
       }
 
       botWebsocket.sendAction('setChests', this.targets.chests)

@@ -1,10 +1,11 @@
+const { json } = require('express/lib/response')
 const {
   StateTransition,
   BehaviorIdle,
   NestedStateMachine
 } = require('mineflayer-statemachine')
 
-function pickUpItems (bot, targets) {
+function pickUpItems(bot, targets) {
   const { nearChests } = require('@modules/chestModule')(bot, targets)
 
   const start = new BehaviorIdle(targets)
@@ -30,8 +31,25 @@ function pickUpItems (bot, targets) {
   let pendingTransaction
   const findChests = () => {
     pendingTransaction = []
-    nearChests().forEach((chest, chestIndex) => {
-      const items = targets.pickUpItems.filter(c => c.fromChest === chestIndex)
+
+    const pickupItems = JSON.parse(JSON.stringify(targets.pickUpItems));
+
+    Object.values(targets.chests).forEach((chest, chestIndex) => {
+
+      const items = [];
+
+      pickupItems.forEach((i, indexItem) => {
+        if (
+          i.fromChest === chestIndex
+          && chest.dimension === bot.game.dimension
+          && bot.entity.position.distanceTo(chest.position) < 128
+        ) {
+          const item = { ...i }
+          items.push(i)
+        }
+
+      })
+
       if (items.length > 0) {
         pendingTransaction.push({
           chest,
