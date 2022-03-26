@@ -134,9 +134,9 @@ function miningFunction(bot, targets) {
 
 
     if (tunel === 'horizontally') {
-      if (orientation === 'z+') newMineCords.zEnd++
+      if (orientation === 'z+') newMineCords.zStart++
       if (orientation === 'z-') newMineCords.zEnd--
-      if (orientation === 'x+') newMineCords.xEnd++
+      if (orientation === 'x+') newMineCords.zStart++
       if (orientation === 'x-') newMineCords.xEnd--
     }
 
@@ -308,6 +308,8 @@ function miningFunction(bot, targets) {
         if (nextLayer.minerCords.tunel === "horizontally") {
           // Move to base of block
           targets.position.y = parseInt(checkLayer.minerCords.yStart);
+          console.log(targets.config.minerCords.world)
+          targets.position.dimension = targets.config.minerCords.world
         }
       },
       shouldTransition: () => currentBlock.isFinished(),
