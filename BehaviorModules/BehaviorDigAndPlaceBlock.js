@@ -1,6 +1,6 @@
 const botWebsocket = require('@modules/botWebsocket')
 module.exports = class template {
-  constructor (bot, targets) {
+  constructor(bot, targets) {
     this.bot = bot
     this.targets = targets
     this.stateName = 'BehaviorDigAndPlaceBlock'
@@ -16,16 +16,16 @@ module.exports = class template {
     this.sidesToPlaceBlock = []
   }
 
-  isFinished () {
+  isFinished() {
     return this.isEndFinished
   }
 
-  onStateExited () {
+  onStateExited() {
     this.isEndFinished = false
     clearTimeout(this.timeLimit)
   }
 
-  onStateEntered () {
+  onStateEntered() {
     this.timeLimit = setTimeout(() => {
       botWebsocket.log('Time exceded for place item')
       this.isEndFinished = true
@@ -43,21 +43,20 @@ module.exports = class template {
 
     this.digBlock(this.targets.position)
       .then(() => {
-        this.placeBlocksBucle()
-          .then(() => {
-            this.isEndFinished = true
-          })
-          .catch(() => {
-            botWebsocket.log(`Error on place block ${this.targets.position}`)
-            this.isEndFinished = true
-          })
+        return this.placeBlocksBucle()
+      })
+      .then(() => {
+        this.isEndFinished = true
       })
       .catch(() => {
-        botWebsocket.log(`Error on dig block ${this.targets.position}`)
+        botWebsocket.log(`Error on place block ${this.targets.position}`)
+        this.isEndFinished = true
       })
+
+
   }
 
-  equipAndPlace (newPosition, blockOffset) {
+  equipAndPlace(newPosition, blockOffset) {
     return new Promise((resolve, reject) => {
       const item = this.bot.inventory.items().find(item => this.targets.minerJob.blockForPlace.includes(item.name))
       if (!item) {
@@ -66,19 +65,14 @@ module.exports = class template {
       }
 
       this.equipHeldItem(item.name)
-        .then(() => {
-          this.place(newPosition, blockOffset)
-            .then(() => {
-              this.placeBlocksBucle()
-                .then(() => {
-                  resolve()
-                })
-            })
-        })
+        .then(() => this.place(newPosition, blockOffset))
+        .then(this.placeBlocksBucle)
+        .then(resolve)
+        .catch(reject)
     })
   }
 
-  placeBlocksBucle () {
+  placeBlocksBucle() {
     return new Promise((resolve, reject) => {
       if (this.sidesToPlaceBlock.length === 0) {
         this.isEndFinished = true
@@ -91,22 +85,15 @@ module.exports = class template {
 
       if (['kelp_plant'].includes(this.bot.blockAt(currentSideToPlaceBlock).name)) {
         this.digBlock(currentSideToPlaceBlock)
-          .then(() => {
-            this.equipAndPlace(newPosition, blockOffset)
-              .then(() => {
-                resolve()
-              })
-          })
-          .catch(() => {
-            botWebsocket.log('Error on dig kelp plant')
-          })
+          .then(() => this.equipAndPlace(newPosition, blockOffset))
+          .then(resolve)
+          .catch(reject)
         return
       }
 
       this.equipAndPlace(newPosition, blockOffset)
-        .then(() => {
-          resolve()
-        })
+        .then(resolve)
+        .catch(reject)
     })
   }
 }
