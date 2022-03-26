@@ -335,7 +335,13 @@ function miningFunction(bot, targets) {
     new StateTransition({
       parent: digAndPlaceBlock,
       child: minerChecks,
-      shouldTransition: () => digAndPlaceBlock.isFinished(),
+      shouldTransition: () => digAndPlaceBlock.isFinished() && !digAndPlaceBlock.isOutOfBlocks(),
+    }),
+
+    new StateTransition({
+      parent: digAndPlaceBlock,
+      child: exit,
+      shouldTransition: () => digAndPlaceBlock.isFinished() && digAndPlaceBlock.isOutOfBlocks(),
     }),
 
     new StateTransition({

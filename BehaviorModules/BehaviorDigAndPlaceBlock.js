@@ -20,8 +20,13 @@ module.exports = class template {
     return this.isEndFinished
   }
 
+  isOutOfBlocks() {
+    return this.outOfBlocks
+  }
+
   onStateExited() {
     this.isEndFinished = false
+    this.outOfBlocks = false
     clearTimeout(this.timeLimit)
   }
 
@@ -32,6 +37,7 @@ module.exports = class template {
     }, 9000)
 
     this.isEndFinished = false
+    this.outOfBlocks = false
 
     if (this.targets.position == null) {
       botWebsocket.log('No exists targets.position')
@@ -56,6 +62,7 @@ module.exports = class template {
     return new Promise((resolve, reject) => {
       const item = this.bot.inventory.items().find(item => this.targets.minerJob.blockForPlace.includes(item.name))
       if (!item) {
+        this.outOfBlocks = true
         this.isEndFinished = true
         return
       }
