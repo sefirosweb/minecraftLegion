@@ -42,9 +42,7 @@ module.exports = class template {
     this.sidesToPlaceBlock = this.calculateSideToPlaceBlock(this.targets.minerJob.mineBlock.clone())
 
     this.digBlock(this.targets.position)
-      .then(() => {
-        return this.placeBlocksBucle()
-      })
+      .then(() => this.placeBlocksBucle())
       .then(() => {
         this.isEndFinished = true
       })
@@ -52,8 +50,6 @@ module.exports = class template {
         botWebsocket.log(`Error on place block ${this.targets.position}`)
         this.isEndFinished = true
       })
-
-
   }
 
   equipAndPlace(newPosition, blockOffset) {
@@ -66,7 +62,7 @@ module.exports = class template {
 
       this.equipHeldItem(item.name)
         .then(() => this.place(newPosition, blockOffset))
-        .then(this.placeBlocksBucle)
+        .then(() => this.placeBlocksBucle())
         .then(resolve)
         .catch(reject)
     })
