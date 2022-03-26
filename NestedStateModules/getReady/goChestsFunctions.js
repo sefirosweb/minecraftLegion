@@ -16,60 +16,62 @@ function goChestsFunction(bot, targets) {
 
   const start = new BehaviorIdle()
   start.stateName = 'Start'
-  start.x = 125
-  start.y = 313
+  start.x = 75
+  start.y = 63
 
   const checkCraftItem = new BehaviorIdle()
   checkCraftItem.stateName = 'Check Craft Item'
-  checkCraftItem.x = 125
-  checkCraftItem.y = 313
+  checkCraftItem.x = 75
+  checkCraftItem.y = 513
 
   const exit = new BehaviorIdle()
   exit.stateName = 'Exit'
-  exit.x = 725
+  exit.x = 525
   exit.y = 113
 
   const nextCheck = new BehaviorIdle()
   nextCheck.stateName = 'Next Check'
-  nextCheck.x = 525
-  nextCheck.y = 113
+  nextCheck.x = 325
+  nextCheck.y = 213
 
   const loadConfig = new BehaviorLoadConfig(bot, targets)
   loadConfig.stateName = 'Load Bot Config'
-  loadConfig.x = 125
-  loadConfig.y = 113
+  loadConfig.x = 75
+  loadConfig.y = 213
 
   const checkItemsInInventory = new BehaviorCheckItemsInInventory(bot, targets)
   checkItemsInInventory.stateName = 'Checks Items in Inventory'
-  checkItemsInInventory.x = 525
-  checkItemsInInventory.y = 250
+  checkItemsInInventory.x = 325
+  checkItemsInInventory.y = 363
 
   const goChest = new BehaviorMoveTo(bot, targets)
   goChest.stateName = 'Go chest'
   goChest.x = 525
-  goChest.y = 413
+  goChest.y = 513
   goChest.movements = targets.movements
 
   const withdrawItems = new BehaviorWithdrawItemChest(bot, targets)
   withdrawItems.stateName = 'Withdraw Items'
   withdrawItems.x = 325
-  withdrawItems.y = 250
+  withdrawItems.y = 513
 
   const depositItems = new BehaviorDepositItemChest(bot, targets)
   depositItems.stateName = 'Deposit Items'
-  depositItems.x = 725
-  depositItems.y = 250
+  depositItems.x = 525
+  depositItems.y = 363
 
   const pickUpItems = require('@NestedStateModules/getReady/pickUpItems')(bot, targets)
   pickUpItems.stateName = 'Pick Up Items'
   pickUpItems.x = 325
-  pickUpItems.y = 50
+  pickUpItems.y = 63
 
   const searchAndCraft =
     require("@NestedStateModules/crafterJob/searchAndCraftFunction")(
       bot,
       targets
     );
+  searchAndCraft.x = 75
+  searchAndCraft.y = 363
 
 
   let chests = []
