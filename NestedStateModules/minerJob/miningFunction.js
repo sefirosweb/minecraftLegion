@@ -52,9 +52,6 @@ const movingWhile = (bot, nextCurrentLayer, movements) => {
 
 function miningFunction(bot, targets) {
   const mcData = require("minecraft-data")(bot.version);
-  const movements = new mineflayerPathfinder.Movements(bot, mcData);
-  movements.canDig = false;
-  movements.allowSprinting = targets.movements.allowSprinting;
 
   const start = new BehaviorIdle(targets);
   start.stateName = "Start";
@@ -93,9 +90,9 @@ function miningFunction(bot, targets) {
 
   const moveToBlock = new BehaviorMoveTo(bot, targets);
   moveToBlock.stateName = "Move To Block";
+  moveToBlock.movements = targets.movements
   moveToBlock.x = 925;
   moveToBlock.y = 313;
-  moveToBlock.movements = movements;
 
   const minerChecks = new BehaviorMinerChecks(bot, targets);
   minerChecks.stateName = "Miner Check";
@@ -130,6 +127,7 @@ function miningFunction(bot, targets) {
   const saveCurrentLayer = () => {
     const tunel = targets.config.minerCords.tunel
     const orientation = targets.config.minerCords.orientation
+    const world = targets.config.minerCords.world
     const newMineCords = { ...targets.minerJob.original }
 
 
@@ -156,6 +154,7 @@ function miningFunction(bot, targets) {
 
     newMineCords.tunel = tunel
     newMineCords.orientation = orientation
+    newMineCords.world = world
     setMinerCords(bot.username, newMineCords)
 
     targets.config.minerCords = newMineCords
@@ -252,7 +251,7 @@ function miningFunction(bot, targets) {
       name: "nextLayer -> checkLayer",
       onTransition: () => {
         const nextCurrentLayer = nextLayer.getCurrentLayerCoords();
-        movingWhile(bot, nextCurrentLayer, movements);
+        movingWhile(bot, nextCurrentLayer, targets.movements);
         checkLayer.setMinerCords(nextCurrentLayer);
       },
       shouldTransition: () => true,
@@ -308,7 +307,6 @@ function miningFunction(bot, targets) {
         if (nextLayer.minerCords.tunel === "horizontally") {
           // Move to base of block
           targets.position.y = parseInt(checkLayer.minerCords.yStart);
-          console.log(targets.config.minerCords.world)
           targets.position.dimension = targets.config.minerCords.world
         }
       },
