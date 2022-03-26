@@ -297,7 +297,7 @@ function connect() {
 
         chests = botconfig.getChests(bot.username);
         chests[config.value.chestId].position = findMaster.position.floored();
-        chests[config.value.chestId].dimension = bot.game.dimension
+        chests[config.value.chestId].position.dimension = bot.game.dimension
         botconfig.setChests(bot.username, chests);
 
         break;
