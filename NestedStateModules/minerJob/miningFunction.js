@@ -247,6 +247,9 @@ function miningFunction(bot, targets) {
       parent: nextLayer,
       child: finishedJob,
       name: "Mining finished",
+      onTransition: () => {
+        bot.pathfinder.setGoal(null)
+      },
       shouldTransition: () => nextLayer.isFinished(),
     }),
 
