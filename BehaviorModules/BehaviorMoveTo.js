@@ -121,11 +121,17 @@ module.exports = class BehaviorMoveTo {
       return
     }
 
-    blocksFound.sort(
-      (a, b) => {
-        return a.y - b.y
+    blocksFound.map(
+      (p) => {
+        p.distance = this.bot.entity.position.distanceTo(p)
+        return p
       }
     )
+      .sort(
+        (a, b) => {
+          return a.distance - b.distance
+        }
+      )
 
     const portal = blocksFound[0]
 
