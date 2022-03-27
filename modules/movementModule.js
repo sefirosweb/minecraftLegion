@@ -1,4 +1,6 @@
 const botWebsocket = require('@modules/botWebsocket')
+const mineflayerPathfinder = require('mineflayer-pathfinder')
+
 
 module.exports = function (bot, targets) {
     const mcData = require('minecraft-data')(bot.version)
@@ -49,8 +51,6 @@ module.exports = function (bot, targets) {
             portals = findPortals(dimension)
             compareWithCurrentPortals(portals, dimension)
         }
-
-        console.log(targets.portals)
     }
 
     const compareWithCurrentPortals = (portals, dimension) => {
@@ -114,8 +114,50 @@ module.exports = function (bot, targets) {
         return blocksFound;
     }
 
+    const crossThePortal = (dimension) => {
+        return new Promise((resolve, reject) => {
+            const portal = getNearestPortal(dimension)
+
+            if (!portal) {
+                reject(`Can't find the portal to dimension ${dimension}`)
+                return
+            }
+
+            goPosition(portal)
+                .then(() => {
+                    return new Promise((resolve) => {
+                        bot.once('spawn', () => {
+                            setTimeout(() => {
+                                resolve();
+                            }, 2000)
+                        })
+                    });
+                })
+                .then(resolve)
+        })
+
+    }
+
+    const goPosition = (position) => {
+        const goal = new mineflayerPathfinder.goals.GoalBlock(position.x, position.y, position.z)
+        bot.pathfinder.setMovements(targets.movements);
+        bot.pathfinder.setGoal(goal);
+
+        return new Promise((resolve) => {
+            bot.once("goal_reached", () => {
+                resolve()
+            });
+        });
+    }
+
+    const goSeeBlock = (block) => {
+
+    }
+
     return {
         getNearestPortal,
-        checkPortalsOnSpawn
+        checkPortalsOnSpawn,
+        crossThePortal,
+        goSeeBlock
     };
 };

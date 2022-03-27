@@ -76,7 +76,7 @@ module.exports = (bot) => {
   death.x = 425
   death.y = 213
 
-  const { checkPortalsOnSpawn } = require('@modules/portalsModule')(bot, targets)
+  const { checkPortalsOnSpawn } = require('@modules/movementModule')(bot, targets)
 
   const transitions = [
     new StateTransition({

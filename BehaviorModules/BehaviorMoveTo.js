@@ -16,7 +16,7 @@ module.exports = class BehaviorMoveTo {
     this.mcData = require('minecraft-data')(this.bot.version)
     this.movements = new mineflayerPathfinder.Movements(bot, this.mcData)
 
-    this.portalsModule = require('@modules/portalsModule')(bot, targets)
+    this.movementModule = require('@modules/movementModule')(bot, targets)
   }
 
   onStateEntered() {
@@ -94,40 +94,15 @@ module.exports = class BehaviorMoveTo {
   }
 
   crossThePortal(dimension) {
-    const portal = this.portalsModule.getNearestPortal(dimension)
-
-    if (!portal) {
-      this.stopMoving()
-      botWebsocket.log(`[MoveTo] Can't find the portal to dimension ${dimension}`)
-      this.isEndFinished = true
-      return
-    }
-
-    this.goPosition(portal)
-      .then(() => {
-        return new Promise((resolve) => {
-          this.bot.once('spawn', () => {
-            setTimeout(() => {
-              resolve();
-            }, 2000)
-          })
-        });
-      })
+    this.movementModule.crossThePortal(dimension)
       .then(() => {
         this.startMoving()
       })
-  }
-
-  goPosition(position) {
-    const goal = new mineflayerPathfinder.goals.GoalBlock(position.x, position.y, position.z)
-    this.bot.pathfinder.setMovements(this.movements);
-    this.bot.pathfinder.setGoal(goal);
-
-    return new Promise((resolve) => {
-      this.bot.once("goal_reached", () => {
-        resolve();
-      });
-    });
+      .catch((err) => {
+        this.stopMoving()
+        botWebsocket.log(err)
+        this.isEndFinished = true
+      })
   }
 
   restart() {
