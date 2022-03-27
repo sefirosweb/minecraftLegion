@@ -99,6 +99,13 @@ function miningFunction(bot, targets) {
   moveToBlock.x = 925;
   moveToBlock.y = 313;
 
+  const moveToNearBlock = new BehaviorMoveTo(bot, targets);
+  moveToNearBlock.stateName = "Move To Near Block";
+  moveToNearBlock.movements = targets.movements
+  moveToNearBlock.x = 925
+  moveToNearBlock.y = 113
+
+
   const minerChecks = new BehaviorMinerChecks(bot, targets);
   minerChecks.stateName = "Miner Check";
   minerChecks.x = 325;
@@ -318,7 +325,25 @@ function miningFunction(bot, targets) {
           targets.position.dimension = targets.config.minerCords.world
         }
       },
-      shouldTransition: () => currentBlock.isFinished(),
+      shouldTransition: () => currentBlock.isFinished() && currentBlock.canGetBlockInfo(),
+    }),
+
+    new StateTransition({
+      parent: currentBlock,
+      child: moveToNearBlock,
+      shouldTransition: () => currentBlock.isFinished() && !currentBlock.canGetBlockInfo(),
+    }),
+
+    new StateTransition({
+      parent: moveToNearBlock,
+      child: currentBlock,
+      shouldTransition: () => {
+        const block = bot.blockAt(targets.position)
+        if (block) {
+          return true
+        }
+        return false
+      },
     }),
 
     new StateTransition({
@@ -336,7 +361,7 @@ function miningFunction(bot, targets) {
         targets.position = targets.minerJob.mineBlock;
       },
       shouldTransition: () =>
-        (moveToBlock.isFinished() || moveToBlock.distanceToTarget() < 3) &&
+        (moveToBlock.isFinished() || moveToBlock.distanceToTarget() < 2.5) &&
         !bot.pathfinder.isMining(),
     }),
 

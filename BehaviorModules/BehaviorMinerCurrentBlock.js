@@ -29,6 +29,10 @@ module.exports = class BehaviorMinerCurrentBlock {
     return this.isEndFinished
   }
 
+  canGetBlockInfo() {
+    return this.getBlockInfo
+  }
+
   getLayerIsFinished() {
     return this.isLayerFinished
   }
@@ -70,6 +74,7 @@ module.exports = class BehaviorMinerCurrentBlock {
 
   onStateEntered() {
     this.isEndFinished = false
+    this.getBlockInfo = false
     this.startBlock()
     this.isEndFinished = this.checkSand()
     if (!this.isEndFinished) {
@@ -126,14 +131,19 @@ module.exports = class BehaviorMinerCurrentBlock {
 
     const block = this.bot.blockAt(position)
     if (!block) {
-      return false
+      this.getBlockInfo = false
+      this.targets.position = position
+      this.targets.position.dimension = this.targets.config.minerCords.world
+      return true
     }
+
     const isValidBlockType = this.blockInValidType.find(b => b === block.name)
     if (isValidBlockType === undefined &&
       (
         allBlocks || ['sand', 'gravel'].includes(block.name)
       )
     ) {
+      this.getBlockInfo = true
       this.targets.position = block.position // I detect is not air / lava / water then go to this position
       return true
     }

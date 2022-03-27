@@ -150,14 +150,9 @@ module.exports = function (bot, targets) {
         });
     }
 
-    const goSeeBlock = (block) => {
-
-    }
-
     return {
         getNearestPortal,
         checkPortalsOnSpawn,
-        crossThePortal,
-        goSeeBlock
+        crossThePortal
     };
 };
