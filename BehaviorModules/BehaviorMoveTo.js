@@ -1,6 +1,7 @@
 const mineflayerPathfinder = require('mineflayer-pathfinder')
 const botWebsocket = require('@modules/botWebsocket')
 
+
 module.exports = class BehaviorMoveTo {
   constructor(bot, targets, timeout) {
     this.stateName = 'moveTo'
@@ -14,6 +15,8 @@ module.exports = class BehaviorMoveTo {
     this.targets = targets
     this.mcData = require('minecraft-data')(this.bot.version)
     this.movements = new mineflayerPathfinder.Movements(bot, this.mcData)
+
+    this.portalsModule = require('@modules/portalsModule')(bot, targets)
   }
 
   onStateEntered() {
@@ -91,49 +94,14 @@ module.exports = class BehaviorMoveTo {
   }
 
   corssThePortal(dimension) {
-    let matching
-    if ( //Nether portal
-      dimension === 'minecraft:the_nether' && this.bot.game.dimension === 'minecraft:overworld'
-      || dimension === 'minecraft:overworld' && this.bot.game.dimension === 'minecraft:the_nether'
-      || dimension === 'minecraft:the_end' && this.bot.game.dimension === 'minecraft:the_nether'
-    ) {
-      matching = ['nether_portal'].map(name => this.mcData.blocksByName[name].id)
-    }
+    const portal = this.portalsModule.getNearestPortal(dimension)
 
-    if ( // End Portal
-      dimension === 'minecraft:the_end' && this.bot.game.dimension === 'minecraft:overworld'
-      || dimension === 'minecraft:overworld' && this.bot.game.dimension === 'minecraft:the_end'
-      || dimension === 'minecraft:the_nether' && this.bot.game.dimension === 'minecraft:the_end'
-    ) {
-      matching = ['end_portal'].map(name => this.mcData.blocksByName[name].id)
-    }
-
-    const blocksFound = this.bot.findBlocks({
-      matching,
-      maxDistance: 128,
-      count: 16
-    })
-
-    if (blocksFound.length === 0) {
+    if (!portal) {
       this.stopMoving()
       botWebsocket.log(`[MoveTo] Can't find the portal to dimension ${dimension}`)
       this.isEndFinished = true
       return
     }
-
-    blocksFound.map(
-      (p) => {
-        p.distance = this.bot.entity.position.distanceTo(p)
-        return p
-      }
-    )
-      .sort(
-        (a, b) => {
-          return a.distance - b.distance
-        }
-      )
-
-    const portal = blocksFound[0]
 
     this.goPosition(portal)
       .then(() => {
@@ -141,7 +109,7 @@ module.exports = class BehaviorMoveTo {
           this.bot.once('spawn', () => {
             setTimeout(() => {
               resolve();
-            })
+            }, 2000)
           })
         });
       })

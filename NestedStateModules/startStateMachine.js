@@ -53,6 +53,14 @@ module.exports = (bot) => {
   const movements = new mineflayerPathfinder.Movements(bot, mcData)
   targets.movements = movements
   targets.chests = {}
+  targets.portals = {
+    overworld: {
+      the_nether: [],
+      the_end: []
+    },
+    the_nether: [],
+    the_end: []
+  };
 
   const startState = new BehaviorIdle(targets)
   startState.stateName = 'Start'
@@ -170,21 +178,33 @@ module.exports = (bot) => {
       case 'getChests':
         targets.chests = value
         break
+      case 'getPortals':
+        targets.portals = value
+        break
     }
   })
 
-  function getChests () {
+  function getChests() {
     botWebsocket.emit('sendAction', {
       action: 'getChests',
       value: ''
     })
   }
 
+  function getPortals() {
+    botWebsocket.emit('sendAction', {
+      action: 'getPortals',
+      value: ''
+    })
+  }
+
   if (botWebsocket.getLoged()) {
     getChests()
+    getPortals()
   } else {
     bot.once('webSocketLogin', function () {
       getChests()
+      getPortals()
     })
   }
 }
