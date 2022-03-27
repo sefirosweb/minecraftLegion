@@ -58,6 +58,11 @@ function miningFunction(bot, targets) {
   start.x = 125;
   start.y = 113;
 
+  const finishedJob = new BehaviorIdle(targets);
+  finishedJob.stateName = "Finished Job";
+  finishedJob.x = 125;
+  finishedJob.y = 113;
+
   const loadConfig = new BehaviorLoadConfig(bot, targets);
   loadConfig.stateName = "Load Bot Config";
   loadConfig.x = 325;
@@ -240,7 +245,7 @@ function miningFunction(bot, targets) {
 
     new StateTransition({
       parent: nextLayer,
-      child: exit,
+      child: finishedJob,
       name: "Mining finished",
       shouldTransition: () => nextLayer.isFinished(),
     }),
