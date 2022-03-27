@@ -139,7 +139,7 @@ function miningFunction(bot, targets) {
     if (tunel === 'horizontally') {
       if (orientation === 'z+') newMineCords.zStart++
       if (orientation === 'z-') newMineCords.zEnd--
-      if (orientation === 'x+') newMineCords.zStart++
+      if (orientation === 'x+') newMineCords.xStart++
       if (orientation === 'x-') newMineCords.xEnd--
     }
 
