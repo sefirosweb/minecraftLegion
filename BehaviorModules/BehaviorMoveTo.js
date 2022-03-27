@@ -89,11 +89,11 @@ module.exports = class BehaviorMoveTo {
       this.bot.pathfinder.setMovements(this.movements)
       this.bot.pathfinder.setGoal(goal)
     } else {
-      this.corssThePortal(dimension)
+      this.crossThePortal(dimension)
     }
   }
 
-  corssThePortal(dimension) {
+  crossThePortal(dimension) {
     const portal = this.portalsModule.getNearestPortal(dimension)
 
     if (!portal) {

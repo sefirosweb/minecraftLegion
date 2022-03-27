@@ -1,6 +1,90 @@
+const botWebsocket = require('@modules/botWebsocket')
+
 module.exports = function (bot, targets) {
     const mcData = require('minecraft-data')(bot.version)
     const getNearestPortal = (dimension) => {
+
+        const portalsFound = findPortals(dimension)
+
+        const portals = compareWithCurrentPortals(portalsFound, dimension)
+
+        // blocksFound.map(
+        //     (p) => {
+        //         p.distance = bot.entity.position.distanceTo(p)
+        //         return p
+        //     }
+        // )
+        //     .sort(
+        //         (a, b) => {
+        //             return a.distance - b.distance
+        //         }
+        //     )
+
+        const portal = portals[0]
+        return portal
+    }
+
+    const checkPortalsOnSpawn = () => {
+
+        let portals, dimension
+
+        if (bot.game.dimension === 'minecraft:the_nether') {
+            dimension = "minecraft:overworld"
+            portals = findPortals(dimension)
+            compareWithCurrentPortals(portals, dimension)
+        }
+
+        if (bot.game.dimension === 'minecraft:the_end') {
+            dimension = "minecraft:overworld"
+            portals = findPortals(dimension)
+            compareWithCurrentPortals(portals, dimension)
+        }
+
+        if (bot.game.dimension === 'minecraft:overworld') {
+            dimension = "minecraft:the_nether"
+            portals = findPortals(dimension)
+            compareWithCurrentPortals(portals, dimension)
+
+            dimension = "minecraft:the_end"
+            portals = findPortals(dimension)
+            compareWithCurrentPortals(portals, dimension)
+        }
+
+        console.log(targets.portals)
+    }
+
+    const compareWithCurrentPortals = (portals, dimension) => {
+        let currentPortals
+        if (bot.game.dimension === 'minecraft:the_nether' && dimension === 'minecraft:overworld') {
+            currentPortals = targets.portals.the_nether
+        }
+
+        if (bot.game.dimension === 'minecraft:the_end' && dimension === 'minecraft:overworld') {
+            currentPortals = targets.portals.the_end
+        }
+
+        if (bot.game.dimension === 'minecraft:overworld' && dimension === 'minecraft:the_nether') {
+            currentPortals = targets.portals.overworld.the_nether
+        }
+
+        if (bot.game.dimension === 'minecraft:overworld' && dimension === 'minecraft:the_end') {
+            currentPortals = targets.portals.overworld.the_end
+        }
+
+
+        portals.forEach(portal => {
+            const portalFound = currentPortals.find(cp => cp.x === portal.x && cp.y === portal.y && cp.z === portal.z)
+
+            if (!portalFound) {
+                currentPortals.push(portal)
+            }
+        })
+
+        botWebsocket.sendAction('setPortals', targets.portals)
+        return currentPortals
+    }
+
+    const findPortals = (dimension) => {
         let matching
         if ( //Nether portal
             dimension === 'minecraft:the_nether' && bot.game.dimension === 'minecraft:overworld'
@@ -19,36 +103,19 @@ module.exports = function (bot, targets) {
             matching = "end_portal"
         }
 
-        const matchingId = ["nether_portal"].map(name => mcData.blocksByName[name].id)
+        const matchingId = [matching].map(name => mcData.blocksByName[name].id)
 
         const blocksFound = bot.findBlocks({
             matching: matchingId,
             maxDistance: 128,
-            count: 16
+            count: 99
         })
 
-        if (blocksFound.length === 0) {
-            return false;
-        }
-
-        blocksFound.map(
-            (p) => {
-                p.distance = bot.entity.position.distanceTo(p)
-                return p
-            }
-        )
-            .sort(
-                (a, b) => {
-                    return a.distance - b.distance
-                }
-            )
-
-        const portal = blocksFound[0]
-        return portal
+        return blocksFound;
     }
 
-
     return {
-        getNearestPortal
+        getNearestPortal,
+        checkPortalsOnSpawn
     };
 };

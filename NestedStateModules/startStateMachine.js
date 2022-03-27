@@ -76,6 +76,8 @@ module.exports = (bot) => {
   death.x = 425
   death.y = 213
 
+  const { checkPortalsOnSpawn } = require('@modules/portalsModule')(bot, targets)
+
   const transitions = [
     new StateTransition({
       parent: startState,
@@ -84,7 +86,10 @@ module.exports = (bot) => {
       shouldTransition: () => true,
       onTransition: () => {
         console.log('start')
-        setTimeout(() => transitions[1].trigger(), 2000)
+        setTimeout(() => {
+          checkPortalsOnSpawn()
+          transitions[1].trigger()
+        }, 2000)
       }
     }),
 
@@ -120,6 +125,11 @@ module.exports = (bot) => {
   bot.on('health', () => {
     botWebsocket.emitHealth(bot.health)
     botWebsocket.emitFood(bot.food)
+  })
+
+
+  bot.on('spawn', () => {
+    checkPortalsOnSpawn()
   })
 
   bot.on('physicTick', () => bot.emit('customEventPhysicTick'))
