@@ -89,12 +89,12 @@ module.exports = class BehaviorMoveTo {
       this.bot.pathfinder.setMovements(this.movements)
       this.bot.pathfinder.setGoal(goal)
     } else {
-      this.crossThePortal(dimension)
+      this.crossThePortal(dimension, position)
     }
   }
 
-  crossThePortal(dimension) {
-    this.movementModule.crossThePortal(dimension)
+  crossThePortal(dimension, destination) {
+    this.movementModule.crossThePortal(dimension, destination)
       .then(() => {
         this.startMoving()
       })

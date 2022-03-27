@@ -1,26 +1,52 @@
 const botWebsocket = require('@modules/botWebsocket')
-const mineflayerPathfinder = require('mineflayer-pathfinder')
+const mineflayerPathfinder = require('mineflayer-pathfinder');
+const { Vec3 } = require('vec3');
 
 
 module.exports = function (bot, targets) {
     const mcData = require('minecraft-data')(bot.version)
-    const getNearestPortal = (dimension) => {
+    const getNearestPortal = (dimension, destination) => {
 
         const portalsFound = findPortals(dimension)
 
         const portals = compareWithCurrentPortals(portalsFound, dimension)
 
-        // blocksFound.map(
-        //     (p) => {
-        //         p.distance = bot.entity.position.distanceTo(p)
-        //         return p
-        //     }
-        // )
-        //     .sort(
-        //         (a, b) => {
-        //             return a.distance - b.distance
-        //         }
-        //     )
+        portals.map(
+            (p) => {
+                const distanceToPortal = bot.entity.position.distanceTo(p)
+
+                if (
+                    (bot.game.dimension === 'minecraft:the_nether' && dimension === 'minecraft:overworld')
+                    || (bot.game.dimension === 'minecraft:overworld' && dimension === 'minecraft:the_nether')
+                ) {
+
+                    const otherDimensionPosition = new Vec3(p.x, p.y, p.z)
+                    if (dimension === 'minecraft:overworld') {
+                        otherDimensionPosition.x = otherDimensionPosition.x * 8
+                        otherDimensionPosition.z = otherDimensionPosition.z * 8
+                        const plusDistance = otherDimensionPosition.distanceTo(destination)
+                        p.distance = distanceToPortal + plusDistance
+                    }
+
+                    if (dimension === 'minecraft:the_nether') {
+                        otherDimensionPosition.x = otherDimensionPosition.x / 8
+                        otherDimensionPosition.z = otherDimensionPosition.z / 8
+                        const plusDistance = otherDimensionPosition.distanceTo(destination)
+                        p.distance = distanceToPortal + plusDistance
+                    }
+
+                } else {
+                    p.distance = distanceToPortal
+                }
+
+                return p
+            }
+        )
+        .sort(
+            (a, b) => {
+                return a.distance - b.distance
+            }
+        )
 
         const portal = portals[0]
         return portal
@@ -114,9 +140,9 @@ module.exports = function (bot, targets) {
         return blocksFound;
     }
 
-    const crossThePortal = (dimension) => {
+    const crossThePortal = (dimension, destination) => {
         return new Promise((resolve, reject) => {
-            const portal = getNearestPortal(dimension)
+            const portal = getNearestPortal(dimension, destination)
 
             if (!portal) {
                 reject(`Can't find the portal to dimension ${dimension}`)
