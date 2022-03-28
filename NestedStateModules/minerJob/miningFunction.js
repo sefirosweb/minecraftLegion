@@ -151,7 +151,7 @@ function miningFunction(bot, targets) {
     }
 
     if (tunel === 'vertically') {
-      newMineCords.yStart--
+      newMineCords.yEnd--
     }
 
     newMineCords.yStart = newMineCords.yStart.toString()
