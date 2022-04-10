@@ -1,33 +1,33 @@
 #!/bin/bash
 
 # Install docker
-sudo apt-get update
-sudo apt-get install \
+apt-get update
+apt-get install \
     ca-certificates \
     curl \
     gnupg \
     lsb-release
-curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
 
 echo \
   "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu \
-  $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+  $(lsb_release -cs) stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null
 
-sudo apt-get update
-sudo apt-get install docker-ce docker-ce-cli containerd.io -y
-sudo apt-get install docker-compose -y
+apt-get update
+apt-get install docker-ce docker-ce-cli containerd.io -y
+apt-get install docker-compose -y
 
 cd /root
-sudo docker network create minecraftLegionNetwork
-sudo git clone https://github.com/sefirosweb/minecraftLegion.git
+docker network create minecraftLegionNetwork
+git clone https://github.com/sefirosweb/minecraftLegion.git
 cd minecraftLegion/
 
-sudo echo "
+echo "
 const config = {
   server: 'sefirosweb.es',
   port: '25565',
   masters: [{ name: 'Sefirosweb' }],
-  webServer: 'http://minecraftlegionwebserver',
+  webServer: 'http://159.223.30.240',
   webServerPort: '4001',
   webServerPassword: 'admin',
   debugMode: false,
@@ -37,5 +37,11 @@ const config = {
 module.exports = config
 " > config.js
 
-sudo docker run --rm -it -v $PWD:/home/app -w /home/app node:16.13-bullseye npm install
-sudo docker run --name minecraftLegion  --network minecraftLegionNetwork -v $PWD:/home/app -w /home/app -p 4500-4550:4500-4550 -p 9229:9229 node:16.13-bullseye node index.js
+docker run --rm -it -v $PWD:/home/app -w /home/app node:16.13-bullseye npm install
+
+docker run -d --restart always \
+--name minecraftLegion \
+--hostname minecraftLegion \
+--network minecraftLegionNetwork \
+-v $PWD:/home/app -w /home/app -p 4500-4550:4500-4550 -p 9229:9229 \
+node:16.13-bullseye node index.js
