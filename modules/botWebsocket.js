@@ -406,6 +406,9 @@ function connect() {
         chestArea.splice(config.value, 1);
         botconfig.setChestArea(bot.username, chestArea);
         break;
+      case "saveFullConfig":
+        botconfig.saveFullConfig(bot.username, config.value);
+        break;
     }
 
     sendConfig();

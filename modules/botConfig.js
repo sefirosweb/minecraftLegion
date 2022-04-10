@@ -80,6 +80,16 @@ function getAll(botName) {
   return db.get("config").value();
 }
 
+function saveFullConfig(botName, config) {
+  const db = getConn(botName);
+  const fullConfig = db.get("config").value();
+  const newFullConfig = {
+    ...fullConfig,
+    ...config
+  };
+  db.set("config", newFullConfig).write();
+}
+
 function setJob(botName, job) {
   const db = getConn(botName);
   db.set("config.job", job).write();
@@ -355,6 +365,7 @@ function setChestArea(botName, farmAreas) {
 
 module.exports = {
   getAll,
+  saveFullConfig,
   setJob,
   getJob,
   setMode,
