@@ -16,7 +16,7 @@ module.exports = function (bot) {
       for (let i = 0; i < aviableRecipes[r].delta.length; i++) {
         if (aviableRecipes[r].delta[i].count > 0) {
           result = {
-            name: mcData.findItemOrBlockById(aviableRecipes[r].delta[i].id)
+            name: mcData.items[aviableRecipes[r].delta[i].id]
               .name,
             id: aviableRecipes[r].delta[i].id,
             type: aviableRecipes[r].delta[i].id,
@@ -25,7 +25,7 @@ module.exports = function (bot) {
           continue;
         }
         items.push({
-          name: mcData.findItemOrBlockById(aviableRecipes[r].delta[i].id).name,
+          name: mcData.items[aviableRecipes[r].delta[i].id].name,
           id: aviableRecipes[r].delta[i].id,
           type: aviableRecipes[r].delta[i].id,
           count: Math.abs(aviableRecipes[r].delta[i].count),
@@ -58,7 +58,7 @@ module.exports = function (bot) {
       recipes[r].needCraftingTable = needCraftingTable;
 
       for (let i = 0; i < recipes[r].items.length; i++) {
-        subItem = mcData.findItemOrBlockById(recipes[r].items[i].id);
+        subItem = mcData.items[recipes[r].items[i].id];
         if (previousItem && subItem.id === previousItem.id) {
           itemsToRemove.push(r);
           continue;
