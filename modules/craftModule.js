@@ -81,7 +81,7 @@ module.exports = function (bot) {
   };
 
   const getFullTreeCraftToItem = (itemName) => {
-    const item = mcData.findItemOrBlockByName(itemName);
+    const item = mcData.itemsByName[itemName];
     const craftingTable = getCraftingTable();
     return recursiveRecipes(item, craftingTable);
   };

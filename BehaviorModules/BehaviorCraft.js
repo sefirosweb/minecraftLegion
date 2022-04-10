@@ -56,7 +56,7 @@ module.exports = class BehaviorCraft {
       return;
     }
 
-    const item = this.mcData.findItemOrBlockByName(this.targets.craftItem.name);
+    const item = this.mcData.itemsByName[this.targets.craftItem.name];
     const recipe = this.bot.recipesFor(
       item.id,
       null,
@@ -97,7 +97,7 @@ module.exports = class BehaviorCraft {
   }
 
   enoughItemsForCraft(name) {
-    const item = this.mcData.findItemOrBlockByName(name);
+    const item = this.mcData.itemsByName[name];
 
     if (!item) {
       botWebsocket.log(`unknown item: ${name}`);
