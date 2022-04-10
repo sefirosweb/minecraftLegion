@@ -27,17 +27,17 @@ const config = {
   server: 'sefirosweb.es',
   port: '25565',
   masters: [{ name: 'Sefirosweb' }],
-  webServer: 'http://159.223.30.240',
+  webServer: 'http://178.62.239.12',
   webServerPort: '4001',
   webServerPassword: 'admin',
   debugMode: false,
-  customStart: false,
+  customStart: true,
   autoRestart: true
 }
 module.exports = config
 " > config.js
 
-docker run --rm -it -v $PWD:/home/app -w /home/app node:16.13-bullseye npm install
+docker run --rm -v $PWD:/home/app -w /home/app node:16.13-bullseye npm install
 
 docker run -d --restart always \
 --name minecraftLegion \
