@@ -195,8 +195,7 @@ function commandsFunction (bot, targets) {
 
     const goal = new mineflayerPathfinder.goals.GoalBlock(x, y, z)
 
-    const movements = new mineflayerPathfinder.Movements(bot, mcData)
-    pathfinder.setMovements(movements)
+    pathfinder.setMovements(targets.movements)
     pathfinder.setGoal(goal)
   }
 
