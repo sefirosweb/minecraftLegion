@@ -17,6 +17,7 @@ function getConn(botName) {
     randomFarmArea: false,
     isCopingPatrol: false,
     canDig: false,
+    canPlaceBlocks: false,
     allowSprinting: false,
     firstPickUpItemsFromKnownChests: true,
     canCraftItemWithdrawChest: true,
@@ -138,6 +139,21 @@ function setCanDig(botName, mode) {
 function getCanDig(botName) {
   const db = getConn(botName);
   return db.get("config.canDig").value();
+}
+
+function setCanPlaceBlocks(botName, mode) {
+  const db = getConn(botName);
+  if (mode === true) {
+    mode = true;
+  } else {
+    mode = false;
+  }
+  db.set("config.canPlaceBlocks", mode).write();
+}
+
+function getCanPlaceBlocks(botName) {
+  const db = getConn(botName);
+  return db.get("config.canPlaceBlocks").value();
 }
 
 function setFirstPickUpItemsFromKnownChests(botName, mode) {
@@ -390,6 +406,8 @@ module.exports = {
   setCopingPatrol,
   setCanDig,
   getCanDig,
+  setCanPlaceBlocks,
+  getCanPlaceBlocks,
   setFirstPickUpItemsFromKnownChests,
   getFirstPickUpItemsFromKnownChests,
   setCanCraftItemWithdrawChest,
