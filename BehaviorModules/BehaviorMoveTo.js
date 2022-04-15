@@ -22,8 +22,12 @@ module.exports = class BehaviorMoveTo {
   onStateEntered() {
     this.isEndFinished = false
     this.success = false
-    this.bot.on('pathUpdate', this.pathUpdate)
-    this.bot.on('goalReached', this.goalReached)
+    this.bot.on('pathUpdate', () => {
+      if (r.status === 'noPath') {
+        console.log('[MoveTo] No path to target!')
+      }
+    })
+    // this.bot.on('goalReached', () => this.goalReached())
 
     if (this.timeout) {
       this.timeLimit = setTimeout(() => {
@@ -39,8 +43,8 @@ module.exports = class BehaviorMoveTo {
   onStateExited() {
     this.isEndFinished = false
     this.success = false
-    this.bot.removeListener('pathUpdate', this.pathUpdate)
-    this.bot.removeListener('goalReached', this.goalReached)
+    this.bot.removeAllListeners('pathUpdate')
+    this.bot.removeAllListeners('goalReached')
     this.stopMoving()
     clearTimeout(this.timeLimit)
   }
