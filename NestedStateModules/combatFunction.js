@@ -9,8 +9,9 @@ const {
 const BehaviorAttack = require('@BehaviorModules/BehaviorAttack')
 const BehaviorLongAttack = require('@BehaviorModules/BehaviorLongAttack')
 
-function combatFunction (bot, targets) {
+function combatFunction(bot, targets) {
   const inventory = require('@modules/inventoryModule')(bot)
+  const { ignoreMobs } = require('@modules/getClosestEnemy')(bot, targets)
   const hawkEye = require('minecrafthawkeye')
   bot.loadPlugin(hawkEye)
 
@@ -49,9 +50,13 @@ function combatFunction (bot, targets) {
   let bowColdown = Date.now() // Used for avoid bugs on jam between bow and sword
   let newTargetColdDown = Date.now()
 
-  const filter = e => e.type === 'mob' &&
+  const filter = e =>
+    e.type === 'mob' &&
     e.position.distanceTo(bot.entity.position) < 10 &&
-    e.mobType !== 'Armor Stand'
+    e.mobType !== 'Armor Stand' &&
+    e.kind !== 'Passive mobs' &&
+    e.isValid &&
+    !ignoreMobs.includes(e.mobType)
 
   const getGrades = function () {
     // Of other enemies aproax, change target (Ex clipper)
@@ -106,7 +111,7 @@ function combatFunction (bot, targets) {
     longRangeAttack.setInfoShot(targetGrade)
   }
 
-  function startGrades () {
+  function startGrades() {
     const isEventLoaded = bot.listeners('customEventPhysicTick').find(event => {
       return event.name === 'getGrades'
     })
@@ -116,11 +121,11 @@ function combatFunction (bot, targets) {
     }
   }
 
-  function stopGrades () {
+  function stopGrades() {
     bot.removeListener('customEventPhysicTick', getGrades)
   }
 
-  function checkHandleSword () {
+  function checkHandleSword() {
     const swordHandled = inventory.checkItemEquiped('sword')
 
     if (swordHandled) { return }

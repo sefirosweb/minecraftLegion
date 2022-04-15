@@ -40,8 +40,6 @@ module.exports = function (bot, targets) {
 
         if (bot.canSeeBlock(blockPosition)) {
           targets.entity = entity
-          console.log(entity.kind)
-          console.log(entity.mobType)
         }
 
       }
@@ -125,7 +123,8 @@ module.exports = function (bot, targets) {
   }
 
   return {
-    check
+    check,
+    ignoreMobs
   }
 }
 
