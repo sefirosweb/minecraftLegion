@@ -40,7 +40,10 @@ module.exports = function (bot, targets) {
   const nearChests = () => {
     const chests = {}
 
-    Object.values(targets.chests).forEach((c, index) => {
+    Object.entries(targets.chests).forEach((entry) => {
+      const index = entry[0]
+      const c = entry[1]
+
       if (c.dimension === bot.game.dimension && bot.entity.position.distanceTo(c.position) < 128) {
         chests[index] = c
       }

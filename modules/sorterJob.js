@@ -8,7 +8,9 @@ module.exports = function (bot) {
     const transactions = []
 
     items.forEach((item, itemIndex) => {
-      Object.values(chests).forEach((chest, chestIndex) => {
+      Object.entries(chests).forEach((entry) => {
+        const chestIndex = entry[0]
+        const chest = entry[1]
         chest.slots.every((slot, slotIndex) => {
           if (exclude && exclude[chestIndex][slotIndex].correct === true) return true
           if (item.quantity === 0) return false

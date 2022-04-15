@@ -103,6 +103,12 @@ function searchAndCraftFunction(bot, targets) {
     }),
 
     new StateTransition({
+      parent: checkRecipes,
+      child: goTable,
+      shouldTransition: () => itemsToPickUpBatch.repicesUsed.length === 0,
+    }),
+
+    new StateTransition({
       parent: checkMaterials,
       child: exit,
       shouldTransition: () => itemsToPickUpBatch.itemToPickup.length === 0,
@@ -156,7 +162,9 @@ function searchAndCraftFunction(bot, targets) {
           name: recipes.shift().result.name,
         };
       },
-      shouldTransition: () => pickUpItems.isFinished(),
+      shouldTransition: () => {
+        return pickUpItems.isFinished()
+      },
     }),
 
     new StateTransition({
@@ -174,12 +182,6 @@ function searchAndCraftFunction(bot, targets) {
       parent: craftItem,
       child: exit,
       shouldTransition: () => recipes.length === 0 && craftItem.isFinished(),
-    }),
-
-    new StateTransition({
-      parent: checkRecipes,
-      child: goTable,
-      shouldTransition: () => itemsToPickUpBatch.repicesUsed.length === 0,
     }),
 
     new StateTransition({

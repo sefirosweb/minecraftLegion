@@ -66,7 +66,7 @@ function sorterJobFunction (bot, targets) {
 
     chests.forEach(chest => {
       // Find chest in targets.chests
-      const cKey = Object.values(targets.chests).findIndex(tc => {
+      const cKey = Object.values(targets.chests).findIndex(tc => { // TODO revisar
         if (
           // Both must be second block or not
           (tc.secondBlock === undefined) === (chest.secondBlock === undefined) &&
@@ -122,7 +122,7 @@ function sorterJobFunction (bot, targets) {
           return false
         })
       ) {
-        const chestInfo = Object.values(targets.chests).find(c => {
+        const chestInfo = Object.values(targets.chests).find(c => { // TODO revisar
           if (vec3(c.position).equals(chest.position)) return true
           if (secondBlock && vec3(c.position).equals(secondBlock.position)) return true
           return false
@@ -229,7 +229,7 @@ function sorterJobFunction (bot, targets) {
       child: checkNewChests,
       onTransition: () => {
         if (!checkItemsInChest.getCanOpenChest()) {
-          const chestIndex = Object.values(targets.chests).findIndex(c => {
+          const chestIndex = Object.values(targets.chests).findIndex(c => { // TODO revisar
             if (vec3(c.position).equals(targets.sorterJob.chest.position)) return true
             if (targets.sorterJob.chest.secondBlock && vec3(c.position).equals(targets.sorterJob.chest.secondBlock.position)) return true
             return false
@@ -247,7 +247,7 @@ function sorterJobFunction (bot, targets) {
       child: goChest,
       onTransition: () => {
         if (!checkItemsInChest.getCanOpenChest()) {
-          const chestIndex = Object.values(targets.chests).findIndex(c => {
+          const chestIndex = Object.values(targets.chests).findIndex(c => { // TODO revisar
             if (vec3(c.position).equals(targets.sorterJob.chest.position)) return true
             if (targets.sorterJob.chest.secondBlock && vec3(c.position).equals(targets.sorterJob.chest.secondBlock.position)) return true
             return false

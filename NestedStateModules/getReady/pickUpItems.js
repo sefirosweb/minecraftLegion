@@ -34,7 +34,10 @@ function pickUpItems(bot, targets) {
 
     const pickupItems = JSON.parse(JSON.stringify(targets.pickUpItems));
 
-    Object.values(targets.chests).forEach((chest, chestIndex) => {
+    Object.entries(targets.chests).forEach((entry) => {
+
+      const chestIndex = entry[0]
+      const chest = entry[1]
 
       const items = [];
 
