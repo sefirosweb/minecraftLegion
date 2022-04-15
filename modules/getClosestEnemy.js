@@ -3,6 +3,21 @@ module.exports = function (bot, targets) {
   let entities = []
   let currentEntity = false
 
+  const ignoreMobs = [
+    'Glow Squid',
+    'Armor Stand',
+    'Iron Golem',
+    'Squid',
+    'Tropical Fish',
+    'Pufferfish',
+    'Axolotl',
+    'Bat',
+    'Cod',
+    'Bee',
+    'Salmon',
+    'Cat'
+  ]
+
   const mcData = require('minecraft-data')(bot.version)
   const mineflayerPathfinder = require('mineflayer-pathfinder')
   const movements = new mineflayerPathfinder.Movements(bot, mcData)
@@ -16,12 +31,19 @@ module.exports = function (bot, targets) {
     }
 
     if (entities.length > 0) {
-      const validEntity = getValidPath(entities[currentEntity])
-      if (validEntity) {
-        const blockPosition = bot.blockAt(entities[currentEntity].position.offset(0, entities[currentEntity].height, 0))
+      const entity = entities[currentEntity]
+      const validPath = getValidPath(entity)
+      if (validPath) {
+
+        const entityPosition = entity.position.offset(0, entity.height, 0)
+        const blockPosition = bot.blockAt(entityPosition)
+
         if (bot.canSeeBlock(blockPosition)) {
-          targets.entity = entities[currentEntity]
+          targets.entity = entity
+          console.log(entity.kind)
+          console.log(entity.mobType)
         }
+
       }
 
       currentEntity++
@@ -94,10 +116,9 @@ module.exports = function (bot, targets) {
     if (targets.config.mode === 'pve') {
       return (entity.position.distanceTo(bot.player.entity.position) <= targets.config.distance) &&
         (entity.type === 'mob') &&
-        (entity.mobType !== 'Armor Stand') &&
-        (entity.mobType !== 'Iron Golem') &&
         (entity.kind !== 'Passive mobs') &&
-        (entity.isValid)
+        (entity.isValid) &&
+        !ignoreMobs.includes(entity.mobType)
     }
 
     return false
@@ -107,3 +128,6 @@ module.exports = function (bot, targets) {
     check
   }
 }
+
+  
+  
