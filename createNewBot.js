@@ -34,6 +34,7 @@ const createNewBot = (botName, botPassword = "", server, port, customStart) => {
 
   bot.once("spawn", async () => {
     console.log(bot.version);
+    bot.chat(`/login ${botPassword}`)
     botWebsocket.connect();
     botWebsocket.log("Ready!");
 
