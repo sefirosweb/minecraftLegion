@@ -26,6 +26,7 @@ function commandsFunction (bot, targets) {
   followPlayer.stateName = 'Follow Player'
   followPlayer.x = 125
   followPlayer.y = 313
+  followPlayer.movements = targets.movements
 
   const lookAtFollowTarget = new BehaviorLookAtEntity(bot, targets)
   lookAtFollowTarget.stateName = 'Look Player'
