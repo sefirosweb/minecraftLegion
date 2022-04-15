@@ -10,7 +10,7 @@ const BehaviorLoadConfig = require('@BehaviorModules/BehaviorLoadConfig')
 const BehaviorMoveTo = require('@BehaviorModules/BehaviorMoveTo')
 
 // let isDigging = false
-function fillFunction (bot, targets) {
+function fillFunction(bot, targets) {
   let placeBlock2Position
   const { getNewPositionForPlaceBlock, blocksCanBeReplaced } = require('@modules/placeBlockModule')(bot)
 
@@ -68,7 +68,7 @@ function fillFunction (bot, targets) {
       },
       shouldTransition: () => {
         const block = bot.blockAt(targets.position.offset(0, 1, 0))
-        return (moveToBlock.isFinished() || moveToBlock.distanceToTarget() < 3) && blocksCanBeReplaced.includes(block.name)
+        return (moveToBlock.isFinished() || moveToBlock.distanceToTarget() < 2.5) && blocksCanBeReplaced.includes(block.name)
       }
     }),
 
