@@ -31,7 +31,7 @@ const config = {
   webServerPort: '4001',
   webServerPassword: 'admin',
   debugMode: false,
-  customStart: true,
+  customStart: false,
   autoRestart: true
 }
 module.exports = config
