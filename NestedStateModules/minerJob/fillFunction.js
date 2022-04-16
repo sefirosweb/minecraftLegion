@@ -26,9 +26,9 @@ function fillFunction(bot, targets) {
 
   const moveToBlock = new BehaviorMoveTo(bot, targets)
   moveToBlock.stateName = 'Move To Block'
+  moveToBlock.movements = targets.movements
   moveToBlock.x = 525
   moveToBlock.y = 113
-  moveToBlock.movements = targets.movements
 
   const mineBlock = new BehaviorDigBlock(bot, targets)
   mineBlock.stateName = 'Mine Block'
@@ -68,7 +68,9 @@ function fillFunction(bot, targets) {
       },
       shouldTransition: () => {
         const block = bot.blockAt(targets.position.offset(0, 1, 0))
-        return (moveToBlock.isFinished() || moveToBlock.distanceToTarget() < 2.5) && blocksCanBeReplaced.includes(block.name)
+        return (moveToBlock.isFinished() || moveToBlock.distanceToTarget() < 2.5)
+          && blocksCanBeReplaced.includes(block.name)
+          && !bot.pathfinder.isMining()
       }
     }),
 

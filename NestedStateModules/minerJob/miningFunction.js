@@ -361,8 +361,8 @@ function miningFunction(bot, targets) {
         targets.position = targets.minerJob.mineBlock;
       },
       shouldTransition: () =>
-        (moveToBlock.isFinished() || moveToBlock.distanceToTarget() < 2.5) &&
-        !bot.pathfinder.isMining(),
+        (moveToBlock.isFinished() || moveToBlock.distanceToTarget() < 2.5)
+        && !bot.pathfinder.isMining(),
     }),
 
     new StateTransition({
