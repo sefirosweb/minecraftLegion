@@ -1,6 +1,6 @@
 module.exports = function (bot, targets) {
   const { findItemsInChests } = require("@modules/sorterJob")(bot);
-  const { getResumeInventory, getGenericItems } =
+  const { getResumeInventoryV2, getGenericItems } =
     require("@modules/inventoryModule")(bot);
 
   const getItemsToWithdrawInChests = (chests) => {
@@ -20,7 +20,7 @@ module.exports = function (bot, targets) {
   };
 
   const findChestsToWithdraw = (botChests, sharedChests) => {
-    const resumeInventory = getResumeInventory();
+    const resumeInventory = getResumeInventoryV2();
     const itemsToWithdrawInChests = getItemsToWithdrawInChests(botChests); // bsca que items hay que sacar
     const itemsToWithdraw = itemsToWithdrawInChests.reduce((returnData, i) => {
       // resta los items que hay que sacar - inventario
@@ -30,7 +30,7 @@ module.exports = function (bot, targets) {
       } else {
         invItem = resumeInventory.find((inv) => inv.name === i.item);
       }
-      i.quantity = invItem ? i.quantity - invItem.quantity : i.quantity;
+      i.quantity = invItem ? i.quantity - invItem.count : i.quantity;
       if (i.quantity > 0) returnData.push(i);
       return returnData;
     }, []);

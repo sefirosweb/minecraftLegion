@@ -112,8 +112,10 @@ module.exports = function (bot) {
 
 
   function getResumeInventoryV2() {
-    const items = bot.inventory.items().reduce((currentItems, slot) => {
+    const items = bot.inventory.slots.reduce((currentItems, slot) => {
       const newItems = [...currentItems]
+      if (slot === null) return newItems
+
       const itemSlot = {
         name: slot.name,
         type: slot.type,
@@ -134,8 +136,10 @@ module.exports = function (bot) {
   }
 
   function getResumeInventory() {
-    const items = bot.inventory.items().reduce((currentItems, slot) => {
+    const items = bot.inventory.slots.reduce((currentItems, slot) => {
       const newItems = [...currentItems]
+      if (slot === null) return newItems
+
       const itemSlot = {
         name: slot.name,
         type: slot.type,
