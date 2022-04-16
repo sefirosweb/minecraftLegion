@@ -67,6 +67,7 @@ function startWorkFunction (bot, targets) {
         targets.movements.allowSprinting = targets.config.allowSprinting
         targets.movements.canDig = targets.config.canDig
         targets.movements.allow1by1towers = targets.config.canPlaceBlocks
+        targets.movements.scafoldingBlocks = targets.config.canPlaceBlocks ? targets.movements.scafoldingBlocks : []
         targets.movements.blocksToAvoid.delete(mcData.blocksByName.wheat.id)
         targets.movements.blocksToAvoid.add(mcData.blocksByName.sweet_berry_bush.id)
         targets.movements.blocksCantBreak.add(mcData.blocksByName.sweet_berry_bush.id)
