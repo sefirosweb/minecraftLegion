@@ -10,6 +10,8 @@ module.exports = class template {
     this.equipHeldItem = require('@modules/inventoryModule')(bot).equipHeldItem
     this.calculateSideToPlaceBlock = require('@modules/minerModule')(bot, targets).calculateSideToPlaceBlock
     this.getNewPositionForPlaceBlock = require('@modules/placeBlockModule')(bot).getNewPositionForPlaceBlock
+    this.blocksCanBeReplaced = require('@modules/placeBlockModule')(bot).blocksCanBeReplaced
+    this.getPathToPlace = require('@modules/placeBlockModule')(bot).getPathToPlace
     this.place = require('@modules/placeBlockModule')(bot).place
 
     this.isEndFinished = false
@@ -47,6 +49,7 @@ module.exports = class template {
 
     this.sidesToPlaceBlock = this.calculateSideToPlaceBlock(this.targets.minerJob.mineBlock.clone())
 
+
     this.digBlock(this.targets.position)
       .then(() => this.placeBlocksBucle())
       .then(() => {
@@ -73,9 +76,7 @@ module.exports = class template {
 
       this.equipHeldItem(item.name)
         .then(() => this.place(newPosition, blockOffset))
-        .then(() => this.placeBlocksBucle())
         .then(resolve)
-        .catch(() => this.equipAndPlace(newPosition, blockOffset))
     })
   }
 
@@ -88,19 +89,39 @@ module.exports = class template {
       }
 
       const currentSideToPlaceBlock = this.sidesToPlaceBlock.shift()
-      const { newPosition, blockOffset } = this.getNewPositionForPlaceBlock(currentSideToPlaceBlock)
+      this.listPlaceBlocks = this.getPathToPlace(currentSideToPlaceBlock)
 
-      if (['kelp_plant'].includes(this.bot.blockAt(currentSideToPlaceBlock).name)) {
-        this.digBlock(currentSideToPlaceBlock)
-          .then(() => this.equipAndPlace(newPosition, blockOffset))
-          .then(resolve)
-          .catch(reject)
-        return
-      }
-
-      this.equipAndPlace(newPosition, blockOffset)
+      this.placeBlocks()
+        .then(() => this.placeBlocksBucle())
         .then(resolve)
         .catch(reject)
     })
   }
+
+  placeBlocks() {
+    return new Promise((resolve, reject) => {
+      if (this.listPlaceBlocks.length === 0) {
+        resolve()
+        return
+      }
+
+      const placeBlockTo = this.listPlaceBlocks.shift().position.clone()
+
+      const { newPosition, blockOffset } = this.getNewPositionForPlaceBlock(placeBlockTo)
+      if (!this.blocksCanBeReplaced.includes(this.bot.blockAt(placeBlockTo).name)) {
+        this.digBlock(placeBlockTo)
+          .then(() => this.equipAndPlace(newPosition, blockOffset))
+          .then(() => this.placeBlocks())
+          .then(resolve)
+          .catch(reject)
+      } else {
+        this.equipAndPlace(newPosition, blockOffset)
+          .then(() => this.placeBlocks())
+          .then(resolve)
+          .catch(reject)
+      }
+    })
+  }
+
+
 }
