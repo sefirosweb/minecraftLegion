@@ -85,7 +85,6 @@ function fillFunction(bot, targets) {
       child: moveToBlock,
       onTransition: () => {
         targets.position = targets.position ? targets.position : originalPosition
-        console.log(targets.position)
       },
       shouldTransition: () => true
     }),
