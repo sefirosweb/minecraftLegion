@@ -10,10 +10,11 @@ const BehaviorCustomPlaceBlock = require('@BehaviorModules/BehaviorCustomPlaceBl
 const BehaviorLoadConfig = require('@BehaviorModules/BehaviorLoadConfig')
 const BehaviorMoveTo = require('@BehaviorModules/BehaviorMoveTo')
 
+
 // let isDigging = false
 function fillFunction(bot, targets) {
   let placeBlock2Position
-  const { getNewPositionForPlaceBlock, blocksCanBeReplaced } = require('@modules/placeBlockModule')(bot)
+  const { getNewPositionForPlaceBlock, blocksCanBeReplaced, getPathToPlace } = require('@modules/placeBlockModule')(bot)
 
   const start = new BehaviorIdle(targets)
   start.stateName = 'Start'
@@ -63,6 +64,7 @@ function fillFunction(bot, targets) {
   loadConfig.y = 113
 
   let originalPosition = undefined
+  let listPlaceBlocks = []
 
   const transitions = [
     new StateTransition({
@@ -94,7 +96,10 @@ function fillFunction(bot, targets) {
       child: placeBlock2,
       name: 'if block is liquid',
       onTransition: () => {
-        const positionForPlaceBlock = getNewPositionForPlaceBlock(originalPosition)
+        listPlaceBlocks = getPathToPlace(originalPosition)
+        const currentPlaceBlock = listPlaceBlocks.shift()
+        const positionForPlaceBlock = getNewPositionForPlaceBlock(currentPlaceBlock.position)
+
         targets.position = positionForPlaceBlock.newPosition
         placeBlock2.setOffset(positionForPlaceBlock.blockOffset)
       },
@@ -128,7 +133,10 @@ function fillFunction(bot, targets) {
       name: 'mineBlock -> placeBlock1',
       onTransition: () => {
         placeBlock2Position = targets.position.clone()
-        const positionForPlaceBlock = getNewPositionForPlaceBlock(targets.position.offset(0, -1, 0))
+        listPlaceBlocks = getPathToPlace(targets.position.offset(0, -1, 0))
+        const currentPlaceBlock = listPlaceBlocks.shift()
+        const positionForPlaceBlock = getNewPositionForPlaceBlock(currentPlaceBlock.position)
+
         targets.position = positionForPlaceBlock.newPosition
         placeBlock1.setOffset(positionForPlaceBlock.blockOffset)
       },
