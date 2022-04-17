@@ -25,6 +25,12 @@ function fillFunction(bot, targets) {
   exit.x = 125
   exit.y = 313
 
+  const moveToCantSeeBlock = new BehaviorMoveTo(bot, targets)
+  moveToCantSeeBlock.stateName = 'Cant see block'
+  moveToCantSeeBlock.movements = targets.movements
+  moveToCantSeeBlock.x = 125
+  moveToCantSeeBlock.y = 213
+
   const findInteractPosition = new BehaviorFindInteractPosition(bot, targets)
   findInteractPosition.stateName = 'findInteractPosition'
   findInteractPosition.x = 325
@@ -61,6 +67,12 @@ function fillFunction(bot, targets) {
   const transitions = [
     new StateTransition({
       parent: start,
+      child: moveToCantSeeBlock,
+      shouldTransition: () => bot.blockAt(targets.position)
+    }),
+
+    new StateTransition({
+      parent: moveToCantSeeBlock,
       child: findInteractPosition,
       onTransition: () => {
         originalPosition = targets.position.clone()
@@ -72,6 +84,7 @@ function fillFunction(bot, targets) {
       parent: findInteractPosition,
       child: moveToBlock,
       onTransition: () => {
+        targets.position = targets.position ? targets.position : originalPosition
         console.log(targets.position)
       },
       shouldTransition: () => true
