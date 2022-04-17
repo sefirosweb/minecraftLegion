@@ -58,9 +58,13 @@ module.exports = class template {
       })
   }
 
+  getItemToPlace() {
+    return this.bot.inventory.items().find(item => this.targets.minerJob.blockForPlace.includes(item.name))
+  }
+
   equipAndPlace(newPosition, blockOffset) {
     return new Promise((resolve, reject) => {
-      const item = this.bot.inventory.items().find(item => this.targets.minerJob.blockForPlace.includes(item.name))
+      const item = getItemToPlace()
       if (!item) {
         this.outOfBlocks = true
         this.isEndFinished = true

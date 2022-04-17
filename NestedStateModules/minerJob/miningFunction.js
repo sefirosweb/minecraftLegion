@@ -310,7 +310,14 @@ function miningFunction(bot, targets) {
       parent: fillBlocks,
       child: checkLayer,
       name: "Finished fill block",
-      shouldTransition: () => fillBlocks.isFinished(),
+      shouldTransition: () => fillBlocks.isFinished() && digAndPlaceBlock.getItemToPlace(),
+    }),
+
+    new StateTransition({
+      parent: fillBlocks,
+      child: exit,
+      name: "Finished fill block",
+      shouldTransition: () => fillBlocks.isFinished() && !digAndPlaceBlock.getItemToPlace(),
     }),
 
     new StateTransition({
