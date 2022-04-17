@@ -2,7 +2,7 @@ const botWebsocket = require('@modules/botWebsocket')
 const Vec3 = require('vec3')
 
 module.exports = class BehaviorMinerCheckLayer {
-  constructor (bot, targets) {
+  constructor(bot, targets) {
     this.bot = bot
     this.targets = targets
     this.stateName = 'BehaviorMinerCheckLayer'
@@ -16,15 +16,15 @@ module.exports = class BehaviorMinerCheckLayer {
     this.floorBlocksToFind = ['air', 'cave_air']
   }
 
-  isFinished () {
+  isFinished() {
     return this.isEndFinished
   }
 
-  getFoundLavaOrWater () {
+  getFoundLavaOrWater() {
     return this.foundLavaOrWater
   }
 
-  onStateEntered () {
+  onStateEntered() {
     this.foundLavaOrWater = false
     this.isEndFinished = false
 
@@ -34,7 +34,7 @@ module.exports = class BehaviorMinerCheckLayer {
     }
   }
 
-  onStateExited () {
+  onStateExited() {
     // Reset positions for cehck again all blocks
     const stone = this.checkStoneInInventory()
     if (stone === undefined) {
@@ -49,11 +49,11 @@ module.exports = class BehaviorMinerCheckLayer {
     this.startBlock()
   }
 
-  checkStoneInInventory () {
+  checkStoneInInventory() {
     return this.bot.inventory.items().find(item => this.targets.minerJob.blockForPlace.includes(item.name))
   }
 
-  checkArea () {
+  checkArea() {
     if (
       this.yCurrent === this.yEnd &&
       this.zCurrent === this.zEnd &&
@@ -103,7 +103,7 @@ module.exports = class BehaviorMinerCheckLayer {
     }
   }
 
-  xNext () {
+  xNext() {
     if (this.xCurrent === this.xEnd) {
       const temp = this.xEnd
       this.xEnd = this.xStart
@@ -123,11 +123,11 @@ module.exports = class BehaviorMinerCheckLayer {
     }
   }
 
-  yNext () {
+  yNext() {
     this.yCurrent--
   }
 
-  zNext () {
+  zNext() {
     if (this.zCurrent === this.zEnd) {
       const temp = this.zEnd
       this.zEnd = this.zStart
@@ -151,19 +151,19 @@ module.exports = class BehaviorMinerCheckLayer {
     }
   }
 
-  getBlockType () {
+  getBlockType() {
     const position = new Vec3(this.xCurrent, this.yCurrent, this.zCurrent)
     return this.bot.blockAt(position)
   }
 
-  setMinerCords (minerCords) {
+  setMinerCords(minerCords) {
     this.isLayerFinished = false
     this.firstBlockOnLayer = true
     this.minerCords = minerCords
     this.startBlock()
   }
 
-  startBlock () {
+  startBlock() {
     this.yStart = parseInt(this.minerCords.yStart) > parseInt(this.minerCords.yEnd) ? parseInt(this.minerCords.yStart) : parseInt(this.minerCords.yEnd)
     this.yEnd = parseInt(this.minerCords.yStart) > parseInt(this.minerCords.yEnd) ? parseInt(this.minerCords.yEnd) : parseInt(this.minerCords.yStart)
 
