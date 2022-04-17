@@ -64,7 +64,7 @@ module.exports = class template {
 
   equipAndPlace(newPosition, blockOffset) {
     return new Promise((resolve, reject) => {
-      const item = getItemToPlace()
+      const item = this.getItemToPlace()
       if (!item) {
         this.outOfBlocks = true
         this.isEndFinished = true
