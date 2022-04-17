@@ -60,8 +60,8 @@ function miningFunction(bot, targets) {
 
   const finishedJob = new BehaviorIdle(targets);
   finishedJob.stateName = "Finished Job";
-  finishedJob.x = 125;
-  finishedJob.y = 113;
+  finishedJob.x = 525;
+  finishedJob.y = 13;
 
   const loadConfig = new BehaviorLoadConfig(bot, targets);
   loadConfig.stateName = "Load Bot Config";
