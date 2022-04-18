@@ -9,7 +9,7 @@ const {
 } = require('mineflayer-statemachine')
 const botConfig = require('@modules/botConfig')
 const botWebsocket = require('@modules/botWebsocket')
-const masters = botWebsocket.getMasters()
+
 
 function commandsFunction (bot, targets) {
   const start = new BehaviorIdle(targets)
@@ -201,6 +201,7 @@ function commandsFunction (bot, targets) {
   }
 
   function botChatCommandFunctionListener (username, message) {
+    const masters = botWebsocket.getMasters()
     const findMaster = masters.find(e => e.name === username)
 
     if (findMaster === undefined) {
