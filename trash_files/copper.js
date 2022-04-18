@@ -8,7 +8,7 @@ if (process.argv.length < 2 || process.argv.length > 6) {
 
 const bot = mineflayer.createBot({
   host: process.argv[2] ? process.argv[2] : "host.docker.internal",
-  port: process.argv[3] ? parseInt(process.argv[3]) : 54500,
+  port: process.argv[3] ? parseInt(process.argv[3]) : 53989,
   username: process.argv[4] ? process.argv[4] : "copper",
   password: process.argv[5],
 });
@@ -36,6 +36,12 @@ bot.once('spawn', () => {
   setTimeout(() => {
     digBlock()
   }, 2000)
+})
+
+let mcData
+bot.once('inject_allowed', () => {
+  mcData = require('minecraft-data')(bot.version)
+  mcData.blocksArray[826].hardness = 3
 })
 
 function digBlock() {
