@@ -42,6 +42,7 @@ let mcData
 bot.once('inject_allowed', () => {
   mcData = require('minecraft-data')(bot.version)
   mcData.blocksArray[826].hardness = 3
+  mcData.blocksArray[826].resistance = 6
 })
 
 function digBlock() {
