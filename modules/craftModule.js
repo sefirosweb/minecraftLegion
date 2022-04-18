@@ -177,6 +177,7 @@ module.exports = function (bot) {
     let i;
     let recipesFound = itemsToCraft.length;
     let needCraftingTable = false;
+    let haveMaterials = true;
 
     for (i = 0; i < itemsToCraft.length; i++) {
       itemToCraft = itemsToCraft[i];
@@ -204,6 +205,14 @@ module.exports = function (bot) {
 
       sharedChests = resultItemToPickup.sharedChests;
       resumeInventory = resultItemToPickup.resumeInventory;
+
+      if (haveMaterials) {
+        haveMaterials = "all";
+      } else if (!haveMaterials && i === 0) {
+        haveMaterials = "none";
+      } else {
+        haveMaterials = "some";
+      }
     }
 
     return {
@@ -211,6 +220,7 @@ module.exports = function (bot) {
       needCraftingTable,
       itemToPickup: allItemsToPickUp,
       repicesUsed: allRecpiesUsed,
+      haveMaterials
     };
   };
 

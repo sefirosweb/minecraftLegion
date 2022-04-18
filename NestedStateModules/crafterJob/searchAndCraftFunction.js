@@ -111,7 +111,7 @@ function searchAndCraftFunction(bot, targets) {
     new StateTransition({
       parent: checkMaterials,
       child: exit,
-      shouldTransition: () => itemsToPickUpBatch.itemToPickup.length === 0,
+      shouldTransition: () => itemsToPickUpBatch.itemToPickup.length === 0 && itemsToPickUpBatch.haveMaterials !== 'all',
     }),
 
     new StateTransition({
@@ -120,7 +120,7 @@ function searchAndCraftFunction(bot, targets) {
       onTransition: () => {
         targets.pickUpItems = itemsToPickUpBatch.itemToPickup;
       },
-      shouldTransition: () => itemsToPickUpBatch.itemToPickup.length > 0,
+      shouldTransition: () => itemsToPickUpBatch.itemToPickup.length > 0 || itemsToPickUpBatch.haveMaterials === 'all',
     }),
 
     new StateTransition({
