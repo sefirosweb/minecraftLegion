@@ -49,6 +49,7 @@ module.exports = class BehaviorTransactionBetweenInventoryChest {
               .then(() => {
                 resolve()
               })
+              .catch(reject)
           }, this.speed)
         })
     })
