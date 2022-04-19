@@ -119,6 +119,7 @@ function commandsFunction(bot, targets) {
     transitions[0].trigger()
     transitions[1].trigger()
     transitions[2].trigger()
+    targets.entity = undefined
   }
 
   botWebsocket.on('action', toBotData => {
