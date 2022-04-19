@@ -146,13 +146,13 @@ function miningFunction(bot, targets) {
 
 
     if (tunel === 'horizontally') {
-      if (orientation === 'z+') newMineCords.zStart++
-      if (orientation === 'z-') newMineCords.zEnd--
-      if (orientation === 'x+') newMineCords.xStart++
-      if (orientation === 'x-') newMineCords.xEnd--
+      if (orientation === 'z+' && newMineCords.zStart < newMineCords.zEnd) newMineCords.zStart++
+      if (orientation === 'z-' && newMineCords.zStart < newMineCords.zEnd) newMineCords.zEnd--
+      if (orientation === 'x+' && newMineCords.xStart < newMineCords.xEnd) newMineCords.xStart++
+      if (orientation === 'x-' && newMineCords.xStart < newMineCords.xEnd) newMineCords.xEnd--
     }
 
-    if (tunel === 'vertically') {
+    if (tunel === 'vertically' && newMineCords.yStart < newMineCords.yEnd) {
       newMineCords.yEnd--
     }
 
@@ -359,7 +359,10 @@ function miningFunction(bot, targets) {
       parent: currentBlock,
       child: nextLayer,
       name: "Finished chunk",
-      onTransition: () => saveCurrentLayer(),
+      onTransition: () => {
+        saveCurrentLayer()
+        nextLayer.next()
+      },
       shouldTransition: () => currentBlock.getLayerIsFinished(),
     }),
 
