@@ -1,7 +1,8 @@
 const vec3 = require('vec3')
 
 module.exports = function (bot) {
-  const blocksCanBeReplaced = ['air', 'cave_air', 'lava', 'water', 'seagrass', 'tall_seagrass', 'kelp', 'kelp_plant']
+  const blocksCanBeReplaced = ['air', 'cave_air', 'lava', 'water', 'seagrass', 'tall_seagrass', 'kelp_plant']
+  const blocksToBeRplaced = ['kelp'].concat(blocksCanBeReplaced)
   let isJumping
 
   const getNewPositionForPlaceBlock = (position) => {
@@ -172,6 +173,7 @@ module.exports = function (bot) {
     getNewPositionForPlaceBlock,
     getOffsetPlaceBlock,
     blocksCanBeReplaced,
+    blocksToBeRplaced,
     getPathToPlace,
     place
   }
