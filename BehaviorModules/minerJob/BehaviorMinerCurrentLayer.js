@@ -53,10 +53,24 @@ module.exports = class BehaviorMinerCurrentLayer {
   }
 
   onStateEntered() {
-    if (this.currentLayer < this.endLayer) {
+    if (this.minerCords.tunel === 'vertically' && this.currentLayer < this.endLayer)
       this.isEndFinished = true
-      botWebsocket.log('Finished all layers')
-    }
+
+    if (this.minerCords.tunel === 'horizontally' && this.currentLayer < this.endLayer &&
+      (
+        this.minerCords.orientation === 'z-' ||
+        this.minerCords.orientation === 'x-'
+      )
+    )
+      this.isEndFinished = true
+
+    if (this.minerCords.tunel === 'horizontally' && this.currentLayer > this.endLayer &&
+      (
+        this.minerCords.orientation === 'z+' ||
+        this.minerCords.orientation === 'x+'
+      )
+    )
+      this.isEndFinished = true
   }
 
   next() {
