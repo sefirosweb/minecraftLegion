@@ -11,7 +11,7 @@ const botConfig = require('@modules/botConfig')
 const botWebsocket = require('@modules/botWebsocket')
 
 
-function commandsFunction (bot, targets) {
+function commandsFunction(bot, targets) {
   const start = new BehaviorIdle(targets)
   start.stateName = 'Start'
   start.x = 125
@@ -92,12 +92,12 @@ function commandsFunction (bot, targets) {
     })
   ]
 
-  function stayTrigger () {
+  function stayTrigger() {
     transitions[4].trigger()
     transitions[5].trigger()
   }
 
-  function followTrigger (master) {
+  function followTrigger(master) {
     const filter = e => e.type === 'player' &&
       e.username === master &&
       e.mobType !== 'Armor Stand'
@@ -114,7 +114,7 @@ function commandsFunction (bot, targets) {
     transitions[3].trigger()
   }
 
-  function endCommandsTrigger () {
+  function endCommandsTrigger() {
     bot.removeListener('customEventChat', botChatCommandFunctionListener)
     transitions[0].trigger()
     transitions[1].trigger()
@@ -200,7 +200,7 @@ function commandsFunction (bot, targets) {
     pathfinder.setGoal(goal)
   }
 
-  function botChatCommandFunctionListener (username, message) {
+  function botChatCommandFunctionListener(username, message) {
     const masters = botWebsocket.getMasters()
     const findMaster = masters.find(e => e.name === username)
 
@@ -219,6 +219,9 @@ function commandsFunction (bot, targets) {
         break
       case (message === 'stay'):
         stayTrigger()
+        break
+      case (message === 'pos'):
+        bot.chat(bot.game.dimension + ' ' + bot.entity.position.floored().toString())
         break
       default:
         if (message.match(/set job.*/)) {
@@ -267,7 +270,7 @@ function commandsFunction (bot, targets) {
 
   let patrol = []
 
-  function saveMiner (coords) {
+  function saveMiner(coords) {
     if (coords.length !== 10) {
       // bot.chat('The coords is wrong')
       return false
@@ -287,7 +290,7 @@ function commandsFunction (bot, targets) {
     // bot.chat('Lets made a tunel!')
   }
 
-  function dropAll () {
+  function dropAll() {
     const excludedItems = ['fishing_rod']
     const item = bot.inventory.items().find(item => !excludedItems.includes(item.name))
     if (item) {
@@ -302,7 +305,7 @@ function commandsFunction (bot, targets) {
     }
   }
 
-  async function findBed () {
+  async function findBed() {
     const bed = bot.findBlock({
       matching: block => bot.isABed(block),
       maxDistance: 3
@@ -330,7 +333,7 @@ function commandsFunction (bot, targets) {
     }
   }
 
-  function saveJob (job) {
+  function saveJob(job) {
     switch (true) {
       case (job === 'guard'):
       case (job === 'archer'):
@@ -345,7 +348,7 @@ function commandsFunction (bot, targets) {
     }
   }
 
-  function saveMode (mode) {
+  function saveMode(mode) {
     switch (true) {
       case (mode === 'none'):
       case (mode === 'pvp'):
@@ -359,7 +362,7 @@ function commandsFunction (bot, targets) {
     }
   }
 
-  function saveHelp (mode) {
+  function saveHelp(mode) {
     switch (true) {
       case (mode === 'true'):
         // bot.chat('I will defend my friends')
@@ -375,7 +378,7 @@ function commandsFunction (bot, targets) {
     }
   }
 
-  function saveDistance (distance) {
+  function saveDistance(distance) {
     distance = parseInt(distance)
     if (!isNaN(distance)) {
       // bot.chat('I take a look!')
@@ -388,7 +391,7 @@ function commandsFunction (bot, targets) {
   let prevPoint
   let distancePatrol
 
-  function nextPointListener (point) {
+  function nextPointListener(point) {
     if (point.distanceTo(prevPoint) > distancePatrol) {
       patrol.push(point)
       prevPoint = point
@@ -396,7 +399,7 @@ function commandsFunction (bot, targets) {
     }
   }
 
-  function startGetPoints (distance = 2) {
+  function startGetPoints(distance = 2) {
     distance = parseInt(distance)
     if (isNaN(distance)) {
       // bot.chat('I dont understood the distance')
@@ -415,7 +418,7 @@ function commandsFunction (bot, targets) {
     bot.on('customEventMove', nextPointListener)
   }
 
-  function savePatrol () {
+  function savePatrol() {
     bot.removeListener('customEventMove', nextPointListener)
     botConfig.setPatrol(bot.username, patrol)
     // bot.chat('Ok, I memorized the patrol')
