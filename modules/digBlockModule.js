@@ -3,10 +3,9 @@ module.exports = function (bot) {
   const startDig = (block) => {
     return new Promise((resolve, reject) => {
       bot.dig(block)
-        .then(() => {
-          resolve()
-        })
-        .catch(function (e) {
+        .then(resolve)
+        .catch((e) => {
+          bot.stopDigging()
           reject(e)
         })
     })
@@ -21,18 +20,9 @@ module.exports = function (bot) {
       }
 
       equipToolForBlock(block)
-        .then(() => {
-          startDig(block)
-            .then(() => {
-              resolve()
-            })
-            .catch((e) => {
-              reject(e)
-            })
-        })
-        .catch(function (err) {
-          reject(err)
-        })
+        .then(() => startDig(block))
+        .then(resolve)
+        .catch(reject)
     })
   }
 
@@ -52,9 +42,7 @@ module.exports = function (bot) {
       }
 
       bot.equip(tool, 'hand')
-        .then(() => {
-          resolve()
-        })
+        .then(resolve)
         .catch(() => {
           reject(new Error('Error on equip tool'))
         })
