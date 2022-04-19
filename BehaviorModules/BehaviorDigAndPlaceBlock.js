@@ -65,7 +65,7 @@ module.exports = class template {
     return this.bot.inventory.items().find(item => this.targets.minerJob.blockForPlace.includes(item.name))
   }
 
-  equipAndPlace(newPosition, blockOffset) {
+  equipAndPlace(placeBlockTo, newPosition, blockOffset) {
     return new Promise((resolve, reject) => {
       const item = this.getItemToPlace()
       if (!item) {
@@ -74,11 +74,23 @@ module.exports = class template {
         return
       }
 
-      this.equipHeldItem(item.name)
-        .then(() => this.place(newPosition, blockOffset))
-        .then(resolve)
+      const block = this.bot.blockAt(placeBlockTo)
+
+      if (block.name === 'kelp') {
+        this.digBlock(placeBlockTo)
+          .then(() => this.equipHeldItem(item.name))
+          .then(() => this.place(newPosition, blockOffset))
+          .then(resolve)
+      } else {
+        this.equipHeldItem(item.name)
+          .then(() => this.place(newPosition, blockOffset))
+          .then(resolve)
+      }
+
     })
   }
+
+
 
   placeBlocksBucle() {
     return new Promise((resolve, reject) => {
@@ -110,12 +122,12 @@ module.exports = class template {
       const { newPosition, blockOffset } = this.getNewPositionForPlaceBlock(placeBlockTo)
       if (!this.blocksCanBeReplaced.includes(this.bot.blockAt(placeBlockTo).name)) {
         this.digBlock(placeBlockTo)
-          .then(() => this.equipAndPlace(newPosition, blockOffset))
+          .then(() => this.equipAndPlace(placeBlockTo, newPosition, blockOffset))
           .then(() => this.placeBlocks())
           .then(resolve)
           .catch(reject)
       } else {
-        this.equipAndPlace(newPosition, blockOffset)
+        this.equipAndPlace(placeBlockTo, newPosition, blockOffset)
           .then(() => this.placeBlocks())
           .then(resolve)
           .catch(reject)
