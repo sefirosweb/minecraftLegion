@@ -1,7 +1,7 @@
 const botWebsocket = require('@modules/botWebsocket')
 
 module.exports = class BehaviorCustomPlaceBlock {
-  constructor (bot, targets, canJump = true) {
+  constructor(bot, targets, canJump = true) {
     this.bot = bot
     this.targets = targets
     this.stateName = 'Custom BehaviorPlaceBlock '
@@ -15,34 +15,34 @@ module.exports = class BehaviorCustomPlaceBlock {
     this.canJump = canJump
   }
 
-  isFinished () {
+  isFinished() {
     return this.isEndFinished
   }
 
-  isItemNotFound () {
+  isItemNotFound() {
     return this.itemNotFound
   }
 
-  isCantPlaceBlock () {
+  isCantPlaceBlock() {
     return this.cantPlaceBlock
   }
 
-  setCanJump (canJump) {
+  setCanJump(canJump) {
     this.canJump = canJump
   }
 
-  setOffset (offset) {
+  setOffset(offset) {
     this.offset = offset
   }
 
-  onStateExited () {
+  onStateExited() {
     this.isEndFinished = false
     this.itemNotFound = false
     this.cantPlaceBlock = false
     clearTimeout(this.timeLimit)
   }
 
-  onStateEntered () {
+  onStateEntered() {
     this.timeLimit = setTimeout(() => {
       botWebsocket.log('Time exceded for place item')
       this.isEndFinished = true
