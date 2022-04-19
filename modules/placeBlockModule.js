@@ -1,7 +1,7 @@
 const vec3 = require('vec3')
 
 module.exports = function (bot) {
-  const blocksCanBeReplaced = ['air', 'cave_air', 'lava', 'water', 'seagrass', 'tall_seagrass', 'kelp_plant']
+  const blocksCanBeReplaced = ['air', 'cave_air', 'lava', 'water', 'seagrass', 'tall_seagrass', 'kelp', 'kelp_plant']
   let isJumping
 
   const getNewPositionForPlaceBlock = (position) => {
@@ -32,13 +32,11 @@ module.exports = function (bot) {
 
     const positionsToPlaceBlocks = []
     let currentParent = result.parent
-    do{
-
+    do {
       const positionToplaceBlock = positions_checked[currentParent]
       positionsToPlaceBlocks.push(positionToplaceBlock)
       currentParent = positionToplaceBlock.parent
-
-    }while(currentParent !== null)
+    } while (currentParent !== null)
 
     return positionsToPlaceBlocks
   }
