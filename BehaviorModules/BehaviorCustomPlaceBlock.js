@@ -5,7 +5,7 @@ module.exports = class BehaviorCustomPlaceBlock {
     this.bot = bot
     this.targets = targets
     this.stateName = 'Custom BehaviorPlaceBlock '
-    this.blockCanBeReplaced = require('@modules/placeBlockModule')(bot).blocksCanBeReplaced
+    this.blocksCanBeReplaced = require('@modules/placeBlockModule')(bot).blocksCanBeReplaced
     this.equipHeldItem = require('@modules/inventoryModule')(bot).equipHeldItem
     this.place = require('@modules/placeBlockModule')(bot).place
     this.digBlock = require('@modules/digBlockModule')(bot).digBlock
@@ -80,7 +80,7 @@ module.exports = class BehaviorCustomPlaceBlock {
       return
     }
 
-    if (!this.blockCanBeReplaced.includes(block.name)) {
+    if (!this.blocksCanBeReplaced.includes(block.name)) {
       if (this.canReplaceBlock) {
         this.digBlock(block.position)
           .then(() => this.placeBlock())
