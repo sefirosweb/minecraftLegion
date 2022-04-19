@@ -143,6 +143,15 @@ function miningFunction(bot, targets) {
     const orientation = targets.config.minerCords.orientation
     const world = targets.config.minerCords.world
     const newMineCords = { ...targets.minerJob.original }
+    
+    newMineCords.xStart = parseInt(newMineCords.xStart)
+    newMineCords.xEnd = parseInt(newMineCords.xEnd)
+
+    newMineCords.yStart = parseInt(newMineCords.yStart)
+    newMineCords.yEnd = parseInt(newMineCords.yEnd)
+    
+    newMineCords.zStart = parseInt(newMineCords.zStart)
+    newMineCords.zEnd = parseInt(newMineCords.zEnd)
 
 
     if (tunel === 'horizontally') {
