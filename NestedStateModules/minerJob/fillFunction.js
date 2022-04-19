@@ -166,7 +166,7 @@ function fillFunction(bot, targets) {
   ]
 
   const fillFunction = new NestedStateMachine(transitions, start, exit)
-  fillFunction.stateName = 'Fill Water & Lava'
+  fillFunction.stateName = 'fillFunction'
   return fillFunction
 }
 

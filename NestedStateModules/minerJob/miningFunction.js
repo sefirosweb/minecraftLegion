@@ -124,6 +124,7 @@ function miningFunction(bot, targets) {
   eatFood.y = 363;
 
   const fillBlocks = require("@NestedStateModules/minerJob/fillFunction")(bot, targets);
+  fillBlocks.stateName = 'Fill Water & Lava'
   fillBlocks.x = 350;
   fillBlocks.y = 313;
 
