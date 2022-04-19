@@ -5,11 +5,13 @@ const {
 } = require("mineflayer-statemachine");
 
 const BehaviorLoadConfig = require("@BehaviorModules/BehaviorLoadConfig");
-const BehaviorMinerCheckLayer = require("@BehaviorModules/BehaviorMinerCheckLayer");
-const BehaviorMinerCurrentLayer = require("@BehaviorModules/BehaviorMinerCurrentLayer");
-const BehaviorMinerCurrentBlock = require("@BehaviorModules/BehaviorMinerCurrentBlock");
+
+const BehaviorMinerCheckLayer = require("@BehaviorModules/minerJob/BehaviorMinerCheckLayer");
+const BehaviorMinerCurrentLayer = require("@BehaviorModules/minerJob/BehaviorMinerCurrentLayer");
+const BehaviorMinerCurrentBlock = require("@BehaviorModules/minerJob/BehaviorMinerCurrentBlock");
+const BehaviorMinerChecks = require("@BehaviorModules/minerJob/BehaviorMinerChecks");
+
 const BehaviorDigBlock = require("@BehaviorModules/BehaviorDigBlock");
-const BehaviorMinerChecks = require("@BehaviorModules/BehaviorMinerChecks");
 const BehaviorEatFood = require("@BehaviorModules/BehaviorEatFood");
 const BehaviorMoveTo = require("@BehaviorModules/BehaviorMoveTo");
 const BehaviorDigAndPlaceBlock = require("@BehaviorModules/BehaviorDigAndPlaceBlock");
@@ -269,7 +271,7 @@ function miningFunction(bot, targets) {
         movingWhile(bot, nextCurrentLayer, targets.movements);
         checkLayer.setMinerCords(nextCurrentLayer);
       },
-      shouldTransition: () => true,
+      shouldTransition: () => !nextLayer.isFinished(),
     }),
 
     new StateTransition({
