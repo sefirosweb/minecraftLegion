@@ -10,7 +10,6 @@ module.exports = class BehaviorMinerCheckLayer {
     this.isEndFinished = false
     this.minerCords = false
     this.foundLavaOrWater = false
-    this.firstBlockOnLayer = true
 
     this.blocksToFind = ['lava', 'water', 'seagrass', 'tall_seagrass', 'kelp_plant']
     this.floorBlocksToFind = ['air', 'cave_air']
@@ -143,15 +142,11 @@ module.exports = class BehaviorMinerCheckLayer {
         this.yNext()
       }
     } else {
-      if (this.firstBlockOnLayer) {
-        this.firstBlockOnLayer = false
-      } else {
         if (this.zStart < this.zEnd) {
           this.zCurrent++
         } else {
           this.zCurrent--
         }
-      }
     }
   }
 
@@ -162,7 +157,6 @@ module.exports = class BehaviorMinerCheckLayer {
 
   setMinerCords(minerCords) {
     this.isLayerFinished = false
-    this.firstBlockOnLayer = true
     this.minerCords = minerCords
     this.startBlock()
   }
