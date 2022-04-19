@@ -12,7 +12,7 @@ module.exports = class BehaviorMinerCheckLayer {
     this.foundLavaOrWater = false
     this.firstBlockOnLayer = true
 
-    this.blocksToFind = ['lava', 'water']
+    this.blocksToFind = ['lava', 'water', 'seagrass', 'tall_seagrass', 'kelp_plant']
     this.floorBlocksToFind = ['air', 'cave_air']
   }
 
@@ -60,46 +60,50 @@ module.exports = class BehaviorMinerCheckLayer {
       this.xCurrent === this.xEnd
     ) {
       return false
-    } else {
-      if (this.minerCords.orientation === 'z-' || this.minerCords.orientation === 'z+') {
-        this.zNext()
-      }
-      if (this.minerCords.orientation === 'x+' || this.minerCords.orientation === 'x-') {
-        this.xNext()
-      }
+    }
 
-      // 4 extreme position => omit
-      if (
-        this.minerCords.tunel === 'vertically' &&
-        (
-          (this.xCurrent === this.xEnd && this.zCurrent === this.zEnd) ||
-          (this.xCurrent === this.xStart && this.zCurrent === this.zStart) ||
-          (this.xCurrent === this.xEnd && this.zCurrent === this.zStart) ||
-          (this.xCurrent === this.xStart && this.zCurrent === this.zEnd)
-        )
-      ) {
-        return this.checkArea()
-      }
+    this.next();
 
-      const block = this.getBlockType()
-      if (
-        block &&
-        (
-          this.blocksToFind.includes(block.name) ||
-          (
-            this.floorBlocksToFind.includes(block.name) &&
-            this.minerCords.tunel === 'horizontally' &&
-            (this.minerCords.yStart - 1) === this.yCurrent
-          )
-        )
-      ) {
-        botWebsocket.log(`Found: ${block.name} on X:${this.xCurrent} Y:${this.yCurrent} Z:${this.zCurrent}`)
-        this.targets.position = block.position
-        this.foundLavaOrWater = true
-        return true
-      }
-
+    if (
+      this.minerCords.tunel === 'vertically' &&
+      (
+        (this.xCurrent === this.xEnd && this.zCurrent === this.zEnd) ||
+        (this.xCurrent === this.xStart && this.zCurrent === this.zStart) ||
+        (this.xCurrent === this.xEnd && this.zCurrent === this.zStart) ||
+        (this.xCurrent === this.xStart && this.zCurrent === this.zEnd)
+      )
+    ) {
       return this.checkArea()
+    }
+
+    const block = this.getBlockType()
+    if (
+      block &&
+      (
+        this.blocksToFind.includes(block.name) ||
+        (
+          this.floorBlocksToFind.includes(block.name) &&
+          this.minerCords.tunel === 'horizontally' &&
+          (this.minerCords.yStart - 1) === this.yCurrent
+        )
+      )
+    ) {
+      botWebsocket.log(`Found: ${block.name} on X:${this.xCurrent} Y:${this.yCurrent} Z:${this.zCurrent}`)
+      this.targets.position = block.position
+      this.foundLavaOrWater = true
+      return true
+    }
+
+    return this.checkArea()
+
+  }
+
+  next() {
+    if (this.minerCords.orientation === 'z-' || this.minerCords.orientation === 'z+') {
+      this.zNext()
+    }
+    if (this.minerCords.orientation === 'x+' || this.minerCords.orientation === 'x-') {
+      this.xNext()
     }
   }
 
