@@ -87,7 +87,6 @@ module.exports = class BehaviorMinerCheckLayer {
         )
       )
     ) {
-      botWebsocket.log(`Found: ${block.name} on X:${this.xCurrent} Y:${this.yCurrent} Z:${this.zCurrent}`)
       this.targets.position = block.position
       this.foundLavaOrWater = true
       return true
@@ -142,11 +141,11 @@ module.exports = class BehaviorMinerCheckLayer {
         this.yNext()
       }
     } else {
-        if (this.zStart < this.zEnd) {
-          this.zCurrent++
-        } else {
-          this.zCurrent--
-        }
+      if (this.zStart < this.zEnd) {
+        this.zCurrent++
+      } else {
+        this.zCurrent--
+      }
     }
   }
 
@@ -170,11 +169,37 @@ module.exports = class BehaviorMinerCheckLayer {
       this.yEnd--
     }
 
+
     this.xStart = parseInt(this.minerCords.xStart) > parseInt(this.minerCords.xEnd) ? parseInt(this.minerCords.xStart) : parseInt(this.minerCords.xEnd)
     this.xEnd = parseInt(this.minerCords.xStart) > parseInt(this.minerCords.xEnd) ? parseInt(this.minerCords.xEnd) : parseInt(this.minerCords.xStart)
 
-    this.zStart = parseInt(this.minerCords.zStart) > parseInt(this.minerCords.zEnd) ? parseInt(this.minerCords.zStart) : parseInt(this.minerCords.zEnd)
-    this.zEnd = parseInt(this.minerCords.zStart) > parseInt(this.minerCords.zEnd) ? parseInt(this.minerCords.zEnd) : parseInt(this.minerCords.zStart)
+    switch (true) {
+      case this.minerCords.orientation === 'x+':
+        this.xStart = parseInt(this.minerCords.xStart) > parseInt(this.minerCords.xEnd) ? parseInt(this.minerCords.xStart) : parseInt(this.minerCords.xEnd)
+        this.xEnd = parseInt(this.minerCords.xStart) > parseInt(this.minerCords.xEnd) ? parseInt(this.minerCords.xEnd) : parseInt(this.minerCords.xStart)
+        this.zStart = parseInt(this.minerCords.zStart) > parseInt(this.minerCords.zEnd) ? parseInt(this.minerCords.zStart) : parseInt(this.minerCords.zEnd)
+        this.zEnd = parseInt(this.minerCords.zStart) > parseInt(this.minerCords.zEnd) ? parseInt(this.minerCords.zEnd) : parseInt(this.minerCords.zStart)
+        break
+      case this.minerCords.orientation === 'x-':
+        this.xStart = parseInt(this.minerCords.xStart) < parseInt(this.minerCords.xEnd) ? parseInt(this.minerCords.xStart) : parseInt(this.minerCords.xEnd)
+        this.xEnd = parseInt(this.minerCords.xStart) < parseInt(this.minerCords.xEnd) ? parseInt(this.minerCords.xEnd) : parseInt(this.minerCords.xStart)
+        this.zStart = parseInt(this.minerCords.zStart) < parseInt(this.minerCords.zEnd) ? parseInt(this.minerCords.zStart) : parseInt(this.minerCords.zEnd)
+        this.zEnd = parseInt(this.minerCords.zStart) < parseInt(this.minerCords.zEnd) ? parseInt(this.minerCords.zEnd) : parseInt(this.minerCords.zStart)
+        break
+      case this.minerCords.orientation === 'z+':
+        this.xStart = parseInt(this.minerCords.xStart) > parseInt(this.minerCords.xEnd) ? parseInt(this.minerCords.xStart) : parseInt(this.minerCords.xEnd)
+        this.xEnd = parseInt(this.minerCords.xStart) > parseInt(this.minerCords.xEnd) ? parseInt(this.minerCords.xEnd) : parseInt(this.minerCords.xStart)
+        this.zStart = parseInt(this.minerCords.zStart) < parseInt(this.minerCords.zEnd) ? parseInt(this.minerCords.zStart) : parseInt(this.minerCords.zEnd)
+        this.zEnd = parseInt(this.minerCords.zStart) < parseInt(this.minerCords.zEnd) ? parseInt(this.minerCords.zEnd) : parseInt(this.minerCords.zStart)
+        break
+      case this.minerCords.orientation === 'z-':
+        this.xStart = parseInt(this.minerCords.xStart) < parseInt(this.minerCords.xEnd) ? parseInt(this.minerCords.xStart) : parseInt(this.minerCords.xEnd)
+        this.xEnd = parseInt(this.minerCords.xStart) < parseInt(this.minerCords.xEnd) ? parseInt(this.minerCords.xEnd) : parseInt(this.minerCords.xStart)
+        this.zStart = parseInt(this.minerCords.zStart) > parseInt(this.minerCords.zEnd) ? parseInt(this.minerCords.zStart) : parseInt(this.minerCords.zEnd)
+        this.zEnd = parseInt(this.minerCords.zStart) > parseInt(this.minerCords.zEnd) ? parseInt(this.minerCords.zEnd) : parseInt(this.minerCords.zStart)
+        break
+    }
+
 
     if (this.minerCords.tunel === 'vertically') {
       if (this.xStart > this.xEnd) {
