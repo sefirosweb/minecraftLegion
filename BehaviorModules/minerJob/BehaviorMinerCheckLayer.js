@@ -11,7 +11,7 @@ module.exports = class BehaviorMinerCheckLayer {
     this.minerCords = false
     this.foundLavaOrWater = false
 
-    this.blocksToFind = ['lava', 'water', 'seagrass', 'tall_seagrass', 'kelp_plant']
+    this.blocksToFind = ['lava', 'water', 'seagrass', 'tall_seagrass', 'kelp', 'kelp_plant']
     this.floorBlocksToFind = ['air', 'cave_air']
   }
 
