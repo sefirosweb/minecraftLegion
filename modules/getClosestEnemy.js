@@ -32,17 +32,17 @@ module.exports = function (bot, targets) {
 
     if (entities.length > 0) {
       const entity = entities[currentEntity]
-      const validPath = getValidPath(entity)
-      if (validPath) {
+      // const validPath = getValidPath(entity)
+      // if (validPath) {
 
-        const entityPosition = entity.position.offset(0, entity.height, 0)
-        const blockPosition = bot.blockAt(entityPosition)
+      const entityPosition = entity.position.offset(0, entity.height, 0)
+      const blockPosition = bot.blockAt(entityPosition)
 
-        if (bot.canSeeBlock(blockPosition)) {
-          targets.entity = entity
-        }
-
+      if (bot.canSeeBlock(blockPosition)) {
+        targets.entity = entity
       }
+
+      // }
 
       currentEntity++
     }
@@ -128,5 +128,4 @@ module.exports = function (bot, targets) {
   }
 }
 
-  
-  
+

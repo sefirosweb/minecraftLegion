@@ -81,10 +81,12 @@ module.exports = class template {
           .then(() => this.equipHeldItem(item.name))
           .then(() => this.place(newPosition, blockOffset))
           .then(resolve)
+          .catch(reject)
       } else {
         this.equipHeldItem(item.name)
           .then(() => this.place(newPosition, blockOffset))
           .then(resolve)
+          .catch(reject)
       }
 
     })
