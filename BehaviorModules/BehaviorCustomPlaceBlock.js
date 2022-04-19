@@ -1,18 +1,20 @@
 const botWebsocket = require('@modules/botWebsocket')
 
 module.exports = class BehaviorCustomPlaceBlock {
-  constructor(bot, targets, canJump = true) {
+  constructor(bot, targets, canJump = true, canReplaceBlock = false) {
     this.bot = bot
     this.targets = targets
     this.stateName = 'Custom BehaviorPlaceBlock '
     this.blockCanBeReplaced = require('@modules/placeBlockModule')(bot).blocksCanBeReplaced
     this.equipHeldItem = require('@modules/inventoryModule')(bot).equipHeldItem
     this.place = require('@modules/placeBlockModule')(bot).place
+    this.digBlock = require('@modules/digBlockModule')(bot).digBlock
 
     this.isEndFinished = false
     this.itemNotFound = false
     this.cantPlaceBlock = false
     this.canJump = canJump
+    this.canReplaceBlock = canReplaceBlock
   }
 
   isFinished() {
@@ -79,21 +81,33 @@ module.exports = class BehaviorCustomPlaceBlock {
     }
 
     if (!this.blockCanBeReplaced.includes(block.name)) {
-      botWebsocket.log(`Cant s block there ${block.name}`)
-      this.cantPlaceBlock = true
-      return
+      if (this.canReplaceBlock) {
+        this.digBlock(block.position)
+          .then(() => this.placeBlock())
+      } else {
+        botWebsocket.log(`Cant s block there ${block.name}`)
+        this.cantPlaceBlock = true
+      }
+
+    } else {
+      this.placeBlock()
     }
 
-    this.equipHeldItem(this.targets.item.name)
-      .then(() => {
-        this.place(this.targets.position, this.offset)
-          .then(() => {
-            this.isEndFinished = true
-          })
-          .catch(() => {
-            this.cantPlaceBlock = true
-            this.isEndFinished = true
-          })
-      })
+  }
+
+  placeBlock() {
+    return new Promise((resolve, reject) => {
+      this.equipHeldItem(this.targets.item.name)
+        .then(() => {
+          this.place(this.targets.position, this.offset)
+            .then(() => {
+              this.isEndFinished = true
+            })
+            .catch(() => {
+              this.cantPlaceBlock = true
+              this.isEndFinished = true
+            })
+        })
+    })
   }
 }

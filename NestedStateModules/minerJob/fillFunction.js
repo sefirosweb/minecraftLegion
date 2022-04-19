@@ -48,12 +48,12 @@ function fillFunction(bot, targets) {
   mineBlock.x = 725
   mineBlock.y = 113
 
-  const placeBlock1 = new BehaviorCustomPlaceBlock(bot, targets)
+  const placeBlock1 = new BehaviorCustomPlaceBlock(bot, targets, true, true)
   placeBlock1.stateName = 'Place Block 1'
   placeBlock1.x = 725
   placeBlock1.y = 313
 
-  const placeBlock2 = new BehaviorCustomPlaceBlock(bot, targets)
+  const placeBlock2 = new BehaviorCustomPlaceBlock(bot, targets, true, true)
   placeBlock2.stateName = 'Place Block 2'
   placeBlock2.x = 525
   placeBlock2.y = 313
