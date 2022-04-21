@@ -1,3 +1,4 @@
+const mineflayerPathfinder = require('mineflayer-pathfinder')
 const botWebsocket = require('@modules/botWebsocket')
 const Vec3 = require('vec3')
 
@@ -27,13 +28,13 @@ module.exports = class BehaviorMinerCheckLayer {
     this.foundLavaOrWater = false
     this.isEndFinished = false
 
-    this.foundLavaOrWater = this.checkArea()
-    if (this.foundLavaOrWater === false) {
-      this.isEndFinished = true
-    }
+    this.checkArea()
   }
 
   onStateExited() {
+    this.bot.pathfinder.setGoal(null);
+    this.bot.removeAllListeners('customEventPhysicTick')
+
     // Reset positions for cehck again all blocks
     const stone = this.checkStoneInInventory()
     if (stone === undefined) {
@@ -53,46 +54,50 @@ module.exports = class BehaviorMinerCheckLayer {
   }
 
   checkArea() {
-    if (
-      this.yCurrent === this.yEnd &&
-      this.zCurrent === this.zEnd &&
-      this.xCurrent === this.xEnd
-    ) {
-      return false
-    }
+    return new Promise(async (resolve, reject) => {
+      do {
+        if (
+          this.yCurrent === this.yEnd &&
+          this.zCurrent === this.zEnd &&
+          this.xCurrent === this.xEnd
+        ) {
+          this.isEndFinished = true
+          resolve()
+          return
+        }
 
-    this.next();
+        this.next();
 
-    if (
-      this.minerCords.tunel === 'vertically' &&
-      (
-        (this.xCurrent === this.xEnd && this.zCurrent === this.zEnd) ||
-        (this.xCurrent === this.xStart && this.zCurrent === this.zStart) ||
-        (this.xCurrent === this.xEnd && this.zCurrent === this.zStart) ||
-        (this.xCurrent === this.xStart && this.zCurrent === this.zEnd)
-      )
-    ) {
-      return this.checkArea()
-    }
+        if (
+          this.minerCords.tunel === 'vertically' &&
+          (
+            (this.xCurrent === this.xEnd && this.zCurrent === this.zEnd) ||
+            (this.xCurrent === this.xStart && this.zCurrent === this.zStart) ||
+            (this.xCurrent === this.xEnd && this.zCurrent === this.zStart) ||
+            (this.xCurrent === this.xStart && this.zCurrent === this.zEnd)
+          )
+        ) {
+          continue
+        }
 
-    const block = this.getBlockType()
-    if (
-      block &&
-      (
-        this.blocksToFind.includes(block.name) ||
-        (
-          this.floorBlocksToFind.includes(block.name) &&
-          this.minerCords.tunel === 'horizontally' &&
-          (this.minerCords.yStart - 1) === this.yCurrent
-        )
-      )
-    ) {
-      this.targets.position = block.position
-      this.foundLavaOrWater = true
-      return true
-    }
+        let block = this.getBlockType()
+        if (!block) {
+          botWebsocket.log(`Block: ${this.xCurrent} ${this.yCurrent} ${this.zCurrent} It is very far! I can't see the block, approaching the block to check it`)
+          botWebsocket.log(`Area less than 200 blocks radius distance is recommended`)
+          const position = new Vec3(this.xCurrent, this.yCurrent, this.zCurrent)
+          await this.moveToSeeBlock(this.xCurrent, this.yCurrent, this.zCurrent)
+          this.bot.removeAllListeners('customEventPhysicTick')
+          block = this.getBlockType()
+        }
 
-    return this.checkArea()
+        if (this.checkValidBlock(block)) {
+          resolve()
+          return
+        }
+
+
+      } while (true)
+    })
 
   }
 
@@ -222,5 +227,39 @@ module.exports = class BehaviorMinerCheckLayer {
     this.yCurrent = parseInt(this.yStart)
     this.xCurrent = parseInt(this.xStart)
     this.zCurrent = parseInt(this.zStart)
+  }
+
+  checkValidBlock(block) {
+    if (this.blocksToFind.includes(block.name) ||
+      (
+        this.floorBlocksToFind.includes(block.name) &&
+        this.minerCords.tunel === 'horizontally' &&
+        (this.minerCords.yStart - 1) === this.yCurrent
+      )
+    ) {
+      this.targets.position = block.position
+      this.foundLavaOrWater = true
+      return true
+    }
+
+    return false
+  }
+
+  moveToSeeBlock(x, y, z) {
+    return new Promise((resolve, reject) => {
+
+      const goal = new mineflayerPathfinder.goals.GoalBlock(x, y, z)
+      this.bot.pathfinder.setMovements(this.targets.movements);
+      this.bot.pathfinder.setGoal(goal);
+
+      this.bot.on('customEventPhysicTick', () => {
+        const block = this.getBlockType()
+        if (block) {
+          this.bot.pathfinder.setGoal(null);
+          resolve()
+        }
+      })
+
+    })
   }
 }
