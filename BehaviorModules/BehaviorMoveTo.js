@@ -29,17 +29,12 @@ module.exports = class BehaviorMoveTo {
     })
 
     this.currentDate = Date.now()
-    this.currentPos = this.bot.entity.position.floored()
+    
     this.bot.on('customEventPhysicTick', () => {
       const checkDate = Date.now()
-      if (checkDate - this.currentDate > 5000) {
-        const checkPos = this.bot.entity.position.floored()
-
-        if (checkPos.distanceTo(this.currentPos) < 3) {
-          this.restart()
-          this.currentDate = Date.now()
-          this.currentPos = this.bot.entity.position.floored()
-        }
+      if (checkDate - this.currentDate > 15000) {
+        this.restart()
+        this.currentDate = Date.now()
       }
     })
 
