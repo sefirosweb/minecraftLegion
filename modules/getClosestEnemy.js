@@ -18,11 +18,30 @@ module.exports = function (bot, targets) {
     'Cat'
   ]
 
+  const flyingMobs = [
+    'Allay',
+    'Bat',
+    'Bee',
+    'Blaze',
+    'Chicken',
+    'Ender Dragon',
+    'Ghast',
+    'Parrot',
+    'Phantom',
+    'Vex',
+    'Wither',
+  ]
+
   const mcData = require('minecraft-data')(bot.version)
   const mineflayerPathfinder = require('mineflayer-pathfinder')
+
   const movements = new mineflayerPathfinder.Movements(bot, mcData)
-  movements.digCost = 100
   movements.canDig = false
+  
+  // const movementsForFliyingMobs = new mineflayerPathfinder.Movements(bot, mcData)
+  // movementsForFliyingMobs.canDig = false
+  // movementsForFliyingMobs.allow1by1towers = false
+  // movementsForFliyingMobs.scafoldingBlocks = []
 
   const check = () => {
     if (!currentEntity || entities.length <= currentEntity) {
@@ -48,7 +67,7 @@ module.exports = function (bot, targets) {
     }
   }
 
-  const getValidPath = (entity) => {
+  const getValidPath = (entity) => { // UNUSED FOR A NOW
     if (entity.type === 'mob' && (
       entity.mobType === 'Phantom' ||
       entity.mobType === 'Blaze' ||

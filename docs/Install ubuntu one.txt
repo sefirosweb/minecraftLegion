@@ -40,9 +40,9 @@ module.exports = config
 docker run --rm -v $PWD:/home/app -w /home/app node:16.13-bullseye npm install
 
 docker run -d --restart always \
---name redstone \
---hostname redstone \
+--name Miner \
+--hostname Miner \
 --network minecraftLegionNetwork \
 -v $PWD:/home/app -w /home/app  \
-node:16.13-bullseye node start_bot.js redstone legion
+node:16.13-bullseye node start_bot.js Miner legion
 
