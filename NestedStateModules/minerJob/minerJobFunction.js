@@ -20,7 +20,7 @@ function minerJobFunction (bot, targets) {
   miningFunction.x = 125
   miningFunction.y = 213
 
-  const combatStrategy = require('@NestedStateModules/combatStrategyFunction')(bot, targets)
+  const combatStrategy = require('@NestedStateModules/combat/combatStrategyFunction')(bot, targets)
   combatStrategy.x = 325
   combatStrategy.y = 213
 

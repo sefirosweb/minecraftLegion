@@ -61,7 +61,7 @@ function guardJobFunction(bot, targets) {
   goFriend.x = 725
   goFriend.y = 813
 
-  const combatStrategy = require('@NestedStateModules/combatStrategyFunction')(bot, targets)
+  const combatStrategy = require('@NestedStateModules/combat/combatStrategyFunction')(bot, targets)
   combatStrategy.x = 925
   combatStrategy.y = 513
 

@@ -16,7 +16,7 @@ function combatStrategyFunction (bot, targets) {
   exit.x = 125
   exit.y = 313
 
-  const combatFunction = require('@NestedStateModules/combatFunction')(bot, targets)
+  const combatFunction = require('@NestedStateModules/combat/combatFunction')(bot, targets)
   combatFunction.x = 125
   combatFunction.y = 213
 

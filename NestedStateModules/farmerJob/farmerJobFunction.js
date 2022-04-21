@@ -33,7 +33,7 @@ function farmerJobFunction (bot, targets) {
   eatFood.y = 413
 
   const getClosestMob = require('@modules/getClosestEnemy')(bot, targets)
-  const combatStrategy = require('@NestedStateModules/combatStrategyFunction')(bot, targets)
+  const combatStrategy = require('@NestedStateModules/combat/combatStrategyFunction')(bot, targets)
   combatStrategy.x = 325
   combatStrategy.y = 413
 
