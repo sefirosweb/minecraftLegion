@@ -27,6 +27,22 @@ module.exports = class BehaviorMoveTo {
         console.log('[MoveTo] No path to target!')
       }
     })
+
+    this.currentDate = Date.now()
+    this.currentPos = this.bot.entity.position.floored()
+    this.bot.on('customEventPhysicTick', () => {
+      const checkDate = Date.now()
+      if (checkDate - this.currentDate > 5000) {
+        const checkPos = this.bot.entity.position.floored()
+
+        if (checkPos.distanceTo(this.currentPos) < 3) {
+          this.restart()
+          this.currentDate = Date.now()
+          this.currentPos = this.bot.entity.position.floored()
+        }
+      }
+    })
+
     // this.bot.on('goalReached', () => this.goalReached())
 
     if (this.timeout) {
@@ -41,6 +57,7 @@ module.exports = class BehaviorMoveTo {
   }
 
   onStateExited() {
+    this.bot.removeAllListeners('customEventPhysicTick')
     this.isEndFinished = false
     this.success = false
     this.bot.removeAllListeners('pathUpdate')
