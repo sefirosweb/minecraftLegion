@@ -9,7 +9,7 @@ const BehaviorLoadConfig = require("@BehaviorModules/BehaviorLoadConfig");
 const BehaviorMinerCheckLayer = require("@BehaviorModules/minerJob/BehaviorMinerCheckLayer");
 const BehaviorMinerCurrentLayer = require("@BehaviorModules/minerJob/BehaviorMinerCurrentLayer");
 const BehaviorMinerCurrentBlock = require("@BehaviorModules/minerJob/BehaviorMinerCurrentBlock");
-const BehaviorMinerChecks = require("@BehaviorModules/minerJob/BehaviorMinerChecks");
+const BehaviorGetReady = require("@BehaviorModules/BehaviorGetReady");
 
 const BehaviorDigBlock = require("@BehaviorModules/BehaviorDigBlock");
 const BehaviorEatFood = require("@BehaviorModules/BehaviorEatFood");
@@ -108,10 +108,10 @@ function miningFunction(bot, targets) {
   moveToNearBlock.y = 113
 
 
-  const minerChecks = new BehaviorMinerChecks(bot, targets);
-  minerChecks.stateName = "Miner Check";
-  minerChecks.x = 325;
-  minerChecks.y = 563;
+  const getReady = new BehaviorGetReady(bot, targets);
+  getReady.stateName = 'Check if bot is ready'
+  getReady.x = 325;
+  getReady.y = 563;
 
   const checkLayer = new BehaviorMinerCheckLayer(bot, targets);
   checkLayer.stateName = "Check Layer Lava & Water";
@@ -372,7 +372,7 @@ function miningFunction(bot, targets) {
 
     new StateTransition({
       parent: digAndPlaceBlock,
-      child: minerChecks,
+      child: getReady,
       shouldTransition: () => digAndPlaceBlock.isFinished() && !digAndPlaceBlock.isOutOfBlocks(),
     }),
 
@@ -383,10 +383,9 @@ function miningFunction(bot, targets) {
     }),
 
     new StateTransition({
-      parent: minerChecks,
+      parent: getReady,
       child: eatFood,
-      shouldTransition: () =>
-        minerChecks.isFinished() && minerChecks.getIsReady(),
+      shouldTransition: () => getReady.getIsReady(),
     }),
 
     new StateTransition({
@@ -396,11 +395,10 @@ function miningFunction(bot, targets) {
     }),
 
     new StateTransition({
-      parent: minerChecks,
+      parent: getReady,
       child: exit,
       name: "No pickaxes or shovel in inventory",
-      shouldTransition: () =>
-        minerChecks.isFinished() && !minerChecks.getIsReady(),
+      shouldTransition: () => !getReady.getIsReady(),
     }),
   ];
 
