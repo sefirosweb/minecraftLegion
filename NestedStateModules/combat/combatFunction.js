@@ -28,6 +28,9 @@ function combatFunction(bot, targets) {
   const rangeFollowToShortAttack = 5
   const timeBowCountdown = 1550
 
+  const timeMobCountdown = 7500
+  let newTimeMobCountdown
+
   const start = new BehaviorIdle(targets)
   start.stateName = 'Start'
   start.x = 125
@@ -188,7 +191,11 @@ function combatFunction(bot, targets) {
         targets.entity = undefined
         checkHandleSword()
       },
-      shouldTransition: () => !targets.entity || targets.entity.isValid === false
+      shouldTransition: () => {
+        return (!targets.entity) ||
+          (targets.entity.isValid === false) ||
+          (Date.now() - newTimeMobCountdown > timeMobCountdown && targets.entity.type !== 'player')
+      }
     }),
     // END Mob is dead ***********
 
@@ -214,6 +221,7 @@ function combatFunction(bot, targets) {
         } else {
           followMob.movements = movements
         }
+        newTimeMobCountdown = Date.now()
         checkHandleSword()
       },
       shouldTransition: () => followMob.distanceToTarget() > rangeSword && followMob.distanceToTarget() < rangeFollowToShortAttack && targets.entity.isValid
@@ -231,7 +239,12 @@ function combatFunction(bot, targets) {
       parent: followMob,
       child: longRangeAttack,
       name: 'Mob is on range for Long Range Attack',
-      shouldTransition: () => followMob.distanceToTarget() < rangoBow && followMob.distanceToTarget() > rangeFollowToShortAttack && Date.now() - bowCountdown > timeBowCountdown && targetGrade !== false && targets.entity.isValid
+      shouldTransition: () => {
+        return followMob.distanceToTarget() < rangoBow &&
+          followMob.distanceToTarget() > rangeFollowToShortAttack && Date.now() - bowCountdown > timeBowCountdown &&
+          targetGrade !== false && targets.entity.isValid &&
+          longRangeAttack.checkBowAndArrow() === true
+      }
     }),
 
     new StateTransition({
@@ -245,6 +258,7 @@ function combatFunction(bot, targets) {
         }
         checkHandleSword()
         bowCountdown = Date.now()
+        newTimeMobCountdown = Date.now()
       },
       shouldTransition: () => {
         return (longRangeAttack.checkBowAndArrow() === false && targets.entity.isValid) ||

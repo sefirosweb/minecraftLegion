@@ -37,7 +37,7 @@ module.exports = function (bot, targets) {
 
   const movements = new mineflayerPathfinder.Movements(bot, mcData)
   movements.canDig = false
-  
+
   // const movementsForFliyingMobs = new mineflayerPathfinder.Movements(bot, mcData)
   // movementsForFliyingMobs.canDig = false
   // movementsForFliyingMobs.allow1by1towers = false
@@ -57,7 +57,7 @@ module.exports = function (bot, targets) {
       const entityPosition = entity.position.offset(0, entity.height, 0)
       const blockPosition = bot.blockAt(entityPosition)
 
-      if (bot.canSeeBlock(blockPosition)) {
+      if (blockPosition && bot.canSeeBlock(blockPosition)) {
         targets.entity = entity
       }
 
@@ -109,9 +109,8 @@ module.exports = function (bot, targets) {
       if (
         (entity.position.distanceTo(bot.player.entity.position) <= targets.config.distance) &&
         (entity.type === 'mob' || entity.type === 'player') &&
-        (entity.mobType !== 'Armor Stand') &&
-        (entity.mobType !== 'Iron Golem') &&
         (entity.kind !== 'Passive mobs') &&
+        !ignoreMobs.includes(entity.mobType) &&
         (entity.isValid)
       ) {
         const botFriends = botWebsocket.getFriends()
@@ -119,6 +118,8 @@ module.exports = function (bot, targets) {
         if (bFriend !== undefined) {
           return false
         }
+
+        if (!entity.username) return true
 
         const masters = botWebsocket.getMasters()
         const mFriend = masters.find(b => b.name === entity.username)
@@ -134,8 +135,8 @@ module.exports = function (bot, targets) {
       return (entity.position.distanceTo(bot.player.entity.position) <= targets.config.distance) &&
         (entity.type === 'mob') &&
         (entity.kind !== 'Passive mobs') &&
-        (entity.isValid) &&
-        !ignoreMobs.includes(entity.mobType)
+        !ignoreMobs.includes(entity.mobType) &&
+        (entity.isValid)
     }
 
     return false
