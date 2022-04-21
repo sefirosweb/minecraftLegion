@@ -19,16 +19,16 @@ module.exports = function (bot, targets) {
   ]
 
   const flyingMobs = [
-    'Allay',
+    'allay',
     'Bat',
-    'Bee',
-    'Blaze',
-    'Chicken',
-    'Ender Dragon',
-    'Ghast',
-    'Parrot',
-    'Phantom',
-    'Vex',
+    'bee',
+    'blaze',
+    'chicken',
+    'ender_dragon',
+    'ghast',
+    'parrot',
+    'phantom',
+    'vex',
     'Wither',
   ]
 
@@ -143,7 +143,8 @@ module.exports = function (bot, targets) {
 
   return {
     check,
-    ignoreMobs
+    ignoreMobs,
+    flyingMobs
   }
 }
 

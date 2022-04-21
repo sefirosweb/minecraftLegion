@@ -1,4 +1,5 @@
 const botWebsocket = require('@modules/botWebsocket')
+const mineflayerPathfinder = require('mineflayer-pathfinder')
 
 const {
   StateTransition,
@@ -11,9 +12,16 @@ const BehaviorLongAttack = require('@BehaviorModules/BehaviorLongAttack')
 
 function combatFunction(bot, targets) {
   const inventory = require('@modules/inventoryModule')(bot)
-  const { ignoreMobs } = require('@modules/getClosestEnemy')(bot, targets)
+  const { ignoreMobs, flyingMobs } = require('@modules/getClosestEnemy')(bot, targets)
   const hawkEye = require('minecrafthawkeye')
   bot.loadPlugin(hawkEye)
+
+  const movements = new mineflayerPathfinder.Movements(bot, mcData)
+
+  const movementsForFliyingMobs = new mineflayerPathfinder.Movements(bot, mcData)
+  movementsForFliyingMobs.canDig = false
+  movementsForFliyingMobs.allow1by1towers = false
+  movementsForFliyingMobs.scafoldingBlocks = []
 
   const rangoBow = 60
   const rangeSword = 3
@@ -201,6 +209,11 @@ function combatFunction(bot, targets) {
       child: followMob,
       name: 'Mob is too far',
       onTransition: () => {
+        if (flyingMobs.includes(targets.entity.name)) {
+          followMob.movements = movementsForFliyingMobs
+        } else {
+          followMob.movements = movements
+        }
         checkHandleSword()
       },
       shouldTransition: () => followMob.distanceToTarget() > rangeSword && followMob.distanceToTarget() < rangeFollowToShortAttack && targets.entity.isValid
@@ -225,6 +238,11 @@ function combatFunction(bot, targets) {
       parent: longRangeAttack,
       child: followMob,
       onTransition: () => {
+        if (flyingMobs.includes(targets.entity.name)) {
+          followMob.movements = movementsForFliyingMobs
+        } else {
+          followMob.movements = movements
+        }
         checkHandleSword()
         bowColdown = Date.now()
       },
@@ -232,7 +250,7 @@ function combatFunction(bot, targets) {
         return (longRangeAttack.checkBowAndArrow() === false && targets.entity.isValid) ||
           (followMob.distanceToTarget() > rangoBow && targets.entity.isValid) ||
           (followMob.distanceToTarget() < rangeFollowToShortAttack && targets.entity.isValid) ||
-          (targets.entity.mobType === 'Enderman' && targets.entity.isValid) || 
+          (targets.entity.mobType === 'Enderman' && targets.entity.isValid) ||
           (targetGrade === false && targets.entity.isValid)
       }
     }),
