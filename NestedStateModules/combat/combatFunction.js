@@ -26,7 +26,7 @@ function combatFunction(bot, targets) {
   const rangoBow = 60
   const rangeSword = 3
   const rangeFollowToShortAttack = 5
-  const timeBowColdown = 1550
+  const timeBowCountdown = 1550
 
   const start = new BehaviorIdle(targets)
   start.stateName = 'Start'
@@ -55,7 +55,7 @@ function combatFunction(bot, targets) {
 
   let targetGrade = false
   const prevPlayerPositions = []
-  let bowColdown = Date.now() // Used for avoid bugs on jam between bow and sword
+  let bowCountdown = Date.now() // Used for avoid bugs on jam between bow and sword
   let newTargetColdDown = Date.now()
 
   const filter = e =>
@@ -77,7 +77,7 @@ function combatFunction(bot, targets) {
       }
     }
 
-    if (Date.now() - bowColdown < timeBowColdown) {
+    if (Date.now() - bowCountdown < timeBowCountdown) {
       longRangeAttack.setInfoShot(false)
       return false
     }
@@ -231,7 +231,7 @@ function combatFunction(bot, targets) {
       parent: followMob,
       child: longRangeAttack,
       name: 'Mob is on range for Long Range Attack',
-      shouldTransition: () => followMob.distanceToTarget() < rangoBow && followMob.distanceToTarget() > rangeFollowToShortAttack && Date.now() - bowColdown > timeBowColdown && targetGrade !== false && targets.entity.isValid
+      shouldTransition: () => followMob.distanceToTarget() < rangoBow && followMob.distanceToTarget() > rangeFollowToShortAttack && Date.now() - bowCountdown > timeBowCountdown && targetGrade !== false && targets.entity.isValid
     }),
 
     new StateTransition({
@@ -244,7 +244,7 @@ function combatFunction(bot, targets) {
           followMob.movements = movements
         }
         checkHandleSword()
-        bowColdown = Date.now()
+        bowCountdown = Date.now()
       },
       shouldTransition: () => {
         return (longRangeAttack.checkBowAndArrow() === false && targets.entity.isValid) ||
