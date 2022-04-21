@@ -62,7 +62,17 @@ module.exports = class template {
   }
 
   getItemToPlace() {
-    return this.bot.inventory.items().find(item => this.targets.minerJob.blockForPlace.includes(item.name))
+    const items = this.bot.inventory.items().filter(item => this.targets.minerJob.blockForPlace.includes(item.name))
+    if (items.length === 0) {
+      return undefined
+    }
+
+    const item = items.map(i => {
+      i.hardness = mcData.blocksByName[i.name].hardness
+      return i
+    }).sort((a, b) => a.hardness - b.hardness)[0]
+
+    return item
   }
 
   equipAndPlace(placeBlockTo, newPosition, blockOffset) {
