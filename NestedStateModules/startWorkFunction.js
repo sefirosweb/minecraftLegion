@@ -6,7 +6,7 @@ const {
 
 const BehaviorLoadConfig = require('@BehaviorModules/BehaviorLoadConfig')
 
-function startWorkFunction (bot, targets) {
+function startWorkFunction(bot, targets) {
   const mcData = require('minecraft-data')(bot.version)
 
   const start = new BehaviorIdle(targets)
@@ -117,6 +117,23 @@ function startWorkFunction (bot, targets) {
       child: minerJob,
       onTransition: () => {
         targets.minerJob = {}
+        // Set place block sorting to easy to hardness
+        targets.minerJob.blockForPlace = Object.values(mcData.blocksByName).filter(b => [
+          "netherrack",
+          "basalt",
+          "blackstone",
+          "stone",
+          "cobblestone",
+          "cobbled_deepslate",
+          "dirt",
+          "tuff",
+          "andesite",
+          "diorite",
+          "granite",
+          "sandstone",
+        ].includes(b.name))
+          .sort((a, b) => a.hardness - b.hardness)
+          .map(b => b.name)
       },
       shouldTransition: () => loadConfig.getJob() === 'miner'
     }),

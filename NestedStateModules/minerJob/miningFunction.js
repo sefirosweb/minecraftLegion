@@ -187,20 +187,6 @@ function miningFunction(bot, targets) {
       child: loadConfig,
       name: "start -> loadConfig",
       onTransition: () => {
-        targets.minerJob.blockForPlace = [
-          "netherrack",
-          "basalt",
-          "blackstone",
-          "stone",
-          "cobblestone",
-          "cobbled_deepslate",
-          "dirt",
-          "tuff",
-          "andesite",
-          "diorite",
-          "granite",
-          "sandstone",
-        ];
         targets.minerJob.nextLayer = nextLayer;
 
         const yStart =
