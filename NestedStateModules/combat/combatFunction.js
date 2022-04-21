@@ -228,52 +228,13 @@ function combatFunction(bot, targets) {
         checkHandleSword()
         bowColdown = Date.now()
       },
-      name: 'Mob is near for short attack',
-      shouldTransition: () => followMob.distanceToTarget() < rangeFollowToShortAttack && targets.entity.isValid
-    }),
-
-    new StateTransition({
-      parent: longRangeAttack,
-      child: followMob,
-      onTransition: () => {
-        checkHandleSword()
-        bowColdown = Date.now()
-      },
-      name: 'No arrows or Bow',
-      shouldTransition: () => longRangeAttack.checkBowAndArrow() === false && targets.entity.isValid
-    }),
-
-    new StateTransition({
-      parent: longRangeAttack,
-      child: followMob,
-      onTransition: () => {
-        checkHandleSword()
-        bowColdown = Date.now()
-      },
-      name: 'Mob is VERY too far',
-      shouldTransition: () => followMob.distanceToTarget() > rangoBow && targets.entity.isValid
-    }),
-
-    new StateTransition({
-      parent: longRangeAttack,
-      child: followMob,
-      onTransition: () => {
-        checkHandleSword()
-        bowColdown = Date.now()
-      },
-      name: 'Invalid mob for long range',
-      shouldTransition: () => targets.entity.mobType === 'Enderman' && targets.entity.isValid
-    }),
-
-    new StateTransition({
-      parent: longRangeAttack,
-      child: followMob,
-      onTransition: () => {
-        checkHandleSword()
-        bowColdown = Date.now()
-      },
-      name: 'Cant target to Mob',
-      shouldTransition: () => targetGrade === false && targets.entity.isValid
+      shouldTransition: () => {
+        return (longRangeAttack.checkBowAndArrow() === false && targets.entity.isValid) ||
+          (followMob.distanceToTarget() > rangoBow && targets.entity.isValid) ||
+          (followMob.distanceToTarget() < rangeFollowToShortAttack && targets.entity.isValid) ||
+          (targets.entity.mobType === 'Enderman' && targets.entity.isValid) || 
+          (targetGrade === false && targets.entity.isValid)
+      }
     }),
 
     new StateTransition({
