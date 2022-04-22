@@ -40,9 +40,30 @@ module.exports = config
 docker run --rm -v $PWD:/home/app -w /home/app node:16.13-bullseye npm install
 
 docker run -d --restart always \
---name Miner \
---hostname Miner \
+--name Miner9 \
+--hostname Miner9 \
 --network minecraftLegionNetwork \
 -v $PWD:/home/app -w /home/app  \
-node:16.13-bullseye node start_bot.js Miner legion
+node:16.13-bullseye node start_bot.js Miner9 legion
+
+docker run -d --restart always \
+--name Miner10 \
+--hostname Miner10 \
+--network minecraftLegionNetwork \
+-v $PWD:/home/app -w /home/app  \
+node:16.13-bullseye node start_bot.js Miner10 legion
+
+docker run -d --restart always \
+--name Miner11 \
+--hostname Miner11 \
+--network minecraftLegionNetwork \
+-v $PWD:/home/app -w /home/app  \
+node:16.13-bullseye node start_bot.js Miner11 legion
+
+docker run -d --restart always \
+--name Miner12 \
+--hostname Miner12 \
+--network minecraftLegionNetwork \
+-v $PWD:/home/app -w /home/app  \
+node:16.13-bullseye node start_bot.js Miner12 legion
 

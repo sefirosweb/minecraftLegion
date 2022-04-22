@@ -8,6 +8,7 @@ const BehaviorLoadConfig = require('@BehaviorModules/BehaviorLoadConfig')
 
 function startWorkFunction(bot, targets) {
   const mcData = require('minecraft-data')(bot.version)
+  const { getAllBlocksExceptLeafs } = require('@modules/movementModule')(bot, targets)
 
   const start = new BehaviorIdle(targets)
   start.stateName = 'Start'
@@ -99,6 +100,12 @@ function startWorkFunction(bot, targets) {
       child: farmerJob,
       onTransition: () => {
         targets.farmerJob = {}
+        if (targets.movements.canDig === false) {
+          const allBlocksExceptLeafs = getAllBlocksExceptLeafs()
+          targets.movements.canDig = true
+          targets.movements.blocksCantBreak = new Set([...targets.movements.blocksCantBreak, ...allBlocksExceptLeafs])
+        }
+
       },
       shouldTransition: () => loadConfig.getJob() === 'farmer'
     }),

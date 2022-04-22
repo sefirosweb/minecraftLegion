@@ -42,11 +42,11 @@ module.exports = function (bot, targets) {
                 return p
             }
         )
-        .sort(
-            (a, b) => {
-                return a.distance - b.distance
-            }
-        )
+            .sort(
+                (a, b) => {
+                    return a.distance - b.distance
+                }
+            )
 
         const portal = portals[0]
         return portal
@@ -177,9 +177,14 @@ module.exports = function (bot, targets) {
         });
     }
 
+    const getAllBlocksExceptLeafs = () => {
+        return mcData.blocksArray.filter(b => !b.name.includes('leave')).map(b => b.id)
+    }
+
     return {
         getNearestPortal,
         checkPortalsOnSpawn,
-        crossThePortal
+        crossThePortal,
+        getAllBlocksExceptLeafs
     };
 };
