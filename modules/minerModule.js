@@ -12,12 +12,16 @@ module.exports = function (bot, targets) {
 
     const backOffset = vec3(offsetX, 0, offsetZ)
 
+    if (targets.config.minerCords.tunel === 'vertically') {
+      sidesToCheck.push({
+        side: 'bottom',
+        position: originalPosition.offset(0, -1, 0)
+      })
+    }
+
     if (
-      targets.config.minerCords.tunel === 'vertically' ||
-      (
-        targets.config.minerCords.tunel === 'horizontally' &&
-        parseInt(originalPosition.y) === parseInt(targets.minerJob.original.yStart)
-      )
+      targets.config.minerCords.tunel === 'horizontally' &&
+      parseInt(originalPosition.y) === parseInt(targets.minerJob.original.yStart)
     ) {
       sidesToCheck.push({
         side: 'bottom',
