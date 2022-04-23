@@ -14,10 +14,10 @@ module.exports = function (bot, targets) {
 
     if (
       targets.config.minerCords.tunel === 'vertically' ||
-            (
-              targets.config.minerCords.tunel === 'horizontally' &&
-                parseInt(originalPosition.y) === parseInt(targets.minerJob.original.yStart)
-            )
+      (
+        targets.config.minerCords.tunel === 'horizontally' &&
+        parseInt(originalPosition.y) === parseInt(targets.minerJob.original.yStart)
+      )
     ) {
       sidesToCheck.push({
         side: 'bottom',
@@ -31,7 +31,7 @@ module.exports = function (bot, targets) {
 
     if (
       targets.config.minerCords.tunel === 'horizontally' &&
-            parseInt(originalPosition.y) === parseInt(targets.minerJob.original.yEnd)
+      parseInt(originalPosition.y) === parseInt(targets.minerJob.original.yEnd)
     ) {
       sidesToCheck.push({
         side: 'top',
@@ -45,12 +45,12 @@ module.exports = function (bot, targets) {
 
     if (
       targets.config.minerCords.tunel === 'horizontally' &&
-            (
-              (targets.config.minerCords.orientation === 'x+' && parseInt(originalPosition.z) === parseInt(targets.minerJob.original.zStart)) ||
-                (targets.config.minerCords.orientation === 'x-' && parseInt(originalPosition.z) === parseInt(targets.minerJob.original.zEnd)) ||
-                (targets.config.minerCords.orientation === 'z+' && parseInt(originalPosition.x) === parseInt(targets.minerJob.original.xEnd)) ||
-                (targets.config.minerCords.orientation === 'z-' && parseInt(originalPosition.x) === parseInt(targets.minerJob.original.xStart))
-            )
+      (
+        (targets.config.minerCords.orientation === 'x+' && parseInt(originalPosition.z) === parseInt(targets.minerJob.original.zStart)) ||
+        (targets.config.minerCords.orientation === 'x-' && parseInt(originalPosition.z) === parseInt(targets.minerJob.original.zEnd)) ||
+        (targets.config.minerCords.orientation === 'z+' && parseInt(originalPosition.x) === parseInt(targets.minerJob.original.xEnd)) ||
+        (targets.config.minerCords.orientation === 'z-' && parseInt(originalPosition.x) === parseInt(targets.minerJob.original.xStart))
+      )
     ) {
       switch (targets.config.minerCords.orientation) {
         case 'x+':
@@ -79,12 +79,12 @@ module.exports = function (bot, targets) {
 
     if (
       targets.config.minerCords.tunel === 'horizontally' &&
-            (
-              (targets.config.minerCords.orientation === 'x+' && parseInt(originalPosition.z) === parseInt(targets.minerJob.original.zEnd)) ||
-                (targets.config.minerCords.orientation === 'x-' && parseInt(originalPosition.z) === parseInt(targets.minerJob.original.zStart)) ||
-                (targets.config.minerCords.orientation === 'z+' && parseInt(originalPosition.x) === parseInt(targets.minerJob.original.xStart)) ||
-                (targets.config.minerCords.orientation === 'z-' && parseInt(originalPosition.x) === parseInt(targets.minerJob.original.xEnd))
-            )
+      (
+        (targets.config.minerCords.orientation === 'x+' && parseInt(originalPosition.z) === parseInt(targets.minerJob.original.zEnd)) ||
+        (targets.config.minerCords.orientation === 'x-' && parseInt(originalPosition.z) === parseInt(targets.minerJob.original.zStart)) ||
+        (targets.config.minerCords.orientation === 'z+' && parseInt(originalPosition.x) === parseInt(targets.minerJob.original.xStart)) ||
+        (targets.config.minerCords.orientation === 'z-' && parseInt(originalPosition.x) === parseInt(targets.minerJob.original.xEnd))
+      )
     ) {
       switch (targets.config.minerCords.orientation) {
         case 'x+':
