@@ -17,6 +17,7 @@ function getConn(botName) {
     randomFarmArea: false,
     isCopingPatrol: false,
     canDig: false,
+    canSleep: true,
     canPlaceBlocks: false,
     allowSprinting: false,
     firstPickUpItemsFromKnownChests: true,
@@ -35,8 +36,7 @@ function getConn(botName) {
       "baked_potato",
       "cooked_chicken",
       "cooked_porkchop",
-      "cooked_mutton",
-      "golden_carrot",
+      "cooked_mutton"
     ],
     chests: [],
     patrol: [],
@@ -139,6 +139,21 @@ function setCanDig(botName, mode) {
 function getCanDig(botName) {
   const db = getConn(botName);
   return db.get("config.canDig").value();
+}
+
+function setCanSleep(botName, mode) {
+  const db = getConn(botName);
+  if (mode === true) {
+    mode = true;
+  } else {
+    mode = false;
+  }
+  db.set("config.canSleep", mode).write();
+}
+
+function getCanSleep(botName) {
+  const db = getConn(botName);
+  return db.get("config.canSleep").value();
 }
 
 function setCanPlaceBlocks(botName, mode) {
@@ -406,6 +421,8 @@ module.exports = {
   setCopingPatrol,
   setCanDig,
   getCanDig,
+  setCanSleep,
+  getCanSleep,
   setCanPlaceBlocks,
   getCanPlaceBlocks,
   setFirstPickUpItemsFromKnownChests,
