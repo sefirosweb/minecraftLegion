@@ -89,6 +89,9 @@ function connect() {
       case "canDig":
         botconfig.setCanDig(bot.username, config.value);
         break;
+      case "canSleep":
+        botconfig.setCanSleep(bot.username, config.value);
+        break;
       case "canPlaceBlocks":
         botconfig.setCanPlaceBlocks(bot.username, config.value);
         break;
