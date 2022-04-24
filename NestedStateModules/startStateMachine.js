@@ -89,12 +89,16 @@ module.exports = (bot) => {
           transitions[1].trigger()
 
           targets.isNight = false
+          targets.triedToSleep = false
 
           bot.on('time', () => {
             const timeOfDay = bot.time.timeOfDay
 
             if ((timeOfDay >= 100 && timeOfDay <= 12040)) {
               targets.isNight = false
+              if (targets.triedToSleep) {
+                targets.triedToSleep = false
+              }
             } else {
               targets.isNight = true
             }

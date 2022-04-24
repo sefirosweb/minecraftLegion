@@ -15,11 +15,6 @@ function startWorkFunction(bot, targets) {
   start.x = 125
   start.y = 113
 
-  const loadConfig = new BehaviorLoadConfig(bot, targets)
-  loadConfig.stateName = 'Load Bot Config'
-  loadConfig.x = 125
-  loadConfig.y = 213
-
   const loadedConfig = new BehaviorIdle(targets)
   loadedConfig.stateName = 'Loaded Config'
   loadedConfig.x = 325
@@ -56,24 +51,7 @@ function startWorkFunction(bot, targets) {
   const transitions = [
     new StateTransition({
       parent: start,
-      child: loadConfig,
-      shouldTransition: () => true
-    }),
-
-    new StateTransition({
-      parent: loadConfig,
       child: loadedConfig,
-      onTransition: () => {
-        targets.config = loadConfig.getAllConfig()
-        targets.movements.allowSprinting = targets.config.allowSprinting
-        targets.movements.canDig = targets.config.canDig
-        targets.movements.allow1by1towers = targets.config.canPlaceBlocks
-        targets.movements.scafoldingBlocks = targets.config.canPlaceBlocks ? targets.movements.scafoldingBlocks : []
-        targets.movements.blocksToAvoid.delete(mcData.blocksByName.wheat.id)
-        targets.movements.blocksToAvoid.add(mcData.blocksByName.sweet_berry_bush.id)
-        targets.movements.blocksCantBreak.add(mcData.blocksByName.sweet_berry_bush.id)
-        targets.movements.blocksCantBreak.add(mcData.blocksByName.cactus.id)
-      },
       shouldTransition: () => true
     }),
 
@@ -83,7 +61,7 @@ function startWorkFunction(bot, targets) {
       onTransition: () => {
         targets.guardJob = {}
       },
-      shouldTransition: () => loadConfig.getJob() === 'guard'
+      shouldTransition: () => targets.config.job === 'guard'
     }),
 
     new StateTransition({
@@ -92,7 +70,7 @@ function startWorkFunction(bot, targets) {
       onTransition: () => {
         targets.archerJob = {}
       },
-      shouldTransition: () => loadConfig.getJob() === 'archer'
+      shouldTransition: () => targets.config.job === 'archer'
     }),
 
     new StateTransition({
@@ -107,7 +85,7 @@ function startWorkFunction(bot, targets) {
         }
 
       },
-      shouldTransition: () => loadConfig.getJob() === 'farmer'
+      shouldTransition: () => targets.config.job === 'farmer'
     }),
 
     new StateTransition({
@@ -116,7 +94,7 @@ function startWorkFunction(bot, targets) {
       onTransition: () => {
         targets.breederJob = {}
       },
-      shouldTransition: () => loadConfig.getJob() === 'breeder'
+      shouldTransition: () => targets.config.job === 'breeder'
     }),
 
     new StateTransition({
@@ -142,7 +120,7 @@ function startWorkFunction(bot, targets) {
           .sort((a, b) => a.hardness - b.hardness)
           .map(b => b.name)
       },
-      shouldTransition: () => loadConfig.getJob() === 'miner'
+      shouldTransition: () => targets.config.job === 'miner'
     }),
 
     new StateTransition({
@@ -151,7 +129,7 @@ function startWorkFunction(bot, targets) {
       onTransition: () => {
         targets.sorterJob = {}
       },
-      shouldTransition: () => loadConfig.getJob() === 'sorter'
+      shouldTransition: () => targets.config.job === 'sorter'
     }),
 
     new StateTransition({
@@ -160,13 +138,13 @@ function startWorkFunction(bot, targets) {
       onTransition: () => {
         targets.crafterJob = {}
       },
-      shouldTransition: () => loadConfig.getJob() === 'crafter'
+      shouldTransition: () => targets.config.job === 'crafter'
     }),
 
   ]
 
   const startWorkFunction = new NestedStateMachine(transitions, start)
-  startWorkFunction.stateName = 'Start Work'
+  startWorkFunction.stateName = 'startWorkFunction'
   return startWorkFunction
 }
 

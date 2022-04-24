@@ -5,25 +5,35 @@ const {
 } = require('mineflayer-statemachine')
 const BehaviorGetPlayer = require('@BehaviorModules/BehaviorGetPlayer')
 const botWebsocket = require('@modules/botWebsocket')
+const BehaviorLoadConfig = require('@BehaviorModules/BehaviorLoadConfig')
 
-function deathFunction (bot, targets) {
+function deathFunction(bot, targets) {
   const start = new BehaviorIdle(targets)
   start.stateName = 'Start'
   start.x = 125
   start.y = 113
 
   const startWork = require('@NestedStateModules/startWorkFunction')(bot, targets)
-  startWork.x = 325
-  startWork.y = 313
+  startWork.x = 525
+  startWork.y = 413
 
   const commands = require('@NestedStateModules/commandsFunction')(bot, targets)
-  commands.x = 525
-  commands.y = 113
+  commands.x = 325
+  commands.y = 263
 
   const playerEntity = new BehaviorGetPlayer(bot, targets)
   playerEntity.stateName = 'Search Player'
-  playerEntity.x = 325
+  playerEntity.x = 525
   playerEntity.y = 113
+
+  const loadConfig = new BehaviorLoadConfig(bot, targets)
+  loadConfig.stateName = 'Load Bot Config'
+  loadConfig.x = 125
+  loadConfig.y = 413
+
+  const goSleep = require('@NestedStateModules/goSleepFunction')(bot, targets)
+  goSleep.x = 725
+  goSleep.y = 413
 
   const transitions = [
     new StateTransition({
@@ -36,8 +46,7 @@ function deathFunction (bot, targets) {
 
     new StateTransition({
       parent: start,
-      child: startWork,
-      name: 'start -> startWork',
+      child: loadConfig,
       shouldTransition: () => true
     }),
 
@@ -49,6 +58,12 @@ function deathFunction (bot, targets) {
 
     new StateTransition({
       parent: startWork,
+      child: playerEntity,
+      name: 'Player say: hi'
+    }),
+
+    new StateTransition({
+      parent: goSleep,
       child: playerEntity,
       name: 'Player say: hi'
     }),
@@ -62,21 +77,59 @@ function deathFunction (bot, targets) {
 
     new StateTransition({
       parent: commands,
-      child: startWork,
-      name: 'Commands finished',
-      onTransition: () => bot.look(bot.player.entity.yaw, 0),
+      child: loadConfig,
+      onTransition: () => {
+        bot.look(bot.player.entity.yaw, 0)
+        targets.triedToSleep = false
+      },
       shouldTransition: () => commands.isFinished()
-    })
+    }),
+
+    new StateTransition({
+      parent: loadConfig,
+      child: startWork,
+      onTransition: () => {
+        targets.config = loadConfig.getAllConfig()
+        targets.movements.allowSprinting = targets.config.allowSprinting
+        targets.movements.canDig = targets.config.canDig
+        targets.movements.allow1by1towers = targets.config.canPlaceBlocks
+        targets.movements.scafoldingBlocks = targets.config.canPlaceBlocks ? targets.movements.scafoldingBlocks : []
+        targets.movements.blocksToAvoid.delete(mcData.blocksByName.wheat.id)
+        targets.movements.blocksToAvoid.add(mcData.blocksByName.sweet_berry_bush.id)
+        targets.movements.blocksCantBreak.add(mcData.blocksByName.sweet_berry_bush.id)
+        targets.movements.blocksCantBreak.add(mcData.blocksByName.cactus.id)
+      },
+      shouldTransition: () => true
+    }),
+
+    new StateTransition({
+      parent: startWork,
+      child: goSleep,
+      onTransition: () => {
+        targets.triedToSleep = true
+      },
+      shouldTransition: () => targets.config.canSleep === true && targets.triedToSleep === false && targets.isNight === true
+    }),
+
+    new StateTransition({
+      parent: goSleep,
+      child: startWork,
+      shouldTransition: () => goSleep.isFinished() || targets.isNight === false
+    }),
+
+
+
   ]
 
-  function reloadTrigger () {
+  function reloadTrigger() {
     transitions[0].trigger()
   }
 
-  function commandTrigger () {
+  function commandTrigger() {
     botWebsocket.log('sendStay')
     transitions[2].trigger()
     transitions[3].trigger()
+    transitions[4].trigger()
     botWebsocket.emitCombat(false)
   }
 
