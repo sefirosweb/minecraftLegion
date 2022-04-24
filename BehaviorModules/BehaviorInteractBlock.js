@@ -1,18 +1,17 @@
 module.exports = class template {
-  constructor (bot, targets) {
+  constructor(bot, targets) {
     this.bot = bot
     this.targets = targets
     this.stateName = 'BehaviorInteractBlock'
-
     this.isEndFinished = false
   }
 
-  onStateEntered () {
+  onStateEntered() {
     this.isEndFinished = false
     this.interactBlock()
   }
 
-  interactBlock () {
+  interactBlock() {
     if (this.targets.position == null) {
       this.isEndFinished = true
       console.log('Block is null')
@@ -25,13 +24,17 @@ module.exports = class template {
       return
     }
 
-    this.bot.activateBlock(block).catch(err => {
-      console.log(err)
-    })
-    this.isEndFinished = true
+    this.bot.activateBlock(block)
+      .then(e => {
+        this.isEndFinished = true
+      })
+      .catch(err => {
+        console.log(err)
+      })
+
   }
 
-  isFinished () {
+  isFinished() {
     return this.isEndFinished
   }
 }
