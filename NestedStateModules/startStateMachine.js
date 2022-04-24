@@ -62,10 +62,10 @@ module.exports = (bot) => {
     the_end: []
   };
 
-  const startState = new BehaviorIdle(targets)
-  startState.stateName = 'Start'
-  startState.x = 125
-  startState.y = 113
+  const start = new BehaviorIdle(targets)
+  start.stateName = 'Start'
+  start.x = 125
+  start.y = 113
 
   const watiState = new BehaviorIdle(targets)
   watiState.stateName = 'Wait Second'
@@ -76,19 +76,33 @@ module.exports = (bot) => {
   death.x = 425
   death.y = 213
 
+
+
   const { checkPortalsOnSpawn } = require('@modules/movementModule')(bot, targets)
 
   const transitions = [
     new StateTransition({
-      parent: startState,
+      parent: start,
       child: watiState,
-      name: 'idleState -> deathFunction',
-      shouldTransition: () => true,
       onTransition: () => {
         console.log('start')
+
         setTimeout(() => {
           checkPortalsOnSpawn()
           transitions[1].trigger()
+
+          targets.isNight = false
+
+          bot.on('time', () => {
+            const timeOfDay = bot.time.timeOfDay
+
+            if ((timeOfDay >= 100 && timeOfDay <= 12040)) {
+              targets.isNight = false
+            } else {
+              targets.isNight = true
+            }
+          })
+
         }, 2000)
       }
     }),
@@ -101,12 +115,15 @@ module.exports = (bot) => {
 
     new StateTransition({
       parent: death,
-      child: startState,
+      child: start,
+      onTransition: () => {
+        bot.removeAllListeners('time')
+      },
       name: 'if bot die then restarts'
-    })
+    }),
   ]
 
-  const root = new NestedStateMachine(transitions, startState)
+  const root = new NestedStateMachine(transitions, start)
   root.stateName = 'Main'
   const stateMachine = new BotStateMachine(bot, root)
 
