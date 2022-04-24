@@ -76,8 +76,6 @@ module.exports = (bot) => {
   death.x = 425
   death.y = 213
 
-
-
   const { checkPortalsOnSpawn } = require('@modules/movementModule')(bot, targets)
 
   const transitions = [
@@ -86,7 +84,6 @@ module.exports = (bot) => {
       child: watiState,
       onTransition: () => {
         console.log('start')
-
         setTimeout(() => {
           checkPortalsOnSpawn()
           transitions[1].trigger()
@@ -104,7 +101,8 @@ module.exports = (bot) => {
           })
 
         }, 2000)
-      }
+      },
+      shouldTransition: () => true
     }),
 
     new StateTransition({
@@ -120,7 +118,7 @@ module.exports = (bot) => {
         bot.removeAllListeners('time')
       },
       name: 'if bot die then restarts'
-    }),
+    })
   ]
 
   const root = new NestedStateMachine(transitions, start)
