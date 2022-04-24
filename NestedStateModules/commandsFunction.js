@@ -75,7 +75,11 @@ function commandsFunction(bot, targets) {
       parent: start,
       child: lookAtPlayersState,
       name: 'Enter to nested',
-      onTransition: () => bot.on('customEventChat', botChatCommandFunctionListener),
+      onTransition: () => {
+        bot.wake()
+          .catch(e => console.log(e))
+        bot.on('customEventChat', botChatCommandFunctionListener)
+      },
       shouldTransition: () => true
     }),
     new StateTransition({
@@ -317,6 +321,7 @@ function commandsFunction(bot, targets) {
       bot.removeListener('sleep', isSleeping)
       setTimeout(() => {
         bot.wake()
+          .catch(e => console.log(e))
       }, 500)
     }
 

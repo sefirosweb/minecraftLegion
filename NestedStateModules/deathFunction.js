@@ -33,15 +33,26 @@ function deathFunction(bot, targets) {
 
   const goSleep = require('@NestedStateModules/goSleepFunction')(bot, targets)
   goSleep.x = 725
-  goSleep.y = 413
+  goSleep.y = 263
 
   const transitions = [
     new StateTransition({
       parent: startWork,
-      child: startWork,
+      child: loadConfig,
       name: 'Reload config',
       onTransition: () => botWebsocket.log('Reloading configuration'),
       shouldTransition: () => false
+    }),
+
+    new StateTransition({
+      parent: goSleep,
+      child: loadConfig,
+      onTransition: () => {
+        bot.wake()
+          .catch(e => console.log(e))
+        targets.triedToSleep = false
+      },
+      name: 'Reload config'
     }),
 
     new StateTransition({
@@ -123,13 +134,14 @@ function deathFunction(bot, targets) {
 
   function reloadTrigger() {
     transitions[0].trigger()
+    transitions[1].trigger()
   }
 
   function commandTrigger() {
     botWebsocket.log('sendStay')
-    transitions[2].trigger()
     transitions[3].trigger()
     transitions[4].trigger()
+    transitions[5].trigger()
     botWebsocket.emitCombat(false)
   }
 
