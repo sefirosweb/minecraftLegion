@@ -16,28 +16,34 @@ const goSleepFunction = function (bot, targets) {
   const exit = new BehaviorIdle()
   exit.stateName = 'Exit'
   exit.x = 125
-  exit.y = 213
+  exit.y = 313
+
+  const goSleepArea = new BehaviorMoveTo(bot, targets);
+  goSleepArea.stateName = "Go to sleep area";
+  goSleepArea.movements = targets.movements;
+  goSleepArea.x = 325
+  goSleepArea.y = 113
 
   const searchBeds = new BehaviorIdle()
   searchBeds.stateName = 'Search nearby beds'
   searchBeds.x = 325
-  searchBeds.y = 113
+  searchBeds.y = 213
 
   const waitUntilWakeUp = new BehaviorIdle()
   waitUntilWakeUp.stateName = 'Wait until wake up'
   waitUntilWakeUp.x = 325
-  waitUntilWakeUp.y = 313
+  waitUntilWakeUp.y = 413
 
   const goToBed = new BehaviorMoveTo(bot, targets);
   goToBed.stateName = "Go to bed";
   goToBed.movements = targets.movements;
   goToBed.x = 525
-  goToBed.y = 113
+  goToBed.y = 213
 
   const interactWithBed = new BehaviorSleep(bot, targets)
   interactWithBed.stateName = 'Interact With Bed'
   interactWithBed.x = 525
-  interactWithBed.y = 213
+  interactWithBed.y = 313
 
   let nearBeds = []
 
@@ -45,6 +51,15 @@ const goSleepFunction = function (bot, targets) {
 
     new StateTransition({
       parent: start,
+      child: goSleepArea,
+      onTransition: () => {
+        targets.position = targets.config.sleepArea
+      },
+      shouldTransition: () => true,
+    }),
+
+    new StateTransition({
+      parent: goSleepArea,
       child: searchBeds,
       onTransition: () => {
 
@@ -63,7 +78,7 @@ const goSleepFunction = function (bot, targets) {
             return a.distance - b.distance
           })
       },
-      shouldTransition: () => true
+      shouldTransition: () => bot.entity.position.distanceTo(targets.config.sleepArea) < 5
     }),
 
     new StateTransition({
@@ -101,7 +116,7 @@ const goSleepFunction = function (bot, targets) {
       child: waitUntilWakeUp,
       onTransition: () => {
         bot.once('wake', () => {
-          transitions[6].trigger()
+          transitions[7].trigger()
         })
       },
       shouldTransition: () => interactWithBed.isFinished()
