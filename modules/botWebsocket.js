@@ -92,6 +92,11 @@ function connect() {
       case "canSleep":
         botconfig.setCanSleep(bot.username, config.value);
         break;
+      case "sleepArea":
+        minerConfig = botconfig.getSleepArea(bot.username);
+        minerConfig[config.value.coord] = config.value.pos;
+        botconfig.setSleepArea(bot.username, minerConfig);
+        break;
       case "canPlaceBlocks":
         botconfig.setCanPlaceBlocks(bot.username, config.value);
         break;

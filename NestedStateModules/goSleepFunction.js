@@ -50,7 +50,7 @@ const goSleepFunction = function (bot, targets) {
 
         nearBeds = bot.findBlocks({
           matching: block => bot.isABed(block),
-          maxDistance: 128,
+          maxDistance: 16,
           count: 99
         })
           .map(p => {

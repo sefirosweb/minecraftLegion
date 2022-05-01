@@ -18,6 +18,11 @@ function getConn(botName) {
     isCopingPatrol: false,
     canDig: false,
     canSleep: true,
+    sleepArea: {
+      x: null,
+      y: null,
+      z: null,
+    },
     canPlaceBlocks: false,
     allowSprinting: false,
     firstPickUpItemsFromKnownChests: true,
@@ -154,6 +159,16 @@ function setCanSleep(botName, mode) {
 function getCanSleep(botName) {
   const db = getConn(botName);
   return db.get("config.canSleep").value();
+}
+
+function setSleepArea(botName, coords) {
+  const db = getConn(botName);
+  db.set("config.sleepArea", coords).write();
+}
+
+function getSleepArea(botName) {
+  const db = getConn(botName);
+  return db.get("config.sleepArea").value();
 }
 
 function setCanPlaceBlocks(botName, mode) {
@@ -423,6 +438,8 @@ module.exports = {
   getCanDig,
   setCanSleep,
   getCanSleep,
+  setSleepArea,
+  getSleepArea,
   setCanPlaceBlocks,
   getCanPlaceBlocks,
   setFirstPickUpItemsFromKnownChests,
