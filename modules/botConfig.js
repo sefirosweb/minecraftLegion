@@ -78,6 +78,26 @@ function getConn(botName) {
   };
 
   db.defaults({ config: defaultConfig }).write();
+
+  db.get("config").value()
+
+  let allDataIsCorrect = true
+  const botConfig = db.get("config").value()
+  Object.entries(defaultConfig).forEach(entry => {
+
+    const key = entry[0]
+    const value = entry[1]
+
+    if (botConfig[key] === undefined) {
+      allDataIsCorrect = false
+      botConfig[key] = value
+    }
+  })
+
+  if (!allDataIsCorrect) {
+    db.set("config", botConfig).write();
+  }
+
   return db;
 }
 
