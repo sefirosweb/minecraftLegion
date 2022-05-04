@@ -1,7 +1,7 @@
 const vec3 = require('vec3')
 
 module.exports = function (bot) {
-  const blocksCanBeReplaced = ['air', 'cave_air', 'lava', 'water', 'seagrass', 'tall_seagrass', 'kelp_plant']
+  const blocksCanBeReplaced = ['air', 'cave_air', 'lava', 'water', 'bubble_column', 'seagrass', 'tall_seagrass', 'kelp_plant']
   const blocksToBeRplaced = ['kelp'].concat(blocksCanBeReplaced)
   let isJumping
 
