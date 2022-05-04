@@ -77,7 +77,7 @@ function commandsFunction(bot, targets) {
       name: 'Enter to nested',
       onTransition: () => {
         bot.wake()
-          .catch(e => console.log(e))
+          .catch(e => {})
         bot.on('customEventChat', botChatCommandFunctionListener)
       },
       shouldTransition: () => true
