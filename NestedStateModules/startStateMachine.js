@@ -93,8 +93,8 @@ module.exports = (bot) => {
 
           bot.on('time', () => {
             const timeOfDay = bot.time.timeOfDay
-
-            if ((timeOfDay >= 100 && timeOfDay <= 12040)) {
+            const thunderstorm = bot.isRaining && (bot.thunderState > 0)
+            if (!thunderstorm && !(timeOfDay >= 12541 && timeOfDay <= 23458)) {
               targets.isNight = false
               if (targets.triedToSleep) {
                 targets.triedToSleep = false
