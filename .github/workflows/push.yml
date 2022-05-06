@@ -15,4 +15,6 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22
           script: |
-            cd minecraftLegion/ && git pull && docker restart $(docker ps -a -q)
+            cd minecraftLegion/
+            git pull
+            docker restart $(docker ps -a -q)
