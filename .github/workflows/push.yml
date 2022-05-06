@@ -17,4 +17,5 @@ jobs:
           script: |
             cd minecraftLegion/
             git pull
+            npm install
             docker restart $(docker ps -a -q)
