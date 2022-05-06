@@ -7,7 +7,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Deploy to server
+      - name: Deploy to server 1
         uses: appleboy/ssh-action@master
         with:
           host: "159.223.219.219"
@@ -15,6 +15,30 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22
           script: |
-            echo "Asd ggh" > test.log
+            cd minecraftLegion/ && git pull && docker restart $(docker ps -a -q)
+
+          
+    steps:
+      - name: Deploy to server 1
+        uses: appleboy/ssh-action@master
+        with:
+          host: "159.223.228.127"
+          username: root
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: 22
+          script: |
+            cd minecraftLegion/ && git pull && docker restart $(docker ps -a -q)
+
+          
+    steps:
+      - name: Deploy to server 1
+        uses: appleboy/ssh-action@master
+        with:
+          host: "146.190.233.14"
+          username: root
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: 22
+          script: |
+            cd minecraftLegion/ && git pull && docker restart $(docker ps -a -q)
 
           
