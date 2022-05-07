@@ -33,8 +33,7 @@ module.exports = class template {
         this.isEndFinished = true
       })
       .catch(err => {
-        console.log(err.message)
-        if (err.message === 'the bed is occupied') {
+        if (err.message === 'the bed is occupied' || err.message === 'bot is not sleeping') {
           this.bedOcupped = true
         } else {
           return this.cantSleepNow = true
