@@ -140,6 +140,7 @@ function miningFunction(bot, targets) {
     const tunel = targets.config.minerCords.tunel
     const orientation = targets.config.minerCords.orientation
     const world = targets.config.minerCords.world
+    const reverse = targets.config.minerCords.reverse
     const newMineCords = { ...targets.minerJob.original }
 
     newMineCords.xStart = parseInt(newMineCords.xStart)
@@ -176,6 +177,7 @@ function miningFunction(bot, targets) {
     newMineCords.tunel = tunel
     newMineCords.orientation = orientation
     newMineCords.world = world
+    newMineCords.reverse = reverse
     setMinerCords(bot.username, newMineCords)
 
     targets.config.minerCords = newMineCords

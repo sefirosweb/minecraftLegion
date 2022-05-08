@@ -261,6 +261,11 @@ function connect() {
         minerConfig[config.value.coord] = config.value.pos;
         botconfig.setMinerCords(bot.username, minerConfig);
         break;
+      case "changeReverseModeMiner":
+        minerConfig = botconfig.getMinerCords(bot.username);
+        minerConfig.reverse = config.value;
+        botconfig.setMinerCords(bot.username, minerConfig);
+        break;
       case "insertNewChest":
         chests = botconfig.getChests(bot.username);
         chests.push({

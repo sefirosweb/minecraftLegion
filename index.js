@@ -45,10 +45,16 @@ const start_bot = () => {
   const botsToStart = [
     // { username: 'Sephi' }
     // { username: 'Sorter' },
+    
     // { username: "MinerY1" },
     // { username: "MinerY2" },
     // { username: "MinerY3" },
     // { username: "MinerY4" },
+    // { username: "MinerY5" },
+    // { username: "MinerY6" },
+    // { username: "MinerY7" },
+    // { username: "MinerY8" },
+    
     // { username: "MinerX+" },
     // { username: "MinerX-" },
     // { username: "MinerZ+" },

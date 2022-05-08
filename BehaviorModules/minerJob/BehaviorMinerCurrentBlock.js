@@ -44,7 +44,7 @@ module.exports = class BehaviorMinerCurrentBlock {
     this.startBlock()
   }
 
-  startBlock() {
+  startBlock() {    
     this.yStart = parseInt(this.minerCords.yStart) > parseInt(this.minerCords.yEnd) ? parseInt(this.minerCords.yEnd) : parseInt(this.minerCords.yStart)
     this.yEnd = parseInt(this.minerCords.yStart) > parseInt(this.minerCords.yEnd) ? parseInt(this.minerCords.yStart) : parseInt(this.minerCords.yEnd)
 
@@ -53,6 +53,20 @@ module.exports = class BehaviorMinerCurrentBlock {
 
     this.zStart = parseInt(this.minerCords.zStart) > parseInt(this.minerCords.zEnd) ? parseInt(this.minerCords.zEnd) : parseInt(this.minerCords.zStart)
     this.zEnd = parseInt(this.minerCords.zStart) > parseInt(this.minerCords.zEnd) ? parseInt(this.minerCords.zStart) : parseInt(this.minerCords.zEnd)
+
+    let temp
+    
+    if (this.minerCords.reverse && this.minerCords.tunel === 'vertically' && (this.minerCords.orientation === 'x+' || this.minerCords.orientation === 'x-' )) {
+      temp = this.xStart
+      this.xStart = this.xEnd
+      this.xEnd = temp
+    }
+
+    if (this.minerCords.reverse && this.minerCords.tunel === 'vertically' && (this.minerCords.orientation === 'z+' || this.minerCords.orientation === 'z-' )) {
+      temp = this.zStart
+      this.zStart = this.zEnd
+      this.zEnd = temp
+    }
 
     if (this.minerCords.tunel === 'vertically') {
       if (this.minerCords.orientation === 'z+' || this.minerCords.orientation === 'x-') {

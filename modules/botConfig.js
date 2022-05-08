@@ -74,6 +74,7 @@ function getConn(botName) {
       zEnd: null,
       orientation: null,
       tunel: null,
+      reverse: false
     },
   };
 

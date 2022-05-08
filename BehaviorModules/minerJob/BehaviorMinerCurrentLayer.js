@@ -93,6 +93,7 @@ module.exports = class BehaviorMinerCurrentLayer {
     const minerCoords = {}
     minerCoords.orientation = this.minerCords.orientation
     minerCoords.tunel = this.minerCords.tunel
+    minerCoords.reverse = this.minerCords.reverse
 
     if (this.minerCords.tunel === 'vertically') { // => Y Layer
       minerCoords.xStart = parseInt(this.minerCords.xStart)
