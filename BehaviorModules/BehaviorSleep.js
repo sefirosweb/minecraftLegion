@@ -28,11 +28,24 @@ module.exports = class template {
       return
     }
 
+    /** HOTFIX until sleep() is fixed **/
+    const timeOutForsleep = setTimeout(() => {
+      this.bedOcupped = true
+      console.log('Exceded time for sleep')
+    }, 5000)
+    this.bot.once('sleep', () => {
+      console.log('clearing timeout')
+      clearTimeout(timeOutForsleep)
+      this.isEndFinished = true
+    })
+    /****/
     this.bot.sleep(block)
-      .then(e => {
-        this.isEndFinished = true
-      })
       .catch(err => {
+        /** HOTFIX until sleep() is fixed **/
+        console.log('clearing timeout')
+        clearTimeout(timeOutForsleep)
+        /****/
+
         if (err.message === 'the bed is occupied' || err.message === 'bot is not sleeping') {
           this.bedOcupped = true
         } else {
