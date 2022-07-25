@@ -36,7 +36,7 @@ module.exports = class template {
     this.timeLimit = setTimeout(() => {
       botWebsocket.log('Time exceded for place item')
       this.isEndFinished = true
-    }, 9000)
+    }, 10000)
 
     this.isEndFinished = false
     this.outOfBlocks = false
