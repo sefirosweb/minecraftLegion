@@ -160,7 +160,6 @@ module.exports = function (bot, targets) {
                     });
                 })
                 .then(resolve)
-                .reject(reject)
         })
 
     }
