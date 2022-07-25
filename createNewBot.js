@@ -35,6 +35,7 @@ const createNewBot = (botName, botPassword = "", server, port, customStart) => {
   bot.once('inject_allowed', () => {
     mcData = require('minecraft-data')(bot.version)
     mcData.blocksArray[826].hardness = 3 // hotfix until wait a final relase
+    mcData.blocksArray[274].boundingBox = 'block'
   })
 
   bot.once("spawn", async () => {
