@@ -51,7 +51,7 @@ export const createNewBot = (props: Props): void => {
   bot.once('inject_allowed', () => {
     const mcData = require('minecraft-data')(bot.version)
     mcData.blocksArray[826].hardness = 3 // hotfix until wait a final relase
-    mcData.blocksArray[274].boundingBox = 'block'
+    mcData.blocksArray[274].boundingBox = 'block' // hot fix for cross the portal of the end
   })
 
   bot.once("spawn", async () => {
