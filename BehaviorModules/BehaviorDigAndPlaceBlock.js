@@ -35,8 +35,9 @@ module.exports = class template {
   onStateEntered() {
     this.timeLimit = setTimeout(() => {
       botWebsocket.log('Time exceded for place item')
+      this.bot.stopDigging()
       this.isEndFinished = true
-    }, 10000)
+    }, 15000)
 
     this.isEndFinished = false
     this.outOfBlocks = false
