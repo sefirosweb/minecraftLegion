@@ -8,6 +8,8 @@ const botWebsocket = require('@modules/botWebsocket')
 const BehaviorLoadConfig = require('@BehaviorModules/BehaviorLoadConfig')
 
 function deathFunction(bot, targets) {
+  const mcData = require('minecraft-data')(bot.version)
+
   const start = new BehaviorIdle(targets)
   start.stateName = 'Start'
   start.x = 125
@@ -161,7 +163,7 @@ function deathFunction(bot, targets) {
   bot.on('chat', (master, message) => {
     if (message === 'hi ' + bot.username || message === 'hi all') {
       const masters = botWebsocket.getMasters()
-      const findMaster = masters.find(e => e.name === master)
+      const findMaster = masters.find(e => e?.name === master)
 
       if (findMaster === undefined) {
         botWebsocket.log(`${master} is no in master list!`)

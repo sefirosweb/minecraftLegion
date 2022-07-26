@@ -1,7 +1,7 @@
 const Vec3 = require("vec3");
-const { webServer, webServerPort, webServerPassword } = require("@config");
+const configBot = require("@config");
+const { webServer, webServerPort, webServerPassword } = configBot.default
 const socketIOClient = require("socket.io-client");
-const config = require("@config");
 const botconfig = require("@modules/botConfig");
 
 let bot;
@@ -507,7 +507,7 @@ function getFriends() {
 }
 
 function getMasters() {
-  const allMasters = masters.concat(config.masters); // Gef offline + online config
+  const allMasters = masters.concat(configBot.default.masters); // Gef offline + online config
   return allMasters;
 }
 

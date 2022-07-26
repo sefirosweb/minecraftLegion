@@ -1,0 +1,66 @@
+{
+  "config": {
+    "name": "Miner12",
+    "job": "none",
+    "mode": "none",
+    "distance": 10,
+    "helpFriends": false,
+    "pickUpItems": false,
+    "randomFarmArea": false,
+    "isCopingPatrol": false,
+    "canDig": false,
+    "canPlaceBlocks": false,
+    "allowSprinting": false,
+    "firstPickUpItemsFromKnownChests": true,
+    "canCraftItemWithdrawChest": true,
+    "itemsToBeReady": [
+      {
+        "item": "sword",
+        "quantity": 1
+      }
+    ],
+    "itemsCanBeEat": [
+      "bread",
+      "carrot",
+      "potato",
+      "sweet_berries",
+      "baked_potato",
+      "cooked_chicken",
+      "cooked_porkchop",
+      "cooked_mutton",
+      "golden_carrot"
+    ],
+    "chests": [],
+    "patrol": [],
+    "plantAreas": [],
+    "chestAreas": [],
+    "farmAreas": [],
+    "farmAnimal": {
+      "seconds": 60,
+      "cow": 10,
+      "sheep": 10,
+      "wolf": 10,
+      "chicken": 10,
+      "cat": 10,
+      "horse": 10,
+      "donkey": 10,
+      "llama": 10,
+      "pig": 10,
+      "rabbit": 10,
+      "turtles": 10,
+      "panda": 10,
+      "fox": 10,
+      "bee": 10
+    },
+    "minerCords": {
+      "xStart": null,
+      "yStart": null,
+      "zStart": null,
+      "xEnd": null,
+      "yEnd": null,
+      "zEnd": null,
+      "orientation": null,
+      "tunel": null
+    }
+  }
+}

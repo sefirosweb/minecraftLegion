@@ -33,7 +33,7 @@ const createNewBot = (botName, botPassword = "", server, port, customStart) => {
   });
 
   bot.once('inject_allowed', () => {
-    mcData = require('minecraft-data')(bot.version)
+    const mcData = require('minecraft-data')(bot.version)
     mcData.blocksArray[826].hardness = 3 // hotfix until wait a final relase
     mcData.blocksArray[274].boundingBox = 'block'
   })
@@ -45,11 +45,11 @@ const createNewBot = (botName, botPassword = "", server, port, customStart) => {
     botWebsocket.log("Ready!");
 
     if (customStart) {
-      const customFilePath = "./custom_start/custom.js";
+      const customFilePath = __dirname + "/custom_start/custom.js";
 
       accessFile(customFilePath)
         .catch((err) => {
-          const exampleFile = "./custom_start/custom_example.js";
+          const exampleFile = __dirname + "/custom_start/custom_example.js";
           return copyFile(exampleFile, customFilePath);
         })
         .then(() => {

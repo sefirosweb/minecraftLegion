@@ -1,0 +1,127 @@
+{
+  "config": {
+    "name": "MinerY5",
+    "job": "miner",
+    "mode": "none",
+    "distance": 10,
+    "helpFriends": false,
+    "pickUpItems": false,
+    "randomFarmArea": false,
+    "isCopingPatrol": false,
+    "canDig": false,
+    "canSleep": true,
+    "sleepArea": {
+      "x": "420",
+      "y": "122",
+      "z": "-357"
+    },
+    "canPlaceBlocks": false,
+    "allowSprinting": true,
+    "firstPickUpItemsFromKnownChests": true,
+    "canCraftItemWithdrawChest": true,
+    "itemsToBeReady": [
+      {
+        "item": "pickaxe",
+        "quantity": 1
+      },
+      {
+        "item": "shovel",
+        "quantity": 1
+      }
+    ],
+    "itemsCanBeEat": [
+      "bread",
+      "carrot",
+      "potato",
+      "sweet_berries",
+      "baked_potato",
+      "cooked_chicken",
+      "cooked_porkchop",
+      "cooked_mutton",
+      "golden_carrot"
+    ],
+    "chests": [
+      {
+        "name": "Input chest name",
+        "type": "withdraw",
+        "position": {
+          "x": 406,
+          "y": 124,
+          "z": -356,
+          "dimension": "minecraft:overworld"
+        },
+        "items": [
+          {
+            "item": "iron_pickaxe",
+            "quantity": 5
+          },
+          {
+            "item": "iron_shovel",
+            "quantity": 2
+          }
+        ]
+      },
+      {
+        "name": "Input chest name",
+        "type": "depositAll",
+        "position": {
+          "x": 406,
+          "y": 124,
+          "z": -356,
+          "dimension": "minecraft:overworld"
+        },
+        "items": [
+          {
+            "item": "iron_pickaxe",
+            "quantity": 5
+          },
+          {
+            "item": "iron_shovel",
+            "quantity": 2
+          }
+        ]
+      }
+    ],
+    "patrol": [],
+    "plantAreas": [],
+    "chestAreas": [
+      {
+        "yLayer": 62,
+        "xStart": 195,
+        "xEnd": 181,
+        "zStart": 100,
+        "zEnd": 100
+      }
+    ],
+    "farmAreas": [],
+    "farmAnimal": {
+      "seconds": 60,
+      "cow": 10,
+      "sheep": 10,
+      "wolf": 10,
+      "chicken": 10,
+      "cat": 10,
+      "horse": 10,
+      "donkey": 10,
+      "llama": 10,
+      "pig": 10,
+      "rabbit": 10,
+      "turtles": 10,
+      "panda": 10,
+      "fox": 10,
+      "bee": 10
+    },
+    "minerCords": {
+      "xStart": "400",
+      "xEnd": "431",
+      "yStart": "-30",
+      "yEnd": "87",
+      "zStart": "-352",
+      "zEnd": "-321",
+      "tunel": "vertically",
+      "orientation": "x+",
+      "world": "minecraft:overworld",
+      "reverse": true
+    }
+  }
+}

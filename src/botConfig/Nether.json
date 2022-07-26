@@ -1,0 +1,160 @@
+{
+  "config": {
+    "name": "Nether",
+    "job": "miner",
+    "mode": "pve",
+    "distance": 3,
+    "helpFriends": false,
+    "pickUpItems": false,
+    "randomFarmArea": false,
+    "isCopingPatrol": false,
+    "canDig": false,
+    "allowSprinting": false,
+    "firstPickUpItemsFromKnownChests": true,
+    "canCraftItemWithdrawChest": true,
+    "itemsToBeReady": [
+      {
+        "item": "sword",
+        "quantity": 1
+      },
+      {
+        "item": "iron_pickaxe",
+        "quantity": 1
+      },
+      {
+        "item": "iron_shovel",
+        "quantity": 1
+      }
+    ],
+    "itemsCanBeEat": [
+      "bread",
+      "carrot",
+      "potato",
+      "sweet_berries",
+      "baked_potato",
+      "cooked_chicken",
+      "cooked_porkchop",
+      "cooked_mutton",
+      "golden_carrot"
+    ],
+    "chests": [
+      {
+        "name": "Input chest name",
+        "type": "withdraw",
+        "position": {
+          "x": 35,
+          "y": 117,
+          "z": -1
+        },
+        "items": [
+          {
+            "item": "iron_pickaxe",
+            "quantity": 3
+          },
+          {
+            "item": "iron_shovel",
+            "quantity": 2
+          },
+          {
+            "item": "iron_sword",
+            "quantity": 1
+          },
+          {
+            "item": "iron_chestplate",
+            "quantity": 1
+          },
+          {
+            "item": "iron_helmet",
+            "quantity": 1
+          },
+          {
+            "item": "iron_leggings",
+            "quantity": 1
+          },
+          {
+            "item": "iron_boots",
+            "quantity": 1
+          }
+        ]
+      },
+      {
+        "name": "Input chest name",
+        "type": "depositAll",
+        "position": {
+          "x": 35,
+          "y": 117,
+          "z": 2
+        },
+        "items": [
+          {
+            "item": "iron_shovel",
+            "quantity": 2
+          },
+          {
+            "item": "iron_pickaxe",
+            "quantity": 3
+          },
+          {
+            "item": "carrot",
+            "quantity": 64
+          },
+          {
+            "item": "iron_sword",
+            "quantity": 1
+          },
+          {
+            "item": "netherrack",
+            "quantity": 128
+          },
+          {
+            "item": "iron_chestplate",
+            "quantity": 1
+          },
+          {
+            "item": "iron_helmet",
+            "quantity": 1
+          },
+          {
+            "item": "iron_leggings",
+            "quantity": 1
+          },
+          {
+            "item": "iron_boots",
+            "quantity": 1
+          }
+        ]
+      }
+    ],
+    "patrol": [],
+    "plantAreas": [],
+    "chestAreas": [],
+    "farmAreas": [],
+    "farmAnimal": {
+      "seconds": 60,
+      "cow": 10,
+      "sheep": 10,
+      "wolf": 10,
+      "chicken": 10,
+      "cat": 10,
+      "horse": 10,
+      "donkey": 10,
+      "llama": 10,
+      "pig": 10,
+      "rabbit": 10,
+      "turtles": 10,
+      "panda": 10,
+      "fox": 10,
+      "bee": 10
+    },
+    "minerCords": {
+      "xStart": "31",
+      "yStart": "117",
+      "zStart": "31",
+      "xEnd": "-32",
+      "yEnd": "122",
+      "zEnd": "-32",
+      "orientation": "x-",
+      "tunel": "horizontally"
+    }
+  }
+}

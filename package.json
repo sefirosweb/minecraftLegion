@@ -22,17 +22,19 @@
     },
     "devDependencies": {
         "nodemon": "2.0.19",
-        "standard": "17.0.0"
+        "standard": "17.0.0",
+        "ts-node": "^10.9.1",
+        "typescript": "^4.7.4"
     },
     "scripts": {
         "start": "nodemon index.js --ignore botConfig/ --ignore custom_start/",
-        "one": "nodemon --inspect=0.0.0.0:9229 start_bot.js $1 $2 --ignore botConfig/ --ignore custom_start/",
+        "one": "nodemon --inspect=0.0.0.0:9229 src/start_bot.ts $1 $2 --ignore src/botConfig/ --ignore src/custom_start/",
         "test": "echo \"Error: no test specified\" && exit 1",
         "standard": "standard --fix",
         "dockerrun": "docker run --rm -p:3000:3000 minecraftlegion",
         "docker": "docker run --rm -it --name minecraftLegion  -v ~/.gitconfig:/etc/gitconfig --network minecraftLegionNetwork -v $PWD:/home/app -w /home/app -u node -p 4500-4550:4500-4550 -p 9229:9229 node:16.13-bullseye /bin/bash",
         "update": "npx npm-check-updates",
-        "craft": "nodemon --inspect=0.0.0.0:9229 ./trash_files/copper.js"
+        "ts": "ts-node ./src/start_bot $1"
     },
     "repository": {
         "type": "git",
@@ -46,9 +48,9 @@
     "homepage": "https://github.com/sefirosweb/minecraftLegion#readme",
     "_moduleAliases": {
         "@": ".",
-        "@modules": "./modules",
-        "@BehaviorModules": "./BehaviorModules",
-        "@NestedStateModules": "./NestedStateModules",
-        "@config": "./config"
+        "@modules": "./src/modules",
+        "@BehaviorModules": "./src/BehaviorModules",
+        "@NestedStateModules": "./src/NestedStateModules",
+        "@config": "./src/config"
     }
 }

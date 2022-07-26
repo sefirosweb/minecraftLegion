@@ -3,19 +3,19 @@ on:
   push:
     branches: [master]
 
-jobs:
-  deploy:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Deploy to server 1
-        uses: appleboy/ssh-action@master
-        with:
-          host: "159.223.219.219,159.223.228.127,146.190.233.14"
-          username: root
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          port: 22
-          script: |
-            cd minecraftLegion/
-            git pull
-            npm install
-            docker restart $(docker ps -a -q)
+# jobs:
+#   deploy:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: Deploy to server 1
+#         uses: appleboy/ssh-action@master
+#         with:
+#           host: "159.223.219.219,159.223.228.127,146.190.233.14"
+#           username: root
+#           key: ${{ secrets.SSH_PRIVATE_KEY }}
+#           port: 22
+#           script: |
+#             cd minecraftLegion/
+#             git pull
+#             npm install
+#             docker restart $(docker ps -a -q)

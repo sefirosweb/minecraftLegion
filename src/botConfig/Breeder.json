@@ -1,0 +1,56 @@
+{
+  "config": {
+    "name": "Breeder",
+    "job": "breeder",
+    "mode": "none",
+    "distance": 10,
+    "helpFriends": false,
+    "pickUpItems": true,
+    "randomFarmArea": false,
+    "isCopingPatrol": false,
+    "canDig": false,
+    "allowSprinting": false,
+    "itemsToBeReady": [],
+    "itemsCanBeEat": [],
+    "chests": [],
+    "patrol": [],
+    "plantAreas": [],
+    "chestAreas": [],
+    "farmAreas": [
+      {
+        "yLayer": 63,
+        "xStart": 185,
+        "xEnd": 193,
+        "zStart": 141,
+        "zEnd": 132
+      }
+    ],
+    "farmAnimal": {
+      "seconds": 60,
+      "cow": 10,
+      "sheep": 10,
+      "wolf": 10,
+      "chicken": 10,
+      "cat": 10,
+      "horse": 10,
+      "donkey": 10,
+      "llama": 10,
+      "pig": 10,
+      "rabbit": 10,
+      "turtles": 10,
+      "panda": 10,
+      "fox": 10,
+      "bee": 10
+    },
+    "minerCords": {
+      "xStart": null,
+      "yStart": null,
+      "zStart": null,
+      "xEnd": null,
+      "yEnd": null,
+      "zEnd": null,
+      "orientation": null,
+      "tunel": null
+    }
+  }
+}

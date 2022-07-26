@@ -16,6 +16,7 @@ function combatFunction(bot, targets) {
   const hawkEye = require('minecrafthawkeye')
   bot.loadPlugin(hawkEye)
 
+  const mcData = require('minecraft-data')(bot.version)
   const movements = new mineflayerPathfinder.Movements(bot, mcData)
 
   const movementsForFliyingMobs = new mineflayerPathfinder.Movements(bot, mcData)

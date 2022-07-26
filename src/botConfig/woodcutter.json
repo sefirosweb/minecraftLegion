@@ -1,0 +1,191 @@
+{
+  "config": {
+    "name": "woodcutter",
+    "job": "farmer",
+    "mode": "pve",
+    "distance": 3,
+    "helpFriends": false,
+    "pickUpItems": true,
+    "randomFarmArea": true,
+    "isCopingPatrol": false,
+    "canDig": true,
+    "allowSprinting": false,
+    "firstPickUpItemsFromKnownChests": true,
+    "canCraftItemWithdrawChest": true,
+    "itemsToBeReady": [
+      {
+        "item": "iron_axe",
+        "quantity": 1
+      },
+      {
+        "item": "apple",
+        "quantity": 1
+      }
+    ],
+    "itemsCanBeEat": [
+      "bread",
+      "carrot",
+      "potato",
+      "sweet_berries",
+      "baked_potato",
+      "cooked_chicken",
+      "cooked_porkchop",
+      "cooked_mutton",
+      "apple"
+    ],
+    "chests": [
+      {
+        "name": "Input chest name",
+        "type": "withdraw",
+        "position": {
+          "x": 264,
+          "y": -56,
+          "z": -100
+        },
+        "items": [
+          {
+            "item": "iron_axe",
+            "quantity": 5
+          },
+          {
+            "item": "apple",
+            "quantity": 64
+          }
+        ]
+      },
+      {
+        "name": "Input chest name",
+        "type": "deposit",
+        "position": {
+          "x": 264,
+          "y": -56,
+          "z": -100
+        },
+        "items": [
+          {
+            "item": "oak_log",
+            "quantity": 64
+          },
+          {
+            "item": "apple",
+            "quantity": 640
+          }
+        ]
+      },
+      {
+        "name": "Input chest name",
+        "type": "depositAll",
+        "position": {
+          "x": 276,
+          "y": -58,
+          "z": -96
+        },
+        "items": [
+          {
+            "item": "iron_axe",
+            "quantity": 5
+          },
+          {
+            "item": "oak_planks",
+            "quantity": 64
+          },
+          {
+            "item": "iron_ingot",
+            "quantity": 64
+          },
+          {
+            "item": "stick",
+            "quantity": 64
+          },
+          {
+            "item": "oak_sapling",
+            "quantity": 64
+          },
+          {
+            "item": "apple",
+            "quantity": 64
+          }
+        ]
+      },
+      {
+        "name": "dimen",
+        "type": "withdraw",
+        "position": {
+          "x": 266,
+          "y": -56,
+          "z": -102
+        },
+        "items": [],
+        "dimension": "minecraft:overworld"
+      },
+      {
+        "name": "Input chest name",
+        "type": "withdraw",
+        "position": {
+          "x": 35,
+          "y": 117,
+          "z": 3
+        },
+        "items": [],
+        "dimension": "minecraft:the_nether"
+      }
+    ],
+    "patrol": [],
+    "plantAreas": [
+      {
+        "plant": "oak_sapling",
+        "yLayer": -59,
+        "xStart": 282,
+        "xEnd": 274,
+        "zStart": -104,
+        "zEnd": -138
+      }
+    ],
+    "chestAreas": [
+      {
+        "yLayer": null,
+        "xStart": null,
+        "xEnd": null,
+        "zStart": null,
+        "zEnd": null
+      }
+    ],
+    "farmAreas": [
+      {
+        "yLayer": 2,
+        "xStart": 2,
+        "xEnd": 2,
+        "zStart": 2,
+        "zEnd": 2
+      }
+    ],
+    "farmAnimal": {
+      "seconds": 60,
+      "cow": 1,
+      "sheep": 2,
+      "wolf": 15,
+      "chicken": 3,
+      "cat": 11,
+      "horse": 4,
+      "donkey": 5,
+      "llama": 6,
+      "pig": 13,
+      "rabbit": 12,
+      "turtles": 14,
+      "panda": 9,
+      "fox": 7,
+      "bee": 8
+    },
+    "minerCords": {
+      "xStart": "464",
+      "yStart": "23",
+      "zStart": "333",
+      "xEnd": "2312",
+      "yEnd": "2211",
+      "zEnd": "12",
+      "orientation": "z+",
+      "tunel": "vertically",
+      "validationCustomFeed": "1233"
+    }
+  }
+}

@@ -1,13 +1,12 @@
-const fs = require("fs");
-const util = require("util");
-const copyFile = util.promisify(fs.copyFile);
-const accessFile = util.promisify(fs.access);
-
 require("module-alias/register");
-const mineflayer = require("mineflayer");
-const botWebsocket = require("@modules/botWebsocket");
-const { server, port, customStart } = require("@config");
-const createNewBot = require("./createNewBot");
+// @ts-ignore
+import config from "./config";
+
+console.log(config)
+const { server, port, customStart } = config
+
+// @ts-ignore
+import createNewBot from "./createNewBot"
 
 
 console.log("Usage : node start_bot.js <botName> <botPassword>");

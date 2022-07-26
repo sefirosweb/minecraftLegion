@@ -1,0 +1,274 @@
+{
+  "config": {
+    "name": "Miner4",
+    "job": "miner",
+    "mode": "pve",
+    "distance": 10,
+    "helpFriends": false,
+    "pickUpItems": false,
+    "randomFarmArea": false,
+    "isCopingPatrol": false,
+    "canDig": false,
+    "canSleep": true,
+    "sleepArea": {
+      "x": "1228",
+      "y": "51",
+      "z": "-3579"
+    },
+    "canPlaceBlocks": false,
+    "allowSprinting": false,
+    "firstPickUpItemsFromKnownChests": true,
+    "canCraftItemWithdrawChest": true,
+    "itemsToBeReady": [
+      {
+        "item": "sword",
+        "quantity": 1
+      },
+      {
+        "item": "iron_pickaxe",
+        "quantity": 1
+      },
+      {
+        "item": "iron_shovel",
+        "quantity": 1
+      }
+    ],
+    "itemsCanBeEat": [
+      "bread",
+      "carrot",
+      "potato",
+      "sweet_berries",
+      "baked_potato",
+      "cooked_chicken",
+      "cooked_porkchop",
+      "cooked_mutton",
+      "golden_carrot"
+    ],
+    "chests": [
+      {
+        "name": "Input chest name",
+        "type": "withdraw",
+        "position": {
+          "x": 1224,
+          "y": 51,
+          "z": -3585,
+          "dimension": "minecraft:overworld"
+        },
+        "items": [
+          {
+            "item": "carrot",
+            "quantity": 64
+          }
+        ]
+      },
+      {
+        "name": "Input chest name",
+        "type": "withdraw",
+        "position": {
+          "x": 1223,
+          "y": 51,
+          "z": -3585,
+          "dimension": "minecraft:overworld"
+        },
+        "items": [
+          {
+            "item": "iron_pickaxe",
+            "quantity": 3
+          },
+          {
+            "item": "iron_shovel",
+            "quantity": 2
+          },
+          {
+            "item": "iron_sword",
+            "quantity": 1
+          },
+          {
+            "item": "iron_helmet",
+            "quantity": 1
+          },
+          {
+            "item": "iron_chestplate",
+            "quantity": 1
+          },
+          {
+            "item": "iron_boots",
+            "quantity": 1
+          },
+          {
+            "item": "iron_leggings",
+            "quantity": 1
+          }
+        ]
+      },
+      {
+        "name": "Input chest name",
+        "type": "withdraw",
+        "position": {
+          "x": "1220",
+          "y": "51",
+          "z": "-3577",
+          "dimension": "minecraft:overworld"
+        },
+        "items": [
+          {
+            "item": "cobblestone",
+            "quantity": 64
+          }
+        ]
+      },
+      {
+        "name": "Input chest name",
+        "type": "deposit",
+        "position": {
+          "x": 1221,
+          "y": 52,
+          "z": -3585,
+          "dimension": "minecraft:overworld"
+        },
+        "items": [
+          {
+            "item": "stick",
+            "quantity": 0
+          },
+          {
+            "item": "iron_ingot",
+            "quantity": 0
+          },
+          {
+            "item": "oak_planks",
+            "quantity": 0
+          },
+          {
+            "item": "iron_block",
+            "quantity": 0
+          },
+          {
+            "item": "iron_pickaxe",
+            "quantity": 3
+          },
+          {
+            "item": "iron_shovel",
+            "quantity": 2
+          },
+          {
+            "item": "iron_sword",
+            "quantity": 1
+          },
+          {
+            "item": "iron_helmet",
+            "quantity": 1
+          },
+          {
+            "item": "iron_chestplate",
+            "quantity": 1
+          },
+          {
+            "item": "iron_boots",
+            "quantity": 1
+          },
+          {
+            "item": "iron_leggings",
+            "quantity": 1
+          }
+        ]
+      },
+      {
+        "name": "Input chest name",
+        "type": "deposit",
+        "position": {
+          "x": "1220",
+          "y": "54",
+          "z": "-3578",
+          "dimension": "minecraft:overworld"
+        },
+        "items": [
+          {
+            "item": "cobblestone",
+            "quantity": 64
+          }
+        ]
+      },
+      {
+        "name": "Input chest name",
+        "type": "depositAll",
+        "position": {
+          "x": "1220",
+          "y": "51",
+          "z": "-3576",
+          "dimension": "minecraft:overworld"
+        },
+        "items": [
+          {
+            "item": "iron_pickaxe",
+            "quantity": 3
+          },
+          {
+            "item": "iron_shovel",
+            "quantity": 2
+          },
+          {
+            "item": "iron_sword",
+            "quantity": 1
+          },
+          {
+            "item": "iron_helmet",
+            "quantity": 1
+          },
+          {
+            "item": "iron_chestplate",
+            "quantity": 1
+          },
+          {
+            "item": "iron_boots",
+            "quantity": 1
+          },
+          {
+            "item": "iron_leggings",
+            "quantity": 1
+          },
+          {
+            "item": "cobblestone",
+            "quantity": 64
+          },
+          {
+            "item": "carrot",
+            "quantity": 64
+          }
+        ]
+      }
+    ],
+    "patrol": [],
+    "plantAreas": [],
+    "chestAreas": [],
+    "farmAreas": [],
+    "farmAnimal": {
+      "seconds": 60,
+      "cow": 10,
+      "sheep": 10,
+      "wolf": 10,
+      "chicken": 10,
+      "cat": 10,
+      "horse": 10,
+      "donkey": 10,
+      "llama": 10,
+      "pig": 10,
+      "rabbit": 10,
+      "turtles": 10,
+      "panda": 10,
+      "fox": 10,
+      "bee": 10
+    },
+    "minerCords": {
+      "xStart": "1199",
+      "xEnd": "1248",
+      "yStart": "0",
+      "yEnd": "0",
+      "zStart": "-3579",
+      "zEnd": "-3553",
+      "tunel": "vertically",
+      "orientation": "x-",
+      "world": "minecraft:overworld"
+    }
+  }
+}

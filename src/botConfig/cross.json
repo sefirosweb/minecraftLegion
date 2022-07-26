@@ -1,0 +1,141 @@
+{
+  "config": {
+    "name": "cross",
+    "job": "miner",
+    "mode": "pve",
+    "distance": 3,
+    "helpFriends": false,
+    "pickUpItems": false,
+    "randomFarmArea": false,
+    "isCopingPatrol": false,
+    "canDig": false,
+    "allowSprinting": false,
+    "firstPickUpItemsFromKnownChests": true,
+    "canCraftItemWithdrawChest": true,
+    "itemsToBeReady": [
+      {
+        "item": "iron_pickaxe",
+        "quantity": 1
+      },
+      {
+        "item": "iron_shovel",
+        "quantity": 1
+      },
+      {
+        "item": "carrot",
+        "quantity": 2
+      },
+      {
+        "item": "basalt",
+        "quantity": 2
+      }
+    ],
+    "itemsCanBeEat": [
+      "carrots"
+    ],
+    "chests": [
+      {
+        "name": "Input chest name",
+        "type": "withdraw",
+        "position": {
+          "x": 2,
+          "y": 65,
+          "z": 5,
+          "dimension": "minecraft:the_nether"
+        },
+        "items": [
+          {
+            "item": "iron_shovel",
+            "quantity": 1
+          },
+          {
+            "item": "iron_pickaxe",
+            "quantity": 5
+          }
+        ],
+        "dimension": "minecraft:overworld"
+      },
+      {
+        "name": "Input chest name",
+        "type": "withdraw",
+        "position": {
+          "x": 2,
+          "y": 65,
+          "z": 5,
+          "dimension": "minecraft:the_nether"
+        },
+        "items": [
+          {
+            "item": "carrot",
+            "quantity": 10
+          },
+          {
+            "item": "basalt",
+            "quantity": 128
+          }
+        ]
+      },
+      {
+        "name": "Input chest name",
+        "type": "depositAll",
+        "position": {
+          "x": 2,
+          "y": 65,
+          "z": 5,
+          "dimension": "minecraft:the_nether"
+        },
+        "items": [
+          {
+            "item": "iron_shovel",
+            "quantity": 1
+          },
+          {
+            "item": "carrot",
+            "quantity": 10
+          },
+          {
+            "item": "basalt",
+            "quantity": 128
+          },
+          {
+            "item": "iron_pickaxe",
+            "quantity": 5
+          }
+        ],
+        "dimension": "minecraft:the_nether"
+      }
+    ],
+    "patrol": [],
+    "plantAreas": [],
+    "chestAreas": [],
+    "farmAreas": [],
+    "farmAnimal": {
+      "seconds": 60,
+      "cow": 10,
+      "sheep": 10,
+      "wolf": 10,
+      "chicken": 10,
+      "cat": 10,
+      "horse": 10,
+      "donkey": 10,
+      "llama": 10,
+      "pig": 10,
+      "rabbit": 10,
+      "turtles": 10,
+      "panda": 10,
+      "fox": 10,
+      "bee": 10
+    },
+    "minerCords": {
+      "xStart": "3",
+      "xEnd": "6",
+      "yStart": "65",
+      "yEnd": "68",
+      "zStart": "-272",
+      "zEnd": "-78",
+      "tunel": "horizontally",
+      "orientation": "z-",
+      "world": "minecraft:the_nether"
+    }
+  }
+}

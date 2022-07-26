@@ -1,0 +1,104 @@
+{
+  "config": {
+    "name": "Miner",
+    "job": "miner",
+    "mode": "pve",
+    "distance": 10,
+    "helpFriends": false,
+    "pickUpItems": false,
+    "randomFarmArea": false,
+    "isCopingPatrol": false,
+    "canDig": false,
+    "allowSprinting": false,
+    "itemsToBeReady": [
+      {
+        "item": "pickaxe",
+        "quantity": 1
+      },
+      {
+        "item": "shovel",
+        "quantity": 1
+      }
+    ],
+    "itemsCanBeEat": [
+      "bread",
+      "carrot",
+      "potato",
+      "sweet_berries",
+      "baked_potato",
+      "cooked_chicken",
+      "cooked_porkchop",
+      "cooked_mutton",
+      "golden_carrot"
+    ],
+    "chests": [
+      {
+        "name": "Input chest name",
+        "type": "depositAll",
+        "position": {
+          "x": 188,
+          "y": 63,
+          "z": 105
+        },
+        "items": [
+          {
+            "item": "pickaxe",
+            "quantity": 5
+          },
+          {
+            "item": "shovel",
+            "quantity": 5
+          }
+        ]
+      }
+    ],
+    "patrol": [],
+    "plantAreas": [],
+    "chestAreas": [
+      {
+        "yLayer": 62,
+        "xStart": 195,
+        "xEnd": 181,
+        "zStart": 100,
+        "zEnd": 100
+      }
+    ],
+    "farmAreas": [],
+    "farmAnimal": {
+      "seconds": 60,
+      "cow": 10,
+      "sheep": 10,
+      "wolf": 10,
+      "chicken": 10,
+      "cat": 10,
+      "horse": 10,
+      "donkey": 10,
+      "llama": 10,
+      "pig": 10,
+      "rabbit": 10,
+      "turtles": 10,
+      "panda": 10,
+      "fox": 10,
+      "bee": 10
+    },
+    "minerCords": {
+      "xStart": "178",
+      "yStart": "60",
+      "zStart": "91",
+      "xEnd": "1780",
+      "yEnd": "56",
+      "zEnd": "87",
+      "orientation": "x+",
+      "tunel": "horizontally"
+    },
+    "canSleep": true,
+    "sleepArea": {
+      "x": null,
+      "y": null,
+      "z": null
+    },
+    "canPlaceBlocks": false,
+    "firstPickUpItemsFromKnownChests": true,
+    "canCraftItemWithdrawChest": true
+  }
+}
