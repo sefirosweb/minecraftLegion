@@ -19,7 +19,7 @@ export type Chests = {
 
 export type Config = {
     job: Jobs
-    sleepArea: Vec3
+    sleepArea?: Vec3
 }
 
 export type Portals = {
@@ -38,7 +38,7 @@ export interface LegionStateMachineTargets extends StateMachineTargets {
     isNight: boolean;
     triedToSleep: boolean;
 
-    config?: Config;
+    config: Config;
 
     guardJob?: GuardJob;
     archerJob?: ArcherJob;
@@ -48,3 +48,20 @@ export interface LegionStateMachineTargets extends StateMachineTargets {
     sorterJob?: SorterJob;
     crafterJob?: CrafterJob;
 }
+
+declare module 'mineflayer' {
+    export interface BotEvents {
+        customEventPhysicTick: () => Promise<void> | void
+
+        customEventChat: (
+            username: string,
+            message: string,
+            translate: string | null,
+            jsonMsg: ChatMessage,
+            matches: string[] | null
+        ) => Promise<void> | void
+
+        customEventMove: (position: Vec3) => Promise<void> | void
+    }
+}
+

@@ -91,7 +91,7 @@ const goSleepFunction = function (bot: Bot, targets: LegionStateMachineTargets) 
             return a.distance - b.distance
           })
       },
-      shouldTransition: () => bot.entity.position.distanceTo(targets.config.sleepArea) < 5
+      shouldTransition: () => targets.config.sleepArea !== undefined && bot.entity.position.distanceTo(targets.config.sleepArea) < 5
     }),
 
     new StateTransition({

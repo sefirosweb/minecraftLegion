@@ -14,5 +14,5 @@ export enum DefaultBlockForPlace {
 }
 
 export enum Jobs {
-    'guard', 'archer', 'farmer', 'breeder', 'sorter', 'miner', 'crafter'
+    'none', 'guard', 'archer', 'farmer', 'breeder', 'sorter', 'miner', 'crafter'
 }
