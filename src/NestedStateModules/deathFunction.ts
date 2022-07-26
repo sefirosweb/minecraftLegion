@@ -1,18 +1,25 @@
-const {
+import { BotwebsocketAction, LegionStateMachineTargets, Master } from '@/types'
+import { Bot } from 'mineflayer'
+import {
   StateTransition,
   BehaviorIdle,
   NestedStateMachine
-} = require('mineflayer-statemachine')
-const BehaviorGetPlayer = require('@BehaviorModules/BehaviorGetPlayer')
-const botWebsocket = require('@modules/botWebsocket')
-const BehaviorLoadConfig = require('@BehaviorModules/BehaviorLoadConfig')
+} from 'mineflayer-statemachine'
+//@ts-ignore
+import BehaviorGetPlayer from '@BehaviorModules/BehaviorGetPlayer'
+//@ts-ignore
+import botWebsocket from '@modules/botWebsocket'
+//@ts-ignore
+import BehaviorLoadConfig from '@BehaviorModules/BehaviorLoadConfig'
 
-function deathFunction(bot, targets) {
+function deathFunction(bot: Bot, targets: LegionStateMachineTargets) {
   const mcData = require('minecraft-data')(bot.version)
 
-  const start = new BehaviorIdle(targets)
+  const start = new BehaviorIdle()
   start.stateName = 'Start'
+  //@ts-ignore
   start.x = 125
+  //@ts-ignore
   start.y = 113
 
   const startWork = require('@NestedStateModules/startWorkFunction')(bot, targets)
@@ -148,7 +155,7 @@ function deathFunction(bot, targets) {
     botWebsocket.emitCombat(false)
   }
 
-  botWebsocket.on('action', toBotData => {
+  botWebsocket.on('action', (toBotData: BotwebsocketAction) => {
     const { type } = toBotData
     switch (type) {
       case 'reloadConfig':
@@ -162,7 +169,7 @@ function deathFunction(bot, targets) {
 
   bot.on('chat', (master, message) => {
     if (message === 'hi ' + bot.username || message === 'hi all') {
-      const masters = botWebsocket.getMasters()
+      const masters = botWebsocket.getMasters() as Master[]
       const findMaster = masters.find(e => e?.name === master)
 
       if (findMaster === undefined) {

@@ -20,6 +20,10 @@ export type Chests = {
 export type Config = {
     job: Jobs
     sleepArea?: Vec3
+    allowSprinting: boolean
+    canDig: boolean
+    canPlaceBlocks: boolean
+    canSleep: boolean
 }
 
 export type Portals = {

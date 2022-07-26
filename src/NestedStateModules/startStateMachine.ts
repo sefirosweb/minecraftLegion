@@ -56,7 +56,11 @@ module.exports = (bot: Bot) => {
 
   const targets: LegionStateMachineTargets = {
     config: {
-      job: Jobs.none
+      job: Jobs.none,
+      allowSprinting: false,
+      canDig: false,
+      canPlaceBlocks: false,
+      canSleep: false,
     },
     movements: movements,
     chests: {},
