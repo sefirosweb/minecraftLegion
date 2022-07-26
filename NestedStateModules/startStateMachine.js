@@ -130,6 +130,7 @@ module.exports = (bot) => {
   const stateMachine = new BotStateMachine(bot, root)
 
   bot.on('death', function () {
+    bot.stopDigging()
     // Clear custom events when dies
     bot.removeAllListeners('customEventPhysicTick')
     bot.removeAllListeners('customEventChat')

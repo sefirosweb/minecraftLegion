@@ -76,8 +76,9 @@ function commandsFunction(bot, targets) {
       child: lookAtPlayersState,
       name: 'Enter to nested',
       onTransition: () => {
+        bot.stopDigging()
         bot.wake()
-          .catch(e => {})
+          .catch(e => { })
         bot.on('customEventChat', botChatCommandFunctionListener)
       },
       shouldTransition: () => true

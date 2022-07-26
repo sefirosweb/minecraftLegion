@@ -133,6 +133,7 @@ function deathFunction(bot, targets) {
   ]
 
   function reloadTrigger() {
+    bot.stopDigging()
     transitions[0].trigger()
     transitions[1].trigger()
   }
