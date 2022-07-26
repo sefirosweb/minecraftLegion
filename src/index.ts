@@ -1,11 +1,16 @@
 require("module-alias/register");
-const fs = require("fs");
+import fs from "fs";
+import path from "path";
 
-const filePath = "./config.js";
+type botType = {
+  username: string
+}
 
-fs.access(filePath, fs.F_OK, (err) => {
+const filePath = path.join(__dirname, "config.js")
+
+fs.access(filePath, 0, (err) => {
   if (err) {
-    fs.copyFile("./config_example.js", filePath, (err) => {
+    fs.copyFile(path.join(__dirname, "config_example.js"), filePath, (err) => {
       if (err) throw err;
       start_bot();
       return;
@@ -18,11 +23,10 @@ fs.access(filePath, fs.F_OK, (err) => {
 const start_bot = () => {
   const { autoRestart } = require("@config");
   const cp = require("child_process");
-  const path = require("path");
 
-  function startBot(botName, password) {
-    const command = "node " + path.join(__dirname, "start_bot") + " " + botName + " " + password;
-    cp.exec(command, (err, stdout, stderr) => {
+  function startBot(botName: string, password?: string) {
+    const command = `npm run ts ${botName} ${password ?? ''}`;
+    cp.exec(command, (err: string, stdout: string, stderr: string) => {
       if (err) {
         console.log(`Error: ${err}`);
         console.log(`Bot broken: ${botName}`);
@@ -42,10 +46,11 @@ const start_bot = () => {
     });
   }
 
-  const botsToStart = [
+  const botsToStart: botType[] = [
     // { username: 'Sephi' }
-    // { username: 'Sorter' },
-    
+    { username: 'Types' },
+    { username: 'Type' },
+
     // { username: "MinerY1" },
     // { username: "MinerY2" },
     // { username: "MinerY3" },
@@ -54,7 +59,7 @@ const start_bot = () => {
     // { username: "MinerY6" },
     // { username: "MinerY7" },
     // { username: "MinerY8" },
-    
+
     // { username: "MinerX+" },
     // { username: "MinerX-" },
     // { username: "MinerZ+" },
@@ -85,7 +90,6 @@ const start_bot = () => {
   // Master websocket for load bots
   const { webServer, webServerPort, webServerPassword } = require("@config");
   const io = require("socket.io-client");
-  const { exit } = require("process");
   const socket = io(webServer + ":" + webServerPort);
   let loged = false;
 
@@ -95,7 +99,11 @@ const start_bot = () => {
     socket.emit("login", webServerPassword);
   });
 
-  socket.on("login", (authenticate) => {
+  type socketAuth = {
+    auth: string
+  }
+
+  socket.on("login", (authenticate: socketAuth) => {
     if (authenticate.auth) {
       loged = true;
     } else {
@@ -107,7 +115,12 @@ const start_bot = () => {
     console.log("disconnected from webserver");
   });
 
-  socket.on("botConnect", (data) => {
+  type botSocket = {
+    botName: string
+    botPassword?: string
+  }
+
+  socket.on("botConnect", (data: botSocket) => {
     if (!loged) {
       return;
     }

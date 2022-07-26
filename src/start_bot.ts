@@ -1,4 +1,5 @@
 require("module-alias/register");
+//@ts-ignore
 import config from "./config";
 const { server, port, customStart } = config
 

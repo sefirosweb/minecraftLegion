@@ -1,11 +1,15 @@
-const fs = require("fs");
-const util = require("util");
+import fs from "fs";
+import util from "util";
+import mineflayer from "mineflayer";
+import path from "path";
+
 const copyFile = util.promisify(fs.copyFile);
 const accessFile = util.promisify(fs.access);
 
 require("module-alias/register");
-const mineflayer = require("mineflayer");
-const botWebsocket = require("@modules/botWebsocket");
+
+//@ts-ignore
+import botWebsocket from "@modules/botWebsocket";
 
 export type Props = {
   botName?: string;
@@ -42,7 +46,7 @@ export const createNewBot = (props: Props): void => {
     process.exit();
   });
 
-  bot.once("error", (error: string) => {
+  bot.once("error", (error) => {
     botWebsocket.log("Error bot detected " + JSON.stringify(error));
     console.log(error);
     process.exit();
@@ -54,18 +58,18 @@ export const createNewBot = (props: Props): void => {
     mcData.blocksArray[274].boundingBox = 'block' // hot fix for cross the portal of the end
   })
 
-  bot.once("spawn", async () => {
+  bot.once("spawn", () => {
     console.log(bot.version);
     bot.chat(`/login ${botPassword}`)
     botWebsocket.connect();
     botWebsocket.log("Ready!");
 
     if (customStart) {
-      const customFilePath = __dirname + "/custom_start/custom.js";
+      const customFilePath = path.join(__dirname, "custom_start/custom.js")
 
       accessFile(customFilePath)
         .catch(() => {
-          const exampleFile = __dirname + "/custom_start/custom_example.js";
+          const exampleFile = path.join(__dirname, "custom_start/custom_example.js")
           return copyFile(exampleFile, customFilePath);
         })
         .then(() => {

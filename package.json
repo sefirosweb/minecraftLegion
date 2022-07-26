@@ -27,14 +27,14 @@
         "typescript": "^4.7.4"
     },
     "scripts": {
-        "start": "nodemon index.js --ignore botConfig/ --ignore custom_start/",
+        "start": "nodemon src/index.ts --ignore botConfig/ --ignore custom_start/",
         "one": "nodemon --inspect=0.0.0.0:9229 src/start_bot.ts $1 $2 --ignore src/botConfig/ --ignore src/custom_start/",
         "test": "echo \"Error: no test specified\" && exit 1",
         "standard": "standard --fix",
         "dockerrun": "docker run --rm -p:3000:3000 minecraftlegion",
         "docker": "docker run --rm -it --name minecraftLegion  -v ~/.gitconfig:/etc/gitconfig --network minecraftLegionNetwork -v $PWD:/home/app -w /home/app -u node -p 4500-4550:4500-4550 -p 9229:9229 node:16.13-bullseye /bin/bash",
         "update": "npx npm-check-updates",
-        "ts": "ts-node ./src/start_bot $1"
+        "ts": "ts-node ./src/start_bot $1 $2"
     },
     "repository": {
         "type": "git",

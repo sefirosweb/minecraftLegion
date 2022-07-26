@@ -1,6 +1,7 @@
+
 const config = {
   server: '127.0.0.1', // Minecraft Server
-  port: '25565', // Minecraft Port
+  port: 25565, // Minecraft Port
   masters: [{ name: 'PlayerName' }, { name: 'SecondPlayerName' }], // Is requeried for manage the bot in game, offline mode
   webServer: 'http://minecraftlegionwebserver', // host minecraftLegionWebServer Web
   webServerPort: '4001', // minecraftLegionWebServer PORT
@@ -9,4 +10,6 @@ const config = {
   customStart: false,
   autoRestart: true
 }
-module.exports = config
+
+export default config
+
