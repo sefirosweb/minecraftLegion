@@ -35,6 +35,10 @@ export type Portals = {
     the_end: Array<Vec3>
 };
 
+export type ItemDrop = {
+    position: Vec3
+}
+
 export interface LegionStateMachineTargets extends StateMachineTargets {
     movements: Movements;
     chests: Chests;
@@ -43,6 +47,8 @@ export interface LegionStateMachineTargets extends StateMachineTargets {
     triedToSleep: boolean;
 
     config: Config;
+
+    itemDrop?: ItemDrop; // TODO FIX
 
     guardJob?: GuardJob;
     archerJob?: ArcherJob;
@@ -75,6 +81,12 @@ declare module 'mineflayer' {
 
         newListener: (event: string | symbol, listener: Function) => Promise<void> | void
         removeListener: (event: string | symbol, listener: Function) => Promise<void> | void
+    }
+}
+
+declare module 'prismarine-entity' {
+    export interface Entity {
+        isEnemy?: boolean
     }
 }
 

@@ -1,22 +1,35 @@
-const {
+import {
   StateTransition,
   BehaviorIdle,
   NestedStateMachine,
   BehaviorFollowEntity
-} = require('mineflayer-statemachine')
+} from 'mineflayer-statemachine'
 
-const BehaviorLoadConfig = require('@BehaviorModules/BehaviorLoadConfig')
-const BehaviorMoveToArray = require('@BehaviorModules/BehaviorMoveToArray')
-const BehaviorEatFood = require('@BehaviorModules/BehaviorEatFood')
-const BehaviorEquipAll = require('@BehaviorModules/BehaviorEquipAll')
-const BehaviorFindItems = require('@BehaviorModules/BehaviorFindItems')
-const BehaviorHelpFriend = require('@BehaviorModules/BehaviorHelpFriend')
-const BehaviorMoveTo = require('@BehaviorModules/BehaviorMoveTo')
+//@ts-ignore
+import BehaviorLoadConfig from '@BehaviorModules/BehaviorLoadConfig'
+//@ts-ignore
+import BehaviorMoveToArray from '@BehaviorModules/BehaviorMoveToArray'
+//@ts-ignore
+import BehaviorEatFood from '@BehaviorModules/BehaviorEatFood'
+//@ts-ignore
+import BehaviorEquipAll from '@BehaviorModules/BehaviorEquipAll'
+//@ts-ignore
+import BehaviorFindItems from '@BehaviorModules/BehaviorFindItems'
+//@ts-ignore
+import BehaviorHelpFriend from '@BehaviorModules/BehaviorHelpFriend'
+//@ts-ignore
+import BehaviorMoveTo from '@BehaviorModules/BehaviorMoveTo'
+//@ts-ignore
+import { Bot } from 'mineflayer'
+//@ts-ignore
+import { LegionStateMachineTargets } from '@/types'
 
-function guardJobFunction(bot, targets) {
-  const start = new BehaviorIdle(targets)
+function guardJobFunction(bot: Bot, targets: LegionStateMachineTargets) {
+  const start = new BehaviorIdle()
   start.stateName = 'Start'
+  //@ts-ignore
   start.x = 125
+  //@ts-ignore
   start.y = 113
 
   const loadConfig = new BehaviorLoadConfig(bot, targets)
@@ -56,9 +69,12 @@ function guardJobFunction(bot, targets) {
   helpFriend.x = 525
   helpFriend.y = 813
 
+  //@ts-ignore
   const goFriend = new BehaviorFollowEntity(bot, targets)
   goFriend.stateName = 'Go To Help Friend'
+  //@ts-ignore
   goFriend.x = 725
+  //@ts-ignore
   goFriend.y = 813
 
   const combatStrategy = require('@NestedStateModules/combat/combatStrategyFunction')(bot, targets)
@@ -118,7 +134,7 @@ function guardJobFunction(bot, targets) {
       child: goToObject,
       name: 'patrol -> goToObject',
       onTransition: () => {
-        targets.position = targets.itemDrop.position.offset(0, 0.2, 0).clone()
+        targets.position = targets.itemDrop && targets.itemDrop.position.offset(0, 0.2, 0).clone()
       },
       shouldTransition: () => findItem.search() && bot.inventory.items().length < 33
     }),
@@ -132,7 +148,7 @@ function guardJobFunction(bot, targets) {
           return true
         }
 
-        if (targets.position.distanceTo(targets.itemDrop.position) > 1) {
+        if (targets.itemDrop && targets.position && targets.position.distanceTo(targets.itemDrop.position) > 1) {
           targets.position = targets.itemDrop.position.offset(0, 0.2, 0).clone()
           goToObject.restart()
         }
