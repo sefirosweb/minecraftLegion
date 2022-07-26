@@ -74,3 +74,7 @@ declare module 'mineflayer' {
     }
 }
 
+export type Coordinates = 'x+' | 'x-' | 'z+' | 'z-'
+export type Master = {
+    name: string
+}

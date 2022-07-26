@@ -1,41 +1,62 @@
-const Vec3 = require('vec3')
+import { Vec3 } from 'vec3'
 
-const {
+import {
   StateTransition,
   BehaviorIdle,
   BehaviorFollowEntity,
   BehaviorLookAtEntity,
   NestedStateMachine
-} = require('mineflayer-statemachine')
-const botConfig = require('@modules/botConfig')
-const botWebsocket = require('@modules/botWebsocket')
+} from 'mineflayer-statemachine'
+
+//@ts-ignore
+import botConfig from '@modules/botConfig'
+//@ts-ignore
+import botWebsocket from '@modules/botWebsocket'
+import { Bot } from 'mineflayer'
+import { BotwebsocketAction, Coordinates, LegionStateMachineTargets, Master } from '@/types'
+import { Entity } from 'prismarine-entity'
+import mineflayerPathfinder from 'mineflayer-pathfinder'
 
 
-function commandsFunction(bot, targets) {
-  const start = new BehaviorIdle(targets)
+function commandsFunction(bot: Bot, targets: LegionStateMachineTargets) {
+  const start = new BehaviorIdle()
   start.stateName = 'Start'
+  //@ts-ignore
   start.x = 125
+  //@ts-ignore
   start.y = 113
 
-  const exit = new BehaviorIdle(targets)
+  const exit = new BehaviorIdle()
   exit.stateName = 'Exit'
+  //@ts-ignore
   exit.x = 350
+  //@ts-ignore
   exit.y = 250
 
+  //@ts-ignore
   const followPlayer = new BehaviorFollowEntity(bot, targets)
   followPlayer.stateName = 'Follow Player'
+  //@ts-ignore
   followPlayer.x = 125
+  //@ts-ignore
   followPlayer.y = 313
+  //@ts-ignore
   followPlayer.movements = targets.movements
 
+  //@ts-ignore
   const lookAtFollowTarget = new BehaviorLookAtEntity(bot, targets)
   lookAtFollowTarget.stateName = 'Look Player'
+  //@ts-ignore
   lookAtFollowTarget.x = 550
+  //@ts-ignore
   lookAtFollowTarget.y = 313
 
+  //@ts-ignore
   const lookAtPlayersState = new BehaviorLookAtEntity(bot, targets)
   lookAtPlayersState.stateName = 'Stay In Position'
+  //@ts-ignore
   lookAtPlayersState.x = 350
+  //@ts-ignore
   lookAtPlayersState.y = 113
 
   const transitions = [
@@ -78,7 +99,7 @@ function commandsFunction(bot, targets) {
       onTransition: () => {
         bot.stopDigging()
         bot.wake()
-          .catch(e => { })
+          .catch(() => { })
         bot.on('customEventChat', botChatCommandFunctionListener)
       },
       shouldTransition: () => true
@@ -102,8 +123,9 @@ function commandsFunction(bot, targets) {
     transitions[5].trigger()
   }
 
-  function followTrigger(master) {
-    const filter = e => e.type === 'player' &&
+  function followTrigger(master: string) {
+
+    const filter = (e: Entity) => e.type === 'player' &&
       e.username === master &&
       e.mobType !== 'Armor Stand'
 
@@ -127,7 +149,7 @@ function commandsFunction(bot, targets) {
     targets.entity = undefined
   }
 
-  botWebsocket.on('action', toBotData => {
+  botWebsocket.on('action', (toBotData: BotwebsocketAction) => {
     const { type, value } = toBotData
 
     // Generic variables
@@ -144,7 +166,7 @@ function commandsFunction(bot, targets) {
         endCommandsTrigger()
         break
       case 'interactWithPlayer':
-        filter = e => e.type === 'player' && e.position.distanceTo(bot.entity.position) < 3
+        filter = (e: Entity) => e.type === 'player' && e.position.distanceTo(bot.entity.position) < 3
         entity = bot.nearestEntity(filter)
         if (entity) { bot.useOn(entity) }
         break
@@ -164,9 +186,7 @@ function commandsFunction(bot, targets) {
     }
   })
 
-  const moveTo = (to) => {
-    const mineflayerPathfinder = require('mineflayer-pathfinder')
-    const mcData = require('minecraft-data')(bot.version)
+  const moveTo = (to: Coordinates) => {
 
     const pathfinder = bot.pathfinder
 
@@ -194,9 +214,9 @@ function commandsFunction(bot, targets) {
     const upBlock = bot.blockAt(new Vec3(x, y + 1, z))
     const downBlock = bot.blockAt(new Vec3(x, y - 1, z))
 
-    if (!airblocks.includes(frontBlock.name) && airblocks.includes(upBlock.name)) {
+    if (frontBlock && upBlock && !airblocks.includes(frontBlock.name) && airblocks.includes(upBlock.name)) {
       y++
-    } else if (airblocks.includes(frontBlock.name) && airblocks.includes(downBlock.name)) {
+    } else if (frontBlock && downBlock && airblocks.includes(frontBlock.name) && airblocks.includes(downBlock.name)) {
       y--
     }
 
@@ -206,8 +226,8 @@ function commandsFunction(bot, targets) {
     pathfinder.setGoal(goal)
   }
 
-  function botChatCommandFunctionListener(username, message) {
-    const masters = botWebsocket.getMasters()
+  function botChatCommandFunctionListener(username: string, message: string) {
+    const masters = botWebsocket.getMasters() as Master[] // TODO this is a hotfix
     const findMaster = masters.find(e => e.name === username)
 
     if (findMaster === undefined) {
@@ -230,38 +250,9 @@ function commandsFunction(bot, targets) {
         bot.chat(bot.game.dimension + ' ' + bot.entity.position.floored().toString())
         break
       default:
-        if (message.match(/set job.*/)) {
-          msg = message.split(' ')
-          saveJob(msg[2])
-        }
-
-        if (message.match(/set mode.*/)) {
-          msg = message.split(' ')
-          saveMode(msg[2])
-        }
-
-        if (message.match(/set help.*/)) {
-          msg = message.split(' ')
-          saveHelp(msg[2])
-        }
-
-        if (message.match(/set distance.*/)) {
-          msg = message.split(' ')
-          saveDistance(msg[2])
-        }
-
         if (message.match(/set start way.*/)) {
           msg = message.split(' ')
           startGetPoints(msg[3])
-        }
-
-        if (message.match(/set save patrol.*/)) {
-          savePatrol()
-        }
-
-        if (message.match(/set miner.*/)) {
-          msg = message.split(' ')
-          saveMiner(msg)
         }
 
         if (message.match(/drop all.*/)) {
@@ -274,27 +265,7 @@ function commandsFunction(bot, targets) {
     }
   }
 
-  let patrol = []
-
-  function saveMiner(coords) {
-    if (coords.length !== 10) {
-      // bot.chat('The coords is wrong')
-      return false
-    }
-    const minerCoords = {}
-    minerCoords.xStart = coords['2']
-    minerCoords.yStart = coords['3']
-    minerCoords.zStart = coords['4']
-    minerCoords.xEnd = coords['5']
-    minerCoords.yEnd = coords['6']
-    minerCoords.zEnd = coords['7']
-    minerCoords.orientation = coords['8'] // x+ || x- || z+ || z-
-    minerCoords.tunel = coords['9'] // vertically || horizontally
-
-    botWebsocket.log('Point: ' + JSON.stringify(minerCoords))
-    botConfig.setMinerCords(bot.username, minerCoords)
-    // bot.chat('Lets made a tunel!')
-  }
+  let patrol: Array<Vec3> = []
 
   function dropAll() {
     const excludedItems = ['fishing_rod']
@@ -313,6 +284,7 @@ function commandsFunction(bot, targets) {
 
   async function findBed() {
     const bed = bot.findBlock({
+      //@ts-ignore
       matching: block => bot.isABed(block),
       maxDistance: 3
     })
@@ -334,71 +306,16 @@ function commandsFunction(bot, targets) {
       } else {
         botWebsocket.log('No nearby bed')
       }
-    } catch (err) {
+    } catch (err: any) {
       botWebsocket.log(err.message)
       bot.removeListener('sleep', isSleeping)
     }
   }
 
-  function saveJob(job) {
-    switch (true) {
-      case (job === 'guard'):
-      case (job === 'archer'):
-      case (job === 'farmer'):
-      case (job === 'miner'):
-        // bot.chat('I will fulfill this job')
-        botConfig.setJob(bot.username, job)
-        break
-      default:
-        // bot.chat("Master, I don't know how to do this job")
-        break
-    }
-  }
+  let prevPoint: Vec3
+  let distancePatrol: number
 
-  function saveMode(mode) {
-    switch (true) {
-      case (mode === 'none'):
-      case (mode === 'pvp'):
-      case (mode === 'pve'):
-        // bot.chat('I understood the conflict')
-        botConfig.setMode(bot.username, mode)
-        break
-      default:
-        // bot.chat("Master, I don't know what you means mode")
-        break
-    }
-  }
-
-  function saveHelp(mode) {
-    switch (true) {
-      case (mode === 'true'):
-        // bot.chat('I will defend my friends')
-        botConfig.setHelpFriends(bot.username, true)
-        break
-      case (mode === 'false'):
-        // bot.chat('Its ok for my friends')
-        botConfig.setHelpFriends(bot.username, false)
-        break
-      default:
-        // bot.chat("Master, I don't know friends say")
-        break
-    }
-  }
-
-  function saveDistance(distance) {
-    distance = parseInt(distance)
-    if (!isNaN(distance)) {
-      // bot.chat('I take a look!')
-      botConfig.setDistance(bot.username, distance)
-    } else {
-      // bot.chat('I dont understood the distance')
-    }
-  }
-
-  let prevPoint
-  let distancePatrol
-
-  function nextPointListener(point) {
+  function nextPointListener(point: Vec3) {
     if (point.distanceTo(prevPoint) > distancePatrol) {
       patrol.push(point)
       prevPoint = point
@@ -406,15 +323,14 @@ function commandsFunction(bot, targets) {
     }
   }
 
-  function startGetPoints(distance = 2) {
-    distance = parseInt(distance)
-    if (isNaN(distance)) {
+  function startGetPoints(distance: string | number = 2) {
+    distancePatrol = typeof distance === "string" ? parseInt(distance) : distance
+
+    if (isNaN(distancePatrol)) {
       // bot.chat('I dont understood the distance')
       return false
     }
     // bot.chat('Ok, tell me the way')
-
-    distancePatrol = distance
 
     const point = bot.entity.position
     patrol = []
