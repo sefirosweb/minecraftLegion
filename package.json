@@ -47,7 +47,7 @@
     },
     "homepage": "https://github.com/sefirosweb/minecraftLegion#readme",
     "_moduleAliases": {
-        "@": ".",
+        "@": "./src/",
         "@modules": "./src/modules",
         "@BehaviorModules": "./src/BehaviorModules",
         "@NestedStateModules": "./src/NestedStateModules",

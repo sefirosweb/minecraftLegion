@@ -1,23 +1,28 @@
-const {
+import {
   StateTransition,
   BehaviorIdle,
-  NestedStateMachine
-} = require('mineflayer-statemachine')
+  NestedStateMachine,
+  BehaviorFollowEntity
+} from 'mineflayer-statemachine'
 
-const BehaviorLoadConfig = require('@BehaviorModules/BehaviorLoadConfig')
+import { Bot } from 'mineflayer'
+import { LegionStateMachineTargets } from '@/types/index'
+import mcDataLoader from 'minecraft-data'
+import { DefaultBlockForPlace, Jobs } from '@/types/defaultTypes'
 
-function startWorkFunction(bot, targets) {
-  const mcData = require('minecraft-data')(bot.version)
+function startWorkFunction(bot: Bot, targets: LegionStateMachineTargets) {
+  const mcData = mcDataLoader(bot.version)
   const { getAllBlocksExceptLeafs } = require('@modules/movementModule')(bot, targets)
 
-  const start = new BehaviorIdle(targets)
+  // @ts-ignore
+  const start = new BehaviorFollowEntity(bot, targets)
   start.stateName = 'Start'
-  start.x = 125
-  start.y = 113
 
-  const loadedConfig = new BehaviorIdle(targets)
+  const loadedConfig = new BehaviorIdle()
   loadedConfig.stateName = 'Loaded Config'
+  // @ts-ignore
   loadedConfig.x = 325
+  // @ts-ignore
   loadedConfig.y = 213
 
   const guardJob = require('@NestedStateModules/guardJobFunction')(bot, targets)
@@ -61,7 +66,7 @@ function startWorkFunction(bot, targets) {
       onTransition: () => {
         targets.guardJob = {}
       },
-      shouldTransition: () => targets.config.job === 'guard'
+      shouldTransition: () => targets.config.job === Jobs.guard
     }),
 
     new StateTransition({
@@ -70,7 +75,7 @@ function startWorkFunction(bot, targets) {
       onTransition: () => {
         targets.archerJob = {}
       },
-      shouldTransition: () => targets.config.job === 'archer'
+      shouldTransition: () => targets.config.job === Jobs.archer
     }),
 
     new StateTransition({
@@ -85,7 +90,7 @@ function startWorkFunction(bot, targets) {
         }
 
       },
-      shouldTransition: () => targets.config.job === 'farmer'
+      shouldTransition: () => targets.config.job === Jobs.farmer
     }),
 
     new StateTransition({
@@ -94,33 +99,27 @@ function startWorkFunction(bot, targets) {
       onTransition: () => {
         targets.breederJob = {}
       },
-      shouldTransition: () => targets.config.job === 'breeder'
+      shouldTransition: () => targets.config.job === Jobs.breeder
     }),
 
     new StateTransition({
       parent: loadedConfig,
       child: minerJob,
       onTransition: () => {
-        targets.minerJob = {}
-        // Set place block sorting to easy to hardness
-        targets.minerJob.blockForPlace = Object.values(mcData.blocksByName).filter(b => [
-          "netherrack",
-          "basalt",
-          "blackstone",
-          "stone",
-          "cobblestone",
-          "cobbled_deepslate",
-          "dirt",
-          "tuff",
-          "andesite",
-          "diorite",
-          "granite",
-          "sandstone",
-        ].includes(b.name))
-          .sort((a, b) => a.hardness - b.hardness)
+        console.log(DefaultBlockForPlace)
+        console.log(Object.values(DefaultBlockForPlace))
+        const blockForPlace = Object.values(mcData.blocksByName)
+          .filter(b => Object.values(DefaultBlockForPlace).includes(b.name))
+          .filter(a => a.hardness !== null)
+          .sort((a, b) => a.hardness! - b.hardness!)
           .map(b => b.name)
+
+        targets.minerJob = {
+          blockForPlace
+        }
+
       },
-      shouldTransition: () => targets.config.job === 'miner'
+      shouldTransition: () => targets.config.job === Jobs.miner
     }),
 
     new StateTransition({
@@ -129,7 +128,7 @@ function startWorkFunction(bot, targets) {
       onTransition: () => {
         targets.sorterJob = {}
       },
-      shouldTransition: () => targets.config.job === 'sorter'
+      shouldTransition: () => targets.config.job === Jobs.sorter
     }),
 
     new StateTransition({
@@ -138,7 +137,7 @@ function startWorkFunction(bot, targets) {
       onTransition: () => {
         targets.crafterJob = {}
       },
-      shouldTransition: () => targets.config.job === 'crafter'
+      shouldTransition: () => targets.config.job === Jobs.crafter
     }),
 
   ]
