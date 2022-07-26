@@ -1,5 +1,16 @@
+import { LegionStateMachineTargets, BotwebsocketAction } from "@/types"
+import { Jobs } from "@/types/defaultTypes"
+import { Bot, BotEvents } from "mineflayer"
+import {
+  StateTransition,
+  BotStateMachine,
+  StateMachineWebserver,
+  BehaviorIdle,
+  NestedStateMachine
+} from 'mineflayer-statemachine'
 
-module.exports = (bot) => {
+
+module.exports = (bot: Bot) => {
   const botWebsocket = require('@modules/botWebsocket')
   const inventoryViewer = require('mineflayer-web-inventory')
   const prismarineViewer = require('@modules/viewer')
@@ -10,66 +21,72 @@ module.exports = (bot) => {
 
   const isInDebug = debugMode || false
 
-  const {
-    StateTransition,
-    BotStateMachine,
-    StateMachineWebserver,
-    BehaviorIdle,
-    NestedStateMachine
-  } = require('mineflayer-statemachine')
+  // const targets: LegionStateMachineTargets = {
+  // aListener: function (object, val) {
+  //   if (!debugMode) return
+  //   console.log(`Detected change ${object} value:`, val)
+  // },
 
-  const targets = {
-    // aListener: function (object, val) {
-    //   if (!debugMode) return
-    //   console.log(`Detected change ${object} value:`, val)
-    // },
+  // set position (val) {
+  //   this.positionVal = val
+  //   this.aListener('position', val)
+  // },
+  // get position () {
+  //   return this.positionVal
+  // },
 
-    // set position (val) {
-    //   this.positionVal = val
-    //   this.aListener('position', val)
-    // },
-    // get position () {
-    //   return this.positionVal
-    // },
+  // set entity (val) {
+  //   this.entityVal = val
+  //   this.aListener('entity', val)
+  // },
+  // get entity () {
+  //   return this.entityVal
+  // },
 
-    // set entity (val) {
-    //   this.entityVal = val
-    //   this.aListener('entity', val)
-    // },
-    // get entity () {
-    //   return this.entityVal
-    // },
+  // set item (val) {
+  //   this.itemVal = val
+  //   this.aListener('item', val)
+  // },
+  // get item () {
+  //   return this.itemVal
+  // }
+  // }
 
-    // set item (val) {
-    //   this.itemVal = val
-    //   this.aListener('item', val)
-    // },
-    // get item () {
-    //   return this.itemVal
-    // }
-  }
-
-  let webserver = {}
   const movements = new mineflayerPathfinder.Movements(bot, mcData)
-  targets.movements = movements
-  targets.chests = {}
-  targets.portals = {
-    overworld: {
+
+  const targets: LegionStateMachineTargets = {
+    config: {
+      job: Jobs.none
+    },
+    movements: movements,
+    chests: {},
+    portals: {
+      overworld: {
+        the_nether: [],
+        the_end: []
+      },
       the_nether: [],
       the_end: []
     },
-    the_nether: [],
-    the_end: []
-  };
 
-  const start = new BehaviorIdle(targets)
+    isNight: false,
+    triedToSleep: false
+  }
+
+  let webserver: any
+
+  const start = new BehaviorIdle()
   start.stateName = 'Start'
+  // @ts-ignore
   start.x = 125
+  // @ts-ignore
   start.y = 113
 
-  const watiState = new BehaviorIdle(targets)
+  const watiState = new BehaviorIdle()
   watiState.stateName = 'Wait Second'
+  //@ts-ignore
   watiState.x = 125
+  //@ts-ignore
   watiState.y = 313
 
   const death = require('@NestedStateModules/deathFunction')(bot, targets)
@@ -93,7 +110,8 @@ module.exports = (bot) => {
 
           bot.on('time', () => {
             const timeOfDay = bot.time.timeOfDay
-            const thunderstorm = bot.isRaining && (bot.thunderState > 0)
+            //@ts-ignore
+            const thunderstorm = bot.thunderState > 0
             if (!thunderstorm && !(timeOfDay >= 12541 && timeOfDay <= 23458)) {
               targets.isNight = false
               if (targets.triedToSleep) {
@@ -127,6 +145,7 @@ module.exports = (bot) => {
 
   const root = new NestedStateMachine(transitions, start)
   root.stateName = 'Main'
+  // @ts-ignore
   const stateMachine = new BotStateMachine(bot, root)
 
   bot.on('death', function () {
@@ -152,29 +171,42 @@ module.exports = (bot) => {
     checkPortalsOnSpawn()
   })
 
-  bot.on('physicTick', () => bot.emit('customEventPhysicTick'))
-  bot.on('chat', (username, message) => bot.emit('customEventChat', username, message))
-  bot.on('move', (position) => bot.emit('customEventMove', position))
+  bot.on('physicTick', () => {
+    bot.emit('customEventPhysicTick')
+  })
+
+  bot.on('chat', (username, message, translate, jsonMsg, matches) => {
+    bot.emit('customEventChat', username, message, translate, jsonMsg, matches)
+  })
+
+  //@ts-ignore
+  bot.on('move', (position: any) => {
+    bot.emit('customEventMove', position)
+  })
 
   if (isInDebug) { // Only enable on debug mode
-    bot.on('newListener', (e, l) => {
+
+    bot.on('newListener', () => {
       const events = bot.eventNames()
-      const eventsToSend = []
+      const eventsToSend: Array<string> = []
       events.forEach(event => {
-        eventsToSend.push(`${event}: ${bot.listenerCount(event)}`)
+        const eventName = (typeof event === 'string' ? event : event.toString()) as keyof BotEvents
+        eventsToSend.push(`${eventName}: ${bot.listenerCount(eventName)}`)
       })
       botWebsocket.emitEvents(eventsToSend)
     })
 
-    bot.on('removeListener', (e, l) => {
+    bot.on('removeListener', () => {
       const events = bot.eventNames()
-      const eventsToSend = []
+      const eventsToSend: Array<string> = []
       events.forEach(event => {
-        eventsToSend.push(`${event}: ${bot.listenerCount(event)}`)
+        const eventName = (typeof event === 'string' ? event : event.toString()) as keyof BotEvents
+        eventsToSend.push(`${eventName}: ${bot.listenerCount(eventName)}`)
       })
       botWebsocket.emitEvents(eventsToSend)
     })
 
+    // @ts-ignore
     webserver = new StateMachineWebserver(bot, stateMachine, 4550)
     if (!webserver.isServerRunning()) {
       webserver.startServer()
@@ -183,7 +215,7 @@ module.exports = (bot) => {
     inventoryViewer(bot, { port: 4540 })
   }
 
-  botWebsocket.on('action', toBotData => {
+  botWebsocket.on('action', (toBotData: BotwebsocketAction) => {
     const { type, value } = toBotData
     switch (type) {
       case 'startInventory':
@@ -196,6 +228,7 @@ module.exports = (bot) => {
         break
       case 'startStateMachine':
         if (typeof webserver.isServerRunning !== 'function') {
+          // @ts-ignore
           webserver = new StateMachineWebserver(bot, stateMachine, value.port)
         }
         if (typeof webserver.isServerRunning === 'function') {
@@ -232,7 +265,7 @@ module.exports = (bot) => {
     getChests()
     getPortals()
   } else {
-    bot.once('webSocketLogin', function () {
+    bot.once('webSocketLogin', () => {
       getChests()
       getPortals()
     })

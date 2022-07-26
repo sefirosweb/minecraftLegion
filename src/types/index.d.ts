@@ -49,8 +49,14 @@ export interface LegionStateMachineTargets extends StateMachineTargets {
     crafterJob?: CrafterJob;
 }
 
+export type BotwebsocketAction = {
+    type: string,
+    value: any
+}
+
 declare module 'mineflayer' {
     export interface BotEvents {
+        webSocketLogin: () => Promise<void> | void
         customEventPhysicTick: () => Promise<void> | void
 
         customEventChat: (
@@ -62,6 +68,9 @@ declare module 'mineflayer' {
         ) => Promise<void> | void
 
         customEventMove: (position: Vec3) => Promise<void> | void
+
+        newListener: (event: string | symbol, listener: Function) => Promise<void> | void
+        removeListener: (event: string | symbol, listener: Function) => Promise<void> | void
     }
 }
 
