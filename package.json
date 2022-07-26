@@ -26,8 +26,7 @@
     },
     "scripts": {
         "start": "nodemon index.js --ignore botConfig/ --ignore custom_start/",
-        "one": "nodemon --inspect=0.0.0.0:9229 start_bot.js Test legion --ignore botConfig/ --ignore custom_start/",
-        "second": "node --inspect=0.0.0.0:9229 start_bot.js Test legion",
+        "one": "nodemon --inspect=0.0.0.0:9229 start_bot.js $1 $2 --ignore botConfig/ --ignore custom_start/",
         "test": "echo \"Error: no test specified\" && exit 1",
         "standard": "standard --fix",
         "dockerrun": "docker run --rm -p:3000:3000 minecraftlegion",
