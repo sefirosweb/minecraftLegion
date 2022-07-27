@@ -1,0 +1,17 @@
+name: CI
+
+on:
+  push:
+    branches: [migrate_to_typescript]
+  pull_request:
+
+jobs:
+  Lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js 14.x
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - run: npm install && npm run lint
