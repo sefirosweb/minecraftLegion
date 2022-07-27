@@ -1,7 +1,9 @@
 import { Movements } from 'mineflayer-pathfinder'
 import { StateMachineTargets } from 'mineflayer-statemachine'
+import { Bot as MineflayerBot } from 'mineflayer'
 import { Vec3 } from 'vec3'
 import { Jobs } from './defaultTypes'
+import { Block } from 'prismarine-block'
 
 type GuardJob = {}
 type ArcherJob = {}
@@ -64,6 +66,9 @@ export type BotwebsocketAction = {
     value: any
 }
 
+export interface Bot extends MineflayerBot {
+    isABed: (bedBlock: Block) => boolean
+}
 declare module 'mineflayer' {
     export interface BotEvents {
         webSocketLogin: () => Promise<void> | void

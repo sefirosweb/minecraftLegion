@@ -6,8 +6,8 @@ import {
 
 //@ts-ignore
 import BehaviorMoveTo from '@BehaviorModules/BehaviorMoveTo'
-//@ts-ignore
-import BehaviorSleep from '@BehaviorModules/BehaviorSleep'
+
+import BehaviorSleep from '@/BehaviorModules/BehaviorSleep'
 import { Bot } from 'mineflayer'
 import { LegionStateMachineTargets } from '@/types'
 
@@ -52,6 +52,7 @@ const goSleepFunction = function (bot: Bot, targets: LegionStateMachineTargets) 
   goToBed.x = 525
   goToBed.y = 213
 
+  //@ts-ignore
   const interactWithBed = new BehaviorSleep(bot, targets)
   interactWithBed.stateName = 'Interact With Bed'
   interactWithBed.x = 525

@@ -1,8 +1,22 @@
-module.exports = class template {
-  constructor(bot, targets) {
+import { LegionStateMachineTargets, Bot } from "@/types"
+import { StateBehavior } from "mineflayer-statemachine"
+
+export default class BehaviorFollowEntity implements StateBehavior {
+
+  stateName: string = 'BehaviorSleep'
+  active: boolean = false
+
+  readonly bot: Bot
+  readonly targets: LegionStateMachineTargets
+  x?: number;
+  y?: number;
+  isEndFinished: boolean
+  bedOcupped: boolean
+  cantSleepNow: boolean
+
+  constructor(bot: Bot, targets: LegionStateMachineTargets) {
     this.bot = bot
     this.targets = targets
-    this.stateName = 'BehaviorSleep'
     this.isEndFinished = false
     this.bedOcupped = false
     this.cantSleepNow = false

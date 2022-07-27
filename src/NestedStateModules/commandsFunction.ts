@@ -12,8 +12,7 @@ import {
 import botConfig from '@modules/botConfig'
 //@ts-ignore
 import botWebsocket from '@modules/botWebsocket'
-import { Bot } from 'mineflayer'
-import { BotwebsocketAction, Coordinates, LegionStateMachineTargets, Master } from '@/types'
+import { Bot, BotwebsocketAction, Coordinates, LegionStateMachineTargets, Master } from '@/types'
 import { Entity } from 'prismarine-entity'
 import mineflayerPathfinder from 'mineflayer-pathfinder'
 
@@ -284,7 +283,6 @@ function commandsFunction(bot: Bot, targets: LegionStateMachineTargets) {
 
   async function findBed() {
     const bed = bot.findBlock({
-      //@ts-ignore
       matching: block => bot.isABed(block),
       maxDistance: 3
     })
