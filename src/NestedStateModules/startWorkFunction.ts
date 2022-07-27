@@ -96,8 +96,6 @@ function startWorkFunction(bot: Bot, targets: LegionStateMachineTargets) {
       parent: loadedConfig,
       child: minerJob,
       onTransition: () => {
-        console.log(DefaultBlockForPlace)
-        console.log(Object.values(DefaultBlockForPlace))
         const blockForPlace = Object.values(mcData.blocksByName)
           .filter(b => Object.values(DefaultBlockForPlace).includes(b.name))
           .filter(a => a.hardness !== null)
