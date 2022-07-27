@@ -9,6 +9,8 @@ import {
   NestedStateMachine
 } from 'mineflayer-statemachine'
 
+import { Vec3 } from "vec3"
+
 import debugMode from '@/config'
 import mcDataLoader from 'minecraft-data'
 
@@ -63,7 +65,19 @@ module.exports = (bot: Bot) => {
       canDig: false,
       canPlaceBlocks: false,
       canSleep: false,
-      canCraftItemWithdrawChest: false
+      canCraftItemWithdrawChest: false,
+      minerCords: {
+        orientation: "x+",
+        reverse: false,
+        tunel: "horizontally",
+        world: "minecraft:overworld",
+        xEnd: 0,
+        xStart: 0,
+        yEnd: 0,
+        yStart: 0,
+        zEnd: 0,
+        zStart: 0,
+      }
     },
     movements: movements,
     chests: {},
@@ -103,6 +117,12 @@ module.exports = (bot: Bot) => {
         turtles: 10,
         wolf: 10
       },
+    },
+    minerJob: {
+      blockForPlace: [],
+      original: undefined,
+      mineBlock: new Vec3(0, 0, 0),
+      nextLayer: undefined
     }
   }
 

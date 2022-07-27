@@ -1,11 +1,13 @@
-const {
+import {
   StateTransition,
   NestedStateMachine
-} = require('mineflayer-statemachine')
+} from 'mineflayer-statemachine'
 
-const BehaviorEatFood = require('@BehaviorModules/BehaviorEatFood')
+//@ts-ignore
+import BehaviorEatFood from '@BehaviorModules/BehaviorEatFood'
+import { Bot, LegionStateMachineTargets } from '@/types'
 
-function minerJobFunction (bot, targets) {
+function minerJobFunction(bot: Bot, targets: LegionStateMachineTargets) {
   const getReady = require('@NestedStateModules/getReady/getReadyFunction')(bot, targets)
   getReady.stateName = 'Get Ready'
   getReady.x = 125

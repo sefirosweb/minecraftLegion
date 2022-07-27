@@ -19,6 +19,22 @@ export type Layer = {
     yLayer: number,
 }
 
+export type MineCords = {
+    xStart: number,
+    xEnd: number
+    yStart: number
+    yEnd: number
+    zStart: number
+    zEnd: number
+}
+
+export type MineCordsConfig = MineCords & {
+    tunel: 'horizontally' | 'vertically'
+    orientation: 'z+' | 'z-' | 'x+' | 'x-'
+    world: Dimensions
+    reverse: boolean
+}
+
 export type PlantArea = {
     xStart?: number,
     xEnd?: number,
@@ -60,6 +76,9 @@ type SorterJob = {}
 type CrafterJob = {}
 type MinerJob = {
     blockForPlace: Array<any>
+    original: any
+    mineBlock: Vec3,
+    nextLayer?: Layer
 }
 
 export type Item = {
@@ -72,11 +91,13 @@ export type itemsToCraft = {
     quantity: number
 }
 
+export type Dimensions = 'minecraft:overworld' | 'minecraft:the_nether' | 'minecraft:the_end'
+
 export type Chest = {
     items: Array<Item>
     type: 'withdraw' | 'deposit' | 'depositAll'
     position: Vec3
-    dimension: 'minecraft:overworld' | 'minecraft:the_nether' | 'minecraft:the_end'
+    dimension: Dimensions
 };
 
 export type Config = {
@@ -87,6 +108,7 @@ export type Config = {
     canPlaceBlocks: boolean
     canSleep: boolean
     canCraftItemWithdrawChest: boolean
+    minerCords: MineCordsConfig
 }
 
 export type Portals = {
@@ -114,6 +136,10 @@ export type Recipes = {
         name: string
     }
 }
+
+type PositionWithVec3 = Vec3 & {
+    dimension?: Dimensions
+}
 export interface LegionStateMachineTargets extends StateMachineTargets {
     movements: Movements;
     chests: Chests;
@@ -124,7 +150,7 @@ export interface LegionStateMachineTargets extends StateMachineTargets {
     config: Config;
 
     itemDrop?: ItemDrop; // TODO FIX
-    position?: Vec3;
+    position?: PositionWithVec3;
     pickUpItems?: any;
     items?: any;
     craftItemBatch?: any;
@@ -137,7 +163,7 @@ export interface LegionStateMachineTargets extends StateMachineTargets {
     guardJob?: GuardJob;
     archerJob?: ArcherJob;
     farmerJob: FarmerJob;
-    minerJob?: MinerJob;
+    minerJob: MinerJob;
     breederJob: BreederJob;
     sorterJob?: SorterJob;
     crafterJob?: CrafterJob;

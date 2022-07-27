@@ -102,9 +102,7 @@ function startWorkFunction(bot: Bot, targets: LegionStateMachineTargets) {
           .sort((a, b) => a.hardness! - b.hardness!)
           .map(b => b.name)
 
-        targets.minerJob = {
-          blockForPlace
-        }
+        targets.minerJob.blockForPlace = blockForPlace
 
       },
       shouldTransition: () => targets.config.job === Jobs.miner

@@ -1,25 +1,36 @@
-const {
+import {
   StateTransition,
   BehaviorIdle,
   NestedStateMachine
-} = require('mineflayer-statemachine')
+} from 'mineflayer-statemachine'
 
-const BehaviorLoadConfig = require('@BehaviorModules/BehaviorLoadConfig')
+//@ts-ignore
+import BehaviorLoadConfig from '@BehaviorModules/BehaviorLoadConfig'
 
-const BehaviorMinerCheckLayer = require('@BehaviorModules/minerJob/BehaviorMinerCheckLayer')
-const BehaviorMinerCurrentLayer = require('@BehaviorModules/minerJob/BehaviorMinerCurrentLayer')
-const BehaviorMinerCurrentBlock = require('@BehaviorModules/minerJob/BehaviorMinerCurrentBlock')
-const BehaviorGetReady = require('@BehaviorModules/BehaviorGetReady')
+//@ts-ignore
+import BehaviorMinerCheckLayer from '@BehaviorModules/minerJob/BehaviorMinerCheckLayer'
+//@ts-ignore
+import BehaviorMinerCurrentLayer from '@BehaviorModules/minerJob/BehaviorMinerCurrentLayer'
+//@ts-ignore
+import BehaviorMinerCurrentBlock from '@BehaviorModules/minerJob/BehaviorMinerCurrentBlock'
+//@ts-ignore
+import BehaviorGetReady from '@BehaviorModules/BehaviorGetReady'
 
-const BehaviorDigBlock = require('@BehaviorModules/BehaviorDigBlock')
-const BehaviorEatFood = require('@BehaviorModules/BehaviorEatFood')
-const BehaviorMoveTo = require('@BehaviorModules/BehaviorMoveTo')
-const BehaviorDigAndPlaceBlock = require('@BehaviorModules/BehaviorDigAndPlaceBlock')
+//@ts-ignore
+import BehaviorDigBlock from '@BehaviorModules/BehaviorDigBlock'
+//@ts-ignore
+import BehaviorEatFood from '@BehaviorModules/BehaviorEatFood'
+//@ts-ignore
+import BehaviorMoveTo from '@BehaviorModules/BehaviorMoveTo'
+//@ts-ignore
+import BehaviorDigAndPlaceBlock from '@BehaviorModules/BehaviorDigAndPlaceBlock'
 
-const mineflayerPathfinder = require('mineflayer-pathfinder')
-const { setMinerCords } = require('@modules/botConfig')
+import mineflayerPathfinder, { Movements } from 'mineflayer-pathfinder'
+//@ts-ignore
+import { setMinerCords } from '@modules/botConfig'
+import { Bot, LegionStateMachineTargets, MineCords, MineCordsConfig } from '@/types'
 
-const movingWhile = (bot, nextCurrentLayer, movements) => {
+const movingWhile = (bot: Bot, nextCurrentLayer: MineCords, movements: Movements) => {
   let x, y, z
 
   if (bot.entity.position.x < nextCurrentLayer.xStart) {
@@ -52,17 +63,19 @@ const movingWhile = (bot, nextCurrentLayer, movements) => {
   pathfinder.setGoal(goal)
 }
 
-function miningFunction (bot, targets) {
-  const mcData = require('minecraft-data')(bot.version)
-
-  const start = new BehaviorIdle(targets)
+function miningFunction(bot: Bot, targets: LegionStateMachineTargets) {
+  const start = new BehaviorIdle()
   start.stateName = 'Start'
+  //@ts-ignore
   start.x = 125
+  //@ts-ignore
   start.y = 113
 
-  const finishedJob = new BehaviorIdle(targets)
+  const finishedJob = new BehaviorIdle()
   finishedJob.stateName = 'Finished Job'
+  //@ts-ignore
   finishedJob.x = 525
+  //@ts-ignore
   finishedJob.y = 13
 
   const loadConfig = new BehaviorLoadConfig(bot, targets)
@@ -70,9 +83,11 @@ function miningFunction (bot, targets) {
   loadConfig.x = 325
   loadConfig.y = 113
 
-  const exit = new BehaviorIdle(targets)
+  const exit = new BehaviorIdle()
   exit.stateName = 'Exit'
+  //@ts-ignore
   exit.x = 125
+  //@ts-ignore
   exit.y = 313
 
   const nextLayer = new BehaviorMinerCurrentLayer(bot, targets)
@@ -140,16 +155,17 @@ function miningFunction (bot, targets) {
     const orientation = targets.config.minerCords.orientation
     const world = targets.config.minerCords.world
     const reverse = targets.config.minerCords.reverse
-    const newMineCords = { ...targets.minerJob.original }
 
-    newMineCords.xStart = parseInt(newMineCords.xStart)
-    newMineCords.xEnd = parseInt(newMineCords.xEnd)
+    const newMineCords: MineCords = {
+      xStart: parseInt(targets.minerJob.original.xStart),
+      xEnd: parseInt(targets.minerJob.original.xEnd),
 
-    newMineCords.yStart = parseInt(newMineCords.yStart)
-    newMineCords.yEnd = parseInt(newMineCords.yEnd)
+      yStart: parseInt(targets.minerJob.original.yStart),
+      yEnd: parseInt(targets.minerJob.original.yEnd),
 
-    newMineCords.zStart = parseInt(newMineCords.zStart)
-    newMineCords.zEnd = parseInt(newMineCords.zEnd)
+      zStart: parseInt(targets.minerJob.original.zStart),
+      zEnd: parseInt(targets.minerJob.original.zEnd),
+    }
 
     if (tunel === 'horizontally') {
       if (orientation === 'z+' && newMineCords.zStart < newMineCords.zEnd) newMineCords.zStart++
@@ -162,22 +178,19 @@ function miningFunction (bot, targets) {
       newMineCords.yEnd--
     }
 
-    newMineCords.yStart = newMineCords.yStart.toString()
-    newMineCords.yEnd = newMineCords.yEnd.toString()
-    newMineCords.zStart = newMineCords.zStart.toString()
-    newMineCords.zEnd = newMineCords.zEnd.toString()
-    newMineCords.xStart = newMineCords.xStart.toString()
-    newMineCords.xEnd = newMineCords.xEnd.toString()
 
     targets.minerJob.original = newMineCords
 
-    newMineCords.tunel = tunel
-    newMineCords.orientation = orientation
-    newMineCords.world = world
-    newMineCords.reverse = reverse
-    setMinerCords(bot.username, newMineCords)
+    const mineCordsConfig: MineCordsConfig = {
+      ...newMineCords,
+      tunel: tunel,
+      orientation: orientation,
+      world: world,
+      reverse: reverse
+    }
 
-    targets.config.minerCords = newMineCords
+    setMinerCords(bot.username, mineCordsConfig)
+    targets.config.minerCords = mineCordsConfig
   }
 
   const transitions = [
@@ -189,37 +202,37 @@ function miningFunction (bot, targets) {
         targets.minerJob.nextLayer = nextLayer
 
         const yStart =
-          parseInt(targets.config.minerCords.yStart) >
-            parseInt(targets.config.minerCords.yEnd)
-            ? parseInt(targets.config.minerCords.yEnd)
-            : parseInt(targets.config.minerCords.yStart)
+          targets.config.minerCords.yStart >
+            targets.config.minerCords.yEnd
+            ? targets.config.minerCords.yEnd
+            : targets.config.minerCords.yStart
         const yEnd =
-          parseInt(targets.config.minerCords.yStart) >
-            parseInt(targets.config.minerCords.yEnd)
-            ? parseInt(targets.config.minerCords.yStart)
-            : parseInt(targets.config.minerCords.yEnd)
+          targets.config.minerCords.yStart >
+            targets.config.minerCords.yEnd
+            ? targets.config.minerCords.yStart
+            : targets.config.minerCords.yEnd
 
         const xStart =
-          parseInt(targets.config.minerCords.xStart) >
-            parseInt(targets.config.minerCords.xEnd)
-            ? parseInt(targets.config.minerCords.xEnd)
-            : parseInt(targets.config.minerCords.xStart)
+          targets.config.minerCords.xStart >
+            targets.config.minerCords.xEnd
+            ? targets.config.minerCords.xEnd
+            : targets.config.minerCords.xStart
         const xEnd =
-          parseInt(targets.config.minerCords.xStart) >
-            parseInt(targets.config.minerCords.xEnd)
-            ? parseInt(targets.config.minerCords.xStart)
-            : parseInt(targets.config.minerCords.xEnd)
+          targets.config.minerCords.xStart >
+            targets.config.minerCords.xEnd
+            ? targets.config.minerCords.xStart
+            : targets.config.minerCords.xEnd
 
         const zStart =
-          parseInt(targets.config.minerCords.zStart) >
-            parseInt(targets.config.minerCords.zEnd)
-            ? parseInt(targets.config.minerCords.zEnd)
-            : parseInt(targets.config.minerCords.zStart)
+          targets.config.minerCords.zStart >
+            targets.config.minerCords.zEnd
+            ? targets.config.minerCords.zEnd
+            : targets.config.minerCords.zStart
         const zEnd =
-          parseInt(targets.config.minerCords.zStart) >
-            parseInt(targets.config.minerCords.zEnd)
-            ? parseInt(targets.config.minerCords.zStart)
-            : parseInt(targets.config.minerCords.zEnd)
+          targets.config.minerCords.zStart >
+            targets.config.minerCords.zEnd
+            ? targets.config.minerCords.zStart
+            : targets.config.minerCords.zEnd
 
         targets.minerJob.original = {
           xStart,
@@ -319,10 +332,12 @@ function miningFunction (bot, targets) {
       child: moveToBlock,
       name: 'currentBlock -> moveToBlock',
       onTransition: () => {
-        targets.minerJob.mineBlock = targets.position.clone()
+        targets.minerJob.mineBlock = targets.position!.clone()
         if (nextLayer.minerCords.tunel === 'horizontally') {
           // Move to base of block
+          //@ts-ignore
           targets.position.y = parseInt(checkLayer.minerCords.yStart)
+          //@ts-ignore
           targets.position.dimension = targets.config.minerCords.world
         }
       },
@@ -339,7 +354,7 @@ function miningFunction (bot, targets) {
       parent: moveToNearBlock,
       child: currentBlock,
       shouldTransition: () => {
-        const block = bot.blockAt(targets.position)
+        const block = targets.position ? bot.blockAt(targets.position) : null
         if (block) {
           return true
         }
