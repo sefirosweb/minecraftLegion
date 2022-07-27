@@ -49,41 +49,37 @@ module.exports = function (bot) {
     const currentParent = positions_checked.length - 1
 
     const offsetPlaceBlock = getOffsetPlaceBlock(position)
-    if (offsetPlaceBlock) return {
-      position,
-      parent: currentParent
+    if (offsetPlaceBlock) {
+      return {
+        position,
+        parent: currentParent
+      }
     }
 
     // down
     offset = vec3(0, -1, 0)
     newPosition = position.clone().add(offset)
-    if (!positions_checked.find((p) => p.position.equals(newPosition)))
-      queue.push({ position: newPosition, parent: currentParent })
+    if (!positions_checked.find((p) => p.position.equals(newPosition))) { queue.push({ position: newPosition, parent: currentParent }) }
     // front
     offset = vec3(1, 0, 0)
     newPosition = position.clone().add(offset)
-    if (!positions_checked.find((p) => p.position.equals(newPosition)))
-      queue.push({ position: newPosition, parent: currentParent })
+    if (!positions_checked.find((p) => p.position.equals(newPosition))) { queue.push({ position: newPosition, parent: currentParent }) }
     // back
     offset = vec3(-1, 0, 0)
     newPosition = position.clone().add(offset)
-    if (!positions_checked.find((p) => p.position.equals(newPosition)))
-      queue.push({ position: newPosition, parent: currentParent })
+    if (!positions_checked.find((p) => p.position.equals(newPosition))) { queue.push({ position: newPosition, parent: currentParent }) }
     // right
     offset = vec3(0, 0, 1)
     newPosition = position.clone().add(offset)
-    if (!positions_checked.find((p) => p.position.equals(newPosition)))
-      queue.push({ position: newPosition, parent: currentParent })
+    if (!positions_checked.find((p) => p.position.equals(newPosition))) { queue.push({ position: newPosition, parent: currentParent }) }
     // left
     offset = vec3(0, 0, -1)
     newPosition = position.clone().add(offset)
-    if (!positions_checked.find((p) => p.position.equals(newPosition)))
-      queue.push({ position: newPosition, parent: currentParent })
+    if (!positions_checked.find((p) => p.position.equals(newPosition))) { queue.push({ position: newPosition, parent: currentParent }) }
     // up
     offset = vec3(0, 1, 0)
     newPosition = position.clone().add(offset)
-    if (!positions_checked.find((p) => p.position.equals(newPosition)))
-      queue.push({ position: newPosition, parent: currentParent })
+    if (!positions_checked.find((p) => p.position.equals(newPosition))) { queue.push({ position: newPosition, parent: currentParent }) }
 
     return false
   }

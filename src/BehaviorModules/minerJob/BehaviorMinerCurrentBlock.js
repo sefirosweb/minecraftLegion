@@ -1,6 +1,6 @@
 const Vec3 = require('vec3')
 module.exports = class BehaviorMinerCurrentBlock {
-  constructor(bot, targets) {
+  constructor (bot, targets) {
     this.bot = bot
     this.targets = targets
     this.stateName = 'BehaviorMinerCurrentBlock'
@@ -25,26 +25,26 @@ module.exports = class BehaviorMinerCurrentBlock {
     this.firstBlockOnLayer = true
   }
 
-  isFinished() {
+  isFinished () {
     return this.isEndFinished
   }
 
-  canGetBlockInfo() {
+  canGetBlockInfo () {
     return this.getBlockInfo
   }
 
-  getLayerIsFinished() {
+  getLayerIsFinished () {
     return this.isLayerFinished
   }
 
-  setMinerCords(minerCords) {
+  setMinerCords (minerCords) {
     this.isLayerFinished = false
     this.firstBlockOnLayer = true
     this.minerCords = minerCords
     this.startBlock()
   }
 
-  startBlock() {    
+  startBlock () {
     this.yStart = parseInt(this.minerCords.yStart) > parseInt(this.minerCords.yEnd) ? parseInt(this.minerCords.yEnd) : parseInt(this.minerCords.yStart)
     this.yEnd = parseInt(this.minerCords.yStart) > parseInt(this.minerCords.yEnd) ? parseInt(this.minerCords.yStart) : parseInt(this.minerCords.yEnd)
 
@@ -55,14 +55,14 @@ module.exports = class BehaviorMinerCurrentBlock {
     this.zEnd = parseInt(this.minerCords.zStart) > parseInt(this.minerCords.zEnd) ? parseInt(this.minerCords.zStart) : parseInt(this.minerCords.zEnd)
 
     let temp
-    
-    if (this.minerCords.reverse && this.minerCords.tunel === 'vertically' && (this.minerCords.orientation === 'x+' || this.minerCords.orientation === 'x-' )) {
+
+    if (this.minerCords.reverse && this.minerCords.tunel === 'vertically' && (this.minerCords.orientation === 'x+' || this.minerCords.orientation === 'x-')) {
       temp = this.xStart
       this.xStart = this.xEnd
       this.xEnd = temp
     }
 
-    if (this.minerCords.reverse && this.minerCords.tunel === 'vertically' && (this.minerCords.orientation === 'z+' || this.minerCords.orientation === 'z-' )) {
+    if (this.minerCords.reverse && this.minerCords.tunel === 'vertically' && (this.minerCords.orientation === 'z+' || this.minerCords.orientation === 'z-')) {
       temp = this.zStart
       this.zStart = this.zEnd
       this.zEnd = temp
@@ -86,7 +86,7 @@ module.exports = class BehaviorMinerCurrentBlock {
     this.zCurrent = this.zStart
   }
 
-  onStateEntered() {
+  onStateEntered () {
     this.isEndFinished = false
     this.getBlockInfo = false
     this.startBlock()
@@ -98,7 +98,7 @@ module.exports = class BehaviorMinerCurrentBlock {
     }
   }
 
-  checkSand() {
+  checkSand () {
     if (this.minerCords.tunel === 'vertically') {
       return false
     }
@@ -111,7 +111,7 @@ module.exports = class BehaviorMinerCurrentBlock {
     return this.nextBlock(false)
   }
 
-  nextBlock(allBlocks) {
+  nextBlock (allBlocks) {
     if (
       this.yCurrent === this.yEnd &&
       this.zCurrent === this.zEnd &&
@@ -136,7 +136,7 @@ module.exports = class BehaviorMinerCurrentBlock {
     }
   }
 
-  calculateIsValid(allBlocks) {
+  calculateIsValid (allBlocks) {
     const position = new Vec3(this.xCurrent, this.yCurrent, this.zCurrent)
 
     if (!allBlocks) { // Check over block is sand
@@ -165,7 +165,7 @@ module.exports = class BehaviorMinerCurrentBlock {
     return false
   }
 
-  yNext() {
+  yNext () {
     if (this.yCurrent < this.yEnd) {
       this.yCurrent++
     } else {
@@ -173,7 +173,7 @@ module.exports = class BehaviorMinerCurrentBlock {
     }
   }
 
-  xNext() {
+  xNext () {
     if (this.xCurrent === this.xEnd) {
       const temp = this.xEnd
       this.xEnd = this.xStart
@@ -197,7 +197,7 @@ module.exports = class BehaviorMinerCurrentBlock {
     }
   }
 
-  zNext() {
+  zNext () {
     if (this.zCurrent === this.zEnd) {
       const temp = this.zEnd
       this.zEnd = this.zStart
@@ -221,7 +221,7 @@ module.exports = class BehaviorMinerCurrentBlock {
     }
   }
 
-  getCurrentBlock() {
+  getCurrentBlock () {
     const currentBlock = {
       x: this.xCurrent,
       y: this.yCurrent,

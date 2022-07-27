@@ -1,6 +1,6 @@
 const botWebsocket = require('@modules/botWebsocket')
 module.exports = class BehaviorMinerCurrentLayer {
-  constructor(bot, targets) {
+  constructor (bot, targets) {
     this.bot = bot
     this.targets = targets
     this.stateName = 'BehaviorMinerCurrentLayer'
@@ -14,18 +14,18 @@ module.exports = class BehaviorMinerCurrentLayer {
     this.xIsInverted = false
   }
 
-  isFinished() {
+  isFinished () {
     return this.isEndFinished
   }
 
-  setMinerCords(minerCords) {
+  setMinerCords (minerCords) {
     botWebsocket.log('BehaviorMinerCurrentLayer: Set new coords', minerCords)
     this.minerCords = minerCords
     this.isEndFinished = false
     this.startLayer()
   }
 
-  startLayer() {
+  startLayer () {
     if (this.minerCords.tunel === 'vertically') {
       this.currentLayer = Math.max(parseInt(this.minerCords.yStart), parseInt(this.minerCords.yEnd))
       this.endLayer = Math.min(parseInt(this.minerCords.yStart), parseInt(this.minerCords.yEnd))
@@ -52,28 +52,25 @@ module.exports = class BehaviorMinerCurrentLayer {
     }
   }
 
-  onStateEntered() {
-    if (this.minerCords.tunel === 'vertically' && this.currentLayer < this.endLayer)
-      this.isEndFinished = true
+  onStateEntered () {
+    if (this.minerCords.tunel === 'vertically' && this.currentLayer < this.endLayer) { this.isEndFinished = true }
 
     if (this.minerCords.tunel === 'horizontally' && this.currentLayer < this.endLayer &&
       (
         this.minerCords.orientation === 'z-' ||
         this.minerCords.orientation === 'x-'
       )
-    )
-      this.isEndFinished = true
+    ) { this.isEndFinished = true }
 
     if (this.minerCords.tunel === 'horizontally' && this.currentLayer > this.endLayer &&
       (
         this.minerCords.orientation === 'z+' ||
         this.minerCords.orientation === 'x+'
       )
-    )
-      this.isEndFinished = true
+    ) { this.isEndFinished = true }
   }
 
-  next() {
+  next () {
     switch (true) {
       case this.minerCords.tunel === 'vertically':
         this.currentLayer--
@@ -89,7 +86,7 @@ module.exports = class BehaviorMinerCurrentLayer {
     }
   }
 
-  getCurrentLayerCoords() {
+  getCurrentLayerCoords () {
     const minerCoords = {}
     minerCoords.orientation = this.minerCords.orientation
     minerCoords.tunel = this.minerCords.tunel

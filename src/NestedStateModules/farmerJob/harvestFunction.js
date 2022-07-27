@@ -192,7 +192,7 @@ function harvestFunction (bot, targets) {
     new StateTransition({
       parent: goPlant,
       child: exit,
-      onTransition:() => {
+      onTransition: () => {
         botWebsocket.log(`Error on go to plant ${targets.farmerJob.plantArea.plant}`)
       },
       shouldTransition: () => goPlant.isFinished() && !goPlant.isSuccess()

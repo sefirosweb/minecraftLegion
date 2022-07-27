@@ -1,6 +1,6 @@
 const botWebsocket = require('@modules/botWebsocket')
 module.exports = class template {
-  constructor(bot, targets) {
+  constructor (bot, targets) {
     this.bot = bot
     this.targets = targets
     this.stateName = 'BehaviorDigAndPlaceBlock'
@@ -18,21 +18,21 @@ module.exports = class template {
     this.sidesToPlaceBlock = []
   }
 
-  isFinished() {
+  isFinished () {
     return this.isEndFinished
   }
 
-  isOutOfBlocks() {
+  isOutOfBlocks () {
     return this.outOfBlocks
   }
 
-  onStateExited() {
+  onStateExited () {
     this.isEndFinished = false
     this.outOfBlocks = false
     clearTimeout(this.timeLimit)
   }
 
-  onStateEntered() {
+  onStateEntered () {
     this.timeLimit = setTimeout(() => {
       botWebsocket.log('Time exceded for place item')
       this.bot.stopDigging()
@@ -50,7 +50,6 @@ module.exports = class template {
 
     this.sidesToPlaceBlock = this.calculateSideToPlaceBlock(this.targets.minerJob.mineBlock.clone())
 
-
     this.digBlock(this.targets.position)
       .then(() => this.placeBlocksBucle())
       .then(() => {
@@ -62,7 +61,7 @@ module.exports = class template {
       })
   }
 
-  getItemToPlace() {
+  getItemToPlace () {
     const items = this.bot.inventory.items().filter(item => this.targets.minerJob.blockForPlace.includes(item.name))
     if (items.length === 0) {
       return undefined
@@ -76,7 +75,7 @@ module.exports = class template {
     return item
   }
 
-  equipAndPlace(placeBlockTo, newPosition, blockOffset) {
+  equipAndPlace (placeBlockTo, newPosition, blockOffset) {
     return new Promise((resolve, reject) => {
       const item = this.getItemToPlace()
       if (!item) {
@@ -99,13 +98,10 @@ module.exports = class template {
           .then(resolve)
           .catch(reject)
       }
-
     })
   }
 
-
-
-  placeBlocksBucle() {
+  placeBlocksBucle () {
     return new Promise((resolve, reject) => {
       if (this.sidesToPlaceBlock.length === 0) {
         this.isEndFinished = true
@@ -123,7 +119,7 @@ module.exports = class template {
     })
   }
 
-  placeBlocks() {
+  placeBlocks () {
     return new Promise((resolve, reject) => {
       if (this.listPlaceBlocks.length === 0) {
         resolve()
@@ -147,6 +143,4 @@ module.exports = class template {
       }
     })
   }
-
-
 }

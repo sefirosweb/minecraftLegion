@@ -1,140 +1,139 @@
 const {
   StateTransition,
   BehaviorIdle,
-  NestedStateMachine,
-} = require("mineflayer-statemachine");
+  NestedStateMachine
+} = require('mineflayer-statemachine')
 
-const BehaviorLoadConfig = require("@BehaviorModules/BehaviorLoadConfig");
+const BehaviorLoadConfig = require('@BehaviorModules/BehaviorLoadConfig')
 
-const BehaviorMinerCheckLayer = require("@BehaviorModules/minerJob/BehaviorMinerCheckLayer");
-const BehaviorMinerCurrentLayer = require("@BehaviorModules/minerJob/BehaviorMinerCurrentLayer");
-const BehaviorMinerCurrentBlock = require("@BehaviorModules/minerJob/BehaviorMinerCurrentBlock");
-const BehaviorGetReady = require("@BehaviorModules/BehaviorGetReady");
+const BehaviorMinerCheckLayer = require('@BehaviorModules/minerJob/BehaviorMinerCheckLayer')
+const BehaviorMinerCurrentLayer = require('@BehaviorModules/minerJob/BehaviorMinerCurrentLayer')
+const BehaviorMinerCurrentBlock = require('@BehaviorModules/minerJob/BehaviorMinerCurrentBlock')
+const BehaviorGetReady = require('@BehaviorModules/BehaviorGetReady')
 
-const BehaviorDigBlock = require("@BehaviorModules/BehaviorDigBlock");
-const BehaviorEatFood = require("@BehaviorModules/BehaviorEatFood");
-const BehaviorMoveTo = require("@BehaviorModules/BehaviorMoveTo");
-const BehaviorDigAndPlaceBlock = require("@BehaviorModules/BehaviorDigAndPlaceBlock");
+const BehaviorDigBlock = require('@BehaviorModules/BehaviorDigBlock')
+const BehaviorEatFood = require('@BehaviorModules/BehaviorEatFood')
+const BehaviorMoveTo = require('@BehaviorModules/BehaviorMoveTo')
+const BehaviorDigAndPlaceBlock = require('@BehaviorModules/BehaviorDigAndPlaceBlock')
 
-const mineflayerPathfinder = require("mineflayer-pathfinder");
-const { setMinerCords } = require("@modules/botConfig");
+const mineflayerPathfinder = require('mineflayer-pathfinder')
+const { setMinerCords } = require('@modules/botConfig')
 
 const movingWhile = (bot, nextCurrentLayer, movements) => {
-  let x, y, z;
+  let x, y, z
 
   if (bot.entity.position.x < nextCurrentLayer.xStart) {
-    x = nextCurrentLayer.xStart;
+    x = nextCurrentLayer.xStart
   } else if (bot.entity.position.x > nextCurrentLayer.xEnd) {
-    x = nextCurrentLayer.xEnd;
+    x = nextCurrentLayer.xEnd
   } else {
-    x = bot.entity.position.x;
+    x = bot.entity.position.x
   }
 
   if (bot.entity.position.y < nextCurrentLayer.yStart) {
-    y = nextCurrentLayer.yStart;
+    y = nextCurrentLayer.yStart
   } else if (bot.entity.position.y > nextCurrentLayer.yEnd) {
-    y = nextCurrentLayer.yEnd;
+    y = nextCurrentLayer.yEnd
   } else {
-    y = bot.entity.position.y;
+    y = bot.entity.position.y
   }
 
   if (bot.entity.position.z < nextCurrentLayer.zStart) {
-    z = nextCurrentLayer.zStart;
+    z = nextCurrentLayer.zStart
   } else if (bot.entity.position.z > nextCurrentLayer.zEnd) {
-    z = nextCurrentLayer.zEnd;
+    z = nextCurrentLayer.zEnd
   } else {
-    z = bot.entity.position.z;
+    z = bot.entity.position.z
   }
 
-  const pathfinder = bot.pathfinder;
-  const goal = new mineflayerPathfinder.goals.GoalBlock(x, y, z);
-  pathfinder.setMovements(movements);
-  pathfinder.setGoal(goal);
-};
+  const pathfinder = bot.pathfinder
+  const goal = new mineflayerPathfinder.goals.GoalBlock(x, y, z)
+  pathfinder.setMovements(movements)
+  pathfinder.setGoal(goal)
+}
 
-function miningFunction(bot, targets) {
-  const mcData = require("minecraft-data")(bot.version);
+function miningFunction (bot, targets) {
+  const mcData = require('minecraft-data')(bot.version)
 
-  const start = new BehaviorIdle(targets);
-  start.stateName = "Start";
-  start.x = 125;
-  start.y = 113;
+  const start = new BehaviorIdle(targets)
+  start.stateName = 'Start'
+  start.x = 125
+  start.y = 113
 
-  const finishedJob = new BehaviorIdle(targets);
-  finishedJob.stateName = "Finished Job";
-  finishedJob.x = 525;
-  finishedJob.y = 13;
+  const finishedJob = new BehaviorIdle(targets)
+  finishedJob.stateName = 'Finished Job'
+  finishedJob.x = 525
+  finishedJob.y = 13
 
-  const loadConfig = new BehaviorLoadConfig(bot, targets);
-  loadConfig.stateName = "Load Bot Config";
-  loadConfig.x = 325;
-  loadConfig.y = 113;
+  const loadConfig = new BehaviorLoadConfig(bot, targets)
+  loadConfig.stateName = 'Load Bot Config'
+  loadConfig.x = 325
+  loadConfig.y = 113
 
-  const exit = new BehaviorIdle(targets);
-  exit.stateName = "Exit";
-  exit.x = 125;
-  exit.y = 313;
+  const exit = new BehaviorIdle(targets)
+  exit.stateName = 'Exit'
+  exit.x = 125
+  exit.y = 313
 
-  const nextLayer = new BehaviorMinerCurrentLayer(bot, targets);
-  nextLayer.stateName = "Next Layer";
-  nextLayer.x = 525;
-  nextLayer.y = 113;
+  const nextLayer = new BehaviorMinerCurrentLayer(bot, targets)
+  nextLayer.stateName = 'Next Layer'
+  nextLayer.x = 525
+  nextLayer.y = 113
 
-  const currentBlock = new BehaviorMinerCurrentBlock(bot, targets);
-  currentBlock.stateName = "Check next block";
-  currentBlock.x = 725;
-  currentBlock.y = 113;
+  const currentBlock = new BehaviorMinerCurrentBlock(bot, targets)
+  currentBlock.stateName = 'Check next block'
+  currentBlock.x = 725
+  currentBlock.y = 113
 
-  const digBlock = new BehaviorDigBlock(bot, targets);
-  digBlock.stateName = "Dig Block";
-  digBlock.x = 1025;
-  digBlock.y = 563;
+  const digBlock = new BehaviorDigBlock(bot, targets)
+  digBlock.stateName = 'Dig Block'
+  digBlock.x = 1025
+  digBlock.y = 563
 
-  const digAndPlaceBlock = new BehaviorDigAndPlaceBlock(bot, targets);
-  digAndPlaceBlock.stateName = "Dig Block & Place";
-  digAndPlaceBlock.x = 925;
-  digAndPlaceBlock.y = 563;
+  const digAndPlaceBlock = new BehaviorDigAndPlaceBlock(bot, targets)
+  digAndPlaceBlock.stateName = 'Dig Block & Place'
+  digAndPlaceBlock.x = 925
+  digAndPlaceBlock.y = 563
 
-  const moveToBlock = new BehaviorMoveTo(bot, targets);
-  moveToBlock.stateName = "Move To Block";
+  const moveToBlock = new BehaviorMoveTo(bot, targets)
+  moveToBlock.stateName = 'Move To Block'
   moveToBlock.movements = targets.movements
-  moveToBlock.x = 925;
-  moveToBlock.y = 313;
+  moveToBlock.x = 925
+  moveToBlock.y = 313
 
-  const moveToNearBlock = new BehaviorMoveTo(bot, targets);
-  moveToNearBlock.stateName = "Move To Near Block";
+  const moveToNearBlock = new BehaviorMoveTo(bot, targets)
+  moveToNearBlock.stateName = 'Move To Near Block'
   moveToNearBlock.movements = targets.movements
   moveToNearBlock.x = 925
   moveToNearBlock.y = 113
 
-
-  const getReady = new BehaviorGetReady(bot, targets);
+  const getReady = new BehaviorGetReady(bot, targets)
   getReady.stateName = 'Check if bot is ready'
-  getReady.x = 325;
-  getReady.y = 563;
+  getReady.x = 325
+  getReady.y = 563
 
-  const checkLayer = new BehaviorMinerCheckLayer(bot, targets);
-  checkLayer.stateName = "Check Layer Lava & Water";
-  checkLayer.x = 525;
-  checkLayer.y = 213;
+  const checkLayer = new BehaviorMinerCheckLayer(bot, targets)
+  checkLayer.stateName = 'Check Layer Lava & Water'
+  checkLayer.x = 525
+  checkLayer.y = 213
 
-  const eatFood = new BehaviorEatFood(bot, targets);
-  eatFood.stateName = "Eat Food";
-  eatFood.x = 725;
-  eatFood.y = 363;
+  const eatFood = new BehaviorEatFood(bot, targets)
+  eatFood.stateName = 'Eat Food'
+  eatFood.x = 725
+  eatFood.y = 363
 
-  const fillBlocks = require("@NestedStateModules/minerJob/fillFunction")(bot, targets);
+  const fillBlocks = require('@NestedStateModules/minerJob/fillFunction')(bot, targets)
   fillBlocks.stateName = 'Fill Water & Lava'
-  fillBlocks.x = 350;
-  fillBlocks.y = 313;
+  fillBlocks.x = 350
+  fillBlocks.y = 313
 
-  const findItemsAndPickup = require("@NestedStateModules/findItemsAndPickup")(
+  const findItemsAndPickup = require('@NestedStateModules/findItemsAndPickup')(
     bot,
     targets
-  );
-  findItemsAndPickup.stateName = "Find Items";
-  findItemsAndPickup.x = 525;
-  findItemsAndPickup.y = 363;
+  )
+  findItemsAndPickup.stateName = 'Find Items'
+  findItemsAndPickup.x = 525
+  findItemsAndPickup.y = 363
 
   const saveCurrentLayer = () => {
     const tunel = targets.config.minerCords.tunel
@@ -151,7 +150,6 @@ function miningFunction(bot, targets) {
 
     newMineCords.zStart = parseInt(newMineCords.zStart)
     newMineCords.zEnd = parseInt(newMineCords.zEnd)
-
 
     if (tunel === 'horizontally') {
       if (orientation === 'z+' && newMineCords.zStart < newMineCords.zEnd) newMineCords.zStart++
@@ -173,7 +171,6 @@ function miningFunction(bot, targets) {
 
     targets.minerJob.original = newMineCords
 
-
     newMineCords.tunel = tunel
     newMineCords.orientation = orientation
     newMineCords.world = world
@@ -187,42 +184,42 @@ function miningFunction(bot, targets) {
     new StateTransition({
       parent: start,
       child: loadConfig,
-      name: "start -> loadConfig",
+      name: 'start -> loadConfig',
       onTransition: () => {
-        targets.minerJob.nextLayer = nextLayer;
+        targets.minerJob.nextLayer = nextLayer
 
         const yStart =
           parseInt(targets.config.minerCords.yStart) >
             parseInt(targets.config.minerCords.yEnd)
             ? parseInt(targets.config.minerCords.yEnd)
-            : parseInt(targets.config.minerCords.yStart);
+            : parseInt(targets.config.minerCords.yStart)
         const yEnd =
           parseInt(targets.config.minerCords.yStart) >
             parseInt(targets.config.minerCords.yEnd)
             ? parseInt(targets.config.minerCords.yStart)
-            : parseInt(targets.config.minerCords.yEnd);
+            : parseInt(targets.config.minerCords.yEnd)
 
         const xStart =
           parseInt(targets.config.minerCords.xStart) >
             parseInt(targets.config.minerCords.xEnd)
             ? parseInt(targets.config.minerCords.xEnd)
-            : parseInt(targets.config.minerCords.xStart);
+            : parseInt(targets.config.minerCords.xStart)
         const xEnd =
           parseInt(targets.config.minerCords.xStart) >
             parseInt(targets.config.minerCords.xEnd)
             ? parseInt(targets.config.minerCords.xStart)
-            : parseInt(targets.config.minerCords.xEnd);
+            : parseInt(targets.config.minerCords.xEnd)
 
         const zStart =
           parseInt(targets.config.minerCords.zStart) >
             parseInt(targets.config.minerCords.zEnd)
             ? parseInt(targets.config.minerCords.zEnd)
-            : parseInt(targets.config.minerCords.zStart);
+            : parseInt(targets.config.minerCords.zStart)
         const zEnd =
           parseInt(targets.config.minerCords.zStart) >
             parseInt(targets.config.minerCords.zEnd)
             ? parseInt(targets.config.minerCords.zStart)
-            : parseInt(targets.config.minerCords.zEnd);
+            : parseInt(targets.config.minerCords.zEnd)
 
         targets.minerJob.original = {
           xStart,
@@ -230,43 +227,43 @@ function miningFunction(bot, targets) {
           yStart,
           yEnd,
           zStart,
-          zEnd,
-        };
+          zEnd
+        }
       },
-      shouldTransition: () => true,
+      shouldTransition: () => true
     }),
 
     new StateTransition({
       parent: loadConfig,
       child: nextLayer,
-      name: "loadConfig -> nextLayer",
+      name: 'loadConfig -> nextLayer',
       onTransition: () => {
-        targets.entity = undefined;
-        nextLayer.setMinerCords(loadConfig.getMinerCords());
+        targets.entity = undefined
+        nextLayer.setMinerCords(loadConfig.getMinerCords())
       },
-      shouldTransition: () => true,
+      shouldTransition: () => true
     }),
 
     new StateTransition({
       parent: nextLayer,
       child: finishedJob,
-      name: "Mining finished",
+      name: 'Mining finished',
       onTransition: () => {
         bot.pathfinder.setGoal(null)
       },
-      shouldTransition: () => nextLayer.isFinished(),
+      shouldTransition: () => nextLayer.isFinished()
     }),
 
     new StateTransition({
       parent: nextLayer,
       child: checkLayer,
-      name: "nextLayer -> checkLayer",
+      name: 'nextLayer -> checkLayer',
       onTransition: () => {
-        const nextCurrentLayer = nextLayer.getCurrentLayerCoords();
-        movingWhile(bot, nextCurrentLayer, targets.movements);
-        checkLayer.setMinerCords(nextCurrentLayer);
+        const nextCurrentLayer = nextLayer.getCurrentLayerCoords()
+        movingWhile(bot, nextCurrentLayer, targets.movements)
+        checkLayer.setMinerCords(nextCurrentLayer)
       },
-      shouldTransition: () => !nextLayer.isFinished(),
+      shouldTransition: () => !nextLayer.isFinished()
     }),
 
     new StateTransition({
@@ -278,64 +275,64 @@ function miningFunction(bot, targets) {
         checkLayer.isFinished() ||
         !bot.inventory
           .items()
-          .find((item) => targets.minerJob.blockForPlace.includes(item.name)),
+          .find((item) => targets.minerJob.blockForPlace.includes(item.name))
     }),
 
     new StateTransition({
       parent: findItemsAndPickup,
       child: eatFood,
-      shouldTransition: () => findItemsAndPickup.isFinished(),
+      shouldTransition: () => findItemsAndPickup.isFinished()
     }),
 
     new StateTransition({
       parent: checkLayer,
       child: fillBlocks,
-      name: "checkLayer -> fillBlocks",
+      name: 'checkLayer -> fillBlocks',
       shouldTransition: () => {
         const item = bot.inventory
           .items()
-          .find((item) => targets.minerJob.blockForPlace.includes(item.name));
+          .find((item) => targets.minerJob.blockForPlace.includes(item.name))
         if (checkLayer.getFoundLavaOrWater() && item) {
-          targets.item = item;
-          return true;
+          targets.item = item
+          return true
         }
-        return false;
-      },
+        return false
+      }
     }),
 
     new StateTransition({
       parent: fillBlocks,
       child: checkLayer,
-      name: "Finished fill block",
-      shouldTransition: () => fillBlocks.isFinished() && digAndPlaceBlock.getItemToPlace(),
+      name: 'Finished fill block',
+      shouldTransition: () => fillBlocks.isFinished() && digAndPlaceBlock.getItemToPlace()
     }),
 
     new StateTransition({
       parent: fillBlocks,
       child: exit,
-      name: "Finished fill block",
-      shouldTransition: () => fillBlocks.isFinished() && !digAndPlaceBlock.getItemToPlace(),
+      name: 'Finished fill block',
+      shouldTransition: () => fillBlocks.isFinished() && !digAndPlaceBlock.getItemToPlace()
     }),
 
     new StateTransition({
       parent: currentBlock,
       child: moveToBlock,
-      name: "currentBlock -> moveToBlock",
+      name: 'currentBlock -> moveToBlock',
       onTransition: () => {
-        targets.minerJob.mineBlock = targets.position.clone();
-        if (nextLayer.minerCords.tunel === "horizontally") {
+        targets.minerJob.mineBlock = targets.position.clone()
+        if (nextLayer.minerCords.tunel === 'horizontally') {
           // Move to base of block
-          targets.position.y = parseInt(checkLayer.minerCords.yStart);
+          targets.position.y = parseInt(checkLayer.minerCords.yStart)
           targets.position.dimension = targets.config.minerCords.world
         }
       },
-      shouldTransition: () => currentBlock.isFinished() && currentBlock.canGetBlockInfo(),
+      shouldTransition: () => currentBlock.isFinished() && currentBlock.canGetBlockInfo()
     }),
 
     new StateTransition({
       parent: currentBlock,
       child: moveToNearBlock,
-      shouldTransition: () => currentBlock.isFinished() && !currentBlock.canGetBlockInfo(),
+      shouldTransition: () => currentBlock.isFinished() && !currentBlock.canGetBlockInfo()
     }),
 
     new StateTransition({
@@ -347,66 +344,66 @@ function miningFunction(bot, targets) {
           return true
         }
         return false
-      },
+      }
     }),
 
     new StateTransition({
       parent: currentBlock,
       child: nextLayer,
-      name: "Finished chunk",
+      name: 'Finished chunk',
       onTransition: () => {
         saveCurrentLayer()
         nextLayer.next()
       },
-      shouldTransition: () => currentBlock.getLayerIsFinished(),
+      shouldTransition: () => currentBlock.getLayerIsFinished()
     }),
 
     new StateTransition({
       parent: moveToBlock,
       child: digAndPlaceBlock,
       onTransition: () => {
-        targets.position = targets.minerJob.mineBlock;
+        targets.position = targets.minerJob.mineBlock
       },
       shouldTransition: () =>
-        (moveToBlock.isFinished() || moveToBlock.distanceToTarget() < 2.5)
-        && !bot.pathfinder.isMining(),
+        (moveToBlock.isFinished() || moveToBlock.distanceToTarget() < 2.5) &&
+        !bot.pathfinder.isMining()
     }),
 
     new StateTransition({
       parent: digAndPlaceBlock,
       child: getReady,
-      shouldTransition: () => digAndPlaceBlock.isFinished() && !digAndPlaceBlock.isOutOfBlocks(),
+      shouldTransition: () => digAndPlaceBlock.isFinished() && !digAndPlaceBlock.isOutOfBlocks()
     }),
 
     new StateTransition({
       parent: digAndPlaceBlock,
       child: exit,
-      shouldTransition: () => digAndPlaceBlock.isFinished() && digAndPlaceBlock.isOutOfBlocks(),
+      shouldTransition: () => digAndPlaceBlock.isFinished() && digAndPlaceBlock.isOutOfBlocks()
     }),
 
     new StateTransition({
       parent: getReady,
       child: eatFood,
-      shouldTransition: () => getReady.getIsReady(),
+      shouldTransition: () => getReady.getIsReady()
     }),
 
     new StateTransition({
       parent: eatFood,
       child: currentBlock,
-      shouldTransition: () => eatFood.isFinished(),
+      shouldTransition: () => eatFood.isFinished()
     }),
 
     new StateTransition({
       parent: getReady,
       child: exit,
-      name: "No pickaxes or shovel in inventory",
-      shouldTransition: () => !getReady.getIsReady(),
-    }),
-  ];
+      name: 'No pickaxes or shovel in inventory',
+      shouldTransition: () => !getReady.getIsReady()
+    })
+  ]
 
-  const miningFunction = new NestedStateMachine(transitions, start, exit);
-  miningFunction.stateName = "Mining";
-  return miningFunction;
+  const miningFunction = new NestedStateMachine(transitions, start, exit)
+  miningFunction.stateName = 'Mining'
+  return miningFunction
 }
 
-module.exports = miningFunction;
+module.exports = miningFunction

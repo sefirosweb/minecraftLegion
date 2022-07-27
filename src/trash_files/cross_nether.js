@@ -1,6 +1,6 @@
 const { Vec3 } = require('vec3')
 const mineflayer = require('mineflayer')
-const { pathfinder, Movements, goals } = require("mineflayer-pathfinder");
+const { pathfinder, Movements, goals } = require('mineflayer-pathfinder')
 
 if (process.argv.length < 4 || process.argv.length > 6) {
   console.log('Usage : node cross <host> <port> [<name>] [<password>]')
@@ -14,26 +14,24 @@ const bot = mineflayer.createBot({
   password: process.argv[5]
 })
 
-
 bot.once('inject_allowed', () => {
   bot.loadPlugin(require('mineflayer-pathfinder').pathfinder)
 })
-
 
 bot.once('spawn', () => {
   bot.chat('Hi')
   const mcData = require('minecraft-data')(bot.version)
 
   const goPortal = (position) => {
-    bot.loadPlugin(pathfinder);
-    bot.pathfinder.setMovements(new Movements(bot, mcData));
-    bot.pathfinder.setGoal(new goals.GoalBlock(position.x, position.y, position.z));
+    bot.loadPlugin(pathfinder)
+    bot.pathfinder.setMovements(new Movements(bot, mcData))
+    bot.pathfinder.setGoal(new goals.GoalBlock(position.x, position.y, position.z))
 
     return new Promise((resolve) => {
-      bot.on("goal_reached", (goal) => {
-        resolve();
-      });
-    });
+      bot.on('goal_reached', (goal) => {
+        resolve()
+      })
+    })
   }
 
   const matching = ['nether_portal', 'end_portal'].map(name => mcData.blocksByName[name].id)
@@ -59,11 +57,8 @@ bot.once('spawn', () => {
         bot.once('spawn', (asd) => {
           console.log('spawned')
         })
-
       })
   } else {
     console.log(false)
   }
-
-
-});
+})

@@ -1,7 +1,7 @@
 const mineflayerViewer = require('prismarine-viewer').mineflayer
 
 function start (bot, port = 4000) {
-  mineflayerViewer(bot, { port: port })
+  mineflayerViewer(bot, { port })
   const path = [bot.entity.position.clone()]
   bot.on('move', () => {
     if (path[path.length - 1].distanceTo(bot.entity.position) > 1) {

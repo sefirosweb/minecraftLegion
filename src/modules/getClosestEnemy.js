@@ -29,7 +29,7 @@ module.exports = function (bot, targets) {
     'parrot',
     'phantom',
     'vex',
-    'Wither',
+    'Wither'
   ]
 
   const mcData = require('minecraft-data')(bot.version)
@@ -148,5 +148,3 @@ module.exports = function (bot, targets) {
     flyingMobs
   }
 }
-
-

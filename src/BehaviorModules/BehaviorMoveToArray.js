@@ -19,7 +19,6 @@ module.exports = class BehaviorMoveToArray {
     const mcData = require('minecraft-data')(this.bot.version)
     this.movements = new mineflayerPathfinder.Movements(this.bot, mcData)
 
-  
     if (this.startNearestPoint === true && this.patrol !== undefined) {
       this.sortPatrol()
     }

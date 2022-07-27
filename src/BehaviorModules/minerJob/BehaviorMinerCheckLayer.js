@@ -3,7 +3,7 @@ const botWebsocket = require('@modules/botWebsocket')
 const Vec3 = require('vec3')
 
 module.exports = class BehaviorMinerCheckLayer {
-  constructor(bot, targets) {
+  constructor (bot, targets) {
     this.bot = bot
     this.targets = targets
     this.stateName = 'BehaviorMinerCheckLayer'
@@ -16,23 +16,23 @@ module.exports = class BehaviorMinerCheckLayer {
     this.floorBlocksToFind = ['air', 'cave_air']
   }
 
-  isFinished() {
+  isFinished () {
     return this.isEndFinished
   }
 
-  getFoundLavaOrWater() {
+  getFoundLavaOrWater () {
     return this.foundLavaOrWater
   }
 
-  onStateEntered() {
+  onStateEntered () {
     this.foundLavaOrWater = false
     this.isEndFinished = false
 
     this.checkArea()
   }
 
-  onStateExited() {
-    this.bot.pathfinder.setGoal(null);
+  onStateExited () {
+    this.bot.pathfinder.setGoal(null)
     this.bot.removeAllListeners('customEventPhysicTick')
 
     // Reset positions for cehck again all blocks
@@ -49,11 +49,11 @@ module.exports = class BehaviorMinerCheckLayer {
     this.startBlock()
   }
 
-  checkStoneInInventory() {
+  checkStoneInInventory () {
     return this.bot.inventory.items().find(item => this.targets.minerJob.blockForPlace.includes(item.name))
   }
 
-  checkArea() {
+  checkArea () {
     return new Promise(async (resolve, reject) => {
       do {
         if (
@@ -66,7 +66,7 @@ module.exports = class BehaviorMinerCheckLayer {
           return
         }
 
-        this.next();
+        this.next()
 
         if (
           this.minerCords.tunel === 'vertically' &&
@@ -83,7 +83,7 @@ module.exports = class BehaviorMinerCheckLayer {
         let block = this.getBlockType()
         if (!block) {
           botWebsocket.log(`Block: ${this.xCurrent} ${this.yCurrent} ${this.zCurrent} It is very far! I can't see the block, approaching the block to check it`)
-          botWebsocket.log(`Area less than 200 blocks radius distance is recommended`)
+          botWebsocket.log('Area less than 200 blocks radius distance is recommended')
           const position = new Vec3(this.xCurrent, this.yCurrent, this.zCurrent)
           await this.moveToSeeBlock(this.xCurrent, this.yCurrent, this.zCurrent)
           this.bot.removeAllListeners('customEventPhysicTick')
@@ -94,14 +94,11 @@ module.exports = class BehaviorMinerCheckLayer {
           resolve()
           return
         }
-
-
       } while (true)
     })
-
   }
 
-  next() {
+  next () {
     if (this.minerCords.orientation === 'z-' || this.minerCords.orientation === 'z+') {
       this.zNext()
     }
@@ -110,7 +107,7 @@ module.exports = class BehaviorMinerCheckLayer {
     }
   }
 
-  xNext() {
+  xNext () {
     if (this.xCurrent === this.xEnd) {
       const temp = this.xEnd
       this.xEnd = this.xStart
@@ -130,11 +127,11 @@ module.exports = class BehaviorMinerCheckLayer {
     }
   }
 
-  yNext() {
+  yNext () {
     this.yCurrent--
   }
 
-  zNext() {
+  zNext () {
     if (this.zCurrent === this.zEnd) {
       const temp = this.zEnd
       this.zEnd = this.zStart
@@ -154,18 +151,18 @@ module.exports = class BehaviorMinerCheckLayer {
     }
   }
 
-  getBlockType() {
+  getBlockType () {
     const position = new Vec3(this.xCurrent, this.yCurrent, this.zCurrent)
     return this.bot.blockAt(position)
   }
 
-  setMinerCords(minerCords) {
+  setMinerCords (minerCords) {
     this.isLayerFinished = false
     this.minerCords = minerCords
     this.startBlock()
   }
 
-  startBlock() {
+  startBlock () {
     this.yStart = parseInt(this.minerCords.yStart) > parseInt(this.minerCords.yEnd) ? parseInt(this.minerCords.yStart) : parseInt(this.minerCords.yEnd)
     this.yEnd = parseInt(this.minerCords.yStart) > parseInt(this.minerCords.yEnd) ? parseInt(this.minerCords.yEnd) : parseInt(this.minerCords.yStart)
 
@@ -173,7 +170,6 @@ module.exports = class BehaviorMinerCheckLayer {
     if (this.minerCords.tunel === 'horizontally') {
       this.yEnd--
     }
-
 
     this.xStart = parseInt(this.minerCords.xStart) > parseInt(this.minerCords.xEnd) ? parseInt(this.minerCords.xStart) : parseInt(this.minerCords.xEnd)
     this.xEnd = parseInt(this.minerCords.xStart) > parseInt(this.minerCords.xEnd) ? parseInt(this.minerCords.xEnd) : parseInt(this.minerCords.xStart)
@@ -204,21 +200,20 @@ module.exports = class BehaviorMinerCheckLayer {
         this.zEnd = parseInt(this.minerCords.zStart) > parseInt(this.minerCords.zEnd) ? parseInt(this.minerCords.zEnd) : parseInt(this.minerCords.zStart)
         break
     }
-    
+
     let temp
-    
-    if (this.minerCords.reverse && this.minerCords.tunel === 'vertically' && (this.minerCords.orientation === 'x+' || this.minerCords.orientation === 'x-' )) {
+
+    if (this.minerCords.reverse && this.minerCords.tunel === 'vertically' && (this.minerCords.orientation === 'x+' || this.minerCords.orientation === 'x-')) {
       temp = this.xStart
       this.xStart = this.xEnd
       this.xEnd = temp
     }
 
-    if (this.minerCords.reverse && this.minerCords.tunel === 'vertically' && (this.minerCords.orientation === 'z+' || this.minerCords.orientation === 'z-' )) {
+    if (this.minerCords.reverse && this.minerCords.tunel === 'vertically' && (this.minerCords.orientation === 'z+' || this.minerCords.orientation === 'z-')) {
       temp = this.zStart
       this.zStart = this.zEnd
       this.zEnd = temp
     }
-
 
     if (this.minerCords.tunel === 'vertically') {
       if (this.xStart > this.xEnd) {
@@ -243,7 +238,7 @@ module.exports = class BehaviorMinerCheckLayer {
     this.zCurrent = parseInt(this.zStart)
   }
 
-  checkValidBlock(block) {
+  checkValidBlock (block) {
     if (this.blocksToFind.includes(block.name) ||
       (
         this.floorBlocksToFind.includes(block.name) &&
@@ -259,21 +254,19 @@ module.exports = class BehaviorMinerCheckLayer {
     return false
   }
 
-  moveToSeeBlock(x, y, z) {
+  moveToSeeBlock (x, y, z) {
     return new Promise((resolve, reject) => {
-
       const goal = new mineflayerPathfinder.goals.GoalBlock(x, y, z)
-      this.bot.pathfinder.setMovements(this.targets.movements);
-      this.bot.pathfinder.setGoal(goal);
+      this.bot.pathfinder.setMovements(this.targets.movements)
+      this.bot.pathfinder.setGoal(goal)
 
       this.bot.on('customEventPhysicTick', () => {
         const block = this.getBlockType()
         if (block) {
-          this.bot.pathfinder.setGoal(null);
+          this.bot.pathfinder.setGoal(null)
           resolve()
         }
       })
-
     })
   }
 }

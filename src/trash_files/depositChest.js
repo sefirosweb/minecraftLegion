@@ -18,16 +18,16 @@ bot.once('spawn', () => {
   inventoryViewer(bot, { port: 3001 })
   let chest, itemsToDeposit
 
-  function getRandomItems() {
+  function getRandomItems () {
     const items = mcData.itemsArray
     for (let i = 0; i < 36; i++) {
-      const item = items[Math.floor(Math.random() * items.length)];
+      const item = items[Math.floor(Math.random() * items.length)]
       const stack = Math.floor(Math.random() * item.stackSize)
       bot.chat(`/give ${bot.username} minecraft:${item.name} ${stack}`)
     }
   }
 
-  async function openChest() {
+  async function openChest () {
     const chestToOpen = bot.findBlock({
       matching: ['chest', 'ender_chest', 'trapped_chest'].map(name => mcData.blocksByName[name].id),
       maxDistance: 3
@@ -41,7 +41,7 @@ bot.once('spawn', () => {
     }, 350)
   }
 
-  async function depositItems() {
+  async function depositItems () {
     if (itemsToDeposit.length === 0) {
       setTimeout(() => {
         chest.close()
@@ -58,12 +58,12 @@ bot.once('spawn', () => {
   }
 
   getRandomItems()
-  bot.chat(`/kill @e[type=minecraft:item]`)
+  bot.chat('/kill @e[type=minecraft:item]')
   bot.chat('Hi im ready!')
 
   bot.on('chat', (username, message) => {
     if (message === 'start') {
-      openChest();
+      openChest()
     }
   })
 })

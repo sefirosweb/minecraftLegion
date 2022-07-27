@@ -191,7 +191,7 @@ module.exports = function (bot) {
               toSlot: slotIndex,
               type: slot.type,
               name: slot.name,
-              quantity: quantity
+              quantity
             })
           }
           if (everyInventoryItem.count === 0) return false

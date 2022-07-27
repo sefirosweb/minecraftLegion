@@ -10,7 +10,7 @@ const {
 const BehaviorAttack = require('@BehaviorModules/BehaviorAttack')
 const BehaviorLongAttack = require('@BehaviorModules/BehaviorLongAttack')
 
-function combatFunction(bot, targets) {
+function combatFunction (bot, targets) {
   const inventory = require('@modules/inventoryModule')(bot)
   const { ignoreMobs, flyingMobs } = require('@modules/getClosestEnemy')(bot, targets)
   const hawkEye = require('minecrafthawkeye')
@@ -123,7 +123,7 @@ function combatFunction(bot, targets) {
     longRangeAttack.setInfoShot(targetGrade)
   }
 
-  function startGrades() {
+  function startGrades () {
     const isEventLoaded = bot.listeners('customEventPhysicTick').find(event => {
       return event.name === 'getGrades'
     })
@@ -133,11 +133,11 @@ function combatFunction(bot, targets) {
     }
   }
 
-  function stopGrades() {
+  function stopGrades () {
     bot.removeListener('customEventPhysicTick', getGrades)
   }
 
-  function checkHandleSword() {
+  function checkHandleSword () {
     const swordHandled = inventory.checkItemEquiped('sword')
 
     if (swordHandled) { return }
