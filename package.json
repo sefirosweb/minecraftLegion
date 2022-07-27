@@ -37,6 +37,11 @@
         "lint": "standard && standard-markdown",
         "ts": "ts-node ./src/start_bot $1 $2"
     },
+    "standard": {
+        "ignore": [
+            "/src/trash_files/**/*.js"
+        ]
+    },
     "repository": {
         "type": "git",
         "url": "git+https://github.com/sefirosweb/minecraftLegion.git"
