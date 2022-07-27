@@ -88,7 +88,7 @@ module.exports = function (bot) {
 
   const getCraftingTable = () => {
     const craftingTableID = mcData.blocksByName.crafting_table.id;
-    craftingTable = bot.findBlock({
+    const craftingTable = bot.findBlock({
       matching: craftingTableID,
       maxDistance: 3,
     });
