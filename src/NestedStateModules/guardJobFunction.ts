@@ -19,8 +19,7 @@ import BehaviorFindItems from '@BehaviorModules/BehaviorFindItems'
 import BehaviorHelpFriend from '@BehaviorModules/BehaviorHelpFriend'
 //@ts-ignore
 import BehaviorMoveTo from '@BehaviorModules/BehaviorMoveTo'
-//@ts-ignore
-import { Bot } from 'mineflayer'
+import { Bot } from '@/types'
 //@ts-ignore
 import { LegionStateMachineTargets } from '@/types'
 

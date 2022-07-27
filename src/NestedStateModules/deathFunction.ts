@@ -1,5 +1,5 @@
 import { BotwebsocketAction, LegionStateMachineTargets, Master } from '@/types'
-import { Bot } from 'mineflayer'
+import { Bot } from '@/types'
 import {
   StateTransition,
   BehaviorIdle,

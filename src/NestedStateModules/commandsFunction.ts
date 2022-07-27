@@ -42,10 +42,10 @@ function commandsFunction(bot: Bot, targets: LegionStateMachineTargets) {
   //@ts-ignore
   followPlayer.movements = targets.movements
 
-  //@ts-ignore
+   //@ts-ignore
   const lookAtFollowTarget = new BehaviorLookAtEntity(bot, targets)
   lookAtFollowTarget.stateName = 'Look Player'
-  //@ts-ignore
+   //@ts-ignore
   lookAtFollowTarget.x = 550
   //@ts-ignore
   lookAtFollowTarget.y = 313

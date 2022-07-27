@@ -69,6 +69,7 @@ export type BotwebsocketAction = {
 export interface Bot extends MineflayerBot {
     isABed: (bedBlock: Block) => boolean
 }
+
 declare module 'mineflayer' {
     export interface BotEvents {
         webSocketLogin: () => Promise<void> | void

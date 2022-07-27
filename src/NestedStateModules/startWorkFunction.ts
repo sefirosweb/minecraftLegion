@@ -5,7 +5,7 @@ import {
   BehaviorFollowEntity
 } from 'mineflayer-statemachine'
 
-import { Bot } from 'mineflayer'
+import { Bot } from '@/types'
 import { LegionStateMachineTargets } from '@/types/index'
 import mcDataLoader from 'minecraft-data'
 import { DefaultBlockForPlace, Jobs } from '@/types/defaultTypes'
