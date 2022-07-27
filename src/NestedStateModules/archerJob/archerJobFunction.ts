@@ -1,26 +1,33 @@
-const botWebsocket = require('@modules/botWebsocket')
 
-const {
+import {
   StateTransition,
   BehaviorIdle,
   BehaviorFollowEntity,
   NestedStateMachine,
   BehaviorGetClosestEntity
 
-} = require('mineflayer-statemachine')
-const BehaviorAttack = require('@BehaviorModules/BehaviorAttack')
+} from 'mineflayer-statemachine'
+import { Entity } from 'prismarine-entity'
 
-function archerJobFunction (bot, targets) {
-  const enter = new BehaviorIdle(targets)
-  const exit = new BehaviorIdle(targets)
+//@ts-ignore
+import botWebsocket from '@modules/botWebsocket'
+//@ts-ignore
+import BehaviorAttack from '@BehaviorModules/BehaviorAttack'
+import { Bot } from 'mineflayer'
+import { LegionStateMachineTargets } from '@/types'
+
+function archerJobFunction(bot: Bot, targets: LegionStateMachineTargets) {
+  const enter = new BehaviorIdle()
+  const exit = new BehaviorIdle()
   const attack = new BehaviorAttack(bot, targets)
 
-  function distanceFilter (entity) {
-    return entity.position.distanceTo(this.bot.player.entity.position) <= 10 &&
+  function distanceFilter(entity: Entity) {
+    return entity.position.distanceTo(bot.player.entity.position) <= 10 &&
       (entity.type === 'mob' || entity.type === 'player')
   }
+  //@ts-ignore
   const getClosestMob = new BehaviorGetClosestEntity(bot, targets, distanceFilter)
-
+  //@ts-ignore
   const followMob = new BehaviorFollowEntity(bot, targets)
 
   const transitions = [
@@ -36,7 +43,7 @@ function archerJobFunction (bot, targets) {
       child: followMob,
       name: 'Found a mob',
       shouldTransition: () => targets.entity !== undefined,
-      onTransition: () => botWebsocket.log('Attack mob! ' + targets.entity.displayName)
+      onTransition: () => botWebsocket.log('Attack mob! ' + targets.entity?.displayName)
     }),
 
     new StateTransition({
@@ -50,35 +57,35 @@ function archerJobFunction (bot, targets) {
       parent: followMob,
       child: attack,
       name: 'Mob is near',
-      shouldTransition: () => followMob.distanceToTarget() < 2 && attack.nextAttack() && targets.entity.isValid
+      shouldTransition: () => followMob.distanceToTarget() < 2 && attack.nextAttack() && targets.entity?.isValid
     }),
 
     new StateTransition({
       parent: attack,
       child: followMob,
       name: 'Mob is too far',
-      shouldTransition: () => followMob.distanceToTarget() > 2 && targets.entity.isValid
+      shouldTransition: () => targets.entity !== undefined && followMob.distanceToTarget() > 2 && targets.entity.isValid
     }),
 
     new StateTransition({
       parent: attack,
       child: attack,
       name: 'Mob still near continue attack',
-      shouldTransition: () => followMob.distanceToTarget() < 2 && attack.nextAttack() && targets.entity.isValid
+      shouldTransition: () => followMob.distanceToTarget() < 2 && attack.nextAttack() && targets.entity?.isValid
     }),
 
     new StateTransition({
       parent: attack,
       child: getClosestMob,
       name: 'Mob is dead',
-      shouldTransition: () => targets.entity.isValid === false
+      shouldTransition: () => targets.entity?.isValid === false
     }),
 
     new StateTransition({
       parent: followMob,
       child: getClosestMob,
       name: 'Mob is dead',
-      shouldTransition: () => targets.entity.isValid === false
+      shouldTransition: () => targets.entity?.isValid === false
     })
 
   ]
