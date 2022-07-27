@@ -75,7 +75,29 @@ module.exports = (bot: Bot) => {
     },
 
     isNight: false,
-    triedToSleep: false
+    triedToSleep: false,
+
+    breederJob: {
+      animalsToBeFeed: [],
+      breededAnimals: [],
+      farmAreas: [],
+      farmAnimal: {
+        seconds: 60,
+        bee: 10,
+        cat: 10,
+        chicken: 10,
+        cow: 10,
+        donkey: 10,
+        horse: 10,
+        llama: 10,
+        panda: 10,
+        pig: 10,
+        rabbit: 10,
+        sheep: 10,
+        turtles: 10,
+        wolf: 10
+      },
+    }
   }
 
   let webserver: any

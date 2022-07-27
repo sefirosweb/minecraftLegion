@@ -4,12 +4,44 @@ import { Bot as MineflayerBot } from 'mineflayer'
 import { Vec3 } from 'vec3'
 import { Jobs } from './defaultTypes'
 import { Block } from 'prismarine-block'
+import { Entity } from 'prismarine-entity'
+
+
+// type BreedAnimal = Entity & {
+//     breededDate: number
+// }
 
 type GuardJob = {}
 type ArcherJob = {}
 type FarmerJob = {}
-type BreederJob = {}
-type BreederJob = {}
+type BreederJob = {
+    farmAreas: Array<{
+        xStart: number,
+        xEnd: number,
+        zStart: number,
+        zEnd: number,
+        yLayer: number,
+    }>,
+    breededAnimals: Array<Entity>,
+    farmAnimal: {
+        seconds: number,
+        cow: 10,
+        sheep: 10,
+        chicken: 10,
+        horse: 10,
+        donkey: 10,
+        llama: 10,
+        bee: 10,
+        panda: 10,
+        wolf: 10,
+        cat: 10,
+        rabbit: 10,
+        pig: 10,
+        turtles: 10,
+    },
+    animalsToBeFeed: Array<Entity>,
+    feedEntity?: Entity
+}
 type SorterJob = {}
 type CrafterJob = {}
 type MinerJob = {
@@ -84,11 +116,13 @@ export interface LegionStateMachineTargets extends StateMachineTargets {
     craftItemBatch?: any;
     craftItem?: any
 
+    interactEntity?: Entity
+
     guardJob?: GuardJob;
     archerJob?: ArcherJob;
     farmerJob?: FarmerJob;
     minerJob?: MinerJob;
-    breederJob?: BreederJob;
+    breederJob: BreederJob;
     sorterJob?: SorterJob;
     crafterJob?: CrafterJob;
 }
@@ -109,6 +143,7 @@ export interface Bot extends MineflayerBot {
 declare module 'prismarine-entity' {
     export interface Entity {
         isEnemy?: boolean
+        breededDate?: number
     }
 }
 declare module 'mineflayer' {

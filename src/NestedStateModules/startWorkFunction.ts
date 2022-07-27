@@ -96,9 +96,6 @@ function startWorkFunction(bot: Bot, targets: LegionStateMachineTargets) {
     new StateTransition({
       parent: loadedConfig,
       child: breederJob,
-      onTransition: () => {
-        targets.breederJob = {}
-      },
       shouldTransition: () => targets.config.job === Jobs.breeder
     }),
 

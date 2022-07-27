@@ -1,23 +1,31 @@
-const {
+import { LegionStateMachineTargets } from '@/types'
+import { Bot } from 'mineflayer'
+import {
   StateTransition,
   BehaviorIdle,
   NestedStateMachine
-} = require('mineflayer-statemachine')
-
-function slaughterhouseFunction (bot, targets) {
-  const start = new BehaviorIdle(targets)
+} from 'mineflayer-statemachine'
+import { Entity } from 'prismarine-entity'
+function slaughterhouseFunction(bot: Bot, targets: LegionStateMachineTargets) {
+  const start = new BehaviorIdle()
   start.stateName = 'Start'
+  //@ts-ignore
   start.x = 125
+  //@ts-ignore
   start.y = 113
 
-  const exit = new BehaviorIdle(targets)
+  const exit = new BehaviorIdle()
   exit.stateName = 'Exit'
+  //@ts-ignore
   exit.x = 525
+  //@ts-ignore
   exit.y = 113
 
-  const check = new BehaviorIdle(targets)
+  const check = new BehaviorIdle()
   check.stateName = 'Check'
+  //@ts-ignore
   check.x = 325
+  //@ts-ignore
   check.y = 113
 
   const slaughter = require('@NestedStateModules/breederJob/slaughterFunction')(bot, targets)
@@ -25,12 +33,14 @@ function slaughterhouseFunction (bot, targets) {
   slaughter.x = 325
   slaughter.y = 263
 
-  let animalsToKill
+  let animalsToKill: Array<Entity>
 
   const getSpareAnimals = () => {
-    const spareAnimals = []
+    const spareAnimals: Array<Entity> = []
     let spare
     Object.keys(targets.breederJob.farmAnimal).forEach(animalName => {
+
+      //@ts-ignore
       const animalQuantity = targets.breederJob.farmAnimal[animalName]
       spare = targets.breederJob.breededAnimals.filter(e => {
         return e.name === animalName
@@ -39,6 +49,7 @@ function slaughterhouseFunction (bot, targets) {
         spare.splice(0, animalQuantity)
         spareAnimals.push(...spare)
       }
+
     })
 
     return spareAnimals

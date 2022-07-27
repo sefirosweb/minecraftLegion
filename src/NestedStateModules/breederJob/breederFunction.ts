@@ -1,17 +1,23 @@
-const {
+import {
   StateTransition,
   BehaviorIdle,
   NestedStateMachine
-} = require('mineflayer-statemachine')
+} from 'mineflayer-statemachine'
 
-const BehaviorLoadConfig = require('@BehaviorModules/BehaviorLoadConfig')
-const animalType = require('@modules/animalType')
+//@ts-ignore
+import BehaviorLoadConfig from '@BehaviorModules/BehaviorLoadConfig'
+//@ts-ignore
+import animalType from '@modules/animalType'
+import { Bot, LegionStateMachineTargets } from '@/types'
+import { Entity } from 'prismarine-entity'
 const animalTypes = Object.keys(animalType)
 
-function breederFunction (bot, targets) {
-  const start = new BehaviorIdle(targets)
+function breederFunction(bot: Bot, targets: LegionStateMachineTargets) {
+  const start = new BehaviorIdle()
   start.stateName = 'Start'
+  //@ts-ignore
   start.x = 125
+  //@ts-ignore
   start.y = 113
 
   const loadConfig = new BehaviorLoadConfig(bot, targets)
@@ -19,14 +25,18 @@ function breederFunction (bot, targets) {
   loadConfig.x = 325
   loadConfig.y = 113
 
-  const exit = new BehaviorIdle(targets)
+  const exit = new BehaviorIdle()
   exit.stateName = 'Exit'
+  //@ts-ignore
   exit.x = 525
+  //@ts-ignore
   exit.y = 263
 
-  const checkFarmAreas = new BehaviorIdle(targets)
+  const checkFarmAreas = new BehaviorIdle()
   checkFarmAreas.stateName = 'Check Animals'
+  //@ts-ignore
   checkFarmAreas.x = 325
+  //@ts-ignore
   checkFarmAreas.y = 263
 
   const feedAnimal = require('@NestedStateModules/breederJob/feedAnimalFunction')(bot, targets)
@@ -35,7 +45,7 @@ function breederFunction (bot, targets) {
   feedAnimal.y = 413
 
   const getAnimalsToBeFeed = () => {
-    const animalsToFeed = []
+    const animalsToFeed: Array<Entity> = []
     let xStart, xEnd, zStart, zEnd, yStart, yEnd
 
     targets.breederJob.farmAreas.forEach(area => {
@@ -50,6 +60,7 @@ function breederFunction (bot, targets) {
         const entity = bot.entities[entityName]
         if (entity === bot.entity) { continue }
         if (
+          entity.name &&
           animalTypes.includes(entity.name) &&
           entity.position.x >= xStart && entity.position.x <= xEnd &&
           entity.position.y >= yStart && entity.position.y <= yEnd &&
@@ -59,12 +70,17 @@ function breederFunction (bot, targets) {
             return b.id === entity.id
           })
 
-          if (animalId >= 0) {
+          if (animalId !== undefined && animalId >= 0) {
             if (
               !targets.breederJob.breededAnimals[animalId].breededDate ||
-              Date.now() - targets.breederJob.breededAnimals[animalId].breededDate > targets.breederJob.farmAnimal.seconds * 1000
+              (
+                targets.breederJob &&
+                Date.now() - (targets.breederJob.breededAnimals[animalId].breededDate ?? 0) > targets.breederJob.farmAnimal.seconds * 1000
+              )
             ) {
-              animalsToFeed.push(targets.breederJob.breededAnimals[animalId])
+              if (targets.breederJob) {
+                animalsToFeed.push(targets.breederJob.breededAnimals[animalId])
+              }
             }
           } else {
             targets.breederJob.breededAnimals.push(entity)

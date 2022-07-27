@@ -1,25 +1,33 @@
-const {
+import {
   StateTransition,
   BehaviorIdle,
   BehaviorFollowEntity,
   NestedStateMachine
-} = require('mineflayer-statemachine')
+} from 'mineflayer-statemachine'
 
-const BehaviorEquip = require('@BehaviorModules/BehaviorEquip')
-const BehaviorInteractEntity = require('@BehaviorModules/BehaviorInteractEntity')
-const animalType = require('@modules/animalType')
+//@ts-ignore
+import BehaviorEquip from '@BehaviorModules/BehaviorEquip'
+//@ts-ignore
+import BehaviorInteractEntity from '@BehaviorModules/BehaviorInteractEntity'
+//@ts-ignore
+import animalType from '@modules/animalType'
+import { Bot, LegionStateMachineTargets } from '@/types'
 
-function feedAnimalFunction (bot, targets) {
+function feedAnimalFunction(bot: Bot, targets: LegionStateMachineTargets) {
   const mcData = require('minecraft-data')(bot.version)
 
-  const start = new BehaviorIdle(targets)
+  const start = new BehaviorIdle()
   start.stateName = 'Start'
+  //@ts-ignore
   start.x = 125
+  //@ts-ignore
   start.y = 113
 
-  const exit = new BehaviorIdle(targets)
+  const exit = new BehaviorIdle()
   exit.stateName = 'Exit'
+  //@ts-ignore
   exit.x = 350
+  //@ts-ignore
   exit.y = 313
 
   const equip = new BehaviorEquip(bot, targets)
@@ -32,10 +40,14 @@ function feedAnimalFunction (bot, targets) {
   interactEntity.x = 575
   interactEntity.y = 313
 
+  //@ts-ignore
   const followAnimal = new BehaviorFollowEntity(bot, targets)
   followAnimal.stateName = 'Follow Animal'
+  //@ts-ignore
   followAnimal.x = 575
+  //@ts-ignore
   followAnimal.y = 113
+  //@ts-ignore
   followAnimal.movements = targets.movements
 
   const transitions = [
@@ -45,7 +57,7 @@ function feedAnimalFunction (bot, targets) {
       onTransition: () => {
         targets.breederJob.breededAnimals = []
         // Select item to give food
-        const validFoods = animalType[targets.breederJob.feedEntity.name].foods
+        const validFoods = animalType[targets.breederJob.feedEntity?.name].foods
         const validFood = bot.inventory.items().find(item => validFoods.includes(item.name))
         if (validFood) {
           targets.item = mcData.itemsByName[validFood.name]
@@ -76,7 +88,7 @@ function feedAnimalFunction (bot, targets) {
       child: exit,
       onTransition: () => {
         const animalId = targets.breederJob.breededAnimals.findIndex(b => {
-          return b.id === targets.breederJob.feedEntity.id
+          return b.id === targets.breederJob.feedEntity?.id
         })
         if (animalId >= 0) {
           targets.breederJob.breededAnimals.splice(animalId, 1)
@@ -93,7 +105,7 @@ function feedAnimalFunction (bot, targets) {
       onTransition: () => {
         targets.interactEntity = targets.breederJob.feedEntity
       },
-      shouldTransition: () => targets.entity && followAnimal.distanceToTarget() < 2 && targets.entity.isValid
+      shouldTransition: () => targets.entity !== undefined && followAnimal.distanceToTarget() < 2 && targets.entity.isValid
     }),
 
     new StateTransition({
@@ -101,14 +113,14 @@ function feedAnimalFunction (bot, targets) {
       child: exit,
       onTransition: () => {
         const animalId = targets.breederJob.breededAnimals.findIndex(b => {
-          return b.id === targets.breederJob.feedEntity.id
+          return b.id === targets.breederJob.feedEntity?.id
         })
 
         if (animalId >= 0) {
           targets.breederJob.breededAnimals[animalId].breededDate = Date.now()
         }
 
-        targets.interactEntity = null
+        targets.interactEntity = undefined
       },
       shouldTransition: () => interactEntity.isFinished()
     })

@@ -1,29 +1,40 @@
-const {
+import {
   StateTransition,
   BehaviorIdle,
   NestedStateMachine,
   BehaviorFollowEntity
-} = require('mineflayer-statemachine')
+} from 'mineflayer-statemachine'
 
-const BehaviorAttack = require('@BehaviorModules/BehaviorAttack')
-const BehaviorEquip = require('@BehaviorModules/BehaviorEquip')
+//@ts-ignore
+import BehaviorAttack from '@BehaviorModules/BehaviorAttack'
+//@ts-ignore
+import BehaviorEquip from '@BehaviorModules/BehaviorEquip'
+import { Bot, LegionStateMachineTargets } from '@/types'
 const rangeSword = 3
 
-function slaughterhouseFunction (bot, targets) {
-  const start = new BehaviorIdle(targets)
+function slaughterhouseFunction(bot: Bot, targets: LegionStateMachineTargets) {
+  const start = new BehaviorIdle()
   start.stateName = 'Start'
+  //@ts-ignore
   start.x = 125
+  //@ts-ignore
   start.y = 113
 
-  const exit = new BehaviorIdle(targets)
+  const exit = new BehaviorIdle()
   exit.stateName = 'Exit'
+  //@ts-ignore
   exit.x = 325
+  //@ts-ignore
   exit.y = 413
 
+  //@ts-ignore
   const followMob = new BehaviorFollowEntity(bot, targets)
   followMob.stateName = 'Follow Enemy'
+  //@ts-ignore
   followMob.x = 325
+  //@ts-ignore
   followMob.y = 263
+  //@ts-ignore
   followMob.movements = targets.movements
 
   const attack = new BehaviorAttack(bot, targets)
@@ -61,7 +72,7 @@ function slaughterhouseFunction (bot, targets) {
 
   const removeAnimal = () => {
     const animalId = targets.breederJob.breededAnimals.findIndex(b => {
-      return b.id === targets.entity.id
+      return b.id === targets.entity?.id
     })
     if (animalId >= 0) {
       targets.breederJob.breededAnimals.splice(animalId, 1)
@@ -109,7 +120,7 @@ function slaughterhouseFunction (bot, targets) {
     new StateTransition({
       parent: attack,
       child: followMob,
-      shouldTransition: () => targets.entity && followMob.distanceToTarget() >= rangeSword && targets.entity.isValid
+      shouldTransition: () => targets.entity !== undefined && followMob.distanceToTarget() >= rangeSword && targets.entity.isValid
     }),
 
     new StateTransition({
