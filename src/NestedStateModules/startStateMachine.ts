@@ -9,12 +9,13 @@ import {
   NestedStateMachine
 } from 'mineflayer-statemachine'
 
+import debugMode from '@/config'
 
 module.exports = (bot: Bot) => {
   const botWebsocket = require('@modules/botWebsocket')
   const inventoryViewer = require('mineflayer-web-inventory')
   const prismarineViewer = require('@modules/viewer')
-  const { debugMode } = require('@config')
+
 
   const mineflayerPathfinder = require('mineflayer-pathfinder')
   const mcData = require('minecraft-data')(bot.version)
