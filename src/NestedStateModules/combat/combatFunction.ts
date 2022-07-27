@@ -1,16 +1,29 @@
-const botWebsocket = require('@modules/botWebsocket')
-const mineflayerPathfinder = require('mineflayer-pathfinder')
+//@ts-ignore
+import botWebsocket from '@modules/botWebsocket'
+import mineflayerPathfinder from 'mineflayer-pathfinder'
 
-const {
+import {
   StateTransition,
   BehaviorIdle,
   NestedStateMachine,
   BehaviorFollowEntity
-} = require('mineflayer-statemachine')
-const BehaviorAttack = require('@BehaviorModules/BehaviorAttack')
-const BehaviorLongAttack = require('@BehaviorModules/BehaviorLongAttack')
+} from 'mineflayer-statemachine'
+//@ts-ignore
+import BehaviorAttack from '@BehaviorModules/BehaviorAttack'
+//@ts-ignore
+import BehaviorLongAttack from '@BehaviorModules/BehaviorLongAttack'
+import { Bot, LegionStateMachineTargets } from '@/types'
+import { Entity } from 'prismarine-entity'
 
-function combatFunction (bot, targets) {
+
+
+type fakeVec3 = {
+  x: number
+  y: number
+  z: number
+}
+
+function combatFunction(bot: Bot, targets: LegionStateMachineTargets) {
   const inventory = require('@modules/inventoryModule')(bot)
   const { ignoreMobs, flyingMobs } = require('@modules/getClosestEnemy')(bot, targets)
   const hawkEye = require('minecrafthawkeye')
@@ -30,16 +43,20 @@ function combatFunction (bot, targets) {
   const timeBowCountdown = 1550
 
   const timeMobCountdown = 7500
-  let newTimeMobCountdown
+  let newTimeMobCountdown: number
 
-  const start = new BehaviorIdle(targets)
+  const start = new BehaviorIdle()
   start.stateName = 'Start'
+  //@ts-ignore
   start.x = 125
+  //@ts-ignore
   start.y = 113
 
-  const exit = new BehaviorIdle(targets)
+  const exit = new BehaviorIdle()
   exit.stateName = 'Exit'
+  //@ts-ignore
   exit.x = 575
+  //@ts-ignore
   exit.y = 263
 
   const attack = new BehaviorAttack(bot, targets)
@@ -52,17 +69,20 @@ function combatFunction (bot, targets) {
   longRangeAttack.x = 725
   longRangeAttack.y = 413
 
+  //@ts-ignore
   const followMob = new BehaviorFollowEntity(bot, targets)
   followMob.stateName = 'Follow Enemy'
+  //@ts-ignore
   followMob.x = 725
+  //@ts-ignore
   followMob.y = 113
 
   let targetGrade = false
-  const prevPlayerPositions = []
+  const prevPlayerPositions: Array<fakeVec3> = []
   let bowCountdown = Date.now() // Used for avoid bugs on jam between bow and sword
   let newTargetColdDown = Date.now()
 
-  const filter = e =>
+  const filter = (e: Entity) =>
     e.type === 'mob' &&
     e.position.distanceTo(bot.entity.position) < 10 &&
     e.mobType !== 'Armor Stand' &&
@@ -83,12 +103,12 @@ function combatFunction (bot, targets) {
 
     if (Date.now() - bowCountdown < timeBowCountdown) {
       longRangeAttack.setInfoShot(false)
-      return false
+      return
     }
 
     if (!targets.entity || targets.entity === undefined) {
       longRangeAttack.setInfoShot(false)
-      return false
+      return
     }
 
     if (prevPlayerPositions.length > 10) {
@@ -118,12 +138,12 @@ function combatFunction (bot, targets) {
     speed.x = speed.x / prevPlayerPositions.length
     speed.y = speed.y / prevPlayerPositions.length
     speed.z = speed.z / prevPlayerPositions.length
-
+    //@ts-ignore
     targetGrade = bot.hawkEye.getMasterGrade(targets.entity, speed, 'bow')
     longRangeAttack.setInfoShot(targetGrade)
   }
 
-  function startGrades () {
+  function startGrades() {
     const isEventLoaded = bot.listeners('customEventPhysicTick').find(event => {
       return event.name === 'getGrades'
     })
@@ -133,11 +153,11 @@ function combatFunction (bot, targets) {
     }
   }
 
-  function stopGrades () {
+  function stopGrades() {
     bot.removeListener('customEventPhysicTick', getGrades)
   }
 
-  function checkHandleSword () {
+  function checkHandleSword() {
     const swordHandled = inventory.checkItemEquiped('sword')
 
     if (swordHandled) { return }
@@ -145,9 +165,7 @@ function combatFunction (bot, targets) {
     const itemEquip = bot.inventory.items().find(item => item.name.includes('sword'))
     if (itemEquip) {
       // botWebsocket.log('Sword changing')
-      bot.equip(itemEquip, 'hand', function () {
-        botWebsocket.log('Sword changed')
-      })
+      bot.equip(itemEquip, 'hand')
     }
   }
 
@@ -164,7 +182,7 @@ function combatFunction (bot, targets) {
         targets.entity = undefined
         checkHandleSword()
       },
-      shouldTransition: () => !targets.entity || targets.entity.isValid === false
+      shouldTransition: () => targets.entity === undefined || targets.entity.isValid === false
     }),
 
     new StateTransition({
@@ -178,7 +196,7 @@ function combatFunction (bot, targets) {
         targets.entity = undefined
         checkHandleSword()
       },
-      shouldTransition: () => !targets.entity || targets.entity.isValid === false
+      shouldTransition: () => targets.entity === undefined || targets.entity.isValid === false
     }),
 
     new StateTransition({
@@ -193,7 +211,7 @@ function combatFunction (bot, targets) {
         checkHandleSword()
       },
       shouldTransition: () => {
-        return (!targets.entity) ||
+        return (targets.entity === undefined) ||
           (targets.entity.isValid === false) ||
           (Date.now() - newTimeMobCountdown > timeMobCountdown && targets.entity.type !== 'player')
       }
@@ -205,7 +223,7 @@ function combatFunction (bot, targets) {
       child: attack,
       onTransition: () => {
         botWebsocket.emitCombat(true)
-        botWebsocket.log('Start combat ' + targets.entity.mobType + ' ' + JSON.stringify(targets.entity.position))
+        botWebsocket.log('Start combat ' + targets.entity?.mobType + ' ' + JSON.stringify(targets.entity?.position))
         startGrades()
       },
       name: 'start -> followMob',
@@ -217,15 +235,20 @@ function combatFunction (bot, targets) {
       child: followMob,
       name: 'Mob is too far',
       onTransition: () => {
-        if (flyingMobs.includes(targets.entity.name)) {
+        if (flyingMobs.includes(targets.entity?.name)) {
+          //@ts-ignore
           followMob.movements = movementsForFliyingMobs
         } else {
+          //@ts-ignore
           followMob.movements = movements
         }
         newTimeMobCountdown = Date.now()
         checkHandleSword()
       },
-      shouldTransition: () => followMob.distanceToTarget() > rangeSword && followMob.distanceToTarget() < rangeFollowToShortAttack && targets.entity.isValid
+      shouldTransition: () => targets.entity !== undefined &&
+        followMob.distanceToTarget() > rangeSword &&
+        followMob.distanceToTarget() < rangeFollowToShortAttack &&
+        targets.entity.isValid
     }),
 
     // Long Range Attack
@@ -233,7 +256,9 @@ function combatFunction (bot, targets) {
       parent: attack,
       child: longRangeAttack,
       name: 'Mob is too far',
-      shouldTransition: () => followMob.distanceToTarget() > rangeFollowToShortAttack && targetGrade !== false && targets.entity.isValid
+      shouldTransition: () => targets.entity !== undefined &&
+        followMob.distanceToTarget() > rangeFollowToShortAttack &&
+        targetGrade !== false && targets.entity.isValid
     }),
 
     new StateTransition({
@@ -241,9 +266,12 @@ function combatFunction (bot, targets) {
       child: longRangeAttack,
       name: 'Mob is on range for Long Range Attack',
       shouldTransition: () => {
-        return followMob.distanceToTarget() < rangoBow &&
-          followMob.distanceToTarget() > rangeFollowToShortAttack && Date.now() - bowCountdown > timeBowCountdown &&
-          targetGrade !== false && targets.entity.isValid &&
+        return targets.entity !== undefined &&
+          followMob.distanceToTarget() < rangoBow &&
+          followMob.distanceToTarget() > rangeFollowToShortAttack &&
+          Date.now() - bowCountdown > timeBowCountdown &&
+          targetGrade !== false &&
+          targets.entity.isValid &&
           longRangeAttack.checkBowAndArrow() === true
       }
     }),
@@ -252,9 +280,11 @@ function combatFunction (bot, targets) {
       parent: longRangeAttack,
       child: followMob,
       onTransition: () => {
-        if (flyingMobs.includes(targets.entity.name)) {
+        if (flyingMobs.includes(targets.entity?.name)) {
+          //@ts-ignore
           followMob.movements = movementsForFliyingMobs
         } else {
+          //@ts-ignore
           followMob.movements = movements
         }
         checkHandleSword()
@@ -262,11 +292,13 @@ function combatFunction (bot, targets) {
         newTimeMobCountdown = Date.now()
       },
       shouldTransition: () => {
-        return (longRangeAttack.checkBowAndArrow() === false && targets.entity.isValid) ||
+        return targets.entity !== undefined && (
+          (longRangeAttack.checkBowAndArrow() === false && targets.entity.isValid) ||
           (followMob.distanceToTarget() > rangoBow && targets.entity.isValid) ||
           (followMob.distanceToTarget() < rangeFollowToShortAttack && targets.entity.isValid) ||
           (targets.entity.mobType === 'Enderman' && targets.entity.isValid) ||
           (targetGrade === false && targets.entity.isValid)
+        )
       }
     }),
 
@@ -274,7 +306,10 @@ function combatFunction (bot, targets) {
       parent: longRangeAttack,
       child: longRangeAttack,
       name: 'Mob is on range for Long Range Attack',
-      shouldTransition: () => followMob.distanceToTarget() < rangoBow && followMob.distanceToTarget() > rangeFollowToShortAttack && targets.entity.isValid
+      shouldTransition: () => targets.entity !== undefined &&
+        followMob.distanceToTarget() < rangoBow &&
+        followMob.distanceToTarget() > rangeFollowToShortAttack &&
+        targets.entity.isValid
     }),
     // END ************* Long Range Attack
 
@@ -282,14 +317,18 @@ function combatFunction (bot, targets) {
       parent: followMob,
       child: attack,
       name: 'Mob is near',
-      shouldTransition: () => followMob.distanceToTarget() < rangeSword && attack.nextAttack() && targets.entity.isValid
+      shouldTransition: () => targets.entity !== undefined &&
+        followMob.distanceToTarget() < rangeSword &&
+        attack.nextAttack() && targets.entity.isValid
     }),
 
     new StateTransition({
       parent: attack,
       child: attack,
       name: 'Mob still near continue attack',
-      shouldTransition: () => followMob.distanceToTarget() < rangeSword && attack.nextAttack() && targets.entity.isValid
+      shouldTransition: () => targets.entity !== undefined &&
+        followMob.distanceToTarget() < rangeSword &&
+        attack.nextAttack() && targets.entity.isValid
     })
 
   ]
