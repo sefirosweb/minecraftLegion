@@ -12,9 +12,10 @@ import BehaviorInteractEntity from '@BehaviorModules/BehaviorInteractEntity'
 //@ts-ignore
 import animalType from '@modules/animalType'
 import { Bot, LegionStateMachineTargets } from '@/types'
+import mcDataLoader from 'minecraft-data'
 
 function feedAnimalFunction(bot: Bot, targets: LegionStateMachineTargets) {
-  const mcData = require('minecraft-data')(bot.version)
+  const mcData = mcDataLoader(bot.version)
 
   const start = new BehaviorIdle()
   start.stateName = 'Start'

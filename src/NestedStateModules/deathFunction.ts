@@ -11,9 +11,10 @@ import BehaviorGetPlayer from '@BehaviorModules/BehaviorGetPlayer'
 import botWebsocket from '@modules/botWebsocket'
 //@ts-ignore
 import BehaviorLoadConfig from '@BehaviorModules/BehaviorLoadConfig'
+import mcDataLoader from 'minecraft-data'
 
 function deathFunction(bot: Bot, targets: LegionStateMachineTargets) {
-  const mcData = require('minecraft-data')(bot.version)
+  const mcData = mcDataLoader(bot.version)
 
   const start = new BehaviorIdle()
   start.stateName = 'Start'

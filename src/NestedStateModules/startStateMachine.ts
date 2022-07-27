@@ -10,6 +10,7 @@ import {
 } from 'mineflayer-statemachine'
 
 import debugMode from '@/config'
+import mcDataLoader from 'minecraft-data'
 
 module.exports = (bot: Bot) => {
   const botWebsocket = require('@modules/botWebsocket')
@@ -18,7 +19,7 @@ module.exports = (bot: Bot) => {
 
 
   const mineflayerPathfinder = require('mineflayer-pathfinder')
-  const mcData = require('minecraft-data')(bot.version)
+  const mcData = mcDataLoader(bot.version)
 
   const isInDebug = debugMode || false
 

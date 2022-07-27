@@ -7,9 +7,10 @@ import {
 import BehaviorMoveTo from '@BehaviorModules/BehaviorMoveTo'
 import { Bot, LegionStateMachineTargets } from '@/types'
 import { Block } from 'prismarine-block'
+import mcDataLoader from 'minecraft-data'
 
 function goCraftingTableFunction(bot: Bot, targets: LegionStateMachineTargets) {
-  const mcData = require('minecraft-data')(bot.version)
+  const mcData = mcDataLoader(bot.version)
 
   const start = new BehaviorIdle()
   start.stateName = 'Start'

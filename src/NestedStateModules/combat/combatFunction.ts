@@ -14,7 +14,7 @@ import BehaviorAttack from '@BehaviorModules/BehaviorAttack'
 import BehaviorLongAttack from '@BehaviorModules/BehaviorLongAttack'
 import { Bot, LegionStateMachineTargets } from '@/types'
 import { Entity } from 'prismarine-entity'
-
+import mcDataLoader from 'minecraft-data'
 
 
 type fakeVec3 = {
@@ -29,7 +29,7 @@ function combatFunction(bot: Bot, targets: LegionStateMachineTargets) {
   const hawkEye = require('minecrafthawkeye')
   bot.loadPlugin(hawkEye)
 
-  const mcData = require('minecraft-data')(bot.version)
+  const mcData = mcDataLoader(bot.version)
   const movements = new mineflayerPathfinder.Movements(bot, mcData)
 
   const movementsForFliyingMobs = new mineflayerPathfinder.Movements(bot, mcData)

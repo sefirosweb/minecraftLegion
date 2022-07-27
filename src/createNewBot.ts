@@ -10,6 +10,7 @@ require("module-alias/register");
 
 //@ts-ignore
 import botWebsocket from "@modules/botWebsocket";
+import mcDataLoader from 'minecraft-data'
 
 export type Props = {
   botName?: string;
@@ -53,7 +54,7 @@ export const createNewBot = (props: Props): void => {
   });
 
   bot.once('inject_allowed', () => {
-    const mcData = require('minecraft-data')(bot.version)
+    const mcData = mcDataLoader(bot.version)
     mcData.blocksArray[826].hardness = 3 // hotfix until wait a final relase
     mcData.blocksArray[274].boundingBox = 'block' // hot fix for cross the portal of the end
   })
