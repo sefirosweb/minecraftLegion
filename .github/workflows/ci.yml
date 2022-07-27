@@ -15,3 +15,46 @@ jobs:
         with:
           node-version: 16
       - run: npm install && npm run lint
+
+  MinecraftServer:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        javaVersion: [1.8]
+        mcVersion:
+          [
+            "1.8.8",
+            "1.9.4",
+            "1.10.2",
+            "1.11.2",
+            "1.12.2",
+            "1.13.2",
+            "1.14.4",
+            "1.15.2",
+            "1.16.5",
+          ]
+        include:
+          - javaVersion: 16
+            mcVersion: "1.17.1"
+          - javaVersion: 17
+            mcVersion: "1.18.2"
+      fail-fast: false
+
+      steps:
+        - uses: actions/checkout@v3
+        - name: Use Node.js ${{ matrix.node-version }}
+          uses: actions/setup-node@v3
+          with:
+            node-version: 16
+
+        - name: Setup Java JDK
+          uses: actions/setup-java@v1.4.3
+          with:
+            java-version: ${{ matrix.javaVersion }}
+            java-package: jre
+
+        - name: Install Dependencies
+          run: npm install
+
+        - name: Start Tests
+          run: npm run mocha_test -- -g ${{ matrix.mcVersion }}
