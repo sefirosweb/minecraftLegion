@@ -1,50 +1,66 @@
-const Vec3 = require('vec3')
+//@ts-nocheck
+
+import { Bot, LegionStateMachineTargets, MineCordsConfig } from '@/types'
+import Vec3 from 'vec3'
 module.exports = class BehaviorMinerCurrentBlock {
-  constructor (bot, targets) {
+
+  readonly bot: Bot;
+  readonly targets: LegionStateMachineTargets;
+  stateName: string;
+
+  isLayerFinished: boolean
+  isEndFinished: boolean
+  firstBlockOnLayer: boolean
+
+  blockInValidType: Array<string>
+  minerCords: MineCordsConfig | undefined
+
+  yCurrent: number | undefined
+  zCurrent: number | undefined
+  xCurrent: number | undefined
+
+  yStart: number | undefined
+  zStart: number | undefined
+  xStart: number | undefined
+
+  yEnd: number | undefined
+  zEnd: number | undefined
+  xEnd: number | undefined
+
+
+
+  constructor(bot: Bot, targets: LegionStateMachineTargets) {
     this.bot = bot
     this.targets = targets
     this.stateName = 'BehaviorMinerCurrentBlock'
 
     this.blockInValidType = ['air', 'cave_air', 'lava', 'water', 'bubble_column', 'bedrock', 'torch', 'wall_torch', 'redstone_torch', 'redstone_wall_torch', 'soul_torch', 'soul_wall_torch', 'lantern']
-    this.minerCords = false
-
-    this.xStart = false
-    this.yStart = false
-    this.zStart = false
-
-    this.xEnd = false
-    this.yEnd = false
-    this.zEnd = false
-
-    this.xCurrent = false
-    this.yCurrent = false
-    this.zCurrent = false
 
     this.isLayerFinished = false
     this.isEndFinished = false
     this.firstBlockOnLayer = true
   }
 
-  isFinished () {
+  isFinished() {
     return this.isEndFinished
   }
 
-  canGetBlockInfo () {
+  canGetBlockInfo() {
     return this.getBlockInfo
   }
 
-  getLayerIsFinished () {
+  getLayerIsFinished() {
     return this.isLayerFinished
   }
 
-  setMinerCords (minerCords) {
+  setMinerCords(minerCords) {
     this.isLayerFinished = false
     this.firstBlockOnLayer = true
     this.minerCords = minerCords
     this.startBlock()
   }
 
-  startBlock () {
+  startBlock() {
     this.yStart = parseInt(this.minerCords.yStart) > parseInt(this.minerCords.yEnd) ? parseInt(this.minerCords.yEnd) : parseInt(this.minerCords.yStart)
     this.yEnd = parseInt(this.minerCords.yStart) > parseInt(this.minerCords.yEnd) ? parseInt(this.minerCords.yStart) : parseInt(this.minerCords.yEnd)
 
@@ -86,7 +102,7 @@ module.exports = class BehaviorMinerCurrentBlock {
     this.zCurrent = this.zStart
   }
 
-  onStateEntered () {
+  onStateEntered() {
     this.isEndFinished = false
     this.getBlockInfo = false
     this.startBlock()
@@ -98,7 +114,7 @@ module.exports = class BehaviorMinerCurrentBlock {
     }
   }
 
-  checkSand () {
+  checkSand() {
     if (this.minerCords.tunel === 'vertically') {
       return false
     }
@@ -111,7 +127,7 @@ module.exports = class BehaviorMinerCurrentBlock {
     return this.nextBlock(false)
   }
 
-  nextBlock (allBlocks) {
+  nextBlock(allBlocks) {
     if (
       this.yCurrent === this.yEnd &&
       this.zCurrent === this.zEnd &&
@@ -136,7 +152,7 @@ module.exports = class BehaviorMinerCurrentBlock {
     }
   }
 
-  calculateIsValid (allBlocks) {
+  calculateIsValid(allBlocks) {
     const position = new Vec3(this.xCurrent, this.yCurrent, this.zCurrent)
 
     if (!allBlocks) { // Check over block is sand
@@ -165,7 +181,7 @@ module.exports = class BehaviorMinerCurrentBlock {
     return false
   }
 
-  yNext () {
+  yNext() {
     if (this.yCurrent < this.yEnd) {
       this.yCurrent++
     } else {
@@ -173,7 +189,7 @@ module.exports = class BehaviorMinerCurrentBlock {
     }
   }
 
-  xNext () {
+  xNext() {
     if (this.xCurrent === this.xEnd) {
       const temp = this.xEnd
       this.xEnd = this.xStart
@@ -197,7 +213,7 @@ module.exports = class BehaviorMinerCurrentBlock {
     }
   }
 
-  zNext () {
+  zNext() {
     if (this.zCurrent === this.zEnd) {
       const temp = this.zEnd
       this.zEnd = this.zStart
@@ -221,7 +237,7 @@ module.exports = class BehaviorMinerCurrentBlock {
     }
   }
 
-  getCurrentBlock () {
+  getCurrentBlock() {
     const currentBlock = {
       x: this.xCurrent,
       y: this.yCurrent,

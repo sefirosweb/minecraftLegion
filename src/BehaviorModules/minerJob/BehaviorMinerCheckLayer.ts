@@ -1,37 +1,63 @@
-const mineflayerPathfinder = require('mineflayer-pathfinder')
-const botWebsocket = require('@modules/botWebsocket')
-const Vec3 = require('vec3')
+//@ts-nocheck
+import { Bot, LegionStateMachineTargets, MineCordsConfig } from "@/types"
+
+import mineflayerPathfinder from 'mineflayer-pathfinder'
+//@ts-ignore
+import botWebsocket from '@modules/botWebsocket'
+import { Vec3 } from 'vec3'
 
 module.exports = class BehaviorMinerCheckLayer {
-  constructor (bot, targets) {
+
+  readonly bot: Bot;
+  readonly targets: LegionStateMachineTargets;
+  stateName: string;
+
+  isEndFinished: boolean;
+  foundLavaOrWater: boolean;
+  minerCords: MineCordsConfig | undefined;
+  blocksToFind: Array<string>;
+  floorBlocksToFind: Array<string>;
+
+  yCurrent: number | undefined
+  zCurrent: number | undefined
+  xCurrent: number | undefined
+
+  yStart: number | undefined
+  zStart: number | undefined
+  xStart: number | undefined
+
+  yEnd: number | undefined
+  zEnd: number | undefined
+  xEnd: number | undefined
+
+  constructor(bot: Bot, targets: LegionStateMachineTargets) {
     this.bot = bot
     this.targets = targets
     this.stateName = 'BehaviorMinerCheckLayer'
 
     this.isEndFinished = false
-    this.minerCords = false
     this.foundLavaOrWater = false
 
     this.blocksToFind = ['lava', 'water', 'bubble_column', 'seagrass', 'tall_seagrass', 'kelp', 'kelp_plant']
     this.floorBlocksToFind = ['air', 'cave_air']
   }
 
-  isFinished () {
+  isFinished() {
     return this.isEndFinished
   }
 
-  getFoundLavaOrWater () {
+  getFoundLavaOrWater() {
     return this.foundLavaOrWater
   }
 
-  onStateEntered () {
+  onStateEntered() {
     this.foundLavaOrWater = false
     this.isEndFinished = false
 
     this.checkArea()
   }
 
-  onStateExited () {
+  onStateExited() {
     this.bot.pathfinder.setGoal(null)
     this.bot.removeAllListeners('customEventPhysicTick')
 
@@ -49,12 +75,12 @@ module.exports = class BehaviorMinerCheckLayer {
     this.startBlock()
   }
 
-  checkStoneInInventory () {
+  checkStoneInInventory() {
     return this.bot.inventory.items().find(item => this.targets.minerJob.blockForPlace.includes(item.name))
   }
 
-  checkArea () {
-    return new Promise(async (resolve, reject) => {
+  checkArea() {
+    return new Promise(async (resolve) => {
       do {
         if (
           this.yCurrent === this.yEnd &&
@@ -62,7 +88,7 @@ module.exports = class BehaviorMinerCheckLayer {
           this.xCurrent === this.xEnd
         ) {
           this.isEndFinished = true
-          resolve()
+          resolve(true)
           return
         }
 
@@ -91,14 +117,14 @@ module.exports = class BehaviorMinerCheckLayer {
         }
 
         if (this.checkValidBlock(block)) {
-          resolve()
+          resolve(true)
           return
         }
       } while (true)
     })
   }
 
-  next () {
+  next() {
     if (this.minerCords.orientation === 'z-' || this.minerCords.orientation === 'z+') {
       this.zNext()
     }
@@ -107,7 +133,7 @@ module.exports = class BehaviorMinerCheckLayer {
     }
   }
 
-  xNext () {
+  xNext() {
     if (this.xCurrent === this.xEnd) {
       const temp = this.xEnd
       this.xEnd = this.xStart
@@ -127,11 +153,11 @@ module.exports = class BehaviorMinerCheckLayer {
     }
   }
 
-  yNext () {
+  yNext() {
     this.yCurrent--
   }
 
-  zNext () {
+  zNext() {
     if (this.zCurrent === this.zEnd) {
       const temp = this.zEnd
       this.zEnd = this.zStart
@@ -151,18 +177,18 @@ module.exports = class BehaviorMinerCheckLayer {
     }
   }
 
-  getBlockType () {
+  getBlockType() {
     const position = new Vec3(this.xCurrent, this.yCurrent, this.zCurrent)
     return this.bot.blockAt(position)
   }
 
-  setMinerCords (minerCords) {
+  setMinerCords(minerCords) {
     this.isLayerFinished = false
     this.minerCords = minerCords
     this.startBlock()
   }
 
-  startBlock () {
+  startBlock() {
     this.yStart = parseInt(this.minerCords.yStart) > parseInt(this.minerCords.yEnd) ? parseInt(this.minerCords.yStart) : parseInt(this.minerCords.yEnd)
     this.yEnd = parseInt(this.minerCords.yStart) > parseInt(this.minerCords.yEnd) ? parseInt(this.minerCords.yEnd) : parseInt(this.minerCords.yStart)
 
@@ -238,7 +264,7 @@ module.exports = class BehaviorMinerCheckLayer {
     this.zCurrent = parseInt(this.zStart)
   }
 
-  checkValidBlock (block) {
+  checkValidBlock(block) {
     if (this.blocksToFind.includes(block.name) ||
       (
         this.floorBlocksToFind.includes(block.name) &&
@@ -254,8 +280,8 @@ module.exports = class BehaviorMinerCheckLayer {
     return false
   }
 
-  moveToSeeBlock (x, y, z) {
-    return new Promise((resolve, reject) => {
+  moveToSeeBlock(x: number, y: number, z: number) {
+    return new Promise((resolve) => {
       const goal = new mineflayerPathfinder.goals.GoalBlock(x, y, z)
       this.bot.pathfinder.setMovements(this.targets.movements)
       this.bot.pathfinder.setGoal(goal)
@@ -264,7 +290,7 @@ module.exports = class BehaviorMinerCheckLayer {
         const block = this.getBlockType()
         if (block) {
           this.bot.pathfinder.setGoal(null)
-          resolve()
+          resolve(true)
         }
       })
     })
