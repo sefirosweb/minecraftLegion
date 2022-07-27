@@ -231,7 +231,7 @@ module.exports = (bot: Bot) => {
         botWebsocket.log(`Started viewer web server at http://localhost:${value.port}`)
         break
       case 'startStateMachine':
-        if (typeof webserver.isServerRunning !== 'function') {
+        if (!webserver || typeof webserver.isServerRunning !== 'function') {
           // @ts-ignore
           webserver = new StateMachineWebserver(bot, stateMachine, value.port)
         }
