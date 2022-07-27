@@ -1,26 +1,35 @@
-const {
+import {
   StateTransition,
   BehaviorIdle,
   NestedStateMachine
-} = require('mineflayer-statemachine')
-const BehaviorMoveTo = require('@BehaviorModules/BehaviorMoveTo')
+} from 'mineflayer-statemachine'
+//@ts-ignore
+import BehaviorMoveTo from '@BehaviorModules/BehaviorMoveTo'
+import { Bot, LegionStateMachineTargets } from '@/types'
+import { Block } from 'prismarine-block'
 
-function goCraftingTableFunction (bot, targets) {
+function goCraftingTableFunction(bot: Bot, targets: LegionStateMachineTargets) {
   const mcData = require('minecraft-data')(bot.version)
 
-  const start = new BehaviorIdle(targets)
+  const start = new BehaviorIdle()
   start.stateName = 'Start'
+  //@ts-ignore
   start.x = 125
+  //@ts-ignore
   start.y = 113
 
-  const exit = new BehaviorIdle(targets)
+  const exit = new BehaviorIdle()
   exit.stateName = 'exit'
+  //@ts-ignore
   exit.x = 125
+  //@ts-ignore
   exit.y = 213
 
-  const checkCraftingTable = new BehaviorIdle(targets)
+  const checkCraftingTable = new BehaviorIdle()
   checkCraftingTable.stateName = 'Check near crafting table'
+  //@ts-ignore
   checkCraftingTable.x = 325
+  //@ts-ignore
   checkCraftingTable.y = 113
 
   const goTable = new BehaviorMoveTo(bot, targets)
@@ -29,7 +38,7 @@ function goCraftingTableFunction (bot, targets) {
   goTable.x = 325
   goTable.y = 213
 
-  let craftingTable = false
+  let craftingTable: Block | null = null
 
   const transitions = [
     new StateTransition({
@@ -55,9 +64,9 @@ function goCraftingTableFunction (bot, targets) {
       parent: checkCraftingTable,
       child: goTable,
       onTransition: () => {
-        targets.position = craftingTable.position
+        targets.position = craftingTable?.position
       },
-      shouldTransition: () => craftingTable
+      shouldTransition: () => craftingTable !== null
     }),
 
     new StateTransition({

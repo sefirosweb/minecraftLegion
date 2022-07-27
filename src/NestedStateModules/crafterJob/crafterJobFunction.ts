@@ -1,17 +1,18 @@
-const {
+import { Bot, LegionStateMachineTargets } from '@/types'
+import {
   StateTransition,
   BehaviorIdle,
   NestedStateMachine
-} = require('mineflayer-statemachine')
-const { Vec3 } = require('vec3')
+} from 'mineflayer-statemachine'
+import { Vec3 } from 'vec3'
 
-function crafterJobFunction (bot, targets) {
+function crafterJobFunction(bot: Bot, targets: LegionStateMachineTargets) {
   const { getResumeInventory } = require('@modules/inventoryModule')(bot)
 
-  const start = new BehaviorIdle(targets)
+  const start = new BehaviorIdle()
   start.stateName = 'Start'
 
-  const exit = new BehaviorIdle(targets)
+  const exit = new BehaviorIdle()
   exit.stateName = 'exit'
 
   const searchAndCraft =

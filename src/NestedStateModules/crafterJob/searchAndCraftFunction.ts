@@ -1,48 +1,65 @@
-const {
+import {
   StateTransition,
   BehaviorIdle,
   NestedStateMachine
-} = require('mineflayer-statemachine')
-const BehaviorCraft = require('@BehaviorModules/BehaviorCraft')
-const BehaviorMoveTo = require('@BehaviorModules/BehaviorMoveTo')
+} from 'mineflayer-statemachine'
+//@ts-ignore
+import BehaviorCraft from '@BehaviorModules/BehaviorCraft'
+//@ts-ignore
+import BehaviorMoveTo from '@BehaviorModules/BehaviorMoveTo'
+import { Bot, ItemsToPickUpBatch, LegionStateMachineTargets, Recipes } from '@/types'
 
-function searchAndCraftFunction (bot, targets) {
+function searchAndCraftFunction(bot: Bot, targets: LegionStateMachineTargets) {
   const { getItemsToPickUpBatch } = require('@modules/craftModule')(bot)
   const { nearChests } = require('@modules/chestModule')(bot, targets)
 
-  const start = new BehaviorIdle(targets)
+  const start = new BehaviorIdle()
   start.stateName = 'Start'
+  //@ts-ignore
   start.x = 125
+  //@ts-ignore
   start.y = 113
 
-  const exit = new BehaviorIdle(targets)
+  const exit = new BehaviorIdle()
   exit.stateName = 'exit'
+  //@ts-ignore
   exit.x = 125
+  //@ts-ignore
   exit.y = 575
 
-  const checkRecipes = new BehaviorIdle(targets)
+  const checkRecipes = new BehaviorIdle()
   checkRecipes.stateName = 'checkRecipes'
+  //@ts-ignore
   checkRecipes.x = 625
+  //@ts-ignore
   checkRecipes.y = 113
 
-  const checkRecipesWithTable = new BehaviorIdle(targets)
+  const checkRecipesWithTable = new BehaviorIdle()
   checkRecipesWithTable.stateName = 'checkRecipesWithTable'
+  //@ts-ignore
   checkRecipesWithTable.x = 350
+  //@ts-ignore
   checkRecipesWithTable.y = 575
 
-  const checkMaterials = new BehaviorIdle(targets)
+  const checkMaterials = new BehaviorIdle()
   checkMaterials.stateName = 'checkMaterials'
+  //@ts-ignore
   checkMaterials.x = 525
+  //@ts-ignore
   checkMaterials.y = 350
 
-  const checkPickUpItems = new BehaviorIdle(targets)
+  const checkPickUpItems = new BehaviorIdle()
   checkPickUpItems.stateName = 'checkPickUpItems'
+  //@ts-ignore
   checkPickUpItems.x = 350
+  //@ts-ignore
   checkPickUpItems.y = 213
 
-  const checkCraftingTable = new BehaviorIdle(targets)
+  const checkCraftingTable = new BehaviorIdle()
   checkCraftingTable.stateName = 'checkCraftingTable'
+  //@ts-ignore
   checkCraftingTable.x = 125
+  //@ts-ignore
   checkCraftingTable.y = 350
 
   const craftItem = new BehaviorCraft(bot, targets)
@@ -76,8 +93,8 @@ function searchAndCraftFunction (bot, targets) {
   goTableToCraft.x = 325
   goTableToCraft.y = 350
 
-  let recipes = []
-  let itemsToPickUpBatch
+  let recipes: Array<Recipes> = []
+  let itemsToPickUpBatch: ItemsToPickUpBatch
   let craftingTable
 
   const transitions = [
@@ -159,7 +176,7 @@ function searchAndCraftFunction (bot, targets) {
       child: checkCraftingTable,
       onTransition: () => {
         targets.craftItem = {
-          name: recipes.shift().result.name
+          name: recipes.shift()?.result.name
         }
       },
       shouldTransition: () => {
@@ -172,7 +189,7 @@ function searchAndCraftFunction (bot, targets) {
       child: craftItem,
       onTransition: () => {
         targets.craftItem = {
-          name: recipes.shift().result.name
+          name: recipes.shift()?.result.name
         }
       },
       shouldTransition: () => recipes.length > 0 && craftItem.isFinished()

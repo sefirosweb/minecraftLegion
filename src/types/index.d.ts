@@ -55,6 +55,19 @@ export type Portals = {
 export type ItemDrop = {
     position: Vec3
 }
+
+export type ItemsToPickUpBatch = {
+    repicesUsed: Array<any>,
+    itemToPickup: Array<any>,
+    haveMaterials: 'all',
+    needCraftingTable: boolean
+}
+
+export type Recipes = {
+    result: {
+        name: string
+    }
+}
 export interface LegionStateMachineTargets extends StateMachineTargets {
     movements: Movements;
     chests: Chests;
@@ -69,6 +82,7 @@ export interface LegionStateMachineTargets extends StateMachineTargets {
     pickUpItems?: any;
     items?: any;
     craftItemBatch?: any;
+    craftItem?: any
 
     guardJob?: GuardJob;
     archerJob?: ArcherJob;
