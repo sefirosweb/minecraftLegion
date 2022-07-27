@@ -1,5 +1,18 @@
+//@ts-nocheck
+
+import { Bot, DepositType, LegionStateMachineTargets } from "@/types"
+
 module.exports = class BehaviorCheckItemsInInventory {
-  constructor (bot, targets, itemsToCheck = [], isDeposit = false) {
+  readonly bot: Bot
+  readonly targets: LegionStateMachineTargets
+  stateName: string
+  isEndFinished: boolean
+
+  itemsToCheck: Array<any>
+  isDeposit: DepositType
+
+  constructor(bot: Bot, targets: LegionStateMachineTargets, itemsToCheck: Array<any> = [], isDeposit: DepositType = 'deposit') {
+
     this.bot = bot
     this.targets = targets
     this.stateName = 'BehaviorCheckItemsInInventory'
@@ -11,15 +24,15 @@ module.exports = class BehaviorCheckItemsInInventory {
     this.genericItems = this.inventoryModule.getGenericItems()
   }
 
-  setItemsToCheck (itemsToCheck) {
+  setItemsToCheck(itemsToCheck) {
     this.itemsToCheck = itemsToCheck
   }
 
-  setIsDeposit (isDeposit) {
+  setIsDeposit(isDeposit) {
     this.isDeposit = isDeposit
   }
 
-  onStateEntered () {
+  onStateEntered() {
     this.isEndFinished = false
     this.targets.items = []
 
@@ -34,7 +47,7 @@ module.exports = class BehaviorCheckItemsInInventory {
     }
   }
 
-  getItemsToDepositAll () {
+  getItemsToDepositAll() {
     const items = this.getResumeInventory(false)
 
     const itemsToDeposit = items.reduce((currentItems, slot) => {
@@ -63,7 +76,7 @@ module.exports = class BehaviorCheckItemsInInventory {
     this.isEndFinished = true
   }
 
-  getItemsToDeposit () {
+  getItemsToDeposit() {
     const items = this.getResumeInventory(false)
 
     const itemsToDeposit = this.itemsToCheck.reduce((currentItems, slot) => {
@@ -89,7 +102,7 @@ module.exports = class BehaviorCheckItemsInInventory {
     this.isEndFinished = true
   }
 
-  getItemsToWithdraw () {
+  getItemsToWithdraw() {
     const items = this.getResumeInventory(true)
 
     const itemsToWithdraw = this.itemsToCheck.reduce((currentItems, slot) => {
@@ -121,11 +134,11 @@ module.exports = class BehaviorCheckItemsInInventory {
 
   // }
 
-  isFinished () {
+  isFinished() {
     return this.isEndFinished
   }
 
-  getEquipedItems () {
+  getEquipedItems() {
     const equipedItems = []
 
     if (this.bot.inventory.slots[5]) equipedItems.push(this.bot.inventory.slots[5]) // helmet
@@ -137,7 +150,7 @@ module.exports = class BehaviorCheckItemsInInventory {
     return equipedItems
   }
 
-  getResumeInventory (withEquip) {
+  getResumeInventory(withEquip) {
     let equipItems = []
     if (withEquip) {
       equipItems = this.getEquipedItems()

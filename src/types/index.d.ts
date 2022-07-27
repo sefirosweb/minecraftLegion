@@ -102,9 +102,11 @@ export type itemsToCraft = {
 
 export type Dimensions = 'minecraft:overworld' | 'minecraft:the_nether' | 'minecraft:the_end'
 
+export type DepositType = 'withdraw' | 'deposit' | 'depositAll'
+
 export type Chest = {
     items: Array<Item>
-    type: 'withdraw' | 'deposit' | 'depositAll'
+    type: DepositType
     position: Vec3
     dimension: Dimensions
 };
