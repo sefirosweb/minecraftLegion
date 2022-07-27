@@ -1,25 +1,35 @@
-const {
+import { Bot, LegionStateMachineTargets } from "@/types"
+
+import {
   StateTransition,
   BehaviorIdle,
   NestedStateMachine
-} = require('mineflayer-statemachine')
+} from 'mineflayer-statemachine'
 
-const BehaviorFindItems = require('@BehaviorModules/BehaviorFindItems')
-const BehaviorLoadConfig = require('@BehaviorModules/BehaviorLoadConfig')
-const BehaviorMoveTo = require('@BehaviorModules/BehaviorMoveTo')
+//@ts-ignore
+import BehaviorFindItems from '@BehaviorModules/BehaviorFindItems'
+//@ts-ignore
+import BehaviorLoadConfig from '@BehaviorModules/BehaviorLoadConfig'
+//@ts-ignore
+import BehaviorMoveTo from '@BehaviorModules/BehaviorMoveTo'
+import { Vec3 } from "vec3"
 
-function findItemsAndPickup (bot, targets) {
-  let botPosition = {}
+function findItemsAndPickup(bot: Bot, targets: LegionStateMachineTargets) {
+  let botPosition: Vec3
   let botPositionTime = 0
 
-  const start = new BehaviorIdle(targets)
+  const start = new BehaviorIdle()
   start.stateName = 'Start'
+  //@ts-ignore
   start.x = 125
+  //@ts-ignore
   start.y = 113
 
-  const exit = new BehaviorIdle(targets)
+  const exit = new BehaviorIdle()
   exit.stateName = 'Exit'
+  //@ts-ignore
   exit.x = 325
+  //@ts-ignore
   exit.y = 513
 
   const findItem = new BehaviorFindItems(bot, targets, 15, true)
@@ -57,7 +67,7 @@ function findItemsAndPickup (bot, targets) {
       parent: findItem,
       child: goToObject,
       onTransition: () => {
-        targets.position = targets.itemDrop.position.offset(0, 0.2, 0).clone()
+        targets.position = targets.itemDrop?.position.offset(0, 0.2, 0).clone()
         botPosition = bot.entity.position.clone()
         botPositionTime = Date.now()
       },
@@ -95,7 +105,7 @@ function findItemsAndPickup (bot, targets) {
           return true
         }
 
-        if (targets.position.distanceTo(targets.itemDrop.position) > 0.3) {
+        if (targets.position && targets.itemDrop && targets.position.distanceTo(targets.itemDrop.position) > 0.3) {
           targets.position = targets.itemDrop.position.offset(0, 0.2, 0).clone()
           goToObject.restart()
         }
