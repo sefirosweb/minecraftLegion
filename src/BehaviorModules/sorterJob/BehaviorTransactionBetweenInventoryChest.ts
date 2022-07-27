@@ -1,5 +1,18 @@
+
+//@ts-nocheck
+
+import { Bot, LegionStateMachineTargets } from "@/types"
+
 module.exports = class BehaviorTransactionBetweenInventoryChest {
-  constructor (bot, targets) {
+  readonly bot: Bot;
+  readonly targets: LegionStateMachineTargets;
+  stateName: string;
+  isEndFinished: boolean
+  success: boolean
+  speed: number
+
+
+  constructor(bot: Bot, targets: LegionStateMachineTargets) {
     this.bot = bot
     this.targets = targets
     this.stateName = 'BehaviorTransactionBetweenInventoryChest'
@@ -9,12 +22,12 @@ module.exports = class BehaviorTransactionBetweenInventoryChest {
     this.speed = 50
   }
 
-  onStateExited () {
+  onStateExited() {
     this.isEndFinished = false
     this.success = false
   }
 
-  onStateEntered () {
+  onStateEntered() {
     this.isEndFinished = false
     this.pendinTransactions = [...this.targets.sorterJob.nextTransactions]
     const indexChest = this.pendinTransactions[0].fromChest
@@ -32,7 +45,7 @@ module.exports = class BehaviorTransactionBetweenInventoryChest {
       })
   }
 
-  pickNextItem (container) {
+  pickNextItem(container) {
     return new Promise((resolve, reject) => {
       if (this.pendinTransactions.length === 0) {
         resolve()
@@ -55,11 +68,11 @@ module.exports = class BehaviorTransactionBetweenInventoryChest {
     })
   }
 
-  isFinished () {
+  isFinished() {
     return this.isEndFinished
   }
 
-  isSuccess () {
+  isSuccess() {
     return this.isSuccess
   }
 }

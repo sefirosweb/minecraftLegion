@@ -7,9 +7,9 @@ module.exports = class BehaviorMinerCurrentBlock {
   readonly bot: Bot;
   readonly targets: LegionStateMachineTargets;
   stateName: string;
+  isEndFinished: boolean
 
   isLayerFinished: boolean
-  isEndFinished: boolean
   firstBlockOnLayer: boolean
 
   blockInValidType: Array<string>

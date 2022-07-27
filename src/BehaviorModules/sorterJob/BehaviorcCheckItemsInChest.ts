@@ -1,7 +1,18 @@
-const botWebsocket = require('@modules/botWebsocket')
-const vec3 = require('vec3')
+
+//@ts-nocheck
+
+import botWebsocket from '@/modules/botWebsocket'
+import { Bot, LegionStateMachineTargets } from '@/types';
+import vec3 from 'vec3'
 module.exports = class BehaviorcCheckItemsInChest {
-  constructor (bot, targets) {
+  readonly bot: Bot;
+  readonly targets: LegionStateMachineTargets;
+  stateName: string;
+  isEndFinished: boolean
+
+  canOpenChest: boolean
+
+  constructor(bot: Bot, targets: LegionStateMachineTargets) {
     this.bot = bot
     this.targets = targets
     this.stateName = 'BehaviorcCheckItemsInChest'
@@ -11,7 +22,7 @@ module.exports = class BehaviorcCheckItemsInChest {
     this.chest = false
   }
 
-  onStateEntered () {
+  onStateEntered() {
     this.isEndFinished = false
     this.canOpenChest = false
 
@@ -50,16 +61,16 @@ module.exports = class BehaviorcCheckItemsInChest {
     })
   }
 
-  onStateExited () {
+  onStateExited() {
     this.isEndFinished = false
     clearTimeout(this.timeLimit)
   }
 
-  isFinished () {
+  isFinished() {
     return this.isEndFinished
   }
 
-  getCanOpenChest () {
+  getCanOpenChest() {
     return this.canOpenChest
   }
 }
