@@ -77,6 +77,10 @@ module.exports = (bot: Bot) => {
     isNight: false,
     triedToSleep: false,
 
+    farmerJob: {
+      plantArea: {}
+    },
+
     breederJob: {
       animalsToBeFeed: [],
       breededAnimals: [],

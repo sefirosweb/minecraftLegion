@@ -1,23 +1,30 @@
-const {
+import { Bot, LegionStateMachineTargets } from '@/types'
+import {
   StateTransition,
   BehaviorIdle,
   NestedStateMachine
-} = require('mineflayer-statemachine')
+} from 'mineflayer-statemachine'
 
-function farmingPlantsFunction (bot, targets) {
-  const start = new BehaviorIdle(targets)
+function farmingPlantsFunction(bot: Bot, targets: LegionStateMachineTargets) {
+  const start = new BehaviorIdle()
   start.stateName = 'Start'
+  //@ts-ignore
   start.x = 125
+  //@ts-ignore
   start.y = 113
 
-  const exit = new BehaviorIdle(targets)
+  const exit = new BehaviorIdle()
   exit.stateName = 'Exit'
+  //@ts-ignore
   exit.x = 725
+  //@ts-ignore
   exit.y = 113
 
-  const checkFarmingAreas = new BehaviorIdle(targets)
+  const checkFarmingAreas = new BehaviorIdle()
   checkFarmingAreas.stateName = 'Next Area'
+  //@ts-ignore
   checkFarmingAreas.x = 525
+  //@ts-ignore
   checkFarmingAreas.y = 113
 
   const plant = require('@NestedStateModules/farmerJob/plantFunction')(bot, targets)

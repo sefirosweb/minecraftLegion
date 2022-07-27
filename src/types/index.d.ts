@@ -11,17 +11,31 @@ import { Entity } from 'prismarine-entity'
 //     breededDate: number
 // }
 
+export type Layer = {
+    xStart: number,
+    xEnd: number,
+    zStart: number,
+    zEnd: number,
+    yLayer: number,
+}
+
+export type PlantArea = {
+    xStart?: number,
+    xEnd?: number,
+    zStart?: number,
+    zEnd?: number,
+    yLayer?: number,
+    plant?: string
+}
+
 type GuardJob = {}
 type ArcherJob = {}
-type FarmerJob = {}
+type FarmerJob = {
+    plantArea: PlantArea
+}
+
 type BreederJob = {
-    farmAreas: Array<{
-        xStart: number,
-        xEnd: number,
-        zStart: number,
-        zEnd: number,
-        yLayer: number,
-    }>,
+    farmAreas: Array<Layer>,
     breededAnimals: Array<Entity>,
     farmAnimal: {
         seconds: number,
@@ -89,9 +103,9 @@ export type ItemDrop = {
 }
 
 export type ItemsToPickUpBatch = {
-    repicesUsed: Array<any>,
-    itemToPickup: Array<any>,
-    haveMaterials: 'all',
+    repicesUsed: Array<any>
+    itemToPickup: Array<any>
+    haveMaterials: 'all'
     needCraftingTable: boolean
 }
 
@@ -115,12 +129,14 @@ export interface LegionStateMachineTargets extends StateMachineTargets {
     items?: any;
     craftItemBatch?: any;
     craftItem?: any
+    digBlock?: Block;
 
+    block?: Block;
     interactEntity?: Entity
 
     guardJob?: GuardJob;
     archerJob?: ArcherJob;
-    farmerJob?: FarmerJob;
+    farmerJob: FarmerJob;
     minerJob?: MinerJob;
     breederJob: BreederJob;
     sorterJob?: SorterJob;

@@ -1,16 +1,21 @@
-const {
+import {
   StateTransition,
   BehaviorIdle,
   NestedStateMachine
-} = require('mineflayer-statemachine')
+} from 'mineflayer-statemachine'
 
-const BehaviorGetReady = require('@BehaviorModules/BehaviorGetReady')
-const BehaviorEatFood = require('@BehaviorModules/BehaviorEatFood')
+//@ts-ignore
+import BehaviorGetReady from '@BehaviorModules/BehaviorGetReady'
+//@ts-ignore
+import BehaviorEatFood from '@BehaviorModules/BehaviorEatFood'
+import { Bot, LegionStateMachineTargets } from '@/types'
 
-function farmerJobFunction (bot, targets) {
-  const start = new BehaviorIdle(targets)
+function farmerJobFunction(bot: Bot, targets: LegionStateMachineTargets) {
+  const start = new BehaviorIdle()
   start.stateName = 'Start'
+  //@ts-ignore
   start.x = 125
+  //@ts-ignore
   start.y = 113
 
   const getReady = new BehaviorGetReady(bot, targets)

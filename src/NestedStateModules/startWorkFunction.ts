@@ -63,18 +63,12 @@ function startWorkFunction(bot: Bot, targets: LegionStateMachineTargets) {
     new StateTransition({
       parent: loadedConfig,
       child: guardJob,
-      onTransition: () => {
-        targets.guardJob = {}
-      },
       shouldTransition: () => targets.config.job === Jobs.guard
     }),
 
     new StateTransition({
       parent: loadedConfig,
       child: archerJob,
-      onTransition: () => {
-        targets.archerJob = {}
-      },
       shouldTransition: () => targets.config.job === Jobs.archer
     }),
 
@@ -82,7 +76,6 @@ function startWorkFunction(bot: Bot, targets: LegionStateMachineTargets) {
       parent: loadedConfig,
       child: farmerJob,
       onTransition: () => {
-        targets.farmerJob = {}
         if (targets.movements.canDig === false) {
           const allBlocksExceptLeafs = getAllBlocksExceptLeafs()
           targets.movements.canDig = true
@@ -122,18 +115,12 @@ function startWorkFunction(bot: Bot, targets: LegionStateMachineTargets) {
     new StateTransition({
       parent: loadedConfig,
       child: sorterJob,
-      onTransition: () => {
-        targets.sorterJob = {}
-      },
       shouldTransition: () => targets.config.job === Jobs.sorter
     }),
 
     new StateTransition({
       parent: loadedConfig,
       child: crafterJobFunction,
-      onTransition: () => {
-        targets.crafterJob = {}
-      },
       shouldTransition: () => targets.config.job === Jobs.crafter
     }),
 

@@ -1,28 +1,37 @@
-const {
+import { Bot, LegionStateMachineTargets } from '@/types'
+import {
   StateTransition,
   BehaviorIdle,
   NestedStateMachine
-} = require('mineflayer-statemachine')
+} from 'mineflayer-statemachine'
 
-function farmingTreesFunction (bot, targets) {
-  const start = new BehaviorIdle(targets)
+function farmingTreesFunction(bot: Bot, targets: LegionStateMachineTargets) {
+  const start = new BehaviorIdle()
   start.stateName = 'Start'
+  //@ts-ignore
   start.x = 125
+  //@ts-ignore
   start.y = 113
 
-  const exit = new BehaviorIdle(targets)
+  const exit = new BehaviorIdle()
   exit.stateName = 'Exit'
+  //@ts-ignore
   exit.x = 725
+  //@ts-ignore
   exit.y = 113
 
-  const selectTree = new BehaviorIdle(targets)
+  const selectTree = new BehaviorIdle()
   selectTree.stateName = 'Select Tree'
+  //@ts-ignore
   selectTree.x = 325
+  //@ts-ignore
   selectTree.y = 113
 
-  const checkFarmingAreas = new BehaviorIdle(targets)
+  const checkFarmingAreas = new BehaviorIdle()
   checkFarmingAreas.stateName = 'Next Area'
+  //@ts-ignore
   checkFarmingAreas.x = 525
+  //@ts-ignore
   checkFarmingAreas.y = 113
 
   const plant = require('@NestedStateModules/farmerJob/plantFunction')(bot, targets)
@@ -40,7 +49,7 @@ function farmingTreesFunction (bot, targets) {
   findItemsAndPickup.x = 525
   findItemsAndPickup.y = 313
 
-  let xStart, xEnd, xCurrent, zStart, zEnd, zCurrent, finished
+  let xStart: number, xEnd: number, xCurrent: number, zStart: number, zEnd: number, zCurrent: number, finished: boolean
 
   const nextTree = () => {
     xCurrent += 2
@@ -65,10 +74,10 @@ function farmingTreesFunction (bot, targets) {
       parent: start,
       child: selectTree,
       onTransition: () => {
-        xStart = targets.farmerJob.plantArea.xStart < targets.farmerJob.plantArea.xEnd ? targets.farmerJob.plantArea.xStart : targets.farmerJob.plantArea.xEnd
-        xEnd = targets.farmerJob.plantArea.xStart > targets.farmerJob.plantArea.xEnd ? targets.farmerJob.plantArea.xStart : targets.farmerJob.plantArea.xEnd
-        zStart = targets.farmerJob.plantArea.zStart < targets.farmerJob.plantArea.zEnd ? targets.farmerJob.plantArea.zStart : targets.farmerJob.plantArea.zEnd
-        zEnd = targets.farmerJob.plantArea.zStart > targets.farmerJob.plantArea.zEnd ? targets.farmerJob.plantArea.zStart : targets.farmerJob.plantArea.zEnd
+        xStart = targets.farmerJob.plantArea.xStart! < targets.farmerJob.plantArea.xEnd! ? targets.farmerJob.plantArea.xStart! : targets.farmerJob.plantArea.xEnd!
+        xEnd = targets.farmerJob.plantArea.xStart! > targets.farmerJob.plantArea.xEnd! ? targets.farmerJob.plantArea.xStart! : targets.farmerJob.plantArea.xEnd!
+        zStart = targets.farmerJob.plantArea.zStart! < targets.farmerJob.plantArea.zEnd! ? targets.farmerJob.plantArea.zStart! : targets.farmerJob.plantArea.zEnd!
+        zEnd = targets.farmerJob.plantArea.zStart! > targets.farmerJob.plantArea.zEnd! ? targets.farmerJob.plantArea.zStart! : targets.farmerJob.plantArea.zEnd!
         xCurrent = xStart
         zCurrent = zStart
         finished = false

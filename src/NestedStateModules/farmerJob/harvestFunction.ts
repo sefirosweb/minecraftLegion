@@ -1,20 +1,31 @@
-const Vec3 = require('vec3')
-const botWebsocket = require('@modules/botWebsocket')
+import { Vec3 } from 'vec3'
 
-const {
+import {
   StateTransition,
   BehaviorIdle,
   NestedStateMachine
-} = require('mineflayer-statemachine')
-const BehaviorDigBlock = require('@BehaviorModules/BehaviorDigBlock')
-const BehaviorEatFood = require('@BehaviorModules/BehaviorEatFood')
-const BehaviorInteractBlock = require('@BehaviorModules/BehaviorInteractBlock')
-const BehaviorMoveTo = require('@BehaviorModules/BehaviorMoveTo')
+} from 'mineflayer-statemachine'
 
-function harvestFunction (bot, targets) {
-  const start = new BehaviorIdle(targets)
+import { plants } from '@/modules/plantType'
+
+//@ts-ignore
+import botWebsocket from '@modules/botWebsocket'
+//@ts-ignore
+import BehaviorDigBlock from '@BehaviorModules/BehaviorDigBlock'
+//@ts-ignore
+import BehaviorEatFood from '@BehaviorModules/BehaviorEatFood'
+//@ts-ignore
+import BehaviorInteractBlock from '@BehaviorModules/BehaviorInteractBlock'
+//@ts-ignore
+import BehaviorMoveTo from '@BehaviorModules/BehaviorMoveTo'
+import { Bot, LegionStateMachineTargets } from '@/types'
+
+function harvestFunction(bot: Bot, targets: LegionStateMachineTargets) {
+  const start = new BehaviorIdle()
   start.stateName = 'Start'
+  //@ts-ignore
   start.x = 125
+  //@ts-ignore
   start.y = 113
 
   const eatFood = new BehaviorEatFood(bot, targets)
@@ -28,19 +39,25 @@ function harvestFunction (bot, targets) {
   goPlant.x = 525
   goPlant.y = 413
 
-  const exit = new BehaviorIdle(targets)
+  const exit = new BehaviorIdle()
   exit.stateName = 'Exit'
+  //@ts-ignore
   exit.x = 225
+  //@ts-ignore
   exit.y = 413
 
-  const checkArea = new BehaviorIdle(targets)
+  const checkArea = new BehaviorIdle()
   checkArea.stateName = 'Check Area for Harvest'
+  //@ts-ignore
   checkArea.x = 525
+  //@ts-ignore
   checkArea.y = 113
 
-  const checkHarvest = new BehaviorIdle(targets)
+  const checkHarvest = new BehaviorIdle()
   checkHarvest.stateName = 'Exsist Any Plant To Harvest'
+  //@ts-ignore
   checkHarvest.x = 225
+  //@ts-ignore
   checkHarvest.y = 263
 
   const harvestPlant = new BehaviorDigBlock(bot, targets)
@@ -55,7 +72,7 @@ function harvestFunction (bot, targets) {
 
   let harvestIsFinished = false
 
-  function checkPlantAge () {
+  function checkPlantAge() {
     const block = getPlantBlock()
 
     if (block === undefined) {
@@ -66,15 +83,13 @@ function harvestFunction (bot, targets) {
     harvestIsFinished = false
   }
 
-  const { plants } = require('@modules/plantType')
-
-  function getPlantBlock () {
-    const xStart = targets.farmerJob.plantArea.xStart < targets.farmerJob.plantArea.xEnd ? targets.farmerJob.plantArea.xStart : targets.farmerJob.plantArea.xEnd
-    const xEnd = targets.farmerJob.plantArea.xStart > targets.farmerJob.plantArea.xEnd ? targets.farmerJob.plantArea.xStart : targets.farmerJob.plantArea.xEnd
-    const zStart = targets.farmerJob.plantArea.zStart < targets.farmerJob.plantArea.zEnd ? targets.farmerJob.plantArea.zStart : targets.farmerJob.plantArea.zEnd
-    const zEnd = targets.farmerJob.plantArea.zStart > targets.farmerJob.plantArea.zEnd ? targets.farmerJob.plantArea.zStart : targets.farmerJob.plantArea.zEnd
-    const yLayer = targets.farmerJob.plantArea.yLayer + 1
-    const plant = targets.farmerJob.plantArea.plant
+  function getPlantBlock() {
+    const xStart = targets.farmerJob.plantArea.xStart! < targets.farmerJob.plantArea.xEnd! ? targets.farmerJob.plantArea.xStart! : targets.farmerJob.plantArea.xEnd!
+    const xEnd = targets.farmerJob.plantArea.xStart! > targets.farmerJob.plantArea.xEnd! ? targets.farmerJob.plantArea.xStart! : targets.farmerJob.plantArea.xEnd!
+    const zStart = targets.farmerJob.plantArea.zStart! < targets.farmerJob.plantArea.zEnd! ? targets.farmerJob.plantArea.zStart! : targets.farmerJob.plantArea.zEnd!
+    const zEnd = targets.farmerJob.plantArea.zStart! > targets.farmerJob.plantArea.zEnd! ? targets.farmerJob.plantArea.zStart! : targets.farmerJob.plantArea.zEnd!
+    const yLayer = targets.farmerJob.plantArea.yLayer! + 1
+    const plant = targets.farmerJob.plantArea.plant!
     const plantName = plants[plant].plantName
     const type = plants[plant].type
     const age = plants[plant].age
@@ -174,19 +189,19 @@ function harvestFunction (bot, targets) {
       parent: goPlant,
       child: harvestPlant,
       onTransition: () => {
-        targets.position = targets.digBlock.position.clone()
+        targets.position = targets.digBlock?.position.clone()
         // botWebsocket.log(`Error on go to plant ${targets.farmerJob.plantArea.plant}`)
       },
-      shouldTransition: () => bot.canDigBlock(targets.digBlock) && !bot.pathfinder.isMining() && targets.farmerJob.plantArea.plant !== 'sweet_berries'
+      shouldTransition: () => targets.digBlock !== undefined && bot.canDigBlock(targets.digBlock) && !bot.pathfinder.isMining() && targets.farmerJob.plantArea.plant !== 'sweet_berries'
     }),
 
     new StateTransition({
       parent: goPlant,
       child: interactWithPlant,
       onTransition: () => {
-        targets.position = targets.digBlock.position.clone()
+        targets.position = targets.digBlock?.position.clone()
       },
-      shouldTransition: () => bot.canDigBlock(targets.digBlock) && bot.canSeeBlock(targets.digBlock) && !bot.pathfinder.isMining() && targets.farmerJob.plantArea.plant === 'sweet_berries'
+      shouldTransition: () => targets.digBlock !== undefined && bot.canDigBlock(targets.digBlock) && bot.canSeeBlock(targets.digBlock) && !bot.pathfinder.isMining() && targets.farmerJob.plantArea.plant === 'sweet_berries'
     }),
 
     new StateTransition({
