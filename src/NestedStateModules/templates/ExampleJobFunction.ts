@@ -1,13 +1,15 @@
-const {
+import {
   StateTransition,
   BehaviorIdle,
   NestedStateMachine
-} = require('mineflayer-statemachine')
+} from 'mineflayer-statemachine'
 
-const BehaviorLoadConfig = require('@BehaviorModules/BehaviorLoadConfig')
+//@ts-ignore
+import BehaviorLoadConfig from '@BehaviorModules/BehaviorLoadConfig'
+import { Bot, LegionStateMachineTargets } from '@/types'
 
-function minerJobFunction (bot, targets) {
-  const start = new BehaviorIdle(targets)
+function minerJobFunction(bot: Bot, targets: LegionStateMachineTargets) {
+  const start = new BehaviorIdle()
   start.stateName = 'Start'
 
   const loadConfig = new BehaviorLoadConfig(bot, targets)
