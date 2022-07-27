@@ -1,28 +1,38 @@
-const {
+import {
   StateTransition,
   BehaviorIdle,
   NestedStateMachine,
   BehaviorFindInteractPosition
-} = require('mineflayer-statemachine')
+} from 'mineflayer-statemachine'
 
-const BehaviorDigBlock = require('@BehaviorModules/BehaviorDigBlock')
-const BehaviorCustomPlaceBlock = require('@BehaviorModules/BehaviorCustomPlaceBlock')
-const BehaviorLoadConfig = require('@BehaviorModules/BehaviorLoadConfig')
-const BehaviorMoveTo = require('@BehaviorModules/BehaviorMoveTo')
+//@ts-ignore
+import BehaviorDigBlock from '@BehaviorModules/BehaviorDigBlock'
+//@ts-ignore
+import BehaviorCustomPlaceBlock from '@BehaviorModules/BehaviorCustomPlaceBlock'
+//@ts-ignore
+import BehaviorLoadConfig from '@BehaviorModules/BehaviorLoadConfig'
+//@ts-ignore
+import BehaviorMoveTo from '@BehaviorModules/BehaviorMoveTo'
+import { Bot, LegionStateMachineTargets } from '@/types'
+import { Vec3 } from 'vec3'
 
 // let isDigging = false
-function fillFunction (bot, targets) {
-  let placeBlock2Position
+function fillFunction(bot: Bot, targets: LegionStateMachineTargets) {
+  let placeBlock2Position: Vec3 | undefined
   const { getNewPositionForPlaceBlock, blocksCanBeReplaced, getPathToPlace } = require('@modules/placeBlockModule')(bot)
 
-  const start = new BehaviorIdle(targets)
+  const start = new BehaviorIdle()
   start.stateName = 'Start'
+  //@ts-ignore
   start.x = 125
+  //@ts-ignore
   start.y = 113
 
-  const exit = new BehaviorIdle(targets)
+  const exit = new BehaviorIdle()
   exit.stateName = 'Exit'
+  //@ts-ignore
   exit.x = 125
+  //@ts-ignore
   exit.y = 313
 
   const moveToCantSeeBlock = new BehaviorMoveTo(bot, targets)
@@ -31,9 +41,12 @@ function fillFunction (bot, targets) {
   moveToCantSeeBlock.x = 125
   moveToCantSeeBlock.y = 213
 
+  //@ts-ignore
   const findInteractPosition = new BehaviorFindInteractPosition(bot, targets)
   findInteractPosition.stateName = 'findInteractPosition'
+  //@ts-ignore
   findInteractPosition.x = 325
+  //@ts-ignore
   findInteractPosition.y = 113
 
   const moveToBlock = new BehaviorMoveTo(bot, targets)
@@ -62,21 +75,21 @@ function fillFunction (bot, targets) {
   loadConfig.x = 325
   loadConfig.y = 113
 
-  let originalPosition
+  let originalPosition: Vec3 | undefined
   let listPlaceBlocks = []
 
   const transitions = [
     new StateTransition({
       parent: start,
       child: moveToCantSeeBlock,
-      shouldTransition: () => bot.blockAt(targets.position)
+      shouldTransition: () => targets.position !== undefined && bot.blockAt(targets.position) !== undefined
     }),
 
     new StateTransition({
       parent: moveToCantSeeBlock,
       child: findInteractPosition,
       onTransition: () => {
-        originalPosition = targets.position.clone()
+        originalPosition = targets.position?.clone()
       },
       shouldTransition: () => true
     }),
@@ -103,9 +116,9 @@ function fillFunction (bot, targets) {
         placeBlock2.setOffset(positionForPlaceBlock.blockOffset)
       },
       shouldTransition: () => {
-        const block = bot.blockAt(targets.position.offset(0, 1, 0))
+        const block = targets.position ? bot.blockAt(targets.position.offset(0, 1, 0)) : null
         return (moveToBlock.isFinished() || moveToBlock.distanceToTarget() < 2.5) &&
-          blocksCanBeReplaced.includes(block.name) &&
+          block && blocksCanBeReplaced.includes(block.name) &&
           !bot.pathfinder.isMining()
       }
     }),
@@ -115,14 +128,15 @@ function fillFunction (bot, targets) {
       child: mineBlock,
       name: 'If up block is solid',
       onTransition: () => {
-        targets.position = targets.position.offset(0, 1, 0)
+        targets.position = targets.position?.offset(0, 1, 0)
       },
       shouldTransition: () => {
-        const block = bot.blockAt(targets.position.offset(0, 1, 0))
-        if (bot.canDigBlock(block) && !blocksCanBeReplaced.includes(block.name)) {
+        const block = targets.position ? bot.blockAt(targets.position.offset(0, 1, 0)) : null
+        if (block && bot.canDigBlock(block) && !blocksCanBeReplaced.includes(block.name)) {
           bot.pathfinder.setGoal(null)
           return !bot.pathfinder.isMining()
         }
+        return false
       }
     }),
 
@@ -131,8 +145,8 @@ function fillFunction (bot, targets) {
       child: placeBlock1,
       name: 'mineBlock -> placeBlock1',
       onTransition: () => {
-        placeBlock2Position = targets.position.clone()
-        listPlaceBlocks = getPathToPlace(targets.position.offset(0, -1, 0))
+        placeBlock2Position = targets.position?.clone()
+        listPlaceBlocks = getPathToPlace(targets.position?.offset(0, -1, 0))
         const currentPlaceBlock = listPlaceBlocks.shift()
         const positionForPlaceBlock = getNewPositionForPlaceBlock(currentPlaceBlock.position)
 
