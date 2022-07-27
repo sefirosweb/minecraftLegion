@@ -1,30 +1,39 @@
-const {
+import { Bot, LegionStateMachineTargets } from '@/types'
+import {
   StateTransition,
   BehaviorIdle,
   NestedStateMachine
-} = require('mineflayer-statemachine')
+} from 'mineflayer-statemachine'
 
-function sortChestFunction (bot, targets) {
+function sortChestFunction(bot: Bot, targets: LegionStateMachineTargets) {
   const { findItemsInChests, calculateSlotsToSort } = require('@modules/sorterJob')(bot)
 
-  const start = new BehaviorIdle(targets)
+  const start = new BehaviorIdle()
   start.stateName = 'Start'
+  //@ts-ignore
   start.x = 125
+  //@ts-ignore
   start.y = 113
 
-  const exit = new BehaviorIdle(targets)
+  const exit = new BehaviorIdle()
   exit.stateName = 'Exit'
+  //@ts-ignore
   exit.x = 125
+  //@ts-ignore
   exit.y = 413
 
-  const checkChestsToSort = new BehaviorIdle(targets)
+  const checkChestsToSort = new BehaviorIdle()
   checkChestsToSort.stateName = 'Check Chests mus be sorted'
+  //@ts-ignore
   checkChestsToSort.x = 525
+  //@ts-ignore
   checkChestsToSort.y = 113
 
-  const findItems = new BehaviorIdle(targets)
+  const findItems = new BehaviorIdle()
   findItems.stateName = 'Find items in chests'
+  //@ts-ignore
   findItems.x = 525
+  //@ts-ignore
   findItems.y = 263
 
   const pickUpItems = require('@NestedStateModules/getReady/pickUpItems')(bot, targets)
@@ -42,8 +51,11 @@ function sortChestFunction (bot, targets) {
       parent: start,
       child: checkChestsToSort,
       onTransition: () => {
+        //@ts-ignore
         const calculatedSlotsToSort = calculateSlotsToSort(targets.chests, targets.sorterJob.newChestSort)
+        //@ts-ignore
         targets.sorterJob.correctChests = calculatedSlotsToSort.correctChests
+        //@ts-ignore
         targets.sorterJob.slotsToSort = calculatedSlotsToSort.slotsToSort
       },
       shouldTransition: () => true
@@ -53,6 +65,7 @@ function sortChestFunction (bot, targets) {
       parent: checkChestsToSort,
       child: findItems,
       onTransition: () => {
+        //@ts-ignore
         targets.pickUpItems = findItemsInChests(targets.chests, targets.sorterJob.slotsToSort, targets.sorterJob.correctChests)
       },
       shouldTransition: () => true

@@ -7,9 +7,14 @@ import { Block } from 'prismarine-block'
 import { Entity } from 'prismarine-entity'
 
 
-// type BreedAnimal = Entity & {
-//     breededDate: number
-// }
+export type PendingTransaction = {
+    chest: any,
+    items: any
+}
+
+export type Chests = {
+    [key: string]: {};
+};
 
 export type Layer = {
     xStart: number,
@@ -72,7 +77,11 @@ type BreederJob = {
     animalsToBeFeed: Array<Entity>,
     feedEntity?: Entity
 }
-type SorterJob = {}
+
+type SorterJob = {
+    emptyChests: Array<any>
+}
+
 type CrafterJob = {}
 type MinerJob = {
     blockForPlace: Array<any>
@@ -165,7 +174,7 @@ export interface LegionStateMachineTargets extends StateMachineTargets {
     farmerJob: FarmerJob;
     minerJob: MinerJob;
     breederJob: BreederJob;
-    sorterJob?: SorterJob;
+    sorterJob: SorterJob;
     crafterJob?: CrafterJob;
 }
 

@@ -1,23 +1,30 @@
-const {
+import { Bot, LegionStateMachineTargets } from '@/types'
+import {
   StateTransition,
   BehaviorIdle,
   NestedStateMachine
-} = require('mineflayer-statemachine')
+} from 'mineflayer-statemachine'
 
-function depositItemsInInventory (bot, targets) {
-  const start = new BehaviorIdle(targets)
+function depositItemsInInventory(bot: Bot, targets: LegionStateMachineTargets) {
+  const start = new BehaviorIdle()
   start.stateName = 'Start'
+  //@ts-ignore
   start.x = 125
+  //@ts-ignore
   start.y = 113
 
-  const nextChest = new BehaviorIdle(targets)
+  const nextChest = new BehaviorIdle()
   nextChest.stateName = 'Next Chest'
+  //@ts-ignore
   nextChest.x = 125
+  //@ts-ignore
   nextChest.y = 213
 
-  const exit = new BehaviorIdle(targets)
+  const exit = new BehaviorIdle()
   exit.stateName = 'Exit'
+  //@ts-ignore
   exit.x = 325
+  //@ts-ignore
   exit.y = 213
 
   const goAndDeposit = require('@NestedStateModules/getReady/goAndDeposit')(bot, targets)
@@ -25,13 +32,15 @@ function depositItemsInInventory (bot, targets) {
   goAndDeposit.x = 125
   goAndDeposit.y = 313
 
-  let chestsFound
+  let chestsFound: Array<any>
   let currentChest
 
   const findEmptychests = () => {
-    const chests = JSON.parse(JSON.stringify(targets.chests))
+    const chests: Array<any> = JSON.parse(JSON.stringify(targets.chests))
     return chests
+      //@ts-ignore
       .filter(c => c.slots.filter(s => s === null).length > 0)
+      //@ts-ignore
       .sort((a, b) => b.slots.filter(s => s === null).length - a.slots.filter(s => s === null).length)
   }
 

@@ -123,6 +123,9 @@ module.exports = (bot: Bot) => {
       original: undefined,
       mineBlock: new Vec3(0, 0, 0),
       nextLayer: undefined
+    },
+    sorterJob: {
+      emptyChests: []
     }
   }
 
