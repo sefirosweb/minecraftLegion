@@ -51,6 +51,7 @@ export interface LegionStateMachineTargets extends StateMachineTargets {
     config: Config;
 
     itemDrop?: ItemDrop; // TODO FIX
+    position?: Vec3;
 
     guardJob?: GuardJob;
     archerJob?: ArcherJob;
@@ -64,36 +65,6 @@ export interface LegionStateMachineTargets extends StateMachineTargets {
 export type BotwebsocketAction = {
     type: string,
     value: any
-}
-
-export interface Bot extends MineflayerBot {
-    isABed: (bedBlock: Block) => boolean
-}
-
-declare module 'mineflayer' {
-    export interface BotEvents {
-        webSocketLogin: () => Promise<void> | void
-        customEventPhysicTick: () => Promise<void> | void
-
-        customEventChat: (
-            username: string,
-            message: string,
-            translate: string | null,
-            jsonMsg: ChatMessage,
-            matches: string[] | null
-        ) => Promise<void> | void
-
-        customEventMove: (position: Vec3) => Promise<void> | void
-
-        newListener: (event: string | symbol, listener: Function) => Promise<void> | void
-        removeListener: (event: string | symbol, listener: Function) => Promise<void> | void
-    }
-}
-
-declare module 'prismarine-entity' {
-    export interface Entity {
-        isEnemy?: boolean
-    }
 }
 
 export type Coordinates = 'x+' | 'x-' | 'z+' | 'z-'
