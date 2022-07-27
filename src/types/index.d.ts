@@ -15,8 +15,22 @@ type CrafterJob = {}
 type MinerJob = {
     blockForPlace: Array<any>
 }
-export type Chests = {
-    [key: string]: {};
+
+export type Item = {
+    item: string
+    quantity: number
+}
+
+export type itemsToCraft = {
+    name: string
+    quantity: number
+}
+
+export type Chest = {
+    items: Array<Item>
+    type: 'withdraw' | 'deposit' | 'depositAll'
+    position: Vec3
+    dimension: 'minecraft:overworld' | 'minecraft:the_nether' | 'minecraft:the_end'
 };
 
 export type Config = {
@@ -26,6 +40,7 @@ export type Config = {
     canDig: boolean
     canPlaceBlocks: boolean
     canSleep: boolean
+    canCraftItemWithdrawChest: boolean
 }
 
 export type Portals = {
@@ -40,7 +55,6 @@ export type Portals = {
 export type ItemDrop = {
     position: Vec3
 }
-
 export interface LegionStateMachineTargets extends StateMachineTargets {
     movements: Movements;
     chests: Chests;
@@ -52,6 +66,9 @@ export interface LegionStateMachineTargets extends StateMachineTargets {
 
     itemDrop?: ItemDrop; // TODO FIX
     position?: Vec3;
+    pickUpItems?: any;
+    items?: any;
+    craftItemBatch?: any;
 
     guardJob?: GuardJob;
     archerJob?: ArcherJob;

@@ -1,12 +1,18 @@
-const { json } = require('express/lib/response')
+import { Bot, Item, LegionStateMachineTargets, Chest } from "@/types"
+
+
 const {
   StateTransition,
   BehaviorIdle,
   NestedStateMachine
 } = require('mineflayer-statemachine')
 
-function pickUpItems(bot, targets) {
-  const { nearChests } = require('@modules/chestModule')(bot, targets)
+type PendingTransaction = {
+  chest: Chest,
+  items: Array<Item>
+}
+
+function pickUpItems(bot: Bot, targets: LegionStateMachineTargets) {
 
   const start = new BehaviorIdle(targets)
   start.stateName = 'Start'
@@ -28,20 +34,20 @@ function pickUpItems(bot, targets) {
   goAndWithdraw.x = 125
   goAndWithdraw.y = 413
 
-  let pendingTransaction
+  let pendingTransaction: Array<PendingTransaction>
   const findChests = () => {
     pendingTransaction = []
 
-    const pickupItems = JSON.parse(JSON.stringify(targets.pickUpItems));
+    const pickupItems = JSON.parse(JSON.stringify(targets.pickUpItems)) as Array<any>; // TODO Fix
 
     Object.entries(targets.chests).forEach((entry) => {
 
       const chestIndex = entry[0]
-      const chest = entry[1]
+      const chest = entry[1] as Chest
 
-      const items = [];
+      const items: Array<Item> = [];
 
-      pickupItems.forEach((i, indexItem) => {
+      pickupItems.forEach((i) => {
         if (
           i.fromChest === chestIndex
           && chest.dimension === bot.game.dimension
@@ -78,8 +84,10 @@ function pickUpItems(bot, targets) {
       child: goAndWithdraw,
       onTransition: () => {
         const currentChest = pendingTransaction.shift()
-        targets.position = currentChest.chest.position
-        targets.items = currentChest.items
+        if (currentChest) {
+          targets.position = currentChest.chest.position
+          targets.items = currentChest.items
+        }
       },
       shouldTransition: () => pendingTransaction.length > 0
     }),

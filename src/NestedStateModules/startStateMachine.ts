@@ -61,6 +61,7 @@ module.exports = (bot: Bot) => {
       canDig: false,
       canPlaceBlocks: false,
       canSleep: false,
+      canCraftItemWithdrawChest: false
     },
     movements: movements,
     chests: {},

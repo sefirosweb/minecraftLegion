@@ -1,21 +1,28 @@
-const {
+import {
   StateTransition,
   BehaviorIdle,
   NestedStateMachine
-} = require('mineflayer-statemachine')
+} from 'mineflayer-statemachine'
 
-const BehaviorWithdrawItemChest = require('@BehaviorModules/BehaviorWithdrawItemChest')
-const BehaviorMoveTo = require('@BehaviorModules/BehaviorMoveTo')
+//@ts-ignore
+import BehaviorWithdrawItemChest from '@BehaviorModules/BehaviorWithdrawItemChest'
+//@ts-ignore
+import BehaviorMoveTo from '@BehaviorModules/BehaviorMoveTo'
+import { Bot, LegionStateMachineTargets } from '@/types'
 
-function goAndWithdraw (bot, targets) {
+function goAndWithdraw(bot: Bot, targets: LegionStateMachineTargets) {
   const start = new BehaviorIdle()
   start.stateName = 'Start'
+  //@ts-ignore
   start.x = 125
+  //@ts-ignore
   start.y = 113
 
   const exit = new BehaviorIdle()
   exit.stateName = 'Exit'
+  //@ts-ignore
   exit.x = 125
+  //@ts-ignore
   exit.y = 413
 
   const goChest = new BehaviorMoveTo(bot, targets)

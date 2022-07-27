@@ -1,37 +1,51 @@
-const {
+import {
   StateTransition,
   BehaviorIdle,
   NestedStateMachine
-} = require('mineflayer-statemachine')
+} from 'mineflayer-statemachine'
 
-const BehaviorLoadConfig = require('@BehaviorModules/BehaviorLoadConfig')
-const BehaviorWithdrawItemChest = require('@BehaviorModules/BehaviorWithdrawItemChest')
-const BehaviorDepositItemChest = require('@BehaviorModules/BehaviorDepositItemChest')
-const BehaviorCheckItemsInInventory = require('@BehaviorModules/BehaviorCheckItemsInInventory')
-const BehaviorMoveTo = require('@BehaviorModules/BehaviorMoveTo')
+//@ts-ignore
+import BehaviorLoadConfig from '@BehaviorModules/BehaviorLoadConfig'
+//@ts-ignore
+import BehaviorWithdrawItemChest from '@BehaviorModules/BehaviorWithdrawItemChest'
+//@ts-ignore
+import BehaviorDepositItemChest from '@BehaviorModules/BehaviorDepositItemChest'
+//@ts-ignore
+import BehaviorCheckItemsInInventory from '@BehaviorModules/BehaviorCheckItemsInInventory'
+//@ts-ignore
+import BehaviorMoveTo from '@BehaviorModules/BehaviorMoveTo'
+import { Bot, Chest, Item, itemsToCraft, LegionStateMachineTargets } from '@/types'
 
-function goChestsFunction(bot, targets) {
+function goChestsFunction(bot: Bot, targets: LegionStateMachineTargets) {
   const { findChestsToWithdraw } = require('@modules/chestModule')(bot, targets)
   const { getResumeInventoryV2 } = require("@modules/inventoryModule")(bot);
 
   const start = new BehaviorIdle()
   start.stateName = 'Start'
+  //@ts-ignore
   start.x = 75
+  //@ts-ignore
   start.y = 63
 
   const checkCraftItem = new BehaviorIdle()
   checkCraftItem.stateName = 'Check Craft Item'
+  //@ts-ignore
   checkCraftItem.x = 75
+  //@ts-ignore
   checkCraftItem.y = 513
 
   const exit = new BehaviorIdle()
   exit.stateName = 'Exit'
+  //@ts-ignore
   exit.x = 525
+  //@ts-ignore
   exit.y = 113
 
   const nextCheck = new BehaviorIdle()
   nextCheck.stateName = 'Next Check'
+  //@ts-ignore
   nextCheck.x = 325
+  //@ts-ignore
   nextCheck.y = 213
 
   const loadConfig = new BehaviorLoadConfig(bot, targets)
@@ -74,9 +88,9 @@ function goChestsFunction(bot, targets) {
   searchAndCraft.y = 363
 
 
-  let chests = []
+  let chests: Array<Chest> = [];
   let chestIndex = 0
-  let itemsToCraft = []
+  let itemsToCraft: Array<itemsToCraft> = []
 
   const transitions = [
     new StateTransition({
@@ -162,7 +176,7 @@ function goChestsFunction(bot, targets) {
       child: checkCraftItem,
       onTransition: () => {
         const itemInChest = chests[chestIndex].items
-        const resumeInventory = getResumeInventoryV2()
+        // const resumeInventory = getResumeInventoryV2()
 
         itemsToCraft = []
 
