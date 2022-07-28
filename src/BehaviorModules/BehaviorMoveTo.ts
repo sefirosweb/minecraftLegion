@@ -1,8 +1,24 @@
-const mineflayerPathfinder = require('mineflayer-pathfinder')
-const botWebsocket = require('@modules/botWebsocket')
+
+// @ts-nocheck
+
+import mineflayerPathfinder, { Movements } from 'mineflayer-pathfinder'
+import botWebsocket from '@/modules/botWebsocket'
+import { Bot, LegionStateMachineTargets } from '@/types'
+import mcDataLoader from 'minecraft-data'
 
 module.exports = class BehaviorMoveTo {
-  constructor (bot, targets, timeout) {
+  readonly bot: Bot
+  readonly targets: LegionStateMachineTargets
+  readonly mcData: mcDataLoader.IndexedData
+  stateName: string
+  timeout: number
+  active: boolean
+  success: Boolean
+  isEndFinished: boolean
+  distance: number
+  movements: Movements
+
+  constructor(bot: Bot, targets: LegionStateMachineTargets, timeout: number) {
     this.stateName = 'moveTo'
     this.active = false
     this.timeout = timeout
@@ -12,13 +28,13 @@ module.exports = class BehaviorMoveTo {
     this.distance = 0
     this.bot = bot
     this.targets = targets
-    this.mcData = require('minecraft-data')(this.bot.version)
+    this.mcData = mcDataLoader(bot.version)
     this.movements = new mineflayerPathfinder.Movements(bot, this.mcData)
 
     this.movementModule = require('@modules/movementModule')(bot, targets)
   }
 
-  onStateEntered () {
+  onStateEntered() {
     this.isEndFinished = false
     this.success = false
     this.bot.on('pathUpdate', () => {
@@ -50,7 +66,7 @@ module.exports = class BehaviorMoveTo {
     this.startMoving()
   }
 
-  onStateExited () {
+  onStateExited() {
     this.bot.removeAllListeners('customEventPhysicTick')
     this.isEndFinished = false
     this.success = false
@@ -60,19 +76,19 @@ module.exports = class BehaviorMoveTo {
     clearTimeout(this.timeLimit)
   }
 
-  pathUpdate (r) {
+  pathUpdate(r) {
     if (r.status === 'noPath') {
       botWebsocket.log('[MoveTo] No path to target!')
     }
   }
 
-  goalReached () {
+  goalReached() {
     botWebsocket.log('[MoveTo] Target reached.')
     this.success = true
     this.isEndFinished = true
   }
 
-  setMoveTarget (position) {
+  setMoveTarget(position) {
     if (this.targets.position === position) {
       return
     }
@@ -80,11 +96,11 @@ module.exports = class BehaviorMoveTo {
     this.restart()
   }
 
-  stopMoving () {
+  stopMoving() {
     this.bot.pathfinder.setGoal(null)
   }
 
-  startMoving () {
+  startMoving() {
     const position = this.targets.position
     if (position == null) {
       botWebsocket.log('[MoveTo] Target not defined. Skipping.')
@@ -108,7 +124,7 @@ module.exports = class BehaviorMoveTo {
     }
   }
 
-  crossThePortal (dimension, destination) {
+  crossThePortal(dimension, destination) {
     this.movementModule.crossThePortal(dimension, destination)
       .then(() => {
         this.startMoving()
@@ -120,7 +136,7 @@ module.exports = class BehaviorMoveTo {
       })
   }
 
-  restart () {
+  restart() {
     if (!this.active) {
       return
     }
@@ -128,15 +144,15 @@ module.exports = class BehaviorMoveTo {
     this.startMoving()
   }
 
-  isFinished () {
+  isFinished() {
     return this.isEndFinished
   }
 
-  isSuccess () {
+  isSuccess() {
     return false
   }
 
-  distanceToTarget () {
+  distanceToTarget() {
     const position = this.targets.position
     if (position == null) { return 0 }
     return this.bot.entity.position.distanceTo(position)

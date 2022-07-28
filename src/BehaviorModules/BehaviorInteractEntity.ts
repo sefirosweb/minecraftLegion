@@ -1,5 +1,14 @@
+
+//@ts-nocheck
+import { Bot, LegionStateMachineTargets } from "@/types"
+
 module.exports = class template {
-  constructor (bot, targets) {
+  readonly bot: Bot
+  readonly targets: LegionStateMachineTargets
+  stateName: string
+  isEndFinished: boolean
+
+  constructor(bot: Bot, targets: LegionStateMachineTargets) {
     this.bot = bot
     this.targets = targets
     this.stateName = 'BehaviorInteractEntity'
@@ -7,24 +16,24 @@ module.exports = class template {
     this.isEndFinished = false
   }
 
-  onStateEntered () {
+  onStateEntered() {
     this.isEndFinished = false
     this.interactEntity()
   }
 
-  async interactEntity () {
-    if (this.targets.interactEntity == null) {
+  async interactEntity() {
+    if (this.targets.interactEntity === null) {
       this.isEndFinished = true
       console.log('interactEntity is null')
       return
     }
 
     await this.bot.lookAt(this.targets.interactEntity.position)
-    await this.bot.useOn(this.targets.interactEntity)
+    this.bot.useOn(this.targets.interactEntity)
     this.isEndFinished = true
   }
 
-  isFinished () {
+  isFinished() {
     return this.isEndFinished
   }
 }

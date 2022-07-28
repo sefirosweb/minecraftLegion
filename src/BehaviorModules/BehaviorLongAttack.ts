@@ -1,7 +1,16 @@
-const botWebsocket = require('@modules/botWebsocket')
+
+//@ts-nocheck
+
+import { Bot, LegionStateMachineTargets } from "@/types"
 
 module.exports = class BehaviorLongAttack {
-  constructor (bot, targets) {
+  readonly bot: Bot
+  readonly targets: LegionStateMachineTargets
+  stateName: string
+  playerIsFound: boolean
+  playername?: string
+
+  constructor(bot: Bot, targets: LegionStateMachineTargets) {
     this.bot = bot
     this.targets = targets
     this.stateName = 'BehaviorLongAttack'
@@ -16,11 +25,11 @@ module.exports = class BehaviorLongAttack {
     this.infoShot = false
   }
 
-  onStateEntered () {
+  onStateEntered() {
     this.shot()
   }
 
-  shot () {
+  shot() {
     if (!this.preparingShot) {
       this.bot.activateItem()
       this.preparingShot = true
@@ -43,11 +52,11 @@ module.exports = class BehaviorLongAttack {
     }
   }
 
-  setInfoShot (infoShot) {
+  setInfoShot(infoShot) {
     this.infoShot = infoShot
   }
 
-  equipBow () {
+  equipBow() {
     const itemEquip = this.bot.inventory.items().find(item => item.name.includes('bow'))
     if (itemEquip) {
       this.bot.equip(itemEquip, 'hand', (error) => {
@@ -58,7 +67,7 @@ module.exports = class BehaviorLongAttack {
     }
   }
 
-  checkBow () {
+  checkBow() {
     const bow = this.bot.inventory.items().find(item => item.name.includes('bow'))
     if (bow === undefined) {
       return false
@@ -67,7 +76,7 @@ module.exports = class BehaviorLongAttack {
     }
   }
 
-  checkArrows () {
+  checkArrows() {
     const arrows = this.bot.inventory.items().find(item => item.name.includes('arrow'))
     if (arrows === undefined) {
       return false
@@ -76,11 +85,11 @@ module.exports = class BehaviorLongAttack {
     }
   }
 
-  checkBowEquipped () {
+  checkBowEquipped() {
     return this.inventory.checkItemEquiped('bow')
   }
 
-  checkBowAndArrow () {
+  checkBowAndArrow() {
     if (this.checkBow() && this.checkArrows()) {
       return true
     } else {

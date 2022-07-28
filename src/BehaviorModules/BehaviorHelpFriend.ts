@@ -1,7 +1,18 @@
-const botWebsocket = require('@modules/botWebsocket')
+
+//@ts-nocheck
+import botWebsocket from '@/modules/botWebsocket'
+import { Bot, LegionStateMachineTargets } from '@/types'
+import { Entity } from 'prismarine-entity'
 
 module.exports = class BehaviorHelpFriend {
-  constructor (bot, targets) {
+
+  readonly bot: Bot
+  readonly targets: LegionStateMachineTargets
+  stateName: string
+  entity: Entity | undefined
+
+
+  constructor(bot: Bot, targets: LegionStateMachineTargets) {
     this.bot = bot
     this.targets = targets
     this.stateName = 'BehaviorHelpFriend'
@@ -9,15 +20,15 @@ module.exports = class BehaviorHelpFriend {
     this.entity = undefined
   }
 
-  onStateEntered () {
+  onStateEntered() {
     this.targets.entity = this.entity
   }
 
-  onStateExited () {
+  onStateExited() {
     this.entity = undefined
   }
 
-  findHelpFriend () {
+  findHelpFriend() {
     if (!this.targets.config.helpFriends) return false
     const friends = botWebsocket.getFriends()
     const friendsNeedHelp = friends.filter(e => e.combat === true)
@@ -37,7 +48,7 @@ module.exports = class BehaviorHelpFriend {
     return true
   }
 
-  getFriendInVission (friendsNeedHelp) {
+  getFriendInVission(friendsNeedHelp) {
     const entities = []
     let index, dist
     for (const entityName of Object.keys(this.bot.entities)) {
@@ -54,18 +65,18 @@ module.exports = class BehaviorHelpFriend {
     return entities
   }
 
-  sortEntitiesDistance (entities) {
+  sortEntitiesDistance(entities) {
     entities.sort(function (a, b) {
       return a.distance - b.distance
     })
     return entities
   }
 
-  isFinished () {
+  isFinished() {
     return this.isEndEating
   }
 
-  targetIsFriend () {
+  targetIsFriend() {
     const friends = botWebsocket.getFriends()
     if (this.targets.entity.type === 'player') {
       const index = friends.findIndex(f => f.name === this.targets.entity.username)
@@ -76,7 +87,7 @@ module.exports = class BehaviorHelpFriend {
     return false
   }
 
-  stillNeedHelp () {
+  stillNeedHelp() {
     const friends = botWebsocket.getFriends()
     if (this.targets.entity.type === 'player') {
       const index = friends.findIndex(f => f.name === this.targets.entity.username)

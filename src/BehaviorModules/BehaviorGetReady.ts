@@ -1,5 +1,15 @@
+
+//@ts-nocheck
+import { Bot, LegionStateMachineTargets } from "@/types"
+
 module.exports = class BehaviorGetReady {
-  constructor (bot, targets) {
+  readonly bot: Bot
+  readonly targets: LegionStateMachineTargets
+  stateName: string
+  isReady: boolean
+
+
+  constructor(bot: Bot, targets: LegionStateMachineTargets) {
     this.bot = bot
     this.targets = targets
     this.stateName = 'BehaviorGetReady'
@@ -8,15 +18,15 @@ module.exports = class BehaviorGetReady {
     this.inventory = require('@modules/inventoryModule')(this.bot)
   }
 
-  onStateEntered () {
+  onStateEntered() {
     this.checkImReady()
   }
 
-  getIsReady () {
+  getIsReady() {
     return this.isReady
   }
 
-  checkImReady () {
+  checkImReady() {
     for (let i = 0; i < this.targets.config.itemsToBeReady.length; i++) {
       const itemToBeReady = this.targets.config.itemsToBeReady[i]
       const itemsInUse = this.inventory.countItemsInInventoryOrEquipped(itemToBeReady.item)

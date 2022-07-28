@@ -1,7 +1,17 @@
-const botConfig = require('@modules/botConfig')
+
+//@ts-nocheck
+import { Bot, LegionStateMachineTargets } from "@/types"
+import botConfig from '@/modules/botConfig'
 
 module.exports = class BehaviorLoadConfig {
-  constructor (bot, targets) {
+
+  readonly bot: Bot
+  readonly targets: LegionStateMachineTargets
+  stateName: string
+  playername?: string
+
+
+  constructor(bot: Bot, targets: LegionStateMachineTargets) {
     this.bot = bot
     this.targets = targets
     this.stateName = 'BehaviorLoadConfig'
@@ -22,7 +32,7 @@ module.exports = class BehaviorLoadConfig {
     this.minerCords = {}
   }
 
-  onStateEntered () {
+  onStateEntered() {
     this.job = botConfig.getJob(this.bot.username)
     this.mode = botConfig.getMode(this.bot.username)
     this.helpFriends = botConfig.getHelpFriends(this.bot.username)
@@ -43,75 +53,75 @@ module.exports = class BehaviorLoadConfig {
     this.farmAreas = botConfig.getFarmAreas(this.bot.username)
   }
 
-  getAllConfig () {
+  getAllConfig() {
     return botConfig.getAll(this.bot.username)
   }
 
-  getJob () {
+  getJob() {
     return this.job
   }
 
-  getMode () {
+  getMode() {
     return this.mode
   }
 
-  getHelpFriend () {
+  getHelpFriend() {
     return this.helpFriends
   }
 
-  getDistance () {
+  getDistance() {
     return this.distance
   }
 
-  getPatrol () {
+  getPatrol() {
     return this.patrol
   }
 
-  getMinerCords () {
+  getMinerCords() {
     return this.minerCords
   }
 
-  getAllChests () {
+  getAllChests() {
     return this.chests
   }
 
-  getItemsToBeReady () {
+  getItemsToBeReady() {
     return this.itemsToBeReady
   }
 
-  getPickUpItems () {
+  getPickUpItems() {
     return this.pickUpItems
   }
 
-  getItemsCanBeEat () {
+  getItemsCanBeEat() {
     return this.itemsCanBeEat
   }
 
-  getCanDig () {
+  getCanDig() {
     return this.canDig
   }
 
-  getAllowSprinting () {
+  getAllowSprinting() {
     return this.allowSprinting
   }
 
-  getPlantAreas () {
+  getPlantAreas() {
     return this.plantAreas
   }
 
-  getRandomFarmArea () {
+  getRandomFarmArea() {
     return this.randomFarmArea
   }
 
-  getFarmAnimal () {
+  getFarmAnimal() {
     return this.farmAnimal
   }
 
-  getFarmAreas () {
+  getFarmAreas() {
     return this.farmAreas
   }
 
-  getFirstPickUpItemsFromKnownChests () {
+  getFirstPickUpItemsFromKnownChests() {
     return this.firstPickUpItemsFromKnownChests
   }
 }

@@ -1,17 +1,26 @@
+import { Bot, LegionStateMachineTargets } from "@/types"
+
 module.exports = class template {
-  constructor (bot, targets) {
+
+  readonly bot: Bot
+  readonly targets: LegionStateMachineTargets
+  stateName: string
+  isEndFinished: boolean
+
+
+  constructor(bot: Bot, targets: LegionStateMachineTargets) {
     this.bot = bot
     this.targets = targets
     this.stateName = 'BehaviorInteractBlock'
     this.isEndFinished = false
   }
 
-  onStateEntered () {
+  onStateEntered() {
     this.isEndFinished = false
     this.interactBlock()
   }
 
-  interactBlock () {
+  interactBlock() {
     if (this.targets.position == null) {
       this.isEndFinished = true
       console.log('Block is null')
@@ -25,7 +34,7 @@ module.exports = class template {
     }
 
     this.bot.activateBlock(block)
-      .then(e => {
+      .then(() => {
         this.isEndFinished = true
       })
       .catch(err => {
@@ -33,7 +42,7 @@ module.exports = class template {
       })
   }
 
-  isFinished () {
+  isFinished() {
     return this.isEndFinished
   }
 }
