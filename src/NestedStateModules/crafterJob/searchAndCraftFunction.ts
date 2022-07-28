@@ -5,13 +5,13 @@ import {
 } from 'mineflayer-statemachine'
 //@ts-ignore
 import BehaviorCraft from '@BehaviorModules/BehaviorCraft'
-//@ts-ignore
-import BehaviorMoveTo from '@BehaviorModules/BehaviorMoveTo'
+
+import chestModule from '@/modules/chestModule'
 import { Bot, ItemsToPickUpBatch, LegionStateMachineTargets, Recipes } from '@/types'
 
 function searchAndCraftFunction(bot: Bot, targets: LegionStateMachineTargets) {
   const { getItemsToPickUpBatch } = require('@modules/craftModule')(bot)
-  const { nearChests } = require('@modules/chestModule')(bot, targets)
+  const { nearChests } = chestModule(bot, targets)
 
   const start = new BehaviorIdle()
   start.stateName = 'Start'

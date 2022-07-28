@@ -1,9 +1,13 @@
-module.exports = function (bot, targets) {
+//@ts-nocheck
+
+import { Bot, LegionStateMachineTargets } from "@/types"
+
+const chestModule = (bot: Bot, targets: LegionStateMachineTargets) => {
   const { findItemsInChests } = require('@modules/sorterJob')(bot)
   const { getResumeInventoryV2, getGenericItems } =
     require('@modules/inventoryModule')(bot)
 
-  const getItemsToWithdrawInChests = (chests) => {
+  const getItemsToWithdrawInChests = (chests: any) => {
     return chests
       .filter((c) => c.type === 'withdraw')
       .reduce((returnData, c) => {
@@ -57,3 +61,5 @@ module.exports = function (bot, targets) {
     findChestsToWithdraw
   }
 }
+
+export default chestModule

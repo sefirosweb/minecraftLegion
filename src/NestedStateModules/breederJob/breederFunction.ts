@@ -7,7 +7,7 @@ import {
 //@ts-ignore
 import BehaviorLoadConfig from '@BehaviorModules/BehaviorLoadConfig'
 //@ts-ignore
-import animalType from '@modules/animalType'
+import animalType from '@/modules/animalType'
 import { Bot, LegionStateMachineTargets } from '@/types'
 import { Entity } from 'prismarine-entity'
 const animalTypes = Object.keys(animalType)

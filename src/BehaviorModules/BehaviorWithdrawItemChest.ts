@@ -1,9 +1,19 @@
-const botWebsocket = require('@modules/botWebsocket')
-const { sleep, getSecondBlockPosition } = require('@modules/utils')
-const vec3 = require('vec3')
+
+//@ts-nocheck
+
+import botWebsocket from '@/modules/botWebsocket'
+import { sleep, getSecondBlockPosition } from '@/modules/utils'
+import { Bot, LegionStateMachineTargets } from '@/types'
+import vec3 from 'vec3'
 
 module.exports = class BehaviorWithdrawItemChest {
-  constructor (bot, targets) {
+
+  readonly bot: Bot
+  readonly targets: LegionStateMachineTargets
+  stateName: string
+  isEndFinished: boolean
+
+  constructor(bot: Bot, targets: LegionStateMachineTargets) {
     this.bot = bot
     this.targets = targets
     this.stateName = 'BehaviorWithdrawItemChest'
@@ -12,7 +22,7 @@ module.exports = class BehaviorWithdrawItemChest {
     this.items = []
   }
 
-  onStateEntered () {
+  onStateEntered() {
     this.isEndFinished = false
     this.items = [...this.targets.items]
     botWebsocket.log('Items to withdraw ' + JSON.stringify(this.items))
@@ -25,16 +35,16 @@ module.exports = class BehaviorWithdrawItemChest {
     this.withdrawAllItems()
   }
 
-  onStateExited () {
+  onStateExited() {
     this.isEndFinished = false
     clearTimeout(this.timeLimit)
   }
 
-  isFinished () {
+  isFinished() {
     return this.isEndFinished
   }
 
-  async withdrawAllItems () {
+  async withdrawAllItems() {
     const chestToOpen = this.bot.blockAt(vec3(this.targets.position))
     if (!chestToOpen) {
       return
@@ -67,7 +77,7 @@ module.exports = class BehaviorWithdrawItemChest {
       })
   }
 
-  refreshChest (chestToOpen, container) {
+  refreshChest(chestToOpen, container) {
     const chest = Object.values(this.targets.chests).find(c => {
       if (vec3(c.position).equals(chestToOpen.position)) return true
       if (c.secondBlock && vec3(c.secondBlock.position).equals(chestToOpen.position)) return true
@@ -97,7 +107,7 @@ module.exports = class BehaviorWithdrawItemChest {
     botWebsocket.sendAction('setChests', this.targets.chests)
   }
 
-  withdrawItem (container) {
+  withdrawItem(container) {
     return new Promise((resolve, reject) => {
       if (this.items.length === 0) {
         resolve()

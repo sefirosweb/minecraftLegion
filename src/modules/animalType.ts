@@ -1,4 +1,11 @@
-module.exports = {
+
+type Animals = {
+  [key: string]: {
+    foods: Array<string>
+  }
+}
+
+const animals: Animals = {
   sheep: {
     foods: ['wheat']
   },
@@ -42,3 +49,5 @@ module.exports = {
     foods: ['dandelion', 'poppy', 'blue_orchid', 'allium', 'azure_bluet', 'orange_tulip', 'pink_tulip', 'red_tulip', 'white_tulip', 'cornflower', 'lily_of_the_valley', 'oxeye_daisy']
   }
 }
+
+export default animals

@@ -14,10 +14,11 @@ import BehaviorDepositItemChest from '@BehaviorModules/BehaviorDepositItemChest'
 import BehaviorCheckItemsInInventory from '@BehaviorModules/BehaviorCheckItemsInInventory'
 //@ts-ignore
 import BehaviorMoveTo from '@BehaviorModules/BehaviorMoveTo'
-import { Bot, Chest, Item, itemsToCraft, LegionStateMachineTargets } from '@/types'
+import { Bot, Chest, itemsToCraft, LegionStateMachineTargets } from '@/types'
+import chestModule from '@/modules/chestModule'
 
 function goChestsFunction(bot: Bot, targets: LegionStateMachineTargets) {
-  const { findChestsToWithdraw } = require('@modules/chestModule')(bot, targets)
+  const { findChestsToWithdraw } = chestModule(bot, targets)
   const { getResumeInventoryV2 } = require("@modules/inventoryModule")(bot);
 
   const start = new BehaviorIdle()
