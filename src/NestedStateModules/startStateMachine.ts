@@ -1,6 +1,6 @@
-import { LegionStateMachineTargets, BotwebsocketAction } from "@/types"
+import { LegionStateMachineTargets, BotwebsocketAction, Bot } from "@/types"
 import { Jobs } from "@/types/defaultTypes"
-import { Bot, BotEvents } from "mineflayer"
+import { BotEvents } from "mineflayer"
 import {
   StateTransition,
   BotStateMachine,
@@ -13,6 +13,7 @@ import { Vec3 } from "vec3"
 
 import debugMode from '@/config'
 import mcDataLoader from 'minecraft-data'
+import movementModule from '@/modules/movementModule'
 
 module.exports = (bot: Bot) => {
   const botWebsocket = require('@modules/botWebsocket')
@@ -149,7 +150,7 @@ module.exports = (bot: Bot) => {
   death.x = 425
   death.y = 213
 
-  const { checkPortalsOnSpawn } = require('@modules/movementModule')(bot, targets)
+  const { checkPortalsOnSpawn } = movementModule(bot, targets)
 
   const transitions = [
     new StateTransition({

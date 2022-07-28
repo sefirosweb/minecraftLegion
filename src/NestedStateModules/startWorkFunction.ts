@@ -9,10 +9,11 @@ import { Bot } from '@/types'
 import { LegionStateMachineTargets } from '@/types/index'
 import mcDataLoader from 'minecraft-data'
 import { DefaultBlockForPlace, Jobs } from '@/types/defaultTypes'
+import movementModule from '@/modules/movementModule'
 
 function startWorkFunction(bot: Bot, targets: LegionStateMachineTargets) {
   const mcData = mcDataLoader(bot.version)
-  const { getAllBlocksExceptLeafs } = require('@modules/movementModule')(bot, targets)
+  const { getAllBlocksExceptLeafs } = movementModule(bot, targets)
 
   // @ts-ignore
   const start = new BehaviorFollowEntity(bot, targets)

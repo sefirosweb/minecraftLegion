@@ -1,8 +1,12 @@
-const botWebsocket = require('@modules/botWebsocket')
-const mineflayerPathfinder = require('mineflayer-pathfinder')
-const { Vec3 } = require('vec3')
 
-module.exports = function (bot, targets) {
+//@ts-nocheck
+import { Bot, LegionStateMachineTargets } from "@/types"
+
+import botWebsocket from '@/modules/botWebsocket'
+import mineflayerPathfinder from 'mineflayer-pathfinder'
+import { Vec3 } from 'vec3'
+
+const movementModule = (bot: Bot, targets: LegionStateMachineTargets) => {
   const mcData = require('minecraft-data')(bot.version)
   const getNearestPortal = (dimension, destination) => {
     const portalsFound = findPortals(dimension)
@@ -15,7 +19,7 @@ module.exports = function (bot, targets) {
 
         if (
           (bot.game.dimension === 'minecraft:the_nether' && dimension === 'minecraft:overworld') ||
-                    (bot.game.dimension === 'minecraft:overworld' && dimension === 'minecraft:the_nether')
+          (bot.game.dimension === 'minecraft:overworld' && dimension === 'minecraft:the_nether')
         ) {
           const otherDimensionPosition = new Vec3(p.x, p.y, p.z)
           if (dimension === 'minecraft:overworld') {
@@ -108,16 +112,16 @@ module.exports = function (bot, targets) {
     let matching
     if ( // Nether portal
       dimension === 'minecraft:the_nether' && bot.game.dimension === 'minecraft:overworld' ||
-            dimension === 'minecraft:overworld' && bot.game.dimension === 'minecraft:the_nether' ||
-            dimension === 'minecraft:the_end' && bot.game.dimension === 'minecraft:the_nether'
+      dimension === 'minecraft:overworld' && bot.game.dimension === 'minecraft:the_nether' ||
+      dimension === 'minecraft:the_end' && bot.game.dimension === 'minecraft:the_nether'
     ) {
       matching = 'nether_portal'
     }
 
     if ( // End Portal
       dimension === 'minecraft:the_end' && bot.game.dimension === 'minecraft:overworld' ||
-            dimension === 'minecraft:overworld' && bot.game.dimension === 'minecraft:the_end' ||
-            dimension === 'minecraft:the_nether' && bot.game.dimension === 'minecraft:the_end'
+      dimension === 'minecraft:overworld' && bot.game.dimension === 'minecraft:the_end' ||
+      dimension === 'minecraft:the_nether' && bot.game.dimension === 'minecraft:the_end'
     ) {
       matching = 'end_portal'
     }
@@ -179,3 +183,5 @@ module.exports = function (bot, targets) {
     getAllBlocksExceptLeafs
   }
 }
+
+export default movementModule

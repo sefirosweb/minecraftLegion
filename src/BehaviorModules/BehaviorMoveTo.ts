@@ -5,6 +5,7 @@ import mineflayerPathfinder, { Movements } from 'mineflayer-pathfinder'
 import botWebsocket from '@/modules/botWebsocket'
 import { Bot, LegionStateMachineTargets } from '@/types'
 import mcDataLoader from 'minecraft-data'
+import movementModule from '@/modules/movementModule'
 
 module.exports = class BehaviorMoveTo {
   readonly bot: Bot
@@ -31,7 +32,7 @@ module.exports = class BehaviorMoveTo {
     this.mcData = mcDataLoader(bot.version)
     this.movements = new mineflayerPathfinder.Movements(bot, this.mcData)
 
-    this.movementModule = require('@modules/movementModule')(bot, targets)
+    this.movementModule = movementModule(bot, targets)
   }
 
   onStateEntered() {
