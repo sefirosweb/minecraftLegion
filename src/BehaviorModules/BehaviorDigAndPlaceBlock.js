@@ -16,6 +16,8 @@ module.exports = class template {
 
     this.isEndFinished = false
     this.sidesToPlaceBlock = []
+
+    this.mcData = require('minecraft-data')(this.bot.version)
   }
 
   isFinished () {
@@ -68,7 +70,7 @@ module.exports = class template {
     }
 
     const item = items.map(i => {
-      i.hardness = mcData.blocksByName[i.name].hardness
+      i.hardness = this.mcData.blocksByName[i.name].hardness
       return i
     }).sort((a, b) => a.hardness - b.hardness)[0]
 
