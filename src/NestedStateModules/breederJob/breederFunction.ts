@@ -5,7 +5,7 @@ import {
 } from 'mineflayer-statemachine'
 
 //@ts-ignore
-import BehaviorLoadConfig from '@BehaviorModules/BehaviorLoadConfig'
+import BehaviorLoadConfig from '@/BehaviorModules/BehaviorLoadConfig'
 //@ts-ignore
 import animalType from '@/modules/animalType'
 import { Bot, LegionStateMachineTargets } from '@/types'

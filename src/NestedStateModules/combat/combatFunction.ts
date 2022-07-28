@@ -1,4 +1,4 @@
-//@ts-ignore
+//@ts-nocheck
 import botWebsocket from '@modules/botWebsocket'
 import mineflayerPathfinder from 'mineflayer-pathfinder'
 
@@ -8,14 +8,13 @@ import {
   NestedStateMachine,
   BehaviorFollowEntity
 } from 'mineflayer-statemachine'
-//@ts-ignore
-import BehaviorAttack from '@BehaviorModules/BehaviorAttack'
-//@ts-ignore
-import BehaviorLongAttack from '@BehaviorModules/BehaviorLongAttack'
+import BehaviorAttack from '@/BehaviorModules/BehaviorAttack'
+import BehaviorLongAttack from '@/BehaviorModules/BehaviorLongAttack'
 import { Bot, LegionStateMachineTargets } from '@/types'
 import { Entity } from 'prismarine-entity'
 import mcDataLoader from 'minecraft-data'
 import inventoryModule from '@/modules/inventoryModule'
+import getClosestEnemy from '@/modules/getClosestEnemy'
 
 
 type fakeVec3 = {
@@ -26,7 +25,7 @@ type fakeVec3 = {
 
 function combatFunction(bot: Bot, targets: LegionStateMachineTargets) {
   const inventory = inventoryModule(bot)
-  const { ignoreMobs, flyingMobs } = require('@modules/getClosestEnemy')(bot, targets)
+  const { ignoreMobs, flyingMobs } = getClosestEnemy(bot, targets)
   const hawkEye = require('minecrafthawkeye')
   bot.loadPlugin(hawkEye)
 
@@ -48,16 +47,12 @@ function combatFunction(bot: Bot, targets: LegionStateMachineTargets) {
 
   const start = new BehaviorIdle()
   start.stateName = 'Start'
-  //@ts-ignore
   start.x = 125
-  //@ts-ignore
   start.y = 113
 
   const exit = new BehaviorIdle()
   exit.stateName = 'Exit'
-  //@ts-ignore
   exit.x = 575
-  //@ts-ignore
   exit.y = 263
 
   const attack = new BehaviorAttack(bot, targets)
@@ -70,12 +65,10 @@ function combatFunction(bot: Bot, targets: LegionStateMachineTargets) {
   longRangeAttack.x = 725
   longRangeAttack.y = 413
 
-  //@ts-ignore
+
   const followMob = new BehaviorFollowEntity(bot, targets)
   followMob.stateName = 'Follow Enemy'
-  //@ts-ignore
   followMob.x = 725
-  //@ts-ignore
   followMob.y = 113
 
   let targetGrade = false
@@ -139,7 +132,7 @@ function combatFunction(bot: Bot, targets: LegionStateMachineTargets) {
     speed.x = speed.x / prevPlayerPositions.length
     speed.y = speed.y / prevPlayerPositions.length
     speed.z = speed.z / prevPlayerPositions.length
-    //@ts-ignore
+
     targetGrade = bot.hawkEye.getMasterGrade(targets.entity, speed, 'bow')
     longRangeAttack.setInfoShot(targetGrade)
   }
@@ -237,10 +230,10 @@ function combatFunction(bot: Bot, targets: LegionStateMachineTargets) {
       name: 'Mob is too far',
       onTransition: () => {
         if (flyingMobs.includes(targets.entity?.name)) {
-          //@ts-ignore
+
           followMob.movements = movementsForFliyingMobs
         } else {
-          //@ts-ignore
+
           followMob.movements = movements
         }
         newTimeMobCountdown = Date.now()
@@ -282,10 +275,10 @@ function combatFunction(bot: Bot, targets: LegionStateMachineTargets) {
       child: followMob,
       onTransition: () => {
         if (flyingMobs.includes(targets.entity?.name)) {
-          //@ts-ignore
+
           followMob.movements = movementsForFliyingMobs
         } else {
-          //@ts-ignore
+
           followMob.movements = movements
         }
         checkHandleSword()

@@ -5,9 +5,9 @@ import {
 } from 'mineflayer-statemachine'
 
 //@ts-ignore
-import BehaviorDepositItemChest from '@BehaviorModules/BehaviorDepositItemChest'
+import BehaviorDepositItemChest from '@/BehaviorModules/BehaviorDepositItemChest'
 //@ts-ignore
-import BehaviorMoveTo from '@BehaviorModules/BehaviorMoveTo'
+import BehaviorMoveTo from '@/BehaviorModules/BehaviorMoveTo'
 import { Bot, LegionStateMachineTargets } from '@/types'
 
 function goAndDeposit(bot: Bot, targets: LegionStateMachineTargets) {

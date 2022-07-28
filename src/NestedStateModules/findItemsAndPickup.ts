@@ -7,11 +7,11 @@ import {
 } from 'mineflayer-statemachine'
 
 //@ts-ignore
-import BehaviorFindItems from '@BehaviorModules/BehaviorFindItems'
+import BehaviorFindItems from '@/BehaviorModules/BehaviorFindItems'
 //@ts-ignore
-import BehaviorLoadConfig from '@BehaviorModules/BehaviorLoadConfig'
+import BehaviorLoadConfig from '@/BehaviorModules/BehaviorLoadConfig'
 //@ts-ignore
-import BehaviorMoveTo from '@BehaviorModules/BehaviorMoveTo'
+import BehaviorMoveTo from '@/BehaviorModules/BehaviorMoveTo'
 import { Vec3 } from "vec3"
 
 function findItemsAndPickup(bot: Bot, targets: LegionStateMachineTargets) {

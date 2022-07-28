@@ -4,7 +4,7 @@ import {
   NestedStateMachine
 } from 'mineflayer-statemachine'
 //@ts-ignore
-import BehaviorMoveTo from '@BehaviorModules/BehaviorMoveTo'
+import BehaviorMoveTo from '@/BehaviorModules/BehaviorMoveTo'
 import { Bot, LegionStateMachineTargets } from '@/types'
 import { Block } from 'prismarine-block'
 import mcDataLoader from 'minecraft-data'

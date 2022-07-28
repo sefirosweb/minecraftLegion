@@ -6,9 +6,9 @@ import {
 } from 'mineflayer-statemachine'
 
 //@ts-ignore
-import BehaviorEquip from '@BehaviorModules/BehaviorEquip'
+import BehaviorEquip from '@/BehaviorModules/BehaviorEquip'
 //@ts-ignore
-import BehaviorInteractEntity from '@BehaviorModules/BehaviorInteractEntity'
+import BehaviorInteractEntity from '@/BehaviorModules/BehaviorInteractEntity'
 //@ts-ignore
 import animalType from '@modules/animalType'
 import { Bot, LegionStateMachineTargets } from '@/types'

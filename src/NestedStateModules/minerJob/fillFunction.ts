@@ -6,13 +6,13 @@ import {
 } from 'mineflayer-statemachine'
 
 //@ts-ignore
-import BehaviorDigBlock from '@BehaviorModules/BehaviorDigBlock'
+import BehaviorDigBlock from '@/BehaviorModules/BehaviorDigBlock'
 //@ts-ignore
-import BehaviorCustomPlaceBlock from '@BehaviorModules/BehaviorCustomPlaceBlock'
+import BehaviorCustomPlaceBlock from '@/BehaviorModules/BehaviorCustomPlaceBlock'
 //@ts-ignore
-import BehaviorLoadConfig from '@BehaviorModules/BehaviorLoadConfig'
+import BehaviorLoadConfig from '@/BehaviorModules/BehaviorLoadConfig'
 //@ts-ignore
-import BehaviorMoveTo from '@BehaviorModules/BehaviorMoveTo'
+import BehaviorMoveTo from '@/BehaviorModules/BehaviorMoveTo'
 import { Bot, LegionStateMachineTargets } from '@/types'
 import { Vec3 } from 'vec3'
 import placeBlockModule from '@/modules/placeBlockModule'

@@ -6,9 +6,9 @@ import {
 } from 'mineflayer-statemachine'
 
 //@ts-ignore
-import BehaviorAttack from '@BehaviorModules/BehaviorAttack'
+import BehaviorAttack from '@/BehaviorModules/BehaviorAttack'
 //@ts-ignore
-import BehaviorEquip from '@BehaviorModules/BehaviorEquip'
+import BehaviorEquip from '@/BehaviorModules/BehaviorEquip'
 import { Bot, LegionStateMachineTargets } from '@/types'
 const rangeSword = 3
 

@@ -9,7 +9,7 @@ import { shuffle } from '@modules/utils'
 //@ts-ignore
 import botWebsocket from '@modules/botWebsocket'
 //@ts-ignore
-import BehaviorLoadConfig from '@BehaviorModules/BehaviorLoadConfig'
+import BehaviorLoadConfig from '@/BehaviorModules/BehaviorLoadConfig'
 import { Bot, LegionStateMachineTargets, PlantArea } from '@/types'
 
 function farmingFunction(bot: Bot, targets: LegionStateMachineTargets) {

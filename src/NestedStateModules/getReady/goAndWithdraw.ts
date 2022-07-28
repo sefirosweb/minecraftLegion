@@ -5,9 +5,9 @@ import {
 } from 'mineflayer-statemachine'
 
 //@ts-ignore
-import BehaviorWithdrawItemChest from '@BehaviorModules/BehaviorWithdrawItemChest'
+import BehaviorWithdrawItemChest from '@/BehaviorModules/BehaviorWithdrawItemChest'
 //@ts-ignore
-import BehaviorMoveTo from '@BehaviorModules/BehaviorMoveTo'
+import BehaviorMoveTo from '@/BehaviorModules/BehaviorMoveTo'
 import { Bot, LegionStateMachineTargets } from '@/types'
 
 function goAndWithdraw(bot: Bot, targets: LegionStateMachineTargets) {

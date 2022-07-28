@@ -4,7 +4,7 @@ import {
   NestedStateMachine
 } from 'mineflayer-statemachine'
 //@ts-ignore
-import BehaviorEatFood from '@BehaviorModules/BehaviorEatFood'
+import BehaviorEatFood from '@/BehaviorModules/BehaviorEatFood'
 import { Bot, LegionStateMachineTargets } from '@/types'
 
 function combatStrategyFunction(bot: Bot, targets: LegionStateMachineTargets) {

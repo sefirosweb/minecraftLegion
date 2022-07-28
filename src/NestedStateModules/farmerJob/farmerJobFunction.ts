@@ -1,21 +1,20 @@
+
+//@ts-nocheck
 import {
   StateTransition,
   BehaviorIdle,
   NestedStateMachine
 } from 'mineflayer-statemachine'
-
-//@ts-ignore
-import BehaviorGetReady from '@BehaviorModules/BehaviorGetReady'
-//@ts-ignore
-import BehaviorEatFood from '@BehaviorModules/BehaviorEatFood'
+import BehaviorGetReady from '@/BehaviorModules/BehaviorGetReady'
+import BehaviorEatFood from '@/BehaviorModules/BehaviorEatFood'
 import { Bot, LegionStateMachineTargets } from '@/types'
+import getClosestEnemy from '@/modules/getClosestEnemy'
+
 
 function farmerJobFunction(bot: Bot, targets: LegionStateMachineTargets) {
   const start = new BehaviorIdle()
   start.stateName = 'Start'
-  //@ts-ignore
   start.x = 125
-  //@ts-ignore
   start.y = 113
 
   const getReady = new BehaviorGetReady(bot, targets)
@@ -37,7 +36,7 @@ function farmerJobFunction(bot: Bot, targets: LegionStateMachineTargets) {
   eatFood.x = 125
   eatFood.y = 413
 
-  const getClosestMob = require('@modules/getClosestEnemy')(bot, targets)
+  const getClosestMob = getClosestEnemy(bot, targets)
   const combatStrategy = require('@NestedStateModules/combat/combatStrategyFunction')(bot, targets)
   combatStrategy.x = 325
   combatStrategy.y = 413

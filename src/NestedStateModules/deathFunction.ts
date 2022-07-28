@@ -6,11 +6,11 @@ import {
   NestedStateMachine
 } from 'mineflayer-statemachine'
 //@ts-ignore
-import BehaviorGetPlayer from '@BehaviorModules/BehaviorGetPlayer'
+import BehaviorGetPlayer from '@/BehaviorModules/BehaviorGetPlayer'
 //@ts-ignore
 import botWebsocket from '@modules/botWebsocket'
 //@ts-ignore
-import BehaviorLoadConfig from '@BehaviorModules/BehaviorLoadConfig'
+import BehaviorLoadConfig from '@/BehaviorModules/BehaviorLoadConfig'
 import mcDataLoader from 'minecraft-data'
 
 function deathFunction(bot: Bot, targets: LegionStateMachineTargets) {

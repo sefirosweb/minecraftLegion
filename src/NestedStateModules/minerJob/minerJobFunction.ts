@@ -1,11 +1,14 @@
+
+//@ts-nocheck
+import { Bot, LegionStateMachineTargets } from '@/types'
+
 import {
   StateTransition,
   NestedStateMachine
 } from 'mineflayer-statemachine'
 
-//@ts-ignore
-import BehaviorEatFood from '@BehaviorModules/BehaviorEatFood'
-import { Bot, LegionStateMachineTargets } from '@/types'
+import BehaviorEatFood from '@/BehaviorModules/BehaviorEatFood'
+import getClosestEnemy from '@/modules/getClosestEnemy'
 
 function minerJobFunction(bot: Bot, targets: LegionStateMachineTargets) {
   const getReady = require('@NestedStateModules/getReady/getReadyFunction')(bot, targets)
@@ -26,7 +29,7 @@ function minerJobFunction(bot: Bot, targets: LegionStateMachineTargets) {
   combatStrategy.x = 325
   combatStrategy.y = 213
 
-  const getClosestMob = require('@modules/getClosestEnemy')(bot, targets)
+  const getClosestMob = getClosestEnemy(bot, targets)
 
   const transitions = [
     new StateTransition({

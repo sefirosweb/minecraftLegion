@@ -5,25 +5,25 @@ import {
 } from 'mineflayer-statemachine'
 
 //@ts-ignore
-import BehaviorLoadConfig from '@BehaviorModules/BehaviorLoadConfig'
+import BehaviorLoadConfig from '@/BehaviorModules/BehaviorLoadConfig'
 
 //@ts-ignore
-import BehaviorMinerCheckLayer from '@BehaviorModules/minerJob/BehaviorMinerCheckLayer'
+import BehaviorMinerCheckLayer from '@/BehaviorModules/minerJob/BehaviorMinerCheckLayer'
 //@ts-ignore
-import BehaviorMinerCurrentLayer from '@BehaviorModules/minerJob/BehaviorMinerCurrentLayer'
+import BehaviorMinerCurrentLayer from '@/BehaviorModules/minerJob/BehaviorMinerCurrentLayer'
 //@ts-ignore
-import BehaviorMinerCurrentBlock from '@BehaviorModules/minerJob/BehaviorMinerCurrentBlock'
+import BehaviorMinerCurrentBlock from '@/BehaviorModules/minerJob/BehaviorMinerCurrentBlock'
 //@ts-ignore
-import BehaviorGetReady from '@BehaviorModules/BehaviorGetReady'
+import BehaviorGetReady from '@/BehaviorModules/BehaviorGetReady'
 
 //@ts-ignore
-import BehaviorDigBlock from '@BehaviorModules/BehaviorDigBlock'
+import BehaviorDigBlock from '@/BehaviorModules/BehaviorDigBlock'
 //@ts-ignore
-import BehaviorEatFood from '@BehaviorModules/BehaviorEatFood'
+import BehaviorEatFood from '@/BehaviorModules/BehaviorEatFood'
 //@ts-ignore
-import BehaviorMoveTo from '@BehaviorModules/BehaviorMoveTo'
+import BehaviorMoveTo from '@/BehaviorModules/BehaviorMoveTo'
 //@ts-ignore
-import BehaviorDigAndPlaceBlock from '@BehaviorModules/BehaviorDigAndPlaceBlock'
+import BehaviorDigAndPlaceBlock from '@/BehaviorModules/BehaviorDigAndPlaceBlock'
 
 import mineflayerPathfinder, { Movements } from 'mineflayer-pathfinder'
 //@ts-ignore

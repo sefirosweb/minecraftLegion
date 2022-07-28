@@ -5,7 +5,7 @@ import {
 } from 'mineflayer-statemachine'
 
 //@ts-ignore
-import BehaviorLoadConfig from '@BehaviorModules/BehaviorLoadConfig'
+import BehaviorLoadConfig from '@/BehaviorModules/BehaviorLoadConfig'
 import { Bot, LegionStateMachineTargets } from '@/types'
 
 function minerJobFunction(bot: Bot, targets: LegionStateMachineTargets) {

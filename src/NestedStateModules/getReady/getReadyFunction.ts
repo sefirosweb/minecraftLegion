@@ -4,9 +4,9 @@ import {
   NestedStateMachine
 } from 'mineflayer-statemachine'
 //@ts-ignore
-import BehaviorGetReady from '@BehaviorModules/BehaviorGetReady'
+import BehaviorGetReady from '@/BehaviorModules/BehaviorGetReady'
 //@ts-ignore
-import BehaviorEquipAll from '@BehaviorModules/BehaviorEquipAll'
+import BehaviorEquipAll from '@/BehaviorModules/BehaviorEquipAll'
 import { Bot, LegionStateMachineTargets } from '@/types'
 
 function getReadyFunction(bot: Bot, targets: LegionStateMachineTargets) {

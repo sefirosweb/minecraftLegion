@@ -5,7 +5,7 @@ import {
 } from 'mineflayer-statemachine'
 
 //@ts-ignore
-import BehaviorMoveTo from '@BehaviorModules/BehaviorMoveTo'
+import BehaviorMoveTo from '@/BehaviorModules/BehaviorMoveTo'
 
 import BehaviorSleep from '@/BehaviorModules/BehaviorSleep'
 import { Bot, LegionStateMachineTargets } from '@/types'

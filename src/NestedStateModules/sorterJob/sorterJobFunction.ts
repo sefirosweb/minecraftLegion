@@ -7,8 +7,8 @@ import {
 } from 'mineflayer-statemachine'
 
 import botWebsocket from '@modules/botWebsocket'
-import BehaviorcCheckItemsInChest from '@BehaviorModules/sorterJob/BehaviorcCheckItemsInChest'
-import BehaviorMoveTo from '@BehaviorModules/BehaviorMoveTo'
+import BehaviorcCheckItemsInChest from '@/BehaviorModules/sorterJob/BehaviorcCheckItemsInChest'
+import BehaviorMoveTo from '@/BehaviorModules/BehaviorMoveTo'
 import { Bot, LegionStateMachineTargets } from '@/types'
 import sorterJob from '@/modules/sorterJob'
 import inventoryModule from '@/modules/inventoryModule'

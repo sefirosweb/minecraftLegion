@@ -11,13 +11,13 @@ import { plants } from '@/modules/plantType'
 //@ts-ignore
 import botWebsocket from '@modules/botWebsocket'
 //@ts-ignore
-import BehaviorDigBlock from '@BehaviorModules/BehaviorDigBlock'
+import BehaviorDigBlock from '@/BehaviorModules/BehaviorDigBlock'
 //@ts-ignore
-import BehaviorEatFood from '@BehaviorModules/BehaviorEatFood'
+import BehaviorEatFood from '@/BehaviorModules/BehaviorEatFood'
 //@ts-ignore
-import BehaviorInteractBlock from '@BehaviorModules/BehaviorInteractBlock'
+import BehaviorInteractBlock from '@/BehaviorModules/BehaviorInteractBlock'
 //@ts-ignore
-import BehaviorMoveTo from '@BehaviorModules/BehaviorMoveTo'
+import BehaviorMoveTo from '@/BehaviorModules/BehaviorMoveTo'
 import { Bot, LegionStateMachineTargets } from '@/types'
 
 function harvestFunction(bot: Bot, targets: LegionStateMachineTargets) {

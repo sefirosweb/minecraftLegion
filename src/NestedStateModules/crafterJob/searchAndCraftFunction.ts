@@ -6,7 +6,7 @@ import {
   BehaviorIdle,
   NestedStateMachine
 } from 'mineflayer-statemachine'
-import BehaviorCraft from '@BehaviorModules/BehaviorCraft'
+import BehaviorCraft from '@/BehaviorModules/BehaviorCraft'
 
 import chestModule from '@/modules/chestModule'
 import craftModule from '@/modules/craftModule'

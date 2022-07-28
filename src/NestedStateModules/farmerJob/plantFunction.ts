@@ -6,13 +6,13 @@ import {
 } from 'mineflayer-statemachine'
 
 //@ts-ignore
-import BehaviorCustomPlaceBlock from '@BehaviorModules/BehaviorCustomPlaceBlock'
+import BehaviorCustomPlaceBlock from '@/BehaviorModules/BehaviorCustomPlaceBlock'
 //@ts-ignore
-import BehaviorFertilize from '@BehaviorModules/BehaviorFertilize'
+import BehaviorFertilize from '@/BehaviorModules/BehaviorFertilize'
 //@ts-ignore
-import BehaviorMoveTo from '@BehaviorModules/BehaviorMoveTo'
+import BehaviorMoveTo from '@/BehaviorModules/BehaviorMoveTo'
 //@ts-ignore
-import BehaviorCraft from '@BehaviorModules/BehaviorCraft'
+import BehaviorCraft from '@/BehaviorModules/BehaviorCraft'
 import { plants, dirtCanBefertilized } from '@/modules/plantType'
 import { Bot, LegionStateMachineTargets } from '@/types'
 import { Block } from 'prismarine-block'

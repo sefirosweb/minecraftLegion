@@ -5,15 +5,15 @@ import {
 } from 'mineflayer-statemachine'
 
 //@ts-ignore
-import BehaviorLoadConfig from '@BehaviorModules/BehaviorLoadConfig'
+import BehaviorLoadConfig from '@/BehaviorModules/BehaviorLoadConfig'
 //@ts-ignore
-import BehaviorWithdrawItemChest from '@BehaviorModules/BehaviorWithdrawItemChest'
+import BehaviorWithdrawItemChest from '@/BehaviorModules/BehaviorWithdrawItemChest'
 //@ts-ignore
-import BehaviorDepositItemChest from '@BehaviorModules/BehaviorDepositItemChest'
+import BehaviorDepositItemChest from '@/BehaviorModules/BehaviorDepositItemChest'
 //@ts-ignore
-import BehaviorCheckItemsInInventory from '@BehaviorModules/BehaviorCheckItemsInInventory'
+import BehaviorCheckItemsInInventory from '@/BehaviorModules/BehaviorCheckItemsInInventory'
 //@ts-ignore
-import BehaviorMoveTo from '@BehaviorModules/BehaviorMoveTo'
+import BehaviorMoveTo from '@/BehaviorModules/BehaviorMoveTo'
 import { Bot, Chest, itemsToCraft, LegionStateMachineTargets } from '@/types'
 import chestModule from '@/modules/chestModule'
 import inventoryModule from '@/modules/inventoryModule'

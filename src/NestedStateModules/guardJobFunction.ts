@@ -1,3 +1,6 @@
+
+//@ts-nocheck
+
 import {
   StateTransition,
   BehaviorIdle,
@@ -5,30 +8,22 @@ import {
   BehaviorFollowEntity
 } from 'mineflayer-statemachine'
 
-//@ts-ignore
-import BehaviorLoadConfig from '@BehaviorModules/BehaviorLoadConfig'
-//@ts-ignore
-import BehaviorMoveToArray from '@BehaviorModules/BehaviorMoveToArray'
-//@ts-ignore
-import BehaviorEatFood from '@BehaviorModules/BehaviorEatFood'
-//@ts-ignore
-import BehaviorEquipAll from '@BehaviorModules/BehaviorEquipAll'
-//@ts-ignore
-import BehaviorFindItems from '@BehaviorModules/BehaviorFindItems'
-//@ts-ignore
-import BehaviorHelpFriend from '@BehaviorModules/BehaviorHelpFriend'
-//@ts-ignore
-import BehaviorMoveTo from '@BehaviorModules/BehaviorMoveTo'
+import BehaviorLoadConfig from '@/BehaviorModules/BehaviorLoadConfig'
+import BehaviorMoveToArray from '@/BehaviorModules/BehaviorMoveToArray'
+import BehaviorEatFood from '@/BehaviorModules/BehaviorEatFood'
+import BehaviorEquipAll from '@/BehaviorModules/BehaviorEquipAll'
+import BehaviorFindItems from '@/BehaviorModules/BehaviorFindItems'
+import BehaviorHelpFriend from '@/BehaviorModules/BehaviorHelpFriend'
+import BehaviorMoveTo from '@/BehaviorModules/BehaviorMoveTo'
 import { Bot } from '@/types'
-//@ts-ignore
 import { LegionStateMachineTargets } from '@/types'
+import getClosestEnemy from '@/modules/getClosestEnemy'
 
 function guardJobFunction(bot: Bot, targets: LegionStateMachineTargets) {
   const start = new BehaviorIdle()
   start.stateName = 'Start'
-  //@ts-ignore
+
   start.x = 125
-  //@ts-ignore
   start.y = 113
 
   const loadConfig = new BehaviorLoadConfig(bot, targets)
@@ -42,7 +37,7 @@ function guardJobFunction(bot: Bot, targets: LegionStateMachineTargets) {
   patrol.y = 513
   patrol.movements = targets.movements
 
-  const getClosestMob = require('@modules/getClosestEnemy')(bot, targets)
+  const getClosestMob = getClosestEnemy(bot, targets)
 
   const equip = new BehaviorEquipAll(bot, targets)
   equip.stateName = 'Equip items'
@@ -68,12 +63,12 @@ function guardJobFunction(bot: Bot, targets: LegionStateMachineTargets) {
   helpFriend.x = 525
   helpFriend.y = 813
 
-  //@ts-ignore
+
   const goFriend = new BehaviorFollowEntity(bot, targets)
   goFriend.stateName = 'Go To Help Friend'
-  //@ts-ignore
+
   goFriend.x = 725
-  //@ts-ignore
+
   goFriend.y = 813
 
   const combatStrategy = require('@NestedStateModules/combat/combatStrategyFunction')(bot, targets)

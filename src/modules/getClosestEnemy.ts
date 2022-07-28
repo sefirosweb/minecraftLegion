@@ -1,5 +1,9 @@
-const botWebsocket = require('@modules/botWebsocket')
-module.exports = function (bot, targets) {
+
+//@ts-nocheck
+import { Bot, LegionStateMachineTargets } from '@/types'
+import botWebsocket from '@/modules/botWebsocket'
+
+const getClosestEnemy = (bot: Bot, targets: LegionStateMachineTargets) => {
   let entities = []
   let currentEntity = false
 
@@ -148,3 +152,5 @@ module.exports = function (bot, targets) {
     flyingMobs
   }
 }
+
+export default getClosestEnemy
