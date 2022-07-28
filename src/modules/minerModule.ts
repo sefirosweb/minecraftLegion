@@ -1,6 +1,10 @@
-const vec3 = require('vec3')
 
-module.exports = function (bot, targets) {
+//@ts-nocheck
+
+import { Bot, LegionStateMachineTargets } from "@/types"
+import vec3 from 'vec3'
+
+const minerModule = (bot: Bot, targets: LegionStateMachineTargets) => {
   const blocksToBeRplaced = require('@modules/placeBlockModule')(bot).blocksToBeRplaced
 
   const getSidesToCheck = (originalPosition) => {
@@ -144,3 +148,5 @@ module.exports = function (bot, targets) {
     getSidesToCheck
   }
 }
+
+export default minerModule

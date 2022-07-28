@@ -4,6 +4,7 @@
 import { Bot, LegionStateMachineTargets } from "@/types"
 import botWebsocket from '@/modules/botWebsocket'
 import digBlockModule from '@/modules/digBlockModule'
+import minerModule from '@/modules/minerModule'
 
 module.exports = class template {
 
@@ -20,7 +21,7 @@ module.exports = class template {
     this.digBlock = digBlockModule(bot).digBlock
     this.placeBlockModule = require('@modules/placeBlockModule')(bot).place
     this.equipHeldItem = require('@modules/inventoryModule')(bot).equipHeldItem
-    this.calculateSideToPlaceBlock = require('@modules/minerModule')(bot, targets).calculateSideToPlaceBlock
+    this.calculateSideToPlaceBlock = minerModule(bot, targets).calculateSideToPlaceBlock
     this.getNewPositionForPlaceBlock = require('@modules/placeBlockModule')(bot).getNewPositionForPlaceBlock
     this.blocksCanBeReplaced = require('@modules/placeBlockModule')(bot).blocksCanBeReplaced
     this.getPathToPlace = require('@modules/placeBlockModule')(bot).getPathToPlace
