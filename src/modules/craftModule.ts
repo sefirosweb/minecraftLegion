@@ -1,4 +1,7 @@
-module.exports = function (bot) {
+//@ts-nocheck
+import { Bot } from "@/types"
+
+const craftModule = (bot: Bot) => {
   const mcData = require('minecraft-data')(bot.version)
   const { getResumeInventoryV2 } = require('@modules/inventoryModule')(bot)
   const { findItemsInChests } = require('@modules/sorterJob')(bot)
@@ -402,3 +405,6 @@ module.exports = function (bot) {
     getCraftingTable
   }
 }
+
+
+export default craftModule
