@@ -3,6 +3,7 @@
 import { Bot, LegionStateMachineTargets } from "@/types"
 import botWebsocket from '@/modules/botWebsocket'
 import digBlockModule from '@/modules/digBlockModule'
+import placeBlockModule from '@/modules/placeBlockModule'
 module.exports = class BehaviorCustomPlaceBlock {
 
   readonly bot: Bot
@@ -14,13 +15,14 @@ module.exports = class BehaviorCustomPlaceBlock {
 
 
   constructor(bot: Bot, targets: LegionStateMachineTargets, canJump: boolean = true, canReplaceBlock: boolean = false) {
+    const { blocksCanBeReplaced, place } = placeBlockModule(bot)
     this.bot = bot
     this.targets = targets
     this.stateName = 'Custom BehaviorPlaceBlock '
-    this.blocksCanBeReplaced = require('@modules/placeBlockModule')(bot).blocksCanBeReplaced
     this.equipHeldItem = require('@modules/inventoryModule')(bot).equipHeldItem
-    this.place = require('@modules/placeBlockModule')(bot).place
     this.digBlock = digBlockModule(bot).digBlock
+    this.place = place
+    this.blocksCanBeReplaced = blocksCanBeReplaced
 
     this.isEndFinished = false
     this.itemNotFound = false

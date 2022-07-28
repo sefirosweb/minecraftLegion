@@ -5,6 +5,7 @@ import { Bot, LegionStateMachineTargets } from "@/types"
 import botWebsocket from '@/modules/botWebsocket'
 import digBlockModule from '@/modules/digBlockModule'
 import minerModule from '@/modules/minerModule'
+import placeBlockModule from '@/modules/placeBlockModule'
 
 module.exports = class template {
 
@@ -14,18 +15,20 @@ module.exports = class template {
   isEndFinished: boolean
 
   constructor(bot: Bot, targets: LegionStateMachineTargets) {
+    const { blocksCanBeReplaced, place, getPathToPlace, getNewPositionForPlaceBlock } = placeBlockModule(bot)
+
     this.bot = bot
     this.targets = targets
     this.stateName = 'BehaviorDigAndPlaceBlock'
 
     this.digBlock = digBlockModule(bot).digBlock
-    this.placeBlockModule = require('@modules/placeBlockModule')(bot).place
+    this.placeBlockModule = place
     this.equipHeldItem = require('@modules/inventoryModule')(bot).equipHeldItem
     this.calculateSideToPlaceBlock = minerModule(bot, targets).calculateSideToPlaceBlock
-    this.getNewPositionForPlaceBlock = require('@modules/placeBlockModule')(bot).getNewPositionForPlaceBlock
-    this.blocksCanBeReplaced = require('@modules/placeBlockModule')(bot).blocksCanBeReplaced
-    this.getPathToPlace = require('@modules/placeBlockModule')(bot).getPathToPlace
-    this.place = require('@modules/placeBlockModule')(bot).place
+    this.getNewPositionForPlaceBlock = getNewPositionForPlaceBlock
+    this.blocksCanBeReplaced = blocksCanBeReplaced
+    this.getPathToPlace = getPathToPlace
+    this.place = place
 
     this.isEndFinished = false
     this.sidesToPlaceBlock = []

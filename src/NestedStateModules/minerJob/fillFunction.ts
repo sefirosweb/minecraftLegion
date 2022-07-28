@@ -15,11 +15,12 @@ import BehaviorLoadConfig from '@BehaviorModules/BehaviorLoadConfig'
 import BehaviorMoveTo from '@BehaviorModules/BehaviorMoveTo'
 import { Bot, LegionStateMachineTargets } from '@/types'
 import { Vec3 } from 'vec3'
+import placeBlockModule from '@/modules/placeBlockModule'
 
 // let isDigging = false
 function fillFunction(bot: Bot, targets: LegionStateMachineTargets) {
   let placeBlock2Position: Vec3 | undefined
-  const { getNewPositionForPlaceBlock, blocksCanBeReplaced, getPathToPlace } = require('@modules/placeBlockModule')(bot)
+  const { getNewPositionForPlaceBlock, blocksCanBeReplaced, getPathToPlace } = placeBlockModule(bot)
 
   const start = new BehaviorIdle()
   start.stateName = 'Start'

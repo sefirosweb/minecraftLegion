@@ -3,9 +3,10 @@
 
 import { Bot, LegionStateMachineTargets } from "@/types"
 import vec3 from 'vec3'
+import placeBlockModule from '@/modules/placeBlockModule'
 
 const minerModule = (bot: Bot, targets: LegionStateMachineTargets) => {
-  const blocksToBeRplaced = require('@modules/placeBlockModule')(bot).blocksToBeRplaced
+  const blocksToBeRplaced = placeBlockModule(bot).blocksToBeRplaced
 
   const getSidesToCheck = (originalPosition) => {
     const sidesToCheck = []

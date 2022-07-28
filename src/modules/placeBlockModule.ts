@@ -1,6 +1,9 @@
-const vec3 = require('vec3')
 
-module.exports = function (bot) {
+//@ts-nocheck
+import { Bot } from '@/types'
+import vec3 from 'vec3'
+
+const placeBlockModule = (bot: Bot) => {
   const blocksCanBeReplaced = ['air', 'cave_air', 'lava', 'water', 'bubble_column', 'seagrass', 'tall_seagrass', 'kelp_plant']
   const blocksToBeRplaced = ['kelp'].concat(blocksCanBeReplaced)
   let isJumping
@@ -174,3 +177,5 @@ module.exports = function (bot) {
     place
   }
 }
+
+export default placeBlockModule
