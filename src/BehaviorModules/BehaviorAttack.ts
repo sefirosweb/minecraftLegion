@@ -1,7 +1,7 @@
 //@ts-nocheck
 
 import { Bot, LegionStateMachineTargets } from "@/types"
-
+import inventoryModule from '@/modules/inventoryModule'
 class BehaviorAttack {
   readonly bot: Bot
   readonly targets: LegionStateMachineTargets
@@ -19,7 +19,7 @@ class BehaviorAttack {
     this.playerIsFound = false
     this.lastAttack = Date.now()
 
-    this.inventory = require('@modules/inventoryModule')(this.bot)
+    this.inventory = inventoryModule(this.bot)
   }
 
   onStateEntered() {

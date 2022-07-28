@@ -1,6 +1,7 @@
 //@ts-nocheck
 
 import { Bot, DepositType, LegionStateMachineTargets } from "@/types"
+import inventoryModule from '@/modules/inventoryModule'
 
 module.exports = class BehaviorCheckItemsInInventory {
   readonly bot: Bot
@@ -20,7 +21,7 @@ module.exports = class BehaviorCheckItemsInInventory {
     this.itemsToCheck = itemsToCheck
     this.isDeposit = isDeposit
 
-    this.inventoryModule = require('@modules/inventoryModule')(this.bot)
+    this.inventoryModule = inventoryModule(this.bot)
     this.genericItems = this.inventoryModule.getGenericItems()
   }
 

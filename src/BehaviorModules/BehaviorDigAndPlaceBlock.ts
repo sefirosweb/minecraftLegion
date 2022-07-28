@@ -6,6 +6,7 @@ import botWebsocket from '@/modules/botWebsocket'
 import digBlockModule from '@/modules/digBlockModule'
 import minerModule from '@/modules/minerModule'
 import placeBlockModule from '@/modules/placeBlockModule'
+import inventoryModule from '@/modules/inventoryModule'
 
 module.exports = class template {
 
@@ -23,7 +24,7 @@ module.exports = class template {
 
     this.digBlock = digBlockModule(bot).digBlock
     this.placeBlockModule = place
-    this.equipHeldItem = require('@modules/inventoryModule')(bot).equipHeldItem
+    this.equipHeldItem = inventoryModule(bot).equipHeldItem
     this.calculateSideToPlaceBlock = minerModule(bot, targets).calculateSideToPlaceBlock
     this.getNewPositionForPlaceBlock = getNewPositionForPlaceBlock
     this.blocksCanBeReplaced = blocksCanBeReplaced

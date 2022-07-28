@@ -1,9 +1,12 @@
-const { getSecondBlockPosition } = require('@modules/utils')
+//@ts-nocheck
 
-module.exports = function (bot) {
+import { Bot } from "@/types"
+import { getSecondBlockPosition } from '@/modules/utils'
+
+const inventoryModule = (bot: Bot) => {
   const mcData = require('minecraft-data')(bot.version)
 
-  function countItemsInInventoryOrEquipped (item) {
+  function countItemsInInventoryOrEquipped(item) {
     let currentItems = 0
 
     if (checkItemEquiped(item)) {
@@ -14,7 +17,7 @@ module.exports = function (bot) {
     return currentItems
   }
 
-  function countItemsInInventory (itemToCount) {
+  function countItemsInInventory(itemToCount) {
     let currentItems
     if (getGenericItems().includes(itemToCount)) {
       currentItems = bot.inventory.items().filter(item => item.name.includes(itemToCount))
@@ -27,7 +30,7 @@ module.exports = function (bot) {
     return currentItems
   }
 
-  function checkItemEquiped (itemArmor) {
+  function checkItemEquiped(itemArmor) {
     let swordEquiped, isSword, bowEquiped, isBow
 
     let slotID
@@ -68,7 +71,7 @@ module.exports = function (bot) {
     return bot.inventory.slots[slotID] !== null
   }
 
-  function equipItem (itemArmor) {
+  function equipItem(itemArmor) {
     return new Promise((resolve, reject) => {
       if (checkItemEquiped(itemArmor)) {
         resolve()
@@ -110,7 +113,7 @@ module.exports = function (bot) {
     })
   }
 
-  function getResumeInventoryV2 () {
+  function getResumeInventoryV2() {
     const items = bot.inventory.slots.reduce((currentItems, slot) => {
       const newItems = [...currentItems]
       if (slot === null) return newItems
@@ -134,7 +137,7 @@ module.exports = function (bot) {
     return items
   }
 
-  function getResumeInventory () {
+  function getResumeInventory() {
     const items = bot.inventory.slots.reduce((currentItems, slot) => {
       const newItems = [...currentItems]
       if (slot === null) return newItems
@@ -258,3 +261,6 @@ module.exports = function (bot) {
     equipHeldItem
   }
 }
+
+
+export default inventoryModule

@@ -2,11 +2,11 @@
 
 import { Bot, LegionStateMachineTargets } from "@/types"
 import sorterJob from '@/modules/sorterJob'
+import inventoryModule from '@/modules/inventoryModule'
 
 const chestModule = (bot: Bot, targets: LegionStateMachineTargets) => {
   const { findItemsInChests } = sorterJob(bot)
-  const { getResumeInventoryV2, getGenericItems } =
-    require('@modules/inventoryModule')(bot)
+  const { getResumeInventoryV2, getGenericItems } = inventoryModule(bot)
 
   const getItemsToWithdrawInChests = (chests: any) => {
     return chests

@@ -16,10 +16,11 @@ import BehaviorCheckItemsInInventory from '@BehaviorModules/BehaviorCheckItemsIn
 import BehaviorMoveTo from '@BehaviorModules/BehaviorMoveTo'
 import { Bot, Chest, itemsToCraft, LegionStateMachineTargets } from '@/types'
 import chestModule from '@/modules/chestModule'
+import inventoryModule from '@/modules/inventoryModule'
 
 function goChestsFunction(bot: Bot, targets: LegionStateMachineTargets) {
   const { findChestsToWithdraw } = chestModule(bot, targets)
-  const { getResumeInventoryV2 } = require("@modules/inventoryModule")(bot);
+  const { getResumeInventoryV2 } = inventoryModule(bot);
 
   const start = new BehaviorIdle()
   start.stateName = 'Start'

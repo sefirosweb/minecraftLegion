@@ -5,9 +5,10 @@ import {
   NestedStateMachine
 } from 'mineflayer-statemachine'
 import { Vec3 } from 'vec3'
+import inventoryModule from '@/modules/inventoryModule'
 
 function crafterJobFunction(bot: Bot, targets: LegionStateMachineTargets) {
-  const { getResumeInventory } = require('@modules/inventoryModule')(bot)
+  const { getResumeInventory } = inventoryModule(bot)
 
   const start = new BehaviorIdle()
   start.stateName = 'Start'

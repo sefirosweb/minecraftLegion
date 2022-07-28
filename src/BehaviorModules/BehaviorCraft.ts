@@ -4,7 +4,7 @@ import { Bot, LegionStateMachineTargets } from "@/types"
 import { Block } from "minecraft-data"
 import mcDataLoader from 'minecraft-data'
 import botWebsocket from '@/modules/botWebsocket'
-
+import inventoryModule from '@/modules/inventoryModule'
 module.exports = class BehaviorCraft {
 
   readonly bot: Bot
@@ -24,7 +24,7 @@ module.exports = class BehaviorCraft {
     this.success = false
     this.craftingTable = null
     this.mcData = mcDataLoader(bot.version)
-    this.inventoryModule = require('@modules/inventoryModule')(bot)
+    this.inventoryModule = inventoryModule(bot)
   }
 
   onStateEntered() {

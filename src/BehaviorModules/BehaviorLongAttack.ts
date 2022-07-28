@@ -2,6 +2,7 @@
 //@ts-nocheck
 
 import { Bot, LegionStateMachineTargets } from "@/types"
+import inventoryModule from '@/modules/inventoryModule'
 
 module.exports = class BehaviorLongAttack {
   readonly bot: Bot
@@ -18,7 +19,7 @@ module.exports = class BehaviorLongAttack {
     this.playerIsFound = false
     this.lastAttack = Date.now()
 
-    this.inventory = require('@modules/inventoryModule')(this.bot)
+    this.inventory = inventoryModule(this.bot)
 
     this.preparingShot = false
     this.prevTime = false

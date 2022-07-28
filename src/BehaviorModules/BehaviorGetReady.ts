@@ -1,7 +1,7 @@
 
 //@ts-nocheck
 import { Bot, LegionStateMachineTargets } from "@/types"
-
+import inventoryModule from '@/modules/inventoryModule'
 module.exports = class BehaviorGetReady {
   readonly bot: Bot
   readonly targets: LegionStateMachineTargets
@@ -15,7 +15,7 @@ module.exports = class BehaviorGetReady {
     this.stateName = 'BehaviorGetReady'
 
     this.isReady = false
-    this.inventory = require('@modules/inventoryModule')(this.bot)
+    this.inventory = inventoryModule(this.bot)
   }
 
   onStateEntered() {

@@ -2,7 +2,7 @@
 //@ts-nocheck
 import { Bot, LegionStateMachineTargets } from "@/types"
 import botWebsocket from '@/modules/botWebsocket'
-
+import inventoryModule from '@/modules/inventoryModule'
 module.exports = class BehaviorEquipAll {
   readonly bot: Bot
   readonly targets: LegionStateMachineTargets
@@ -16,7 +16,7 @@ module.exports = class BehaviorEquipAll {
 
     this.isEndFinished = false
 
-    this.inventory = require('@modules/inventoryModule')(this.bot)
+    this.inventory = inventoryModule(this.bot)
   }
 
   onStateEntered() {

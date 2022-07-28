@@ -4,6 +4,7 @@ import { Bot, LegionStateMachineTargets } from "@/types"
 import botWebsocket from '@/modules/botWebsocket'
 import digBlockModule from '@/modules/digBlockModule'
 import placeBlockModule from '@/modules/placeBlockModule'
+import inventoryModule from '@/modules/inventoryModule'
 module.exports = class BehaviorCustomPlaceBlock {
 
   readonly bot: Bot
@@ -19,7 +20,7 @@ module.exports = class BehaviorCustomPlaceBlock {
     this.bot = bot
     this.targets = targets
     this.stateName = 'Custom BehaviorPlaceBlock '
-    this.equipHeldItem = require('@modules/inventoryModule')(bot).equipHeldItem
+    this.equipHeldItem = inventoryModule(bot).equipHeldItem
     this.digBlock = digBlockModule(bot).digBlock
     this.place = place
     this.blocksCanBeReplaced = blocksCanBeReplaced

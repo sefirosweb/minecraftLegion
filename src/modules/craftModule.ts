@@ -2,10 +2,11 @@
 import { Bot } from "@/types"
 
 import sorterJob from '@/modules/sorterJob'
+import inventoryModule from '@/modules/inventoryModule'
 
 const craftModule = (bot: Bot) => {
   const mcData = require('minecraft-data')(bot.version)
-  const { getResumeInventoryV2 } = require('@modules/inventoryModule')(bot)
+  const { getResumeInventoryV2 } = inventoryModule(bot)
   const { findItemsInChests } = sorterJob(bot)
 
   const getRecipes = (item, craftingTable) => {

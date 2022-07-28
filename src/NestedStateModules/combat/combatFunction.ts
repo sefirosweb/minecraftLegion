@@ -15,6 +15,7 @@ import BehaviorLongAttack from '@BehaviorModules/BehaviorLongAttack'
 import { Bot, LegionStateMachineTargets } from '@/types'
 import { Entity } from 'prismarine-entity'
 import mcDataLoader from 'minecraft-data'
+import inventoryModule from '@/modules/inventoryModule'
 
 
 type fakeVec3 = {
@@ -24,7 +25,7 @@ type fakeVec3 = {
 }
 
 function combatFunction(bot: Bot, targets: LegionStateMachineTargets) {
-  const inventory = require('@modules/inventoryModule')(bot)
+  const inventory = inventoryModule(bot)
   const { ignoreMobs, flyingMobs } = require('@modules/getClosestEnemy')(bot, targets)
   const hawkEye = require('minecrafthawkeye')
   bot.loadPlugin(hawkEye)

@@ -1,9 +1,10 @@
 //@ts-nocheck
 
 import { Bot } from "@/types"
+import inventoryModule from '@/modules/inventoryModule'
 
 const sorterJob = (bot: Bot) => {
-  const { getGenericItems } = require('@modules/inventoryModule')(bot)
+  const { getGenericItems } = inventoryModule(bot)
 
   const findItemsInChests = (chestInput, itemsInput, exclude) => {
     const chests = JSON.parse(JSON.stringify(chestInput))
@@ -11,7 +12,7 @@ const sorterJob = (bot: Bot) => {
 
     const transactions = []
 
-    items.forEach((item, itemIndex) => {
+    items.forEach((item) => {
       Object.entries(chests).forEach((entry) => {
         const chestIndex = entry[0]
         const chest = entry[1]
