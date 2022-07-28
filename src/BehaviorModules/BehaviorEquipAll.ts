@@ -1,7 +1,15 @@
-const botWebsocket = require('@modules/botWebsocket')
+
+//@ts-nocheck
+import { Bot, LegionStateMachineTargets } from "@/types"
+import botWebsocket from '@/modules/botWebsocket'
 
 module.exports = class BehaviorEquipAll {
-  constructor (bot, targets) {
+  readonly bot: Bot
+  readonly targets: LegionStateMachineTargets
+  stateName: string
+  isEndFinished: boolean
+
+  constructor(bot: Bot, targets: LegionStateMachineTargets) {
     this.bot = bot
     this.targets = targets
     this.stateName = 'BehaviorEquipAll'
@@ -11,7 +19,7 @@ module.exports = class BehaviorEquipAll {
     this.inventory = require('@modules/inventoryModule')(this.bot)
   }
 
-  onStateEntered () {
+  onStateEntered() {
     this.isEndFinished = false
     this.equipAllItems()
       .then(() => {
@@ -23,15 +31,15 @@ module.exports = class BehaviorEquipAll {
       })
   }
 
-  onStateExited () {
+  onStateExited() {
     this.isEndFinished = false
   }
 
-  isFinished () {
+  isFinished() {
     return this.isEndFinished
   }
 
-  equipAllItems () {
+  equipAllItems() {
     return new Promise((resolve, reject) => {
       this.inventory.equipItem('helmet')
         .then(() => {

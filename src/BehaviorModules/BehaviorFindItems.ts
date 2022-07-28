@@ -1,5 +1,17 @@
+//@ts-nocheck
+
+import { Bot, LegionStateMachineTargets } from "@/types"
+
 module.exports = class BehaviorFindItems {
-  constructor (bot, targets, distanceToFind = 15, isOnFloor = false) {
+
+  readonly bot: Bot
+  readonly targets: LegionStateMachineTargets
+  stateName: string
+  isEndFinished: boolean
+  distanceToFind: number
+  isOnFloor: boolean
+
+  constructor(bot: Bot, targets: LegionStateMachineTargets, distanceToFind: number = 15, isOnFloor: boolean = false) {
     this.bot = bot
     this.targets = targets
     this.stateName = 'BehaviorFindItems'
@@ -9,7 +21,7 @@ module.exports = class BehaviorFindItems {
     this.isOnFloor = isOnFloor
   }
 
-  onStateEntered () {
+  onStateEntered() {
     this.targets.itemDrop = undefined
     this.isEndFinished = false
     if (this.bot.inventory.items().length >= 33) {
@@ -21,15 +33,15 @@ module.exports = class BehaviorFindItems {
     this.isEndFinished = true
   }
 
-  onStateExited () {
+  onStateExited() {
     this.isEndFinished = false
   }
 
-  isFinished () {
+  isFinished() {
     return this.isEndFinished
   }
 
-  search () {
+  search() {
     if (!this.targets.config.pickUpItems) return false
 
     const entities = Object.keys(this.bot.entities)

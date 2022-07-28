@@ -1,6 +1,13 @@
-const botWebsocket = require('@modules/botWebsocket')
+//@ts-nocheck
+import { Bot, LegionStateMachineTargets } from "@/types"
+import botWebsocket from '@/modules/botWebsocket'
 module.exports = class template {
-  constructor (bot, targets) {
+  readonly bot: Bot
+  readonly targets: LegionStateMachineTargets
+  stateName: string
+  isEndFinished: boolean
+
+  constructor(bot: Bot, targets: LegionStateMachineTargets) {
     this.bot = bot
     this.targets = targets
     this.stateName = 'BehaviorDigBlock'
@@ -10,11 +17,11 @@ module.exports = class template {
     this.isEndFinished = false
   }
 
-  isFinished () {
+  isFinished() {
     return this.isEndFinished
   }
 
-  onStateEntered () {
+  onStateEntered() {
     this.isEndFinished = false
     this.digBlockModule.digBlock(this.targets.position)
       .then(() => {

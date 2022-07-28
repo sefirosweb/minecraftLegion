@@ -1,18 +1,28 @@
+
+//@ts-nocheck
+import { Bot, LegionStateMachineTargets } from "@/types"
+
 module.exports = class BehaviorGetPlayer {
-  constructor (bot, targets) {
+
+  readonly bot: Bot
+  readonly targets: LegionStateMachineTargets
+  stateName: string
+  playerIsFound: boolean
+  playername?: string
+
+  constructor(bot: Bot, targets: LegionStateMachineTargets) {
     this.bot = bot
     this.targets = targets
     this.stateName = 'BehaviorGetPlayer'
 
     this.playerIsFound = false
-    this.playername = false
   }
 
-  onStateEntered () {
+  onStateEntered() {
     this.getPlayerEntity(this.playerName)
   }
 
-  getPlayerEntity (playerName) {
+  getPlayerEntity(playerName) {
     this.targets.entity = this.checkPlayer(playerName) || undefined
     this.playerIsFound = this.targets.entity !== undefined
     if (this.playerIsFound) {
@@ -21,7 +31,7 @@ module.exports = class BehaviorGetPlayer {
     return this.playerIsFound
   }
 
-  checkPlayer (playerName) {
+  checkPlayer(playerName) {
     for (const entityName of Object.keys(this.bot.entities)) {
       const entity = this.bot.entities[entityName]
       if (entity === this.bot.entity) { continue }
@@ -31,11 +41,11 @@ module.exports = class BehaviorGetPlayer {
     return null
   }
 
-  playerFound () {
+  playerFound() {
     return this.playerIsFound
   }
 
-  getPlayerName () {
+  getPlayerName() {
     return this.playerName
   }
 }

@@ -1,14 +1,22 @@
-const botWebsocket = require('@modules/botWebsocket')
+
+//@ts-nocheck
+import { Bot, LegionStateMachineTargets } from "@/types"
+import botWebsocket from '@/modules/botWebsocket'
 
 module.exports = class BehaviorEatFood {
-  constructor (bot, targets, foods = []) {
+  readonly bot: Bot
+  readonly targets: LegionStateMachineTargets
+  stateName: string
+  finished: boolean
+
+  constructor(bot: Bot, targets: LegionStateMachineTargets) {
     this.bot = bot
     this.targets = targets
     this.stateName = 'BehaviorEatFood'
     this.finished = false
   }
 
-  onStateEntered () {
+  onStateEntered() {
     if (this.bot.food === 20) {
       this.finished = true
     } else {
@@ -16,17 +24,17 @@ module.exports = class BehaviorEatFood {
     }
   }
 
-  getAllFoods () {
+  getAllFoods() {
     const mcData = require('minecraft-data')(this.bot.version)
     const mcDataFoods = mcData.foodsArray
     return mcDataFoods.map((item) => item.name)
   }
 
-  onStateExited () {
+  onStateExited() {
     this.finished = false
   }
 
-  checkFoodInInventory () {
+  checkFoodInInventory() {
     return this.bot.inventory.items().reduce((validFood, foodInventory) => {
       const returnValidFood = [...validFood]
 
@@ -46,7 +54,7 @@ module.exports = class BehaviorEatFood {
     }, [])
   }
 
-  eat () {
+  eat() {
     const availableFood = this.checkFoodInInventory().sort(function (a, b) {
       if (a.priority > b.priority) {
         return 1
@@ -88,7 +96,7 @@ module.exports = class BehaviorEatFood {
       })
   }
 
-  isFinished () {
+  isFinished() {
     return this.finished
   }
 }

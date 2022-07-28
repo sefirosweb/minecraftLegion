@@ -1,8 +1,16 @@
-const botWebsocket = require('@modules/botWebsocket')
-const { sleep, getSecondBlockPosition } = require('@modules/utils')
-const vec3 = require('vec3')
+
+//@ts-nocheck
+import botWebsocket from '@/modules/botWebsocket'
+import { sleep, getSecondBlockPosition } from '@/modules/utils'
+import { Bot, LegionStateMachineTargets } from '@/types'
+import vec3 from 'vec3'
 module.exports = class BehaviorDepositItemChest {
-  constructor (bot, targets) {
+  readonly bot: Bot
+  readonly targets: LegionStateMachineTargets
+  stateName: string
+  isEndFinished: boolean
+
+  constructor(bot: Bot, targets: LegionStateMachineTargets) {
     this.bot = bot
     this.targets = targets
     this.stateName = 'BehaviorDepositItemChest'
@@ -11,7 +19,7 @@ module.exports = class BehaviorDepositItemChest {
     this.items = []
   }
 
-  onStateEntered () {
+  onStateEntered() {
     this.isEndFinished = false
     botWebsocket.log('Items to deposit ' + JSON.stringify(this.targets.items))
     this.items = [...this.targets.items]
@@ -24,17 +32,17 @@ module.exports = class BehaviorDepositItemChest {
     this.depositAllItems()
   }
 
-  onStateExited () {
+  onStateExited() {
     this.isEndFinished = false
     this.targets.items = []
     clearTimeout(this.timeLimit)
   }
 
-  isFinished () {
+  isFinished() {
     return this.isEndFinished
   }
 
-  async depositAllItems () {
+  async depositAllItems() {
     const chestToOpen = this.bot.blockAt(vec3(this.targets.position))
     if (!['chest', 'ender_chest', 'trapped_chest'].includes(chestToOpen.name)) {
       botWebsocket.log('No chest found')
@@ -63,7 +71,7 @@ module.exports = class BehaviorDepositItemChest {
       })
   }
 
-  refreshChest (chestToOpen, container) {
+  refreshChest(chestToOpen, container) {
     const chest = Object.values(this.targets.chests).find(c => {
       if (vec3(c.position).equals(chestToOpen.position)) return true
       if (c.secondBlock && vec3(c.secondBlock.position).equals(chestToOpen.position)) return true
@@ -92,7 +100,7 @@ module.exports = class BehaviorDepositItemChest {
     botWebsocket.sendAction('setChests', this.targets.chests)
   }
 
-  checkItemDestinationAndMoveToInventory (container, toSlot) {
+  checkItemDestinationAndMoveToInventory(container, toSlot) {
     return new Promise((resolve, reject) => {
       if (container.slots[toSlot] === null) {
         resolve()
@@ -110,7 +118,7 @@ module.exports = class BehaviorDepositItemChest {
     })
   }
 
-  depositItems (container) {
+  depositItems(container) {
     return new Promise((resolve, reject) => {
       if (this.items.length === 0) {
         resolve()

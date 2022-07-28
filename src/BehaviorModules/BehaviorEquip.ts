@@ -1,18 +1,31 @@
-const botWebsocket = require('@modules/botWebsocket')
+
+//@ts-nocheck
+import { Bot, LegionStateMachineTargets } from "@/types"
+import mcDataLoader from 'minecraft-data'
+import botWebsocket from '@/modules/botWebsocket'
 
 module.exports = class BehaviorEquip {
-  constructor (bot, targets) {
+
+  readonly bot: Bot
+  readonly targets: LegionStateMachineTargets
+  readonly mcData: mcDataLoader.IndexedData
+  stateName: string
+  isEndFinished: boolean
+
+  wasEquipped: boolean
+
+  constructor(bot: Bot, targets: LegionStateMachineTargets) {
     this.bot = bot
     this.targets = targets
     this.stateName = 'BehaviorEquip'
 
-    this.mcData = require('minecraft-data')(this.bot.version)
+    this.mcData = mcDataLoader(bot.version)
 
     this.isEndFinished = false
     this.wasEquipped = false
   }
 
-  onStateEntered () {
+  onStateEntered() {
     this.isEndFinished = false
     this.wasEquipped = false
 
@@ -36,7 +49,7 @@ module.exports = class BehaviorEquip {
       })
   }
 
-  equip () {
+  equip() {
     return new Promise((resolve, reject) => {
       const itemId = this.mcData.itemsByName[this.targets.item.name].id
       this.bot.equip(itemId, this.destination)
@@ -54,21 +67,21 @@ module.exports = class BehaviorEquip {
     })
   }
 
-  onStateExited () {
+  onStateExited() {
     this.isEndFinished = false
     this.wasEquipped = false
     clearTimeout(this.timeLimit)
   }
 
-  isFinished () {
+  isFinished() {
     return this.isEndFinished
   }
 
-  isWasEquipped () {
+  isWasEquipped() {
     return this.wasEquipped
   }
 
-  getEquipDestination (item) {
+  getEquipDestination(item) {
     if (this.isHelmet(item)) return 'head'
     if (this.isChestplate(item)) return 'torso'
     if (this.isLeggings(item)) return 'legs'
@@ -82,7 +95,7 @@ module.exports = class BehaviorEquip {
     return 'hand'
   }
 
-  isHelmet (item) {
+  isHelmet(item) {
     const id = item.type
     if (id === this.mcData.itemsByName.leather_helmet.id) return true
     if (id === this.mcData.itemsByName.iron_helmet.id) return true
@@ -92,7 +105,7 @@ module.exports = class BehaviorEquip {
     return false
   }
 
-  isChestplate (item) {
+  isChestplate(item) {
     const id = item.type
     if (id === this.mcData.itemsByName.leather_chestplate.id) return true
     if (id === this.mcData.itemsByName.iron_chestplate.id) return true
@@ -101,7 +114,7 @@ module.exports = class BehaviorEquip {
     return false
   }
 
-  isLeggings (item) {
+  isLeggings(item) {
     const id = item.type
     if (id === this.mcData.itemsByName.leather_leggings.id) return true
     if (id === this.mcData.itemsByName.iron_leggings.id) return true
@@ -110,7 +123,7 @@ module.exports = class BehaviorEquip {
     return false
   }
 
-  isBoots (item) {
+  isBoots(item) {
     const id = item.type
     if (id === this.mcData.itemsByName.leather_boots.id) return true
     if (id === this.mcData.itemsByName.iron_boots.id) return true

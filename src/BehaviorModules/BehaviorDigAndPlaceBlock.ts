@@ -1,6 +1,17 @@
-const botWebsocket = require('@modules/botWebsocket')
+
+// @ts-nocheck
+
+import { Bot, LegionStateMachineTargets } from "@/types"
+import botWebsocket from '@/modules/botWebsocket'
+
 module.exports = class template {
-  constructor (bot, targets) {
+
+  readonly bot: Bot
+  readonly targets: LegionStateMachineTargets
+  stateName: string
+  isEndFinished: boolean
+
+  constructor(bot: Bot, targets: LegionStateMachineTargets) {
     this.bot = bot
     this.targets = targets
     this.stateName = 'BehaviorDigAndPlaceBlock'
@@ -20,21 +31,21 @@ module.exports = class template {
     this.mcData = require('minecraft-data')(this.bot.version)
   }
 
-  isFinished () {
+  isFinished() {
     return this.isEndFinished
   }
 
-  isOutOfBlocks () {
+  isOutOfBlocks() {
     return this.outOfBlocks
   }
 
-  onStateExited () {
+  onStateExited() {
     this.isEndFinished = false
     this.outOfBlocks = false
     clearTimeout(this.timeLimit)
   }
 
-  onStateEntered () {
+  onStateEntered() {
     this.timeLimit = setTimeout(() => {
       botWebsocket.log('Time exceded for place item')
       this.bot.stopDigging()
@@ -63,7 +74,7 @@ module.exports = class template {
       })
   }
 
-  getItemToPlace () {
+  getItemToPlace() {
     const items = this.bot.inventory.items().filter(item => this.targets.minerJob.blockForPlace.includes(item.name))
     if (items.length === 0) {
       return undefined
@@ -77,7 +88,7 @@ module.exports = class template {
     return item
   }
 
-  equipAndPlace (placeBlockTo, newPosition, blockOffset) {
+  equipAndPlace(placeBlockTo, newPosition, blockOffset) {
     return new Promise((resolve, reject) => {
       const item = this.getItemToPlace()
       if (!item) {
@@ -103,7 +114,7 @@ module.exports = class template {
     })
   }
 
-  placeBlocksBucle () {
+  placeBlocksBucle() {
     return new Promise((resolve, reject) => {
       if (this.sidesToPlaceBlock.length === 0) {
         this.isEndFinished = true
@@ -121,7 +132,7 @@ module.exports = class template {
     })
   }
 
-  placeBlocks () {
+  placeBlocks() {
     return new Promise((resolve, reject) => {
       if (this.listPlaceBlocks.length === 0) {
         resolve()

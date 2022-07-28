@@ -1,5 +1,16 @@
+
+//@ts-nocheck
+import { Bot, LegionStateMachineTargets } from "@/types"
 module.exports = class BehaviorFertilize {
-  constructor (bot, targets) {
+
+  readonly bot: Bot
+  readonly targets: LegionStateMachineTargets
+  readonly blocksCanFertilize: Array<string>
+  stateName: string
+  isEndFinished: boolean
+  success: boolean
+
+  constructor(bot: Bot, targets: LegionStateMachineTargets) {
     this.bot = bot
     this.targets = targets
     this.stateName = 'BehaviorFertilize'
@@ -8,13 +19,13 @@ module.exports = class BehaviorFertilize {
     this.blocksCanFertilize = ['dirt', 'coarse_dirt', 'grass_block']
   }
 
-  onStateExited () {
+  onStateExited() {
     this.isEndFinished = false
     this.success = false
     clearTimeout(this.timeLimit)
   }
 
-  async onStateEntered () {
+  async onStateEntered() {
     this.timeLimit = setTimeout(() => {
       console.log('Time exceded for fertilize')
       this.isEndFinished = true
@@ -25,7 +36,7 @@ module.exports = class BehaviorFertilize {
     await this.fertilize()
   }
 
-  async fertilize () {
+  async fertilize() {
     try {
       const slotID = this.bot.getEquipmentDestSlot('hand')
       if (this.bot.inventory.slots[slotID] === null || !this.bot.inventory.slots[slotID].name.includes('hoe')) { // no have equiped hoe in off hand
@@ -59,11 +70,11 @@ module.exports = class BehaviorFertilize {
     }
   }
 
-  isFinished () {
+  isFinished() {
     return this.isEndFinished
   }
 
-  isSuccess () {
+  isSuccess() {
     return this.success
   }
 }

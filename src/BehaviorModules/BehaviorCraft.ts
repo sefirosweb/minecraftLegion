@@ -1,18 +1,33 @@
-const botWebsocket = require('@modules/botWebsocket')
+
+//@ts-nocheck
+import { Bot, LegionStateMachineTargets } from "@/types"
+import { Block } from "minecraft-data"
+import mcDataLoader from 'minecraft-data'
+import botWebsocket from '@/modules/botWebsocket'
 
 module.exports = class BehaviorCraft {
-  constructor (bot, targets) {
+
+  readonly bot: Bot
+  readonly targets: LegionStateMachineTargets
+  readonly mcData: mcDataLoader.IndexedData
+  stateName: string
+  isEndFinished: boolean
+  success: boolean
+  craftingTable: Block | null
+
+
+  constructor(bot: Bot, targets: LegionStateMachineTargets) {
     this.bot = bot
     this.targets = targets
     this.stateName = 'BehaviorCraft'
     this.isEndFinished = false
     this.success = false
     this.craftingTable = null
-    this.mcData = require('minecraft-data')(bot.version)
+    this.mcData = mcDataLoader(bot.version)
     this.inventoryModule = require('@modules/inventoryModule')(bot)
   }
 
-  onStateEntered () {
+  onStateEntered() {
     this.isEndFinished = false
     this.success = false
     this.craftingTable = null
@@ -25,7 +40,7 @@ module.exports = class BehaviorCraft {
     this.craft()
   }
 
-  onStateExited () {
+  onStateExited() {
     this.isEndFinished = false
     this.success = false
     this.craftingTable = null
@@ -33,15 +48,15 @@ module.exports = class BehaviorCraft {
     clearTimeout(this.timeLimit)
   }
 
-  isFinished () {
+  isFinished() {
     return this.isEndFinished
   }
 
-  isSuccess () {
+  isSuccess() {
     return this.success
   }
 
-  craft () {
+  craft() {
     if (!this.targets.craftItem) {
       botWebsocket.log('Cant craft withouth info')
       this.isEndFinished = true
@@ -84,7 +99,7 @@ module.exports = class BehaviorCraft {
       })
   }
 
-  getCraftingTable () {
+  getCraftingTable() {
     if (!this.craftingTable) {
       const craftingTableID = this.mcData.blocksByName.crafting_table.id
       this.craftingTable = this.bot.findBlock({
@@ -96,7 +111,7 @@ module.exports = class BehaviorCraft {
     return this.craftingTable
   }
 
-  enoughItemsForCraft (name) {
+  enoughItemsForCraft(name) {
     const item = this.mcData.itemsByName[name]
 
     if (!item) {
