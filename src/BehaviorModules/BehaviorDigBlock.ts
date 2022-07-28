@@ -1,6 +1,7 @@
 //@ts-nocheck
 import { Bot, LegionStateMachineTargets } from "@/types"
 import botWebsocket from '@/modules/botWebsocket'
+import digBlockModule from '@/modules/digBlockModule'
 module.exports = class template {
   readonly bot: Bot
   readonly targets: LegionStateMachineTargets
@@ -12,7 +13,7 @@ module.exports = class template {
     this.targets = targets
     this.stateName = 'BehaviorDigBlock'
 
-    this.digBlockModule = require('@modules/digBlockModule')(bot)
+    this.digBlockModule = digBlockModule(bot)
 
     this.isEndFinished = false
   }

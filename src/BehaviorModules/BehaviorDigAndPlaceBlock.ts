@@ -3,6 +3,7 @@
 
 import { Bot, LegionStateMachineTargets } from "@/types"
 import botWebsocket from '@/modules/botWebsocket'
+import digBlockModule from '@/modules/digBlockModule'
 
 module.exports = class template {
 
@@ -16,7 +17,7 @@ module.exports = class template {
     this.targets = targets
     this.stateName = 'BehaviorDigAndPlaceBlock'
 
-    this.digBlock = require('@modules/digBlockModule')(bot).digBlock
+    this.digBlock = digBlockModule(bot).digBlock
     this.placeBlockModule = require('@modules/placeBlockModule')(bot).place
     this.equipHeldItem = require('@modules/inventoryModule')(bot).equipHeldItem
     this.calculateSideToPlaceBlock = require('@modules/minerModule')(bot, targets).calculateSideToPlaceBlock

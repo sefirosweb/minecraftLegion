@@ -1,5 +1,9 @@
+//@ts-nocheck
 
-module.exports = function (bot) {
+import { Bot } from "@/types"
+import { Vec3 } from "vec3"
+
+const digBlockModule = (bot: Bot) => {
   const startDig = (block) => {
     return new Promise((resolve, reject) => {
       bot.dig(block)
@@ -11,7 +15,7 @@ module.exports = function (bot) {
     })
   }
 
-  const digBlock = (position) => {
+  const digBlock = (position: Vec3) => {
     return new Promise((resolve, reject) => {
       const block = bot.blockAt(position)
       if (!block || !bot.canDigBlock(block)) {
@@ -88,3 +92,6 @@ module.exports = function (bot) {
     digBlock
   }
 }
+
+
+export default digBlockModule

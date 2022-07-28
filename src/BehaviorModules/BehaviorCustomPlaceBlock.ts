@@ -2,7 +2,7 @@
 // @ts-nocheck
 import { Bot, LegionStateMachineTargets } from "@/types"
 import botWebsocket from '@/modules/botWebsocket'
-
+import digBlockModule from '@/modules/digBlockModule'
 module.exports = class BehaviorCustomPlaceBlock {
 
   readonly bot: Bot
@@ -20,7 +20,7 @@ module.exports = class BehaviorCustomPlaceBlock {
     this.blocksCanBeReplaced = require('@modules/placeBlockModule')(bot).blocksCanBeReplaced
     this.equipHeldItem = require('@modules/inventoryModule')(bot).equipHeldItem
     this.place = require('@modules/placeBlockModule')(bot).place
-    this.digBlock = require('@modules/digBlockModule')(bot).digBlock
+    this.digBlock = digBlockModule(bot).digBlock
 
     this.isEndFinished = false
     this.itemNotFound = false
