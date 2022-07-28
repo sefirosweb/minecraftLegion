@@ -1,33 +1,26 @@
+//@ts-nocheck
+
 import {
   StateTransition,
   BehaviorIdle,
   NestedStateMachine
 } from 'mineflayer-statemachine'
 
-//@ts-ignore
 import BehaviorLoadConfig from '@/BehaviorModules/BehaviorLoadConfig'
 
-//@ts-ignore
 import BehaviorMinerCheckLayer from '@/BehaviorModules/minerJob/BehaviorMinerCheckLayer'
-//@ts-ignore
 import BehaviorMinerCurrentLayer from '@/BehaviorModules/minerJob/BehaviorMinerCurrentLayer'
-//@ts-ignore
 import BehaviorMinerCurrentBlock from '@/BehaviorModules/minerJob/BehaviorMinerCurrentBlock'
-//@ts-ignore
 import BehaviorGetReady from '@/BehaviorModules/BehaviorGetReady'
 
-//@ts-ignore
 import BehaviorDigBlock from '@/BehaviorModules/BehaviorDigBlock'
-//@ts-ignore
 import BehaviorEatFood from '@/BehaviorModules/BehaviorEatFood'
-//@ts-ignore
 import BehaviorMoveTo from '@/BehaviorModules/BehaviorMoveTo'
-//@ts-ignore
 import BehaviorDigAndPlaceBlock from '@/BehaviorModules/BehaviorDigAndPlaceBlock'
 
 import mineflayerPathfinder, { Movements } from 'mineflayer-pathfinder'
-//@ts-ignore
-import { setMinerCords } from '@modules/botConfig'
+import botConfigLoader from '@/modules/botConfig'
+const { setMinerCords } = botConfigLoader()
 import { Bot, LegionStateMachineTargets, MineCords, MineCordsConfig } from '@/types'
 
 const movingWhile = (bot: Bot, nextCurrentLayer: MineCords, movements: Movements) => {
@@ -66,16 +59,12 @@ const movingWhile = (bot: Bot, nextCurrentLayer: MineCords, movements: Movements
 function miningFunction(bot: Bot, targets: LegionStateMachineTargets) {
   const start = new BehaviorIdle()
   start.stateName = 'Start'
-  //@ts-ignore
   start.x = 125
-  //@ts-ignore
   start.y = 113
 
   const finishedJob = new BehaviorIdle()
   finishedJob.stateName = 'Finished Job'
-  //@ts-ignore
   finishedJob.x = 525
-  //@ts-ignore
   finishedJob.y = 13
 
   const loadConfig = new BehaviorLoadConfig(bot, targets)
@@ -85,9 +74,7 @@ function miningFunction(bot: Bot, targets: LegionStateMachineTargets) {
 
   const exit = new BehaviorIdle()
   exit.stateName = 'Exit'
-  //@ts-ignore
   exit.x = 125
-  //@ts-ignore
   exit.y = 313
 
   const nextLayer = new BehaviorMinerCurrentLayer(bot, targets)
@@ -332,12 +319,10 @@ function miningFunction(bot: Bot, targets: LegionStateMachineTargets) {
       child: moveToBlock,
       name: 'currentBlock -> moveToBlock',
       onTransition: () => {
-        targets.minerJob.mineBlock = targets.position!.clone()
+        targets.minerJob.mineBlock = targets.position.clone()
         if (nextLayer.minerCords.tunel === 'horizontally') {
           // Move to base of block
-          //@ts-ignore
           targets.position.y = parseInt(checkLayer.minerCords.yStart)
-          //@ts-ignore
           targets.position.dimension = targets.config.minerCords.world
         }
       },

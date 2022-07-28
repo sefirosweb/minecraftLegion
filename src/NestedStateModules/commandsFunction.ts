@@ -1,3 +1,5 @@
+
+//@ts-nocheck
 import { Vec3 } from 'vec3'
 
 import {
@@ -8,10 +10,8 @@ import {
   NestedStateMachine
 } from 'mineflayer-statemachine'
 
-//@ts-ignore
-import botConfig from '@modules/botConfig'
-//@ts-ignore
-import botWebsocket from '@modules/botWebsocket'
+import botConfigLoader from '@/modules/botConfig'
+import botWebsocket from '@/modules/botWebsocket'
 import { Bot, BotwebsocketAction, Coordinates, LegionStateMachineTargets, Master } from '@/types'
 import { Entity } from 'prismarine-entity'
 import mineflayerPathfinder from 'mineflayer-pathfinder'
@@ -20,42 +20,28 @@ import mineflayerPathfinder from 'mineflayer-pathfinder'
 function commandsFunction(bot: Bot, targets: LegionStateMachineTargets) {
   const start = new BehaviorIdle()
   start.stateName = 'Start'
-  //@ts-ignore
   start.x = 125
-  //@ts-ignore
   start.y = 113
 
   const exit = new BehaviorIdle()
   exit.stateName = 'Exit'
-  //@ts-ignore
   exit.x = 350
-  //@ts-ignore
   exit.y = 250
 
-  //@ts-ignore
   const followPlayer = new BehaviorFollowEntity(bot, targets)
   followPlayer.stateName = 'Follow Player'
-  //@ts-ignore
   followPlayer.x = 125
-  //@ts-ignore
   followPlayer.y = 313
-  //@ts-ignore
   followPlayer.movements = targets.movements
 
-   //@ts-ignore
   const lookAtFollowTarget = new BehaviorLookAtEntity(bot, targets)
   lookAtFollowTarget.stateName = 'Look Player'
-   //@ts-ignore
   lookAtFollowTarget.x = 550
-  //@ts-ignore
   lookAtFollowTarget.y = 313
 
-  //@ts-ignore
   const lookAtPlayersState = new BehaviorLookAtEntity(bot, targets)
   lookAtPlayersState.stateName = 'Stay In Position'
-  //@ts-ignore
   lookAtPlayersState.x = 350
-  //@ts-ignore
   lookAtPlayersState.y = 113
 
   const transitions = [
@@ -341,7 +327,7 @@ function commandsFunction(bot: Bot, targets: LegionStateMachineTargets) {
 
   function savePatrol() {
     bot.removeListener('customEventMove', nextPointListener)
-    botConfig.setPatrol(bot.username, patrol)
+    botConfigLoader().setPatrol(bot.username, patrol)
     // bot.chat('Ok, I memorized the patrol')
   }
 

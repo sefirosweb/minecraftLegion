@@ -1,7 +1,7 @@
 
 //@ts-nocheck
 import { Bot, LegionStateMachineTargets } from "@/types"
-import botConfig from '@/modules/botConfig'
+import botConfigLoader from '@/modules/botConfig'
 
 module.exports = class BehaviorLoadConfig {
 
@@ -33,6 +33,7 @@ module.exports = class BehaviorLoadConfig {
   }
 
   onStateEntered() {
+    const botConfig = botConfigLoader()
     this.job = botConfig.getJob(this.bot.username)
     this.mode = botConfig.getMode(this.bot.username)
     this.helpFriends = botConfig.getHelpFriends(this.bot.username)
@@ -54,6 +55,7 @@ module.exports = class BehaviorLoadConfig {
   }
 
   getAllConfig() {
+    const botConfig = botConfigLoader()
     return botConfig.getAll(this.bot.username)
   }
 
