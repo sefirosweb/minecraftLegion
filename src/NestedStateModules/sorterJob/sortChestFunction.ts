@@ -5,8 +5,10 @@ import {
   NestedStateMachine
 } from 'mineflayer-statemachine'
 
+import sorterJob from '@/modules/sorterJob'
+
 function sortChestFunction(bot: Bot, targets: LegionStateMachineTargets) {
-  const { findItemsInChests, calculateSlotsToSort } = require('@modules/sorterJob')(bot)
+  const { findItemsInChests, calculateSlotsToSort } = sorterJob(bot)
 
   const start = new BehaviorIdle()
   start.stateName = 'Start'

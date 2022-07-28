@@ -1,4 +1,8 @@
-module.exports = function (bot) {
+//@ts-nocheck
+
+import { Bot } from "@/types"
+
+const sorterJob = (bot: Bot) => {
   const { getGenericItems } = require('@modules/inventoryModule')(bot)
 
   const findItemsInChests = (chestInput, itemsInput, exclude) => {
@@ -249,3 +253,5 @@ module.exports = function (bot) {
     calculateInventoryToSort
   }
 }
+
+export default sorterJob

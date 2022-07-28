@@ -12,10 +12,11 @@ import BehaviorcCheckItemsInChest from '@BehaviorModules/sorterJob/BehaviorcChec
 //@ts-ignore
 import BehaviorMoveTo from '@BehaviorModules/BehaviorMoveTo'
 import { Bot, LegionStateMachineTargets } from '@/types'
+import sorterJob from '@/modules/sorterJob'
 
-function sorterJobFunction(bot: Bot, targets: LegionStateMachineTargets) {
+const sorterJobFunction = (bot: Bot, targets: LegionStateMachineTargets) => {
   const { findChests } = require('@modules/inventoryModule')(bot)
-  const { sortChests, calculateSlotsToSort } = require('@modules/sorterJob')(bot)
+  const { sortChests, calculateSlotsToSort } = sorterJob(bot)
 
   const start = new BehaviorIdle()
   start.stateName = 'Start'
@@ -319,9 +320,9 @@ function sorterJobFunction(bot: Bot, targets: LegionStateMachineTargets) {
 
   ]
 
-  const sorterJob = new NestedStateMachine(transitions, start)
-  sorterJob.stateName = 'Sorter Job'
-  return sorterJob
+  const sorterJobFunction = new NestedStateMachine(transitions, start)
+  sorterJobFunction.stateName = 'Sorter Job'
+  return sorterJobFunction
 }
 
 module.exports = sorterJobFunction

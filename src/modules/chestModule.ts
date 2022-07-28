@@ -1,9 +1,10 @@
 //@ts-nocheck
 
 import { Bot, LegionStateMachineTargets } from "@/types"
+import sorterJob from '@/modules/sorterJob'
 
 const chestModule = (bot: Bot, targets: LegionStateMachineTargets) => {
-  const { findItemsInChests } = require('@modules/sorterJob')(bot)
+  const { findItemsInChests } = sorterJob(bot)
   const { getResumeInventoryV2, getGenericItems } =
     require('@modules/inventoryModule')(bot)
 

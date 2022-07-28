@@ -1,10 +1,12 @@
 //@ts-nocheck
 import { Bot } from "@/types"
 
+import sorterJob from '@/modules/sorterJob'
+
 const craftModule = (bot: Bot) => {
   const mcData = require('minecraft-data')(bot.version)
   const { getResumeInventoryV2 } = require('@modules/inventoryModule')(bot)
-  const { findItemsInChests } = require('@modules/sorterJob')(bot)
+  const { findItemsInChests } = sorterJob(bot)
 
   const getRecipes = (item, craftingTable) => {
     const aviableRecipes = bot.recipesAll(item.id, null, craftingTable)
