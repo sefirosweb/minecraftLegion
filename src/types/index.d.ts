@@ -186,6 +186,7 @@ export type BotwebsocketAction = {
 }
 
 export type Coordinates = 'x+' | 'x-' | 'z+' | 'z-'
+export type Facing = 'south' | 'north' | 'east' | 'west'
 export type Master = {
     name: string
 }

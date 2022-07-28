@@ -1,10 +1,11 @@
-const vec3 = require('vec3')
+import { Facing } from '@/types'
+import { Vec3 } from 'vec3'
 
-function sleep (ms) {
+export const sleep = (ms: number) => {
   return new Promise((resolve) => setTimeout(resolve, ms))
 }
 
-function shuffle (array) {
+export const shuffle = (array: Array<any>) => {
   let currentIndex = array.length
   let randomIndex
 
@@ -24,48 +25,43 @@ function shuffle (array) {
   return array
 }
 
-const getSecondBlockPosition = (facing, type) => {
+
+export const getSecondBlockPosition = (facing: Facing, type: 'single' | 'left' | 'right') => {
   if (type === 'single') {
     return false
   }
 
   if (facing === 'south' && type === 'right') {
-    return vec3(1, 0, 0)
+    return new Vec3(1, 0, 0)
   }
 
   if (facing === 'south' && type === 'left') {
-    return vec3(-1, 0, 0)
+    return new Vec3(-1, 0, 0)
   }
 
   if (facing === 'north' && type === 'left') {
-    return vec3(1, 0, 0)
+    return new Vec3(1, 0, 0)
   }
 
   if (facing === 'north' && type === 'right') {
-    return vec3(-1, 0, 0)
+    return new Vec3(-1, 0, 0)
   }
 
   if (facing === 'east' && type === 'right') {
-    return vec3(0, 0, -1)
+    return new Vec3(0, 0, -1)
   }
 
   if (facing === 'east' && type === 'left') {
-    return vec3(0, 0, 1)
+    return new Vec3(0, 0, 1)
   }
 
   if (facing === 'west' && type === 'left') {
-    return vec3(0, 0, -1)
+    return new Vec3(0, 0, -1)
   }
 
   if (facing === 'west' && type === 'right') {
-    return vec3(0, 0, 1)
+    return new Vec3(0, 0, 1)
   }
 
   return false
-}
-
-module.exports = {
-  sleep,
-  shuffle,
-  getSecondBlockPosition
 }
