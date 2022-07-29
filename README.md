@@ -48,20 +48,21 @@ cd minecraftLegion
 module.exports = config
 
 ```
+5. Copy and edit the  cp src/custom_start/custom_example.ts src/custom_start/custom.ts
 
-5. Start docker with node
+6. Start docker with node
 
 ```
 docker run --rm -it --name minecraftLegion  --network minecraftLegionNetwork -v $PWD:/home/app -w /home/app -u node -p 4500-4550:4500-4550 -p 9229:9229 node:16.13-bullseye /bin/bash
 ```
 
-6. Install dependencies
+7. Install dependencies
 
 ```
 npm install
 ```
 
-7. Start connection to server
+8. Start connection to server
 
 ```
 node index.js
