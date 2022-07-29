@@ -1,11 +1,16 @@
 
-//@ts-nocheck
+
 import { Bot, LegionStateMachineTargets } from '@/types'
 import botWebsocket from '@/modules/botWebsocket'
+import { Entity } from 'prismarine-entity'
+
+type CustomEntity = Entity & {
+  distance: number
+}
 
 const getClosestEnemy = (bot: Bot, targets: LegionStateMachineTargets) => {
-  let entities = []
-  let currentEntity = false
+  let entities: Array<CustomEntity> = []
+  let currentEntity: number | undefined
 
   const ignoreMobs = [
     'Glow Squid',
@@ -71,7 +76,7 @@ const getClosestEnemy = (bot: Bot, targets: LegionStateMachineTargets) => {
     }
   }
 
-  const getValidPath = (entity) => { // UNUSED FOR A NOW
+  const getValidPath = (entity: Entity) => { // UNUSED FOR A NOW
     if (entity.type === 'mob' && (
       entity.mobType === 'Phantom' ||
       entity.mobType === 'Blaze' ||
@@ -92,10 +97,11 @@ const getClosestEnemy = (bot: Bot, targets: LegionStateMachineTargets) => {
     return entities
   }
 
-  const getAllEntities = () => {
+  const getAllEntities = (): Array<CustomEntity> => {
     const entities = []
+
     for (const entityName of Object.keys(bot.entities)) {
-      const entity = bot.entities[entityName]
+      const entity = bot.entities[entityName] as CustomEntity
       if (entity === bot.entity) { continue }
 
       if (!filter(entity)) { continue }
@@ -105,15 +111,17 @@ const getClosestEnemy = (bot: Bot, targets: LegionStateMachineTargets) => {
       entity.isEnemy = true
       entities.push(entity)
     }
+
     return entities
   }
 
-  const filter = (entity) => {
+  const filter = (entity: CustomEntity) => {
     if (targets.config.mode === 'pvp') {
       if (
         (entity.position.distanceTo(bot.player.entity.position) <= targets.config.distance) &&
         (entity.type === 'mob' || entity.type === 'player') &&
         (entity.kind !== 'Passive mobs') &&
+        entity.mobType &&
         !ignoreMobs.includes(entity.mobType) &&
         (entity.isValid)
       ) {
@@ -139,6 +147,7 @@ const getClosestEnemy = (bot: Bot, targets: LegionStateMachineTargets) => {
       return (entity.position.distanceTo(bot.player.entity.position) <= targets.config.distance) &&
         (entity.type === 'mob') &&
         (entity.kind !== 'Passive mobs') &&
+        entity.mobType &&
         !ignoreMobs.includes(entity.mobType) &&
         (entity.isValid)
     }

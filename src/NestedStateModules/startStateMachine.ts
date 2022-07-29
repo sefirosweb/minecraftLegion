@@ -67,6 +67,8 @@ module.exports = (bot: Bot) => {
       canPlaceBlocks: false,
       canSleep: false,
       canCraftItemWithdrawChest: false,
+      mode: 'none',
+      distance: 10,
       minerCords: {
         orientation: "x+",
         reverse: false,

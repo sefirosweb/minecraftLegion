@@ -120,6 +120,8 @@ export type Config = {
     canSleep: boolean
     canCraftItemWithdrawChest: boolean
     minerCords: MineCordsConfig
+    mode: 'none' | 'pve' | 'pvp'
+    distance: number
 }
 
 export type Portals = {

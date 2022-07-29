@@ -10,9 +10,10 @@ import { Vec3 } from 'vec3'
 
 let bot: Bot
 let socket: Socket
-let friends: Array<{ socketId: string }> = []
+let friends: Array<{ socketId: string, name: string }> = []
 let masters: Array<{
   position: Vec3
+  name: string
 }> = []
 let loged = false
 
