@@ -1,3 +1,4 @@
+//@ts-nocheck
 import {
   StateTransition,
   BehaviorIdle,
@@ -5,13 +6,9 @@ import {
   BehaviorFindInteractPosition
 } from 'mineflayer-statemachine'
 
-//@ts-ignore
 import BehaviorDigBlock from '@/BehaviorModules/BehaviorDigBlock'
-//@ts-ignore
 import BehaviorCustomPlaceBlock from '@/BehaviorModules/BehaviorCustomPlaceBlock'
-//@ts-ignore
 import BehaviorLoadConfig from '@/BehaviorModules/BehaviorLoadConfig'
-//@ts-ignore
 import BehaviorMoveTo from '@/BehaviorModules/BehaviorMoveTo'
 import { Bot, LegionStateMachineTargets } from '@/types'
 import { Vec3 } from 'vec3'
@@ -24,16 +21,12 @@ function fillFunction(bot: Bot, targets: LegionStateMachineTargets) {
 
   const start = new BehaviorIdle()
   start.stateName = 'Start'
-  //@ts-ignore
   start.x = 125
-  //@ts-ignore
   start.y = 113
 
   const exit = new BehaviorIdle()
   exit.stateName = 'Exit'
-  //@ts-ignore
   exit.x = 125
-  //@ts-ignore
   exit.y = 313
 
   const moveToCantSeeBlock = new BehaviorMoveTo(bot, targets)
@@ -42,12 +35,9 @@ function fillFunction(bot: Bot, targets: LegionStateMachineTargets) {
   moveToCantSeeBlock.x = 125
   moveToCantSeeBlock.y = 213
 
-  //@ts-ignore
   const findInteractPosition = new BehaviorFindInteractPosition(bot, targets)
   findInteractPosition.stateName = 'findInteractPosition'
-  //@ts-ignore
   findInteractPosition.x = 325
-  //@ts-ignore
   findInteractPosition.y = 113
 
   const moveToBlock = new BehaviorMoveTo(bot, targets)

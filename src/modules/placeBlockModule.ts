@@ -1,18 +1,16 @@
-
-//@ts-nocheck
 import { Bot } from '@/types'
-import vec3 from 'vec3'
+import { Vec3 } from 'vec3'
+import { Block } from 'prismarine-block'
 
 const placeBlockModule = (bot: Bot) => {
   const blocksCanBeReplaced = ['air', 'cave_air', 'lava', 'water', 'bubble_column', 'seagrass', 'tall_seagrass', 'kelp_plant']
   const blocksToBeRplaced = ['kelp'].concat(blocksCanBeReplaced)
-  let isJumping
+  let isJumping: boolean
 
-  const getNewPositionForPlaceBlock = (position) => {
+  const getNewPositionForPlaceBlock = (position: Vec3) => {
     const offset = getOffsetPlaceBlock(position)
-    const newPosition = position.clone().add(offset)
-
-    const blockOffset = vec3(offset.x * -1, offset.y * -1, offset.z * -1)
+    const newPosition = offset ? position.clone().add(offset) : offset
+    const blockOffset = offset ? new Vec3(offset.x * -1, offset.y * -1, offset.z * -1) : offset
 
     return {
       newPosition,
@@ -21,23 +19,35 @@ const placeBlockModule = (bot: Bot) => {
     }
   }
 
-  let queue = []
-  let positions_checked = []
+  type Queue = {
+    position: Vec3,
+    parent: number
+  }
 
-  const getPathToPlace = (position) => {
+  type PositionsChecked = {
+    position: Vec3,
+    parent: number | null
+  }
+
+  let queue: Array<Queue> = []
+  let positions_checked: Array<PositionsChecked> = []
+
+  const getPathToPlace = (position: Vec3) => {
     queue = []
     positions_checked = []
 
     let result = getRecursivePosition(position, null)
     while (!result) {
       const newPosition = queue.shift()
-      result = getRecursivePosition(newPosition.position, newPosition.parent)
+      if (newPosition) {
+        result = getRecursivePosition(newPosition.position, newPosition.parent)
+      }
     }
 
-    const positionsToPlaceBlocks = []
-    let currentParent = result.parent
+    const positionsToPlaceBlocks: Array<PositionsChecked> = []
+    let currentParent: number | null = result.parent
     do {
-      const positionToplaceBlock = positions_checked[currentParent]
+      const positionToplaceBlock: PositionsChecked = positions_checked[currentParent]
       positionsToPlaceBlocks.push(positionToplaceBlock)
       currentParent = positionToplaceBlock.parent
     } while (currentParent !== null)
@@ -45,8 +55,8 @@ const placeBlockModule = (bot: Bot) => {
     return positionsToPlaceBlocks
   }
 
-  const getRecursivePosition = (position, parent) => {
-    let newPosition
+  const getRecursivePosition = (position: Vec3, parent: number | null) => {
+    let newPosition: Vec3
     let offset
     positions_checked.push({ position, parent })
     const currentParent = positions_checked.length - 1
@@ -60,82 +70,82 @@ const placeBlockModule = (bot: Bot) => {
     }
 
     // down
-    offset = vec3(0, -1, 0)
+    offset = new Vec3(0, -1, 0)
     newPosition = position.clone().add(offset)
     if (!positions_checked.find((p) => p.position.equals(newPosition))) { queue.push({ position: newPosition, parent: currentParent }) }
     // front
-    offset = vec3(1, 0, 0)
+    offset = new Vec3(1, 0, 0)
     newPosition = position.clone().add(offset)
     if (!positions_checked.find((p) => p.position.equals(newPosition))) { queue.push({ position: newPosition, parent: currentParent }) }
     // back
-    offset = vec3(-1, 0, 0)
+    offset = new Vec3(-1, 0, 0)
     newPosition = position.clone().add(offset)
     if (!positions_checked.find((p) => p.position.equals(newPosition))) { queue.push({ position: newPosition, parent: currentParent }) }
     // right
-    offset = vec3(0, 0, 1)
+    offset = new Vec3(0, 0, 1)
     newPosition = position.clone().add(offset)
     if (!positions_checked.find((p) => p.position.equals(newPosition))) { queue.push({ position: newPosition, parent: currentParent }) }
     // left
-    offset = vec3(0, 0, -1)
+    offset = new Vec3(0, 0, -1)
     newPosition = position.clone().add(offset)
     if (!positions_checked.find((p) => p.position.equals(newPosition))) { queue.push({ position: newPosition, parent: currentParent }) }
     // up
-    offset = vec3(0, 1, 0)
+    offset = new Vec3(0, 1, 0)
     newPosition = position.clone().add(offset)
     if (!positions_checked.find((p) => p.position.equals(newPosition))) { queue.push({ position: newPosition, parent: currentParent }) }
 
     return false
   }
 
-  const getOffsetPlaceBlock = (position) => {
-    let newBlock
-    let offset
+  const getOffsetPlaceBlock = (position: Vec3) => {
+    let newBlock: Block | null
+    let offset: Vec3
     // down
-    offset = vec3(0, -1, 0)
+    offset = new Vec3(0, -1, 0)
     newBlock = bot.blockAt(position.clone().add(offset))
-    if (!blocksCanBeReplaced.includes(newBlock.name)) {
+    if (newBlock && !blocksCanBeReplaced.includes(newBlock.name)) {
       return offset
     }
 
     // front
-    offset = vec3(1, 0, 0)
+    offset = new Vec3(1, 0, 0)
     newBlock = bot.blockAt(position.clone().add(offset))
-    if (!blocksCanBeReplaced.includes(newBlock.name)) {
+    if (newBlock && !blocksCanBeReplaced.includes(newBlock.name)) {
       return offset
     }
 
     // back
-    offset = vec3(-1, 0, 0)
+    offset = new Vec3(-1, 0, 0)
     newBlock = bot.blockAt(position.clone().add(offset))
-    if (!blocksCanBeReplaced.includes(newBlock.name)) {
+    if (newBlock && !blocksCanBeReplaced.includes(newBlock.name)) {
       return offset
     }
 
     // right
-    offset = vec3(0, 0, 1)
+    offset = new Vec3(0, 0, 1)
     newBlock = bot.blockAt(position.clone().add(offset))
-    if (!blocksCanBeReplaced.includes(newBlock.name)) {
+    if (newBlock && !blocksCanBeReplaced.includes(newBlock.name)) {
       return offset
     }
 
     // left
-    offset = vec3(0, 0, -1)
+    offset = new Vec3(0, 0, -1)
     newBlock = bot.blockAt(position.clone().add(offset))
-    if (!blocksCanBeReplaced.includes(newBlock.name)) {
+    if (newBlock && !blocksCanBeReplaced.includes(newBlock.name)) {
       return offset
     }
 
     // up
-    offset = vec3(0, 1, 0)
+    offset = new Vec3(0, 1, 0)
     newBlock = bot.blockAt(position.clone().add(offset))
-    if (!blocksCanBeReplaced.includes(newBlock.name)) {
+    if (newBlock && !blocksCanBeReplaced.includes(newBlock.name)) {
       return offset
     }
 
-    return false
+    return undefined
   }
 
-  const place = (position, offset, canJump = true) => {
+  const place = (position: Vec3, offset: Vec3, canJump = true): Promise<void> => {
     return new Promise((resolve, reject) => {
       const block = bot.blockAt(position)
 
