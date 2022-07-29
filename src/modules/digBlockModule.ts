@@ -1,9 +1,13 @@
-//@ts-nocheck
 
 import { Bot } from "@/types"
 import { Vec3 } from "vec3"
 import { Block } from 'prismarine-block'
 import mcDataLoader from 'minecraft-data'
+import { Item } from 'prismarine-item';
+
+type CustomItem = Item & {
+  speedTool: number
+}
 
 const digBlockModule = (bot: Bot) => {
   const startDig = (block: Block) => {
@@ -55,8 +59,8 @@ const digBlockModule = (bot: Bot) => {
     })
   }
 
-  const getBestTool = (block: Block) => {
-    const items = bot.inventory.items()
+  const getBestTool = (block: Block): Item | undefined => {
+    const items = bot.inventory.items() as Array<CustomItem>
     const mcData = mcDataLoader(bot.version)
 
     if (!block.material) {
@@ -73,16 +77,16 @@ const digBlockModule = (bot: Bot) => {
       return parseInt(x, 10)
     })
 
+    const tools: Array<CustomItem> = []
+
     // Get all valid tools and add speed
-    const tools = items.reduce((validTools, tool) => {
-      const returnValidTools = [...validTools]
+    items.forEach((tool) => {
       const index = toolsIdForMaterial.findIndex(m => m === tool.type)
       if (index >= 0) {
         tool.speedTool = toolsForMaterial[toolsIdForMaterial[index]]
-        returnValidTools.push(tool)
+        tools.push(tool)
       }
-      return returnValidTools
-    }, [])
+    })
 
     if (tools.length === 0) {
       return undefined
