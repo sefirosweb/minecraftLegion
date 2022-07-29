@@ -8,9 +8,9 @@ const accessFile = util.promisify(fs.access);
 
 require("module-alias/register");
 
-//@ts-ignore
-import botWebsocket from "@modules/botWebsocket";
+import botWebsocket from "@/modules/botWebsocket";
 import mcDataLoader from 'minecraft-data'
+import { Bot } from "./types";
 
 export type Props = {
   botName?: string;
@@ -33,7 +33,7 @@ export const createNewBot = (props: Props): void => {
     username: botName,
     host: server,
     port: port,
-  });
+  }) as Bot;
 
   botWebsocket.loadBot(bot);
   bot.setMaxListeners(0);

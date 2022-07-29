@@ -1,19 +1,26 @@
-const Vec3 = require('vec3')
-const configBot = require('@config')
-const { webServer, webServerPort, webServerPassword } = configBot.default
-const socketIOClient = require('socket.io-client')
-const botconfig = require('@modules/botConfig')
 
-let bot
-let socket
-let friends = []
-let masters = []
+//@ts-nocheck
+import configBot from '@/config'
+const { webServer, webServerPort, webServerPassword } = configBot
+import socketIOClient, { Socket } from 'socket.io-client'
+import botconfigLoader from '@/modules/botConfig'
+const botconfig = botconfigLoader()
+import { Bot } from '@/types'
+import { Vec3 } from 'vec3'
+
+let bot: Bot
+let socket: Socket
+let friends: Array<{ socketId: string }> = []
+let masters: Array<{
+  position: Vec3
+}> = []
 let loged = false
-function loadBot (_bot) {
+
+function loadBot(_bot: Bot) {
   bot = _bot
 }
 
-function connect () {
+function connect() {
   socket = socketIOClient(`${webServer}:${webServerPort}`)
   socket.on('update', (data) => console.log(data))
   socket.on('connect_error', (data) => console.log(data))
@@ -435,11 +442,11 @@ function connect () {
   })
 }
 
-function getLoged () {
+function getLoged() {
   return loged
 }
 
-function sendConfig () {
+function sendConfig() {
   socket.emit('sendAction', {
     action: 'sendConfig',
     value: botconfig.getAll(bot.username)
@@ -448,18 +455,18 @@ function sendConfig () {
   // console.log(botconfig.getAll(bot.username))
 }
 
-function sendAction (action, value) {
+function sendAction(action, value) {
   socket.emit('sendAction', { action, value })
 }
 
-function emit (chanel, data) {
+function emit(chanel, data) {
   if (!loged) {
     return
   }
   socket.emit(chanel, data)
 }
 
-function emitHealth (health) {
+function emitHealth(health) {
   const data = {
     type: 'health',
     value: health
@@ -467,7 +474,7 @@ function emitHealth (health) {
   emit('botStatus', data)
 }
 
-function emitCombat (combat) {
+function emitCombat(combat) {
   const data = {
     type: 'combat',
     value: combat
@@ -475,7 +482,7 @@ function emitCombat (combat) {
   emit('botStatus', data)
 }
 
-function emitFood (health) {
+function emitFood(health) {
   const data = {
     type: 'food',
     value: health
@@ -483,7 +490,7 @@ function emitFood (health) {
   emit('botStatus', data)
 }
 
-function emitEvents (events) {
+function emitEvents(events) {
   const data = {
     type: 'events',
     value: events
@@ -491,28 +498,28 @@ function emitEvents (events) {
   emit('botStatus', data)
 }
 
-function log (data) {
+function log(data) {
   if (!loged) {
     return
   }
   socket.emit('logs', data)
 }
 
-function on (listener, cb) {
+function on(listener, cb) {
   socket.on(listener, cb)
 }
 
-function getFriends () {
+function getFriends() {
   return friends
 }
 
-function getMasters () {
+function getMasters() {
   const allMasters = masters.concat(configBot.default.masters) // Gef offline + online config
   return allMasters
 }
 
 let prevPoint
-function nextPointListener (master) {
+function nextPointListener(master) {
   if (prevPoint === undefined || master.position.distanceTo(prevPoint) > 3) {
     const patrol = botconfig.getPatrol(bot.username)
     patrol.push(
@@ -528,7 +535,7 @@ function nextPointListener (master) {
   }
 }
 
-module.exports = {
+const botWebsocketLoader = {
   loadBot,
   connect,
   getLoged,
@@ -543,3 +550,5 @@ module.exports = {
   getMasters,
   sendAction
 }
+
+export default botWebsocketLoader

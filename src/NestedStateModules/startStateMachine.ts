@@ -14,9 +14,9 @@ import { Vec3 } from "vec3"
 import debugMode from '@/config'
 import mcDataLoader from 'minecraft-data'
 import movementModule from '@/modules/movementModule'
+import botWebsocket from '@/modules/botWebsocket'
 
 module.exports = (bot: Bot) => {
-  const botWebsocket = require('@modules/botWebsocket')
   const inventoryViewer = require('mineflayer-web-inventory')
   const prismarineViewer = require('@modules/viewer')
 
