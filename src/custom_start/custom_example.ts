@@ -1,6 +1,9 @@
-const { sleep } = require('@modules/utils')
+import { Bot } from "@/types"
+import { Entity } from 'prismarine-entity'
 
-module.exports = (bot) => {
+import { sleep } from '@/modules/utils'
+
+const custom = (bot: Bot) => {
   const start = () => {
     return new Promise(async (resolve) => {
       // Login
@@ -10,21 +13,21 @@ module.exports = (bot) => {
       bot.chat('/login password')
       await sleep(500)
       bot.chat('Hello World')
-      resolve()
+      resolve(true)
       return
-
+      /*
       await goPosition()
 
       await sleep(500)
 
       // Click To
-      const filter = (e) =>
-        e.type === 'player' && e.position.distanceTo(bot.entity.position) < 3
+      const filter = (e: Entity) => e.type === 'player' && e.position.distanceTo(bot.entity.position) < 3
       const entity = bot.nearestEntity(filter)
       if (entity) {
         bot.useOn(entity)
       }
       await sleep(500)
+      */
     })
   }
 
@@ -36,8 +39,8 @@ module.exports = (bot) => {
     bot.pathfinder.setGoal(new goals.GoalBlock(37, 51, 11))
 
     return new Promise((resolve) => {
-      bot.on('goal_reached', (goal) => {
-        resolve()
+      bot.on('goal_reached', () => {
+        resolve(true)
       })
     })
   }
@@ -46,3 +49,6 @@ module.exports = (bot) => {
     start
   }
 }
+
+
+export default custom

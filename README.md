@@ -42,7 +42,7 @@ cd minecraftLegion
   webServerPort: '4001', // minecraftLegionWebServer PORT
   webServerPassword: 'admin', // password for websocket
   debugMode: false,
-  customStart: false, // If server have a login or other system to play you can add your self start Ex: login pass pass (see custom_start/custom_example.js)
+  customStart: false, // If server have a login or other system to play you can add your self start Ex: login pass pass (see custom_start/custom_example.ts)
   autoRestart: true // When bot breaks they auto reconnect
 }
 module.exports = config
