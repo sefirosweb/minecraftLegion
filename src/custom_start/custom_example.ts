@@ -4,7 +4,7 @@ import { Entity } from 'prismarine-entity'
 import { sleep } from '@/modules/utils'
 
 const custom = (bot: Bot) => {
-  const start = () => {
+  const start = (): Promise<void> => {
     return new Promise(async (resolve) => {
       // Login
       // await sleep(500)
@@ -13,7 +13,7 @@ const custom = (bot: Bot) => {
       bot.chat('/login password')
       await sleep(500)
       bot.chat('Hello World')
-      resolve(true)
+      resolve()
       return
       /*
       await goPosition()
@@ -31,7 +31,7 @@ const custom = (bot: Bot) => {
     })
   }
 
-  const goPosition = () => {
+  const goPosition = (): Promise<void> => {
     const mcData = require('minecraft-data')(bot.version)
     const { pathfinder, Movements, goals } = require('mineflayer-pathfinder')
     bot.loadPlugin(pathfinder)
@@ -40,7 +40,7 @@ const custom = (bot: Bot) => {
 
     return new Promise((resolve) => {
       bot.on('goal_reached', () => {
-        resolve(true)
+        resolve()
       })
     })
   }

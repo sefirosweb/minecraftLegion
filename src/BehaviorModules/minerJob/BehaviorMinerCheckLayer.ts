@@ -79,7 +79,7 @@ module.exports = class BehaviorMinerCheckLayer {
     return this.bot.inventory.items().find(item => this.targets.minerJob.blockForPlace.includes(item.name))
   }
 
-  checkArea() {
+  checkArea(): Promise<void> {
     return new Promise(async (resolve) => {
       do {
         if (
@@ -88,7 +88,7 @@ module.exports = class BehaviorMinerCheckLayer {
           this.xCurrent === this.xEnd
         ) {
           this.isEndFinished = true
-          resolve(true)
+          resolve()
           return
         }
 
@@ -117,7 +117,7 @@ module.exports = class BehaviorMinerCheckLayer {
         }
 
         if (this.checkValidBlock(block)) {
-          resolve(true)
+          resolve()
           return
         }
       } while (true)
@@ -280,7 +280,7 @@ module.exports = class BehaviorMinerCheckLayer {
     return false
   }
 
-  moveToSeeBlock(x: number, y: number, z: number) {
+  moveToSeeBlock(x: number, y: number, z: number): Promise<void> {
     return new Promise((resolve) => {
       const goal = new mineflayerPathfinder.goals.GoalBlock(x, y, z)
       this.bot.pathfinder.setMovements(this.targets.movements)
@@ -290,7 +290,7 @@ module.exports = class BehaviorMinerCheckLayer {
         const block = this.getBlockType()
         if (block) {
           this.bot.pathfinder.setGoal(null)
-          resolve(true)
+          resolve()
         }
       })
     })

@@ -2,9 +2,11 @@
 
 import { Bot } from "@/types"
 import { Vec3 } from "vec3"
+import { Block } from 'prismarine-block'
+import mcDataLoader from 'minecraft-data'
 
 const digBlockModule = (bot: Bot) => {
-  const startDig = (block) => {
+  const startDig = (block: Block) => {
     return new Promise((resolve, reject) => {
       bot.dig(block)
         .then(resolve)
@@ -19,7 +21,7 @@ const digBlockModule = (bot: Bot) => {
     return new Promise((resolve, reject) => {
       const block = bot.blockAt(position)
       if (!block || !bot.canDigBlock(block)) {
-        reject(new Error(`Error mining block: ${block.name}`))
+        reject(new Error(`Error mining block: ${position.toString()}`))
         return
       }
 
@@ -30,7 +32,7 @@ const digBlockModule = (bot: Bot) => {
     })
   }
 
-  const equipToolForBlock = (block) => {
+  const equipToolForBlock = (block: Block): Promise<void> => {
     return new Promise((resolve, reject) => {
       const tool = getBestTool(block)
       if (tool === undefined) {
@@ -53,9 +55,14 @@ const digBlockModule = (bot: Bot) => {
     })
   }
 
-  const getBestTool = (block) => {
+  const getBestTool = (block: Block) => {
     const items = bot.inventory.items()
-    const mcData = require('minecraft-data')(bot.version)
+    const mcData = mcDataLoader(bot.version)
+
+    if (!block.material) {
+      return undefined
+    }
+
     const toolsForMaterial = mcData.materials[block.material]
 
     if (toolsForMaterial === undefined) {
