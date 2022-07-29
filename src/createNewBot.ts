@@ -1,11 +1,5 @@
-import fs from "fs";
-import util from "util";
 import mineflayer from "mineflayer";
-import path from "path";
 import customStartLoader from "@/custom_start/custom"
-
-const copyFile = util.promisify(fs.copyFile);
-const accessFile = util.promisify(fs.access);
 
 require("module-alias/register");
 
@@ -67,20 +61,10 @@ export const createNewBot = (props: Props): void => {
     botWebsocket.log("Ready!");
 
     if (customStart) {
-      const customFilePath = path.join(__dirname, "custom_start/custom.ts")
-
-      accessFile(customFilePath)
-        .catch(() => {
-          const exampleFile = path.join(__dirname, "custom_start/custom_example.ts")
-          return copyFile(exampleFile, customFilePath);
-        })
-        .then(() => {
-          const { start } = customStartLoader(bot);
-          return start();
-        })
-        .then(() => {
-          require("@NestedStateModules/startStateMachine")(bot);
-        });
+      const { start } = customStartLoader(bot);
+      start().then(() => {
+        require("@NestedStateModules/startStateMachine")(bot);
+      });
     } else {
       require("@NestedStateModules/startStateMachine")(bot);
     }
