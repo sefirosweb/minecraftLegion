@@ -29,10 +29,10 @@ git clone https://github.com/sefirosweb/minecraftLegion.git
 cd minecraftLegion
 ```
 
-4. Copy and edit the config.js file
+4. Copy and edit the config.ts file
 
 ```js
- cp config_example.js config.js
+ cp config_example.ts config.ts
 
  const config = {
   server: '127.0.0.1', // Minecraft Server

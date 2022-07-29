@@ -2,7 +2,7 @@ trash_files/
 unused/
 .vscode/
 .env
-config.js
+config.ts
 
 # Exclude bot configurations
 botConfig/*.json

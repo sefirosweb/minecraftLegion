@@ -514,7 +514,7 @@ function getFriends() {
 }
 
 function getMasters() {
-  const allMasters = masters.concat(configBot.default.masters) // Gef offline + online config
+  const allMasters = masters.concat(configBot.masters) // Gef offline + online config
   return allMasters
 }
 

@@ -6,11 +6,11 @@ type botType = {
   username: string
 }
 
-const filePath = path.join(__dirname, "config.js")
+const filePath = path.join(__dirname, "config.ts")
 
 fs.access(filePath, 0, (err) => {
   if (err) {
-    fs.copyFile(path.join(__dirname, "config_example.js"), filePath, (err) => {
+    fs.copyFile(path.join(__dirname, "config_example.ts"), filePath, (err) => {
       if (err) throw err;
       start_bot();
       return;

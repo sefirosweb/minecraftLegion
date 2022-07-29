@@ -35,7 +35,7 @@ const config = {
   autoRestart: true
 }
 module.exports = config
-" > config.js
+" > config.ts
 
 docker run --rm -v $PWD:/home/app -w /home/app node:16.13-bullseye npm install
 
