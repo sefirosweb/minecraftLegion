@@ -1,18 +1,14 @@
+//@ts-nocheck
 import {
   StateTransition,
   BehaviorIdle,
   NestedStateMachine
 } from 'mineflayer-statemachine'
 
-//@ts-ignore
 import BehaviorLoadConfig from '@/BehaviorModules/BehaviorLoadConfig'
-//@ts-ignore
 import BehaviorWithdrawItemChest from '@/BehaviorModules/BehaviorWithdrawItemChest'
-//@ts-ignore
 import BehaviorDepositItemChest from '@/BehaviorModules/BehaviorDepositItemChest'
-//@ts-ignore
 import BehaviorCheckItemsInInventory from '@/BehaviorModules/BehaviorCheckItemsInInventory'
-//@ts-ignore
 import BehaviorMoveTo from '@/BehaviorModules/BehaviorMoveTo'
 import { Bot, Chest, itemsToCraft, LegionStateMachineTargets } from '@/types'
 import chestModule from '@/modules/chestModule'
@@ -24,30 +20,22 @@ function goChestsFunction(bot: Bot, targets: LegionStateMachineTargets) {
 
   const start = new BehaviorIdle()
   start.stateName = 'Start'
-  //@ts-ignore
   start.x = 75
-  //@ts-ignore
   start.y = 63
 
   const checkCraftItem = new BehaviorIdle()
   checkCraftItem.stateName = 'Check Craft Item'
-  //@ts-ignore
   checkCraftItem.x = 75
-  //@ts-ignore
   checkCraftItem.y = 513
 
   const exit = new BehaviorIdle()
   exit.stateName = 'Exit'
-  //@ts-ignore
   exit.x = 525
-  //@ts-ignore
   exit.y = 113
 
   const nextCheck = new BehaviorIdle()
   nextCheck.stateName = 'Next Check'
-  //@ts-ignore
   nextCheck.x = 325
-  //@ts-ignore
   nextCheck.y = 213
 
   const loadConfig = new BehaviorLoadConfig(bot, targets)

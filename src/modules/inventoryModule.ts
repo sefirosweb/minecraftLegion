@@ -1,6 +1,5 @@
 //@ts-nocheck
-
-import { Bot } from "@/types"
+import { Bot, Item } from "@/types"
 import { getSecondBlockPosition } from '@/modules/utils'
 
 const inventoryModule = (bot: Bot) => {
@@ -114,9 +113,10 @@ const inventoryModule = (bot: Bot) => {
   }
 
   function getResumeInventoryV2() {
-    const items = bot.inventory.slots.reduce((currentItems, slot) => {
-      const newItems = [...currentItems]
-      if (slot === null) return newItems
+
+    const items: Array<Item> = []
+    bot.inventory.slots.forEach((slot) => {
+      if (slot === null) return
 
       const itemSlot = {
         name: slot.name,
@@ -124,15 +124,14 @@ const inventoryModule = (bot: Bot) => {
         count: slot.count
       }
 
-      const index = currentItems.findIndex(i => i.type === slot.type)
+      const index = items.findIndex(i => i.type === slot.type)
       if (index >= 0) {
-        currentItems[index].count += slot.count
+        items[index].count += slot.count
       } else {
-        newItems.push(itemSlot)
+        items.push(itemSlot)
       }
 
-      return newItems
-    }, [])
+    })
 
     return items
   }

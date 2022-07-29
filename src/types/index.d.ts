@@ -13,7 +13,7 @@ export type PendingTransaction = {
 }
 
 export type Chests = {
-    [key: string]: {};
+    [key: string]: Chest;
 };
 
 export type Layer = {
