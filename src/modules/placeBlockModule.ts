@@ -1,4 +1,4 @@
-import { Bot } from '@/types'
+import { Bot, PositionsChecked, Queue } from '@/types'
 import { Vec3 } from 'vec3'
 import { Block } from 'prismarine-block'
 
@@ -17,16 +17,6 @@ const placeBlockModule = (bot: Bot) => {
       blockOffset,
       offset
     }
-  }
-
-  type Queue = {
-    position: Vec3,
-    parent: number
-  }
-
-  type PositionsChecked = {
-    position: Vec3,
-    parent: number | null
   }
 
   let queue: Array<Queue> = []

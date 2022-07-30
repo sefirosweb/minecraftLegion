@@ -1,8 +1,7 @@
 
-import { BlockChest, Bot, Facing, FacingType, getResumeInventory, GetResumeInventoryV2, ItemArmor, OptionsFind } from "@/types"
+import { BlockChest, Bot, Facing, FacingType, GetResumeInventory, GetResumeInventoryV2, ItemArmor, OptionsFind } from "@/types"
 import { getSecondBlockPosition } from '@/modules/utils'
 import { EquipmentDestination } from "mineflayer"
-import { Block } from 'prismarine-block'
 import { Vec3 } from "vec3"
 
 const inventoryModule = (bot: Bot) => {
@@ -145,7 +144,7 @@ const inventoryModule = (bot: Bot) => {
   }
 
   function getResumeInventory() {
-    const items: Array<getResumeInventory> = []
+    const items: Array<GetResumeInventory> = []
 
     bot.inventory.slots.forEach((slot) => {
 

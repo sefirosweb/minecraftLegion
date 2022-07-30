@@ -1,12 +1,8 @@
 
 
-import { Bot, LegionStateMachineTargets } from '@/types'
+import { Bot, CustomEntity, LegionStateMachineTargets } from '@/types'
 import botWebsocket from '@/modules/botWebsocket'
 import { Entity } from 'prismarine-entity'
-
-type CustomEntity = Entity & {
-  distance: number
-}
 
 const getClosestEnemy = (bot: Bot, targets: LegionStateMachineTargets) => {
   let entities: Array<CustomEntity> = []

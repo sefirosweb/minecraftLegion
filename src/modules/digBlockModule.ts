@@ -1,13 +1,9 @@
 
-import { Bot } from "@/types"
+import { Bot, CustomItem } from "@/types"
 import { Vec3 } from "vec3"
 import { Block } from 'prismarine-block'
 import mcDataLoader from 'minecraft-data'
 import { Item } from 'prismarine-item';
-
-type CustomItem = Item & {
-  speedTool: number
-}
 
 const digBlockModule = (bot: Bot) => {
   const startDig = (block: Block) => {

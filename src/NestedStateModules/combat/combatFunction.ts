@@ -10,18 +10,12 @@ import {
 } from 'mineflayer-statemachine'
 import BehaviorAttack from '@/BehaviorModules/BehaviorAttack'
 import BehaviorLongAttack from '@/BehaviorModules/BehaviorLongAttack'
-import { Bot, LegionStateMachineTargets } from '@/types'
+import { Bot, fakeVec3, LegionStateMachineTargets } from '@/types'
 import { Entity } from 'prismarine-entity'
 import mcDataLoader from 'minecraft-data'
 import inventoryModule from '@/modules/inventoryModule'
 import getClosestEnemy from '@/modules/getClosestEnemy'
 
-
-type fakeVec3 = {
-  x: number
-  y: number
-  z: number
-}
 
 function combatFunction(bot: Bot, targets: LegionStateMachineTargets) {
   const inventory = inventoryModule(bot)

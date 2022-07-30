@@ -1,4 +1,4 @@
-import { Bot, Item, LegionStateMachineTargets, Chest } from "@/types"
+import { Bot, Item, LegionStateMachineTargets, Chest, PendingTransaction } from "@/types"
 
 
 const {
@@ -6,11 +6,6 @@ const {
   BehaviorIdle,
   NestedStateMachine
 } = require('mineflayer-statemachine')
-
-type PendingTransaction = {
-  chest: Chest,
-  items: Array<Item>
-}
 
 function pickUpItems(bot: Bot, targets: LegionStateMachineTargets) {
 

@@ -1,10 +1,7 @@
 require("module-alias/register");
 import fs from "fs";
 import path from "path";
-
-type botType = {
-  username: string
-}
+import { botSocket, socketAuth } from "./types";
 
 const filePath = path.join(__dirname, "config.ts")
 
@@ -99,10 +96,6 @@ const start_bot = () => {
     socket.emit("login", webServerPassword);
   });
 
-  type socketAuth = {
-    auth: string
-  }
-
   socket.on("login", (authenticate: socketAuth) => {
     if (authenticate.auth) {
       loged = true;
@@ -114,11 +107,6 @@ const start_bot = () => {
   socket.on("disconnect", () => {
     console.log("disconnected from webserver");
   });
-
-  type botSocket = {
-    botName: string
-    botPassword?: string
-  }
 
   socket.on("botConnect", (data: botSocket) => {
     if (!loged) {

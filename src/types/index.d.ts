@@ -5,6 +5,7 @@ import { Vec3 } from 'vec3'
 import { Jobs } from './defaultTypes'
 import { Block } from 'prismarine-block'
 import { Entity } from 'prismarine-entity'
+import { Item as PrismarineItem  } from 'prismarine-item';
 
 
 export type PendingTransaction = {
@@ -232,10 +233,18 @@ export type GetResumeInventoryV2 = {
     count: number
 }
 
-export type getResumeInventory = {
+export type GetResumeInventory = {
     name: string,
     type: number,
     quantity: number
+}
+
+export type ResumeChests = {
+    [key: string]: SortChest
+};
+
+export type SortChest = {
+    slots: Array<GetResumeInventoryV2>
 }
 
 export type OptionsFind = {
@@ -248,4 +257,53 @@ export type OptionsFind = {
 
 export type BlockChest = Block & {
     secondBlock?: BlockChest
+}
+
+export type PendingTransaction = {
+    chest: Chest,
+    items: Array<Item>
+}
+
+export type fakeVec3 = {
+    x: number
+    y: number
+    z: number
+}
+
+export type Queue = {
+    position: Vec3,
+    parent: number
+}
+
+export type PositionsChecked = {
+    position: Vec3,
+    parent: number | null
+}
+
+export type ChestTransaction = {
+    fromChest: string,
+    fromSlot: string,
+    name: string,
+    quantity: number,
+    type: number
+}
+
+export type CustomEntity = Entity & {
+    distance: number
+}
+
+export type CustomItem = PrismarineItem & {
+    speedTool: number
+}
+
+export type botSocket = {
+    botName: string
+    botPassword?: string
+}
+export type socketAuth = {
+    auth: string
+}
+
+export type botType = {
+    username: string
 }

@@ -1,16 +1,17 @@
 //@ts-nocheck
 
-import { Bot } from "@/types"
+import { Bot, GetResumeInventory, ResumeChests } from "@/types"
 import inventoryModule from '@/modules/inventoryModule'
+
 
 const sorterJob = (bot: Bot) => {
   const { getGenericItems } = inventoryModule(bot)
 
-  const findItemsInChests = (chestInput, itemsInput, exclude) => {
-    const chests = JSON.parse(JSON.stringify(chestInput))
-    const items = JSON.parse(JSON.stringify(itemsInput))
+  const findItemsInChests = (chestInput: ResumeChests, itemsInput: GetResumeInventory, exclude) => {
+    const chests: ResumeChests = JSON.parse(JSON.stringify(chestInput))
+    const items: Array<GetResumeInventory> = JSON.parse(JSON.stringify(itemsInput))
 
-    const transactions = []
+    const transactions: Array<ChestTransaction> = []
 
     items.forEach((item) => {
       Object.entries(chests).forEach((entry) => {
@@ -28,7 +29,7 @@ const sorterJob = (bot: Bot) => {
               item.quantity -= count
               transactions.push({
                 fromChest: chestIndex,
-                fromSlot: slotIndex,
+                fromSlot: slotIndex.toString(),
                 name: slot.name,
                 quantity: slotCount,
                 type: slot.type
