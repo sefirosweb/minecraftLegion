@@ -1,11 +1,14 @@
-//@ts-nocheck
-import { Bot, Item } from "@/types"
+
+import { BlockChest, Bot, Facing, FacingType, getResumeInventory, GetResumeInventoryV2, ItemArmor, OptionsFind } from "@/types"
 import { getSecondBlockPosition } from '@/modules/utils'
+import { EquipmentDestination } from "mineflayer"
+import { Block } from 'prismarine-block'
+import { Vec3 } from "vec3"
 
 const inventoryModule = (bot: Bot) => {
   const mcData = require('minecraft-data')(bot.version)
 
-  function countItemsInInventoryOrEquipped(item) {
+  function countItemsInInventoryOrEquipped(item: ItemArmor) {
     let currentItems = 0
 
     if (checkItemEquiped(item)) {
@@ -16,7 +19,7 @@ const inventoryModule = (bot: Bot) => {
     return currentItems
   }
 
-  function countItemsInInventory(itemToCount) {
+  function countItemsInInventory(itemToCount: ItemArmor) {
     let currentItems
     if (getGenericItems().includes(itemToCount)) {
       currentItems = bot.inventory.items().filter(item => item.name.includes(itemToCount))
@@ -29,7 +32,7 @@ const inventoryModule = (bot: Bot) => {
     return currentItems
   }
 
-  function checkItemEquiped(itemArmor) {
+  function checkItemEquiped(itemArmor: ItemArmor) {
     let swordEquiped, isSword, bowEquiped, isBow
 
     let slotID
@@ -70,7 +73,7 @@ const inventoryModule = (bot: Bot) => {
     return bot.inventory.slots[slotID] !== null
   }
 
-  function equipItem(itemArmor) {
+  function equipItem(itemArmor: ItemArmor): Promise<void> {
     return new Promise((resolve, reject) => {
       if (checkItemEquiped(itemArmor)) {
         resolve()
@@ -84,7 +87,7 @@ const inventoryModule = (bot: Bot) => {
         return
       }
 
-      let location
+      let location: EquipmentDestination
       switch (itemArmor) {
         case 'helmet':
           location = 'head'
@@ -104,6 +107,8 @@ const inventoryModule = (bot: Bot) => {
         case 'shield':
           location = 'off-hand'
           break
+        default:
+          return undefined
       }
 
       bot.equip(armor, location)
@@ -112,13 +117,16 @@ const inventoryModule = (bot: Bot) => {
     })
   }
 
+
+
   function getResumeInventoryV2() {
 
-    const items: Array<Item> = []
+    const items: Array<GetResumeInventoryV2> = []
+
     bot.inventory.slots.forEach((slot) => {
       if (slot === null) return
 
-      const itemSlot = {
+      const itemSlot: GetResumeInventoryV2 = {
         name: slot.name,
         type: slot.type,
         count: slot.count
@@ -137,9 +145,11 @@ const inventoryModule = (bot: Bot) => {
   }
 
   function getResumeInventory() {
-    const items = bot.inventory.slots.reduce((currentItems, slot) => {
-      const newItems = [...currentItems]
-      if (slot === null) return newItems
+    const items: Array<getResumeInventory> = []
+
+    bot.inventory.slots.forEach((slot) => {
+
+      if (slot === null) return
 
       const itemSlot = {
         name: slot.name,
@@ -147,20 +157,19 @@ const inventoryModule = (bot: Bot) => {
         quantity: slot.count
       }
 
-      const index = currentItems.findIndex(i => i.type === slot.type)
+      const index = items.findIndex(i => i.type === slot.type)
       if (index >= 0) {
-        currentItems[index].quantity += slot.count
+        items[index].quantity += slot.count
       } else {
-        newItems.push(itemSlot)
+        items.push(itemSlot)
       }
 
-      return newItems
-    }, [])
+    })
 
     return items
   }
 
-  const findChests = (options) => {
+  const findChests = (options: OptionsFind | undefined) => {
     options = options || {}
     const matching = options.matching || ['chest', 'ender_chest', 'trapped_chest'].map(name => mcData.blocksByName[name].id)
     const point = (options.point || bot.entity.position).floored()
@@ -177,16 +186,21 @@ const inventoryModule = (bot: Bot) => {
     }).map(chest => bot.blockAt(chest))
 
     const chests = []
-    let block, secondBlock, secondBlockIndex, props
-    while (blocksFound.length > 0) {
+    let block: BlockChest | null | undefined
+    let secondBlock: Vec3
+    let secondBlockIndex: number
+    let props: { [key: string]: string | number }
+
+    while (block = blocksFound.shift()) {
+
       if (chests.length >= count) {
         break
       }
 
-      block = blocksFound.shift()
       props = block.getProperties()
-
-      const offset = getSecondBlockPosition(props.facing, props.type)
+      const facing: Facing = props.facing as Facing
+      const type: FacingType = props.type as FacingType
+      const offset = getSecondBlockPosition(facing, type)
 
       if (offset === false) {
         chests.push(block)
@@ -195,12 +209,15 @@ const inventoryModule = (bot: Bot) => {
 
       secondBlock = block.position.offset(offset.x, offset.y, offset.z)
 
-      secondBlockIndex = blocksFound.findIndex(chest => chest.position.equals(secondBlock))
+      secondBlockIndex = blocksFound.findIndex(chest => chest && chest.position.equals(secondBlock))
       if (secondBlockIndex >= 0) {
         blocksFound.splice(secondBlockIndex, 1)
       }
 
-      block.secondBlock = bot.blockAt(secondBlock)
+      const secondBlockChest: BlockChest | null = bot.blockAt(secondBlock)
+      if (secondBlockChest) {
+        block.secondBlock = secondBlockChest
+      }
 
       chests.push(block)
     }
@@ -212,7 +229,7 @@ const inventoryModule = (bot: Bot) => {
     return ['helmet', 'chestplate', 'leggings', 'boots', 'sword', 'pickaxe', 'shovel', '_axe', 'hoe']
   }
 
-  const equipHeldItem = (itemName) => {
+  const equipHeldItem = (itemName: string): Promise<void> => {
     return new Promise((resolve, reject) => {
       const hand = bot.heldItem
 

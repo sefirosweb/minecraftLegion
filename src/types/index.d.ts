@@ -95,6 +95,7 @@ export type Item = {
     quantity: number
 }
 
+
 export type itemsToCraft = {
     name: string
     quantity: number
@@ -189,6 +190,7 @@ export type BotwebsocketAction = {
 
 export type Coordinates = 'x+' | 'x-' | 'z+' | 'z-'
 export type Facing = 'south' | 'north' | 'east' | 'west'
+export type FacingType = 'single' | 'left' | 'right'
 export type Master = {
     name: string
 }
@@ -220,4 +222,30 @@ declare module 'mineflayer' {
         newListener: (event: string | symbol, listener: Function) => Promise<void> | void
         removeListener: (event: string | symbol, listener: Function) => Promise<void> | void
     }
+}
+
+export type ItemArmor = 'helmet' | 'chestplate' | 'leggings' | 'boots' | 'sword' | 'shield' | 'bow'
+
+export type GetResumeInventoryV2 = {
+    name: string,
+    type: number,
+    count: number
+}
+
+export type getResumeInventory = {
+    name: string,
+    type: number,
+    quantity: number
+}
+
+export type OptionsFind = {
+    matching?: Array<string>
+    point?: Vec3
+    maxDistance?: number
+    count?: number
+    useExtraInfo?: any
+}
+
+export type BlockChest = Block & {
+    secondBlock?: BlockChest
 }

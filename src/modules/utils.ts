@@ -1,4 +1,4 @@
-import { Facing } from '@/types'
+import { Facing, FacingType } from '@/types'
 import { Vec3 } from 'vec3'
 
 export const sleep = (ms: number) => {
@@ -26,7 +26,7 @@ export const shuffle = (array: Array<any>) => {
 }
 
 
-export const getSecondBlockPosition = (facing: Facing, type: 'single' | 'left' | 'right') => {
+export const getSecondBlockPosition = (facing: Facing, type: FacingType) => {
   if (type === 'single') {
     return false
   }
