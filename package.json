@@ -15,13 +15,14 @@
         "mineflayer-pathfinder": "2.2.0",
         "mineflayer-statemachine": "1.6.5",
         "mineflayer-web-inventory": "1.8.3",
+        "mocha": "^10.0.0",
         "module-alias": "2.2.2",
         "prismarine-viewer": "1.23.0",
         "socket.io-client": "4.5.1",
         "vec3": "0.1.7"
     },
     "devDependencies": {
-        "mocha": "^10.0.0",
+        "minecraft-wrap": "^1.5.1",
         "nodemon": "2.0.19",
         "prismarine-entity": "^2.1.1",
         "standard": "17.0.0",
@@ -30,7 +31,8 @@
     },
     "scripts": {
         "mocha_test": "mocha --reporter spec --exit",
-        "test": "npm run mocha_test",
+        "test": "npm run mocha_test -- -g 1.18.*",
+        "start_server_test": "docker build -t docker_minecraftlegion . && docker run --rm -it --name minecraftLegion_test_server --network minecraftLegionNetwork -v $PWD:/home/app -w /home/app -u node -p 25565:25565 docker_minecraftlegion node test/common/start_test_server.js",
         "start": "nodemon src/index.ts --ignore botConfig/ --ignore custom_start/",
         "one": "nodemon --inspect=0.0.0.0:9229 src/start_bot.ts $1 $2 --ignore src/botConfig/ --ignore src/custom_start/",
         "standard": "standard --fix",

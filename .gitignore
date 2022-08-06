@@ -108,3 +108,12 @@ dist
 # Public Files examples
 
 examples/nodejs/serverchat/public/files
+
+# Exclude bot configurations
+botConfig/*.json
+
+# Folder of tests
+versions/
+server_jars/
+test/server_*
+test/common/server_*
