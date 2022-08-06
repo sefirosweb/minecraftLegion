@@ -7,18 +7,21 @@ require("module-alias/register");
 const mineflayer = require("mineflayer");
 const botWebsocket = require("@modules/botWebsocket");
 
-const createNewBot = (botName, botPassword = "", server, port, customStart, supportedVersion) => {
+const createNewBot = (botName, botPassword = "", server, port, customStart) => {
   const bot = mineflayer.createBot({
     username: botName,
     host: server,
-    port: port,
-    version: supportedVersion
+    port: port
   });
 
   botWebsocket.loadBot(bot);
   bot.setMaxListeners(0);
-  bot.once("inject_allowed", () => {
+  bot.on("inject_allowed", () => {
+    const mcData = require('minecraft-data')(bot.version)
+    mcData.blocksArray[826].hardness = 3 // hotfix until wait a final relase
+    mcData.blocksArray[274].boundingBox = 'block'
     bot.loadPlugin(require("mineflayer-pathfinder").pathfinder);
+    console.log('\x1b[33m%s\x1b[0m', 'Injected pathfinder');
   });
 
   bot.once("kicked", (reason) => {
@@ -33,14 +36,9 @@ const createNewBot = (botName, botPassword = "", server, port, customStart, supp
     process.exit();
   });
 
-  bot.once('inject_allowed', () => {
-    mcData = require('minecraft-data')(bot.version)
-    mcData.blocksArray[826].hardness = 3 // hotfix until wait a final relase
-    mcData.blocksArray[274].boundingBox = 'block'
-  })
-
   bot.once("spawn", async () => {
-    console.log(bot.version);
+    console.log('\x1b[33m%s\x1b[0m', bot.version);
+    console.log('\x1b[33m%s\x1b[0m', 'Spawned');
     bot.chat(`/login ${botPassword}`)
     botWebsocket.connect();
     botWebsocket.log("Ready!");

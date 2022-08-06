@@ -65,12 +65,10 @@ describe(`mineflayer_external ${version.minecraftVersion}`, function () {
   })
   before((done) => {
     function begin() {
-      bot = createNewBot('flatbot', '', HOST, PORT, false, supportedVersion)
-      commonTest(bot)
-      bot.test.port = PORT
+      bot = createNewBot('flatbot', '', HOST, PORT, false)
 
-      console.log('starting bot')
       bot.once('spawn', () => {
+        commonTest(bot)
         done()
       })
     }
