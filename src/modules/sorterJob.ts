@@ -7,7 +7,7 @@ import inventoryModule from '@/modules/inventoryModule'
 const sorterJob = (bot: Bot) => {
   const { getGenericItems } = inventoryModule(bot)
 
-  const findItemsInChests = (chestInput: ResumeChests, itemsInput: GetResumeInventory, exclude) => {
+  const findItemsInChests = (chestInput: ResumeChests, itemsInput: GetResumeInventory, exclude?: any) => {
     const chests: ResumeChests = JSON.parse(JSON.stringify(chestInput))
     const items: Array<GetResumeInventory> = JSON.parse(JSON.stringify(itemsInput))
 
