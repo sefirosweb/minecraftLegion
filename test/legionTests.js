@@ -1,5 +1,6 @@
 /* eslint-env mocha */
 
+require("module-alias/register");
 const assert = require('assert')
 const mineflayer = require('mineflayer')
 const commonTest = require('./legionTests/plugins/testCommon')
@@ -75,6 +76,7 @@ describe(`mineflayer_external ${version.minecraftVersion}`, function () {
 
       console.log('starting bot')
       bot.once('spawn', () => {
+        require("@NestedStateModules/startStateMachine")(bot);
         done()
       })
     }
