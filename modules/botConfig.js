@@ -2,81 +2,81 @@ const low = require("lowdb");
 const Filesync = require("lowdb/adapters/FileSync");
 const path = require("path");
 
+const defaultConfig = {
+  job: "none", // guard, miner -- For a now...
+  mode: "none", // none, pve, pvp
+  distance: 10,
+  helpFriends: false,
+  pickUpItems: false,
+  randomFarmArea: false,
+  isCopingPatrol: false,
+  canDig: false,
+  canSleep: false,
+  sleepArea: {
+    x: null,
+    y: null,
+    z: null,
+  },
+  canPlaceBlocks: false,
+  allowSprinting: false,
+  firstPickUpItemsFromKnownChests: true,
+  canCraftItemWithdrawChest: true,
+  itemsToBeReady: [
+    {
+      item: "sword",
+      quantity: 1,
+    },
+  ],
+  itemsCanBeEat: [
+    "bread",
+    "carrot",
+    "potato",
+    "sweet_berries",
+    "baked_potato",
+    "cooked_chicken",
+    "cooked_porkchop",
+    "cooked_mutton"
+  ],
+  chests: [],
+  patrol: [],
+  plantAreas: [],
+  chestAreas: [],
+  farmAreas: [],
+  farmAnimal: {
+    seconds: 60,
+    cow: 10,
+    sheep: 10,
+    wolf: 10,
+    chicken: 10,
+    cat: 10,
+    horse: 10,
+    donkey: 10,
+    llama: 10,
+    pig: 10,
+    rabbit: 10,
+    turtles: 10,
+    panda: 10,
+    fox: 10,
+    bee: 10,
+  },
+  minerCords: {
+    xStart: null,
+    yStart: null,
+    zStart: null,
+    xEnd: null,
+    yEnd: null,
+    zEnd: null,
+    orientation: null,
+    tunel: null,
+    reverse: false
+  },
+};
+
 function getConn(botName) {
   const adapter = new Filesync(
     path.join(__dirname, "../botConfig/") + botName + ".json"
   );
   const db = low(adapter);
-  const defaultConfig = {
-    name: botName,
-    job: "none", // guard, miner -- For a now...
-    mode: "none", // none, pve, pvp
-    distance: 10,
-    helpFriends: false,
-    pickUpItems: false,
-    randomFarmArea: false,
-    isCopingPatrol: false,
-    canDig: false,
-    canSleep: false,
-    sleepArea: {
-      x: null,
-      y: null,
-      z: null,
-    },
-    canPlaceBlocks: false,
-    allowSprinting: false,
-    firstPickUpItemsFromKnownChests: true,
-    canCraftItemWithdrawChest: true,
-    itemsToBeReady: [
-      {
-        item: "sword",
-        quantity: 1,
-      },
-    ],
-    itemsCanBeEat: [
-      "bread",
-      "carrot",
-      "potato",
-      "sweet_berries",
-      "baked_potato",
-      "cooked_chicken",
-      "cooked_porkchop",
-      "cooked_mutton"
-    ],
-    chests: [],
-    patrol: [],
-    plantAreas: [],
-    chestAreas: [],
-    farmAreas: [],
-    farmAnimal: {
-      seconds: 60,
-      cow: 10,
-      sheep: 10,
-      wolf: 10,
-      chicken: 10,
-      cat: 10,
-      horse: 10,
-      donkey: 10,
-      llama: 10,
-      pig: 10,
-      rabbit: 10,
-      turtles: 10,
-      panda: 10,
-      fox: 10,
-      bee: 10,
-    },
-    minerCords: {
-      xStart: null,
-      yStart: null,
-      zStart: null,
-      xEnd: null,
-      yEnd: null,
-      zEnd: null,
-      orientation: null,
-      tunel: null,
-      reverse: false
-    },
-  };
 
   db.defaults({ config: defaultConfig }).write();
 
@@ -431,6 +431,7 @@ function setChestArea(botName, farmAreas) {
 }
 
 module.exports = {
+  defaultConfig,
   getAll,
   saveFullConfig,
   setJob,
