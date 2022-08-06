@@ -1,16 +1,24 @@
-
-//@ts-nocheck
 import configBot from '@/config'
 const { webServer, webServerPort, webServerPassword } = configBot
 import socketIOClient, { Socket } from 'socket.io-client'
 import botconfigLoader from '@/modules/botConfig'
 const botconfig = botconfigLoader()
-import { Bot } from '@/types'
+import { Bot, BotwebsocketAction } from '@/types'
 import { Vec3 } from 'vec3'
+import { Jobs } from '@/types/defaultTypes'
+
+type BotFriends = {
+  socketId: string,
+  name: string,
+  event: any
+  health: string
+  food: string
+  combat: string
+}
 
 let bot: Bot
 let socket: Socket
-let friends: Array<{ socketId: string, name: string }> = []
+let friends: Array<BotFriends> = []
 let masters: Array<{
   position: Vec3
   name: string
@@ -54,7 +62,7 @@ function connect() {
     friends = botsOnline
   })
 
-  socket.on('botStatus', (data) => {
+  socket.on('botStatus', (data: { type: 'health' | 'food' | 'combat', socketId: string, value: string }) => {
     const botIndex = friends.findIndex((e) => e.socketId === data.socketId)
     if (botIndex >= 0) {
       const friendUpdate = [...friends]
@@ -76,14 +84,20 @@ function connect() {
       chests,
       itemsCanBeEat,
       findMaster,
-      isEventLoaded,
       plantAreas,
       farmAreas,
       farmAnimal,
       chestArea
+
+    let isEventLoaded: Function | undefined
+
+    const asd = config.value
     switch (config.configToChange) {
       case 'job':
-        botconfig.setJob(bot.username, config.value)
+        if (asd in Jobs) {
+          console.log(asd)
+          botconfig.setJob(bot.username, asd)
+        }
         break
       case 'pickUpItems':
         botconfig.setPickUpItems(bot.username, config.value)
@@ -193,14 +207,16 @@ function connect() {
           return
         }
 
-        isEventLoaded = bot.listeners('customEventPhysicTick').find((event) => {
-          return event.name === 'bound nextPointListener'
-        })
+        isEventLoaded = bot.listeners('customEventPhysicTick')
+          .find((event) => {
+            return event.name === 'bound nextPointListener'
+          })
 
         if (!isEventLoaded) {
           prevPoint = undefined
           bot.on(
             'customEventPhysicTick',
+            //@ts-ignore
             nextPointListener.bind(this, findMaster)
           )
           botconfig.setCopingPatrol(bot.username, true)
@@ -456,18 +472,18 @@ function sendConfig() {
   // console.log(botconfig.getAll(bot.username))
 }
 
-function sendAction(action, value) {
+function sendAction(action: string, value: string) {
   socket.emit('sendAction', { action, value })
 }
 
-function emit(chanel, data) {
+function emit(chanel: string, data: any) {
   if (!loged) {
     return
   }
   socket.emit(chanel, data)
 }
 
-function emitHealth(health) {
+function emitHealth(health: number) {
   const data = {
     type: 'health',
     value: health
@@ -475,7 +491,7 @@ function emitHealth(health) {
   emit('botStatus', data)
 }
 
-function emitCombat(combat) {
+function emitCombat(combat: boolean) {
   const data = {
     type: 'combat',
     value: combat
@@ -483,15 +499,15 @@ function emitCombat(combat) {
   emit('botStatus', data)
 }
 
-function emitFood(health) {
+function emitFood(food: number) {
   const data = {
     type: 'food',
-    value: health
+    value: food
   }
   emit('botStatus', data)
 }
 
-function emitEvents(events) {
+function emitEvents(events: Array<string>) {
   const data = {
     type: 'events',
     value: events
@@ -499,14 +515,14 @@ function emitEvents(events) {
   emit('botStatus', data)
 }
 
-function log(data) {
+function log(data: string) {
   if (!loged) {
     return
   }
   socket.emit('logs', data)
 }
 
-function on(listener, cb) {
+function on(listener: string, cb: (BotwebsocketAction: BotwebsocketAction) => void) {
   socket.on(listener, cb)
 }
 
@@ -519,8 +535,8 @@ function getMasters() {
   return allMasters
 }
 
-let prevPoint
-function nextPointListener(master) {
+let prevPoint: Vec3 | undefined
+function nextPointListener(master: { position: Vec3 }) {
   if (prevPoint === undefined || master.position.distanceTo(prevPoint) > 3) {
     const patrol = botconfig.getPatrol(bot.username)
     patrol.push(

@@ -5,7 +5,7 @@ import { Vec3 } from 'vec3'
 import { Jobs } from './defaultTypes'
 import { Block } from 'prismarine-block'
 import { Entity } from 'prismarine-entity'
-import { Item as PrismarineItem  } from 'prismarine-item';
+import { Item as PrismarineItem } from 'prismarine-item';
 
 
 export type PendingTransaction = {
@@ -56,25 +56,27 @@ type FarmerJob = {
     plantArea: PlantArea
 }
 
+type FarmAnimal = {
+    seconds: number,
+    cow: 10,
+    sheep: 10,
+    chicken: 10,
+    horse: 10,
+    donkey: 10,
+    llama: 10,
+    bee: 10,
+    panda: 10,
+    wolf: 10,
+    cat: 10,
+    rabbit: 10,
+    pig: 10,
+    turtles: 10,
+}
+
 type BreederJob = {
     farmAreas: Array<Layer>,
     breededAnimals: Array<Entity>,
-    farmAnimal: {
-        seconds: number,
-        cow: 10,
-        sheep: 10,
-        chicken: 10,
-        horse: 10,
-        donkey: 10,
-        llama: 10,
-        bee: 10,
-        panda: 10,
-        wolf: 10,
-        cat: 10,
-        rabbit: 10,
-        pig: 10,
-        turtles: 10,
-    },
+    farmAnimal: FarmAnimal,
     animalsToBeFeed: Array<Entity>,
     feedEntity?: Entity
 }
@@ -113,6 +115,8 @@ export type Chest = {
     dimension: Dimensions
 };
 
+export type Agro = 'none' | 'pve' | 'pvp'
+
 export type Config = {
     job: Jobs
     sleepArea?: Vec3
@@ -122,7 +126,7 @@ export type Config = {
     canSleep: boolean
     canCraftItemWithdrawChest: boolean
     minerCords: MineCordsConfig
-    mode: 'none' | 'pve' | 'pvp'
+    mode: Agro
     distance: number
 }
 
@@ -208,7 +212,7 @@ declare module 'prismarine-entity' {
 declare module 'mineflayer' {
     export interface BotEvents {
         webSocketLogin: () => Promise<void> | void
-        customEventPhysicTick: () => Promise<void> | void
+        customEventPhysicTick: Function | void
 
         customEventChat: (
             username: string,

@@ -1,7 +1,13 @@
-//@ts-nocheck
+
+import { Agro, Chests, Config, FarmAnimal, Item, Layer, MineCordsConfig, PlantArea } from '@/types'
+import { Jobs } from '@/types/defaultTypes'
+
+//@ts-ignore
 import low from 'lowdb'
+//@ts-ignore
 import Filesync from 'lowdb/adapters/FileSync'
 import path from 'path'
+import { Vec3 } from 'vec3'
 
 const botConfiguration = () => {
   const getConn = (botName: string) => {
@@ -45,7 +51,7 @@ const botConfiguration = () => {
         'cooked_porkchop',
         'cooked_mutton'
       ],
-      chests: [],
+      chests: {},
       patrol: [],
       plantAreas: [],
       chestAreas: [],
@@ -108,7 +114,7 @@ const botConfiguration = () => {
     return db.get('config').value()
   }
 
-  const saveFullConfig = (botName: string, config) => {
+  const saveFullConfig = (botName: string, config: Config) => {
     const db = getConn(botName)
     const fullConfig = db.get('config').value()
     const newFullConfig = {
@@ -118,7 +124,7 @@ const botConfiguration = () => {
     db.set('config', newFullConfig).write()
   }
 
-  const setJob = (botName: String, job) => {
+  const setJob = (botName: string, job: Jobs) => {
     const db = getConn(botName)
     db.set('config.job', job).write()
   }
@@ -128,9 +134,9 @@ const botConfiguration = () => {
     return db.get('config.job').value()
   }
 
-  const setMode = (botName: string, mode) => {
+  const setMode = (botName: string, agro: Agro) => {
     const db = getConn(botName)
-    db.set('config.mode', mode).write()
+    db.set('config.mode', agro).write()
   }
 
   const getMode = (botName: string) => {
@@ -138,7 +144,7 @@ const botConfiguration = () => {
     return db.get('config.mode').value()
   }
 
-  const setHelpFriends = (botName: string, mode) => {
+  const setHelpFriends = (botName: string, mode: boolean) => {
     const db = getConn(botName)
     if (mode === true) {
       mode = true
@@ -153,7 +159,7 @@ const botConfiguration = () => {
     return db.get('config.helpFriends').value()
   }
 
-  const setCanDig = (botName: string, mode) => {
+  const setCanDig = (botName: string, mode: boolean) => {
     const db = getConn(botName)
     if (mode === true) {
       mode = true
@@ -168,7 +174,7 @@ const botConfiguration = () => {
     return db.get('config.canDig').value()
   }
 
-  const setCanSleep = (botName: string, mode) => {
+  const setCanSleep = (botName: string, mode: boolean) => {
     const db = getConn(botName)
     if (mode === true) {
       mode = true
@@ -183,7 +189,7 @@ const botConfiguration = () => {
     return db.get('config.canSleep').value()
   }
 
-  const setSleepArea = (botName: string, coords) => {
+  const setSleepArea = (botName: string, coords: Vec3) => {
     const db = getConn(botName)
     db.set('config.sleepArea', coords).write()
   }
@@ -193,7 +199,7 @@ const botConfiguration = () => {
     return db.get('config.sleepArea').value()
   }
 
-  const setCanPlaceBlocks = (botName: string, mode) => {
+  const setCanPlaceBlocks = (botName: string, mode: boolean) => {
     const db = getConn(botName)
     if (mode === true) {
       mode = true
@@ -208,7 +214,7 @@ const botConfiguration = () => {
     return db.get('config.canPlaceBlocks').value()
   }
 
-  const setFirstPickUpItemsFromKnownChests = (botName: string, mode) => {
+  const setFirstPickUpItemsFromKnownChests = (botName: string, mode: boolean) => {
     const db = getConn(botName)
     if (mode === true) {
       mode = true
@@ -223,7 +229,7 @@ const botConfiguration = () => {
     return db.get('config.firstPickUpItemsFromKnownChests').value()
   }
 
-  const setCanCraftItemWithdrawChest = (botName: string, mode) => {
+  const setCanCraftItemWithdrawChest = (botName: string, mode: boolean) => {
     const db = getConn(botName)
     if (mode === true) {
       mode = true
@@ -238,7 +244,7 @@ const botConfiguration = () => {
     return db.get('config.canCraftItemWithdrawChest').value()
   }
 
-  const setAllowSprinting = (botName: string, mode) => {
+  const setAllowSprinting = (botName: string, mode: boolean) => {
     const db = getConn(botName)
     if (mode === true) {
       mode = true
@@ -253,7 +259,7 @@ const botConfiguration = () => {
     return db.get('config.allowSprinting').value()
   }
 
-  const setPickUpItems = (botName: string, mode) => {
+  const setPickUpItems = (botName: string, mode: boolean) => {
     const db = getConn(botName)
     if (mode === true) {
       mode = true
@@ -269,7 +275,7 @@ const botConfiguration = () => {
     return db.get('config.pickUpItems').value()
   }
 
-  const setRandomFarmArea = (botName: string, mode) => {
+  const setRandomFarmArea = (botName: string, mode: boolean) => {
     const db = getConn(botName)
     if (mode === true) {
       mode = true
@@ -285,7 +291,7 @@ const botConfiguration = () => {
     return db.get('config.randomFarmArea').value()
   }
 
-  const setDistance = (botName: string, distance) => {
+  const setDistance = (botName: string, distance: number) => {
     const db = getConn(botName)
     db.set('config.distance', distance).write()
   }
@@ -295,7 +301,7 @@ const botConfiguration = () => {
     return db.get('config.distance').value()
   }
 
-  const setPatrol = (botName: string, patrol) => {
+  const setPatrol = (botName: string, patrol: Array<Vec3>) => {
     const db = getConn(botName)
     db.set('config.patrol', patrol).write()
   }
@@ -310,7 +316,7 @@ const botConfiguration = () => {
     return db.get('config.chests').value()
   }
 
-  const setChests = (botName: string, chests) => {
+  const setChests = (botName: string, chests: Chests) => {
     const db = getConn(botName)
     db.set('config.chests', chests).write()
   }
@@ -325,7 +331,7 @@ const botConfiguration = () => {
     }
   }
 
-  const setMinerCords = (botName: string, minerCords) => {
+  const setMinerCords = (botName: string, minerCords: MineCordsConfig) => {
     const db = getConn(botName)
     db.set('config.minerCords', minerCords).write()
   }
@@ -335,7 +341,7 @@ const botConfiguration = () => {
     return db.get('config.minerCords').value()
   }
 
-  const setItemsToBeReady = (botName: string, itemsToBeReady) => {
+  const setItemsToBeReady = (botName: string, itemsToBeReady: Array<Item>) => {
     const db = getConn(botName)
     db.set('config.itemsToBeReady', itemsToBeReady).write()
   }
@@ -345,7 +351,7 @@ const botConfiguration = () => {
     return db.get('config.itemsToBeReady').value()
   }
 
-  const setItemsCanBeEat = (botName: string, itemsToBeReady) => {
+  const setItemsCanBeEat = (botName: string, itemsToBeReady: Array<Item>) => {
     const db = getConn(botName)
     db.set('config.itemsCanBeEat', itemsToBeReady).write()
   }
@@ -355,7 +361,7 @@ const botConfiguration = () => {
     return db.get('config.itemsCanBeEat').value()
   }
 
-  const setCopingPatrol = (botName: string, status) => {
+  const setCopingPatrol = (botName: string, status: boolean) => {
     const db = getConn(botName)
     db.set('config.isCopingPatrol', status).write()
   }
@@ -365,15 +371,15 @@ const botConfiguration = () => {
     return db.get('config.plantAreas').value()
   }
 
-  const setPlantAreas = (botName: string, plantAreas) => {
-    const plantAreasConverted = plantAreas.map((plant) => {
+  const setPlantAreas = (botName: string, plantAreas: Array<PlantArea>) => {
+    const plantAreasConverted: Array<PlantArea> = plantAreas.map((plant) => {
       const copyPlant = {
         plant: plant.plant,
-        yLayer: parseInt(plant.yLayer),
-        xStart: parseInt(plant.xStart),
-        xEnd: parseInt(plant.xEnd),
-        zStart: parseInt(plant.zStart),
-        zEnd: parseInt(plant.zEnd)
+        yLayer: typeof plant.yLayer === 'string' ? parseInt(plant.yLayer) : plant.yLayer,
+        xStart: typeof plant.xStart === 'string' ? parseInt(plant.xStart) : plant.xStart,
+        xEnd: typeof plant.xEnd === 'string' ? parseInt(plant.xEnd) : plant.xEnd,
+        zStart: typeof plant.zStart === 'string' ? parseInt(plant.zStart) : plant.zStart,
+        zEnd: typeof plant.zEnd === 'string' ? parseInt(plant.zEnd) : plant.zEnd
       }
       return copyPlant
     })
@@ -386,14 +392,14 @@ const botConfiguration = () => {
     return db.get('config.farmAreas').value()
   }
 
-  const setFarmAreas = (botName: string, farmAreas) => {
+  const setFarmAreas = (botName: string, farmAreas: Array<Layer>) => {
     const farmAreasConverted = farmAreas.map((plant) => {
       const copyFarm = {
-        yLayer: parseInt(plant.yLayer),
-        xStart: parseInt(plant.xStart),
-        xEnd: parseInt(plant.xEnd),
-        zStart: parseInt(plant.zStart),
-        zEnd: parseInt(plant.zEnd)
+        yLayer: plant.yLayer,
+        xStart: plant.xStart,
+        xEnd: plant.xEnd,
+        zStart: plant.zStart,
+        zEnd: plant.zEnd
       }
       return copyFarm
     })
@@ -406,7 +412,7 @@ const botConfiguration = () => {
     return db.get('config.farmAnimal').value()
   }
 
-  const setFarmAnimal = (botName: string, farmAnimal) => {
+  const setFarmAnimal = (botName: string, farmAnimal: FarmAnimal) => {
     const db = getConn(botName)
     db.set('config.farmAnimal', farmAnimal).write()
   }
@@ -416,14 +422,14 @@ const botConfiguration = () => {
     return db.get('config.chestAreas').value()
   }
 
-  const setChestArea = (botName: string, farmAreas) => {
+  const setChestArea = (botName: string, farmAreas: Array<Layer>) => {
     const area = farmAreas.map((plant) => {
       const copyArea = {
-        yLayer: parseInt(plant.yLayer),
-        xStart: parseInt(plant.xStart),
-        xEnd: parseInt(plant.xEnd),
-        zStart: parseInt(plant.zStart),
-        zEnd: parseInt(plant.zEnd)
+        yLayer: plant.yLayer,
+        xStart: plant.xStart,
+        xEnd: plant.xEnd,
+        zStart: plant.zStart,
+        zEnd: plant.zEnd
       }
       return copyArea
     })

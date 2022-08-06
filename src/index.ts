@@ -1,7 +1,7 @@
 require("module-alias/register");
 import fs from "fs";
 import path from "path";
-import { botSocket, socketAuth } from "./types";
+import { botSocket, botType, socketAuth } from "./types";
 
 const filePath = path.join(__dirname, "config.ts")
 
