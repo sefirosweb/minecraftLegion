@@ -25,7 +25,7 @@ function combatFunction(bot, targets) {
   movementsForFliyingMobs.allow1by1towers = false
   movementsForFliyingMobs.scafoldingBlocks = []
 
-  const rangoBow = 60
+  const rangoBow = 120 // Todo configurable
   const rangeSword = 3
   const rangeFollowToShortAttack = 5
   const timeBowCountdown = 1550
