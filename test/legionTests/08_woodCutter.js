@@ -14,7 +14,6 @@ module.exports = () => async (bot) => {
 
   bot.chat(`/give flatbot minecraft:oak_sapling`)
   bot.chat(`/give flatbot minecraft:iron_axe`)
-  bot.chat(`/give flatbot minecraft:iron_axe`)
   bot.chat(`/fill 8 -54 8 8 -54 8 minecraft:stone`)
   bot.chat(`/gamerule randomTickSpeed 500`)
 
@@ -46,7 +45,7 @@ module.exports = () => async (bot) => {
   botConfig.saveFullConfig(bot.username, config)
   bot.emit('reloadBotConfig')
 
-  addTest('Fight with mob', (bot) => {
+  addTest('Wood cutter', (bot) => {
     return new Promise((resolve) => {
 
       const { getResumeInventory } = require("@modules/inventoryModule")(bot);
