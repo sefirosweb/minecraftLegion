@@ -99,6 +99,7 @@ function inject (bot) {
     bot.test.sayEverywhere('/weather clear 999999')
     bot.test.sayEverywhere('/time set day')
     bot.test.sayEverywhere('/kill @e[type=!player]')
+    bot.test.sayEverywhere('/gamerule randomTickSpeed 20')
     botConfig.saveFullConfig(bot.username, botConfig.defaultConfig);
     await becomeCreative()
     await clearInventory()
