@@ -160,6 +160,11 @@ function deathFunction(bot, targets) {
     }
   })
 
+  bot.on('reloadBotConfig', () => {
+    console.log('Reloading bot config')
+    reloadTrigger()
+  })
+
   bot.on('chat', (master, message) => {
     if (message === 'hi ' + bot.username || message === 'hi all') {
       const masters = botWebsocket.getMasters()
