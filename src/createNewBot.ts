@@ -12,8 +12,10 @@ export type Props = {
   botPassword?: string;
   server: string;
   port?: number;
-  customStart?: boolean
+  customStart?: boolean,
+  version?: string
 }
+
 
 export const createNewBot = (props: Props): void => {
   const {
@@ -21,13 +23,15 @@ export const createNewBot = (props: Props): void => {
     botPassword,
     server,
     port = 25565,
-    customStart = false
+    customStart = false,
+    version = undefined
   } = props
 
   const bot = mineflayer.createBot({
     username: botName,
     host: server,
     port: port,
+    version
   }) as Bot;
 
   botWebsocket.loadBot(bot);
