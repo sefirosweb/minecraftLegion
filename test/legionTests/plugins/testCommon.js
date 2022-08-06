@@ -97,6 +97,7 @@ function inject (bot) {
   async function resetState () {
     bot.test.sayEverywhere('/weather clear 999999')
     bot.test.sayEverywhere('/time set day')
+    bot.test.sayEverywhere('/kill @e[type=!player]')
     botConfig.saveFullConfig(bot.username, botConfig.defaultConfig);
     await becomeCreative()
     await clearInventory()

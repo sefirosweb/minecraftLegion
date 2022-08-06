@@ -6,7 +6,7 @@ module.exports = () => async (bot) => {
   await bot.chat(`/give flatbot minecraft:iron_pickaxe`)
   await bot.chat(`/give flatbot minecraft:iron_shovel`)
   await bot.chat(`/give flatbot minecraft:cobblestone 64`)
-  await bot.chat(`/fill 4 -60 4 -2 -55 10 minecraft:stone`)
+  await bot.chat(`/fill 3 -60 3 -2 -55 7 minecraft:stone`)
   await bot.chat(`/teleport 1 -53 7`)
   await bot.creative.stopFlying()
   bot.test.becomeSurvival()
@@ -23,10 +23,10 @@ module.exports = () => async (bot) => {
     minerCords: {
       xStart: -2,
       yStart: -55,
-      zStart: 4,
-      xEnd: 4,
-      yEnd: -60,
-      zEnd: 10,
+      zStart: 3,
+      xEnd: 3,
+      yEnd: -55,
+      zEnd: 7,
       orientation: "x+",
       tunel: "vertically",
       reverse: false,
@@ -35,9 +35,11 @@ module.exports = () => async (bot) => {
   }
 
   botConfig.saveFullConfig(bot.username, config)
-
   bot.emit('reloadBotConfig')
 
-  await bot.test.wait(100000)
-  assert.strictEqual(true, true)
+  return new Promise((resolve) => {
+    bot.once('finishedJob', (job) => {
+      resolve()
+    })
+  })
 }
