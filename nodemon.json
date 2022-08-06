@@ -1,5 +1,11 @@
 {
-    "execMap": {
-      "ts": "node --require ts-node/register"
-    }
-  }
+  "execMap": {
+    "ts": "node --require ts-node/register"
+  },
+  "verbose": false,
+  "ignore": [
+    "botConfig/*",
+    "custom_start/*",
+    "test/*"
+  ]
+}

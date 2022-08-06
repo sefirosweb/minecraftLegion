@@ -1,13 +1,15 @@
 /* eslint-env mocha */
 
+require("module-alias/register");
 const assert = require('assert')
 const mineflayer = require('mineflayer')
-const commonTest = require('./externalTests/plugins/testCommon')
+const commonTest = require('./legionTests/plugins/testCommon')
 const mc = require('minecraft-protocol')
 const fs = require('fs')
 const path = require('path')
 
 const { getPort } = require('./common/util')
+const createNewBot = require("@/createNewBot");
 
 // set this to false if you want to test without starting a server automatically
 const START_THE_SERVER = false
@@ -63,13 +65,7 @@ describe(`mineflayer_external ${version.minecraftVersion}`, function () {
   })
   before((done) => {
     function begin() {
-      bot = mineflayer.createBot({
-        username: 'flatbot',
-        viewDistance: 'tiny',
-        port: PORT,
-        host: HOST,
-        version: supportedVersion
-      })
+      bot = createNewBot('flatbot', '', HOST, PORT, false, supportedVersion)
       commonTest(bot)
       bot.test.port = PORT
 
@@ -133,12 +129,12 @@ describe(`mineflayer_external ${version.minecraftVersion}`, function () {
     }
   })
 
-  const externalTestsFolder = path.resolve(__dirname, './externalTests')
+  const externalTestsFolder = path.resolve(__dirname, './legionTests')
   fs.readdirSync(externalTestsFolder)
     .filter(file => fs.statSync(path.join(externalTestsFolder, file)).isFile())
     .forEach((test) => {
       test = path.basename(test, '.js')
-      const testFunctions = require(`./externalTests/${test}`)(supportedVersion)
+      const testFunctions = require(`./legionTests/${test}`)(supportedVersion)
       const runTest = (testName, testFunction) => {
         return function (done) {
           this.timeout(TEST_TIMEOUT_MS)

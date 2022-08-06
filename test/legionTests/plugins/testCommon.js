@@ -5,6 +5,7 @@ const { once } = require('events')
 const process = require('process')
 const assert = require('assert')
 const { sleep, onceWithCleanup, withTimeout } = require('../../lib/promise_utils')
+const botConfig = require('@modules/botConfig')
 
 module.exports = inject
 
@@ -61,14 +62,26 @@ function inject (bot) {
     'air',
     'air',
     'air',
+    'air',
+    'air',
+    'air',
+    'air',
+    'air',
+    'air',
+    'air',
+    'air',
+    'air',
+    'air',
+    'air',
+    'air',
     'air'
   ]
 
   async function resetBlocksToSuperflat () {
-    const groundY = 4
-    for (let y = groundY + 4; y >= groundY - 1; y--) {
+    const groundY = 0
+    for (let y = groundY + 20; y >= groundY - 1; y--) {
       const realY = y + bot.test.groundY - 4
-      bot.chat(`/fill ~-5 ${realY} ~-5 ~5 ${realY} ~5 ` + layerNames[y])
+      bot.chat(`/fill ~-50 ${realY} ~-50 ~50 ${realY} ~50 ` + layerNames[y])
     }
     await bot.test.wait(100)
   }
@@ -82,6 +95,9 @@ function inject (bot) {
 
   // always leaves you in creative mode
   async function resetState () {
+    bot.test.sayEverywhere('/weather clear 999999')
+    bot.test.sayEverywhere('/time set day')
+    botConfig.saveFullConfig(bot.username, botConfig.defaultConfig);
     await becomeCreative()
     await clearInventory()
     bot.creative.startFlying()
