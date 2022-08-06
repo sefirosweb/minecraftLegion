@@ -89,7 +89,7 @@ module.exports = class template {
 
       const block = this.bot.blockAt(placeBlockTo)
 
-      if (block.name === 'kelp') {
+      if (['kelp', 'kelp_plant'].includes(block.name)) {
         this.digBlock(placeBlockTo)
           .then(() => this.equipHeldItem(item.name))
           .then(() => this.place(newPosition, blockOffset))
