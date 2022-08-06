@@ -31,6 +31,8 @@ module.exports = class template {
     this.getPathToPlace = getPathToPlace
     this.place = place
 
+    this.mcData = require('minecraft-data')(this.bot.version)
+
     this.isEndFinished = false
     this.sidesToPlaceBlock = []
 

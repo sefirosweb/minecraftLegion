@@ -250,6 +250,7 @@ function miningFunction(bot: Bot, targets: LegionStateMachineTargets) {
       name: 'Mining finished',
       onTransition: () => {
         bot.pathfinder.setGoal(null)
+        bot.emit('finishedJob', 'Mining Job')
       },
       shouldTransition: () => nextLayer.isFinished()
     }),

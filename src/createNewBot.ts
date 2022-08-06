@@ -38,6 +38,10 @@ export const createNewBot = (props: Props): void => {
   bot.setMaxListeners(0);
   bot.once("inject_allowed", () => {
     bot.loadPlugin(require("mineflayer-pathfinder").pathfinder);
+    const mcData = mcDataLoader(bot.version)
+    mcData.blocksArray[826].hardness = 3 // hotfix until wait a final relase
+    mcData.blocksArray[274].boundingBox = 'block' // hot fix for cross the portal of the end
+    console.log('\x1b[33m%s\x1b[0m', 'Injected pathfinder');
   });
 
   bot.once("kicked", (reason: string) => {
@@ -52,14 +56,8 @@ export const createNewBot = (props: Props): void => {
     process.exit();
   });
 
-  bot.once('inject_allowed', () => {
-    const mcData = mcDataLoader(bot.version)
-    mcData.blocksArray[826].hardness = 3 // hotfix until wait a final relase
-    mcData.blocksArray[274].boundingBox = 'block' // hot fix for cross the portal of the end
-  })
-
   bot.once("spawn", () => {
-    console.log(bot.version);
+    console.log('\x1b[33m%s\x1b[0m', bot.version);
     bot.chat(`/login ${botPassword}`)
     botWebsocket.connect();
     botWebsocket.log("Ready!");
