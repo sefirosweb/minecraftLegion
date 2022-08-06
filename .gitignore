@@ -116,3 +116,4 @@ botConfig/*.json
 versions/
 server_jars/
 test/server_*
+test/common/server_*
