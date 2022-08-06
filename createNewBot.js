@@ -7,11 +7,12 @@ require("module-alias/register");
 const mineflayer = require("mineflayer");
 const botWebsocket = require("@modules/botWebsocket");
 
-const createNewBot = (botName, botPassword = "", server, port, customStart) => {
+const createNewBot = (botName, botPassword = "", server, port, customStart, supportedVersion) => {
   const bot = mineflayer.createBot({
     username: botName,
     host: server,
     port: port,
+    version: supportedVersion
   });
 
   botWebsocket.loadBot(bot);
@@ -63,6 +64,8 @@ const createNewBot = (botName, botPassword = "", server, port, customStart) => {
       require("@NestedStateModules/startStateMachine")(bot);
     }
   });
+
+  return bot
 }
 
 module.exports = createNewBot

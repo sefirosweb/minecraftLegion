@@ -9,6 +9,7 @@ const fs = require('fs')
 const path = require('path')
 
 const { getPort } = require('./common/util')
+const createNewBot = require("@/createNewBot");
 
 // set this to false if you want to test without starting a server automatically
 const START_THE_SERVER = false
@@ -64,19 +65,12 @@ describe(`mineflayer_external ${version.minecraftVersion}`, function () {
   })
   before((done) => {
     function begin() {
-      bot = mineflayer.createBot({
-        username: 'flatbot',
-        viewDistance: 'tiny',
-        port: PORT,
-        host: HOST,
-        version: supportedVersion
-      })
+      bot = createNewBot('flatbot', '', HOST, PORT, false, supportedVersion)
       commonTest(bot)
       bot.test.port = PORT
 
       console.log('starting bot')
       bot.once('spawn', () => {
-        require("@NestedStateModules/startStateMachine")(bot);
         done()
       })
     }
