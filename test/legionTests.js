@@ -14,7 +14,7 @@ const createNewBot = require("@/createNewBot");
 // set this to false if you want to test without starting a server automatically
 const START_THE_SERVER = false
 // if you want to have time to look what's happening increase this (milliseconds)
-const TEST_TIMEOUT_MS = 90000
+const TEST_TIMEOUT_MS = 180000
 
 const excludedTests = ['digEverything', 'book', 'anvil', 'placeEntity']
 
@@ -132,7 +132,9 @@ describe(`mineflayer_external ${version.minecraftVersion}`, function () {
     .filter(file => fs.statSync(path.join(externalTestsFolder, file)).isFile())
     .forEach((test) => {
       test = path.basename(test, '.js')
+
       const testFunctions = require(`./legionTests/${test}`)(supportedVersion)
+
       const runTest = (testName, testFunction) => {
         return function (done) {
           this.timeout(TEST_TIMEOUT_MS)
@@ -140,16 +142,19 @@ describe(`mineflayer_external ${version.minecraftVersion}`, function () {
           testFunction(bot, done).then(res => done()).catch(e => done(e))
         }
       }
+
       if (excludedTests.indexOf(test) === -1) {
         if (typeof testFunctions === 'object') {
           for (const testFunctionName in testFunctions) {
             if (testFunctions[testFunctionName] !== undefined) {
+              console.log(1)
               it(`${test} ${testFunctionName}`, (testFunctionName => runTest(`${test} ${testFunctionName}`, testFunctions[testFunctionName]))(testFunctionName))
             }
           }
         } else {
           it(test, runTest(test, testFunctions))
         }
+
       }
     })
 })
