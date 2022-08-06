@@ -111,3 +111,8 @@ examples/nodejs/serverchat/public/files
 
 # Exclude bot configurations
 botConfig/*.json
+
+# Folder of tests
+versions/
+server_jars/
+test/server_*
