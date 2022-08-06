@@ -57,6 +57,8 @@ download(version.minecraftVersion, MC_SERVER_JAR, (err) => {
             version: supportedVersion
         }, (err, results) => {
             console.log('pong')
+            wrap.writeServer('op flatbot\n')
+            wrap.writeServer('op Sefiros\n')
         })
     })
 })
