@@ -253,6 +253,7 @@ function miningFunction(bot, targets) {
       name: "Mining finished",
       onTransition: () => {
         bot.pathfinder.setGoal(null)
+        bot.emit('finishedJob', 'Mining Job')
       },
       shouldTransition: () => nextLayer.isFinished(),
     }),
