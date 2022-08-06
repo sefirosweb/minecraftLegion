@@ -5,7 +5,7 @@ const {
 } = require('mineflayer-statemachine')
 const BehaviorEatFood = require('@BehaviorModules/BehaviorEatFood')
 
-function combatStrategyFunction (bot, targets) {
+function combatStrategyFunction(bot, targets) {
   const start = new BehaviorIdle(targets)
   start.stateName = 'Start'
   start.x = 125
@@ -48,6 +48,9 @@ function combatStrategyFunction (bot, targets) {
     new StateTransition({
       parent: combatFunction,
       child: exit,
+      onTransition: () => {
+        bot.emit('beatMob')
+      },
       shouldTransition: () => combatFunction.isFinished()
     })
   ]
