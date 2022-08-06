@@ -32,6 +32,8 @@ module.exports = () => async (bot) => {
   bot.chat(`/fill 13 -60 0 13 -60 0 minecraft:seagrass`)
   bot.chat(`/fill 13 -59 -1 13 -59 -1 minecraft:dirt`)
   bot.chat(`/fill 13 -58 -1 13 -58 -1 minecraft:seagrass`)
+  bot.creative.stopFlying()
+  bot.test.becomeSurvival()
 
 
   const minerCords = {

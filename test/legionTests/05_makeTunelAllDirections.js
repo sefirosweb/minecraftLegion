@@ -16,10 +16,18 @@ module.exports = () => async (bot) => {
   bot.chat(`/give flatbot minecraft:diamond_shovel`)
   bot.chat(`/give flatbot minecraft:dirt 64`)
 
+  bot.chat(`/fill 9 -60 -9 -9 -55 9 minecraft:glass`)
+  bot.chat(`/fill -8 -56 8 8 -63 -8 minecraft:water`)
+  bot.chat(`/fill -1 -61 -1 1 -61 1 minecraft:glass`)
+  bot.chat(`/fill -1 -57 -1 1 -57 1 minecraft:glass`)
+  bot.chat(`/fill -1 -60 1 1 -58 -1 minecraft:air`)
+
   bot.chat(`/fill 2 -60 -2 -2 -57 -2 minecraft:dirt`)
   bot.chat(`/fill 2 -60 -2 2 -57 2 minecraft:dirt`)
   bot.chat(`/fill 2 -60 2 -2 -57 2 minecraft:dirt`)
   bot.chat(`/fill -2 -60 2 -2 -57 -2 minecraft:dirt`)
+  bot.creative.stopFlying()
+  bot.test.becomeSurvival()
 
 
   addTest('Making a Hole: X+', (bot) => {
