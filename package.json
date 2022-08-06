@@ -29,12 +29,13 @@
     "scripts": {
         "start": "nodemon index.js --ignore botConfig/ --ignore custom_start/",
         "one": "nodemon --inspect=0.0.0.0:9229 start_bot.js $1 $2 --ignore botConfig/ --ignore custom_start/",
-        "start_server_test": "docker run --rm -it --name minecraftLegion_test_server  --network minecraftLegionNetwork -v $PWD:/home/app -w /home/app -u node -p 25565:25565 node:16.13-bullseye /bin/bash",
+        "start_server_test": "docker build -t docker_minecraftlegion . && docker run --rm -it --name minecraftLegion_test_server --network minecraftLegionNetwork -v $PWD:/home/app -w /home/app -u node -p 25565:25565 docker_minecraftlegion node test/common/start_test_server.js",
         "test": "npm run mocha_test -- -g 1.18.*",
         "mocha_test": "mocha --reporter spec --exit",
         "standard": "standard --fix",
         "dockerrun": "docker run --rm -p:3000:3000 minecraftlegion",
-        "docker": "docker run --rm -it --name minecraftLegion  -v ~/.gitconfig:/etc/gitconfig --network minecraftLegionNetwork -v $PWD:/home/app -w /home/app -u node -p 4500-4550:4500-4550 -p 9229:9229 node:16.13-bullseye /bin/bash",
+        "docker": "docker build -t docker_minecraftlegion . && docker run --rm -it --name minecraftLegion  -v ~/.gitconfig:/etc/gitconfig --network minecraftLegionNetwork -v $PWD:/home/app -w /home/app -u node -p 4500-4550:4500-4550 -p 9229:9229 docker_minecraftlegion /bin/bash",
+        "dockerbuild": "docker build -t docker_minecraftlegion .",
         "update": "npx npm-check-updates",
         "craft": "nodemon --inspect=0.0.0.0:9229 ./trash_files/copper.js"
     },
