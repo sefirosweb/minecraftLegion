@@ -5,6 +5,7 @@ const { once } = require('events')
 const process = require('process')
 const assert = require('assert')
 const { sleep, onceWithCleanup, withTimeout } = require('../../lib/promise_utils')
+const botConfig = require('@modules/botConfig')
 
 module.exports = inject
 
@@ -94,6 +95,9 @@ function inject (bot) {
 
   // always leaves you in creative mode
   async function resetState () {
+    bot.test.sayEverywhere('/weather clear 999999')
+    bot.test.sayEverywhere('/time set day')
+    botConfig.saveFullConfig(bot.username, botConfig.defaultConfig);
     await becomeCreative()
     await clearInventory()
     bot.creative.startFlying()
