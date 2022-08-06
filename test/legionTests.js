@@ -2,7 +2,7 @@
 
 const assert = require('assert')
 const mineflayer = require('mineflayer')
-const commonTest = require('./externalTests/plugins/testCommon')
+const commonTest = require('./legionTests/plugins/testCommon')
 const mc = require('minecraft-protocol')
 const fs = require('fs')
 const path = require('path')
@@ -138,7 +138,7 @@ describe(`mineflayer_external ${version.minecraftVersion}`, function () {
     .filter(file => fs.statSync(path.join(externalTestsFolder, file)).isFile())
     .forEach((test) => {
       test = path.basename(test, '.js')
-      const testFunctions = require(`./externalTests/${test}`)(supportedVersion)
+      const testFunctions = require(`./legionTests/${test}`)(supportedVersion)
       const runTest = (testName, testFunction) => {
         return function (done) {
           this.timeout(TEST_TIMEOUT_MS)

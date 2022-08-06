@@ -61,14 +61,26 @@ function inject (bot) {
     'air',
     'air',
     'air',
+    'air',
+    'air',
+    'air',
+    'air',
+    'air',
+    'air',
+    'air',
+    'air',
+    'air',
+    'air',
+    'air',
+    'air',
     'air'
   ]
 
   async function resetBlocksToSuperflat () {
-    const groundY = 4
-    for (let y = groundY + 4; y >= groundY - 1; y--) {
+    const groundY = 0
+    for (let y = groundY + 20; y >= groundY - 1; y--) {
       const realY = y + bot.test.groundY - 4
-      bot.chat(`/fill ~-5 ${realY} ~-5 ~5 ${realY} ~5 ` + layerNames[y])
+      bot.chat(`/fill ~-50 ${realY} ~-50 ~50 ${realY} ~50 ` + layerNames[y])
     }
     await bot.test.wait(100)
   }
