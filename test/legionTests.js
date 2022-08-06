@@ -133,7 +133,7 @@ describe(`mineflayer_external ${version.minecraftVersion}`, function () {
     }
   })
 
-  const externalTestsFolder = path.resolve(__dirname, './externalTests')
+  const externalTestsFolder = path.resolve(__dirname, './legionTests')
   fs.readdirSync(externalTestsFolder)
     .filter(file => fs.statSync(path.join(externalTestsFolder, file)).isFile())
     .forEach((test) => {
