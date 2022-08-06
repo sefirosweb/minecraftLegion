@@ -14,7 +14,7 @@ module.exports = () => async (bot) => {
 
   bot.chat(`/give flatbot minecraft:iron_pickaxe`)
   bot.chat(`/give flatbot minecraft:diamond_shovel`)
-  bot.chat(`/give flatbot minecraft:dirt 64`)
+  bot.chat(`/give flatbot minecraft:dirt 256`)
 
   bot.chat(`/fill 9 -60 -9 -9 -55 9 minecraft:glass`)
   bot.chat(`/fill -8 -56 8 8 -63 -8 minecraft:water`)
