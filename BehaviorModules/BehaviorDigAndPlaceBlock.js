@@ -14,6 +14,8 @@ module.exports = class template {
     this.getPathToPlace = require('@modules/placeBlockModule')(bot).getPathToPlace
     this.place = require('@modules/placeBlockModule')(bot).place
 
+    this.mcData = require('minecraft-data')(this.bot.version)
+
     this.isEndFinished = false
     this.sidesToPlaceBlock = []
   }
@@ -69,7 +71,7 @@ module.exports = class template {
     }
 
     const item = items.map(i => {
-      i.hardness = mcData.blocksByName[i.name].hardness
+      i.hardness = this.mcData.blocksByName[i.name].hardness
       return i
     }).sort((a, b) => a.hardness - b.hardness)[0]
 
