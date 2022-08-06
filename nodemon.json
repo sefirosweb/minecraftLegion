@@ -1,0 +1,8 @@
+{
+    "verbose": false,
+    "ignore": [
+        "botConfig/*",
+        "custom_start/*",
+        "test/*"
+    ]
+}
