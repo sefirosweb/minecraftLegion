@@ -17,7 +17,7 @@ function getConn(botName) {
     randomFarmArea: false,
     isCopingPatrol: false,
     canDig: false,
-    canSleep: true,
+    canSleep: false,
     sleepArea: {
       x: null,
       y: null,
