@@ -449,7 +449,9 @@ function sendConfig() {
 }
 
 function sendAction(action, value) {
-  socket.emit("sendAction", { action, value });
+  if (socket) {
+    socket.emit("sendAction", { action, value });
+  }
 }
 
 function emit(chanel, data) {
@@ -499,7 +501,9 @@ function log(data) {
 }
 
 function on(listener, cb) {
-  socket.on(listener, cb);
+  if (socket) {
+    socket.on(listener, cb);
+  }
 }
 
 function getFriends() {

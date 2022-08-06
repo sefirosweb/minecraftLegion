@@ -8,6 +8,8 @@ const botWebsocket = require('@modules/botWebsocket')
 const BehaviorLoadConfig = require('@BehaviorModules/BehaviorLoadConfig')
 
 function deathFunction(bot, targets) {
+  const mcData = require('minecraft-data')(bot.version)
+
   const start = new BehaviorIdle(targets)
   start.stateName = 'Start'
   start.x = 125
