@@ -23,7 +23,6 @@ module.exports = () => async (bot) => {
   bot.chat(`/give flatbot minecraft:carrot 1`)
   bot.chat(`/give flatbot minecraft:potato 1`)
   bot.chat(`/give flatbot minecraft:beetroot_seeds 1`)
-  bot.chat(`/give flatbot minecraft:beetroot_seeds 1`)
   bot.chat(`/give flatbot minecraft:wheat_seeds 1`)
   bot.chat(`/give flatbot minecraft:sweet_berries 1`)
   bot.chat(`/give flatbot minecraft:sugar_cane 1`)
