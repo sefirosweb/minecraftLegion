@@ -54,6 +54,9 @@ function combatStrategyFunction(bot: Bot, targets: LegionStateMachineTargets) {
     new StateTransition({
       parent: combatFunction,
       child: exit,
+      onTransition: () => {
+        bot.emit('beatMob')
+      },
       shouldTransition: () => combatFunction.isFinished()
     })
   ]
