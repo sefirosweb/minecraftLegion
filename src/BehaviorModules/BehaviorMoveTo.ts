@@ -98,6 +98,7 @@ module.exports = class BehaviorMoveTo {
   }
 
   stopMoving() {
+    this.bot.removeAllListeners('customEventPhysicTick')
     this.bot.pathfinder.setGoal(null)
   }
 

@@ -97,6 +97,8 @@ function inject(bot) {
 
   // always leaves you in creative mode
   async function resetState() {
+    await teleport(new Vec3(0, -60, 0))
+    await bot.test.wait(1000)
     bot.test.sayEverywhere('/weather clear 999999')
     bot.test.sayEverywhere('/time set day')
     bot.test.sayEverywhere('/kill @e[type=!player]')
@@ -105,7 +107,6 @@ function inject(bot) {
     await becomeCreative()
     await clearInventory()
     bot.creative.startFlying()
-    await teleport(new Vec3(0, bot.test.groundY, 0))
     await bot.waitForChunksToLoad()
     await resetBlocksToSuperflat()
     await sleep(1000)
@@ -156,7 +157,7 @@ function inject(bot) {
   }
 
   async function teleport(position) {
-    bot.chat(`/tp ${bot.username} ${position.x} ${position.y} ${position.z}`)
+    bot.chat(`/execute as flatbot in minecraft:overworld run teleport 0 -60 0`)
 
     return onceWithCleanup(bot, 'move', {
       checkCondition: () => bot.entity.position.distanceTo(position) < 0.9

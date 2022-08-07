@@ -6,6 +6,12 @@ import botWebsocket from '@/modules/botWebsocket'
 import mineflayerPathfinder from 'mineflayer-pathfinder'
 import { Vec3 } from 'vec3'
 
+const dimensions = {
+  'minecraft:overworld': 'overworld',
+  'minecraft:the_end': 'the_end',
+  'minecraft:the_nether': 'the_nether',
+}
+
 const movementModule = (bot: Bot, targets: LegionStateMachineTargets) => {
   const mcData = require('minecraft-data')(bot.version)
   const getNearestPortal = (dimension, destination) => {
@@ -137,6 +143,28 @@ const movementModule = (bot: Bot, targets: LegionStateMachineTargets) => {
     return blocksFound
   }
 
+  const deleteOldPortal = (position, dimension) => {
+    const newPortals = JSON.parse(JSON.stringify(targets.portals))
+
+    const currentDim = dimensions[bot.game.dimension]
+    const selectedDim = dimensions[dimension]
+
+    const portalDimension = currentDim === 'overworld' ? newPortals['overworld'][selectedDim] : newPortals[currentDim]
+
+    const portalsToSave = portalDimension.filter(portal => {
+      return portal.x !== position.x || portal.y !== position.y || portal.z !== position.z
+    })
+
+    if (currentDim === 'overworld') {
+      newPortals['overworld'][selectedDim] = portalsToSave
+    } else {
+      newPortals[selectedDim] = portalsToSave
+    }
+
+    targets.portals = newPortals;
+    botWebsocket.sendAction('setPortals', targets.portals)
+  }
+
   const crossThePortal = (dimension, destination) => {
     return new Promise((resolve, reject) => {
       const portal = getNearestPortal(dimension, destination)
@@ -146,10 +174,28 @@ const movementModule = (bot: Bot, targets: LegionStateMachineTargets) => {
         return
       }
 
+      bot.on('customEventPhysicTick', () => {
+        const block = bot.blockAt(new Vec3(portal.x, portal.y, portal.z))
+        if (block !== undefined) {
+          if (
+            (dimension === 'minecraft:the_nether' && block?.name !== 'nether_portal') ||
+            (dimension === 'minecraft:overworld' && block?.name !== 'nether_portal') ||
+            (dimension === 'minecraft:the_end' && block?.name !== 'end_portal') ||
+            (dimension === 'minecraft:overworld' && block?.name !== 'end_portal')
+          ) {
+            console.log(`Im going to ${dimension}`)
+            console.log('And block type is:', block?.name)
+            deleteOldPortal(portal, dimension)
+            reject(`Portal not found!`) // TODO pending to check if works fine
+          }
+        }
+      })
+
       goPosition(portal)
         .then(() => {
           return new Promise((resolve) => {
             bot.once('spawn', () => {
+              bot.removeAllListeners('customEventPhysicTick')
               setTimeout(() => {
                 resolve()
               }, 2000)
