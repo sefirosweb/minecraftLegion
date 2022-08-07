@@ -12,10 +12,15 @@ module.exports = () => async (bot) => {
     })
   }
 
-  bot.chat(`/give flatbot minecraft:oak_sapling`)
   bot.chat(`/give flatbot minecraft:iron_axe`)
-  bot.chat(`/fill 8 -54 8 8 -54 8 minecraft:stone`)
+  bot.chat(`/give flatbot minecraft:iron_hoe`)
+
+  bot.chat(`/fill 10 -61 20 20 -61 20 minecraft:sand`)
   bot.chat(`/gamerule randomTickSpeed 500`)
+
+  bot.chat(`/give flatbot minecraft:cactus 4`)
+  bot.chat(`/give flatbot minecraft:carrot 64`)
+
 
   bot.creative.stopFlying()
   bot.test.becomeSurvival()
@@ -24,20 +29,16 @@ module.exports = () => async (bot) => {
     ...botConfig.defaultConfig,
     job: 'farmer',
     pickUpItems: true,
-    itemsToBeReady: [
-      {
-        item: "iron_axe",
-        quantity: 1
-      }
-    ],
+    itemsCanBeEat: ['carrot'],
+    itemsToBeReady: [],
     plantAreas: [
       {
-        plant: "oak_sapling",
+        plant: "cactus",
         yLayer: -61,
-        xStart: 8,
-        xEnd: 8,
-        zStart: 8,
-        zEnd: 8
+        xStart: 10,
+        zStart: 20,
+        xEnd: 20,
+        zEnd: 20
       }
     ],
   }
@@ -45,24 +46,19 @@ module.exports = () => async (bot) => {
   botConfig.saveFullConfig(bot.username, config)
   bot.emit('reloadBotConfig')
 
-  addTest('Wood cutter', (bot) => {
+  addTest('Farming catus', (bot) => {
     return new Promise((resolve) => {
+
+      const clearItemsInterval = setInterval(() => {
+        bot.test.sayEverywhere('/kill @e[type=!player]')
+      }, 20000)
 
       const { getResumeInventory } = require("@modules/inventoryModule")(bot);
       const interval = setInterval(() => {
         let foundAll = true
         const itemsToFind = [
           {
-            name: 'oak_log', quantity: 10
-          },
-          {
-            name: 'stick', quantity: 1
-          },
-          {
-            name: 'oak_sapling', quantity: 1
-          },
-          {
-            name: 'apple', quantity: 1
+            name: 'cactus', quantity: 10
           }
         ]
 
@@ -76,6 +72,7 @@ module.exports = () => async (bot) => {
         })
 
         if (foundAll) {
+          clearInterval(clearItemsInterval)
           clearInterval(interval)
           resolve()
         }

@@ -15,7 +15,6 @@ module.exports = () => async (bot) => {
   bot.chat(`/give flatbot minecraft:iron_axe`)
   bot.chat(`/give flatbot minecraft:iron_hoe`)
   bot.chat(`/fill 1 -61 -1 23 -61 -1 minecraft:water`)
-  bot.chat(`/fill 17 -61 0 17 -61 0 minecraft:sand`)
   bot.chat(`/fill 11 -59 0 11 -59 0 minecraft:cobblestone_slab[type=top]`)
   bot.chat(`/gamerule randomTickSpeed 500`)
 
@@ -27,13 +26,9 @@ module.exports = () => async (bot) => {
   bot.chat(`/give flatbot minecraft:beetroot_seeds 1`)
   bot.chat(`/give flatbot minecraft:wheat_seeds 1`)
   bot.chat(`/give flatbot minecraft:sweet_berries 1`)
-  bot.chat(`/give flatbot minecraft:bamboo 1`)
   bot.chat(`/give flatbot minecraft:sugar_cane 1`)
-  bot.chat(`/give flatbot minecraft:cactus 1`)
 
-  setInterval(() => {
-    bot.test.sayEverywhere('/kill @e[type=!player]')
-  }, 20000)
+
 
 
   bot.creative.stopFlying()
@@ -108,26 +103,10 @@ module.exports = () => async (bot) => {
         zEnd: 0
       },
       {
-        plant: "bamboo",
-        yLayer: -61,
-        xStart: 13,
-        xEnd: 13,
-        zStart: 0,
-        zEnd: 0
-      },
-      {
         plant: "sugar_cane",
         yLayer: -61,
         xStart: 14,
         xEnd: 14,
-        zStart: 0,
-        zEnd: 0
-      },
-      {
-        plant: "cactus",
-        yLayer: -61,
-        xStart: 17,
-        xEnd: 17,
         zStart: 0,
         zEnd: 0
       }
@@ -139,9 +118,12 @@ module.exports = () => async (bot) => {
 
   addTest('Farming vegetables', (bot) => {
     return new Promise((resolve) => {
+      const clearItemsInterval = setInterval(() => {
+        bot.test.sayEverywhere('/kill @e[type=!player]')
+      }, 20000)
 
       const { getResumeInventory } = require("@modules/inventoryModule")(bot);
-      setInterval(() => {
+      const interval = setInterval(() => {
         let foundAll = true
         const itemsToFind = [
           {
@@ -166,13 +148,7 @@ module.exports = () => async (bot) => {
             name: 'sweet_berries', quantity: 2
           },
           {
-            name: 'bamboo', quantity: 2
-          },
-          {
             name: 'sugar_cane', quantity: 2
-          },
-          {
-            name: 'cactus', quantity: 2
           }
         ]
 
@@ -180,13 +156,14 @@ module.exports = () => async (bot) => {
           const item = getResumeInventory().find(i => i.name === itemToFind.name && i.quantity >= itemToFind.quantity)
           if (!item) {
             foundAll = false
-            console.log(itemToFind)
             return false
           }
           return true
         })
 
         if (foundAll) {
+          clearInterval(clearItemsInterval)
+          clearInterval(interval)
           resolve()
         }
       }, 400)
