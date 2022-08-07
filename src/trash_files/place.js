@@ -1,16 +1,22 @@
 const mineflayer = require('mineflayer')
 const vec3 = require('vec3')
 
-if (process.argv.length < 4 || process.argv.length > 6) {
+if (process.argv.length < 2 || process.argv.length > 6) {
   console.log('Usage : node digger.js <host> <port> [<name>] [<password>]')
   process.exit(1)
 }
 
-const bot = mineflayer.createBot({
-  host: process.argv[2],
-  port: parseInt(process.argv[3]),
-  username: process.argv[4] ? process.argv[4] : 'digger',
-  password: process.argv[5]
+const connection = {
+  host: process.argv[2] ?? 'host.docker.internal',
+  port: process.argv[3] ?? 25565,
+  username: process.argv[4] ?? 'digger',
+  password: process.argv[5] ?? ''
+}
+
+const bot = mineflayer.createBot(connection)
+
+bot.once('spawn', () => {
+  bot.chat('/login XXX')
 })
 
 bot.on('chat', async (username, message) => {
@@ -26,6 +32,10 @@ bot.on('chat', async (username, message) => {
     case 'dig':
       dig()
       break
+    case 'place':
+      stone = 0
+      place()
+      break
     case 'build':
       stone = 0
       build()
@@ -36,7 +46,7 @@ bot.on('chat', async (username, message) => {
   }
 })
 
-function sayItems (items = bot.inventory.items()) {
+function sayItems(items = bot.inventory.items()) {
   const output = items.map(itemToString).join(', ')
   if (output) {
     bot.chat(output)
@@ -45,7 +55,21 @@ function sayItems (items = bot.inventory.items()) {
   }
 }
 
-function dig () {
+
+function place() {
+  const block = bot.blockAt(new vec3.Vec3(30, 16, 25))
+  const offset = new vec3.Vec3(-1, 0, 0)
+
+  bot.placeBlock(block, offset)
+    .then((err) => {
+      console.log(err)
+    })
+    .catch(err => {
+      console.log(err)
+    })
+}
+
+function dig() {
   let target
   if (bot.targetDigBlock) {
     bot.chat(`already digging ${bot.targetDigBlock.name}`)
@@ -59,7 +83,7 @@ function dig () {
     }
   }
 
-  function onDiggingCompleted (err) {
+  function onDiggingCompleted(err) {
     if (err) {
       console.log(err.stack)
       return
@@ -70,7 +94,7 @@ function dig () {
 
 let stone = 0
 
-function build () {
+function build() {
   stone++
   console.log(stone)
   if (stone > 3) {
@@ -83,7 +107,7 @@ function build () {
 
   let tryCount = 0
 
-  function placeIfHighEnough () {
+  function placeIfHighEnough() {
     if (bot.entity.position.y > jumpY) {
       bot.placeBlock(referenceBlock, vec3(0, 1, 0), (err) => {
         if (err) {
@@ -105,7 +129,7 @@ function build () {
   }
 }
 
-function equipDirt () {
+function equipDirt() {
   const mcData = require('minecraft-data')(bot.version)
   let itemsByName
   if (bot.supportFeature('itemsAreNotBlocks')) {
@@ -122,7 +146,7 @@ function equipDirt () {
   })
 }
 
-function itemToString (item) {
+function itemToString(item) {
   if (item) {
     return `${item.name} x ${item.count}`
   } else {
