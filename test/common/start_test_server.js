@@ -2,7 +2,6 @@
 
 const assert = require('assert')
 const mineflayer = require('mineflayer')
-const commonTest = require('../externalTests/plugins/testCommon')
 const mc = require('minecraft-protocol')
 const fs = require('fs')
 const path = require('path')
@@ -17,7 +16,7 @@ const excludedTests = ['digEverything', 'book', 'anvil', 'placeEntity']
 const propOverrides = {
     'level-type': 'FLAT',
     'spawn-npcs': 'true',
-    'spawn-animals': 'false',
+    'spawn-animals': 'true',
     'online-mode': 'false',
     gamemode: '1',
     'spawn-monsters': 'false',
