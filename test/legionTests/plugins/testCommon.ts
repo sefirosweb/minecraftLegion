@@ -1,15 +1,16 @@
+//@ts-nocheck
 const { Vec3 } = require('vec3')
 
 const { spawn } = require('child_process')
-const { once } = require('events')
 const process = require('process')
 const assert = require('assert')
 const { sleep, onceWithCleanup, withTimeout } = require('../../lib/promise_utils')
-const botConfig = require('@modules/botConfig')
+import botConfigLoader from '@/modules/botConfig'
+const botConfig = botConfigLoader()
 
 module.exports = inject
 
-function inject (bot) {
+function inject(bot) {
   console.log(bot.version)
 
   bot.test = {}
@@ -77,7 +78,7 @@ function inject (bot) {
     'air'
   ]
 
-  async function resetBlocksToSuperflat () {
+  async function resetBlocksToSuperflat() {
     const groundY = 0
     for (let y = groundY + 20; y >= groundY - 1; y--) {
       const realY = y + bot.test.groundY - 4
@@ -87,7 +88,7 @@ function inject (bot) {
     await bot.test.wait(100)
   }
 
-  async function placeBlock (slot, position) {
+  async function placeBlock(slot, position) {
     bot.setQuickBarSlot(slot - 36)
     // always place the block on the top of the block below it, i guess.
     const referenceBlock = bot.blockAt(position.plus(new Vec3(0, -1, 0)))
@@ -95,7 +96,7 @@ function inject (bot) {
   }
 
   // always leaves you in creative mode
-  async function resetState () {
+  async function resetState() {
     bot.test.sayEverywhere('/weather clear 999999')
     bot.test.sayEverywhere('/time set day')
     bot.test.sayEverywhere('/kill @e[type=!player]')
@@ -111,18 +112,18 @@ function inject (bot) {
     await clearInventory()
   }
 
-  async function becomeCreative () {
+  async function becomeCreative() {
     // console.log('become creative')
     return setCreativeMode(true)
   }
 
-  async function becomeSurvival () {
+  async function becomeSurvival() {
     return setCreativeMode(false)
   }
 
   const gameModeChangedMessages = ['commands.gamemode.success.self', 'gameMode.changed']
 
-  async function setCreativeMode (value) {
+  async function setCreativeMode(value) {
     const getGM = val => val ? 'creative' : 'survival'
     // this function behaves the same whether we start in creative mode or not.
     // also, creative mode is always allowed for ops, even if server.properties says force-gamemode=true in survival mode.
@@ -136,7 +137,7 @@ function inject (bot) {
     return msgProm
   }
 
-  async function clearInventory () {
+  async function clearInventory() {
     const msgProm = onceWithCleanup(bot, 'message', { checkCondition: msg => msg.translate === 'commands.clear.success.single' || msg.translate === 'commands.clear.success' })
     bot.chat('/give @a stone 1')
     await onceWithCleanup(bot.inventory, 'updateSlot', { checkCondition: (slot, oldItem, newItem) => newItem?.name === 'stone' })
@@ -149,12 +150,12 @@ function inject (bot) {
   }
 
   // you need to be in creative mode for this to work
-  async function setInventorySlot (targetSlot, item) {
+  async function setInventorySlot(targetSlot, item) {
     assert(item === null || item.name !== 'unknown', `item should not be unknown ${JSON.stringify(item)}`)
     return bot.creative.setInventorySlot(targetSlot, item)
   }
 
-  async function teleport (position) {
+  async function teleport(position) {
     bot.chat(`/tp ${bot.username} ${position.x} ${position.y} ${position.z}`)
 
     return onceWithCleanup(bot, 'move', {
@@ -162,16 +163,16 @@ function inject (bot) {
     })
   }
 
-  function sayEverywhere (message) {
+  function sayEverywhere(message) {
     bot.chat(message)
     console.log(message)
   }
 
-  async function fly (delta) {
+  async function fly(delta) {
     return bot.creative.flyTo(bot.entity.position.plus(delta))
   }
 
-  async function tellAndListen (to, what, listen) {
+  async function tellAndListen(to, what, listen) {
     const chatMessagePromise = onceWithCleanup(bot, 'chat', {
       checkCondition: (username, message) => username === to && listen(message)
     })
@@ -181,7 +182,7 @@ function inject (bot) {
     return chatMessagePromise
   }
 
-  async function runExample (file, run) {
+  async function runExample(file, run) {
     let childBotName
 
     const detectChildJoin = async () => {

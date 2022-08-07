@@ -1,6 +1,10 @@
 /* eslint-env mocha */
+//@ts-nocheck
 
-require("module-alias/register");
+import 'module-alias/register';
+import { createNewBot } from "@/createNewBot";
+import { Bot } from '@/types';
+
 const assert = require('assert')
 const mineflayer = require('mineflayer')
 const commonTest = require('./legionTests/plugins/testCommon')
@@ -9,7 +13,6 @@ const fs = require('fs')
 const path = require('path')
 
 const { getPort } = require('./common/util')
-const createNewBot = require("@/createNewBot");
 
 // set this to false if you want to test without starting a server automatically
 const START_THE_SERVER = false
@@ -48,7 +51,7 @@ wrap.on('line', (line) => {
 })
 
 describe(`mineflayer_external ${version.minecraftVersion}`, function () {
-  let bot
+  let bot: Bot | undefined
   let PORT
   let HOST
 
@@ -65,7 +68,12 @@ describe(`mineflayer_external ${version.minecraftVersion}`, function () {
   })
   before((done) => {
     function begin() {
-      bot = createNewBot('flatbot', '', HOST, PORT, false)
+      bot = createNewBot({
+        server: HOST,
+        botName: 'flatbot',
+        port: PORT,
+        customStart: false
+      })
 
       bot.once('spawn', () => {
         commonTest(bot)

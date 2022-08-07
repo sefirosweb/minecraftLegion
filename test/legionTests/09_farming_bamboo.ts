@@ -1,6 +1,7 @@
+//@ts-nocheck
 const assert = require('assert')
-const { once } = require('events')
-const botConfig = require('@modules/botConfig')
+import botConfigLoader from '@/modules/botConfig'
+const botConfig = botConfigLoader()
 const startTests = require('./plugins/startTests')
 
 module.exports = () => async (bot) => {
@@ -14,13 +15,10 @@ module.exports = () => async (bot) => {
 
   bot.chat(`/give flatbot minecraft:iron_axe`)
   bot.chat(`/give flatbot minecraft:iron_hoe`)
-
-  bot.chat(`/fill 10 -61 20 20 -61 20 minecraft:sand`)
+  bot.chat(`/give flatbot minecraft:iron_sword`)
   bot.chat(`/gamerule randomTickSpeed 500`)
 
-  bot.chat(`/give flatbot minecraft:cactus 4`)
-  bot.chat(`/give flatbot minecraft:carrot 64`)
-
+  bot.chat(`/give flatbot minecraft:bamboo 1`)
 
   bot.creative.stopFlying()
   bot.test.becomeSurvival()
@@ -29,16 +27,16 @@ module.exports = () => async (bot) => {
     ...botConfig.defaultConfig,
     job: 'farmer',
     pickUpItems: true,
-    itemsCanBeEat: ['carrot'],
+    itemsCanBeEat: [],
     itemsToBeReady: [],
     plantAreas: [
       {
-        plant: "cactus",
+        plant: "bamboo",
         yLayer: -61,
         xStart: 10,
-        zStart: 20,
         xEnd: 20,
-        zEnd: 20
+        zStart: 0,
+        zEnd: 0
       }
     ],
   }
@@ -46,7 +44,7 @@ module.exports = () => async (bot) => {
   botConfig.saveFullConfig(bot.username, config)
   bot.emit('reloadBotConfig')
 
-  addTest('Farming catus', (bot) => {
+  addTest('Farming bamboo', (bot) => {
     return new Promise((resolve) => {
 
       const clearItemsInterval = setInterval(() => {
@@ -58,7 +56,7 @@ module.exports = () => async (bot) => {
         let foundAll = true
         const itemsToFind = [
           {
-            name: 'cactus', quantity: 10
+            name: 'bamboo', quantity: 20
           }
         ]
 

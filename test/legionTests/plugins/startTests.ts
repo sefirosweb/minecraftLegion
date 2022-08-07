@@ -1,4 +1,5 @@
 
+//@ts-nocheck
 const startTests = (tests) => {
     return new Promise(resolve => {
         if (tests.length === 0) {

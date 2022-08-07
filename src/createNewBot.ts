@@ -17,7 +17,7 @@ export type Props = {
 }
 
 
-export const createNewBot = (props: Props): void => {
+export const createNewBot = (props: Props): Bot => {
   const {
     botName = 'Legion',
     botPassword,
@@ -71,4 +71,6 @@ export const createNewBot = (props: Props): void => {
       require("@NestedStateModules/startStateMachine")(bot);
     }
   });
+
+  return bot;
 }

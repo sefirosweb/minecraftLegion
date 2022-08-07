@@ -1,5 +1,5 @@
 /* eslint-env mocha */
-
+//@ts-nocheck
 const assert = require('assert')
 const mineflayer = require('mineflayer')
 const mc = require('minecraft-protocol')

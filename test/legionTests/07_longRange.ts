@@ -1,6 +1,7 @@
+//@ts-nocheck
 const assert = require('assert')
-const { once } = require('events')
-const botConfig = require('@modules/botConfig')
+import botConfigLoader from '@/modules/botConfig'
+const botConfig = botConfigLoader()
 const startTests = require('./plugins/startTests')
 
 module.exports = () => async (bot) => {
