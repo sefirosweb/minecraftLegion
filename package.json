@@ -35,7 +35,7 @@
     "scripts": {
         "start": "nodemon src/index.ts --ignore botConfig/ --ignore custom_start/",
         "one": "nodemon --inspect=0.0.0.0:9229 src/start_bot.ts $1 $2",
-        "start_server_test": "docker build -t docker_minecraftlegion . && docker run --rm -it --name minecraftLegion_test_server --network minecraftLegionNetwork -v $PWD:/home/app -w /home/app -u node -p 25565:25565 docker_minecraftlegion node test/common/start_test_server.js",
+        "start_server_test": "docker build -t docker_minecraftlegion . && docker run --rm -it --name minecraftLegion_test_server --network minecraftLegionNetwork -v $PWD:/home/app -w /home/app -u node -p 25565:25565 docker_minecraftlegion node test/common/start_test_server.ts",
         "test": "npm run mocha_test -- -g 1.18.*",
         "mocha_test": "mocha -r ts-node/register --inspect=0.0.0.0:9229 --exit 'test/**/*.ts'",
         "standard": "standard --fix",
