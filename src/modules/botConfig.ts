@@ -44,7 +44,7 @@ const defaultConfig = {
     'cooked_porkchop',
     'cooked_mutton'
   ],
-  chests: {},
+  chests: [],
   patrol: [],
   plantAreas: [],
   chestAreas: [],

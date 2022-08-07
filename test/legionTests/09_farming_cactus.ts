@@ -1,8 +1,8 @@
 //@ts-nocheck
-const assert = require('assert')
 import botConfigLoader from '@/modules/botConfig'
 const botConfig = botConfigLoader()
-const startTests = require('./plugins/startTests')
+import startTests from './plugins/startTests'
+import inventoryModule from '@/modules/inventoryModule'
 
 module.exports = () => async (bot) => {
   const tests = []
@@ -54,7 +54,7 @@ module.exports = () => async (bot) => {
         bot.test.sayEverywhere('/kill @e[type=!player]')
       }, 20000)
 
-      const { getResumeInventory } = require("@modules/inventoryModule")(bot);
+      const { getResumeInventory } = inventoryModule(bot);
       const interval = setInterval(() => {
         let foundAll = true
         const itemsToFind = [

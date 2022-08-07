@@ -14,7 +14,7 @@ import { Bot, Chest, itemsToCraft, LegionStateMachineTargets } from '@/types'
 import chestModule from '@/modules/chestModule'
 import inventoryModule from '@/modules/inventoryModule'
 
-function goChestsFunction(bot: Bot, targets: LegionStateMachineTargets) {
+function goChestsFunction(bot, targets) {
   const { findChestsToWithdraw } = chestModule(bot, targets)
   const { getResumeInventoryV2 } = inventoryModule(bot);
 
@@ -78,9 +78,9 @@ function goChestsFunction(bot: Bot, targets: LegionStateMachineTargets) {
   searchAndCraft.y = 363
 
 
-  let chests: Array<Chest> = [];
+  let chests = []
   let chestIndex = 0
-  let itemsToCraft: Array<itemsToCraft> = []
+  let itemsToCraft = []
 
   const transitions = [
     new StateTransition({
@@ -166,7 +166,7 @@ function goChestsFunction(bot: Bot, targets: LegionStateMachineTargets) {
       child: checkCraftItem,
       onTransition: () => {
         const itemInChest = chests[chestIndex].items
-        // const resumeInventory = getResumeInventoryV2()
+        const resumeInventory = getResumeInventoryV2()
 
         itemsToCraft = []
 

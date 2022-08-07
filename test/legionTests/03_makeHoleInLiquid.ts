@@ -1,8 +1,7 @@
 //@ts-nocheck
-const assert = require('assert')
 import botConfigLoader from '@/modules/botConfig'
 const botConfig = botConfigLoader()
-const startTests = require('./plugins/startTests')
+import startTests from './plugins/startTests'
 
 module.exports = () => async (bot) => {
   const tests = []

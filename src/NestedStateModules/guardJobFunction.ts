@@ -1,4 +1,3 @@
-
 //@ts-nocheck
 
 import {
@@ -7,7 +6,6 @@ import {
   NestedStateMachine,
   BehaviorFollowEntity
 } from 'mineflayer-statemachine'
-
 import BehaviorLoadConfig from '@/BehaviorModules/BehaviorLoadConfig'
 import BehaviorMoveToArray from '@/BehaviorModules/BehaviorMoveToArray'
 import BehaviorEatFood from '@/BehaviorModules/BehaviorEatFood'
@@ -19,10 +17,9 @@ import { Bot } from '@/types'
 import { LegionStateMachineTargets } from '@/types'
 import getClosestEnemy from '@/modules/getClosestEnemy'
 
-function guardJobFunction(bot: Bot, targets: LegionStateMachineTargets) {
-  const start = new BehaviorIdle()
+function guardJobFunction(bot, targets) {
+  const start = new BehaviorIdle(targets)
   start.stateName = 'Start'
-
   start.x = 125
   start.y = 113
 
@@ -63,12 +60,9 @@ function guardJobFunction(bot: Bot, targets: LegionStateMachineTargets) {
   helpFriend.x = 525
   helpFriend.y = 813
 
-
   const goFriend = new BehaviorFollowEntity(bot, targets)
   goFriend.stateName = 'Go To Help Friend'
-
   goFriend.x = 725
-
   goFriend.y = 813
 
   const combatStrategy = require('@NestedStateModules/combat/combatStrategyFunction')(bot, targets)
@@ -128,7 +122,7 @@ function guardJobFunction(bot: Bot, targets: LegionStateMachineTargets) {
       child: goToObject,
       name: 'patrol -> goToObject',
       onTransition: () => {
-        targets.position = targets.itemDrop && targets.itemDrop.position.offset(0, 0.2, 0).clone()
+        targets.position = targets.itemDrop.position.offset(0, 0.2, 0).clone()
       },
       shouldTransition: () => findItem.search() && bot.inventory.items().length < 33
     }),
@@ -142,7 +136,7 @@ function guardJobFunction(bot: Bot, targets: LegionStateMachineTargets) {
           return true
         }
 
-        if (targets.itemDrop && targets.position && targets.position.distanceTo(targets.itemDrop.position) > 1) {
+        if (targets.position.distanceTo(targets.itemDrop.position) > 1) {
           targets.position = targets.itemDrop.position.offset(0, 0.2, 0).clone()
           goToObject.restart()
         }

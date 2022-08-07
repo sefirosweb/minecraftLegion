@@ -1,8 +1,8 @@
 //@ts-nocheck
-const assert = require('assert')
 import botConfigLoader from '@/modules/botConfig'
 const botConfig = botConfigLoader()
-const startTests = require('./plugins/startTests')
+import startTests from './plugins/startTests'
+
 
 module.exports = () => async (bot) => {
   const tests = []
@@ -31,12 +31,7 @@ module.exports = () => async (bot) => {
     job: 'guard',
     mode: 'pve',
     distance: 120,
-    itemsToBeReady: [
-      {
-        item: "bow",
-        quantity: 1
-      }
-    ],
+    itemsToBeReady: [],
     patrol: [
       {
         x: 50,

@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { LegionStateMachineTargets, BotwebsocketAction, Bot } from "@/types"
 import { Jobs } from "@/types/defaultTypes"
 import { BotEvents } from "mineflayer"
@@ -83,7 +84,7 @@ module.exports = (bot: Bot) => {
       }
     },
     movements: movements,
-    chests: {},
+    chests: [],
     portals: {
       overworld: {
         the_nether: [],
