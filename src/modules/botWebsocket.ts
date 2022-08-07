@@ -3,9 +3,9 @@ const { webServer, webServerPort, webServerPassword } = configBot
 import socketIOClient, { Socket } from 'socket.io-client'
 import botconfigLoader from '@/modules/botConfig'
 const botconfig = botconfigLoader()
-import { Bot, BotwebsocketAction } from '@/types'
-import { Vec3 } from 'vec3'
+import { Bot, BotwebsocketAction, Master } from '@/types'
 import { Jobs } from '@/types/defaultTypes'
+import { Vec3 } from 'vec3'
 
 type BotFriends = {
   socketId: string,
@@ -19,10 +19,7 @@ type BotFriends = {
 let bot: Bot
 let socket: Socket
 let friends: Array<BotFriends> = []
-let masters: Array<{
-  position: Vec3
-  name: string
-}> = []
+let masters: Array<Master> = []
 let loged = false
 
 function loadBot(_bot: Bot) {

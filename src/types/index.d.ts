@@ -197,7 +197,8 @@ export type Coordinates = 'x+' | 'x-' | 'z+' | 'z-'
 export type Facing = 'south' | 'north' | 'east' | 'west'
 export type FacingType = 'single' | 'left' | 'right'
 export type Master = {
-    name: string
+    name: string,
+    position?: Vec3
 }
 export interface Bot extends MineflayerBot {
     isABed: (bedBlock: Block) => boolean
@@ -213,6 +214,8 @@ declare module 'mineflayer' {
     export interface BotEvents {
         webSocketLogin: () => Promise<void> | void
         customEventPhysicTick: Function | void
+        reloadBotConfig: () => void
+        beatMob: () => void
 
         customEventChat: (
             username: string,
