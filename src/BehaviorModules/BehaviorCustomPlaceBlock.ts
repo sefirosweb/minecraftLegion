@@ -112,7 +112,7 @@ module.exports = class BehaviorCustomPlaceBlock {
     return new Promise(() => {
       this.equipHeldItem(this.targets.item.name)
         .then(() => {
-          this.place(this.targets.position, this.offset)
+          this.place(this.targets.position, this.offset, this.canJump)
             .then(() => {
               this.isEndFinished = true
             })
