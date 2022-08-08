@@ -115,7 +115,7 @@ const botConfiguration = () => {
     return db.get('config').value()
   }
 
-  const saveFullConfig = (botName: string, config: Config) => {
+  const saveFullConfig = (botName: string, config: Partial<Config>) => {
     const db = getConn(botName)
     const fullConfig = db.get('config').value()
     const newFullConfig = {
