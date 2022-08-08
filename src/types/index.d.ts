@@ -125,6 +125,7 @@ export type Config = {
     canPlaceBlocks: boolean
     canSleep: boolean
     canCraftItemWithdrawChest: boolean
+    pickUpItems: boolean
     minerCords: MineCordsConfig
     mode: Agro
     distance: number
@@ -204,10 +205,15 @@ export interface Bot extends MineflayerBot {
     isABed: (bedBlock: Block) => boolean
 }
 
+export interface EntityWithDistance extends Entity {
+    distance: number
+}
+
 declare module 'prismarine-entity' {
     export interface Entity {
         isEnemy?: boolean
         breededDate?: number
+        distance?: number
     }
 }
 declare module 'mineflayer' {

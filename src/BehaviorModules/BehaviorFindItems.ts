@@ -1,9 +1,6 @@
-//@ts-nocheck
-
-import { Bot, LegionStateMachineTargets } from "@/types"
+import { Bot, LegionStateMachineTargets, EntityWithDistance } from "@/types"
 
 module.exports = class BehaviorFindItems {
-
   readonly bot: Bot
   readonly targets: LegionStateMachineTargets
   stateName: string
@@ -41,30 +38,32 @@ module.exports = class BehaviorFindItems {
     return this.isEndFinished
   }
 
+
   search() {
     if (!this.targets.config.pickUpItems) return false
 
     const entities = Object.keys(this.bot.entities)
 
-    const itemsFound = entities.reduce((currentItems, entityName) => {
-      const newItems = [...currentItems]
+    const itemsFound: Array<EntityWithDistance> = [];
+
+    entities.forEach(entityName => {
       const entity = this.bot.entities[entityName]
       const disatanceToObject = entity.position.distanceTo(this.bot.entity.position)
+
       if (disatanceToObject < this.distanceToFind && (
         !this.isOnFloor ||
         Math.abs(entity.position.y - this.bot.entity.position.y) <= 1
       )) {
         if (entity.objectType === 'Item' /* || entity.objectType === 'Arrow' */) {
-          entity.disatanceToObject = disatanceToObject
-          newItems.push(entity)
+          entity.distance = disatanceToObject
+          itemsFound.push(entity as EntityWithDistance)
         }
       }
-      return newItems
-    }, [])
+    })
 
     if (itemsFound.length > 0) {
       itemsFound.sort(function (a, b) {
-        return a.disatanceToObject - b.disatanceToObject
+        return a.distance - b.distance
       })
       this.targets.itemDrop = itemsFound[0]
       this.isEndFinished = true
