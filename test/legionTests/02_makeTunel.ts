@@ -57,14 +57,14 @@ module.exports = () => async (bot) => {
   botConfig.saveFullConfig(bot.username, config)
   bot.emit('reloadBotConfig')
 
-  addTest('Making a Hole X- Normal', (bot) => {
+  addTest('Making a Tunnel X- Normal', (bot) => {
     return new Promise((resolve) => {
       bot.once('finishedJob', () => resolve())
     })
   })
 
 
-  addTest('Making a Hole X+ Normal', (bot) => {
+  addTest('Making a Tunnel X+ Normal', (bot) => {
 
     const newMinerCords = {
       ...minerCords,
@@ -85,7 +85,7 @@ module.exports = () => async (bot) => {
     })
   })
 
-  addTest('Making a Hole Z+ Normal', (bot) => {
+  addTest('Making a Tunnel Z+ Normal', (bot) => {
 
     const newMinerCords = {
       ...minerCords,
@@ -107,7 +107,7 @@ module.exports = () => async (bot) => {
       bot.once('finishedJob', () => resolve())
     })
   })
-  addTest('Making a Hole Z- Normal', (bot) => {
+  addTest('Making a Tunnel Z- Normal', (bot) => {
 
     const newMinerCords = {
       ...minerCords,

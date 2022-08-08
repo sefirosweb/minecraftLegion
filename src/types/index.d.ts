@@ -88,7 +88,7 @@ type SorterJob = {
 type CrafterJob = {}
 type MinerJob = {
     blockForPlace: Array<any>
-    original: any
+    original: MineCords
     mineBlock: Vec3,
     nextLayer?: Layer
 }

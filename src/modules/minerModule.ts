@@ -1,21 +1,19 @@
 
-//@ts-nocheck
-
 import { Bot, LegionStateMachineTargets } from "@/types"
-import vec3 from 'vec3'
+import { Vec3 } from 'vec3'
 import placeBlockModule from '@/modules/placeBlockModule'
 
 const minerModule = (bot: Bot, targets: LegionStateMachineTargets) => {
   const blocksToBeRplaced = placeBlockModule(bot).blocksToBeRplaced
 
-  const getSidesToCheck = (originalPosition) => {
+  const getSidesToCheck = (originalPosition: Vec3) => {
     const sidesToCheck = []
 
     let off
-    const offsetX = targets.config.minerCords.orientation === 'x+' ? 1 : targets.config.minerCords.orientation === 'x-' ? -1 : 0
-    const offsetZ = targets.config.minerCords.orientation === 'z+' ? 1 : targets.config.minerCords.orientation === 'z-' ? -1 : 0
+    const offsetX: number = targets.config.minerCords.orientation === 'x+' ? 1 : targets.config.minerCords.orientation === 'x-' ? -1 : 0
+    const offsetZ: number = targets.config.minerCords.orientation === 'z+' ? 1 : targets.config.minerCords.orientation === 'z-' ? -1 : 0
 
-    const backOffset = vec3(offsetX, 0, offsetZ)
+    const backOffset = new Vec3(offsetX, 0, offsetZ)
 
     if (targets.config.minerCords.tunel === 'vertically') {
       sidesToCheck.push({
@@ -26,7 +24,7 @@ const minerModule = (bot: Bot, targets: LegionStateMachineTargets) => {
 
     if (
       targets.config.minerCords.tunel === 'horizontally' &&
-      parseInt(originalPosition.y) === parseInt(targets.minerJob.original.yStart)
+      originalPosition.y === targets.minerJob.original.yStart
     ) {
       sidesToCheck.push({
         side: 'bottom',
@@ -40,7 +38,7 @@ const minerModule = (bot: Bot, targets: LegionStateMachineTargets) => {
 
     if (
       targets.config.minerCords.tunel === 'horizontally' &&
-      parseInt(originalPosition.y) === parseInt(targets.minerJob.original.yEnd)
+      originalPosition.y === targets.minerJob.original.yEnd
     ) {
       sidesToCheck.push({
         side: 'top',
@@ -55,24 +53,24 @@ const minerModule = (bot: Bot, targets: LegionStateMachineTargets) => {
     if (
       targets.config.minerCords.tunel === 'horizontally' &&
       (
-        (targets.config.minerCords.orientation === 'x+' && parseInt(originalPosition.z) === parseInt(targets.minerJob.original.zStart)) ||
-        (targets.config.minerCords.orientation === 'x-' && parseInt(originalPosition.z) === parseInt(targets.minerJob.original.zEnd)) ||
-        (targets.config.minerCords.orientation === 'z+' && parseInt(originalPosition.x) === parseInt(targets.minerJob.original.xEnd)) ||
-        (targets.config.minerCords.orientation === 'z-' && parseInt(originalPosition.x) === parseInt(targets.minerJob.original.xStart))
+        (targets.config.minerCords.orientation === 'x+' && originalPosition.z === targets.minerJob.original.zStart) ||
+        (targets.config.minerCords.orientation === 'x-' && originalPosition.z === targets.minerJob.original.zEnd) ||
+        (targets.config.minerCords.orientation === 'z+' && originalPosition.x === targets.minerJob.original.xEnd) ||
+        (targets.config.minerCords.orientation === 'z-' && originalPosition.x === targets.minerJob.original.xStart)
       )
     ) {
       switch (targets.config.minerCords.orientation) {
         case 'x+':
-          off = vec3(0, 0, -1)
+          off = new Vec3(0, 0, -1)
           break
         case 'x-':
-          off = vec3(0, 0, 1)
+          off = new Vec3(0, 0, 1)
           break
         case 'z+':
-          off = vec3(1, 0, 0)
+          off = new Vec3(1, 0, 0)
           break
         case 'z-':
-          off = vec3(-1, 0, 0)
+          off = new Vec3(-1, 0, 0)
           break
       }
 
@@ -89,24 +87,24 @@ const minerModule = (bot: Bot, targets: LegionStateMachineTargets) => {
     if (
       targets.config.minerCords.tunel === 'horizontally' &&
       (
-        (targets.config.minerCords.orientation === 'x+' && parseInt(originalPosition.z) === parseInt(targets.minerJob.original.zEnd)) ||
-        (targets.config.minerCords.orientation === 'x-' && parseInt(originalPosition.z) === parseInt(targets.minerJob.original.zStart)) ||
-        (targets.config.minerCords.orientation === 'z+' && parseInt(originalPosition.x) === parseInt(targets.minerJob.original.xStart)) ||
-        (targets.config.minerCords.orientation === 'z-' && parseInt(originalPosition.x) === parseInt(targets.minerJob.original.xEnd))
+        (targets.config.minerCords.orientation === 'x+' && originalPosition.z === targets.minerJob.original.zEnd) ||
+        (targets.config.minerCords.orientation === 'x-' && originalPosition.z === targets.minerJob.original.zStart) ||
+        (targets.config.minerCords.orientation === 'z+' && originalPosition.x === targets.minerJob.original.xStart) ||
+        (targets.config.minerCords.orientation === 'z-' && originalPosition.x === targets.minerJob.original.xEnd)
       )
     ) {
       switch (targets.config.minerCords.orientation) {
         case 'x+':
-          off = vec3(0, 0, 1)
+          off = new Vec3(0, 0, 1)
           break
         case 'x-':
-          off = vec3(0, 0, -1)
+          off = new Vec3(0, 0, -1)
           break
         case 'z+':
-          off = vec3(-1, 0, 0)
+          off = new Vec3(-1, 0, 0)
           break
         case 'z-':
-          off = vec3(1, 0, 0)
+          off = new Vec3(1, 0, 0)
           break
       }
 
@@ -130,13 +128,13 @@ const minerModule = (bot: Bot, targets: LegionStateMachineTargets) => {
     return sidesToCheck
   }
 
-  const calculateSideToPlaceBlock = (position) => {
-    const sidesToPlaceBlock = []
+  const calculateSideToPlaceBlock = (position: Vec3) => {
+    const sidesToPlaceBlock: Array<Vec3> = []
 
     const sidesToCheck = getSidesToCheck(position.clone())
     sidesToCheck.forEach((currentSideToCheck) => {
       const block = bot.blockAt(currentSideToCheck.position)
-      if (blocksToBeRplaced.includes(block.name)) {
+      if (block && blocksToBeRplaced.includes(block.name)) {
         sidesToPlaceBlock.push(currentSideToCheck.position.clone())
       }
     })

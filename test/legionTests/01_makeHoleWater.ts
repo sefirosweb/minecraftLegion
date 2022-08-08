@@ -50,7 +50,7 @@ module.exports = () => async (bot) => {
   botConfig.saveFullConfig(bot.username, config)
   bot.emit('reloadBotConfig')
 
-  addTest('Making a Hole X+ Normal', (bot) => {
+  addTest('Making a Hole in water', (bot) => {
     return new Promise((resolve) => {
       bot.once('finishedJob', () => resolve())
     })
