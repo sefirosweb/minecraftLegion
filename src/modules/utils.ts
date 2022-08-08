@@ -1,4 +1,4 @@
-import { Facing, FacingType } from '@/types'
+import { Facing, ChestPosition } from '@/types'
 import { Vec3 } from 'vec3'
 
 export const sleep = (ms: number) => {
@@ -26,40 +26,40 @@ export const shuffle = (array: Array<any>) => {
 }
 
 
-export const getSecondBlockPosition = (facing: Facing, type: FacingType) => {
-  if (type === 'single') {
+export const getSecondBlockPosition = (facing: Facing, chestPosition: ChestPosition) => {
+  if (chestPosition === 'single') {
     return false
   }
 
-  if (facing === 'south' && type === 'right') {
+  if (facing === 'south' && chestPosition === 'right') {
     return new Vec3(1, 0, 0)
   }
 
-  if (facing === 'south' && type === 'left') {
+  if (facing === 'south' && chestPosition === 'left') {
     return new Vec3(-1, 0, 0)
   }
 
-  if (facing === 'north' && type === 'left') {
+  if (facing === 'north' && chestPosition === 'left') {
     return new Vec3(1, 0, 0)
   }
 
-  if (facing === 'north' && type === 'right') {
+  if (facing === 'north' && chestPosition === 'right') {
     return new Vec3(-1, 0, 0)
   }
 
-  if (facing === 'east' && type === 'right') {
+  if (facing === 'east' && chestPosition === 'right') {
     return new Vec3(0, 0, -1)
   }
 
-  if (facing === 'east' && type === 'left') {
+  if (facing === 'east' && chestPosition === 'left') {
     return new Vec3(0, 0, 1)
   }
 
-  if (facing === 'west' && type === 'left') {
+  if (facing === 'west' && chestPosition === 'left') {
     return new Vec3(0, 0, -1)
   }
 
-  if (facing === 'west' && type === 'right') {
+  if (facing === 'west' && chestPosition === 'right') {
     return new Vec3(0, 0, 1)
   }
 

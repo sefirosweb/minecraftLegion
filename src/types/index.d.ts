@@ -195,7 +195,7 @@ export type BotwebsocketAction = {
 
 export type Coordinates = 'x+' | 'x-' | 'z+' | 'z-'
 export type Facing = 'south' | 'north' | 'east' | 'west'
-export type FacingType = 'single' | 'left' | 'right'
+export type ChestPosition = 'single' | 'left' | 'right'
 export type Master = {
     name: string,
     position?: Vec3
