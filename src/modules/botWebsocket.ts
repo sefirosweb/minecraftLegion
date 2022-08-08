@@ -3,7 +3,7 @@ const { webServer, webServerPort, webServerPassword } = configBot
 import socketIOClient, { Socket } from 'socket.io-client'
 import botconfigLoader from '@/modules/botConfig'
 const botconfig = botconfigLoader()
-import { Bot, BotwebsocketAction, Master } from '@/types'
+import { Bot, BotwebsocketAction, Master, Portals } from '@/types'
 import { Jobs } from '@/types/defaultTypes'
 import { Vec3 } from 'vec3'
 
@@ -469,7 +469,7 @@ function sendConfig() {
   // console.log(botconfig.getAll(bot.username))
 }
 
-function sendAction(action: string, value: string) {
+function sendAction(action: string, value: Portals) {
   socket.emit('sendAction', { action, value })
 }
 

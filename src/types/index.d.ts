@@ -157,6 +157,10 @@ export type Recipes = {
     }
 }
 
+export type Vec3WithDistance = Vec3 & {
+    distance?: number
+}
+
 export type Vec3WithDimension = Vec3 & {
     dimension?: Dimensions
 }
