@@ -1,5 +1,5 @@
 
-import { BlockChest, Bot, Facing, FacingType, GetResumeInventory, GetResumeInventoryV2, ItemArmor, OptionsFind } from "@/types"
+import { BlockChest, Bot, Facing, ChestPosition, GetResumeInventory, GetResumeInventoryV2, ItemArmor, OptionsFind } from "@/types"
 import { getSecondBlockPosition } from '@/modules/utils'
 import { EquipmentDestination } from "mineflayer"
 import { Vec3 } from "vec3"
@@ -198,7 +198,7 @@ const inventoryModule = (bot: Bot) => {
 
       props = block.getProperties()
       const facing: Facing = props.facing as Facing
-      const type: FacingType = props.type as FacingType
+      const type: ChestPosition = props.type as ChestPosition
       const offset = getSecondBlockPosition(facing, type)
 
       if (offset === false) {

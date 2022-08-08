@@ -1,5 +1,5 @@
 //@ts-nocheck
-import { Bot, Chest, Item, LegionStateMachineTargets } from "@/types"
+import { Bot, LegionStateMachineTargets } from "@/types"
 import sorterJob from '@/modules/sorterJob'
 import inventoryModule from '@/modules/inventoryModule'
 
