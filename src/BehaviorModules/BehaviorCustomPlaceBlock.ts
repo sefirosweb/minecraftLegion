@@ -1,10 +1,10 @@
 
-// @ts-nocheck
 import { Bot, LegionStateMachineTargets } from "@/types"
 import botWebsocket from '@/modules/botWebsocket'
 import digBlockModule from '@/modules/digBlockModule'
 import placeBlockModule from '@/modules/placeBlockModule'
 import inventoryModule from '@/modules/inventoryModule'
+import { Vec3 } from "vec3"
 module.exports = class BehaviorCustomPlaceBlock {
 
   readonly bot: Bot
@@ -13,7 +13,14 @@ module.exports = class BehaviorCustomPlaceBlock {
   isEndFinished: boolean
   canJump: boolean
   canReplaceBlock: boolean
-
+  equipHeldItem: (itemName: string) => Promise<void>
+  digBlock: (position: Vec3) => Promise<void>
+  place: (position: Vec3, offset: Vec3, canJump?: boolean) => Promise<void>
+  blocksCanBeReplaced: Array<string>
+  itemNotFound: boolean
+  cantPlaceBlock: boolean
+  offset?: Vec3
+  timeLimit?: ReturnType<typeof setTimeout>
 
   constructor(bot: Bot, targets: LegionStateMachineTargets, canJump: boolean = true, canReplaceBlock: boolean = false) {
     const { blocksCanBeReplaced, place } = placeBlockModule(bot)
@@ -48,7 +55,7 @@ module.exports = class BehaviorCustomPlaceBlock {
     this.canJump = canJump
   }
 
-  setOffset(offset: boolean) {
+  setOffset(offset: Vec3) {
     this.offset = offset
   }
 
@@ -81,6 +88,10 @@ module.exports = class BehaviorCustomPlaceBlock {
       return
     }
 
+    if (!this.offset) {
+      throw new Error('Offset is not inserted')
+    }
+
     const block = this.bot.blockAt(this.targets.position.clone().add(this.offset))
 
     if (block == null) {
@@ -109,9 +120,19 @@ module.exports = class BehaviorCustomPlaceBlock {
   }
 
   placeBlock() {
-    return new Promise(() => {
+    return new Promise((resolve, reject) => {
       this.equipHeldItem(this.targets.item.name)
         .then(() => {
+
+          if (!this.targets.position) {
+            reject('Target position is not definied')
+            return
+          }
+          if (!this.offset) {
+            reject('Offset is not definied')
+            return
+          }
+
           this.place(this.targets.position, this.offset, this.canJump)
             .then(() => {
               this.isEndFinished = true

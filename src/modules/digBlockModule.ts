@@ -6,7 +6,8 @@ import mcDataLoader from 'minecraft-data'
 import { Item } from 'prismarine-item';
 
 const digBlockModule = (bot: Bot) => {
-  const startDig = (block: Block) => {
+
+  const startDig = (block: Block): Promise<void> => {
     return new Promise((resolve, reject) => {
       bot.dig(block)
         .then(resolve)
@@ -17,7 +18,7 @@ const digBlockModule = (bot: Bot) => {
     })
   }
 
-  const digBlock = (position: Vec3) => {
+  const digBlock = (position: Vec3): Promise<void> => {
     return new Promise((resolve, reject) => {
       const block = bot.blockAt(position)
       if (!block || !bot.canDigBlock(block)) {
