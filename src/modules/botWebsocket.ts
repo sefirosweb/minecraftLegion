@@ -29,8 +29,8 @@ function loadBot(_bot: Bot) {
 function connect() {
   socket = socketIOClient(`${webServer}:${webServerPort}`)
   socket.on('update', (data) => console.log(data))
-  socket.on('connect_error', (data) => console.log(data))
-  socket.on('connect_failed', (data) => console.log(data))
+  // socket.on('connect_error', (data) => console.log(data))
+  // socket.on('connect_failed', (data) => console.log(data))
 
   socket.on('connect', () => {
     console.log('Connected to webserver')
