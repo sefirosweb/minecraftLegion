@@ -19,12 +19,12 @@ module.exports = () => async (bot) => {
   bot.chat(`/fill 11 -59 0 11 -59 0 minecraft:cobblestone_slab[type=top]`)
   bot.chat(`/gamerule randomTickSpeed 500`)
 
-  bot.chat(`/give flatbot minecraft:pumpkin_seeds 1`)
-  bot.chat(`/give flatbot minecraft:melon_seeds 1`)
+  bot.chat(`/give flatbot minecraft:pumpkin_seeds 2`)
+  bot.chat(`/give flatbot minecraft:melon_seeds 2`)
   bot.chat(`/give flatbot minecraft:carrot 1`)
   bot.chat(`/give flatbot minecraft:potato 1`)
-  bot.chat(`/give flatbot minecraft:beetroot_seeds 1`)
-  bot.chat(`/give flatbot minecraft:wheat_seeds 1`)
+  bot.chat(`/give flatbot minecraft:beetroot_seeds 2`)
+  bot.chat(`/give flatbot minecraft:wheat_seeds 2`)
   bot.chat(`/give flatbot minecraft:sweet_berries 1`)
   bot.chat(`/give flatbot minecraft:sugar_cane 1`)
 
