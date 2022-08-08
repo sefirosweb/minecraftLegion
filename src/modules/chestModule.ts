@@ -1,33 +1,42 @@
-//@ts-nocheck
-import { Bot, LegionStateMachineTargets } from "@/types"
+import { Bot, Chests, DepositType, Item, LegionStateMachineTargets, ResumeChests, Vec3WithDimension } from "@/types"
 import sorterJob from '@/modules/sorterJob'
 import inventoryModule from '@/modules/inventoryModule'
+
+export type Chest = {
+  items: Array<Item>
+  type: DepositType
+  name: string
+  position: Vec3WithDimension
+};
 
 const chestModule = (bot: Bot, targets: LegionStateMachineTargets) => {
   const { findItemsInChests } = sorterJob(bot)
   const { getResumeInventoryV2, getGenericItems } = inventoryModule(bot)
 
-  const getItemsToWithdrawInChests = (chests) => {
-    return chests
+  const getItemsToWithdrawInChests = (chests: Array<Chest>): Array<Item> => {
+    const items: Array<Item> = []
+    chests
       .filter((c) => c.type === "withdraw")
-      .reduce((returnData, c) => {
+      .forEach(c => {
         c.items.forEach((i) => {
-          const key = returnData.findIndex((r) => r.item === i.item);
+          const key = items.findIndex((r) => r.item === i.item);
           if (key >= 0) {
-            returnData[key].quantity += i.quantity;
+            items[key].quantity += i.quantity;
           } else {
-            returnData.push(i);
+            items.push(i);
           }
         });
-        return returnData;
-      }, []);
+      })
+
+    return items;
   };
 
-  const findChestsToWithdraw = (botChests, sharedChests) => {
+  const findChestsToWithdraw = (botChests: Array<Chest>, sharedChests: ResumeChests) => {
     const resumeInventory = getResumeInventoryV2();
-    const itemsToWithdrawInChests = getItemsToWithdrawInChests(botChests); // bsca que items hay que sacar
-    const itemsToWithdraw = itemsToWithdrawInChests.reduce((returnData, i) => {
-      // resta los items que hay que sacar - inventario
+    const itemsToWithdrawInChests = getItemsToWithdrawInChests(botChests);
+
+    const itemsToWithdraw: Array<Item> = []
+    itemsToWithdrawInChests.forEach(i => {
       let invItem;
       if (getGenericItems().includes(i.item)) {
         invItem = resumeInventory.find((inv) => inv.name.includes(i.item));
@@ -35,15 +44,15 @@ const chestModule = (bot: Bot, targets: LegionStateMachineTargets) => {
         invItem = resumeInventory.find((inv) => inv.name === i.item);
       }
       i.quantity = invItem ? i.quantity - invItem.count : i.quantity;
-      if (i.quantity > 0) returnData.push(i);
-      return returnData;
-    }, []);
-    return findItemsInChests(sharedChests, itemsToWithdraw); // busca en todos los cofres que items hay que sacar
+      if (i.quantity > 0) itemsToWithdraw.push(i);
+    })
+
+    const itemsInChest = findItemsInChests(sharedChests, itemsToWithdraw);
+    return itemsInChest
   };
 
-  const nearChests = () => {
-    const chests = {}
-
+  const nearChests = (): Chests => { // Convert chest array to chest index and return nearest chests
+    const chests: Chests = {}
     Object.entries(targets.chests).forEach((entry) => {
       const index = entry[0]
       const c = entry[1]

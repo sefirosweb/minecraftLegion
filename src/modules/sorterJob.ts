@@ -1,13 +1,13 @@
 //@ts-nocheck
 
-import { Bot, GetResumeInventory, ResumeChests } from "@/types"
+import { Bot, GetResumeInventory, Item, ResumeChests } from "@/types"
 import inventoryModule from '@/modules/inventoryModule'
 
 
 const sorterJob = (bot: Bot) => {
   const { getGenericItems } = inventoryModule(bot)
 
-  const findItemsInChests = (chestInput: ResumeChests, itemsInput: GetResumeInventory, exclude?: any) => {
+  const findItemsInChests = (chestInput: ResumeChests, itemsInput: Array<Item>, exclude?: any) => {
     const chests: ResumeChests = JSON.parse(JSON.stringify(chestInput))
     const items: Array<GetResumeInventory> = JSON.parse(JSON.stringify(itemsInput))
 

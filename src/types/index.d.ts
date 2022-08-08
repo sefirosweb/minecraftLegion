@@ -156,7 +156,7 @@ export type Recipes = {
     }
 }
 
-type PositionWithVec3 = Vec3 & {
+export type Vec3WithDimension = Vec3 & {
     dimension?: Dimensions
 }
 export interface LegionStateMachineTargets extends StateMachineTargets {
@@ -169,7 +169,7 @@ export interface LegionStateMachineTargets extends StateMachineTargets {
     config: Config;
 
     itemDrop?: ItemDrop; // TODO FIX
-    position?: PositionWithVec3;
+    position?: Vec3WithDimension;
     pickUpItems?: any;
     items?: any;
     craftItemBatch?: any;
