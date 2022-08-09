@@ -118,7 +118,7 @@ const inventoryModule = (bot: Bot) => {
 
 
 
-  function getResumeInventoryV2() {
+  function getResumeInventoryV2(): Array<GetResumeInventoryV2> {
 
     const items: Array<GetResumeInventoryV2> = []
 

@@ -70,7 +70,19 @@ module.exports = () => async (bot) => {
           {
             item: "iron_boots",
             quantity: 1
-          }
+          },
+          {
+            item: "oak_door",
+            quantity: 3 // TODO check
+          },
+          {
+            item: "oak_fence_gate",
+            quantity: 1
+          },
+          {
+            item: "oak_boat",
+            quantity: 1
+          },
         ]
       }
     ],
