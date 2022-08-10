@@ -12,7 +12,7 @@
         "minecraft-data": "3.9.1",
         "minecrafthawkeye": "1.2.7",
         "mineflayer": "4.3.0",
-        "mineflayer-pathfinder": "2.2.0",
+        "mineflayer-pathfinder": "2.3.0",
         "mineflayer-statemachine": "1.6.5",
         "mineflayer-web-inventory": "1.8.3",
         "module-alias": "2.2.2",
@@ -21,7 +21,7 @@
         "vec3": "0.1.7"
     },
     "devDependencies": {
-        "@types/chai": "^4.3.1",
+        "@types/chai": "^4.3.3",
         "@types/mocha": "^9.1.1",
         "chai": "^4.3.6",
         "minecraft-wrap": "^1.5.1",
