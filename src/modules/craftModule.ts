@@ -11,44 +11,43 @@ const craftModule = (bot: Bot) => {
   const { getResumeInventoryV2 } = inventoryModule(bot)
   const { findItemsInChests } = sorterJob(bot)
 
-  const getRecipes = (item_id: number, craftingTable: Block | null): Array<Recpie> => {
-    const aviableRecipes = bot.recipesAll(item_id, null, craftingTable)
+  const getRecipes = (itemId: number, craftingTable: Block | null): Array<Recpie> => {
+    const aviableRecipes = bot.recipesAll(itemId, null, craftingTable)
 
     const recipes: Array<Recpie> = []
 
-    // Recpipes
-    for (let r = 0; r < aviableRecipes.length; r++) {
-      // Items in recipe
-      const items = []
+    aviableRecipes.forEach(recipe => {
+      const items: Array<ItemRecipe> = []
       let result: ItemRecipe | null = null
-      for (let i = 0; i < aviableRecipes[r].delta.length; i++) {
-        if (aviableRecipes[r].delta[i].count > 0) {
-          result = {
-            name: mcData.items[aviableRecipes[r].delta[i].id]
-              .name,
-            id: aviableRecipes[r].delta[i].id,
-            type: aviableRecipes[r].delta[i].id,
-            count: Math.abs(aviableRecipes[r].delta[i].count)
+
+      recipe.delta.forEach(itemsInRecipe => {
+        if (itemsInRecipe.count > 0) {
+          result = { // Item returned
+            name: mcData.items[itemsInRecipe.id].name,
+            id: itemsInRecipe.id,
+            type: itemsInRecipe.id,
+            count: Math.abs(itemsInRecipe.count)
           }
-          continue
+        } else {
+          const itemToAdd: ItemRecipe = {
+            name: mcData.items[itemsInRecipe.id].name,
+            id: itemsInRecipe.id,
+            type: itemsInRecipe.id,
+            count: Math.abs(itemsInRecipe.count)
+          }
+
+          items.push(itemToAdd)
         }
-        items.push({
-          name: mcData.items[aviableRecipes[r].delta[i].id].name,
-          id: aviableRecipes[r].delta[i].id,
-          type: aviableRecipes[r].delta[i].id,
-          count: Math.abs(aviableRecipes[r].delta[i].count)
-        })
-      }
+      })
 
       recipes.push({
         result,
         items
       })
-    }
+    })
 
     return recipes
   }
-
 
   const recursiveRecipes = (item: Item, craftingTable: Block | null, previousItem: ItemRecursive | undefined) => {
     let needCraftingTable: boolean = false
@@ -174,8 +173,8 @@ const craftModule = (bot: Bot) => {
 
     let sharedChests: ArrayOfBlocks = JSON.parse(JSON.stringify(InputSharedChests))
 
-    let allItemsToPickUp = []
-    let allRecpiesUsed = []
+    let allItemsToPickUp: Array<ChestMovement> = []
+    let allRecpiesUsed: Array<Recpie> = []
 
     let resultItemToPickup
     let itemToCraft
