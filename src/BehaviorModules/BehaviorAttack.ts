@@ -1,4 +1,3 @@
-//@ts-nocheck
 
 import { Bot, LegionStateMachineTargets } from "@/types"
 import inventoryModule from '@/modules/inventoryModule'
@@ -6,23 +5,24 @@ class BehaviorAttack {
   readonly bot: Bot
   readonly targets: LegionStateMachineTargets
   stateName: string
+  x?: number
+  y?: number
 
-  playerIsFound: boolean
 
   lastAttack: number
+  inventory: ReturnType<typeof inventoryModule>
 
   constructor(bot: Bot, targets: LegionStateMachineTargets) {
     this.bot = bot
     this.targets = targets
     this.stateName = 'BehaviorAttack'
 
-    this.playerIsFound = false
     this.lastAttack = Date.now()
-
     this.inventory = inventoryModule(this.bot)
   }
 
   onStateEntered() {
+    if (!this.targets.entity) return
     this.bot.lookAt(this.targets.entity.position.offset(0, 1, 0))
     this.checkHandleSword()
     this.bot.attack(this.targets.entity)
@@ -42,7 +42,7 @@ class BehaviorAttack {
 
     if (swordHandled) { return }
 
-    const itemEquip = this.bot.inventory.items().find(item => item.name.includes('sword'))
+    const itemEquip = this.bot.inventory.items().find(item => item.name.includes('sword')) // TODO ADD axes hoes etc for combat
     if (itemEquip) {
       this.bot.equip(itemEquip, 'hand')
     }
