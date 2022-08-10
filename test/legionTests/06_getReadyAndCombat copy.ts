@@ -83,6 +83,14 @@ module.exports = () => async (bot) => {
             item: "oak_boat",
             quantity: 1
           },
+          {
+            item: "oak_log",
+            quantity: 10
+          },
+          {
+            item: "golden_axe",
+            quantity: 1
+          },
         ]
       }
     ],
