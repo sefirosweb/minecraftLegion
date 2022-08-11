@@ -1,7 +1,6 @@
 
-//@ts-nocheck
 import { Bot, LegionStateMachineTargets } from "@/types"
-import { Block } from "minecraft-data"
+import { Block } from 'prismarine-block'
 import mcDataLoader from 'minecraft-data'
 import botWebsocket from '@/modules/botWebsocket'
 import inventoryModule from '@/modules/inventoryModule'
@@ -12,9 +11,14 @@ module.exports = class BehaviorCraft {
   readonly mcData: mcDataLoader.IndexedData
   stateName: string
   isEndFinished: boolean
+  x?: number
+  y?: number
+
   success: boolean
   craftingTable: Block | null
 
+  inventoryModule: ReturnType<typeof inventoryModule>
+  timeLimit?: ReturnType<typeof setTimeout>
 
   constructor(bot: Bot, targets: LegionStateMachineTargets) {
     this.bot = bot
@@ -87,7 +91,7 @@ module.exports = class BehaviorCraft {
     }
 
     this.bot
-      .craft(recipe, 1, this.getCraftingTable())
+      .craft(recipe, 1, this.getCraftingTable() ?? undefined)
       .then(() => {
         this.success = true
         this.isEndFinished = true
@@ -99,7 +103,7 @@ module.exports = class BehaviorCraft {
       })
   }
 
-  getCraftingTable() {
+  getCraftingTable(): Block | null {
     if (!this.craftingTable) {
       const craftingTableID = this.mcData.blocksByName.crafting_table.id
       this.craftingTable = this.bot.findBlock({
@@ -111,7 +115,7 @@ module.exports = class BehaviorCraft {
     return this.craftingTable
   }
 
-  enoughItemsForCraft(name) {
+  enoughItemsForCraft(name: string) {
     const item = this.mcData.itemsByName[name]
 
     if (!item) {
