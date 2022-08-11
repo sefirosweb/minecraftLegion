@@ -88,11 +88,10 @@ function connect() {
 
     let isEventLoaded: Function | undefined
 
-    const asd = config.value
+    const asd = config.value // TODO ???
     switch (config.configToChange) {
       case 'job':
-        if (asd in Jobs) {
-          console.log(asd)
+        if (asd in Jobs) { // TODO ???
           botconfig.setJob(bot.username, asd)
         }
         break
@@ -465,8 +464,6 @@ function sendConfig() {
     action: 'sendConfig',
     value: botconfig.getAll(bot.username)
   })
-
-  // console.log(botconfig.getAll(bot.username))
 }
 
 function sendAction(action: string, value: Portals) {

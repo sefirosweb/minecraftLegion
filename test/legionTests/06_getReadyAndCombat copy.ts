@@ -114,7 +114,6 @@ module.exports = () => async (bot) => {
   addTest('Fight with mob', (bot) => {
     return new Promise((resolve) => {
       bot.once('beatMob', () => {
-        console.log(bot.inventory)
         resolve()
       })
     })

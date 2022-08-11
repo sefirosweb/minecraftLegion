@@ -114,7 +114,6 @@ function inject(bot) {
   }
 
   async function becomeCreative() {
-    // console.log('become creative')
     return setCreativeMode(true)
   }
 
