@@ -1,16 +1,16 @@
 export enum DefaultBlockForPlace {
-    "netherrack",
-    "basalt",
-    "blackstone",
-    "stone",
-    "cobblestone",
-    "cobbled_deepslate",
-    "dirt",
-    "tuff",
-    "andesite",
-    "diorite",
-    "granite",
-    "sandstone",
+    netherrack = 'netherrack',
+    basalt = 'basalt',
+    blackstone = 'blackstone',
+    stone = 'stone',
+    cobblestone = 'cobblestone',
+    cobbled_deepslate = 'cobbled_deepslate',
+    dirt = 'dirt',
+    tuff = 'tuff',
+    andesite = 'andesite',
+    diorite = 'diorite',
+    granite = 'granite',
+    sandstone = 'sandstone',
 }
 
 export enum Jobs {
@@ -22,4 +22,10 @@ export enum Jobs {
     sorter = 'sorter',
     miner = 'miner',
     crafter = 'crafter'
+}
+
+export enum BlocksCanFertilize {
+    dirt = 'dirt',
+    coarse_dirt = 'coarse_dirt',
+    grass_block = 'grass_block'
 }

@@ -1,11 +1,13 @@
 
 //@ts-nocheck
+
 import { Bot, LegionStateMachineTargets } from "@/types"
+import { BlocksCanFertilize } from "@/types/defaultTypes"
 module.exports = class BehaviorFertilize {
 
   readonly bot: Bot
   readonly targets: LegionStateMachineTargets
-  readonly blocksCanFertilize: Array<string>
+  readonly blocksCanFertilize: Array<BlocksCanFertilize>
   stateName: string
   isEndFinished: boolean
   success: boolean
@@ -16,7 +18,7 @@ module.exports = class BehaviorFertilize {
     this.stateName = 'BehaviorFertilize'
     this.success = false
     this.isEndFinished = false
-    this.blocksCanFertilize = ['dirt', 'coarse_dirt', 'grass_block']
+    this.blocksCanFertilize = Object.values(BlocksCanFertilize)
   }
 
   onStateExited() {
