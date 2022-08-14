@@ -1,10 +1,9 @@
-
 //@ts-nocheck
-
 import botWebsocket from '@/modules/botWebsocket'
 import { sleep, getSecondBlockPosition } from '@/modules/utils'
-import { Bot, LegionStateMachineTargets } from '@/types'
-import vec3 from 'vec3'
+import { Bot, Item, LegionStateMachineTargets } from '@/types'
+import { Block } from 'prismarine-block'
+import { Vec3 } from 'vec3'
 
 module.exports = class BehaviorWithdrawItemChest {
 
@@ -12,6 +11,8 @@ module.exports = class BehaviorWithdrawItemChest {
   readonly targets: LegionStateMachineTargets
   stateName: string
   isEndFinished: boolean
+  timeLimit?: ReturnType<typeof setTimeout>
+  items: Array<Item>
 
   constructor(bot: Bot, targets: LegionStateMachineTargets) {
     this.bot = bot
@@ -45,7 +46,8 @@ module.exports = class BehaviorWithdrawItemChest {
   }
 
   async withdrawAllItems() {
-    const chestToOpen = this.bot.blockAt(vec3(this.targets.position))
+    if (!this.targets.position) return
+    const chestToOpen = this.bot.blockAt(new Vec3(this.targets.position?.x, this.targets.position?.y, this.targets.position?.z))
     if (!chestToOpen) {
       return
     }
@@ -77,10 +79,14 @@ module.exports = class BehaviorWithdrawItemChest {
       })
   }
 
-  refreshChest(chestToOpen, container) {
+  refreshChest(chestToOpen: Block, container) {
     const chest = Object.values(this.targets.chests).find(c => {
-      if (vec3(c.position).equals(chestToOpen.position)) return true
-      if (c.secondBlock && vec3(c.secondBlock.position).equals(chestToOpen.position)) return true
+      const chestPosition = new Vec3(c.position.x, c.position.y, c.position.z)
+      if (chestPosition.equals(chestToOpen.position)) return true
+
+      if (!c.secondBlock) return false
+      const chestSecondBlock = new Vec3(c.secondBlock.x, c.secondBlock.y, c.secondBlock.z)
+      if (chestSecondBlock.equals(chestToOpen.position)) return true
       return false
     })
 
@@ -107,7 +113,7 @@ module.exports = class BehaviorWithdrawItemChest {
     botWebsocket.sendAction('setChests', this.targets.chests)
   }
 
-  withdrawItem(container) {
+  withdrawItem(container): Promise<void> {
     return new Promise((resolve, reject) => {
       if (this.items.length === 0) {
         resolve()
