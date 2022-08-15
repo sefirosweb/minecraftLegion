@@ -9,9 +9,11 @@ import {
 import BehaviorLoadConfig from '@/BehaviorModules/BehaviorLoadConfig'
 import BehaviorMoveToArray from '@/BehaviorModules/BehaviorMoveToArray'
 import BehaviorEatFood from '@/BehaviorModules/BehaviorEatFood'
+import BehaviorEquipAll from '@/BehaviorModules/BehaviorEquipAll'
 import BehaviorFindItems from '@/BehaviorModules/BehaviorFindItems'
 import BehaviorHelpFriend from '@/BehaviorModules/BehaviorHelpFriend'
 import BehaviorMoveTo from '@/BehaviorModules/BehaviorMoveTo'
+
 import getClosestEnemy from '@/modules/getClosestEnemy'
 
 function guardJobFunction(bot, targets) {
@@ -32,6 +34,11 @@ function guardJobFunction(bot, targets) {
   patrol.movements = targets.movements
 
   const getClosestMob = getClosestEnemy(bot, targets)
+
+  const equip = new BehaviorEquipAll(bot, targets)
+  equip.stateName = 'Equip items'
+  equip.x = 725
+  equip.y = 363
 
   const eatFood = new BehaviorEatFood(bot, targets)
   eatFood.stateName = 'Eat Food'
@@ -65,10 +72,6 @@ function guardJobFunction(bot, targets) {
   getReady.stateName = 'Get Ready'
   getReady.x = 525
   getReady.y = 213
-
-  const goChests = require('@NestedStateModules/getReady/goChestsFunctions')(bot, targets)
-  goChests.x = 725
-  goChests.y = 213
 
   const transitions = [
     new StateTransition({
