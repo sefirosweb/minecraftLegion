@@ -8,7 +8,7 @@ import {
 import sorterJob from '@/modules/sorterJob'
 
 function sortChestFunction(bot: Bot, targets: LegionStateMachineTargets) {
-  const { findItemsInChests, calculateSlotsToSort } = sorterJob(bot)
+  const { findItemsInChests, calculateSlotsToSort } = sorterJob()
 
   const start = new BehaviorIdle()
   start.stateName = 'Start'

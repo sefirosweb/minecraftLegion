@@ -129,9 +129,7 @@ function plantFunction(bot: Bot, targets: LegionStateMachineTargets) {
 
   const craftItem = new BehaviorCraft(bot, targets)
   craftItem.stateName = 'Craft Item'
-  //@ts-ignore
   craftItem.x = 525
-  //@ts-ignore
   craftItem.y = 513
 
   const transitions = [

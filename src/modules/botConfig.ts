@@ -324,7 +324,15 @@ const botConfiguration = () => {
 
   const getAllChests = (botName: string) => {
     const db = getConn(botName)
-    const chest = db.get('config.chests').value()
+    //@ts-ignore
+    const chest = db.get('config.chests').value().map(c => {
+      return {
+        dimension: c.dimension,
+        items: c.items,
+        type: c.type,
+        position: new Vec3(c.position.x, c.position.y, c.position.z)
+      }
+    })
     if (chest === undefined) {
       return {}
     } else {

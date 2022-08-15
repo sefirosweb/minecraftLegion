@@ -139,7 +139,7 @@ module.exports = class BehaviorCraft {
         }
 
         const itemInventory = resumeInventory.find(
-          (inv) => inv.type === aviableRecipes[r].delta[i].id
+          (inv) => inv.id === aviableRecipes[r].delta[i].id
         )
         if (
           !itemInventory ||

@@ -1,5 +1,5 @@
-//@ts-nocheck
-import { Bot, DepositType, LegionStateMachineTargets, Item, GetResumeInventory } from "@/types"
+
+import { Bot, DepositType, LegionStateMachineTargets, Item } from "@/types"
 import inventoryModule from '@/modules/inventoryModule'
 import { Item as McItem } from "prismarine-item"
 
@@ -11,7 +11,7 @@ module.exports = class BehaviorCheckItemsInInventory {
   x?: number
   y?: number
 
-  itemsToCheck: Array<GetResumeInventory>
+  itemsToCheck: Array<Item>
   isDeposit: DepositType
   inventoryModule: ReturnType<typeof inventoryModule>
 
@@ -27,7 +27,7 @@ module.exports = class BehaviorCheckItemsInInventory {
     this.inventoryModule = inventoryModule(this.bot)
   }
 
-  setItemsToCheck(itemsToCheck: Array<GetResumeInventory>) {
+  setItemsToCheck(itemsToCheck: Array<Item>) {
     this.itemsToCheck = itemsToCheck
   }
 
@@ -51,11 +51,11 @@ module.exports = class BehaviorCheckItemsInInventory {
   }
 
   getItemsToDepositAll() {
-    const items: Array<GetResumeInventory> = this.getResumeInventory(false)
+    const items: Array<Item> = this.getResumeInventory(false)
 
-    const itemsToDeposit: Array<GetResumeInventory> = []
+    const itemsToDeposit: Array<Item> = []
     items.forEach(slot => {
-      const itemToExclude = this.itemsToCheck.find(i => i.item === slot.name)
+      const itemToExclude = this.itemsToCheck.find(i => i.name === slot.name)
 
       if (itemToExclude === undefined) {
         itemsToDeposit.push(slot)
@@ -75,10 +75,10 @@ module.exports = class BehaviorCheckItemsInInventory {
   getItemsToDeposit() {
     const items = this.getResumeInventory(false)
 
-    const itemsToDeposit = []
+    const itemsToDeposit: Array<Item> = []
 
     this.itemsToCheck.forEach(slot => {
-      const itemToExclude = items.find(i => i.name === slot.item)
+      const itemToExclude = items.find(i => i.name === slot.name)
 
       if (itemToExclude !== undefined) {
         itemToExclude.quantity -= slot.quantity
@@ -94,11 +94,11 @@ module.exports = class BehaviorCheckItemsInInventory {
   }
 
   getItemsToWithdraw() {
-    const items: Array<GetResumeInventory> = this.getResumeInventory(true)
+    const items: Array<Item> = this.getResumeInventory(true)
 
     const itemsToWithdraw: Array<Item> = []
     this.itemsToCheck.forEach(slot => {
-      const itemToExclude = items.find(i => i.name === slot.item)
+      const itemToExclude = items.find(i => i.name === slot.name)
       if (itemToExclude === undefined) {
         itemsToWithdraw.push(slot)
       } else {
@@ -129,13 +129,13 @@ module.exports = class BehaviorCheckItemsInInventory {
     return equipedItems
   }
 
-  getResumeInventory(withEquip: boolean): Array<GetResumeInventory> {
+  getResumeInventory(withEquip: boolean): Array<Item> {
     let equipItems: Array<McItem> = []
     if (withEquip) {
       equipItems = this.getEquipedItems()
     }
 
-    const items: Array<GetResumeInventory> = []
+    const items: Array<Item> = []
 
     this.bot.inventory.items().concat(equipItems).forEach(slot => {
       const itemSlot = {
@@ -144,7 +144,7 @@ module.exports = class BehaviorCheckItemsInInventory {
         quantity: slot.count
       }
 
-      const index = items.findIndex(i => i.type === slot.type)
+      const index = items.findIndex(i => i.id === slot.type)
       if (index >= 0) {
         items[index].quantity += slot.count
       } else {

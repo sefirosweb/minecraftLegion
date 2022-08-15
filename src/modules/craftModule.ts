@@ -1,42 +1,20 @@
-import { Bot, GetResumeInventoryV2 } from "@/types"
+
+import { Bot, Chests, ChestTransaction, Item, ItemRecipe, Recpie } from "@/types"
 import sorterJob from '@/modules/sorterJob'
 import inventoryModule from '@/modules/inventoryModule'
 import { Item as ItemMC } from "minecraft-data"
 import { Block } from "prismarine-block"
 
-type ChestBlock = { // Todo pending to fill
-  slots: Array<{
-    count: number
-  }>
-}
-
-type ArrayOfChests = {
-  [key: string]: ChestBlock
-}
-
-type Item = {
-  name: string
-  quantity: number
-}
-
 type HaveMaterials = 'all' | 'none' | 'some'
 
 type ResultItemPickup = {
   haveMaterials: HaveMaterials
-  itemToPickup: Array<ChestMovement>
+  itemToPickup: Array<ChestTransaction>
   needCraftingTable: boolean,
   recipesFound: boolean,
   repicesUsed: Array<Recpie>
-  sharedChests: ArrayOfChests
+  sharedChests: Chests
   resumeInventory: Array<ItemRecipe>
-}
-
-type ChestMovement = {
-  fromChest: string
-  fromSlot: string
-  quantity: number
-  type: number
-  name?: string
 }
 
 type ItemWithPickup = Item & {
@@ -50,48 +28,33 @@ type ItemRecursive = {
   stackSize: number
 }
 
-type ItemRecipe = {
-  count: number
-  id: number
-  name: string
-  type: number
-  subRecipes?: Array<Recpie>
-}
-
-type Recpie = {
-  items: Array<ItemRecipe>
-  result: ItemRecipe
-  needCraftingTable: boolean
-}
-
-
-type GetItemsToPickUpBatch = {
+export type GetItemsToPickUpBatch = {
   itemsToCraft: Array<ItemWithPickup>
   needCraftingTable: boolean,
-  itemToPickup: Array<ChestMovement>,
+  itemToPickup: Array<ChestTransaction>,
   repicesUsed: Array<Recpie>,
 }
 
 type CalculateHowManyItemsCanBeCraft = {
   haveMaterials: HaveMaterials
-  itemToPickup: Array<ChestMovement>,
+  itemToPickup: Array<ChestTransaction>,
   repicesUsed: Array<Recpie>,
-  sharedChests: ArrayOfChests,
+  sharedChests: Chests,
   resumeInventory: Array<ItemRecipe>
 }
 
 type GetItemsToPickUpRecursive = {
   currentInventoryStatus: Array<ItemRecipe>
-  sharedChests: ArrayOfChests
+  sharedChests: Chests
   repicesUsed: Array<Recpie>,
-  itemToPickup: Array<ChestMovement>
+  itemToPickup: Array<ChestTransaction>
   recipedUsed: NonNullable<Recpie>
 }
 
 const craftModule = (bot: Bot) => {
   const mcData = require('minecraft-data')(bot.version)
-  const { getResumeInventoryV2 } = inventoryModule(bot)
-  const { findItemsInChests } = sorterJob(bot)
+  const { getResumeInventory } = inventoryModule(bot)
+  const { findItemsInChests } = sorterJob()
 
   const getRecipes = (itemId: number, craftingTable: Block | null): Array<Recpie> => {
     const aviableRecipes = bot.recipesAll(itemId, null, craftingTable)
@@ -107,15 +70,13 @@ const craftModule = (bot: Bot) => {
           result = { // Item returned
             name: mcData.items[itemsInRecipe.id].name,
             id: itemsInRecipe.id,
-            type: itemsInRecipe.id,
-            count: Math.abs(itemsInRecipe.count)
+            quantity: Math.abs(itemsInRecipe.count)
           }
         } else {
           const itemToAdd: ItemRecipe = {
             name: mcData.items[itemsInRecipe.id].name,
             id: itemsInRecipe.id,
-            type: itemsInRecipe.id,
-            count: Math.abs(itemsInRecipe.count)
+            quantity: Math.abs(itemsInRecipe.count)
           }
 
           items.push(itemToAdd)
@@ -208,7 +169,7 @@ const craftModule = (bot: Bot) => {
 
   const getItemsToPickUp = (
     itemName: string,
-    sharedChests: ArrayOfChests,
+    sharedChests: Chests,
     quantity: number,
     InputResumeInventory: Array<ItemRecipe> | undefined
   ): ResultItemPickup | false => {
@@ -218,7 +179,7 @@ const craftModule = (bot: Bot) => {
       return false
     }
 
-    const resumeInventory: Array<ItemRecipe> = InputResumeInventory === undefined ? getResumeInventory() : InputResumeInventory
+    const resumeInventory: Array<ItemRecipe> = InputResumeInventory === undefined ? getResumeInventoryItemRecipe() : InputResumeInventory
 
     const resultItemToPickup = calculateHowManyItemsCanBeCraft(
       resumeInventory,
@@ -242,27 +203,30 @@ const craftModule = (bot: Bot) => {
     }
   }
 
-  const getResumeInventory = (): Array<ItemRecipe> => {
-    const items: Array<GetResumeInventoryV2> = getResumeInventoryV2()
+  const getResumeInventoryItemRecipe = (): Array<ItemRecipe> => {
+    const items: Array<ItemRecipe> = getResumeInventory() as Array<ItemRecipe>
 
-    const itemsToReturn: Array<ItemRecipe> = items.map(p => {
-      return {
-        count: p.count,
-        id: p.type,
-        name: p.name,
-        type: p.type,
-      }
-    })
+    const itemsToReturn: Array<ItemRecipe> = items
+      .filter(p => p.id)
+      .map(p => {
+        return {
+          id: p.id,
+          name: p.name,
+          quantity: p.quantity,
+          subRecipes: undefined,
+        }
+      })
 
     return itemsToReturn
   }
 
-  const getItemsToPickUpBatch = (itemsToCraft: Array<ItemWithPickup>, InputSharedChests: ArrayOfChests): GetItemsToPickUpBatch => {
-    let resumeInventory: Array<ItemRecipe> = getResumeInventory()
+  const getItemsToPickUpBatch = (InputItemsToCraft: Array<Item>, InputSharedChests: Chests): GetItemsToPickUpBatch => {
+    const itemsToCraft = JSON.parse(JSON.stringify(InputItemsToCraft))
+    let sharedChests: Chests = JSON.parse(JSON.stringify(InputSharedChests))
+    let resumeInventory: Array<ItemRecipe> = getResumeInventoryItemRecipe()
 
-    let sharedChests: ArrayOfChests = JSON.parse(JSON.stringify(InputSharedChests))
 
-    let allItemsToPickUp: Array<ChestMovement> = []
+    let allItemsToPickUp: Array<ChestTransaction> = []
     let allRecpiesUsed: Array<Recpie> = []
 
     let resultItemToPickup: ResultItemPickup | false
@@ -271,6 +235,8 @@ const craftModule = (bot: Bot) => {
 
     for (let i = 0; i < itemsToCraft.length; i++) {
       itemToCraft = itemsToCraft[i]
+      if (!itemToCraft.name) continue
+
       resultItemToPickup = getItemsToPickUp(
         itemToCraft.name,
         sharedChests,
@@ -306,20 +272,21 @@ const craftModule = (bot: Bot) => {
   const calculateHowManyItemsCanBeCraft = (
     InputCurrentInventoryStatus: Array<ItemRecipe>,
     fullTreeCraftToItem: Array<Recpie>,
-    InputSharedChests: ArrayOfChests,
+    InputSharedChests: Chests,
     quantity: number
   ): CalculateHowManyItemsCanBeCraft => {
     let resumeInventory: Array<ItemRecipe> = JSON.parse(JSON.stringify(InputCurrentInventoryStatus))
-    let sharedChests: ArrayOfChests = JSON.parse(JSON.stringify(InputSharedChests))
+    let sharedChests: Chests = JSON.parse(JSON.stringify(InputSharedChests))
 
     let resultItemToPickup
-    let allItemsToPickUp: Array<ChestMovement> = []
+    let allItemsToPickUp: Array<ChestTransaction> = []
     let allRecpiesUsed: Array<Recpie> = []
 
     let haveMaterials: boolean | HaveMaterials = true
 
-    let q
-    for (q = 0; q < quantity; q++) {
+    let q = 0
+
+    do {
       resultItemToPickup = getItemsToPickUpRecursive(
         resumeInventory,
         fullTreeCraftToItem,
@@ -332,13 +299,14 @@ const craftModule = (bot: Bot) => {
         haveMaterials = false
         break
       }
+      q += resultItemToPickup.recipedUsed.result.quantity
 
       allItemsToPickUp = allItemsToPickUp.concat(resultItemToPickup.itemToPickup)
       allRecpiesUsed = allRecpiesUsed.concat(resultItemToPickup.repicesUsed)
 
       resumeInventory = resultItemToPickup.currentInventoryStatus
       sharedChests = resultItemToPickup.sharedChests
-    }
+    } while (q < quantity)
 
     if (haveMaterials) {
       haveMaterials = 'all'
@@ -360,8 +328,8 @@ const craftModule = (bot: Bot) => {
   const getItemsToPickUpRecursive = (
     InputCurrentInventoryStatus: Array<ItemRecipe>,
     inputTreeCraftToItem: Array<Recpie> | undefined,
-    InputSharedChests: ArrayOfChests,
-    InputItemToPickup: Array<ChestMovement>,
+    InputSharedChests: Chests,
+    InputItemToPickup: Array<ChestTransaction>,
     InputRepicesUsed: Array<Recpie>
   ): GetItemsToPickUpRecursive | false => {
     const treeCraftToItem: Array<Recpie> = JSON.parse(JSON.stringify(inputTreeCraftToItem))
@@ -372,83 +340,92 @@ const craftModule = (bot: Bot) => {
       recipe = treeCraftToItem[r]
 
       let currentInventoryStatus: Array<ItemRecipe> = JSON.parse(JSON.stringify(InputCurrentInventoryStatus))
-      let sharedChests: ArrayOfChests = JSON.parse(JSON.stringify(InputSharedChests))
-      let itemToPickup: Array<ChestMovement> = JSON.parse(JSON.stringify(InputItemToPickup))
+      let sharedChests: Chests = JSON.parse(JSON.stringify(InputSharedChests))
+      let itemToPickup: Array<ChestTransaction> = JSON.parse(JSON.stringify(InputItemToPickup))
       let repicesUsed: Array<Recpie> = JSON.parse(JSON.stringify(InputRepicesUsed))
 
       haveAllItems = true
 
       for (let i = 0; i < recipe.items.length; i++) {
         item = recipe.items[i]
-        const invItem = currentInventoryStatus.find(
-          (inv) => inv.type === item.type
-        )
 
-        if (invItem) {
-          const itemToDiscount =
-            invItem.count > item.count ? item.count : invItem.count
+        let quantityToCraft = item.quantity
+        do {
 
-          item.count -= itemToDiscount
-          invItem.count -= itemToDiscount
-        }
+          const invItem = currentInventoryStatus.find(
+            (inv) => inv.id === item.id
+          )
 
-        if (item.count > 0) {
-          //@ts-ignore
-          const itemsInChests = findItemsInChests(sharedChests, [item])
+          if (invItem) {
+            const itemToDiscount =
+              invItem.quantity > quantityToCraft ? quantityToCraft : invItem.quantity
 
-          itemsInChests.every((itemsInChest) => {
-            if (item.count === 0) return false
+            quantityToCraft -= itemToDiscount
+            invItem.quantity -= itemToDiscount
+          }
 
-            itemsInChest.quantity = itemsInChest.quantity > item.count ? item.count : itemsInChest.quantity
+          if (quantityToCraft > 0) {
+            const itemsInChests = findItemsInChests(sharedChests, [item])
 
-            item.count -= itemsInChest.quantity
-            sharedChests[itemsInChest.fromChest].slots[itemsInChest.fromSlot].count -= itemsInChest.quantity
+            itemsInChests.every((itemsInChest) => {
+              if (quantityToCraft === 0) return false
 
-            itemToPickup.push(itemsInChest)
-            return true
-          })
+              itemsInChest.quantity = itemsInChest.quantity > quantityToCraft ? quantityToCraft : itemsInChest.quantity
 
-          if (item.count > 0) {
-            const itemsPickupRecursive: GetItemsToPickUpRecursive | false = getItemsToPickUpRecursive(
-              currentInventoryStatus,
-              item.subRecipes,
-              sharedChests,
-              itemToPickup,
-              repicesUsed
-            )
+              quantityToCraft -= itemsInChest.quantity
+              sharedChests[itemsInChest.fromChest].slots[itemsInChest.fromSlot].count -= itemsInChest.quantity
 
-            if (itemsPickupRecursive) {
+              itemToPickup.push(itemsInChest)
+              return true
+            })
+
+            if (quantityToCraft > 0) {
+              const itemsPickupRecursive: GetItemsToPickUpRecursive | false = getItemsToPickUpRecursive(
+                currentInventoryStatus,
+                item.subRecipes,
+                sharedChests,
+                itemToPickup,
+                repicesUsed
+              )
+
+              if (!itemsPickupRecursive) {
+                break;
+              }
+
               itemToPickup = itemsPickupRecursive.itemToPickup
               repicesUsed = itemsPickupRecursive.repicesUsed
               sharedChests = itemsPickupRecursive.sharedChests
               currentInventoryStatus = itemsPickupRecursive.currentInventoryStatus
 
-              const cc = itemsPickupRecursive.recipedUsed.result.count
+              const itemQuantity = quantityToCraft
+              const recipedUsed = JSON.parse(JSON.stringify(itemsPickupRecursive.recipedUsed))
+              quantityToCraft -= recipedUsed.result.quantity
+              recipedUsed.result.quantity -= itemQuantity
+              const spareItem = recipedUsed.result
 
-              itemsPickupRecursive.recipedUsed.result.count -= item.count
-              const spareItem = itemsPickupRecursive.recipedUsed.result
-              item.count = 0
-
-              if (spareItem.count > 0) {
+              if (spareItem.quantity > 0) {
                 const itemInventory = currentInventoryStatus.find(
-                  (i) => i.type === spareItem.type
+                  (i) => i.id === spareItem.id
                 )
 
                 if (itemInventory) {
-                  itemInventory.count += spareItem.count
+                  itemInventory.quantity += spareItem.quantity
                 } else {
                   currentInventoryStatus.push(spareItem)
                 }
               }
+
             }
-
           }
 
-          if (item.count > 0) {
-            haveAllItems = false
-          }
+        } while (quantityToCraft > 0)
+
+        if (quantityToCraft > 0) {
+          haveAllItems = false
         }
       }
+
+
 
       if (haveAllItems) {
         repicesUsed.push(recipe)

@@ -1,8 +1,8 @@
-//@ts-nocheck
+
 import botWebsocket from '@/modules/botWebsocket'
 import { sleep, getSecondBlockPosition } from '@/modules/utils'
-import { Bot, Item, LegionStateMachineTargets } from '@/types'
-import { Block } from 'prismarine-block'
+import { Bot, ChestBlock, ChestProperty, ChestTransaction, Dimensions, LegionStateMachineTargets } from '@/types'
+import { Chest, TransferOptions } from 'mineflayer'
 import { Vec3 } from 'vec3'
 
 module.exports = class BehaviorWithdrawItemChest {
@@ -10,9 +10,12 @@ module.exports = class BehaviorWithdrawItemChest {
   readonly bot: Bot
   readonly targets: LegionStateMachineTargets
   stateName: string
+  x?: number
+  y?: number
+
   isEndFinished: boolean
   timeLimit?: ReturnType<typeof setTimeout>
-  items: Array<Item>
+  items: Array<ChestTransaction>
 
   constructor(bot: Bot, targets: LegionStateMachineTargets) {
     this.bot = bot
@@ -47,7 +50,7 @@ module.exports = class BehaviorWithdrawItemChest {
 
   async withdrawAllItems() {
     if (!this.targets.position) return
-    const chestToOpen = this.bot.blockAt(new Vec3(this.targets.position?.x, this.targets.position?.y, this.targets.position?.z))
+    const chestToOpen = this.bot.blockAt(new Vec3(this.targets.position?.x, this.targets.position?.y, this.targets.position?.z)) as ChestBlock | null
     if (!chestToOpen) {
       return
     }
@@ -59,12 +62,13 @@ module.exports = class BehaviorWithdrawItemChest {
     }
 
     this.bot.openContainer(chestToOpen)
-      .then((container) => {
+      .then((c) => {
+        const container: Chest = c as Chest
         this.withdrawItem(container)
           .then(async () => {
             this.refreshChest(chestToOpen, container)
             await sleep(200)
-            await container.close()
+            container.close()
             await sleep(500)
             this.isEndFinished = true
           })
@@ -72,14 +76,15 @@ module.exports = class BehaviorWithdrawItemChest {
             this.refreshChest(chestToOpen, container)
             console.log(err)
             await sleep(200)
-            await container.close()
+            container.close()
             await sleep(500)
             this.isEndFinished = true
           })
+
       })
   }
 
-  refreshChest(chestToOpen: Block, container) {
+  refreshChest(chestToOpen: ChestBlock, container: Chest) {
     const chest = Object.values(this.targets.chests).find(c => {
       const chestPosition = new Vec3(c.position.x, c.position.y, c.position.z)
       if (chestPosition.equals(chestToOpen.position)) return true
@@ -90,18 +95,20 @@ module.exports = class BehaviorWithdrawItemChest {
       return false
     })
 
+    //@ts-ignore pending to fix from mineflater
     const slots = container.slots.slice(0, container.inventoryStart)
     if (!chest) {
       chestToOpen.slots = slots
       chestToOpen.lastTimeOpen = Date.now()
 
-      const props = chestToOpen.getProperties()
+      const props = chestToOpen.getProperties() as ChestProperty
       const offset = getSecondBlockPosition(props.facing, props.type)
       if (offset) {
-        chestToOpen.secondBlock = this.bot.blockAt(chestToOpen.position.offset(offset.x, offset.y, offset.z))
+        chestToOpen.secondBlock = chestToOpen.position.offset(offset.x, offset.y, offset.z)
       }
 
-      chestToOpen.dimension = this.bot.game.dimension
+       //@ts-ignore pending to fix from mineflater
+      chestToOpen.dimension = this.bot.game.dimension as Dimensions // Todo mending mineflayer fix
 
       const chestIndext = Object.keys(this.targets.chests).length
       this.targets.chests[chestIndext] = chestToOpen
@@ -113,18 +120,19 @@ module.exports = class BehaviorWithdrawItemChest {
     botWebsocket.sendAction('setChests', this.targets.chests)
   }
 
-  withdrawItem(container): Promise<void> {
+  withdrawItem(container: Chest): Promise<void> {
     return new Promise((resolve, reject) => {
       if (this.items.length === 0) {
         resolve()
         return
       }
+      const itemToWithdraw: ChestTransaction = this.items.shift() as ChestTransaction
 
-      const itemToWithdraw = this.items.shift()
-
-      const foundItem = itemToWithdraw.type
-        ? container.containerItems().find(i => i.type === itemToWithdraw.type)
-        : container.containerItems().find(i => i.name.includes(itemToWithdraw.item))
+      const foundItem = itemToWithdraw.id !== undefined
+        //@ts-ignore pending to fix from mineflater
+        ? container.containerItems().find(i => i.type === itemToWithdraw.id)
+        //@ts-ignore pending to fix from mineflater
+        : container.containerItems().find(i => itemToWithdraw.name && i.name.includes(itemToWithdraw.name))
 
       if (!foundItem) {
         this.withdrawItem(container)
@@ -140,17 +148,21 @@ module.exports = class BehaviorWithdrawItemChest {
       const quantity = foundItem.count < itemToWithdraw.quantity ? foundItem.count : itemToWithdraw.quantity
 
       if (itemToWithdraw.fromSlot !== undefined) {
-        // If the source is specific
-        const options = {
+
+        const options: TransferOptions = {
+          //@ts-ignore pending to fix from mineflater
           windows: container,
           itemType: foundItem.type,
           metadata: null,
           count: quantity,
           sourceStart: itemToWithdraw.fromSlot,
           sourceEnd: itemToWithdraw.fromSlot + 1,
+          //@ts-ignore pending to fix from mineflater
           destStart: container.inventoryStart,
+          //@ts-ignore pending to fix from mineflater
           destEnd: container.inventoryEnd
         }
+
         this.bot.transfer(options)
           .then(() => {
             this.withdrawItem(container)
@@ -161,11 +173,10 @@ module.exports = class BehaviorWithdrawItemChest {
                 reject(err)
               })
           })
-          .catch(err => {
+          .catch((err: Error) => {
             reject(err)
           })
       } else {
-        // If the source is NOT specific
         container.withdraw(foundItem.type, null, quantity)
           .then(() => {
             this.withdrawItem(container)
@@ -176,7 +187,7 @@ module.exports = class BehaviorWithdrawItemChest {
                 reject(err)
               })
           })
-          .catch(err => {
+          .catch((err: Error) => {
             reject(err)
           })
       }

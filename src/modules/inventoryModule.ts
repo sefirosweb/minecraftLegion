@@ -1,5 +1,5 @@
 
-import { BlockChest, Bot, Facing, ChestPosition, GetResumeInventory, GetResumeInventoryV2, ItemArmor, OptionsFind } from "@/types"
+import { BlockChest, Bot, Facing, ChestPosition, OptionsFind, Item, ItemArmor } from "@/types"
 import { getSecondBlockPosition } from '@/modules/utils'
 import { EquipmentDestination } from "mineflayer"
 import { Vec3 } from "vec3"
@@ -7,7 +7,7 @@ import { Vec3 } from "vec3"
 const inventoryModule = (bot: Bot) => {
   const mcData = require('minecraft-data')(bot.version)
 
-  function countItemsInInventoryOrEquipped(item: ItemArmor) {
+  function countItemsInInventoryOrEquipped(item: string) {
     let currentItems = 0
 
     if (checkItemEquiped(item)) {
@@ -18,20 +18,15 @@ const inventoryModule = (bot: Bot) => {
     return currentItems
   }
 
-  function countItemsInInventory(itemToCount: ItemArmor) {
-    let currentItems
-    if (getGenericItems().includes(itemToCount)) {
-      currentItems = bot.inventory.items().filter(item => item.name.includes(itemToCount))
-    } else {
-      currentItems = bot.inventory.items().filter(item => item.name === itemToCount)
-    }
-
-    currentItems = currentItems.map(x => x.count)
-    currentItems = currentItems.reduce((total, num) => { return total + num }, 0)
+  function countItemsInInventory(itemToCount: string) {
+    const currentItems = bot.inventory.items()
+      .filter(item => item.name === itemToCount)
+      .map(x => x.count)
+      .reduce((total, num) => { return total + num }, 0)
     return currentItems
   }
 
-  function checkItemEquiped(itemArmor: ItemArmor) {
+  function checkItemEquiped(itemArmor: string | ItemArmor) {
     let swordEquiped, isSword, bowEquiped, isBow
 
     let slotID
@@ -116,47 +111,19 @@ const inventoryModule = (bot: Bot) => {
     })
   }
 
-
-
-  function getResumeInventoryV2(): Array<GetResumeInventoryV2> {
-
-    const items: Array<GetResumeInventoryV2> = []
+  function getResumeInventory(): Array<Item> {
+    const items: Array<Item> = []
 
     bot.inventory.slots.forEach((slot) => {
       if (slot === null) return
 
-      const itemSlot: GetResumeInventoryV2 = {
+      const itemSlot: Item = {
+        id: slot.type,
         name: slot.name,
-        type: slot.type,
-        count: slot.count
-      }
-
-      const index = items.findIndex(i => i.type === slot.type)
-      if (index >= 0) {
-        items[index].count += slot.count
-      } else {
-        items.push(itemSlot)
-      }
-
-    })
-
-    return items
-  }
-
-  function getResumeInventory() {
-    const items: Array<GetResumeInventory> = []
-
-    bot.inventory.slots.forEach((slot) => {
-
-      if (slot === null) return
-
-      const itemSlot = {
-        name: slot.name,
-        type: slot.type,
         quantity: slot.count
       }
 
-      const index = items.findIndex(i => i.type === slot.type)
+      const index = items.findIndex(i => i.id === slot.type)
       if (index >= 0) {
         items[index].quantity += slot.count
       } else {
@@ -224,9 +191,7 @@ const inventoryModule = (bot: Bot) => {
     return chests
   }
 
-  const getGenericItems = () => {
-    return ['helmet', 'chestplate', 'leggings', 'boots', 'sword', 'pickaxe', 'shovel', '_axe', 'hoe']
-  }
+
 
   const equipHeldItem = (itemName: string): Promise<void> => {
     return new Promise((resolve, reject) => {
@@ -269,10 +234,8 @@ const inventoryModule = (bot: Bot) => {
     checkItemEquiped,
     equipItem,
     getResumeInventory,
-    getResumeInventoryV2,
     findChests,
     getSecondBlockPosition,
-    getGenericItems,
     equipHeldItem
   }
 }

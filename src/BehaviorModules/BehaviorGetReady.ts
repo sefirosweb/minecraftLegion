@@ -1,5 +1,3 @@
-
-//@ts-nocheck
 import { Bot, LegionStateMachineTargets } from "@/types"
 import inventoryModule from '@/modules/inventoryModule'
 module.exports = class BehaviorGetReady {
@@ -8,7 +6,7 @@ module.exports = class BehaviorGetReady {
   stateName: string
   isReady: boolean
 
-
+  inventory: ReturnType<typeof inventoryModule>
   constructor(bot: Bot, targets: LegionStateMachineTargets) {
     this.bot = bot
     this.targets = targets
@@ -29,7 +27,7 @@ module.exports = class BehaviorGetReady {
   checkImReady() {
     for (let i = 0; i < this.targets.config.itemsToBeReady.length; i++) {
       const itemToBeReady = this.targets.config.itemsToBeReady[i]
-      const itemsInUse = this.inventory.countItemsInInventoryOrEquipped(itemToBeReady.item)
+      const itemsInUse = !itemToBeReady.name ? 0 : this.inventory.countItemsInInventoryOrEquipped(itemToBeReady.name)
       if (itemsInUse < itemToBeReady.quantity) {
         this.isReady = false
         return

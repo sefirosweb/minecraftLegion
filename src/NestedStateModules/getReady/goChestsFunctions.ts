@@ -10,7 +10,6 @@ import BehaviorWithdrawItemChest from '@/BehaviorModules/BehaviorWithdrawItemChe
 import BehaviorDepositItemChest from '@/BehaviorModules/BehaviorDepositItemChest'
 import BehaviorCheckItemsInInventory from '@/BehaviorModules/BehaviorCheckItemsInInventory'
 import BehaviorMoveTo from '@/BehaviorModules/BehaviorMoveTo'
-import { Bot, Chest, itemsToCraft, LegionStateMachineTargets } from '@/types'
 import chestModule from '@/modules/chestModule'
 import inventoryModule from '@/modules/inventoryModule'
 
@@ -80,7 +79,7 @@ function goChestsFunction(bot, targets) {
 
   let chests = []
   let chestIndex = 0
-  let itemsToCraft = []
+  let itemsToCraft: Array<Item> = []
 
   const transitions = [
     new StateTransition({
@@ -166,14 +165,13 @@ function goChestsFunction(bot, targets) {
       child: checkCraftItem,
       onTransition: () => {
         const itemInChest = chests[chestIndex].items
-        const resumeInventory = getResumeInventoryV2()
 
         itemsToCraft = []
 
         itemInChest.forEach(ic => {
           if (ic.quantity > 0) {
             itemsToCraft.push({
-              name: ic.item,
+              name: ic.name,
               quantity: ic.quantity
             })
           }

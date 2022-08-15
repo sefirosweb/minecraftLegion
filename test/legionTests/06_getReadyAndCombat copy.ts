@@ -36,7 +36,7 @@ module.exports = () => async (bot) => {
     ],
     itemsToBeReady: [
       {
-        item: "iron_sword",
+        name: "iron_sword",
         quantity: 1
       }
     ],
@@ -48,47 +48,47 @@ module.exports = () => async (bot) => {
           x: -3,
           y: -60,
           z: 2,
-          dimension: "minecraft:overworld"
         },
+        dimension: "minecraft:overworld",
         items: [
           {
-            item: "iron_sword",
+            name: "iron_sword",
             quantity: 1
           },
           {
-            item: "iron_helmet",
+            name: "iron_helmet",
             quantity: 1
           },
           {
-            item: "iron_chestplate",
+            name: "iron_chestplate",
             quantity: 1
           },
           {
-            item: "iron_leggings",
+            name: "iron_leggings",
             quantity: 1
           },
           {
-            item: "iron_boots",
+            name: "iron_boots",
             quantity: 1
           },
           {
-            item: "oak_door",
-            quantity: 3 // TODO check
+            name: "oak_door",
+            quantity: 4 // TODO check
           },
           {
-            item: "oak_fence_gate",
+            name: "oak_fence_gate",
             quantity: 1
           },
           {
-            item: "oak_boat",
+            name: "oak_boat",
             quantity: 1
           },
           {
-            item: "oak_log",
+            name: "oak_log",
             quantity: 10
           },
           {
-            item: "golden_axe",
+            name: "golden_axe",
             quantity: 1
           },
         ]

@@ -1,15 +1,11 @@
 //@ts-nocheck
+import { ChestTransaction, Item, Chests } from "@/types"
 
-import { Bot, GetResumeInventory, Item, ResumeChests } from "@/types"
-import inventoryModule from '@/modules/inventoryModule'
+const sorterJob = () => {
 
-
-const sorterJob = (bot: Bot) => {
-  const { getGenericItems } = inventoryModule(bot)
-
-  const findItemsInChests = (chestInput: ResumeChests, itemsInput: Array<Item>, exclude?: any) => {
-    const chests: ResumeChests = JSON.parse(JSON.stringify(chestInput))
-    const items: Array<GetResumeInventory> = JSON.parse(JSON.stringify(itemsInput))
+  const findItemsInChests = (chestInput: Chests, itemsInput: Array<Item>, exclude?: any) => {
+    const chests: Chests = JSON.parse(JSON.stringify(chestInput))
+    const items: Array<Item> = JSON.parse(JSON.stringify(itemsInput))
 
     const transactions: Array<ChestTransaction> = []
 
@@ -21,37 +17,18 @@ const sorterJob = (bot: Bot) => {
           if (exclude && exclude[chestIndex][slotIndex].correct === true) return true
           if (item.quantity === 0) return false
           if (!slot) return true
-          if (item.type) {
-            if (slot.type === item.type && slot.count > 0) {
+          if (item.id) {
+            if (slot.type === item.id && slot.count > 0) {
               const count = slot.count < item.quantity ? slot.count : item.quantity
               const slotCount = slot.count
               slot.count = 0
               item.quantity -= count
               transactions.push({
-                fromChest: chestIndex,
-                fromSlot: slotIndex.toString(),
+                fromChest: parseInt(chestIndex),
+                fromSlot: slotIndex,
+                id: slot.type,
                 name: slot.name,
                 quantity: slotCount,
-                type: slot.type
-              })
-            }
-          } else {
-            if (
-              (
-                (
-                  getGenericItems().includes(item.item) && slot.name.includes(item.item)
-                ) || slot.name === item.item
-              ) && slot.count > 0) {
-              const count = slot.count < item.quantity ? slot.count : item.quantity
-              const slotCount = slot.count
-              slot.count = 0
-              item.quantity -= count
-              transactions.push({
-                fromChest: chestIndex,
-                fromSlot: slotIndex,
-                name: slot.name,
-                quantity: count,
-                type: slot.type
               })
             }
           }

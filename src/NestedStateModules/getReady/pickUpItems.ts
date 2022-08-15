@@ -1,27 +1,31 @@
-import { Bot, Item, LegionStateMachineTargets, Chest, PendingTransaction } from "@/types"
-
-
-const {
+import { Bot, LegionStateMachineTargets, PendingTransaction, ChestTransaction } from "@/types"
+import {
   StateTransition,
   BehaviorIdle,
   NestedStateMachine
-} = require('mineflayer-statemachine')
+} from 'mineflayer-statemachine'
 
 function pickUpItems(bot: Bot, targets: LegionStateMachineTargets) {
 
-  const start = new BehaviorIdle(targets)
+  const start = new BehaviorIdle()
   start.stateName = 'Start'
+  //@ts-ignore
   start.x = 125
+  //@ts-ignore
   start.y = 113
 
-  const exit = new BehaviorIdle(targets)
+  const exit = new BehaviorIdle()
   exit.stateName = 'Exit'
+  //@ts-ignore
   exit.x = 325
+  //@ts-ignore
   exit.y = 313
 
-  const startCheckNextChest = new BehaviorIdle(targets)
+  const startCheckNextChest = new BehaviorIdle()
   startCheckNextChest.stateName = 'Start Check Next Chest'
+  //@ts-ignore
   startCheckNextChest.x = 125
+  //@ts-ignore
   startCheckNextChest.y = 263
 
   const goAndWithdraw = require('@NestedStateModules/getReady/goAndWithdraw')(bot, targets)
@@ -33,22 +37,21 @@ function pickUpItems(bot: Bot, targets: LegionStateMachineTargets) {
   const findChests = () => {
     pendingTransaction = []
 
-    const pickupItems = JSON.parse(JSON.stringify(targets.pickUpItems)) as Array<any>; // TODO Fix
+    const pickupItems = JSON.parse(JSON.stringify(targets.pickUpItems)) as Array<ChestTransaction>;
 
     Object.entries(targets.chests).forEach((entry) => {
 
       const chestIndex = entry[0]
-      const chest = entry[1] as Chest
+      const chest = entry[1]
 
-      const items: Array<Item> = [];
+      const items: Array<ChestTransaction> = [];
 
       pickupItems.forEach((i) => {
         if (
-          i.fromChest === chestIndex
+          i.fromChest === parseInt(chestIndex)
           && chest.dimension === bot.game.dimension
           && bot.entity.position.distanceTo(chest.position) < 128
         ) {
-          const item = { ...i }
           items.push(i)
         }
 

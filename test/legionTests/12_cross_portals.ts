@@ -57,11 +57,11 @@ module.exports = () => async (bot) => {
             x: -2,
             y: -35,
             z: 1,
-            dimension: "minecraft:the_nether"
           },
+          dimension: "minecraft:the_nether",
           items: [
             {
-              item: "iron_pickaxe",
+              name: "iron_pickaxe",
               quantity: 1
             }
           ]
@@ -115,11 +115,11 @@ module.exports = () => async (bot) => {
             x: -2,
             y: -35,
             z: 1,
-            dimension: "minecraft:the_end"
           },
+          dimension: "minecraft:the_end",
           items: [
             {
-              item: "iron_pickaxe",
+              name: "iron_pickaxe",
               quantity: 1
             }
           ]

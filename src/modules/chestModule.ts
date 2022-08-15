@@ -1,25 +1,20 @@
-import { Bot, Chests, DepositType, Item, LegionStateMachineTargets, ResumeChests, Vec3WithDimension } from "@/types"
+
+import { Bot, Chest, Chests, Item, LegionStateMachineTargets } from "@/types"
 import sorterJob from '@/modules/sorterJob'
 import inventoryModule from '@/modules/inventoryModule'
 
-export type Chest = {
-  items: Array<Item>
-  type: DepositType
-  name: string
-  position: Vec3WithDimension
-};
-
 const chestModule = (bot: Bot, targets: LegionStateMachineTargets) => {
-  const { findItemsInChests } = sorterJob(bot)
-  const { getResumeInventoryV2, getGenericItems } = inventoryModule(bot)
+  const { findItemsInChests } = sorterJob()
+  const { getResumeInventory } = inventoryModule(bot)
 
-  const getItemsToWithdrawInChests = (chests: Array<Chest>): Array<Item> => {
+  const getItemsToWithdrawInChests = (InputChests: Array<Chest>): Array<Item> => {
+    const chests = JSON.parse(JSON.stringify(InputChests))
     const items: Array<Item> = []
     chests
-      .filter((c) => c.type === "withdraw")
-      .forEach(c => {
+      .filter((c: Chest) => c.type === "withdraw")
+      .forEach((c: Chest) => {
         c.items.forEach((i) => {
-          const key = items.findIndex((r) => r.item === i.item);
+          const key = items.findIndex((r) => r.name === i.name);
           if (key >= 0) {
             items[key].quantity += i.quantity;
           } else {
@@ -31,19 +26,14 @@ const chestModule = (bot: Bot, targets: LegionStateMachineTargets) => {
     return items;
   };
 
-  const findChestsToWithdraw = (botChests: Array<Chest>, sharedChests: ResumeChests) => {
-    const resumeInventory = getResumeInventoryV2();
+  const findChestsToWithdraw = (botChests: Array<Chest>, sharedChests: Chests) => {
+    const resumeInventory = getResumeInventory();
     const itemsToWithdrawInChests = getItemsToWithdrawInChests(botChests);
 
     const itemsToWithdraw: Array<Item> = []
     itemsToWithdrawInChests.forEach(i => {
-      let invItem;
-      if (getGenericItems().includes(i.item)) {
-        invItem = resumeInventory.find((inv) => inv.name.includes(i.item));
-      } else {
-        invItem = resumeInventory.find((inv) => inv.name === i.item);
-      }
-      i.quantity = invItem ? i.quantity - invItem.count : i.quantity;
+      const invItem = resumeInventory.find((inv) => inv.name === i.name);
+      i.quantity = invItem ? i.quantity - invItem.quantity : i.quantity;
       if (i.quantity > 0) itemsToWithdraw.push(i);
     })
 

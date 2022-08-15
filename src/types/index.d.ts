@@ -1,21 +1,11 @@
 import { Movements } from 'mineflayer-pathfinder'
 import { StateMachineTargets } from 'mineflayer-statemachine'
-import { Bot as MineflayerBot } from 'mineflayer'
+import { Bot as MineflayerBot, Chest, Dispenser, Furnace } from 'mineflayer'
 import { Vec3 } from 'vec3'
 import { Jobs } from './defaultTypes'
 import { Block } from 'prismarine-block'
 import { Entity } from 'prismarine-entity'
 import { Item as PrismarineItem } from 'prismarine-item';
-
-
-export type PendingTransaction = {
-    chest: any,
-    items: any
-}
-
-export type Chests = {
-    [key: string]: Chest;
-};
 
 export type Layer = {
     xStart: number,
@@ -93,27 +83,9 @@ type MinerJob = {
     nextLayer?: Layer
 }
 
-export type Item = {
-    item: string
-    quantity: number
-}
 
-
-export type itemsToCraft = {
-    name: string
-    quantity: number
-}
-
-export type Dimensions = 'minecraft:overworld' | 'minecraft:the_nether' | 'minecraft:the_end'
 
 export type DepositType = 'withdraw' | 'deposit' | 'depositAll'
-
-export type Chest = {
-    items: Array<Item>
-    type: DepositType
-    position: Vec3
-    dimension: Dimensions
-};
 
 export type Agro = 'none' | 'pve' | 'pvp'
 
@@ -129,6 +101,7 @@ export type Config = {
     minerCords: MineCordsConfig
     mode: Agro
     distance: number
+    itemsToBeReady: Array<Item>
 }
 
 export type Portals = {
@@ -177,7 +150,7 @@ export interface LegionStateMachineTargets extends StateMachineTargets {
     position?: Vec3WithDimension;
     pickUpItems?: any;
     items?: any;
-    craftItemBatch?: any;
+    craftItemBatch?: Array<Item>;
     craftItem?: any
     digBlock?: Block;
 
@@ -199,8 +172,7 @@ export type BotwebsocketAction = {
 }
 
 export type Coordinates = 'x+' | 'x-' | 'z+' | 'z-'
-export type Facing = 'south' | 'north' | 'east' | 'west'
-export type ChestPosition = 'single' | 'left' | 'right'
+
 export type Master = {
     name: string,
     position?: Vec3
@@ -242,28 +214,6 @@ declare module 'mineflayer' {
     }
 }
 
-export type ItemArmor = 'helmet' | 'chestplate' | 'leggings' | 'boots' | 'sword' | 'shield' | 'bow'
-
-export type GetResumeInventoryV2 = {
-    name: string,
-    type: number,
-    count: number
-}
-
-export type GetResumeInventory = {
-    name: string,
-    type: number,
-    quantity: number
-}
-
-export type ResumeChests = {
-    [key: string]: SortChest
-};
-
-export type SortChest = {
-    slots: Array<GetResumeInventoryV2>
-}
-
 export type OptionsFind = {
     matching?: Array<string>
     point?: Vec3
@@ -274,11 +224,6 @@ export type OptionsFind = {
 
 export type BlockChest = Block & {
     secondBlock?: BlockChest
-}
-
-export type PendingTransaction = {
-    chest: Chest,
-    items: Array<Item>
 }
 
 export type fakeVec3 = {
@@ -295,14 +240,6 @@ export type Queue = {
 export type PositionsChecked = {
     position: Vec3,
     parent: number | null
-}
-
-export type ChestTransaction = {
-    fromChest: string,
-    fromSlot: string,
-    name: string,
-    quantity: number,
-    type: number
 }
 
 export type CustomEntity = Entity & {
@@ -323,4 +260,78 @@ export type socketAuth = {
 
 export type botType = {
     username: string
+}
+
+// Final types state
+
+export type Chest = {
+    items: Array<Item>
+    name: string
+    type: DepositType
+    position: Vec3
+    dimension: Dimensions
+};
+
+export type ItemArmor = 'helmet' | 'chestplate' | 'leggings' | 'boots' | 'sword' | 'shield' | 'bow'
+
+export type Item = {
+    quantity: number
+} & ({
+    id?: number
+    name: string
+} | {
+    id: number
+    name?: string
+})
+
+export type Slot = {
+    name: string
+    type: number
+    count: number
+}
+
+export type Recpie = {
+    items: Array<ItemRecipe>
+    result: ItemRecipe
+    needCraftingTable: boolean
+}
+
+export type ChestTransaction = {
+    fromChest: number,
+    fromSlot: number,
+    id: number
+    name?: string,
+    quantity: number,
+}
+
+export type ItemRecipe = {
+    id: number
+    name?: string,
+    quantity: number,
+    subRecipes?: Array<Recpie>
+}
+
+export type ChestBlock = Block & {
+    dimension?: Dimensions
+    secondBlock?: Vec3
+    lastTimeOpen?: number
+    slots: Array<Slot>
+}
+
+export type Dimensions = 'minecraft:overworld' | 'minecraft:the_nether' | 'minecraft:the_end'
+export type Facing = 'south' | 'north' | 'east' | 'west'
+export type ChestPosition = 'single' | 'left' | 'right'
+
+export type ChestProperty = {
+    facing: Facing
+    type: ChestPosition
+}
+
+export type Chests = {
+    [key: string]: ChestBlock
+};
+
+export type PendingTransaction = {
+    chest: ChestBlock,
+    items: Array<ChestTransaction>
 }

@@ -139,7 +139,7 @@ function connect() {
       case 'InsertItemToBeReady':
         itemsToBeReady = botconfig.getItemsToBeReady(bot.username)
         itemsToBeReady.push({
-          item: config.value.item,
+          name: config.value.name,
           quantity: config.value.quantity
         })
         botconfig.setItemsToBeReady(bot.username, itemsToBeReady)
@@ -151,7 +151,7 @@ function connect() {
         break
       case 'InsertItemCanBeEat':
         itemsCanBeEat = botconfig.getItemsCanBeEat(bot.username)
-        itemsCanBeEat.push(config.value.item)
+        itemsCanBeEat.push(config.value.name)
         botconfig.setItemsCanBeEat(bot.username, itemsCanBeEat)
         break
       case 'deleteItemCanBeEat':
@@ -340,7 +340,7 @@ function connect() {
       case 'insertItemInChest':
         chests = botconfig.getChests(bot.username)
         chests[config.value.chestId].items.push({
-          item: config.value.item,
+          name: config.value.name,
           quantity: config.value.quantity
         })
         botconfig.setChests(bot.username, chests)
@@ -466,7 +466,7 @@ function sendConfig() {
   })
 }
 
-function sendAction(action: string, value: Portals) {
+function sendAction(action: string, value: any) {
   socket.emit('sendAction', { action, value })
 }
 
