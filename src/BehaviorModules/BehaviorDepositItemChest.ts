@@ -1,14 +1,20 @@
 
-//@ts-nocheck
+
 import botWebsocket from '@/modules/botWebsocket'
 import { sleep, getSecondBlockPosition } from '@/modules/utils'
-import { Bot, LegionStateMachineTargets } from '@/types'
-import vec3 from 'vec3'
+import { Bot, ChestBlock, ChestProperty, ChestTransaction, Dimensions, Item, LegionStateMachineTargets } from '@/types'
+import { Chest, TransferOptions } from 'mineflayer'
+import { Vec3 } from 'vec3'
 module.exports = class BehaviorDepositItemChest {
   readonly bot: Bot
   readonly targets: LegionStateMachineTargets
   stateName: string
   isEndFinished: boolean
+  x?: number
+  y?: number
+
+  items: Array<Item>
+  timeLimit?: ReturnType<typeof setTimeout>
 
   constructor(bot: Bot, targets: LegionStateMachineTargets) {
     this.bot = bot
@@ -43,20 +49,28 @@ module.exports = class BehaviorDepositItemChest {
   }
 
   async depositAllItems() {
-    const chestToOpen = this.bot.blockAt(vec3(this.targets.position))
-    if (!['chest', 'ender_chest', 'trapped_chest'].includes(chestToOpen.name)) {
+
+    if (!this.targets.position) {
+      botWebsocket.log('No target position')
+      this.isEndFinished = true
+      return
+    }
+
+    const chestToOpen = this.bot.blockAt(new Vec3(this.targets.position.x, this.targets.position.y, this.targets.position.z)) as ChestBlock | null
+    if (!chestToOpen || !['chest', 'ender_chest', 'trapped_chest'].includes(chestToOpen.name)) {
       botWebsocket.log('No chest found')
       this.isEndFinished = true
       return
     }
 
     this.bot.openContainer(chestToOpen)
-      .then((container) => {
+      .then((c) => {
+        const container: Chest = c as Chest
         this.depositItems(container)
           .then(async () => {
             this.refreshChest(chestToOpen, container)
             await sleep(200)
-            await container.close()
+            container.close()
             await sleep(500)
             this.isEndFinished = true
           })
@@ -64,32 +78,38 @@ module.exports = class BehaviorDepositItemChest {
             this.refreshChest(chestToOpen, container)
             console.log(err)
             await sleep(200)
-            await container.close()
+            container.close()
             await sleep(500)
             this.isEndFinished = true
           })
       })
   }
 
-  refreshChest(chestToOpen, container) {
+  refreshChest(chestToOpen: ChestBlock, container: Chest) {
     const chest = Object.values(this.targets.chests).find(c => {
-      if (vec3(c.position).equals(chestToOpen.position)) return true
-      if (c.secondBlock && vec3(c.secondBlock.position).equals(chestToOpen.position)) return true
+      const chestPosition = new Vec3(c.position.x, c.position.y, c.position.z)
+      if (chestPosition.equals(chestToOpen.position)) return true
+
+      if (!c.secondBlock) return false
+      const chestSecondBlock = new Vec3(c.secondBlock.x, c.secondBlock.y, c.secondBlock.z)
+      if (chestSecondBlock.equals(chestToOpen.position)) return true
       return false
     })
 
+    //@ts-ignore pending to fix from mineflater
     const slots = container.slots.slice(0, container.inventoryStart)
     if (!chest) {
       chestToOpen.slots = slots
       chestToOpen.lastTimeOpen = Date.now()
 
-      const props = chestToOpen.getProperties()
+      const props = chestToOpen.getProperties() as ChestProperty
       const offset = getSecondBlockPosition(props.facing, props.type)
       if (offset) {
-        chestToOpen.secondBlock = this.bot.blockAt(chestToOpen.position.offset(offset.x, offset.y, offset.z))
+        chestToOpen.secondBlock = chestToOpen.position.offset(offset.x, offset.y, offset.z)
       }
 
-      chestToOpen.dimension = this.bot.game.dimension
+      //@ts-ignore pending to fix from mineflater
+      chestToOpen.dimension = this.bot.game.dimension as Dimensions // Todo mending mineflayer fix
 
       const chestIndext = Object.keys(this.targets.chests).length
       this.targets.chests[chestIndext] = chestToOpen
@@ -100,13 +120,15 @@ module.exports = class BehaviorDepositItemChest {
     botWebsocket.sendAction('setChests', this.targets.chests)
   }
 
-  checkItemDestinationAndMoveToInventory(container, toSlot) {
+  checkItemDestinationAndMoveToInventory(container: Chest, toSlot: number): Promise<void> {
     return new Promise((resolve, reject) => {
+      //@ts-ignore pending to fix from mineflater
       if (container.slots[toSlot] === null) {
         resolve()
         return
       }
 
+      //@ts-ignore pending to fix from mineflater
       const emptySlot = container.slots.findIndex((s, sIndex) => s === null && sIndex > container.inventoryStart)
       this.bot.moveSlotItem(toSlot, emptySlot)
         .then(() => {
@@ -118,24 +140,29 @@ module.exports = class BehaviorDepositItemChest {
     })
   }
 
-  depositItems(container) {
+  depositItems(container: Chest): Promise<void> {
     return new Promise((resolve, reject) => {
       if (this.items.length === 0) {
         resolve()
         return
       }
-      const itemToDeposit = this.items.shift()
+      const itemToDeposit = this.items.shift() as ChestTransaction
 
       if (itemToDeposit.toSlot !== undefined) {
         // If the destination is specific
-        const options = {
+        const options: TransferOptions = {
+          //@ts-ignore pending to fix from mineflater
           windows: container,
-          itemType: itemToDeposit.type,
+          itemType: itemToDeposit.id,
           metadata: null,
           count: itemToDeposit.quantity,
+          //@ts-ignore pending to fix from mineflater
           sourceStart: container.inventoryStart,
+          //@ts-ignore pending to fix from mineflater
           sourceEnd: container.inventoryEnd,
+          //@ts-ignore pending to fix from mineflater
           destStart: itemToDeposit.toSlot,
+          //@ts-ignore pending to fix from mineflater
           destEnd: itemToDeposit.toSlot + 1
         }
 
@@ -160,12 +187,13 @@ module.exports = class BehaviorDepositItemChest {
           })
       } else {
         // If the destination is NOT specific
+        //@ts-ignore pending to fix from mineflater
         if (container.containerItems().length === container.inventoryStart) {
           reject(new Error('The chest is full'))
           return
         }
 
-        container.deposit(itemToDeposit.type, null, itemToDeposit.quantity)
+        container.deposit(itemToDeposit.id, null, itemToDeposit.quantity)
           .then(() => {
             this.depositItems(container)
               .then(() => {

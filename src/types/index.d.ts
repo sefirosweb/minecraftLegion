@@ -299,6 +299,8 @@ export type Recpie = {
 export type ChestTransaction = {
     fromChest: number,
     fromSlot: number,
+    toChest?: number,
+    toSlot?: number,
     id: number
     name?: string,
     quantity: number,

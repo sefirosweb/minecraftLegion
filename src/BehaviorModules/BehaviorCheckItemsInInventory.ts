@@ -138,9 +138,9 @@ module.exports = class BehaviorCheckItemsInInventory {
     const items: Array<Item> = []
 
     this.bot.inventory.items().concat(equipItems).forEach(slot => {
-      const itemSlot = {
+      const itemSlot: Item = {
+        id: slot.type,
         name: slot.name,
-        type: slot.type,
         quantity: slot.count
       }
 
