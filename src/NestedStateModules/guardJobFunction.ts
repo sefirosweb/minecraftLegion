@@ -13,8 +13,6 @@ import BehaviorEquipAll from '@/BehaviorModules/BehaviorEquipAll'
 import BehaviorFindItems from '@/BehaviorModules/BehaviorFindItems'
 import BehaviorHelpFriend from '@/BehaviorModules/BehaviorHelpFriend'
 import BehaviorMoveTo from '@/BehaviorModules/BehaviorMoveTo'
-import { Bot } from '@/types'
-import { LegionStateMachineTargets } from '@/types'
 import getClosestEnemy from '@/modules/getClosestEnemy'
 
 function guardJobFunction(bot, targets) {
@@ -191,15 +189,9 @@ function guardJobFunction(bot, targets) {
 
     new StateTransition({
       parent: getReady,
-      child: goChests,
+      child: equip,
       name: 'Bot is ready for start patrol',
       shouldTransition: () => getReady.isFinished()
-    }),
-
-    new StateTransition({
-      parent: goChests,
-      child: equip,
-      shouldTransition: () => goChests.isFinished()
     }),
 
     new StateTransition({

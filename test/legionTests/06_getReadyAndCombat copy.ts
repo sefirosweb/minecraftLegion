@@ -73,7 +73,7 @@ module.exports = () => async (bot) => {
           },
           {
             name: "oak_door",
-            quantity: 4 // TODO check
+            quantity: 4
           },
           {
             name: "oak_fence_gate",
