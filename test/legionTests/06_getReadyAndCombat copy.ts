@@ -13,6 +13,8 @@ module.exports = () => async (bot) => {
   }
 
   bot.chat(`/setblock -3 -60 2 chest[facing=east]{Items:[{Slot:0,id:iron_block,Count:64},{Slot:1,id:oak_log,Count:64}]} replace`)
+  bot.chat(`/setblock 3 -60 -2 chest[facing=west] replace`)
+  bot.chat(`/setblock 3 -60 0 chest[facing=west] replace`)
   bot.chat(`/fill -3 -60 1 -3 -60 1 minecraft:crafting_table`)
   bot.chat(`/fill 15 -60 35 -3 -58 17 minecraft:dirt`)
   bot.chat(`/fill -2 -58 18 14 -60 34 minecraft:air`)
@@ -91,6 +93,62 @@ module.exports = () => async (bot) => {
             name: "golden_axe",
             quantity: 1
           },
+        ]
+      },
+      {
+        name: "Input chest name",
+        type: "deposit",
+        position: {
+          x: 3,
+          y: -60,
+          z: 0,
+        },
+        dimension: "minecraft:overworld",
+        items: [
+          {
+            name: "oak_door",
+            quantity: 1
+          },
+          {
+            name: "oak_fence_gate",
+            quantity: 0
+          },
+          {
+            name: "oak_log",
+            quantity: 0
+          },
+        ]
+      },
+      {
+        name: "Input chest name",
+        type: "depositAll",
+        position: {
+          x: 3,
+          y: -60,
+          z: -2,
+        },
+        dimension: "minecraft:overworld",
+        items: [
+          {
+            name: "iron_sword",
+            quantity: 1
+          },
+          {
+            name: "iron_helmet",
+            quantity: 1
+          },
+          {
+            name: "iron_chestplate",
+            quantity: 1
+          },
+          {
+            name: "iron_leggings",
+            quantity: 1
+          },
+          {
+            name: "iron_boots",
+            quantity: 1
+          }
         ]
       }
     ],
