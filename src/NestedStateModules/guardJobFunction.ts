@@ -9,7 +9,6 @@ import {
 import BehaviorLoadConfig from '@/BehaviorModules/BehaviorLoadConfig'
 import BehaviorMoveToArray from '@/BehaviorModules/BehaviorMoveToArray'
 import BehaviorEatFood from '@/BehaviorModules/BehaviorEatFood'
-import BehaviorEquipAll from '@/BehaviorModules/BehaviorEquipAll'
 import BehaviorFindItems from '@/BehaviorModules/BehaviorFindItems'
 import BehaviorHelpFriend from '@/BehaviorModules/BehaviorHelpFriend'
 import BehaviorMoveTo from '@/BehaviorModules/BehaviorMoveTo'
@@ -33,11 +32,6 @@ function guardJobFunction(bot, targets) {
   patrol.movements = targets.movements
 
   const getClosestMob = getClosestEnemy(bot, targets)
-
-  const equip = new BehaviorEquipAll(bot, targets)
-  equip.stateName = 'Equip items'
-  equip.x = 725
-  equip.y = 363
 
   const eatFood = new BehaviorEatFood(bot, targets)
   eatFood.stateName = 'Eat Food'
