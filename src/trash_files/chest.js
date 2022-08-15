@@ -1,12 +1,12 @@
 const mineflayer = require('mineflayer')
 
-if (process.argv.length < 3 || process.argv.length > 6) {
+if (process.argv.length < 2 || process.argv.length > 6) {
   console.log('Usage : node chest.js <host> <port> [<name>] [<password>]')
   process.exit(1)
 }
 
 const bot = mineflayer.createBot({
-  host: process.argv[2],
+  host: process.argv[2] ? process.argv[2] : 'host.docker.internal',
   port: process.argv[3] ? parseInt(process.argv[3]) : 25565,
   username: process.argv[4] ? process.argv[4] : 'chest',
   password: process.argv[5]
@@ -37,7 +37,7 @@ bot.on('chat', (username, message) => {
 })
 
 let chestOpen
-function sayItems (items = bot.inventory.items()) {
+function sayItems(items = bot.inventory.items()) {
   const output = items.map(itemToString).join(', ')
   if (output) {
     bot.chat(output)
@@ -46,13 +46,17 @@ function sayItems (items = bot.inventory.items()) {
   }
 }
 
-async function openChest () {
+setTimeout(() => {
+    openChest()
+}, 3000);
+
+async function openChest() {
   if (chestOpen) {
     console.log('Chest is already open')
     return chestOpen
   }
   const chestToOpen = bot.findBlock({
-    matching: ['chest', 'ender_chest', 'trapped_chest'].map(name => mcData.blocksByName[name].id),
+    matching: ['chest', 'ender_chest', 'trapped_chest', 'furnace','dispenser'].map(name => mcData.blocksByName[name].id),
     maxDistance: 6
   })
   if (!chestToOpen) {
@@ -72,7 +76,7 @@ async function openChest () {
   return chestOpen
 }
 
-async function watchChest () {
+async function watchChest() {
   const chest = await openChest()
   if (!chest) {
     return
@@ -81,7 +85,7 @@ async function watchChest () {
   sayItems(chest.containerItems())
 }
 
-function itemToString (item) {
+function itemToString(item) {
   if (item) {
     return `${item.name} x ${item.count}`
   } else {
@@ -89,7 +93,7 @@ function itemToString (item) {
   }
 }
 
-async function depositChest () {
+async function depositChest() {
   const chest = await openChest()
 
   const itemsToDeposit = bot.inventory.items()
@@ -97,7 +101,7 @@ async function depositChest () {
   depositItem(chest, itemsToDeposit, 0)
 }
 
-function depositItem (chest, itemsToDeposit, currentItem) {
+function depositItem(chest, itemsToDeposit, currentItem) {
   if (itemsToDeposit.length <= currentItem) {
     setTimeout(() => {
       chest.close()
