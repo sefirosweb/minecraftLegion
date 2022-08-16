@@ -1,19 +1,21 @@
-import configBot from '@/config'
-const { webServer, webServerPort, webServerPassword } = configBot
 import socketIOClient, { Socket } from 'socket.io-client'
-import botconfigLoader from '@/modules/botConfig'
-const botconfig = botconfigLoader()
-import { Bot, BotwebsocketAction, Master, Portals } from '@/types'
+import { Bot, BotwebsocketAction, Master } from '@/types'
 import { Jobs } from '@/types/defaultTypes'
 import { Vec3 } from 'vec3'
 
-type BotFriends = {
+import configBot from '@/config'
+const { webServer, webServerPort, webServerPassword } = configBot
+
+import botconfigLoader from '@/modules/botConfig'
+const botconfig = botconfigLoader()
+
+export type BotFriends = {
   socketId: string,
   name: string,
   event: any
   health: string
   food: string
-  combat: string
+  combat: boolean
 }
 
 let bot: Bot

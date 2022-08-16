@@ -1,8 +1,9 @@
 
-//@ts-nocheck
 import { Bot, LegionStateMachineTargets } from "@/types"
 import mcDataLoader from 'minecraft-data'
 import botWebsocket from '@/modules/botWebsocket'
+import { Item as PrismarineItem } from 'prismarine-item';
+import { EquipmentDestination } from "mineflayer";
 
 module.exports = class BehaviorEquip {
 
@@ -10,9 +11,13 @@ module.exports = class BehaviorEquip {
   readonly targets: LegionStateMachineTargets
   readonly mcData: mcDataLoader.IndexedData
   stateName: string
-  isEndFinished: boolean
+  x?: number
+  y?: number
 
+  isEndFinished: boolean
   wasEquipped: boolean
+  timeLimit?: ReturnType<typeof setTimeout>
+  destination?: EquipmentDestination
 
   constructor(bot: Bot, targets: LegionStateMachineTargets) {
     this.bot = bot
@@ -49,21 +54,31 @@ module.exports = class BehaviorEquip {
       })
   }
 
-  equip() {
+  equip(): Promise<void> {
     return new Promise((resolve, reject) => {
       const itemId = this.mcData.itemsByName[this.targets.item.name].id
+
+      if (!this.destination) {
+        reject(new Error('Destination not found'))
+        return
+      }
+
       this.bot.equip(itemId, this.destination)
         .then(() => {
           resolve()
-        }).catch(function (err) {
+        })
+
+        .catch((err: Error) => {
           botWebsocket.log(`Error on change item ${this.targets.item.name} ${err.message}`)
-          setTimeout(function () {
+
+          setTimeout(() => {
             this.equip()
               .then(() => {
                 resolve()
               })
-          }.bind(this), 200)
-        }.bind(this))
+          }, 200)
+
+        })
     })
   }
 
@@ -81,54 +96,53 @@ module.exports = class BehaviorEquip {
     return this.wasEquipped
   }
 
-  getEquipDestination(item) {
+  getEquipDestination(item: PrismarineItem): EquipmentDestination {
     if (this.isHelmet(item)) return 'head'
     if (this.isChestplate(item)) return 'torso'
     if (this.isLeggings(item)) return 'legs'
     if (this.isBoots(item)) return 'feet'
-
-    // TODO Uncomment this when mineflayer updates
-    // if (this.isOffhandUsable(item))
-    //     return "off-hand";
-    // pending to add nether armor
-
     return 'hand'
   }
 
-  isHelmet(item) {
+  isHelmet(item: PrismarineItem) {
     const id = item.type
     if (id === this.mcData.itemsByName.leather_helmet.id) return true
     if (id === this.mcData.itemsByName.iron_helmet.id) return true
     if (id === this.mcData.itemsByName.golden_helmet.id) return true
     if (id === this.mcData.itemsByName.diamond_helmet.id) return true
     if (id === this.mcData.itemsByName.turtle_helmet.id) return true
+    if (id === this.mcData.itemsByName.turtle_helmet.id) return true
+    if (id === this.mcData.itemsByName.netherite_helmet.id) return true
     return false
   }
 
-  isChestplate(item) {
+  isChestplate(item: PrismarineItem) {
     const id = item.type
     if (id === this.mcData.itemsByName.leather_chestplate.id) return true
     if (id === this.mcData.itemsByName.iron_chestplate.id) return true
     if (id === this.mcData.itemsByName.golden_chestplate.id) return true
     if (id === this.mcData.itemsByName.diamond_chestplate.id) return true
+    if (id === this.mcData.itemsByName.netherite_chestplate.id) return true
     return false
   }
 
-  isLeggings(item) {
+  isLeggings(item: PrismarineItem) {
     const id = item.type
     if (id === this.mcData.itemsByName.leather_leggings.id) return true
     if (id === this.mcData.itemsByName.iron_leggings.id) return true
     if (id === this.mcData.itemsByName.golden_leggings.id) return true
     if (id === this.mcData.itemsByName.diamond_leggings.id) return true
+    if (id === this.mcData.itemsByName.netherite_leggings.id) return true
     return false
   }
 
-  isBoots(item) {
+  isBoots(item: PrismarineItem) {
     const id = item.type
     if (id === this.mcData.itemsByName.leather_boots.id) return true
     if (id === this.mcData.itemsByName.iron_boots.id) return true
     if (id === this.mcData.itemsByName.golden_boots.id) return true
     if (id === this.mcData.itemsByName.diamond_boots.id) return true
+    if (id === this.mcData.itemsByName.netherite_boots.id) return true
     return false
   }
 }

@@ -1,9 +1,6 @@
-
-// @ts-nocheck
-
 import mineflayerPathfinder, { Movements } from 'mineflayer-pathfinder'
 import botWebsocket from '@/modules/botWebsocket'
-import { Bot, LegionStateMachineTargets } from '@/types'
+import { Bot, Dimensions, LegionStateMachineTargets, Vec3WithDimension } from '@/types'
 import mcDataLoader from 'minecraft-data'
 import movementModule from '@/modules/movementModule'
 
@@ -12,12 +9,18 @@ module.exports = class BehaviorMoveTo {
   readonly targets: LegionStateMachineTargets
   readonly mcData: mcDataLoader.IndexedData
   stateName: string
+  x?: number
+  y?: number
+
+  currentDate?: number
   timeout: number
   active: boolean
   success: Boolean
   isEndFinished: boolean
   distance: number
   movements: Movements
+  movementModule: ReturnType<typeof movementModule>
+  timeLimit?: ReturnType<typeof setTimeout>
 
   constructor(bot: Bot, targets: LegionStateMachineTargets, timeout: number) {
     this.stateName = 'moveTo'
@@ -38,7 +41,7 @@ module.exports = class BehaviorMoveTo {
   onStateEntered() {
     this.isEndFinished = false
     this.success = false
-    this.bot.on('pathUpdate', () => {
+    this.bot.on('path_update', (r) => {
       if (r.status === 'noPath') {
         console.log('[MoveTo] No path to target!')
       }
@@ -48,7 +51,7 @@ module.exports = class BehaviorMoveTo {
 
     this.bot.on('customEventPhysicTick', () => {
       const checkDate = Date.now()
-      if (checkDate - this.currentDate > 15000) {
+      if (this.currentDate && checkDate - this.currentDate > 15000) {
         this.restart()
         this.currentDate = Date.now()
       }
@@ -71,16 +74,10 @@ module.exports = class BehaviorMoveTo {
     this.bot.removeAllListeners('customEventPhysicTick')
     this.isEndFinished = false
     this.success = false
-    this.bot.removeAllListeners('pathUpdate')
-    this.bot.removeAllListeners('goalReached')
+    this.bot.removeAllListeners('path_update')
+    this.bot.removeAllListeners('goal_reached')
     this.stopMoving()
     clearTimeout(this.timeLimit)
-  }
-
-  pathUpdate(r) {
-    if (r.status === 'noPath') {
-      botWebsocket.log('[MoveTo] No path to target!')
-    }
   }
 
   goalReached() {
@@ -89,7 +86,7 @@ module.exports = class BehaviorMoveTo {
     this.isEndFinished = true
   }
 
-  setMoveTarget(position) {
+  setMoveTarget(position: Vec3WithDimension) {
     if (this.targets.position === position) {
       return
     }
@@ -116,7 +113,7 @@ module.exports = class BehaviorMoveTo {
       goal = new mineflayerPathfinder.goals.GoalNear(position.x, position.y, position.z, this.distance)
     }
 
-    const dimension = position.dimension ? position.dimension : this.bot.game.dimension
+    const dimension = position.dimension ? position.dimension : this.bot.game.dimension as Dimensions
 
     if (dimension === this.bot.game.dimension) {
       this.bot.pathfinder.setMovements(this.movements)
@@ -126,7 +123,7 @@ module.exports = class BehaviorMoveTo {
     }
   }
 
-  crossThePortal(dimension, destination) {
+  crossThePortal(dimension: Dimensions, destination: Vec3WithDimension) {
     this.movementModule.crossThePortal(dimension, destination)
       .then(() => {
         this.startMoving()

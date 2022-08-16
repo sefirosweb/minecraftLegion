@@ -102,6 +102,8 @@ export type Config = {
     mode: Agro
     distance: number
     itemsToBeReady: Array<Item>
+    itemsCanBeEat: Array<string>
+    helpFriends: boolean
 }
 
 export type Portals = {
@@ -285,6 +287,12 @@ export type Item = {
     name?: string
 })
 
+export type Food = Item & {
+    id: NonNullable<Item['id']>
+    name: NonNullable<Item['name']>
+    priority: number
+}
+
 export type Slot = {
     name: string
     type: number
@@ -337,4 +345,9 @@ export type Chests = {
 export type PendingTransaction = {
     chest: ChestBlock,
     items: Array<ChestTransaction>
+}
+
+export type ShotDirection = {
+    yaw: number,
+    pitch: number
 }

@@ -1,9 +1,11 @@
 import { Bot, LegionStateMachineTargets, EntityWithDistance } from "@/types"
-
 module.exports = class BehaviorFindItems {
   readonly bot: Bot
   readonly targets: LegionStateMachineTargets
   stateName: string
+  x?: number
+  y?: number
+
   isEndFinished: boolean
   distanceToFind: number
   isOnFloor: boolean

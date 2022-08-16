@@ -1,5 +1,4 @@
 
-//@ts-nocheck
 import { Bot, LegionStateMachineTargets } from "@/types"
 import botWebsocket from '@/modules/botWebsocket'
 import inventoryModule from '@/modules/inventoryModule'
@@ -7,7 +6,11 @@ module.exports = class BehaviorEquipAll {
   readonly bot: Bot
   readonly targets: LegionStateMachineTargets
   stateName: string
+  x?: number
+  y?: number
+
   isEndFinished: boolean
+  inventory: ReturnType<typeof inventoryModule>
 
   constructor(bot: Bot, targets: LegionStateMachineTargets) {
     this.bot = bot
@@ -39,7 +42,7 @@ module.exports = class BehaviorEquipAll {
     return this.isEndFinished
   }
 
-  equipAllItems() {
+  equipAllItems(): Promise<void> {
     return new Promise((resolve, reject) => {
       this.inventory.equipItem('helmet')
         .then(() => {

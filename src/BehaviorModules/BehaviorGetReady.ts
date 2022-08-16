@@ -4,6 +4,9 @@ module.exports = class BehaviorGetReady {
   readonly bot: Bot
   readonly targets: LegionStateMachineTargets
   stateName: string
+  x?: number
+  y?: number
+
   isReady: boolean
 
   inventory: ReturnType<typeof inventoryModule>

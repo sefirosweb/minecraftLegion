@@ -8,6 +8,9 @@ module.exports = class BehaviorLoadConfig {
   readonly bot: Bot
   readonly targets: LegionStateMachineTargets
   stateName: string
+  x?: number
+  y?: number
+
   playername?: string
 
 

@@ -1,12 +1,17 @@
 
-//@ts-nocheck
-import { Bot, LegionStateMachineTargets } from "@/types"
+
+import { Bot, Food, LegionStateMachineTargets } from "@/types"
 import botWebsocket from '@/modules/botWebsocket'
+import mcDataLoader from 'minecraft-data'
 
 module.exports = class BehaviorEatFood {
   readonly bot: Bot
   readonly targets: LegionStateMachineTargets
+  readonly mcData: mcDataLoader.IndexedData
   stateName: string
+  x?: number
+  y?: number
+
   finished: boolean
 
   constructor(bot: Bot, targets: LegionStateMachineTargets) {
@@ -14,6 +19,7 @@ module.exports = class BehaviorEatFood {
     this.targets = targets
     this.stateName = 'BehaviorEatFood'
     this.finished = false
+    this.mcData = mcDataLoader(bot.version)
   }
 
   onStateEntered() {
@@ -25,8 +31,7 @@ module.exports = class BehaviorEatFood {
   }
 
   getAllFoods() {
-    const mcData = require('minecraft-data')(this.bot.version)
-    const mcDataFoods = mcData.foodsArray
+    const mcDataFoods = this.mcData.foodsArray
     return mcDataFoods.map((item) => item.name)
   }
 
@@ -35,23 +40,25 @@ module.exports = class BehaviorEatFood {
   }
 
   checkFoodInInventory() {
-    return this.bot.inventory.items().reduce((validFood, foodInventory) => {
-      const returnValidFood = [...validFood]
+    const validFoods: Array<Food> = []
 
+    this.bot.inventory.items().forEach((foodInventory) => {
       const priority = this.targets.config.itemsCanBeEat.findIndex(
         (food) => food === foodInventory.name
       )
 
       if (priority >= 0) {
-        const validFoodWithPriority = {
-          ...foodInventory,
+        const validFoodWithPriority: Food = {
+          id: foodInventory.type,
+          name: foodInventory.name,
+          quantity: foodInventory.count,
           priority
         }
-        returnValidFood.push(validFoodWithPriority)
+        validFoods.push(validFoodWithPriority)
       }
+    })
 
-      return returnValidFood
-    }, [])
+    return validFoods
   }
 
   eat() {
@@ -79,12 +86,12 @@ module.exports = class BehaviorEatFood {
     }
 
     this.bot
-      .equip(firstFoodFound, 'hand')
+      .equip(firstFoodFound.id, 'hand')
       .then(() => {
         return this.bot.consume()
       })
       .then(() => {
-        if (!this.bot.food !== 20) {
+        if (!this.bot.food || this.bot.food !== 20) {
           this.eat()
         } else {
           this.finished = true

@@ -1,19 +1,25 @@
-//@ts-nocheck
+
 import { Bot, LegionStateMachineTargets } from "@/types"
 import botWebsocket from '@/modules/botWebsocket'
 import digBlockModule from '@/modules/digBlockModule'
+import { Vec3 } from "vec3"
 module.exports = class template {
   readonly bot: Bot
   readonly targets: LegionStateMachineTargets
   stateName: string
+  x?: number
+  y?: number
+
   isEndFinished: boolean
+  digBlock: (position: Vec3) => Promise<void>
 
   constructor(bot: Bot, targets: LegionStateMachineTargets) {
     this.bot = bot
     this.targets = targets
     this.stateName = 'BehaviorDigBlock'
+    const { digBlock } = digBlockModule(bot)
 
-    this.digBlockModule = digBlockModule(bot)
+    this.digBlock = digBlock
 
     this.isEndFinished = false
   }
@@ -24,7 +30,14 @@ module.exports = class template {
 
   onStateEntered() {
     this.isEndFinished = false
-    this.digBlockModule.digBlock(this.targets.position)
+
+    if (!this.targets.position) {
+      this.isEndFinished = true
+      return
+    }
+
+    const targetBlock = new Vec3(this.targets.position.x, this.targets.position.y, this.targets.position.z)
+    this.digBlock(targetBlock)
       .then(() => {
         this.isEndFinished = true
       })

@@ -1,7 +1,5 @@
-
-//@ts-nocheck
-import botWebsocket from '@/modules/botWebsocket'
-import { Bot, LegionStateMachineTargets } from '@/types'
+import botWebsocket, { BotFriends } from '@/modules/botWebsocket'
+import { Bot, EntityWithDistance, LegionStateMachineTargets } from '@/types'
 import { Entity } from 'prismarine-entity'
 
 module.exports = class BehaviorHelpFriend {
@@ -9,8 +7,10 @@ module.exports = class BehaviorHelpFriend {
   readonly bot: Bot
   readonly targets: LegionStateMachineTargets
   stateName: string
-  entity: Entity | undefined
+  x?: number
+  y?: number
 
+  entity: Entity | undefined
 
   constructor(bot: Bot, targets: LegionStateMachineTargets) {
     this.bot = bot
@@ -42,17 +42,19 @@ module.exports = class BehaviorHelpFriend {
       return false
     }
 
-    entities = this.sortEntitiesDistance(entities)
+    entities.sort(function (a, b) {
+      return a.distance - b.distance
+    })
 
     this.entity = entities[0]
     return true
   }
 
-  getFriendInVission(friendsNeedHelp) {
-    const entities = []
+  getFriendInVission(friendsNeedHelp: Array<BotFriends>) {
+    const entities: Array<EntityWithDistance> = []
     let index, dist
     for (const entityName of Object.keys(this.bot.entities)) {
-      const entity = this.bot.entities[entityName]
+      const entity = this.bot.entities[entityName] as EntityWithDistance
       if (entity.type === 'player') {
         index = friendsNeedHelp.findIndex(f => f.name === entity.username)
         if (index >= 0) {
@@ -65,21 +67,13 @@ module.exports = class BehaviorHelpFriend {
     return entities
   }
 
-  sortEntitiesDistance(entities) {
-    entities.sort(function (a, b) {
-      return a.distance - b.distance
-    })
-    return entities
-  }
-
-  isFinished() {
-    return this.isEndEating
-  }
 
   targetIsFriend() {
     const friends = botWebsocket.getFriends()
+    if (!this.targets.entity) return false
+
     if (this.targets.entity.type === 'player') {
-      const index = friends.findIndex(f => f.name === this.targets.entity.username)
+      const index = friends.findIndex(f => this.targets.entity && f.name === this.targets.entity.username)
       if (index >= 0) {
         return true
       }
@@ -89,8 +83,8 @@ module.exports = class BehaviorHelpFriend {
 
   stillNeedHelp() {
     const friends = botWebsocket.getFriends()
-    if (this.targets.entity.type === 'player') {
-      const index = friends.findIndex(f => f.name === this.targets.entity.username)
+    if (this.targets.entity && this.targets.entity.type === 'player') {
+      const index = friends.findIndex(f => this.targets.entity && f.name === this.targets.entity.username)
       if (index >= 0) {
         if (friends[index].combat) {
           return true

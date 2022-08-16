@@ -5,6 +5,9 @@ module.exports = class template {
   readonly bot: Bot
   readonly targets: LegionStateMachineTargets
   stateName: string
+  x?: number
+  y?: number
+
   isEndFinished: boolean
 
 

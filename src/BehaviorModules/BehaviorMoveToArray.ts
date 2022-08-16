@@ -1,18 +1,25 @@
-// @ts-nocheck
-
 import mineflayerPathfinder, { Movements } from 'mineflayer-pathfinder'
 import botWebsocket from '@/modules/botWebsocket'
 import { Bot, LegionStateMachineTargets } from '@/types'
 import mcDataLoader from 'minecraft-data'
+import { Vec3 } from 'vec3'
 
 module.exports = class BehaviorMoveToArray {
   readonly bot: Bot
   readonly targets: LegionStateMachineTargets
   readonly mcData: mcDataLoader.IndexedData
   stateName: string
+  x?: number
+  y?: number
+
   active: boolean
   distance: number
   movements: Movements
+  patrol: Array<Vec3>
+  startNearestPoint: boolean
+  currentPosition: number
+  endPatrol: boolean
+  position?: Vec3
 
 
   constructor(bot: Bot, targets: LegionStateMachineTargets, patrol = [], startNearestPoint = false, distance = 2) {
@@ -27,7 +34,6 @@ module.exports = class BehaviorMoveToArray {
     this.currentPosition = 0
     this.endPatrol = false
     this.active = false
-    this.position = false
 
     this.mcData = mcDataLoader(bot.version)
     this.movements = new mineflayerPathfinder.Movements(this.bot, this.mcData)
@@ -46,7 +52,7 @@ module.exports = class BehaviorMoveToArray {
   }
 
   sortPatrol() {
-    let nearestDistance = false
+    let nearestDistance = Infinity
     let nearestPoint = 0
     let currentPoint = 0
     if (this.patrol.length === 0) {
@@ -54,7 +60,7 @@ module.exports = class BehaviorMoveToArray {
     }
     this.patrol.forEach(position => {
       const distance = this.getDistance(position)
-      if (distance < nearestDistance || !nearestDistance) {
+      if (distance < nearestDistance) {
         nearestDistance = distance
         nearestPoint = currentPoint
       }
@@ -115,12 +121,12 @@ module.exports = class BehaviorMoveToArray {
     return this.getDistance(position)
   }
 
-  getDistance(position) {
+  getDistance(position?: Vec3) {
     if (!position) { return 0 }
     return this.bot.entity.position.distanceTo(position)
   }
 
-  setPatrol(patrol, startNearestPoint = false) {
+  setPatrol(patrol: Array<Vec3>, startNearestPoint = false) {
     this.patrol = patrol
     if (startNearestPoint === true && this.patrol !== undefined) {
       this.sortPatrol()

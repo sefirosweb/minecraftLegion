@@ -1,15 +1,20 @@
-
-//@ts-nocheck
-
-import { Bot, LegionStateMachineTargets } from "@/types"
+import { Bot, LegionStateMachineTargets, ShotDirection } from "@/types"
 import inventoryModule from '@/modules/inventoryModule'
-
+import botWebsocket from '@/modules/botWebsocket'
 module.exports = class BehaviorLongAttack {
   readonly bot: Bot
   readonly targets: LegionStateMachineTargets
   stateName: string
-  playerIsFound: boolean
+  x?: number
+  y?: number
+
   playername?: string
+  infoShot: ShotDirection | false
+  prevTime: number | false
+  playerIsFound: boolean
+  preparingShot: boolean
+  lastAttack: number
+  inventory: ReturnType<typeof inventoryModule>
 
   constructor(bot: Bot, targets: LegionStateMachineTargets) {
     this.bot = bot
@@ -46,25 +51,24 @@ module.exports = class BehaviorLongAttack {
       this.bot.look(this.infoShot.yaw, this.infoShot.pitch)
 
       const currentTime = Date.now()
-      if (this.preparingShot && currentTime - this.prevTime > 1200) {
+      if (this.prevTime && this.preparingShot && currentTime - this.prevTime > 1200) {
         this.bot.deactivateItem()
         this.preparingShot = false
       }
     }
   }
 
-  setInfoShot(infoShot) {
+  setInfoShot(infoShot: ShotDirection) {
     this.infoShot = infoShot
   }
 
   equipBow() {
     const itemEquip = this.bot.inventory.items().find(item => item.name.includes('bow'))
     if (itemEquip) {
-      this.bot.equip(itemEquip, 'hand', (error) => {
-        if (error !== undefined) {
+      this.bot.equip(itemEquip, 'hand')
+        .catch((error: Error) => {
           botWebsocket.log('Error equip bow: ' + error)
-        }
-      })
+        })
     }
   }
 

@@ -9,7 +9,7 @@ import { Vec3 } from "vec3"
 import mcDataLoader from 'minecraft-data'
 
 type ItemWithHardness = Item & {
-  name: string
+  name: NonNullable<Item['name']>
   hardness: number
 }
 
@@ -17,6 +17,9 @@ module.exports = class template {
   readonly bot: Bot
   readonly targets: LegionStateMachineTargets
   stateName: string
+  x?: number
+  y?: number
+
   isEndFinished: boolean
 
   digBlock: (position: Vec3) => Promise<void>

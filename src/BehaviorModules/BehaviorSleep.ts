@@ -10,6 +10,7 @@ export default class BehaviorFollowEntity implements StateBehavior {
   readonly targets: LegionStateMachineTargets
   x?: number;
   y?: number;
+
   isEndFinished: boolean
   bedOcupped: boolean
   cantSleepNow: boolean

@@ -1,5 +1,5 @@
 
-//@ts-nocheck
+
 import { Bot, LegionStateMachineTargets } from "@/types"
 
 module.exports = class BehaviorGetPlayer {
@@ -7,8 +7,11 @@ module.exports = class BehaviorGetPlayer {
   readonly bot: Bot
   readonly targets: LegionStateMachineTargets
   stateName: string
+  x?: number
+  y?: number
+
   playerIsFound: boolean
-  playername?: string
+  playerName?: string
 
   constructor(bot: Bot, targets: LegionStateMachineTargets) {
     this.bot = bot
@@ -19,10 +22,11 @@ module.exports = class BehaviorGetPlayer {
   }
 
   onStateEntered() {
+    if (!this.playerName) return
     this.getPlayerEntity(this.playerName)
   }
 
-  getPlayerEntity(playerName) {
+  getPlayerEntity(playerName: string) {
     this.targets.entity = this.checkPlayer(playerName) || undefined
     this.playerIsFound = this.targets.entity !== undefined
     if (this.playerIsFound) {
@@ -31,7 +35,7 @@ module.exports = class BehaviorGetPlayer {
     return this.playerIsFound
   }
 
-  checkPlayer(playerName) {
+  checkPlayer(playerName: string) {
     for (const entityName of Object.keys(this.bot.entities)) {
       const entity = this.bot.entities[entityName]
       if (entity === this.bot.entity) { continue }

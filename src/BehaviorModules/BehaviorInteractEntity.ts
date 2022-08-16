@@ -1,11 +1,13 @@
 
-//@ts-nocheck
 import { Bot, LegionStateMachineTargets } from "@/types"
 
 module.exports = class template {
   readonly bot: Bot
   readonly targets: LegionStateMachineTargets
   stateName: string
+  x?: number
+  y?: number
+
   isEndFinished: boolean
 
   constructor(bot: Bot, targets: LegionStateMachineTargets) {
@@ -22,7 +24,7 @@ module.exports = class template {
   }
 
   async interactEntity() {
-    if (this.targets.interactEntity === null) {
+    if (!this.targets.interactEntity) {
       this.isEndFinished = true
       console.log('interactEntity is null')
       return
