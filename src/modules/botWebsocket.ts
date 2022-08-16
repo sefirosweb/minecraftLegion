@@ -65,6 +65,7 @@ function connect() {
     const botIndex = friends.findIndex((e) => e.socketId === data.socketId)
     if (botIndex >= 0) {
       const friendUpdate = [...friends]
+      //@ts-ignore
       friendUpdate[botIndex][data.type] = data.value
       friends = friendUpdate
     }
