@@ -22,7 +22,7 @@ const placeBlockModule = (bot: Bot) => {
   let queue: Array<Queue> = []
   let positions_checked: Array<PositionsChecked> = []
 
-  const getPathToPlace = (position: Vec3) => {
+  const getPathToPlace = (position: Vec3): Array<PositionsChecked> => {
     queue = []
     positions_checked = []
 

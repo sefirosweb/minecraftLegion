@@ -1,42 +1,66 @@
 
-// @ts-nocheck
-
-import { Bot, LegionStateMachineTargets } from "@/types"
+import { Bot, Item, LegionStateMachineTargets, PositionsChecked } from "@/types"
 import botWebsocket from '@/modules/botWebsocket'
 import digBlockModule from '@/modules/digBlockModule'
 import minerModule from '@/modules/minerModule'
 import placeBlockModule from '@/modules/placeBlockModule'
 import inventoryModule from '@/modules/inventoryModule'
+import { Vec3 } from "vec3"
+import mcDataLoader from 'minecraft-data'
+
+type ItemWithHardness = Item & {
+  name: string
+  hardness: number
+}
 
 module.exports = class template {
-
   readonly bot: Bot
   readonly targets: LegionStateMachineTargets
   stateName: string
   isEndFinished: boolean
 
+  digBlock: (position: Vec3) => Promise<void>
+  place: (position: Vec3, offset: Vec3, canJump?: boolean) => Promise<void>
+  equipHeldItem: (itemName: string) => Promise<void>
+  calculateSideToPlaceBlock: (position: Vec3) => Array<Vec3>
+  getPathToPlace: (position: Vec3) => Array<PositionsChecked>
+
+  getNewPositionForPlaceBlock: (position: Vec3) => { // TODO CHECK
+    newPosition: Vec3 | undefined;
+    blockOffset: Vec3 | undefined;
+    offset: Vec3 | undefined;
+  }
+
+  blocksCanBeReplaced: Array<string> // TODO CHECK
+  mcData: mcDataLoader.IndexedData
+  sidesToPlaceBlock: Array<Vec3>
+  outOfBlocks: boolean
+  timeLimit?: ReturnType<typeof setTimeout>
+  listPlaceBlocks?: Array<PositionsChecked>
+
   constructor(bot: Bot, targets: LegionStateMachineTargets) {
     const { blocksCanBeReplaced, place, getPathToPlace, getNewPositionForPlaceBlock } = placeBlockModule(bot)
+    const { equipHeldItem } = inventoryModule(bot)
+    const { calculateSideToPlaceBlock } = minerModule(bot, targets)
+    const { digBlock } = digBlockModule(bot)
 
     this.bot = bot
     this.targets = targets
     this.stateName = 'BehaviorDigAndPlaceBlock'
 
-    this.digBlock = digBlockModule(bot).digBlock
-    this.placeBlockModule = place
-    this.equipHeldItem = inventoryModule(bot).equipHeldItem
-    this.calculateSideToPlaceBlock = minerModule(bot, targets).calculateSideToPlaceBlock
-    this.getNewPositionForPlaceBlock = getNewPositionForPlaceBlock
-    this.blocksCanBeReplaced = blocksCanBeReplaced
-    this.getPathToPlace = getPathToPlace
     this.place = place
+    this.digBlock = digBlock
+    this.equipHeldItem = equipHeldItem
+    this.calculateSideToPlaceBlock = calculateSideToPlaceBlock
+    this.getNewPositionForPlaceBlock = getNewPositionForPlaceBlock
+    this.getPathToPlace = getPathToPlace
+    this.blocksCanBeReplaced = blocksCanBeReplaced
 
-    this.mcData = require('minecraft-data')(this.bot.version)
+    this.mcData = mcDataLoader(bot.version)
 
     this.isEndFinished = false
     this.sidesToPlaceBlock = []
-
-    this.mcData = require('minecraft-data')(this.bot.version)
+    this.outOfBlocks = false
   }
 
   isFinished() {
@@ -88,15 +112,19 @@ module.exports = class template {
       return undefined
     }
 
-    const item = items.map(i => {
-      i.hardness = this.mcData.blocksByName[i.name].hardness
-      return i
+    const item: ItemWithHardness = items.map(i => {
+      return {
+        id: i.type,
+        quantity: 1,
+        name: i.name,
+        hardness: this.mcData.blocksByName[i.name].hardness ?? Infinity
+      }
     }).sort((a, b) => a.hardness - b.hardness)[0]
 
     return item
   }
 
-  equipAndPlace(placeBlockTo, newPosition, blockOffset) {
+  equipAndPlace(placeBlockTo: Vec3, newPosition: Vec3, blockOffset: Vec3) {
     return new Promise((resolve, reject) => {
       const item = this.getItemToPlace()
       if (!item) {
@@ -107,7 +135,7 @@ module.exports = class template {
 
       const block = this.bot.blockAt(placeBlockTo)
 
-      if (['kelp', 'kelp_plant'].includes(block.name)) {
+      if (block && ['kelp', 'kelp_plant'].includes(block.name)) {
         this.digBlock(placeBlockTo)
           .then(() => this.equipHeldItem(item.name))
           .then(() => this.place(newPosition, blockOffset))
@@ -122,7 +150,7 @@ module.exports = class template {
     })
   }
 
-  placeBlocksBucle() {
+  placeBlocksBucle(): Promise<void> {
     return new Promise((resolve, reject) => {
       if (this.sidesToPlaceBlock.length === 0) {
         this.isEndFinished = true
@@ -131,6 +159,11 @@ module.exports = class template {
       }
 
       const currentSideToPlaceBlock = this.sidesToPlaceBlock.shift()
+      if (!currentSideToPlaceBlock) {
+        resolve()
+        return
+      }
+
       this.listPlaceBlocks = this.getPathToPlace(currentSideToPlaceBlock)
 
       this.placeBlocks()
@@ -140,17 +173,41 @@ module.exports = class template {
     })
   }
 
-  placeBlocks() {
+  placeBlocks(): Promise<void> {
     return new Promise((resolve, reject) => {
-      if (this.listPlaceBlocks.length === 0) {
+      if (!this.listPlaceBlocks || this.listPlaceBlocks.length === 0) {
         resolve()
         return
       }
 
-      const placeBlockTo = this.listPlaceBlocks.shift().position.clone()
+      const nextPlaceBlockTo = this.listPlaceBlocks.shift()
+      if (!nextPlaceBlockTo) {
+        resolve()
+        return
+      }
+
+      const placeBlockTo = nextPlaceBlockTo.position.clone()
 
       const { newPosition, blockOffset } = this.getNewPositionForPlaceBlock(placeBlockTo)
-      if (!this.blocksCanBeReplaced.includes(this.bot.blockAt(placeBlockTo).name)) {
+
+      const targetBlock = this.bot.blockAt(placeBlockTo)
+
+      if (!targetBlock) {
+        reject(new Error('No block found!'))
+        return
+      }
+
+      if (!newPosition) {
+        reject(new Error('Not found new newPosition!'))
+        return
+      }
+
+      if (!blockOffset) {
+        reject(new Error('Not found new blockOffset!'))
+        return
+      }
+
+      if (!this.blocksCanBeReplaced.includes(targetBlock.name)) {
         this.digBlock(placeBlockTo)
           .then(() => this.equipAndPlace(placeBlockTo, newPosition, blockOffset))
           .then(() => this.placeBlocks())

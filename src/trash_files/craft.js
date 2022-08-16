@@ -36,7 +36,7 @@ bot.once('login', () => {
     })
 
     if (!item) {
-      bot.chat(`unknown item: ${name}`)
+      bot.chat(`unknown name: ${name}`)
       return
     }
     const aviableRecipes = bot.recipesAll(item.id, null, craftingTable)

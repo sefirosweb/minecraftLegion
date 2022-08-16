@@ -237,10 +237,6 @@ export type Queue = {
     parent: number
 }
 
-export type PositionsChecked = {
-    position: Vec3,
-    parent: number | null
-}
 
 export type CustomEntity = Entity & {
     distance: number
@@ -263,6 +259,11 @@ export type botType = {
 }
 
 // Final types state
+
+export type PositionsChecked = {
+    position: Vec3,
+    parent: number | null
+}
 
 export type Chest = {
     items: Array<Item>

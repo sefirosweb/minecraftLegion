@@ -47,7 +47,7 @@ module.exports = () => async (bot) => {
     job: 'miner',
     itemsToBeReady: [
       {
-        item: "iron_pickaxe",
+        name: "iron_pickaxe",
         quantity: 1
       }
     ],

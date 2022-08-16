@@ -41,7 +41,7 @@ module.exports = () => async (bot) => {
     itemsCanBeEat: [],
     itemsToBeReady: [
       {
-        item: "iron_axe",
+        name: "iron_axe",
         quantity: 1
       }
     ],

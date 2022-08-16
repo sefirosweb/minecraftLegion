@@ -30,7 +30,7 @@ const defaultConfig = {
   canCraftItemWithdrawChest: true,
   itemsToBeReady: [
     {
-      item: 'sword',
+      name: 'iron_sword',
       quantity: 1
     }
   ],
