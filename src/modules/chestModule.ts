@@ -2,13 +2,14 @@
 import { Bot, Chest, Chests, Item, LegionStateMachineTargets } from "@/types"
 import sorterJob from '@/modules/sorterJob'
 import inventoryModule from '@/modules/inventoryModule'
+import _ from 'lodash'
 
 const chestModule = (bot: Bot, targets: LegionStateMachineTargets) => {
   const { findItemsInChests } = sorterJob()
   const { getResumeInventory } = inventoryModule(bot)
 
   const getItemsToWithdrawInChests = (InputChests: Array<Chest>): Array<Item> => {
-    const chests = JSON.parse(JSON.stringify(InputChests))
+    const chests = _.cloneDeep(InputChests)
     const items: Array<Item> = []
     chests
       .filter((c: Chest) => c.type === "withdraw")
