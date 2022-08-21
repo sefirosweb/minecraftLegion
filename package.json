@@ -9,9 +9,9 @@
     "dependencies": {
         "express": "4.18.1",
         "lowdb": "1.0.0",
-        "minecraft-data": "3.10.1",
+        "minecraft-data": "3.10.2",
         "minecrafthawkeye": "1.2.7",
-        "mineflayer": "4.3.0",
+        "mineflayer": "4.4.0",
         "mineflayer-pathfinder": "2.3.1",
         "mineflayer-statemachine": "1.6.5",
         "mineflayer-web-inventory": "1.8.3",

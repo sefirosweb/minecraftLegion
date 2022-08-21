@@ -15,11 +15,15 @@ import BehaviorHelpFriend from '@/BehaviorModules/BehaviorHelpFriend'
 import BehaviorMoveTo from '@/BehaviorModules/BehaviorMoveTo'
 
 import getClosestEnemy from '@/modules/getClosestEnemy'
+import { LegionStateMachineTargets } from '@/types'
+import { Bot } from 'mineflayer'
 
-function guardJobFunction(bot, targets) {
-  const start = new BehaviorIdle(targets)
+function guardJobFunction(bot: Bot, targets: LegionStateMachineTargets) {
+  const start = new BehaviorIdle()
   start.stateName = 'Start'
+  //@ts-ignore
   start.x = 125
+  //@ts-ignore
   start.y = 113
 
   const loadConfig = new BehaviorLoadConfig(bot, targets)
@@ -61,7 +65,9 @@ function guardJobFunction(bot, targets) {
 
   const goFriend = new BehaviorFollowEntity(bot, targets)
   goFriend.stateName = 'Go To Help Friend'
+  //@ts-ignore
   goFriend.x = 725
+  //@ts-ignore
   goFriend.y = 813
 
   const combatStrategy = require('@NestedStateModules/combat/combatStrategyFunction')(bot, targets)
