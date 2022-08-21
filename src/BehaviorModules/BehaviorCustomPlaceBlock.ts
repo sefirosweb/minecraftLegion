@@ -5,8 +5,9 @@ import digBlockModule from '@/modules/digBlockModule'
 import placeBlockModule from '@/modules/placeBlockModule'
 import inventoryModule from '@/modules/inventoryModule'
 import { Vec3 } from "vec3"
-module.exports = class BehaviorCustomPlaceBlock {
-
+import { StateBehavior } from "mineflayer-statemachine"
+export default class BehaviorCustomPlaceBlock implements StateBehavior {
+  active: boolean;
   readonly bot: Bot
   readonly targets: LegionStateMachineTargets
   stateName: string
@@ -23,6 +24,7 @@ module.exports = class BehaviorCustomPlaceBlock {
   timeLimit?: ReturnType<typeof setTimeout>
 
   constructor(bot: Bot, targets: LegionStateMachineTargets, canJump: boolean = true, canReplaceBlock: boolean = false) {
+    this.active = false
     const { blocksCanBeReplaced, place } = placeBlockModule(bot)
     this.bot = bot
     this.targets = targets

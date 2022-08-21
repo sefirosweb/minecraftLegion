@@ -3,8 +3,10 @@
 import { Bot, Food, LegionStateMachineTargets } from "@/types"
 import botWebsocket from '@/modules/botWebsocket'
 import mcDataLoader from 'minecraft-data'
+import { StateBehavior } from "mineflayer-statemachine"
 
-module.exports = class BehaviorEatFood {
+export default class BehaviorEatFood implements StateBehavior{
+  active: boolean;
   readonly bot: Bot
   readonly targets: LegionStateMachineTargets
   readonly mcData: mcDataLoader.IndexedData
@@ -15,6 +17,7 @@ module.exports = class BehaviorEatFood {
   finished: boolean
 
   constructor(bot: Bot, targets: LegionStateMachineTargets) {
+    this.active = false
     this.bot = bot
     this.targets = targets
     this.stateName = 'BehaviorEatFood'

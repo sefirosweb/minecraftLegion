@@ -2,8 +2,10 @@
 //@ts-nocheck
 
 import { Bot, LegionStateMachineTargets } from "@/types"
+import { StateBehavior } from "mineflayer-statemachine";
 
-module.exports = class BehaviorTransactionBetweenInventoryChest {
+export default class BehaviorTransactionBetweenInventoryChest implements StateBehavior {
+  active: boolean;
   readonly bot: Bot;
   readonly targets: LegionStateMachineTargets;
   stateName: string;
@@ -13,6 +15,7 @@ module.exports = class BehaviorTransactionBetweenInventoryChest {
 
 
   constructor(bot: Bot, targets: LegionStateMachineTargets) {
+    this.active = false
     this.bot = bot
     this.targets = targets
     this.stateName = 'BehaviorTransactionBetweenInventoryChest'

@@ -117,6 +117,7 @@ export type Portals = {
 
 export type ItemDrop = {
     position: Vec3
+    isValid: boolean
 }
 
 export type ItemsToPickUpBatch = {

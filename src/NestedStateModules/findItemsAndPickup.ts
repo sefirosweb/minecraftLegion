@@ -101,7 +101,7 @@ function findItemsAndPickup(bot: Bot, targets: LegionStateMachineTargets) {
       parent: goToObject,
       child: findItem,
       shouldTransition: () => {
-        if (!goToObject.targets.itemDrop.isValid) {
+        if (!goToObject.targets.itemDrop?.isValid) {
           return true
         }
 

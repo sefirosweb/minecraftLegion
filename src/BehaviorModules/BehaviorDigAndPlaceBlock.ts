@@ -7,13 +7,15 @@ import placeBlockModule from '@/modules/placeBlockModule'
 import inventoryModule from '@/modules/inventoryModule'
 import { Vec3 } from "vec3"
 import mcDataLoader from 'minecraft-data'
+import { StateBehavior } from "mineflayer-statemachine"
 
 type ItemWithHardness = Item & {
   name: NonNullable<Item['name']>
   hardness: number
 }
 
-module.exports = class template {
+export default class template implements StateBehavior {
+  active: boolean;
   readonly bot: Bot
   readonly targets: LegionStateMachineTargets
   stateName: string
@@ -42,6 +44,7 @@ module.exports = class template {
   listPlaceBlocks?: Array<PositionsChecked>
 
   constructor(bot: Bot, targets: LegionStateMachineTargets) {
+    this.active = false
     const { blocksCanBeReplaced, place, getPathToPlace, getNewPositionForPlaceBlock } = placeBlockModule(bot)
     const { equipHeldItem } = inventoryModule(bot)
     const { calculateSideToPlaceBlock } = minerModule(bot, targets)

@@ -4,9 +4,10 @@ import mcDataLoader from 'minecraft-data'
 import botWebsocket from '@/modules/botWebsocket'
 import { Item as PrismarineItem } from 'prismarine-item';
 import { EquipmentDestination } from "mineflayer";
+import { StateBehavior } from "mineflayer-statemachine";
 
-module.exports = class BehaviorEquip {
-
+export default class BehaviorEquip implements StateBehavior {
+  active: boolean;
   readonly bot: Bot
   readonly targets: LegionStateMachineTargets
   readonly mcData: mcDataLoader.IndexedData
@@ -20,6 +21,7 @@ module.exports = class BehaviorEquip {
   destination?: EquipmentDestination
 
   constructor(bot: Bot, targets: LegionStateMachineTargets) {
+    this.active = false
     this.bot = bot
     this.targets = targets
     this.stateName = 'BehaviorEquip'

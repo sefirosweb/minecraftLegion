@@ -3,7 +3,9 @@ import { Bot, LegionStateMachineTargets } from "@/types"
 import botWebsocket from '@/modules/botWebsocket'
 import digBlockModule from '@/modules/digBlockModule'
 import { Vec3 } from "vec3"
-module.exports = class template {
+import { StateBehavior } from "mineflayer-statemachine"
+export default class template implements StateBehavior {
+  active: boolean;
   readonly bot: Bot
   readonly targets: LegionStateMachineTargets
   stateName: string
@@ -14,6 +16,7 @@ module.exports = class template {
   digBlock: (position: Vec3) => Promise<void>
 
   constructor(bot: Bot, targets: LegionStateMachineTargets) {
+    this.active = false
     this.bot = bot
     this.targets = targets
     this.stateName = 'BehaviorDigBlock'

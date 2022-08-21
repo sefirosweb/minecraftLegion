@@ -3,8 +3,10 @@
 import { Bot, LegionStateMachineTargets, MineCordsConfig } from '@/types'
 
 import botWebsocket from '@/modules/botWebsocket'
+import { StateBehavior } from 'mineflayer-statemachine';
 
-module.exports = class BehaviorMinerCurrentLayer {
+export default class BehaviorMinerCurrentLayer implements StateBehavior {
+  active: boolean;
   readonly bot: Bot;
   readonly targets: LegionStateMachineTargets;
   stateName: string;
@@ -18,6 +20,7 @@ module.exports = class BehaviorMinerCurrentLayer {
   endLayer: number | undefined
 
   constructor(bot: Bot, targets: LegionStateMachineTargets) {
+    this.active = false
     this.bot = bot
     this.targets = targets
     this.stateName = 'BehaviorMinerCurrentLayer'

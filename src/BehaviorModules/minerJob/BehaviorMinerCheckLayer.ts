@@ -5,9 +5,10 @@ import mineflayerPathfinder from 'mineflayer-pathfinder'
 //@ts-ignore
 import botWebsocket from '@modules/botWebsocket'
 import { Vec3 } from 'vec3'
+import { StateBehavior } from "mineflayer-statemachine";
 
-module.exports = class BehaviorMinerCheckLayer {
-
+export default class BehaviorMinerCheckLayer implements StateBehavior {
+  active: boolean;
   readonly bot: Bot;
   readonly targets: LegionStateMachineTargets;
   stateName: string;
@@ -31,6 +32,7 @@ module.exports = class BehaviorMinerCheckLayer {
   xEnd: number | undefined
 
   constructor(bot: Bot, targets: LegionStateMachineTargets) {
+    this.active = false
     this.bot = bot
     this.targets = targets
     this.stateName = 'BehaviorMinerCheckLayer'

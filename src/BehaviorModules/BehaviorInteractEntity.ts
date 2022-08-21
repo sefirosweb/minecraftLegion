@@ -1,7 +1,9 @@
 
 import { Bot, LegionStateMachineTargets } from "@/types"
+import { StateBehavior } from "mineflayer-statemachine"
 
-module.exports = class template {
+export default class template implements StateBehavior {
+  active: boolean;
   readonly bot: Bot
   readonly targets: LegionStateMachineTargets
   stateName: string
@@ -11,6 +13,7 @@ module.exports = class template {
   isEndFinished: boolean
 
   constructor(bot: Bot, targets: LegionStateMachineTargets) {
+    this.active = false
     this.bot = bot
     this.targets = targets
     this.stateName = 'BehaviorInteractEntity'

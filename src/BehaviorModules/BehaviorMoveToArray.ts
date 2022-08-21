@@ -3,8 +3,9 @@ import botWebsocket from '@/modules/botWebsocket'
 import { Bot, LegionStateMachineTargets } from '@/types'
 import mcDataLoader from 'minecraft-data'
 import { Vec3 } from 'vec3'
+import { StateBehavior } from 'mineflayer-statemachine'
 
-module.exports = class BehaviorMoveToArray {
+export default class BehaviorMoveToArray implements StateBehavior {
   readonly bot: Bot
   readonly targets: LegionStateMachineTargets
   readonly mcData: mcDataLoader.IndexedData

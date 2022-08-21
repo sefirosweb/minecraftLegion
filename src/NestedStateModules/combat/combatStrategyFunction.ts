@@ -27,7 +27,7 @@ function combatStrategyFunction(bot: Bot, targets: LegionStateMachineTargets) {
   combatFunction.y = 213
 
   const eatFood = new BehaviorEatFood(bot, targets)
-  eatFood.name = 'Eat Food'
+  eatFood.stateName = 'Eat Food'
   eatFood.x = 325
   eatFood.y = 213
 

@@ -2,9 +2,9 @@ import { LegionStateMachineTargets, Bot } from "@/types"
 import { StateBehavior } from "mineflayer-statemachine"
 
 export default class BehaviorFollowEntity implements StateBehavior {
+  active: boolean
 
   stateName: string = 'BehaviorSleep'
-  active: boolean = false
 
   readonly bot: Bot
   readonly targets: LegionStateMachineTargets
@@ -16,6 +16,7 @@ export default class BehaviorFollowEntity implements StateBehavior {
   cantSleepNow: boolean
 
   constructor(bot: Bot, targets: LegionStateMachineTargets) {
+    this.active = false
     this.bot = bot
     this.targets = targets
     this.isEndFinished = false

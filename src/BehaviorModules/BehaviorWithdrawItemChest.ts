@@ -3,10 +3,11 @@ import botWebsocket from '@/modules/botWebsocket'
 import { sleep, getSecondBlockPosition } from '@/modules/utils'
 import { Bot, ChestBlock, ChestProperty, ChestTransaction, Dimensions, LegionStateMachineTargets } from '@/types'
 import { Chest, TransferOptions } from 'mineflayer'
+import { StateBehavior } from 'mineflayer-statemachine'
 import { Vec3 } from 'vec3'
 
-module.exports = class BehaviorWithdrawItemChest {
-
+export default class BehaviorWithdrawItemChest implements StateBehavior {
+  active: boolean;
   readonly bot: Bot
   readonly targets: LegionStateMachineTargets
   stateName: string
@@ -18,6 +19,7 @@ module.exports = class BehaviorWithdrawItemChest {
   items: Array<ChestTransaction>
 
   constructor(bot: Bot, targets: LegionStateMachineTargets) {
+    this.active = false
     this.bot = bot
     this.targets = targets
     this.stateName = 'BehaviorWithdrawItemChest'
@@ -107,7 +109,7 @@ module.exports = class BehaviorWithdrawItemChest {
         chestToOpen.secondBlock = chestToOpen.position.offset(offset.x, offset.y, offset.z)
       }
 
-       //@ts-ignore pending to fix from mineflater
+      //@ts-ignore pending to fix from mineflater
       chestToOpen.dimension = this.bot.game.dimension as Dimensions // Todo mending mineflayer fix
 
       const chestIndext = Object.keys(this.targets.chests).length

@@ -1,7 +1,9 @@
 import { Bot, LegionStateMachineTargets, ShotDirection } from "@/types"
 import inventoryModule from '@/modules/inventoryModule'
 import botWebsocket from '@/modules/botWebsocket'
-module.exports = class BehaviorLongAttack {
+import { StateBehavior } from "mineflayer-statemachine"
+export default class BehaviorLongAttack implements StateBehavior {
+  active: boolean;
   readonly bot: Bot
   readonly targets: LegionStateMachineTargets
   stateName: string
@@ -17,6 +19,7 @@ module.exports = class BehaviorLongAttack {
   inventory: ReturnType<typeof inventoryModule>
 
   constructor(bot: Bot, targets: LegionStateMachineTargets) {
+    this.active = false
     this.bot = bot
     this.targets = targets
     this.stateName = 'BehaviorLongAttack'

@@ -3,8 +3,10 @@ import botWebsocket from '@/modules/botWebsocket'
 import { Bot, Dimensions, LegionStateMachineTargets, Vec3WithDimension } from '@/types'
 import mcDataLoader from 'minecraft-data'
 import movementModule from '@/modules/movementModule'
+import { StateBehavior } from 'mineflayer-statemachine'
 
-module.exports = class BehaviorMoveTo {
+export default class BehaviorMoveTo implements StateBehavior {
+  active: boolean
   readonly bot: Bot
   readonly targets: LegionStateMachineTargets
   readonly mcData: mcDataLoader.IndexedData
@@ -13,16 +15,15 @@ module.exports = class BehaviorMoveTo {
   y?: number
 
   currentDate?: number
-  timeout: number
-  active: boolean
   success: Boolean
   isEndFinished: boolean
   distance: number
   movements: Movements
   movementModule: ReturnType<typeof movementModule>
+  timeout?: number
   timeLimit?: ReturnType<typeof setTimeout>
 
-  constructor(bot: Bot, targets: LegionStateMachineTargets, timeout: number) {
+  constructor(bot: Bot, targets: LegionStateMachineTargets, timeout?: number) {
     this.stateName = 'moveTo'
     this.active = false
     this.timeout = timeout

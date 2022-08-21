@@ -1,5 +1,7 @@
 import { Bot, LegionStateMachineTargets, EntityWithDistance } from "@/types"
-module.exports = class BehaviorFindItems {
+import { StateBehavior } from "mineflayer-statemachine"
+export default class BehaviorFindItems implements StateBehavior {
+  active: boolean;
   readonly bot: Bot
   readonly targets: LegionStateMachineTargets
   stateName: string
@@ -11,6 +13,7 @@ module.exports = class BehaviorFindItems {
   isOnFloor: boolean
 
   constructor(bot: Bot, targets: LegionStateMachineTargets, distanceToFind: number = 15, isOnFloor: boolean = false) {
+    this.active = false
     this.bot = bot
     this.targets = targets
     this.stateName = 'BehaviorFindItems'

@@ -1,6 +1,8 @@
 import { Bot, LegionStateMachineTargets } from "@/types"
 import inventoryModule from '@/modules/inventoryModule'
-module.exports = class BehaviorGetReady {
+import { StateBehavior } from "mineflayer-statemachine"
+export default class BehaviorGetReady implements StateBehavior {
+  active: boolean;
   readonly bot: Bot
   readonly targets: LegionStateMachineTargets
   stateName: string
@@ -11,6 +13,7 @@ module.exports = class BehaviorGetReady {
 
   inventory: ReturnType<typeof inventoryModule>
   constructor(bot: Bot, targets: LegionStateMachineTargets) {
+    this.active = false
     this.bot = bot
     this.targets = targets
     this.stateName = 'BehaviorGetReady'

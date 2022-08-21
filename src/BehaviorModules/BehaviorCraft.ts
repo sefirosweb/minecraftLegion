@@ -4,8 +4,9 @@ import { Block } from 'prismarine-block'
 import mcDataLoader from 'minecraft-data'
 import botWebsocket from '@/modules/botWebsocket'
 import inventoryModule from '@/modules/inventoryModule'
-module.exports = class BehaviorCraft {
-
+import { StateBehavior } from "mineflayer-statemachine"
+export default class BehaviorCraft implements StateBehavior {
+  active: boolean;
   readonly bot: Bot
   readonly targets: LegionStateMachineTargets
   readonly mcData: mcDataLoader.IndexedData
@@ -21,6 +22,7 @@ module.exports = class BehaviorCraft {
   timeLimit?: ReturnType<typeof setTimeout>
 
   constructor(bot: Bot, targets: LegionStateMachineTargets) {
+    this.active = false
     this.bot = bot
     this.targets = targets
     this.stateName = 'BehaviorCraft'

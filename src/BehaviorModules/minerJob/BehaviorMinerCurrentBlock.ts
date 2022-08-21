@@ -1,9 +1,10 @@
 //@ts-nocheck
 
 import { Bot, LegionStateMachineTargets, MineCordsConfig } from '@/types'
+import { StateBehavior } from 'mineflayer-statemachine';
 import Vec3 from 'vec3'
-module.exports = class BehaviorMinerCurrentBlock {
-
+export default class BehaviorMinerCurrentBlock implements StateBehavior {
+  active: boolean;
   readonly bot: Bot;
   readonly targets: LegionStateMachineTargets;
   stateName: string;
@@ -30,6 +31,7 @@ module.exports = class BehaviorMinerCurrentBlock {
 
 
   constructor(bot: Bot, targets: LegionStateMachineTargets) {
+    this.active = false
     this.bot = bot
     this.targets = targets
     this.stateName = 'BehaviorMinerCurrentBlock'

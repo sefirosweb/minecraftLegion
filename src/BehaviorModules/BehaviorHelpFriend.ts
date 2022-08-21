@@ -1,9 +1,10 @@
 import botWebsocket, { BotFriends } from '@/modules/botWebsocket'
 import { Bot, EntityWithDistance, LegionStateMachineTargets } from '@/types'
+import { StateBehavior } from 'mineflayer-statemachine'
 import { Entity } from 'prismarine-entity'
 
-module.exports = class BehaviorHelpFriend {
-
+export default class BehaviorHelpFriend implements StateBehavior {
+  active: boolean;
   readonly bot: Bot
   readonly targets: LegionStateMachineTargets
   stateName: string
@@ -13,6 +14,7 @@ module.exports = class BehaviorHelpFriend {
   entity: Entity | undefined
 
   constructor(bot: Bot, targets: LegionStateMachineTargets) {
+    this.active = false
     this.bot = bot
     this.targets = targets
     this.stateName = 'BehaviorHelpFriend'

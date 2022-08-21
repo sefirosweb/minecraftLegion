@@ -3,8 +3,10 @@
 
 import botWebsocket from '@/modules/botWebsocket'
 import { Bot, LegionStateMachineTargets } from '@/types';
+import { StateBehavior } from 'mineflayer-statemachine';
 import vec3 from 'vec3'
-module.exports = class BehaviorcCheckItemsInChest {
+export default class BehaviorcCheckItemsInChest implements StateBehavior {
+  active: boolean;
   readonly bot: Bot;
   readonly targets: LegionStateMachineTargets;
   stateName: string;
@@ -13,6 +15,7 @@ module.exports = class BehaviorcCheckItemsInChest {
   canOpenChest: boolean
 
   constructor(bot: Bot, targets: LegionStateMachineTargets) {
+    this.active = false
     this.bot = bot
     this.targets = targets
     this.stateName = 'BehaviorcCheckItemsInChest'
