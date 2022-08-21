@@ -41,8 +41,8 @@ export default class BehaviorMinerCurrentLayer implements StateBehavior {
   }
 
   startLayer() {
-    if (!this.minerCords) {
-      throw new Error('Not setted: minerCords')
+    if (this.minerCords === undefined) {
+      throw new Error('Not setted: this.minerCords === undefined')
     }
 
     if (this.minerCords.tunel === 'vertically') {
@@ -72,18 +72,9 @@ export default class BehaviorMinerCurrentLayer implements StateBehavior {
   }
 
   onStateEntered() {
-    if (!this.minerCords) {
-      throw new Error('Not setted: minerCords')
+    if (this.minerCords === undefined || this.currentLayer === undefined || this.endLayer === undefined) {
+      throw new Error('Not setted: this.minerCords === undefined || this.currentLayer === undefined || this.endLayer === undefined')
     }
-
-    if (!this.currentLayer) {
-      throw new Error('Not setted: currentLayer')
-    }
-
-    if (!this.endLayer) {
-      throw new Error('Not setted: endLayer')
-    }
-
 
     if (this.minerCords.tunel === 'vertically' && this.currentLayer < this.endLayer) { this.isEndFinished = true }
 
@@ -103,13 +94,9 @@ export default class BehaviorMinerCurrentLayer implements StateBehavior {
   }
 
   next() {
-    if (!this.minerCords) {
-      throw new Error('Not setted: ')
+    if (this.minerCords === undefined || this.currentLayer === undefined) {
+      throw new Error('Not setted: this.minerCords === undefined || this.currentLayer === undefined')
     }
-    if (!this.currentLayer) {
-      return new Error('No currentLayer setted')
-    }
-
 
     switch (true) {
       case this.minerCords.tunel === 'vertically':
@@ -127,17 +114,11 @@ export default class BehaviorMinerCurrentLayer implements StateBehavior {
   }
 
   getCurrentLayerCoords(): MineCordsConfig {
-    if (!this.minerCords) {
-      throw new Error('Not setted: minerCords')
-    }
-    if (!this.currentLayer) {
-      throw new Error('Not setted: currentLayer')
+    if (this.minerCords === undefined || this.currentLayer === undefined) {
+      throw new Error('Not setted: this.minerCords === undefined || this.currentLayer === undefined')
     }
 
-    const minerCoords: MineCordsConfig = {
-      ...this.minerCords
-    }
-
+    const minerCoords = { ...this.minerCords }
 
     if (this.minerCords.tunel === 'vertically') { // => Y Layer
       minerCoords.xStart = this.minerCords.xStart

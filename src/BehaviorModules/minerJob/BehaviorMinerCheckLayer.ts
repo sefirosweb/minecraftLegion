@@ -1,11 +1,10 @@
-//@ts-nocheck
 import { Bot, LegionStateMachineTargets, MineCordsConfig } from "@/types"
 
 import mineflayerPathfinder from 'mineflayer-pathfinder'
-//@ts-ignore
-import botWebsocket from '@modules/botWebsocket'
+import botWebsocket from '@/modules/botWebsocket'
 import { Vec3 } from 'vec3'
 import { StateBehavior } from "mineflayer-statemachine";
+import { Block } from "prismarine-block";
 
 export default class BehaviorMinerCheckLayer implements StateBehavior {
   active: boolean;
@@ -14,6 +13,9 @@ export default class BehaviorMinerCheckLayer implements StateBehavior {
   stateName: string;
 
   isEndFinished: boolean;
+  isLayerFinished: boolean;
+
+
   foundLavaOrWater: boolean;
   minerCords: MineCordsConfig | undefined;
   blocksToFind: Array<string>;
@@ -38,6 +40,7 @@ export default class BehaviorMinerCheckLayer implements StateBehavior {
     this.stateName = 'BehaviorMinerCheckLayer'
 
     this.isEndFinished = false
+    this.isLayerFinished = false
     this.foundLavaOrWater = false
 
     this.blocksToFind = ['lava', 'water', 'bubble_column', 'seagrass', 'tall_seagrass', 'kelp', 'kelp_plant']
@@ -83,6 +86,10 @@ export default class BehaviorMinerCheckLayer implements StateBehavior {
 
   checkArea(): Promise<void> {
     return new Promise(async (resolve) => {
+      if (this.minerCords === undefined || this.xCurrent === undefined || this.yCurrent === undefined || this.zCurrent === undefined) {
+        throw new Error('No setted: this.minerCords === undefined || this.xCurrent === undefined || this.yCurrent === undefined || this.zCurrent === undefined')
+      }
+
       do {
         if (
           this.yCurrent === this.yEnd &&
@@ -112,10 +119,13 @@ export default class BehaviorMinerCheckLayer implements StateBehavior {
         if (!block) {
           botWebsocket.log(`Block: ${this.xCurrent} ${this.yCurrent} ${this.zCurrent} It is very far! I can't see the block, approaching the block to check it`)
           botWebsocket.log('Area less than 200 blocks radius distance is recommended')
-          const position = new Vec3(this.xCurrent, this.yCurrent, this.zCurrent)
           await this.moveToSeeBlock(this.xCurrent, this.yCurrent, this.zCurrent)
           this.bot.removeAllListeners('customEventPhysicTick')
           block = this.getBlockType()
+        }
+
+        if (block === null) {
+          throw new Error('Block is null')
         }
 
         if (this.checkValidBlock(block)) {
@@ -127,6 +137,10 @@ export default class BehaviorMinerCheckLayer implements StateBehavior {
   }
 
   next() {
+    if (this.minerCords === undefined) {
+      throw new Error('No setted: this.minerCords === undefined')
+    }
+
     if (this.minerCords.orientation === 'z-' || this.minerCords.orientation === 'z+') {
       this.zNext()
     }
@@ -136,6 +150,10 @@ export default class BehaviorMinerCheckLayer implements StateBehavior {
   }
 
   xNext() {
+    if (this.minerCords === undefined || this.xStart === undefined || this.xEnd === undefined || this.xCurrent === undefined) {
+      throw new Error('No setted: this.minerCords === undefined || this.xStart === undefined || this.xEnd === undefined || this.xCurrent === undefined')
+    }
+
     if (this.xCurrent === this.xEnd) {
       const temp = this.xEnd
       this.xEnd = this.xStart
@@ -156,10 +174,18 @@ export default class BehaviorMinerCheckLayer implements StateBehavior {
   }
 
   yNext() {
+    if (this.yCurrent === undefined) {
+      throw new Error('No setted: this.yCurrent === undefined')
+    }
+
     this.yCurrent--
   }
 
   zNext() {
+    if (this.minerCords === undefined || this.zStart === undefined || this.zEnd === undefined || this.zCurrent === undefined) {
+      throw new Error('No setted: this.minerCords === undefined || this.zStart === undefined || this.zEnd === undefined || this.zCurrent === undefined')
+    }
+
     if (this.zCurrent === this.zEnd) {
       const temp = this.zEnd
       this.zEnd = this.zStart
@@ -180,53 +206,63 @@ export default class BehaviorMinerCheckLayer implements StateBehavior {
   }
 
   getBlockType() {
+    if (this.xCurrent === undefined || this.yCurrent === undefined || this.zCurrent === undefined) {
+      throw new Error('No setted: this.xCurrent === undefined || this.yCurrent === undefined || this.zCurrent === undefined')
+    }
+
     const position = new Vec3(this.xCurrent, this.yCurrent, this.zCurrent)
     return this.bot.blockAt(position)
   }
 
-  setMinerCords(minerCords) {
+  setMinerCords(minerCords: MineCordsConfig) {
     this.isLayerFinished = false
     this.minerCords = minerCords
     this.startBlock()
   }
 
   startBlock() {
-    this.yStart = parseInt(this.minerCords.yStart) > parseInt(this.minerCords.yEnd) ? parseInt(this.minerCords.yStart) : parseInt(this.minerCords.yEnd)
-    this.yEnd = parseInt(this.minerCords.yStart) > parseInt(this.minerCords.yEnd) ? parseInt(this.minerCords.yEnd) : parseInt(this.minerCords.yStart)
+    if (this.minerCords === undefined) {
+      throw new Error('No setted: this.minerCords === undefined')
+    }
+
+    this.yStart = this.minerCords.yStart > this.minerCords.yEnd ? this.minerCords.yStart : this.minerCords.yEnd
+    this.yEnd = this.minerCords.yStart > this.minerCords.yEnd ? this.minerCords.yEnd : this.minerCords.yStart
 
     this.yStart++
     if (this.minerCords.tunel === 'horizontally') {
       this.yEnd--
     }
 
-    this.xStart = parseInt(this.minerCords.xStart) > parseInt(this.minerCords.xEnd) ? parseInt(this.minerCords.xStart) : parseInt(this.minerCords.xEnd)
-    this.xEnd = parseInt(this.minerCords.xStart) > parseInt(this.minerCords.xEnd) ? parseInt(this.minerCords.xEnd) : parseInt(this.minerCords.xStart)
+    this.xStart = this.minerCords.xStart > this.minerCords.xEnd ? this.minerCords.xStart : this.minerCords.xEnd
+    this.xEnd = this.minerCords.xStart > this.minerCords.xEnd ? this.minerCords.xEnd : this.minerCords.xStart
 
     switch (true) {
       case this.minerCords.orientation === 'x+':
-        this.xStart = parseInt(this.minerCords.xStart) > parseInt(this.minerCords.xEnd) ? parseInt(this.minerCords.xStart) : parseInt(this.minerCords.xEnd)
-        this.xEnd = parseInt(this.minerCords.xStart) > parseInt(this.minerCords.xEnd) ? parseInt(this.minerCords.xEnd) : parseInt(this.minerCords.xStart)
-        this.zStart = parseInt(this.minerCords.zStart) > parseInt(this.minerCords.zEnd) ? parseInt(this.minerCords.zStart) : parseInt(this.minerCords.zEnd)
-        this.zEnd = parseInt(this.minerCords.zStart) > parseInt(this.minerCords.zEnd) ? parseInt(this.minerCords.zEnd) : parseInt(this.minerCords.zStart)
+        this.xStart = this.minerCords.xStart > this.minerCords.xEnd ? this.minerCords.xStart : this.minerCords.xEnd
+        this.xEnd = this.minerCords.xStart > this.minerCords.xEnd ? this.minerCords.xEnd : this.minerCords.xStart
+        this.zStart = this.minerCords.zStart > this.minerCords.zEnd ? this.minerCords.zStart : this.minerCords.zEnd
+        this.zEnd = this.minerCords.zStart > this.minerCords.zEnd ? this.minerCords.zEnd : this.minerCords.zStart
         break
       case this.minerCords.orientation === 'x-':
-        this.xStart = parseInt(this.minerCords.xStart) < parseInt(this.minerCords.xEnd) ? parseInt(this.minerCords.xStart) : parseInt(this.minerCords.xEnd)
-        this.xEnd = parseInt(this.minerCords.xStart) < parseInt(this.minerCords.xEnd) ? parseInt(this.minerCords.xEnd) : parseInt(this.minerCords.xStart)
-        this.zStart = parseInt(this.minerCords.zStart) < parseInt(this.minerCords.zEnd) ? parseInt(this.minerCords.zStart) : parseInt(this.minerCords.zEnd)
-        this.zEnd = parseInt(this.minerCords.zStart) < parseInt(this.minerCords.zEnd) ? parseInt(this.minerCords.zEnd) : parseInt(this.minerCords.zStart)
+        this.xStart = this.minerCords.xStart < this.minerCords.xEnd ? this.minerCords.xStart : this.minerCords.xEnd
+        this.xEnd = this.minerCords.xStart < this.minerCords.xEnd ? this.minerCords.xEnd : this.minerCords.xStart
+        this.zStart = this.minerCords.zStart < this.minerCords.zEnd ? this.minerCords.zStart : this.minerCords.zEnd
+        this.zEnd = this.minerCords.zStart < this.minerCords.zEnd ? this.minerCords.zEnd : this.minerCords.zStart
         break
       case this.minerCords.orientation === 'z+':
-        this.xStart = parseInt(this.minerCords.xStart) > parseInt(this.minerCords.xEnd) ? parseInt(this.minerCords.xStart) : parseInt(this.minerCords.xEnd)
-        this.xEnd = parseInt(this.minerCords.xStart) > parseInt(this.minerCords.xEnd) ? parseInt(this.minerCords.xEnd) : parseInt(this.minerCords.xStart)
-        this.zStart = parseInt(this.minerCords.zStart) < parseInt(this.minerCords.zEnd) ? parseInt(this.minerCords.zStart) : parseInt(this.minerCords.zEnd)
-        this.zEnd = parseInt(this.minerCords.zStart) < parseInt(this.minerCords.zEnd) ? parseInt(this.minerCords.zEnd) : parseInt(this.minerCords.zStart)
+        this.xStart = this.minerCords.xStart > this.minerCords.xEnd ? this.minerCords.xStart : this.minerCords.xEnd
+        this.xEnd = this.minerCords.xStart > this.minerCords.xEnd ? this.minerCords.xEnd : this.minerCords.xStart
+        this.zStart = this.minerCords.zStart < this.minerCords.zEnd ? this.minerCords.zStart : this.minerCords.zEnd
+        this.zEnd = this.minerCords.zStart < this.minerCords.zEnd ? this.minerCords.zEnd : this.minerCords.zStart
         break
       case this.minerCords.orientation === 'z-':
-        this.xStart = parseInt(this.minerCords.xStart) < parseInt(this.minerCords.xEnd) ? parseInt(this.minerCords.xStart) : parseInt(this.minerCords.xEnd)
-        this.xEnd = parseInt(this.minerCords.xStart) < parseInt(this.minerCords.xEnd) ? parseInt(this.minerCords.xEnd) : parseInt(this.minerCords.xStart)
-        this.zStart = parseInt(this.minerCords.zStart) > parseInt(this.minerCords.zEnd) ? parseInt(this.minerCords.zStart) : parseInt(this.minerCords.zEnd)
-        this.zEnd = parseInt(this.minerCords.zStart) > parseInt(this.minerCords.zEnd) ? parseInt(this.minerCords.zEnd) : parseInt(this.minerCords.zStart)
+        this.xStart = this.minerCords.xStart < this.minerCords.xEnd ? this.minerCords.xStart : this.minerCords.xEnd
+        this.xEnd = this.minerCords.xStart < this.minerCords.xEnd ? this.minerCords.xEnd : this.minerCords.xStart
+        this.zStart = this.minerCords.zStart > this.minerCords.zEnd ? this.minerCords.zStart : this.minerCords.zEnd
+        this.zEnd = this.minerCords.zStart > this.minerCords.zEnd ? this.minerCords.zEnd : this.minerCords.zStart
         break
+      default:
+        throw new Error('Wrong this.minerCords.orientation value')
     }
 
     let temp
@@ -261,12 +297,16 @@ export default class BehaviorMinerCheckLayer implements StateBehavior {
       }
     }
 
-    this.yCurrent = parseInt(this.yStart)
-    this.xCurrent = parseInt(this.xStart)
-    this.zCurrent = parseInt(this.zStart)
+    this.yCurrent = this.yStart
+    this.xCurrent = this.xStart
+    this.zCurrent = this.zStart
   }
 
-  checkValidBlock(block) {
+  checkValidBlock(block: Block) {
+    if (this.minerCords === undefined) {
+      throw new Error('No setted: this.minerCords === undefined')
+    }
+
     if (this.blocksToFind.includes(block.name) ||
       (
         this.floorBlocksToFind.includes(block.name) &&

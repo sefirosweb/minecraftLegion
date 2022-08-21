@@ -1,8 +1,6 @@
-//@ts-nocheck
-
 import { Bot, LegionStateMachineTargets, MineCordsConfig } from '@/types'
 import { StateBehavior } from 'mineflayer-statemachine';
-import Vec3 from 'vec3'
+import { Vec3 } from 'vec3'
 export default class BehaviorMinerCurrentBlock implements StateBehavior {
   active: boolean;
   readonly bot: Bot;
@@ -28,6 +26,7 @@ export default class BehaviorMinerCurrentBlock implements StateBehavior {
   zEnd: number | undefined
   xEnd: number | undefined
 
+  getBlockInfo: boolean
 
 
   constructor(bot: Bot, targets: LegionStateMachineTargets) {
@@ -41,6 +40,7 @@ export default class BehaviorMinerCurrentBlock implements StateBehavior {
     this.isLayerFinished = false
     this.isEndFinished = false
     this.firstBlockOnLayer = true
+    this.getBlockInfo = false
   }
 
   isFinished() {
@@ -55,7 +55,7 @@ export default class BehaviorMinerCurrentBlock implements StateBehavior {
     return this.isLayerFinished
   }
 
-  setMinerCords(minerCords) {
+  setMinerCords(minerCords: MineCordsConfig) {
     this.isLayerFinished = false
     this.firstBlockOnLayer = true
     this.minerCords = minerCords
@@ -63,14 +63,18 @@ export default class BehaviorMinerCurrentBlock implements StateBehavior {
   }
 
   startBlock() {
-    this.yStart = parseInt(this.minerCords.yStart) > parseInt(this.minerCords.yEnd) ? parseInt(this.minerCords.yEnd) : parseInt(this.minerCords.yStart)
-    this.yEnd = parseInt(this.minerCords.yStart) > parseInt(this.minerCords.yEnd) ? parseInt(this.minerCords.yStart) : parseInt(this.minerCords.yEnd)
+    if (this.minerCords === undefined) {
+      throw new Error('No setted: this.minerCords === undefined')
+    }
 
-    this.xStart = parseInt(this.minerCords.xStart) > parseInt(this.minerCords.xEnd) ? parseInt(this.minerCords.xEnd) : parseInt(this.minerCords.xStart)
-    this.xEnd = parseInt(this.minerCords.xStart) > parseInt(this.minerCords.xEnd) ? parseInt(this.minerCords.xStart) : parseInt(this.minerCords.xEnd)
+    this.yStart = this.minerCords.yStart > this.minerCords.yEnd ? this.minerCords.yEnd : this.minerCords.yStart
+    this.yEnd = this.minerCords.yStart > this.minerCords.yEnd ? this.minerCords.yStart : this.minerCords.yEnd
 
-    this.zStart = parseInt(this.minerCords.zStart) > parseInt(this.minerCords.zEnd) ? parseInt(this.minerCords.zEnd) : parseInt(this.minerCords.zStart)
-    this.zEnd = parseInt(this.minerCords.zStart) > parseInt(this.minerCords.zEnd) ? parseInt(this.minerCords.zStart) : parseInt(this.minerCords.zEnd)
+    this.xStart = this.minerCords.xStart > this.minerCords.xEnd ? this.minerCords.xEnd : this.minerCords.xStart
+    this.xEnd = this.minerCords.xStart > this.minerCords.xEnd ? this.minerCords.xStart : this.minerCords.xEnd
+
+    this.zStart = this.minerCords.zStart > this.minerCords.zEnd ? this.minerCords.zEnd : this.minerCords.zStart
+    this.zEnd = this.minerCords.zStart > this.minerCords.zEnd ? this.minerCords.zStart : this.minerCords.zEnd
 
     let temp
 
@@ -117,6 +121,11 @@ export default class BehaviorMinerCurrentBlock implements StateBehavior {
   }
 
   checkSand() {
+    if (this.minerCords === undefined) {
+      throw new Error('No setted: this.minerCords === undefined')
+    }
+
+
     if (this.minerCords.tunel === 'vertically') {
       return false
     }
@@ -124,12 +133,16 @@ export default class BehaviorMinerCurrentBlock implements StateBehavior {
     const temp = this.yEnd
     this.yEnd = this.yStart
     this.yStart = temp
-    this.yCurrent = parseInt(this.yStart)
+    this.yCurrent = this.yStart
 
     return this.nextBlock(false)
   }
 
-  nextBlock(allBlocks) {
+  nextBlock(allBlocks: boolean): boolean {
+    if (this.minerCords === undefined) {
+      throw new Error('No setted: this.minerCords === undefined')
+    }
+
     if (
       this.yCurrent === this.yEnd &&
       this.zCurrent === this.zEnd &&
@@ -152,13 +165,19 @@ export default class BehaviorMinerCurrentBlock implements StateBehavior {
         return this.nextBlock(allBlocks)
       }
     }
+
+    return false
   }
 
-  calculateIsValid(allBlocks) {
+  calculateIsValid(allBlocks: boolean) {
+    if (this.xCurrent === undefined || this.yCurrent === undefined || this.zCurrent === undefined) {
+      throw new Error('No setted: this.xCurrent === undefined || this.yCurrent === undefined || this.zCurrent === undefined')
+    }
+
     const position = new Vec3(this.xCurrent, this.yCurrent, this.zCurrent)
 
-    if (!allBlocks) { // Check over block is sand
-      position.add(Vec3(0, 1, 0))
+    if (!allBlocks) {
+      position.add(new Vec3(0, 1, 0))
     }
 
     const block = this.bot.blockAt(position)
@@ -184,6 +203,9 @@ export default class BehaviorMinerCurrentBlock implements StateBehavior {
   }
 
   yNext() {
+    if (this.yCurrent === undefined || this.yEnd === undefined) {
+      throw new Error('No setted: this.yCurrent === undefined || this.yEnd === undefined')
+    }
     if (this.yCurrent < this.yEnd) {
       this.yCurrent++
     } else {
@@ -192,6 +214,10 @@ export default class BehaviorMinerCurrentBlock implements StateBehavior {
   }
 
   xNext() {
+    if (this.minerCords === undefined || this.xCurrent === undefined || this.xStart === undefined || this.xEnd === undefined) {
+      throw new Error('No setted: this.minerCords === undefined || this.xCurrent === undefined || this.xStart === undefined || this.xEnd === undefined')
+    }
+
     if (this.xCurrent === this.xEnd) {
       const temp = this.xEnd
       this.xEnd = this.xStart
@@ -216,6 +242,10 @@ export default class BehaviorMinerCurrentBlock implements StateBehavior {
   }
 
   zNext() {
+    if (this.minerCords === undefined || this.zStart === undefined || this.zEnd === undefined || this.zCurrent === undefined) {
+      throw new Error('No setted: this.minerCords === undefined || this.zStart === undefined || this.zEnd === undefined || this.zCurrent === undefined')
+    }
+
     if (this.zCurrent === this.zEnd) {
       const temp = this.zEnd
       this.zEnd = this.zStart
