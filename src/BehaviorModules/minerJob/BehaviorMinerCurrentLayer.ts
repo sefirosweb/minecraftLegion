@@ -1,4 +1,3 @@
-//@ts-nocheck
 
 import { Bot, LegionStateMachineTargets, MineCordsConfig } from '@/types'
 
@@ -25,7 +24,7 @@ export default class BehaviorMinerCurrentLayer implements StateBehavior {
     this.targets = targets
     this.stateName = 'BehaviorMinerCurrentLayer'
 
-    this.nextLayer = false
+    // this.nextLayer = false
     this.isEndFinished = false
     this.xIsInverted = false
   }
@@ -34,41 +33,58 @@ export default class BehaviorMinerCurrentLayer implements StateBehavior {
     return this.isEndFinished
   }
 
-  setMinerCords(minerCords) {
-    botWebsocket.log('BehaviorMinerCurrentLayer: Set new coords', minerCords)
+  setMinerCords(minerCords: MineCordsConfig) {
+    botWebsocket.log('BehaviorMinerCurrentLayer: Set new coords' + JSON.stringify(minerCords))
     this.minerCords = minerCords
     this.isEndFinished = false
     this.startLayer()
   }
 
   startLayer() {
+    if (!this.minerCords) {
+      return new Error('No mineCords setted')
+    }
+
     if (this.minerCords.tunel === 'vertically') {
-      this.currentLayer = Math.max(parseInt(this.minerCords.yStart), parseInt(this.minerCords.yEnd))
-      this.endLayer = Math.min(parseInt(this.minerCords.yStart), parseInt(this.minerCords.yEnd))
+      this.currentLayer = Math.max(this.minerCords.yStart, this.minerCords.yEnd)
+      this.endLayer = Math.min(this.minerCords.yStart, this.minerCords.yEnd)
     } else {
       // N & S => Z
       if (this.minerCords.orientation === 'z-') {
-        this.currentLayer = Math.max(parseInt(this.minerCords.zStart), parseInt(this.minerCords.zEnd))
-        this.endLayer = Math.min(parseInt(this.minerCords.zStart), parseInt(this.minerCords.zEnd))
+        this.currentLayer = Math.max(this.minerCords.zStart, this.minerCords.zEnd)
+        this.endLayer = Math.min(this.minerCords.zStart, this.minerCords.zEnd)
       }
       if (this.minerCords.orientation === 'z+') {
-        this.currentLayer = Math.min(parseInt(this.minerCords.zStart), parseInt(this.minerCords.zEnd))
-        this.endLayer = Math.max(parseInt(this.minerCords.zStart), parseInt(this.minerCords.zEnd))
+        this.currentLayer = Math.min(this.minerCords.zStart, this.minerCords.zEnd)
+        this.endLayer = Math.max(this.minerCords.zStart, this.minerCords.zEnd)
       }
 
       if (this.minerCords.orientation === 'x+') {
-        this.currentLayer = Math.min(parseInt(this.minerCords.xStart), parseInt(this.minerCords.xEnd))
-        this.endLayer = Math.max(parseInt(this.minerCords.xStart), parseInt(this.minerCords.xEnd))
+        this.currentLayer = Math.min(this.minerCords.xStart, this.minerCords.xEnd)
+        this.endLayer = Math.max(this.minerCords.xStart, this.minerCords.xEnd)
       }
 
       if (this.minerCords.orientation === 'x-') {
-        this.currentLayer = Math.max(parseInt(this.minerCords.xStart), parseInt(this.minerCords.xEnd))
-        this.endLayer = Math.min(parseInt(this.minerCords.xStart), parseInt(this.minerCords.xEnd))
+        this.currentLayer = Math.max(this.minerCords.xStart, this.minerCords.xEnd)
+        this.endLayer = Math.min(this.minerCords.xStart, this.minerCords.xEnd)
       }
     }
   }
 
   onStateEntered() {
+    if (!this.minerCords) {
+      return new Error('No mineCords setted')
+    }
+
+    if (!this.currentLayer) {
+      return new Error('No currentLayer setted')
+    }
+
+    if (!this.endLayer) {
+      return new Error('No v setted')
+    }
+
+
     if (this.minerCords.tunel === 'vertically' && this.currentLayer < this.endLayer) { this.isEndFinished = true }
 
     if (this.minerCords.tunel === 'horizontally' && this.currentLayer < this.endLayer &&
