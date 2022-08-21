@@ -2,8 +2,9 @@
 import { Bot, DepositType, LegionStateMachineTargets, Item } from "@/types"
 import inventoryModule from '@/modules/inventoryModule'
 import { Item as McItem } from "prismarine-item"
-
-module.exports = class BehaviorCheckItemsInInventory {
+import { StateBehavior } from "mineflayer-statemachine"
+export default class BehaviorCheckItemsInInventory implements StateBehavior {
+  active: boolean;
   readonly bot: Bot
   readonly targets: LegionStateMachineTargets
   stateName: string
@@ -16,7 +17,7 @@ module.exports = class BehaviorCheckItemsInInventory {
   inventoryModule: ReturnType<typeof inventoryModule>
 
   constructor(bot: Bot, targets: LegionStateMachineTargets, itemsToCheck: Array<any> = [], isDeposit: DepositType = 'deposit') {
-
+    this.active = false
     this.bot = bot
     this.targets = targets
     this.stateName = 'BehaviorCheckItemsInInventory'

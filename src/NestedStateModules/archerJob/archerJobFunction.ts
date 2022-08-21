@@ -13,8 +13,7 @@ import { Entity } from 'prismarine-entity'
 import botWebsocket from '@modules/botWebsocket'
 //@ts-ignore
 import BehaviorAttack from '@/BehaviorModules/BehaviorAttack'
-import { Bot } from 'mineflayer'
-import { LegionStateMachineTargets } from '@/types'
+import { Bot, LegionStateMachineTargets } from '@/types'
 
 function archerJobFunction(bot: Bot, targets: LegionStateMachineTargets) {
   const enter = new BehaviorIdle()
@@ -57,7 +56,7 @@ function archerJobFunction(bot: Bot, targets: LegionStateMachineTargets) {
       parent: followMob,
       child: attack,
       name: 'Mob is near',
-      shouldTransition: () => followMob.distanceToTarget() < 2 && attack.nextAttack() && targets.entity?.isValid
+      shouldTransition: () => followMob.distanceToTarget() < 2 && attack.nextAttack() && (targets.entity?.isValid ?? false)
     }),
 
     new StateTransition({
@@ -71,7 +70,7 @@ function archerJobFunction(bot: Bot, targets: LegionStateMachineTargets) {
       parent: attack,
       child: attack,
       name: 'Mob still near continue attack',
-      shouldTransition: () => followMob.distanceToTarget() < 2 && attack.nextAttack() && targets.entity?.isValid
+      shouldTransition: () => followMob.distanceToTarget() < 2 && attack.nextAttack() && (targets.entity?.isValid ?? false)
     }),
 
     new StateTransition({

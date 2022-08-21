@@ -108,13 +108,13 @@ function slaughterhouseFunction(bot: Bot, targets: LegionStateMachineTargets) {
     new StateTransition({
       parent: followMob,
       child: attack,
-      shouldTransition: () => targets.entity && followMob.distanceToTarget() < rangeSword && attack.nextAttack() && targets.entity.isValid
+      shouldTransition: () => targets.entity !== undefined && followMob.distanceToTarget() < rangeSword && attack.nextAttack() && (targets.entity?.isValid ?? false)
     }),
 
     new StateTransition({
       parent: attack,
       child: attack,
-      shouldTransition: () => targets.entity && followMob.distanceToTarget() < rangeSword && attack.nextAttack() && targets.entity.isValid
+      shouldTransition: () => targets.entity !== undefined && followMob.distanceToTarget() < rangeSword && attack.nextAttack() && targets.entity.isValid
     }),
 
     new StateTransition({

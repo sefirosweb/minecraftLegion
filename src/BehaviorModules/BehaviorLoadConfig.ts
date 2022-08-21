@@ -3,13 +3,14 @@
 import { Bot, LegionStateMachineTargets } from "@/types"
 import botConfigLoader from '@/modules/botConfig'
 
-module.exports = class BehaviorLoadConfig {
+export default class BehaviorLoadConfig implements StateBehavior {
 
   readonly bot: Bot
   readonly targets: LegionStateMachineTargets
   stateName: string
   x?: number
   y?: number
+  active: true
 
   playername?: string
 
