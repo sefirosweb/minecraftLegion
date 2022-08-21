@@ -42,11 +42,11 @@ export default class BehaviorMoveTo implements StateBehavior {
   onStateEntered() {
     this.isEndFinished = false
     this.success = false
-    this.bot.on('path_update', (r) => {
-      if (r.status === 'noPath') {
-        console.log('[MoveTo] No path to target!')
-      }
-    })
+    // this.bot.on('path_update', (r) => {
+    //   if (r.status === 'noPath') {
+    //     console.log('[MoveTo] No path to target!')
+    //   }
+    // })
 
     this.currentDate = Date.now()
 

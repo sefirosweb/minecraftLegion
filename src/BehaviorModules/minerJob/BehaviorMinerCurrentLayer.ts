@@ -42,7 +42,7 @@ export default class BehaviorMinerCurrentLayer implements StateBehavior {
 
   startLayer() {
     if (!this.minerCords) {
-      return new Error('No mineCords setted')
+      throw new Error('Not setted: minerCords')
     }
 
     if (this.minerCords.tunel === 'vertically') {
@@ -73,15 +73,15 @@ export default class BehaviorMinerCurrentLayer implements StateBehavior {
 
   onStateEntered() {
     if (!this.minerCords) {
-      return new Error('No mineCords setted')
+      throw new Error('Not setted: minerCords')
     }
 
     if (!this.currentLayer) {
-      return new Error('No currentLayer setted')
+      throw new Error('Not setted: currentLayer')
     }
 
     if (!this.endLayer) {
-      return new Error('No v setted')
+      throw new Error('Not setted: endLayer')
     }
 
 
@@ -103,6 +103,14 @@ export default class BehaviorMinerCurrentLayer implements StateBehavior {
   }
 
   next() {
+    if (!this.minerCords) {
+      throw new Error('Not setted: ')
+    }
+    if (!this.currentLayer) {
+      return new Error('No currentLayer setted')
+    }
+
+
     switch (true) {
       case this.minerCords.tunel === 'vertically':
         this.currentLayer--
@@ -118,42 +126,48 @@ export default class BehaviorMinerCurrentLayer implements StateBehavior {
     }
   }
 
-  getCurrentLayerCoords() {
-    const minerCoords: MineCordsConfig = {}
-    minerCoords.orientation = this.minerCords.orientation
-    minerCoords.tunel = this.minerCords.tunel
-    minerCoords.reverse = this.minerCords.reverse
+  getCurrentLayerCoords(): MineCordsConfig {
+    if (!this.minerCords) {
+      throw new Error('Not setted: minerCords')
+    }
+    if (!this.currentLayer) {
+      throw new Error('Not setted: currentLayer')
+    }
+
+    const minerCoords: MineCordsConfig = {
+      ...this.minerCords
+    }
+
 
     if (this.minerCords.tunel === 'vertically') { // => Y Layer
-      minerCoords.xStart = parseInt(this.minerCords.xStart)
-      minerCoords.xEnd = parseInt(this.minerCords.xEnd)
+      minerCoords.xStart = this.minerCords.xStart
+      minerCoords.xEnd = this.minerCords.xEnd
 
-      minerCoords.yStart = parseInt(this.currentLayer)
-      minerCoords.yEnd = parseInt(this.currentLayer)
+      minerCoords.yStart = this.currentLayer
+      minerCoords.yEnd = this.currentLayer
 
-      minerCoords.zStart = parseInt(this.minerCords.zStart)
-      minerCoords.zEnd = parseInt(this.minerCords.zEnd)
+      minerCoords.zStart = this.minerCords.zStart
+      minerCoords.zEnd = this.minerCords.zEnd
     } else {
-      minerCoords.yStart = Math.min(parseInt(this.minerCords.yStart), parseInt(this.minerCords.yEnd))
-      minerCoords.yEnd = Math.max(parseInt(this.minerCords.yStart), parseInt(this.minerCords.yEnd))
+      minerCoords.yStart = Math.min(this.minerCords.yStart, this.minerCords.yEnd)
+      minerCoords.yEnd = Math.max(this.minerCords.yStart, this.minerCords.yEnd)
 
       if (this.minerCords.orientation === 'z-' || this.minerCords.orientation === 'z+') { // => Z Layer
-        minerCoords.xStart = parseInt(this.minerCords.xStart)
-        minerCoords.xEnd = parseInt(this.minerCords.xEnd)
+        minerCoords.xStart = this.minerCords.xStart
+        minerCoords.xEnd = this.minerCords.xEnd
 
-        minerCoords.zStart = parseInt(this.currentLayer)
-        minerCoords.zEnd = parseInt(this.currentLayer)
+        minerCoords.zStart = this.currentLayer
+        minerCoords.zEnd = this.currentLayer
       }
 
       if (this.minerCords.orientation === 'x+' || this.minerCords.orientation === 'x-') { // => X Layer
-        minerCoords.xStart = parseInt(this.currentLayer)
-        minerCoords.xEnd = parseInt(this.currentLayer)
+        minerCoords.xStart = this.currentLayer
+        minerCoords.xEnd = this.currentLayer
 
-        minerCoords.zStart = parseInt(this.minerCords.zStart)
-        minerCoords.zEnd = parseInt(this.minerCords.zEnd)
+        minerCoords.zStart = this.minerCords.zStart
+        minerCoords.zEnd = this.minerCords.zEnd
       }
-      // TODO X Layer
-      // throw console.error('No soportado otro metodo')
+
     }
 
     return minerCoords
