@@ -1,13 +1,17 @@
 
-//@ts-nocheck
-const startTests = (tests) => {
+type Test = Array<{
+    name: string,
+    f: () => Promise<void>
+}>
+
+const startTests = (tests: Test): Promise<void> => {
     return new Promise(resolve => {
-        if (tests.length === 0) {
+        const test = tests.shift()
+        if (!test) {
             resolve()
             return
         }
 
-        const test = tests.shift()
         console.log(`Starting`, test.name)
         test.f()
             .then(() => {
