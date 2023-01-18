@@ -1,11 +1,11 @@
 
-import { Bot, LegionStateMachineTargets } from "@/types"
 import botWebsocket from '@/modules/botWebsocket'
 import digBlockModule from '@/modules/digBlockModule'
 import placeBlockModule from '@/modules/placeBlockModule'
 import inventoryModule from '@/modules/inventoryModule'
 import { Vec3 } from "vec3"
 import { StateBehavior } from "mineflayer-statemachine"
+import { Bot, LegionStateMachineTargets } from '@/types'
 export default class BehaviorCustomPlaceBlock implements StateBehavior {
   active: boolean;
   readonly bot: Bot
@@ -121,7 +121,7 @@ export default class BehaviorCustomPlaceBlock implements StateBehavior {
     }
   }
 
-  placeBlock() {
+  placeBlock(): Promise<void> {
     return new Promise((resolve, reject) => {
       this.equipHeldItem(this.targets.item.name)
         .then(() => {
@@ -138,10 +138,12 @@ export default class BehaviorCustomPlaceBlock implements StateBehavior {
           this.place(this.targets.position, this.offset, this.canJump)
             .then(() => {
               this.isEndFinished = true
+              resolve()
             })
             .catch(() => {
               this.cantPlaceBlock = true
               this.isEndFinished = true
+              reject()
             })
         })
     })
