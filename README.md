@@ -4,13 +4,12 @@ Minecraft multipurpose bot
 
 This project are based on <a target="_blank" href="https://github.com/PrismarineJS/mineflayer">mineflayer</a> & PrismarineJS repository
 
-This program is part of the 3 of this project,
-Each part can be run independently,
-The other 2 parts are <a target="_blank" href="https://github.com/sefirosweb/minecraftLegionWebServer">minecraftLegionWebServer</a> & <a href="https://github.com/sefirosweb/minecraftLegionWebClient">minecraftLegionWebClient</a>
+This program is part of the 3 of this project, Each part can be run independently, The other 2 parts are <a target="_blank" href="https://github.com/sefirosweb/minecraftLegionWebServer">minecraftLegionWebServer</a> & <a href="https://github.com/sefirosweb/minecraftLegionWebClient">minecraftLegionWebClient</a>
 
 I recommend using the other two modules to help the bots communicate and take commands through the WebUI.
 
 ## Watch the videos so you can see what it can do for you
+
 https://www.youtube.com/watch?v=QIz6o7cJITg&list=PLPwIRDkD3kwSdQ04LnzcGrLrlST9XoKjk&index=5
 
 ## Install with docker
@@ -48,7 +47,8 @@ cd minecraftLegion
 module.exports = config
 
 ```
-5. Copy and edit the  cp src/custom_start/custom_example.ts src/custom_start/custom.ts
+
+5. Copy and edit the cp src/custom_start/custom_example.ts src/custom_start/custom.ts
 
 6. Start docker with node
 
@@ -77,7 +77,9 @@ For download and install frontend go to <a target="_blank" href="https://github.
 ![image](https://raw.githubusercontent.com/sefirosweb/minecraftLegion/master/docs/LoadBot.png)
 
 ## Next usages
+
 For start again the bot only you need to start docker and start the node:
+
 ```
 docker run --rm -it --name minecraftLegion  --network minecraftLegionNetwork -v $PWD:/home/app -w /home/app -u node -p 4500-4550:4500-4550 -p 9229:9229 node:16.13-bullseye /bin/bash
 ```
@@ -87,21 +89,27 @@ node index.js
 ```
 
 ## Manual update
+
 You need to "pull" the new code and install the new dependencies
 
 ```
 git pull
 ```
+
 Start docker:
 
 ```
 docker run --rm -it --name minecraftLegion  --network minecraftLegionNetwork -v $PWD:/home/app -w /home/app -u node -p 4500-4550:4500-4550 -p 9229:9229 node:16.13-bullseye /bin/bash
 ```
+
 Install new dependencies:
+
 ```
 npm install
 ```
+
 Start bot
+
 ```
 node index.js
 ```
@@ -150,8 +158,7 @@ to finish commands
 
 - `bye`
 
-For mining xyz_start xyz_end start_horientantion vertically / horizontalle
-set miner x y z x y z x+ horizontally
+For mining xyz_start xyz_end start_horientantion vertically / horizontalle set miner x y z x y z x+ horizontally
 
 # Current Jobs
 
@@ -169,6 +176,14 @@ set miner x y z x y z x+ horizontally
 - Sorter Job
   - The bot search all nearest chest and they sort all items based on ID item
   - Also send to the server and other bots you have in each chest, NOW ALL BOTS GO DIRECTLY TO THE CHEST THAT STORES THE ITEM!
+
+# TESTS
+
+To usage test must be installed JAVA for open the local server or use docker
+
+- Start local server: `npm run start_server_test`
+- Start bot tests: `npm run docker` -> `npm run test`
+- Start specific test: `npm run test -- --custom 04`
 
 # TODO
 

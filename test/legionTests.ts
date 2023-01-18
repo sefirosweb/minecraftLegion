@@ -135,9 +135,19 @@ describe(`mineflayer_external ${version.minecraftVersion}`, function () {
     }
   })
 
+  const customIndex = process.argv.indexOf('--custom');
+  let customValue;
+
+  if (customIndex > -1) {
+    customValue = process.argv[customIndex + 1];
+  }
+
+  const custom = (customValue || '');
+
   const externalTestsFolder = path.resolve(__dirname, './legionTests')
   fs.readdirSync(externalTestsFolder)
     .filter(file => fs.statSync(path.join(externalTestsFolder, file)).isFile())
+    .filter(file => file.includes(custom))
     .forEach((test) => {
       test = path.basename(test, '.js')
 
