@@ -6,6 +6,8 @@ require("module-alias/register");
 import botWebsocket from "@/modules/botWebsocket";
 import mcDataLoader from 'minecraft-data'
 import { Bot } from "./types";
+import mineflayerPathfinder from 'mineflayer-pathfinder'
+import StartStateMachine from '@/NestedStateModules/startStateMachine'
 
 export type Props = {
   botName?: string;
@@ -37,7 +39,7 @@ export const createNewBot = (props: Props): Bot => {
   botWebsocket.loadBot(bot);
   bot.setMaxListeners(0);
   bot.once("inject_allowed", () => {
-    bot.loadPlugin(require("mineflayer-pathfinder").pathfinder);
+    bot.loadPlugin(mineflayerPathfinder.pathfinder);
     const mcData = mcDataLoader(bot.version)
     mcData.blocksArray[826].hardness = 3 // hotfix until wait a final relase
     mcData.blocksArray[274].boundingBox = 'block' // hot fix for cross the portal of the end
@@ -65,10 +67,10 @@ export const createNewBot = (props: Props): Bot => {
     if (customStart) {
       const { start } = customStartLoader(bot);
       start().then(() => {
-        require("@NestedStateModules/startStateMachine")(bot);
+        StartStateMachine(bot);
       });
     } else {
-      require("@NestedStateModules/startStateMachine")(bot);
+      StartStateMachine(bot);
     }
   });
 

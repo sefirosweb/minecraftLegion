@@ -6,7 +6,7 @@ import {
 } from 'mineflayer-statemachine'
 import BehaviorGetReady from '@/BehaviorModules/BehaviorGetReady'
 import BehaviorEquipAll from '@/BehaviorModules/BehaviorEquipAll'
-import { Bot, LegionStateMachineTargets } from '@/types'
+import GoChestsFunctions from '@/NestedStateModules/getReady/goChestsFunctions'
 
 function getReadyFunction(bot, targets) {
   const start = new BehaviorIdle(targets)
@@ -19,7 +19,7 @@ function getReadyFunction(bot, targets) {
   exit.x = 125
   exit.y = 313
 
-  const goChests = require('@NestedStateModules/getReady/goChestsFunctions')(bot, targets)
+  const goChests = GoChestsFunctions(bot, targets)
   goChests.x = 725
   goChests.y = 313
 
@@ -66,9 +66,9 @@ function getReadyFunction(bot, targets) {
     })
   ]
 
-  const getReadyFunction = new NestedStateMachine(transitions, start, exit)
-  getReadyFunction.stateName = 'getReadyFunction'
-  return getReadyFunction
+  const nestedState = new NestedStateMachine(transitions, start, exit)
+  nestedState.stateName = 'getReadyFunction'
+  return nestedState
 }
 
-module.exports = getReadyFunction
+export default getReadyFunction

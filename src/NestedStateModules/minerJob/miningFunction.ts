@@ -17,6 +17,8 @@ import BehaviorDigBlock from '@/BehaviorModules/BehaviorDigBlock'
 import BehaviorEatFood from '@/BehaviorModules/BehaviorEatFood'
 import BehaviorMoveTo from '@/BehaviorModules/BehaviorMoveTo'
 import BehaviorDigAndPlaceBlock from '@/BehaviorModules/BehaviorDigAndPlaceBlock'
+import FillFunction from '@/NestedStateModules/minerJob/fillFunction'
+import FindItemsAndPickup from '@/NestedStateModules/findItemsAndPickup'
 
 import mineflayerPathfinder, { Movements } from 'mineflayer-pathfinder'
 import botConfigLoader from '@/modules/botConfig'
@@ -124,15 +126,12 @@ function miningFunction(bot: Bot, targets: LegionStateMachineTargets) {
   eatFood.x = 725
   eatFood.y = 363
 
-  const fillBlocks = require('@NestedStateModules/minerJob/fillFunction')(bot, targets)
+  const fillBlocks = FillFunction(bot, targets)
   fillBlocks.stateName = 'Fill Water & Lava'
   fillBlocks.x = 350
   fillBlocks.y = 313
 
-  const findItemsAndPickup = require('@NestedStateModules/findItemsAndPickup')(
-    bot,
-    targets
-  )
+  const findItemsAndPickup = FindItemsAndPickup(bot, targets)
   findItemsAndPickup.stateName = 'Find Items'
   findItemsAndPickup.x = 525
   findItemsAndPickup.y = 363
@@ -402,9 +401,9 @@ function miningFunction(bot: Bot, targets: LegionStateMachineTargets) {
     })
   ]
 
-  const miningFunction = new NestedStateMachine(transitions, start, exit)
-  miningFunction.stateName = 'Mining'
-  return miningFunction
+  const nestedState = new NestedStateMachine(transitions, start, exit)
+  nestedState.stateName = 'Mining'
+  return nestedState
 }
 
-module.exports = miningFunction
+export default miningFunction

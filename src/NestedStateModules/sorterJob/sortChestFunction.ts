@@ -6,6 +6,8 @@ import {
 } from 'mineflayer-statemachine'
 
 import sorterJob from '@/modules/sorterJob'
+import PickUpItems from '@/NestedStateModules/getReady/pickUpItems'
+import DepositItems from '@/NestedStateModules/sorterJob/depositItems'
 
 function sortChestFunction(bot: Bot, targets: LegionStateMachineTargets) {
   const { findItemsInChests, calculateSlotsToSort } = sorterJob()
@@ -38,14 +40,18 @@ function sortChestFunction(bot: Bot, targets: LegionStateMachineTargets) {
   //@ts-ignore
   findItems.y = 263
 
-  const pickUpItems = require('@NestedStateModules/getReady/pickUpItems')(bot, targets)
+  const pickUpItems = PickUpItems(bot, targets)
   pickUpItems.stateName = 'Pick Up Items'
+  //@ts-ignore
   pickUpItems.x = 525
+  //@ts-ignore
   pickUpItems.y = 413
 
-  const depositItems = require('@NestedStateModules/sorterJob/depositItems')(bot, targets)
+  const depositItems = DepositItems(bot, targets)
   depositItems.stateName = 'Deposit Items'
+  //@ts-ignore
   depositItems.x = 325
+  //@ts-ignore
   depositItems.y = 413
 
   const transitions = [
@@ -92,9 +98,9 @@ function sortChestFunction(bot: Bot, targets: LegionStateMachineTargets) {
     })
   ]
 
-  const sortChestFunction = new NestedStateMachine(transitions, start, exit)
-  sortChestFunction.stateName = 'sortChestFunction'
-  return sortChestFunction
+  const nestedState = new NestedStateMachine(transitions, start, exit)
+  nestedState.stateName = 'sortChestFunction'
+  return nestedState
 }
 
-module.exports = sortChestFunction
+export default sortChestFunction

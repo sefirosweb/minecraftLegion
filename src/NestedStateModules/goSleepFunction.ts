@@ -148,9 +148,9 @@ const goSleepFunction = function (bot: Bot, targets: LegionStateMachineTargets) 
 
   ]
 
-  const goSleepFunction = new NestedStateMachine(transitions, start, exit)
-  goSleepFunction.stateName = 'Go Sleep'
-  return goSleepFunction
+  const nestedState = new NestedStateMachine(transitions, start, exit)
+  nestedState.stateName = 'Go Sleep'
+  return nestedState
 }
 
-module.exports = goSleepFunction
+export default goSleepFunction

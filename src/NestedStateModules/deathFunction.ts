@@ -11,6 +11,9 @@ import BehaviorGetPlayer from '@/BehaviorModules/BehaviorGetPlayer'
 import botWebsocket from '@modules/botWebsocket'
 import BehaviorLoadConfig from '@/BehaviorModules/BehaviorLoadConfig'
 import mcDataLoader from 'minecraft-data'
+import StartWork from '@/NestedStateModules/startWorkFunction'
+import Commands from '@/NestedStateModules/commandsFunction'
+import GoSleep from '@/NestedStateModules/goSleepFunction'
 
 function deathFunction(bot: Bot, targets: LegionStateMachineTargets) {
   const mcData = mcDataLoader(bot.version)
@@ -22,12 +25,16 @@ function deathFunction(bot: Bot, targets: LegionStateMachineTargets) {
   //@ts-ignore
   start.y = 113
 
-  const startWork = require('@NestedStateModules/startWorkFunction')(bot, targets)
+  const startWork = StartWork(bot, targets)
+  //@ts-ignore
   startWork.x = 525
+  //@ts-ignore
   startWork.y = 413
 
-  const commands = require('@NestedStateModules/commandsFunction')(bot, targets)
+  const commands = Commands(bot, targets)
+  //@ts-ignore
   commands.x = 325
+  //@ts-ignore
   commands.y = 263
 
   const playerEntity = new BehaviorGetPlayer(bot, targets)
@@ -40,8 +47,10 @@ function deathFunction(bot: Bot, targets: LegionStateMachineTargets) {
   loadConfig.x = 125
   loadConfig.y = 413
 
-  const goSleep = require('@NestedStateModules/goSleepFunction')(bot, targets)
+  const goSleep = GoSleep(bot, targets)
+  //@ts-ignore
   goSleep.x = 725
+  //@ts-ignore
   goSleep.y = 263
 
   const transitions = [
@@ -186,9 +195,9 @@ function deathFunction(bot: Bot, targets: LegionStateMachineTargets) {
     }
   })
 
-  const deathFunction = new NestedStateMachine(transitions, start)
-  deathFunction.stateName = 'After death function'
-  return deathFunction
+  const nestedState = new NestedStateMachine(transitions, start)
+  nestedState.stateName = 'After death function'
+  return nestedState
 }
 
-module.exports = deathFunction
+export default deathFunction

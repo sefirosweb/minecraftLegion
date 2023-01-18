@@ -11,6 +11,13 @@ import { LegionStateMachineTargets } from '@/types/index'
 import mcDataLoader from 'minecraft-data'
 import { DefaultBlockForPlace, Jobs } from '@/types/defaultTypes'
 import movementModule from '@/modules/movementModule'
+import GuardJob from '@/NestedStateModules/guardJob/guardJobFunction'
+import ArcherJob from '@/NestedStateModules/archerJob/archerJobFunction'
+import FarmerJob from '@/NestedStateModules/farmerJob/farmerJobFunction'
+import BreederJob from '@/NestedStateModules/breederJob/breederJobFunction'
+import MinerJob from '@/NestedStateModules/minerJob/minerJobFunction'
+import SorterJob from '@/NestedStateModules/sorterJob/sorterJobFunction'
+import CrafterJobFunction from '@/NestedStateModules/crafterJob/crafterJobFunction'
 
 function startWorkFunction(bot: Bot, targets: LegionStateMachineTargets) {
   const mcData = mcDataLoader(bot.version)
@@ -27,31 +34,31 @@ function startWorkFunction(bot: Bot, targets: LegionStateMachineTargets) {
   // @ts-ignore
   loadedConfig.y = 213
 
-  const guardJob = require('@NestedStateModules/guardJobFunction')(bot, targets)
+  const guardJob = GuardJob(bot, targets)
   guardJob.x = 525
   guardJob.y = 313
 
-  const archerJob = require('@NestedStateModules/archerJob/archerJobFunction')(bot, targets)
+  const archerJob = ArcherJob(bot, targets)
   archerJob.x = 525
   archerJob.y = 113
 
-  const farmerJob = require('@NestedStateModules/farmerJob/farmerJobFunction')(bot, targets)
+  const farmerJob = FarmerJob(bot, targets)
   farmerJob.x = 325
   farmerJob.y = 350
 
-  const breederJob = require('@NestedStateModules/breederJob/breederJobFunction')(bot, targets)
+  const breederJob = BreederJob(bot, targets)
   breederJob.x = 135
   breederJob.y = 320
 
-  const minerJob = require('@NestedStateModules/minerJob/minerJobFunction')(bot, targets)
+  const minerJob = MinerJob(bot, targets)
   minerJob.x = 325
   minerJob.y = 50
 
-  const sorterJob = require('@NestedStateModules/sorterJob/sorterJobFunction')(bot, targets)
+  const sorterJob = SorterJob(bot, targets)
   sorterJob.x = 535
   sorterJob.y = 213
 
-  const crafterJobFunction = require('@NestedStateModules/crafterJob/crafterJobFunction')(bot, targets)
+  const crafterJobFunction = CrafterJobFunction(bot, targets)
   // sorterJob.x = 535
   // sorterJob.y = 213
 
@@ -124,9 +131,9 @@ function startWorkFunction(bot: Bot, targets: LegionStateMachineTargets) {
 
   ]
 
-  const startWorkFunction = new NestedStateMachine(transitions, start)
-  startWorkFunction.stateName = 'startWorkFunction'
-  return startWorkFunction
+  const nestedState = new NestedStateMachine(transitions, start)
+  nestedState.stateName = 'startWorkFunction'
+  return nestedState
 }
 
-module.exports = startWorkFunction
+export default startWorkFunction

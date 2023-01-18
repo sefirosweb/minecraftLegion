@@ -1,5 +1,5 @@
 //@ts-nocheck
-import { Bot, ItemsToPickUpBatch, LegionStateMachineTargets, Recipes } from '@/types'
+import { Bot, LegionStateMachineTargets, Recipes } from '@/types'
 
 import {
   StateTransition,
@@ -9,6 +9,8 @@ import {
 import BehaviorCraft from '@/BehaviorModules/BehaviorCraft'
 import chestModule from '@/modules/chestModule'
 import craftModule, { GetItemsToPickUpBatch } from '@/modules/craftModule'
+import PickUpItems from '@/NestedStateModules/getReady/pickUpItems'
+import GoCraftingTableFunction from '@/NestedStateModules/crafterJob/goCraftingTableFunction'
 
 function searchAndCraftFunction(bot: Bot, targets: LegionStateMachineTargets) {
   const { getItemsToPickUpBatch } = craftModule(bot)
@@ -68,28 +70,17 @@ function searchAndCraftFunction(bot: Bot, targets: LegionStateMachineTargets) {
   craftItem.x = 125
   craftItem.y = 462
 
-  const pickUpItems = require('@NestedStateModules/getReady/pickUpItems')(
-    bot,
-    targets
-  )
+  const pickUpItems = PickUpItems(bot, targets)
   pickUpItems.stateName = 'Pick Up Items'
   pickUpItems.x = 125
   pickUpItems.y = 213
 
-  const goTable =
-    require('@NestedStateModules/crafterJob/goCraftingTableFunction')(
-      bot,
-      targets
-    )
+  const goTable = GoCraftingTableFunction(bot, targets)
   goTable.stateName = 'Go check recipes'
   goTable.x = 625
   goTable.y = 462
 
-  const goTableToCraft =
-    require('@NestedStateModules/crafterJob/goCraftingTableFunction')(
-      bot,
-      targets
-    )
+  const goTableToCraft = GoCraftingTableFunction(bot, targets)
   goTableToCraft.stateName = 'Go to Craft'
   goTableToCraft.x = 325
   goTableToCraft.y = 350
@@ -229,13 +220,9 @@ function searchAndCraftFunction(bot: Bot, targets: LegionStateMachineTargets) {
     })
   ]
 
-  const searchAndCraftFunction = new NestedStateMachine(
-    transitions,
-    start,
-    exit
-  )
-  searchAndCraftFunction.stateName = 'Search and craft item'
-  return searchAndCraftFunction
+  const nestedState = new NestedStateMachine(transitions, start, exit)
+  nestedState.stateName = 'Search and craft item'
+  return nestedState
 }
 
-module.exports = searchAndCraftFunction
+export default searchAndCraftFunction

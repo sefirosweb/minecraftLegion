@@ -1,9 +1,6 @@
 import { Bot, LegionStateMachineTargets } from '@/types'
-import {
-  StateTransition,
-  BehaviorIdle,
-  NestedStateMachine
-} from 'mineflayer-statemachine'
+import { StateTransition, BehaviorIdle, NestedStateMachine } from 'mineflayer-statemachine'
+import GoAndDeposit from '@/NestedStateModules/getReady/goAndDeposit'
 
 function depositItemsInInventory(bot: Bot, targets: LegionStateMachineTargets) {
   const start = new BehaviorIdle()
@@ -27,9 +24,11 @@ function depositItemsInInventory(bot: Bot, targets: LegionStateMachineTargets) {
   //@ts-ignore
   exit.y = 213
 
-  const goAndDeposit = require('@NestedStateModules/getReady/goAndDeposit')(bot, targets)
+  const goAndDeposit = GoAndDeposit(bot, targets)
   goAndDeposit.stateName = 'Go chest and Deposit'
+  //@ts-ignore
   goAndDeposit.x = 125
+  //@ts-ignore
   goAndDeposit.y = 313
 
   let chestsFound: Array<any>
@@ -86,9 +85,9 @@ function depositItemsInInventory(bot: Bot, targets: LegionStateMachineTargets) {
 
   ]
 
-  const depositItemsInInventory = new NestedStateMachine(transitions, start, exit)
-  depositItemsInInventory.stateName = 'depositItemsInInventory'
-  return depositItemsInInventory
+  const nestedState = new NestedStateMachine(transitions, start, exit)
+  nestedState.stateName = 'depositItemsInInventory'
+  return nestedState
 }
 
-module.exports = depositItemsInInventory
+export default depositItemsInInventory

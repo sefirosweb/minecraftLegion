@@ -3,6 +3,7 @@ import sorterJob from '@/modules/sorterJob'
 import inventoryModule from '@/modules/inventoryModule'
 import { Item as ItemMC } from "minecraft-data"
 import { Block } from "prismarine-block"
+import mcDataLoader from 'minecraft-data'
 import _ from 'lodash'
 
 type HaveMaterials = 'all' | 'none' | 'some'
@@ -52,7 +53,7 @@ type GetItemsToPickUpRecursive = {
 }
 
 const craftModule = (bot: Bot) => {
-  const mcData = require('minecraft-data')(bot.version)
+  const mcData = mcDataLoader(bot.version)
   const { getResumeInventory } = inventoryModule(bot)
   const { findItemsInChests } = sorterJob()
 

@@ -6,7 +6,7 @@ import {
 } from 'mineflayer-statemachine'
 
 //@ts-ignore
-import BehaviorAttack from '@/BehaviorModules/BehaviorAttack'
+import BehaviorAttack from '@/BehaviorModules/combat/BehaviorAttack'
 //@ts-ignore
 import BehaviorEquip from '@/BehaviorModules/BehaviorEquip'
 import { Bot, LegionStateMachineTargets } from '@/types'
@@ -144,9 +144,9 @@ function slaughterhouseFunction(bot: Bot, targets: LegionStateMachineTargets) {
     })
   ]
 
-  const slaughterhouseFunction = new NestedStateMachine(transitions, start, exit)
-  slaughterhouseFunction.stateName = 'slaughterhouseFunction'
-  return slaughterhouseFunction
+  const nestedState = new NestedStateMachine(transitions, start, exit)
+  nestedState.stateName = 'slaughterhouseFunction'
+  return nestedState
 }
 
-module.exports = slaughterhouseFunction
+export default slaughterhouseFunction

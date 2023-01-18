@@ -12,6 +12,8 @@ import BehaviorCheckItemsInInventory from '@/BehaviorModules/BehaviorCheckItemsI
 import BehaviorMoveTo from '@/BehaviorModules/BehaviorMoveTo'
 import chestModule from '@/modules/chestModule'
 import inventoryModule from '@/modules/inventoryModule'
+import PickUpItems from '@/NestedStateModules/getReady/pickUpItems'
+import SearchAndCraftFunction from '@/NestedStateModules/crafterJob/searchAndCraftFunction'
 
 function goChestsFunction(bot, targets) {
   const { findChestsToWithdraw } = chestModule(bot, targets)
@@ -63,19 +65,14 @@ function goChestsFunction(bot, targets) {
   depositItems.x = 525
   depositItems.y = 363
 
-  const pickUpItems = require('@NestedStateModules/getReady/pickUpItems')(bot, targets)
+  const pickUpItems = PickUpItems(bot, targets)
   pickUpItems.stateName = 'Pick Up Items'
   pickUpItems.x = 325
   pickUpItems.y = 63
 
-  const searchAndCraft =
-    require("@NestedStateModules/crafterJob/searchAndCraftFunction")(
-      bot,
-      targets
-    );
+  const searchAndCraft = SearchAndCraftFunction(bot, targets);
   searchAndCraft.x = 75
   searchAndCraft.y = 363
-
 
   let chests = []
   let chestIndex = 0
@@ -212,9 +209,9 @@ function goChestsFunction(bot, targets) {
     })
   ]
 
-  const goChestsFunction = new NestedStateMachine(transitions, start, exit)
-  goChestsFunction.stateName = 'Go Chests'
-  return goChestsFunction
+  const nestedState = new NestedStateMachine(transitions, start, exit)
+  nestedState.stateName = 'Go Chests'
+  return nestedState
 }
 
-module.exports = goChestsFunction
+export default goChestsFunction

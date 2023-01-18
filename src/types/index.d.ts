@@ -26,7 +26,7 @@ type MineCords = {
 
 type MineCordsConfig = MineCords & {
     tunel: 'horizontally' | 'vertically'
-    orientation: 'z+' | 'z-' | 'x+' | 'x-'
+    orientation: Coordinates
     world: Dimensions
     reverse: boolean
 }
@@ -68,7 +68,7 @@ type BreederJob = {
     breededAnimals: Array<Entity>,
     farmAnimal: FarmAnimal,
     animalsToBeFeed: Array<Entity>,
-    feedEntity?: Entity
+    feedEntity: Entity
 }
 
 type SorterJob = {
@@ -82,8 +82,6 @@ type MinerJob = {
     mineBlock: Vec3,
     nextLayer?: Layer
 }
-
-
 
 type DepositType = 'withdraw' | 'deposit' | 'depositAll'
 
@@ -215,14 +213,6 @@ declare module 'mineflayer' {
         newListener: (event: string | symbol, listener: Function) => Promise<void> | void
         removeListener: (event: string | symbol, listener: Function) => Promise<void> | void
     }
-}
-
-type OptionsFind = {
-    matching?: Array<string>
-    point?: Vec3
-    maxDistance?: number
-    count?: number
-    useExtraInfo?: any
 }
 
 type BlockChest = Block & {

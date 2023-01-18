@@ -4,6 +4,7 @@
 import 'module-alias/register';
 import { createNewBot } from "@/createNewBot";
 import { Bot } from '@/types';
+import mcDataLoader from 'minecraft-data'
 
 const assert = require('assert')
 const mineflayer = require('mineflayer')
@@ -40,7 +41,7 @@ const MC_SERVER_PATH = path.join(__dirname, 'server')
 
 const supportedVersion = "1.18.2"
 
-const mcData = require('minecraft-data')(supportedVersion)
+const mcData = mcDataLoader(supportedVersion)
 const version = mcData.version
 const MC_SERVER_JAR_DIR = process.env.MC_SERVER_JAR_DIR || `${process.cwd()}/server_jars`
 const MC_SERVER_JAR = `${MC_SERVER_JAR_DIR}/minecraft_server.${version.minecraftVersion}.jar`

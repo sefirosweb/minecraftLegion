@@ -80,13 +80,9 @@ function goCraftingTableFunction(bot: Bot, targets: LegionStateMachineTargets) {
     })
   ]
 
-  const goCraftingTableFunction = new NestedStateMachine(
-    transitions,
-    start,
-    exit
-  )
-  goCraftingTableFunction.stateName = 'Go crafting table'
-  return goCraftingTableFunction
+  const nestedState = new NestedStateMachine(transitions, start, exit)
+  nestedState.stateName = 'Go crafting table'
+  return nestedState
 }
 
-module.exports = goCraftingTableFunction
+export default goCraftingTableFunction

@@ -56,9 +56,9 @@ function goAndDeposit(bot: Bot, targets: LegionStateMachineTargets) {
     })
   ]
 
-  const goAndDeposit = new NestedStateMachine(transitions, start, exit)
-  goAndDeposit.stateName = 'Go Chests and Deposit'
-  return goAndDeposit
+  const nestedState = new NestedStateMachine(transitions, start, exit)
+  nestedState.stateName = 'Go Chests and Deposit'
+  return nestedState
 }
 
-module.exports = goAndDeposit
+export default goAndDeposit

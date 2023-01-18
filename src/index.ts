@@ -2,6 +2,8 @@ require("module-alias/register");
 import fs from "fs";
 import path from "path";
 import { botSocket, botType, socketAuth } from "./types";
+import Config from '@/config'
+import io from 'socket.io-client'
 
 const filePath = path.join(__dirname, "config.ts")
 
@@ -18,7 +20,7 @@ fs.access(filePath, 0, (err) => {
 });
 
 const start_bot = () => {
-  const { autoRestart } = require("@config");
+  const { autoRestart } = Config
   const cp = require("child_process");
 
   function startBot(botName: string, password?: string) {
@@ -85,8 +87,7 @@ const start_bot = () => {
   runNextBot();
 
   // Master websocket for load bots
-  const { webServer, webServerPort, webServerPassword } = require("@config");
-  const io = require("socket.io-client");
+  const { webServer, webServerPort, webServerPassword } = Config;
   const socket = io(webServer + ":" + webServerPort);
   let loged = false;
 

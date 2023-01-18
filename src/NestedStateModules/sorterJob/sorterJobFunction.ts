@@ -12,6 +12,8 @@ import BehaviorMoveTo from '@/BehaviorModules/BehaviorMoveTo'
 import { Bot, LegionStateMachineTargets } from '@/types'
 import sorterJob from '@/modules/sorterJob'
 import inventoryModule from '@/modules/inventoryModule'
+import DepositItemsInInventory from '@/NestedStateModules/sorterJob/depositItemsInInventory'
+import SortChestFunction from '@/NestedStateModules/sorterJob/sortChestFunction'
 
 const sorterJobFunction = (bot: Bot, targets: LegionStateMachineTargets) => {
   const { findChests } = inventoryModule(bot)
@@ -27,7 +29,7 @@ const sorterJobFunction = (bot: Bot, targets: LegionStateMachineTargets) => {
   checkItemsInInventory.x = 125
   checkItemsInInventory.y = 263
 
-  const depositItemsInInventory = require('@NestedStateModules/sorterJob/depositItemsInInventory')(bot, targets)
+  const depositItemsInInventory = DepositItemsInInventory(bot, targets)
   depositItemsInInventory.stateName = 'Deposit Items In Inventory'
   depositItemsInInventory.x = 125
   depositItemsInInventory.y = 463
@@ -53,7 +55,7 @@ const sorterJobFunction = (bot: Bot, targets: LegionStateMachineTargets) => {
   goChest.y = 613
   goChest.movements = targets.movements
 
-  const sortChestFunction = require('@NestedStateModules/sorterJob/sortChestFunction')(bot, targets)
+  const sortChestFunction = SortChestFunction(bot, targets)
   sortChestFunction.stateName = 'Sort chests'
   sortChestFunction.x = 325
   sortChestFunction.y = 263
@@ -311,9 +313,9 @@ const sorterJobFunction = (bot: Bot, targets: LegionStateMachineTargets) => {
 
   ]
 
-  const sorterJobFunction = new NestedStateMachine(transitions, start)
-  sorterJobFunction.stateName = 'Sorter Job'
-  return sorterJobFunction
+  const nestedState = new NestedStateMachine(transitions, start)
+  nestedState.stateName = 'Sorter Job'
+  return nestedState
 }
 
-module.exports = sorterJobFunction
+export default sorterJobFunction

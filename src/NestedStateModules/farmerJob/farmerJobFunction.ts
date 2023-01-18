@@ -9,6 +9,9 @@ import BehaviorGetReady from '@/BehaviorModules/BehaviorGetReady'
 import BehaviorEatFood from '@/BehaviorModules/BehaviorEatFood'
 import { Bot, LegionStateMachineTargets } from '@/types'
 import getClosestEnemy from '@/modules/getClosestEnemy'
+import GoChestsFunctions from '@/NestedStateModules/getReady/goChestsFunctions'
+import FarmingFunction from '@/NestedStateModules/farmerJob/farmingFunction'
+import CombatStrategyFunction from '@/NestedStateModules/combat/combatStrategyFunction'
 
 
 function farmerJobFunction(bot: Bot, targets: LegionStateMachineTargets) {
@@ -22,11 +25,11 @@ function farmerJobFunction(bot: Bot, targets: LegionStateMachineTargets) {
   getReady.x = 125
   getReady.y = 213
 
-  const goChests = require('@NestedStateModules/getReady/goChestsFunctions')(bot, targets)
+  const goChests = GoChestsFunctions(bot, targets)
   goChests.x = 325
   goChests.y = 213
 
-  const farming = require('@NestedStateModules/farmerJob/farmingFunction')(bot, targets)
+  const farming = FarmingFunction(bot, targets)
   farming.stateName = 'Farming'
   farming.x = 325
   farming.y = 313
@@ -37,7 +40,7 @@ function farmerJobFunction(bot: Bot, targets: LegionStateMachineTargets) {
   eatFood.y = 413
 
   const getClosestMob = getClosestEnemy(bot, targets)
-  const combatStrategy = require('@NestedStateModules/combat/combatStrategyFunction')(bot, targets)
+  const combatStrategy = CombatStrategyFunction(bot, targets)
   combatStrategy.x = 325
   combatStrategy.y = 413
 
@@ -100,9 +103,9 @@ function farmerJobFunction(bot: Bot, targets: LegionStateMachineTargets) {
 
   ]
 
-  const farmerJobFunction = new NestedStateMachine(transitions, start)
-  farmerJobFunction.stateName = 'Farmer Job'
-  return farmerJobFunction
+  const nestedState = new NestedStateMachine(transitions, start)
+  nestedState.stateName = 'Farmer Job'
+  return nestedState
 }
 
-module.exports = farmerJobFunction
+export default farmerJobFunction

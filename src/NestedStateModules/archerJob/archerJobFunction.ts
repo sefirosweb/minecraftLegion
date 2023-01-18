@@ -12,7 +12,7 @@ import { Entity } from 'prismarine-entity'
 //@ts-ignore
 import botWebsocket from '@modules/botWebsocket'
 //@ts-ignore
-import BehaviorAttack from '@/BehaviorModules/BehaviorAttack'
+import BehaviorAttack from '@/BehaviorModules/combat/BehaviorAttack'
 import { Bot, LegionStateMachineTargets } from '@/types'
 
 function archerJobFunction(bot: Bot, targets: LegionStateMachineTargets) {
@@ -89,9 +89,9 @@ function archerJobFunction(bot: Bot, targets: LegionStateMachineTargets) {
 
   ]
 
-  const archerJobFunction = new NestedStateMachine(transitions, enter, exit)
-  archerJobFunction.stateName = 'Archer Job'
-  return archerJobFunction
+  const nestedState = new NestedStateMachine(transitions, enter, exit)
+  nestedState.stateName = 'Archer Job'
+  return nestedState
 }
 
-module.exports = archerJobFunction
+export default archerJobFunction

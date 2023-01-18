@@ -1,9 +1,6 @@
 import { Bot, LegionStateMachineTargets, PendingTransaction, ChestTransaction } from "@/types"
-import {
-  StateTransition,
-  BehaviorIdle,
-  NestedStateMachine
-} from 'mineflayer-statemachine'
+import { StateTransition, BehaviorIdle, NestedStateMachine } from 'mineflayer-statemachine'
+import GoAndWithdraw from '@/NestedStateModules/getReady/goAndWithdraw'
 
 function pickUpItems(bot: Bot, targets: LegionStateMachineTargets) {
 
@@ -28,9 +25,11 @@ function pickUpItems(bot: Bot, targets: LegionStateMachineTargets) {
   //@ts-ignore
   startCheckNextChest.y = 263
 
-  const goAndWithdraw = require('@NestedStateModules/getReady/goAndWithdraw')(bot, targets)
+  const goAndWithdraw = GoAndWithdraw(bot, targets)
   goAndWithdraw.stateName = 'Go chest and Withdraw'
+  //@ts-ignore
   goAndWithdraw.x = 125
+  //@ts-ignore
   goAndWithdraw.y = 413
 
   let pendingTransaction: Array<PendingTransaction>
@@ -109,9 +108,9 @@ function pickUpItems(bot: Bot, targets: LegionStateMachineTargets) {
     })
   ]
 
-  const pickUpItems = new NestedStateMachine(transitions, start, exit)
-  pickUpItems.stateName = 'pickUpItems'
-  return pickUpItems
+  const nestedState = new NestedStateMachine(transitions, start, exit)
+  nestedState.stateName = 'pickUpItems'
+  return nestedState
 }
 
-module.exports = pickUpItems
+export default pickUpItems

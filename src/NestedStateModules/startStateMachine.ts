@@ -16,15 +16,13 @@ import { debugMode } from '@/config'
 import mcDataLoader from 'minecraft-data'
 import movementModule from '@/modules/movementModule'
 import botWebsocket from '@/modules/botWebsocket'
+import mineflayerPathfinder from 'mineflayer-pathfinder'
+import inventoryViewer from 'mineflayer-web-inventory'
+import { startPrismarineViewer } from '@/modules/viewer'
+import DeathFunction from '@/NestedStateModules/deathFunction'
 
-module.exports = (bot: Bot) => {
-  const inventoryViewer = require('mineflayer-web-inventory')
-  const prismarineViewer = require('@modules/viewer')
-
-
-  const mineflayerPathfinder = require('mineflayer-pathfinder')
+const startStateMachine = (bot: Bot) => {
   const mcData = mcDataLoader(bot.version)
-
   const isInDebug = debugMode || false
 
   // const targets: LegionStateMachineTargets = {
@@ -149,7 +147,7 @@ module.exports = (bot: Bot) => {
   //@ts-ignore
   watiState.y = 313
 
-  const death = require('@NestedStateModules/deathFunction')(bot, targets)
+  const death = DeathFunction(bot, targets)
   death.x = 425
   death.y = 213
 
@@ -283,7 +281,7 @@ module.exports = (bot: Bot) => {
         botWebsocket.log(`Started inventory web server at http://localhost:${value.port}`)
         break
       case 'startViewer':
-        prismarineViewer.start(bot, value.port)
+        startPrismarineViewer(bot, value.port)
         botWebsocket.log(`Started viewer web server at http://localhost:${value.port}`)
         break
       case 'startStateMachine':
@@ -331,3 +329,5 @@ module.exports = (bot: Bot) => {
     })
   }
 }
+
+export default startStateMachine

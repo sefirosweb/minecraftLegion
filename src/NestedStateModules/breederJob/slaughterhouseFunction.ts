@@ -6,6 +6,8 @@ import {
   NestedStateMachine
 } from 'mineflayer-statemachine'
 import { Entity } from 'prismarine-entity'
+import SlaughterFunction from '@/NestedStateModules/breederJob/slaughterFunction'
+
 function slaughterhouseFunction(bot: Bot, targets: LegionStateMachineTargets) {
   const start = new BehaviorIdle()
   start.stateName = 'Start'
@@ -28,9 +30,11 @@ function slaughterhouseFunction(bot: Bot, targets: LegionStateMachineTargets) {
   //@ts-ignore
   check.y = 113
 
-  const slaughter = require('@NestedStateModules/breederJob/slaughterFunction')(bot, targets)
+  const slaughter = SlaughterFunction(bot, targets)
   slaughter.stateName = 'Slaughter'
+  //@ts-ignore
   slaughter.x = 325
+  //@ts-ignore
   slaughter.y = 263
 
   let animalsToKill: Array<Entity>
@@ -97,9 +101,9 @@ function slaughterhouseFunction(bot: Bot, targets: LegionStateMachineTargets) {
     })
   ]
 
-  const slaughterhouseFunction = new NestedStateMachine(transitions, start, exit)
-  slaughterhouseFunction.stateName = 'slaughterhouseFunction'
-  return slaughterhouseFunction
+  const nestedState = new NestedStateMachine(transitions, start, exit)
+  nestedState.stateName = 'slaughterhouseFunction'
+  return nestedState
 }
 
-module.exports = slaughterhouseFunction
+export default slaughterhouseFunction

@@ -1,10 +1,11 @@
 import { Bot } from '@/types'
 
-const mineflayerViewer = require('prismarine-viewer').mineflayer
+//@ts-ignore
+import mineflayerViewer from 'prismarine-viewer'
 
-export const start = (bot: Bot, port: number = 4000) => {
+export const startPrismarineViewer = (bot: Bot, port: number = 4000) => {
 
-  mineflayerViewer(bot, { port })
+  mineflayerViewer.mineflayer(bot, { port })
   const path = [bot.entity.position.clone()]
   bot.on('move', () => {
     if (path[path.length - 1].distanceTo(bot.entity.position) > 1) {

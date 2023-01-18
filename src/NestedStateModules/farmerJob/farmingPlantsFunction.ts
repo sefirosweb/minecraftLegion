@@ -4,6 +4,9 @@ import {
   BehaviorIdle,
   NestedStateMachine
 } from 'mineflayer-statemachine'
+import PlantFunction from '@/NestedStateModules/farmerJob/plantFunction'
+import HarvestFunction from '@/NestedStateModules/farmerJob/harvestFunction'
+import FindItemsAndPickup from '@/NestedStateModules/findItemsAndPickup'
 
 function farmingPlantsFunction(bot: Bot, targets: LegionStateMachineTargets) {
   const start = new BehaviorIdle()
@@ -27,19 +30,25 @@ function farmingPlantsFunction(bot: Bot, targets: LegionStateMachineTargets) {
   //@ts-ignore
   checkFarmingAreas.y = 113
 
-  const plant = require('@NestedStateModules/farmerJob/plantFunction')(bot, targets)
+  const plant = PlantFunction(bot, targets)
   plant.stateName = 'Plant'
+  //@ts-ignore
   plant.x = 725
+  //@ts-ignore
   plant.y = 313
 
-  const harvest = require('@NestedStateModules/farmerJob/harvestFunction')(bot, targets)
+  const harvest = HarvestFunction(bot, targets)
   harvest.stateName = 'Harvest'
+  //@ts-ignore
   harvest.x = 325
+  //@ts-ignore
   harvest.y = 313
 
-  const findItemsAndPickup = require('@NestedStateModules/findItemsAndPickup')(bot, targets)
+  const findItemsAndPickup = FindItemsAndPickup(bot, targets)
   findItemsAndPickup.stateName = 'Find Items'
+  //@ts-ignore
   findItemsAndPickup.x = 525
+  //@ts-ignore
   findItemsAndPickup.y = 313
 
   const transitions = [
@@ -70,9 +79,9 @@ function farmingPlantsFunction(bot: Bot, targets: LegionStateMachineTargets) {
 
   ]
 
-  const farmingPlantsFunction = new NestedStateMachine(transitions, start, exit)
-  farmingPlantsFunction.stateName = 'farmingPlantsFunction'
-  return farmingPlantsFunction
+  const nestedState = new NestedStateMachine(transitions, start, exit)
+  nestedState.stateName = 'farmingPlantsFunction'
+  return nestedState
 }
 
-module.exports = farmingPlantsFunction
+export default farmingPlantsFunction

@@ -1,11 +1,12 @@
 
-import { BlockChest, Bot, Facing, ChestPosition, OptionsFind, Item, ItemArmor } from "@/types"
+import { BlockChest, Bot, Facing, ChestPosition, Item, ItemArmor } from "@/types"
 import { getSecondBlockPosition } from '@/modules/utils'
-import { EquipmentDestination } from "mineflayer"
+import { EquipmentDestination, FindBlockOptions } from "mineflayer"
 import { Vec3 } from "vec3"
+import mcDataLoader from 'minecraft-data'
 
 const inventoryModule = (bot: Bot) => {
-  const mcData = require('minecraft-data')(bot.version)
+  const mcData = mcDataLoader(bot.version)
 
   function countItemsInInventoryOrEquipped(item: string) {
     let currentItems = 0
@@ -135,21 +136,23 @@ const inventoryModule = (bot: Bot) => {
     return items
   }
 
-  const findChests = (options: OptionsFind | undefined) => {
+  const findChests = (options: Partial<FindBlockOptions> | undefined) => {
     options = options || {}
-    const matching = options.matching || ['chest', 'ender_chest', 'trapped_chest'].map(name => mcData.blocksByName[name].id)
-    const point = (options.point || bot.entity.position).floored()
+    const matching = ['chest', 'ender_chest', 'trapped_chest'].map(name => mcData.blocksByName[name].id)
     const maxDistance = options.maxDistance || 16
-    const count = options.count || 1
+    const point = (options.point || bot.entity.position).floored()
+    const count = (options.count || 1) * 2
     const useExtraInfo = options.useExtraInfo || false
 
-    const blocksFound = bot.findBlocks({
+    const findBlockOptions: FindBlockOptions = {
       matching,
       maxDistance,
       point,
-      count: count * 2,
+      count,
       useExtraInfo
-    }).map(chest => bot.blockAt(chest))
+    }
+
+    const blocksFound = bot.findBlocks(findBlockOptions).map(chest => bot.blockAt(chest))
 
     const chests = []
     let block: BlockChest | null | undefined

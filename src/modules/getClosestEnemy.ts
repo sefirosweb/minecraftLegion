@@ -3,6 +3,8 @@
 import { Bot, CustomEntity, LegionStateMachineTargets } from '@/types'
 import botWebsocket from '@/modules/botWebsocket'
 import { Entity } from 'prismarine-entity'
+import mcDataLoader from 'minecraft-data'
+import mineflayerPathfinder from 'mineflayer-pathfinder'
 
 const getClosestEnemy = (bot: Bot, targets: LegionStateMachineTargets) => {
   let entities: Array<CustomEntity> = []
@@ -37,9 +39,7 @@ const getClosestEnemy = (bot: Bot, targets: LegionStateMachineTargets) => {
     'Wither'
   ]
 
-  const mcData = require('minecraft-data')(bot.version)
-  const mineflayerPathfinder = require('mineflayer-pathfinder')
-
+  const mcData = mcDataLoader(bot.version)
   const movements = new mineflayerPathfinder.Movements(bot, mcData)
   movements.canDig = false
 

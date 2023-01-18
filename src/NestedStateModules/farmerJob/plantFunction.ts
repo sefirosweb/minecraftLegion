@@ -244,9 +244,9 @@ function plantFunction(bot: Bot, targets: LegionStateMachineTargets) {
 
   ]
 
-  const plantFunction = new NestedStateMachine(transitions, start, exit)
-  plantFunction.stateName = 'plantFunction'
-  return plantFunction
+  const nestedState = new NestedStateMachine(transitions, start, exit)
+  nestedState.stateName = 'plantFunction'
+  return nestedState
 }
 
-module.exports = plantFunction
+export default plantFunction

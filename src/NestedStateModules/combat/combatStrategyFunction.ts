@@ -6,6 +6,7 @@ import {
 //@ts-ignore
 import BehaviorEatFood from '@/BehaviorModules/BehaviorEatFood'
 import { Bot, LegionStateMachineTargets } from '@/types'
+import CombatFunction from '@/NestedStateModules/combat/combatFunction'
 
 function combatStrategyFunction(bot: Bot, targets: LegionStateMachineTargets) {
   const start = new BehaviorIdle()
@@ -22,8 +23,10 @@ function combatStrategyFunction(bot: Bot, targets: LegionStateMachineTargets) {
   //@ts-ignore
   exit.y = 313
 
-  const combatFunction = require('@NestedStateModules/combat/combatFunction')(bot, targets)
+  const combatFunction = CombatFunction(bot, targets)
+  //@ts-ignore
   combatFunction.x = 125
+  //@ts-ignore
   combatFunction.y = 213
 
   const eatFood = new BehaviorEatFood(bot, targets)
@@ -61,9 +64,9 @@ function combatStrategyFunction(bot: Bot, targets: LegionStateMachineTargets) {
     })
   ]
 
-  const combatStrategyFunction = new NestedStateMachine(transitions, start, exit)
-  combatStrategyFunction.stateName = 'Combat Strategy'
-  return combatStrategyFunction
+  const nestedState = new NestedStateMachine(transitions, start, exit)
+  nestedState.stateName = 'Combat Strategy'
+  return nestedState
 }
 
-module.exports = combatStrategyFunction
+export default combatStrategyFunction

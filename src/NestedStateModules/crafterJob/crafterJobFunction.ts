@@ -6,6 +6,8 @@ import {
 } from 'mineflayer-statemachine'
 import { Vec3 } from 'vec3'
 import inventoryModule from '@/modules/inventoryModule'
+import SearchAndCraftFunction from '@/NestedStateModules/crafterJob/searchAndCraftFunction'
+import GoAndDeposit from '@/NestedStateModules/getReady/goAndDeposit'
 
 function crafterJobFunction(bot: Bot, targets: LegionStateMachineTargets) {
   const { getResumeInventory } = inventoryModule(bot)
@@ -16,16 +18,9 @@ function crafterJobFunction(bot: Bot, targets: LegionStateMachineTargets) {
   const exit = new BehaviorIdle()
   exit.stateName = 'exit'
 
-  const searchAndCraft =
-    require('@NestedStateModules/crafterJob/searchAndCraftFunction')(
-      bot,
-      targets
-    )
+  const searchAndCraft = SearchAndCraftFunction(bot, targets)
 
-  const goAndDeposit = require('@NestedStateModules/getReady/goAndDeposit')(
-    bot,
-    targets
-  )
+  const goAndDeposit = GoAndDeposit(bot, targets)
   goAndDeposit.stateName = 'Go chest and Deposit'
 
   const transitions = [
@@ -67,9 +62,9 @@ function crafterJobFunction(bot: Bot, targets: LegionStateMachineTargets) {
     })
   ]
 
-  const crafterJobFunction = new NestedStateMachine(transitions, start)
-  crafterJobFunction.stateName = 'Crafter Job'
-  return crafterJobFunction
+  const nestedState = new NestedStateMachine(transitions, start)
+  nestedState.stateName = 'Crafter Job'
+  return nestedState
 }
 
-module.exports = crafterJobFunction
+export default crafterJobFunction

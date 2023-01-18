@@ -120,9 +120,9 @@ function findItemsAndPickup(bot: Bot, targets: LegionStateMachineTargets) {
 
   ]
 
-  const findItemsAndPickup = new NestedStateMachine(transitions, start, exit)
-  findItemsAndPickup.stateName = 'Find Items and pickup'
-  return findItemsAndPickup
+  const nestedState = new NestedStateMachine(transitions, start, exit)
+  nestedState.stateName = 'Find Items and pickup'
+  return nestedState
 }
 
-module.exports = findItemsAndPickup
+export default findItemsAndPickup

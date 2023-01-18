@@ -331,9 +331,9 @@ function commandsFunction(bot: Bot, targets: LegionStateMachineTargets) {
     // bot.chat('Ok, I memorized the patrol')
   }
 
-  const commandsFunction = new NestedStateMachine(transitions, start, exit)
-  commandsFunction.stateName = 'Commands Bot'
-  return commandsFunction
+  const nestedState = new NestedStateMachine(transitions, start, exit)
+  nestedState.stateName = 'Commands Bot'
+  return nestedState
 }
 
-module.exports = commandsFunction
+export default commandsFunction

@@ -9,9 +9,12 @@ import {
 
 import BehaviorEatFood from '@/BehaviorModules/BehaviorEatFood'
 import getClosestEnemy from '@/modules/getClosestEnemy'
+import GetReadyFunction from '@/NestedStateModules/getReady/getReadyFunction'
+import MiningFunction from '@/NestedStateModules/minerJob/miningFunction'
+import CombatStrategyFunction from '@/NestedStateModules/combat/combatStrategyFunction'
 
 function minerJobFunction(bot: Bot, targets: LegionStateMachineTargets) {
-  const getReady = require('@NestedStateModules/getReady/getReadyFunction')(bot, targets)
+  const getReady = GetReadyFunction(bot, targets)
   getReady.stateName = 'Get Ready'
   getReady.x = 125
   getReady.y = 113
@@ -21,11 +24,11 @@ function minerJobFunction(bot: Bot, targets: LegionStateMachineTargets) {
   eatFood.x = 325
   eatFood.y = 113
 
-  const miningFunction = require('@NestedStateModules/minerJob/miningFunction')(bot, targets)
+  const miningFunction = MiningFunction(bot, targets)
   miningFunction.x = 125
   miningFunction.y = 213
 
-  const combatStrategy = require('@NestedStateModules/combat/combatStrategyFunction')(bot, targets)
+  const combatStrategy = CombatStrategyFunction(bot, targets)
   combatStrategy.x = 325
   combatStrategy.y = 213
 
@@ -72,9 +75,9 @@ function minerJobFunction(bot: Bot, targets: LegionStateMachineTargets) {
 
   ]
 
-  const minerJobFunction = new NestedStateMachine(transitions, getReady)
-  minerJobFunction.stateName = 'Miner Job'
-  return minerJobFunction
+  const nestedState = new NestedStateMachine(transitions, getReady)
+  nestedState.stateName = 'Miner Job'
+  return nestedState
 }
 
-module.exports = minerJobFunction
+export default minerJobFunction

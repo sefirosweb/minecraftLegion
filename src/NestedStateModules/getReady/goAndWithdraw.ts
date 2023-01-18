@@ -56,9 +56,9 @@ function goAndWithdraw(bot: Bot, targets: LegionStateMachineTargets) {
     })
   ]
 
-  const goAndWithdraw = new NestedStateMachine(transitions, start, exit)
-  goAndWithdraw.stateName = 'Go Chests and Withdraw'
-  return goAndWithdraw
+  const nestedState = new NestedStateMachine(transitions, start, exit)
+  nestedState.stateName = 'Go Chests and Withdraw'
+  return nestedState
 }
 
-module.exports = goAndWithdraw
+export default goAndWithdraw

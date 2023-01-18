@@ -4,9 +4,8 @@ import {
   NestedStateMachine
 } from 'mineflayer-statemachine'
 
-//@ts-ignore
+import FeedAnimalFunction from '@/NestedStateModules/breederJob/feedAnimalFunction'
 import BehaviorLoadConfig from '@/BehaviorModules/BehaviorLoadConfig'
-//@ts-ignore
 import animalType from '@/modules/animalType'
 import { Bot, LegionStateMachineTargets } from '@/types'
 import { Entity } from 'prismarine-entity'
@@ -39,9 +38,11 @@ function breederFunction(bot: Bot, targets: LegionStateMachineTargets) {
   //@ts-ignore
   checkFarmAreas.y = 263
 
-  const feedAnimal = require('@NestedStateModules/breederJob/feedAnimalFunction')(bot, targets)
+  const feedAnimal = FeedAnimalFunction(bot, targets)
   feedAnimal.stateName = 'Feed'
+  //@ts-ignore
   feedAnimal.x = 325
+  //@ts-ignore
   feedAnimal.y = 413
 
   const getAnimalsToBeFeed = () => {
@@ -117,7 +118,7 @@ function breederFunction(bot: Bot, targets: LegionStateMachineTargets) {
       parent: checkFarmAreas,
       child: feedAnimal,
       onTransition: () => {
-        targets.breederJob.feedEntity = targets.breederJob.animalsToBeFeed.shift()
+        targets.breederJob.feedEntity = targets.breederJob.animalsToBeFeed.shift() as Entity
       },
       shouldTransition: () => targets.breederJob.animalsToBeFeed.length > 0
     }),
@@ -138,7 +139,7 @@ function breederFunction(bot: Bot, targets: LegionStateMachineTargets) {
       parent: feedAnimal,
       child: feedAnimal,
       onTransition: () => {
-        targets.breederJob.feedEntity = targets.breederJob.animalsToBeFeed.shift()
+        targets.breederJob.feedEntity = targets.breederJob.animalsToBeFeed.shift() as Entity
       },
       shouldTransition: () => {
         return feedAnimal.isFinished() && targets.breederJob.animalsToBeFeed.length > 0
@@ -147,9 +148,9 @@ function breederFunction(bot: Bot, targets: LegionStateMachineTargets) {
 
   ]
 
-  const breederFunction = new NestedStateMachine(transitions, start, exit)
-  breederFunction.stateName = 'breederFunction'
-  return breederFunction
+  const nestedState = new NestedStateMachine(transitions, start, exit)
+  nestedState.stateName = 'breederFunction'
+  return nestedState
 }
 
-module.exports = breederFunction
+export default breederFunction

@@ -11,8 +11,10 @@ import BehaviorMoveToArray from '@/BehaviorModules/BehaviorMoveToArray'
 import BehaviorEatFood from '@/BehaviorModules/BehaviorEatFood'
 import BehaviorEquipAll from '@/BehaviorModules/BehaviorEquipAll'
 import BehaviorFindItems from '@/BehaviorModules/BehaviorFindItems'
-import BehaviorHelpFriend from '@/BehaviorModules/BehaviorHelpFriend'
+import BehaviorHelpFriend from '@/BehaviorModules/guardJob/BehaviorHelpFriend'
 import BehaviorMoveTo from '@/BehaviorModules/BehaviorMoveTo'
+import CombatStrategyFunction from '@/NestedStateModules/combat/combatStrategyFunction'
+import GetReadyFunction from '@/NestedStateModules/getReady/getReadyFunction'
 
 import getClosestEnemy from '@/modules/getClosestEnemy'
 import { LegionStateMachineTargets } from '@/types'
@@ -70,11 +72,11 @@ function guardJobFunction(bot: Bot, targets: LegionStateMachineTargets) {
   //@ts-ignore
   goFriend.y = 813
 
-  const combatStrategy = require('@NestedStateModules/combat/combatStrategyFunction')(bot, targets)
+  const combatStrategy = CombatStrategyFunction(bot, targets)
   combatStrategy.x = 925
   combatStrategy.y = 513
 
-  const getReady = require('@NestedStateModules/getReady/getReadyFunction')(bot, targets)
+  const getReady = GetReadyFunction(bot, targets)
   getReady.stateName = 'Get Ready'
   getReady.x = 525
   getReady.y = 213
@@ -227,9 +229,9 @@ function guardJobFunction(bot: Bot, targets: LegionStateMachineTargets) {
 
   ]
 
-  const guardJobFunction = new NestedStateMachine(transitions, start)
-  guardJobFunction.stateName = 'Guard Job'
-  return guardJobFunction
+  const nestedState = new NestedStateMachine(transitions, start)
+  nestedState.stateName = 'Guard Job'
+  return nestedState
 }
 
-module.exports = guardJobFunction
+export default guardJobFunction

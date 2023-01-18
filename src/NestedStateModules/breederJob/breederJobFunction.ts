@@ -8,7 +8,11 @@ import {
 import BehaviorEatFood from '@/BehaviorModules/BehaviorEatFood'
 import { Bot, LegionStateMachineTargets } from '@/types'
 import getClosestEnemy from '@/modules/getClosestEnemy'
-
+import GetReadyFunction from '@/NestedStateModules/getReady/getReadyFunction'
+import BreederFunction from '@/NestedStateModules/breederJob/breederFunction'
+import SlaughterhouseFunction from '@/NestedStateModules/breederJob/slaughterhouseFunction'
+import CombatStrategyFunction from '@/NestedStateModules/combat/combatStrategyFunction'
+import FindItemsAndPickup from '@/NestedStateModules/findItemsAndPickup'
 
 function breederJobFunction(bot: Bot, targets: LegionStateMachineTargets) {
   const start = new BehaviorIdle()
@@ -16,17 +20,17 @@ function breederJobFunction(bot: Bot, targets: LegionStateMachineTargets) {
   start.x = 125
   start.y = 113
 
-  const getReady = require('@NestedStateModules/getReady/getReadyFunction')(bot, targets)
+  const getReady = GetReadyFunction(bot, targets)
   getReady.stateName = 'Get Ready'
   getReady.x = 125
   getReady.y = 213
 
-  const breeder = require('@NestedStateModules/breederJob/breederFunction')(bot, targets)
+  const breeder = BreederFunction(bot, targets)
   breeder.stateName = 'Breeder'
   breeder.x = 525
   breeder.y = 313
 
-  const slaughterhouse = require('@NestedStateModules/breederJob/slaughterhouseFunction')(bot, targets)
+  const slaughterhouse = SlaughterhouseFunction(bot, targets)
   slaughterhouse.stateName = 'Slaughterhouse'
   slaughterhouse.x = 525
   slaughterhouse.y = 213
@@ -37,11 +41,11 @@ function breederJobFunction(bot: Bot, targets: LegionStateMachineTargets) {
   eatFood.y = 413
 
   const getClosestMob = getClosestEnemy(bot, targets)
-  const combatStrategy = require('@NestedStateModules/combat/combatStrategyFunction')(bot, targets)
+  const combatStrategy = CombatStrategyFunction(bot, targets)
   combatStrategy.x = 525
   combatStrategy.y = 413
 
-  const findItemsAndPickup = require('@NestedStateModules/findItemsAndPickup')(bot, targets)
+  const findItemsAndPickup = FindItemsAndPickup(bot, targets)
   findItemsAndPickup.stateName = 'Find Items'
   findItemsAndPickup.x = 325
   findItemsAndPickup.y = 213
@@ -104,9 +108,9 @@ function breederJobFunction(bot: Bot, targets: LegionStateMachineTargets) {
 
   ]
 
-  const breederJobFunction = new NestedStateMachine(transitions, start)
-  breederJobFunction.stateName = 'Breeder Job'
-  return breederJobFunction
+  const nestedState = new NestedStateMachine(transitions, start)
+  nestedState.stateName = 'Breeder Job'
+  return nestedState
 }
 
-module.exports = breederJobFunction
+export default breederJobFunction

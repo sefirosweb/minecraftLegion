@@ -11,9 +11,11 @@ import botWebsocket from '@modules/botWebsocket'
 //@ts-ignore
 import BehaviorLoadConfig from '@/BehaviorModules/BehaviorLoadConfig'
 import { Bot, LegionStateMachineTargets, PlantArea } from '@/types'
+import { plants } from '@/modules/plantType'
+import FarmingPlantsFunction from '@/NestedStateModules/farmerJob/farmingPlantsFunction'
+import FarmingTreesFunction from '@/NestedStateModules/farmerJob/farmingTreesFunction'
 
 function farmingFunction(bot: Bot, targets: LegionStateMachineTargets) {
-  const { plants } = require('@modules/plantType')
   const start = new BehaviorIdle()
   start.stateName = 'Start'
   //@ts-ignore
@@ -47,14 +49,18 @@ function farmingFunction(bot: Bot, targets: LegionStateMachineTargets) {
   //@ts-ignore
   nextArea.y = 250
 
-  const farmingPlantsFunction = require('@NestedStateModules/farmerJob/farmingPlantsFunction')(bot, targets)
+  const farmingPlantsFunction = FarmingPlantsFunction(bot, targets)
   farmingPlantsFunction.stateName = 'Farm Plants'
+  //@ts-ignore
   farmingPlantsFunction.x = 125
+  //@ts-ignore
   farmingPlantsFunction.y = 350
 
-  const farmingTreesFunction = require('@NestedStateModules/farmerJob/farmingTreesFunction')(bot, targets)
+  const farmingTreesFunction = FarmingTreesFunction(bot, targets)
   farmingTreesFunction.stateName = 'Farm Trees'
+  //@ts-ignore
   farmingTreesFunction.x = 525
+  //@ts-ignore
   farmingTreesFunction.y = 350
 
   let plantArea: Array<PlantArea> = []
@@ -150,9 +156,9 @@ function farmingFunction(bot: Bot, targets: LegionStateMachineTargets) {
 
   ]
 
-  const farmingFunction = new NestedStateMachine(transitions, start, exit)
-  farmingFunction.stateName = 'farmingFunction'
-  return farmingFunction
+  const nestedState = new NestedStateMachine(transitions, start, exit)
+  nestedState.stateName = 'farmingFunction'
+  return nestedState
 }
 
-module.exports = farmingFunction
+export default farmingFunction

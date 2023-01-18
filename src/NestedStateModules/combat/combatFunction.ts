@@ -8,19 +8,20 @@ import {
   NestedStateMachine,
   BehaviorFollowEntity
 } from 'mineflayer-statemachine'
-import BehaviorAttack from '@/BehaviorModules/BehaviorAttack'
-import BehaviorLongAttack from '@/BehaviorModules/BehaviorLongAttack'
+import BehaviorAttack from '@/BehaviorModules/combat/BehaviorAttack'
+import BehaviorLongAttack from '@/BehaviorModules/combat/BehaviorLongAttack'
 import { Bot, fakeVec3, LegionStateMachineTargets } from '@/types'
 import { Entity } from 'prismarine-entity'
 import mcDataLoader from 'minecraft-data'
 import inventoryModule from '@/modules/inventoryModule'
 import getClosestEnemy from '@/modules/getClosestEnemy'
+//@ts-ignore
+import hawkEye from 'minecrafthawkeye'
 
 
 function combatFunction(bot: Bot, targets: LegionStateMachineTargets) {
   const inventory = inventoryModule(bot)
   const { ignoreMobs, flyingMobs } = getClosestEnemy(bot, targets)
-  const hawkEye = require('minecrafthawkeye')
   bot.loadPlugin(hawkEye)
 
   const mcData = mcDataLoader(bot.version)
@@ -321,9 +322,9 @@ function combatFunction(bot: Bot, targets: LegionStateMachineTargets) {
 
   ]
 
-  const combatFunction = new NestedStateMachine(transitions, start, exit)
-  combatFunction.stateName = 'Combat'
-  return combatFunction
+  const nestedState = new NestedStateMachine(transitions, start, exit)
+  nestedState.stateName = 'Combat'
+  return nestedState
 }
 
-module.exports = combatFunction
+export default combatFunction

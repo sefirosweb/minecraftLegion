@@ -5,12 +5,9 @@ import {
   NestedStateMachine
 } from 'mineflayer-statemachine'
 
-//@ts-ignore
 import BehaviorEquip from '@/BehaviorModules/BehaviorEquip'
-//@ts-ignore
 import BehaviorInteractEntity from '@/BehaviorModules/BehaviorInteractEntity'
-//@ts-ignore
-import animalType from '@modules/animalType'
+import animalType from '@/modules/animalType'
 import { Bot, LegionStateMachineTargets } from '@/types'
 import mcDataLoader from 'minecraft-data'
 
@@ -57,8 +54,8 @@ function feedAnimalFunction(bot: Bot, targets: LegionStateMachineTargets) {
       child: equip,
       onTransition: () => {
         targets.breederJob.breededAnimals = []
-        // Select item to give food
-        const validFoods = animalType[targets.breederJob.feedEntity?.name].foods
+        const feedEntity = targets.breederJob.feedEntity
+        const validFoods = animalType[feedEntity.name ?? ''].foods
         const validFood = bot.inventory.items().find(item => validFoods.includes(item.name))
         if (validFood) {
           targets.item = mcData.itemsByName[validFood.name]
@@ -128,9 +125,9 @@ function feedAnimalFunction(bot: Bot, targets: LegionStateMachineTargets) {
 
   ]
 
-  const feedAnimalFunction = new NestedStateMachine(transitions, start, exit)
-  feedAnimalFunction.stateName = 'feedAnimalFunction'
-  return feedAnimalFunction
+  const nestedState = new NestedStateMachine(transitions, start, exit)
+  nestedState.stateName = 'feedAnimalFunction'
+  return nestedState
 }
 
-module.exports = feedAnimalFunction
+export default feedAnimalFunction

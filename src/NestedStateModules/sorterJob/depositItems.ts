@@ -1,9 +1,6 @@
 import { Bot, LegionStateMachineTargets, PendingTransaction } from '@/types'
-import {
-  StateTransition,
-  BehaviorIdle,
-  NestedStateMachine
-} from 'mineflayer-statemachine'
+import { StateTransition, BehaviorIdle, NestedStateMachine } from 'mineflayer-statemachine'
+import GoAndDeposit from '@/NestedStateModules/getReady/goAndDeposit'
 
 function depositItems(bot: Bot, targets: LegionStateMachineTargets) {
   const start = new BehaviorIdle()
@@ -27,9 +24,11 @@ function depositItems(bot: Bot, targets: LegionStateMachineTargets) {
   //@ts-ignore
   startCheckNextChest.y = 263
 
-  const goAndDeposit = require('@NestedStateModules/getReady/goAndDeposit')(bot, targets)
+  const goAndDeposit = GoAndDeposit(bot, targets)
   goAndDeposit.stateName = 'Go chest and Deposit'
+  //@ts-ignore
   goAndDeposit.x = 125
+  //@ts-ignore
   goAndDeposit.y = 413
 
   let pendingTransaction: Array<PendingTransaction>
@@ -91,9 +90,9 @@ function depositItems(bot: Bot, targets: LegionStateMachineTargets) {
     })
   ]
 
-  const depositItems = new NestedStateMachine(transitions, start, exit)
-  depositItems.stateName = 'depositItems'
-  return depositItems
+  const nestedState = new NestedStateMachine(transitions, start, exit)
+  nestedState.stateName = 'depositItems'
+  return nestedState
 }
 
-module.exports = depositItems
+export default depositItems

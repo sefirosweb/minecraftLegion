@@ -226,9 +226,9 @@ function harvestFunction(bot: Bot, targets: LegionStateMachineTargets) {
     })
   ]
 
-  const harvestFunction = new NestedStateMachine(transitions, start, exit)
-  harvestFunction.stateName = 'harvestFunction'
-  return harvestFunction
+  const nestedState = new NestedStateMachine(transitions, start, exit)
+  nestedState.stateName = 'harvestFunction'
+  return nestedState
 }
 
-module.exports = harvestFunction
+export default harvestFunction

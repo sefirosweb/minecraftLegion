@@ -169,9 +169,9 @@ function fillFunction(bot: Bot, targets: LegionStateMachineTargets) {
 
   ]
 
-  const fillFunction = new NestedStateMachine(transitions, start, exit)
-  fillFunction.stateName = 'fillFunction'
-  return fillFunction
+  const nestedState = new NestedStateMachine(transitions, start, exit)
+  nestedState.stateName = 'fillFunction'
+  return nestedState
 }
 
-module.exports = fillFunction
+export default fillFunction

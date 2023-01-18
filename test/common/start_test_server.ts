@@ -6,6 +6,8 @@ const mc = require('minecraft-protocol')
 const fs = require('fs')
 const path = require('path')
 
+import mcDataLoader from 'minecraft-data'
+
 // set this to false if you want to test without starting a server automatically
 const START_THE_SERVER = true
 // if you want to have time to look what's happening increase this (milliseconds)
@@ -33,7 +35,7 @@ const MC_SERVER_PATH = path.join(__dirname, 'server')
 
 let PORT = 25565
 const supportedVersion = "1.18.2"
-const mcData = require('minecraft-data')(supportedVersion)
+const mcData = mcDataLoader(supportedVersion)
 const version = mcData.version
 const MC_SERVER_JAR_DIR = process.env.MC_SERVER_JAR_DIR || `${process.cwd()}/server_jars`
 const MC_SERVER_JAR = `${MC_SERVER_JAR_DIR}/minecraft_server.${version.minecraftVersion}.jar`
