@@ -12,7 +12,7 @@ import {
 
 import { Vec3 } from "vec3"
 
-import debugMode from '@/config'
+import { debugMode } from '@/config'
 import mcDataLoader from 'minecraft-data'
 import movementModule from '@/modules/movementModule'
 import botWebsocket from '@/modules/botWebsocket'
