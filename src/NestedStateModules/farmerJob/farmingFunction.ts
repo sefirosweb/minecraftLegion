@@ -114,12 +114,7 @@ function farmingFunction(bot: Bot, targets: LegionStateMachineTargets) {
         botWebsocket.log('Plant is not valid! ' + plantArea[plantAreaIndex].plant)
       },
       // shouldTransition: () => !plantArea[plantAreaIndex].plant.includes(validPlants)
-      shouldTransition: () => plants[plantArea[plantAreaIndex].plant!] === undefined ||
-        !Number.isInteger(plantArea[plantAreaIndex].xStart) ||
-        !Number.isInteger(plantArea[plantAreaIndex].xEnd) ||
-        !Number.isInteger(plantArea[plantAreaIndex].yLayer) ||
-        !Number.isInteger(plantArea[plantAreaIndex].zStart) ||
-        !Number.isInteger(plantArea[plantAreaIndex].zEnd)
+      shouldTransition: () => plants[plantArea[plantAreaIndex].plant!] === undefined
     }),
 
     /** Plants **/

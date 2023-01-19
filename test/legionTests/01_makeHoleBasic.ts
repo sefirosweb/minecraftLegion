@@ -1,17 +1,10 @@
-//@ts-nocheck
 import botConfigLoader from '@/modules/botConfig'
+import { Config, MineCordsConfig } from '@/types'
+import { Jobs } from '@/types/defaultTypes'
 const botConfig = botConfigLoader()
-import startTests from './plugins/startTests'
+import { bot } from '../hooks'
 
-module.exports = () => async (bot) => {
-  const tests = []
-  function addTest(name, f) {
-    tests.push({
-      name,
-      f: () => f(bot)
-    })
-  }
-
+describe('01 Basic Mining', function () {
   let xStart = -10
   let yStart = -50
   let zStart = -10
@@ -20,16 +13,7 @@ module.exports = () => async (bot) => {
   let yEnd = -60
   let zEnd = -12
 
-
-  bot.chat(`/give flatbot minecraft:iron_pickaxe`)
-  bot.chat(`/give flatbot minecraft:diamond_shovel`)
-  bot.chat(`/give flatbot minecraft:dirt 64`)
-  bot.chat(`/fill ${xStart} ${yStart} ${zStart} ${xEnd} ${yEnd} ${zEnd} minecraft:dirt`)
-  bot.chat(`/teleport ${xStart} ${yStart + 2} ${zStart}`)
-  bot.creative.stopFlying()
-  bot.test.becomeSurvival()
-
-  const minerCords = {
+  const minerCords: MineCordsConfig = {
     yStart: yStart,
     yEnd: yStart,
     xStart,
@@ -42,9 +26,9 @@ module.exports = () => async (bot) => {
     world: "minecraft:overworld"
   }
 
-  const config = {
+  const config: Config = {
     ...botConfig.defaultConfig,
-    job: 'miner',
+    job: Jobs.miner,
     itemsToBeReady: [
       {
         name: "iron_pickaxe",
@@ -54,19 +38,30 @@ module.exports = () => async (bot) => {
     minerCords
   }
 
-  botConfig.saveFullConfig(bot.username, config)
-  bot.emit('reloadBotConfig')
+  before(async () => {
+    await bot.test.resetState()
+    bot.chat(`/give flatbot minecraft:iron_pickaxe`)
+    bot.chat(`/give flatbot minecraft:diamond_shovel`)
+    bot.chat(`/give flatbot minecraft:dirt 64`)
+    bot.chat(`/fill ${xStart} ${yStart} ${zStart} ${xEnd} ${yEnd} ${zEnd} minecraft:dirt`)
+    bot.chat(`/teleport ${xStart} ${yStart + 2} ${zStart}`)
+    bot.creative.stopFlying()
+    bot.test.becomeSurvival()
 
-  addTest('Making a Hole X+ Normal', (bot) => {
+    botConfig.saveFullConfig(bot.username, config)
+    bot.emit('reloadBotConfig')
+  })
+
+  it('Making a Hole X+ Normal', (): Promise<void> => {
     return new Promise((resolve) => {
       bot.once('finishedJob', () => resolve())
     })
   })
 
-  addTest('Making a Hole X+ Reverse', (bot) => {
+  it('Making a Hole X+ Reverse', (): Promise<void> => {
     yStart--;
 
-    const newMinerCords = {
+    const newMinerCords: MineCordsConfig = {
       ...minerCords,
       yStart: yStart,
       yEnd: yStart,
@@ -86,10 +81,10 @@ module.exports = () => async (bot) => {
     })
   })
 
-  addTest('Making a Hole X- Normal', (bot) => {
+  it('Making a Hole X- Normal', (): Promise<void> => {
     yStart--;
 
-    const newMinerCords = {
+    const newMinerCords: MineCordsConfig = {
       ...minerCords,
       yStart: yStart,
       yEnd: yStart,
@@ -109,10 +104,10 @@ module.exports = () => async (bot) => {
     })
   })
 
-  addTest('Making a Hole X- Reverse', (bot) => {
+  it('Making a Hole X- Reverse', (): Promise<void> => {
     yStart--;
 
-    const newMinerCords = {
+    const newMinerCords: MineCordsConfig = {
       ...minerCords,
       yStart: yStart,
       yEnd: yStart,
@@ -132,10 +127,10 @@ module.exports = () => async (bot) => {
     })
   })
 
-  addTest('Making a Hole Z+ Normal', (bot) => {
+  it('Making a Hole Z+ Normal', (): Promise<void> => {
     yStart--;
 
-    const newMinerCords = {
+    const newMinerCords: MineCordsConfig = {
       ...minerCords,
       yStart: yStart,
       yEnd: yStart,
@@ -155,10 +150,10 @@ module.exports = () => async (bot) => {
     })
   })
 
-  addTest('Making a Hole Z+ Reverse', (bot) => {
+  it('Making a Hole Z+ Reverse', (): Promise<void> => {
     yStart--;
 
-    const newMinerCords = {
+    const newMinerCords: MineCordsConfig = {
       ...minerCords,
       yStart: yStart,
       yEnd: yStart,
@@ -178,10 +173,10 @@ module.exports = () => async (bot) => {
     })
   })
 
-  addTest('Making a Hole Z- Normal', (bot) => {
+  it('Making a Hole Z- Normal', (): Promise<void> => {
     yStart--;
 
-    const newMinerCords = {
+    const newMinerCords: MineCordsConfig = {
       ...minerCords,
       yStart: yStart,
       yEnd: yStart,
@@ -201,10 +196,10 @@ module.exports = () => async (bot) => {
     })
   })
 
-  addTest('Making a Hole Z- Reverse', (bot) => {
+  it('Making a Hole Z- Reverse', (): Promise<void> => {
     yStart--;
 
-    const newMinerCords = {
+    const newMinerCords: MineCordsConfig = {
       ...minerCords,
       yStart: yStart,
       yEnd: yStart,
@@ -224,7 +219,4 @@ module.exports = () => async (bot) => {
     })
   })
 
-
-
-  return startTests(tests)
-}
+})

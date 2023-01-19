@@ -1,16 +1,10 @@
-//@ts-nocheck
 import botConfigLoader from '@/modules/botConfig'
+import { Config, MineCordsConfig } from '@/types'
+import { Jobs } from '@/types/defaultTypes'
 const botConfig = botConfigLoader()
-import startTests from './plugins/startTests'
+import { bot } from '../hooks'
 
-module.exports = () => async (bot) => {
-  const tests = []
-  function addTest(name, f) {
-    tests.push({
-      name,
-      f: () => f(bot)
-    })
-  }
+describe('02 Make basic tunel', function () {
 
   let xStart = -15
   let yStart = -60
@@ -20,16 +14,7 @@ module.exports = () => async (bot) => {
   let yEnd = -57
   let zEnd = -14
 
-
-  bot.chat(`/give flatbot minecraft:iron_pickaxe`)
-  bot.chat(`/give flatbot minecraft:diamond_shovel`)
-  bot.chat(`/give flatbot minecraft:dirt 64`)
-  bot.chat(`/fill ${xStart} ${yStart} ${zStart} ${xEnd} ${yEnd} ${zEnd} minecraft:dirt`)
-  bot.chat(`/teleport -2 -60 -9`)
-  bot.creative.stopFlying()
-  bot.test.becomeSurvival()
-
-  const minerCords = {
+  const minerCords: MineCordsConfig = {
     xStart: -10,
     yStart: -60,
     zStart: -11,
@@ -42,9 +27,9 @@ module.exports = () => async (bot) => {
     world: "minecraft:overworld"
   }
 
-  const config = {
+  const config: Config = {
     ...botConfig.defaultConfig,
-    job: 'miner',
+    job: Jobs.miner,
     itemsToBeReady: [
       {
         name: "iron_pickaxe",
@@ -54,19 +39,29 @@ module.exports = () => async (bot) => {
     minerCords
   }
 
-  botConfig.saveFullConfig(bot.username, config)
-  bot.emit('reloadBotConfig')
+  before(async () => {
+    await bot.test.resetState()
+    bot.chat(`/give flatbot minecraft:iron_pickaxe`)
+    bot.chat(`/give flatbot minecraft:diamond_shovel`)
+    bot.chat(`/give flatbot minecraft:dirt 64`)
+    bot.chat(`/fill ${xStart} ${yStart} ${zStart} ${xEnd} ${yEnd} ${zEnd} minecraft:dirt`)
+    bot.chat(`/teleport -2 -60 -9`)
+    bot.creative.stopFlying()
+    bot.test.becomeSurvival()
 
-  addTest('Making a Tunnel X- Normal', (bot) => {
+    botConfig.saveFullConfig(bot.username, config)
+    bot.emit('reloadBotConfig')
+  })
+
+  it('Making a Tunnel X- Normal', (): Promise<void> => {
     return new Promise((resolve) => {
       bot.once('finishedJob', () => resolve())
     })
   })
 
+  it('Making a Tunnel X+ Normal', (): Promise<void> => {
 
-  addTest('Making a Tunnel X+ Normal', (bot) => {
-
-    const newMinerCords = {
+    const newMinerCords: MineCordsConfig = {
       ...minerCords,
       xStart: -15,
       xEnd: -13,
@@ -85,9 +80,9 @@ module.exports = () => async (bot) => {
     })
   })
 
-  addTest('Making a Tunnel Z+ Normal', (bot) => {
+  it('Making a Tunnel Z+ Normal', (): Promise<void> => {
 
-    const newMinerCords = {
+    const newMinerCords: MineCordsConfig = {
       ...minerCords,
       xStart: -12,
       xEnd: -13,
@@ -107,9 +102,10 @@ module.exports = () => async (bot) => {
       bot.once('finishedJob', () => resolve())
     })
   })
-  addTest('Making a Tunnel Z- Normal', (bot) => {
 
-    const newMinerCords = {
+  it('Making a Tunnel Z- Normal', (): Promise<void> => {
+
+    const newMinerCords: MineCordsConfig = {
       ...minerCords,
       xStart: -12,
       xEnd: -13,
@@ -130,6 +126,4 @@ module.exports = () => async (bot) => {
     })
   })
 
-
-  return startTests(tests)
-}
+})

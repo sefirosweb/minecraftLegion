@@ -39,11 +39,9 @@ const defaultConfig: Config = {
     'cooked_porkchop',
     'cooked_mutton'
   ],
-  // chests: [],
-  // patrol: [],
-  // plantAreas: [],
+  plantAreas: [],
   // chestAreas: [],
-  // farmAreas: [],
+  farmAreas: [],
   farmAnimal: {
     seconds: 60,
     cow: 10,
@@ -72,7 +70,9 @@ const defaultConfig: Config = {
     zEnd: 0,
     zStart: 0,
     reverse: false
-  }
+  },
+  chests: [],
+  patrol: []
 }
 
 const botConfiguration = () => {
@@ -377,19 +377,8 @@ const botConfiguration = () => {
   }
 
   const setPlantAreas = (botName: string, plantAreas: Array<PlantArea>) => {
-    const plantAreasConverted: Array<PlantArea> = plantAreas.map((plant) => {
-      const copyPlant = {
-        plant: plant.plant,
-        yLayer: typeof plant.yLayer === 'string' ? parseInt(plant.yLayer) : plant.yLayer,
-        xStart: typeof plant.xStart === 'string' ? parseInt(plant.xStart) : plant.xStart,
-        xEnd: typeof plant.xEnd === 'string' ? parseInt(plant.xEnd) : plant.xEnd,
-        zStart: typeof plant.zStart === 'string' ? parseInt(plant.zStart) : plant.zStart,
-        zEnd: typeof plant.zEnd === 'string' ? parseInt(plant.zEnd) : plant.zEnd
-      }
-      return copyPlant
-    })
     const db = getConn(botName)
-    db.set('config.plantAreas', plantAreasConverted).write()
+    db.set('config.plantAreas', plantAreas).write()
   }
 
   const getFarmAreas = (botName: string) => {

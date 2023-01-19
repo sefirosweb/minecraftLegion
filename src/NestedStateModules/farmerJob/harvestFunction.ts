@@ -84,11 +84,11 @@ function harvestFunction(bot: Bot, targets: LegionStateMachineTargets) {
   }
 
   function getPlantBlock() {
-    const xStart = targets.farmerJob.plantArea.xStart! < targets.farmerJob.plantArea.xEnd! ? targets.farmerJob.plantArea.xStart! : targets.farmerJob.plantArea.xEnd!
-    const xEnd = targets.farmerJob.plantArea.xStart! > targets.farmerJob.plantArea.xEnd! ? targets.farmerJob.plantArea.xStart! : targets.farmerJob.plantArea.xEnd!
-    const zStart = targets.farmerJob.plantArea.zStart! < targets.farmerJob.plantArea.zEnd! ? targets.farmerJob.plantArea.zStart! : targets.farmerJob.plantArea.zEnd!
-    const zEnd = targets.farmerJob.plantArea.zStart! > targets.farmerJob.plantArea.zEnd! ? targets.farmerJob.plantArea.zStart! : targets.farmerJob.plantArea.zEnd!
-    const yLayer = targets.farmerJob.plantArea.yLayer! + 1
+    const xStart = targets.farmerJob.plantArea.layer.xStart! < targets.farmerJob.plantArea.layer.xEnd! ? targets.farmerJob.plantArea.layer.xStart! : targets.farmerJob.plantArea.layer.xEnd!
+    const xEnd = targets.farmerJob.plantArea.layer.xStart! > targets.farmerJob.plantArea.layer.xEnd! ? targets.farmerJob.plantArea.layer.xStart! : targets.farmerJob.plantArea.layer.xEnd!
+    const zStart = targets.farmerJob.plantArea.layer.zStart! < targets.farmerJob.plantArea.layer.zEnd! ? targets.farmerJob.plantArea.layer.zStart! : targets.farmerJob.plantArea.layer.zEnd!
+    const zEnd = targets.farmerJob.plantArea.layer.zStart! > targets.farmerJob.plantArea.layer.zEnd! ? targets.farmerJob.plantArea.layer.zStart! : targets.farmerJob.plantArea.layer.zEnd!
+    const yLayer = targets.farmerJob.plantArea.layer.yLayer! + 1
     const plant = targets.farmerJob.plantArea.plant!
     const plantName = plants[plant].plantName
     const type = plants[plant].type

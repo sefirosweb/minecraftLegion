@@ -1,43 +1,44 @@
 import botConfigLoader from '@/modules/botConfig'
-const botConfig = botConfigLoader()
 import inventoryModule from '@/modules/inventoryModule'
-import { Config } from '@/types'
+import { Config, PlantArea } from '@/types'
 import { Jobs } from '@/types/defaultTypes'
 import { bot } from '../hooks'
+const botConfig = botConfigLoader()
 
+describe('06 Wood cutter', function () {
 
-describe('10 Breed cows', function () {
+  const plantAreas: Array<PlantArea> = [
+    {
+      plant: "oak_sapling",
+      layer: {
+        xStart: 8,
+        xEnd: 8,
+        zStart: 8,
+        zEnd: 8,
+        yLayer: -61,
+      }
+    }
+  ]
 
   const config: Config = {
     ...botConfig.defaultConfig,
-    job: Jobs.breeder,
+    job: Jobs.farmer,
     pickUpItems: true,
-    itemsToBeReady: [],
-    farmAnimal: {
-      ...botConfig.defaultConfig.farmAnimal,
-      cow: 5,
-      seconds: 10
-    },
-    farmAreas: [
+    itemsToBeReady: [
       {
-        xStart: 5,
-        xEnd: -5,
-        zStart: -5,
-        zEnd: 5,
-        yLayer: -61,
+        name: "iron_axe",
+        quantity: 1
       }
     ],
+    plantAreas
   }
 
   before(async () => {
     await bot.test.resetState()
+    bot.chat(`/give flatbot minecraft:oak_sapling`)
     bot.chat(`/give flatbot minecraft:iron_axe`)
+    bot.chat(`/fill 8 -54 8 8 -54 8 minecraft:stone`)
     bot.chat(`/gamerule randomTickSpeed 500`)
-    bot.chat(`/give flatbot minecraft:wheat 256`)
-    bot.chat(`/fill -6 -59 6 6 -60 -6 minecraft:stone`)
-    bot.chat(`/fill -5 -59 5 5 -60 -5 minecraft:air`)
-    bot.chat(`/summon cow 3 -60 -3`)
-    bot.chat(`/summon cow 3 -60 3`)
 
     bot.creative.stopFlying()
     bot.test.becomeSurvival()
@@ -46,9 +47,8 @@ describe('10 Breed cows', function () {
     bot.emit('reloadBotConfig')
   })
 
-  it('Breeded cows', (): Promise<void> => {
+  it('Wood cutter', (): Promise<void> => {
     return new Promise((resolve) => {
-
       const { getResumeInventory } = inventoryModule(bot);
       const interval = setInterval(() => {
         let foundAll = true
@@ -57,7 +57,16 @@ describe('10 Breed cows', function () {
           quantity: number
         }> = [
             {
-              name: 'beef', quantity: 3
+              name: 'oak_log', quantity: 10
+            },
+            {
+              name: 'stick', quantity: 1
+            },
+            {
+              name: 'oak_sapling', quantity: 1
+            },
+            {
+              name: 'apple', quantity: 1
             }
           ]
 

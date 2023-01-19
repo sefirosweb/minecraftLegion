@@ -1,6 +1,6 @@
 import { Movements } from 'mineflayer-pathfinder'
 import { StateMachineTargets } from 'mineflayer-statemachine'
-import { Bot as MineflayerBot, Chest, Dispenser, Furnace } from 'mineflayer'
+import { Bot as MineflayerBot, Dispenser, Furnace } from 'mineflayer'
 import { Vec3 } from 'vec3'
 import { Jobs } from './defaultTypes'
 import { Block } from 'prismarine-block'
@@ -32,12 +32,8 @@ type MineCordsConfig = MineCords & {
 }
 
 type PlantArea = {
-    xStart?: number,
-    xEnd?: number,
-    zStart?: number,
-    zEnd?: number,
-    yLayer?: number,
-    plant?: string
+    layer: Layer,
+    plant: string
 }
 
 type GuardJob = {}
@@ -105,7 +101,11 @@ type Config = {
     helpFriends: boolean
     randomFarmArea: boolean,
     firstPickUpItemsFromKnownChests: boolean,
+    patrol: Array<Vec3>
+    chests: Array<Chest>
+    plantAreas: Array<PlantArea>
     farmAnimal: FarmAnimal
+    farmAreas: Array<Layer>
 }
 
 type Portals = {
@@ -184,6 +184,19 @@ type Master = {
 }
 interface Bot extends MineflayerBot {
     isABed: (bedBlock: Block) => boolean
+    test: {
+        sayEverywhere: () => void
+        clearInventory: () => void
+        becomeSurvival: () => void
+        becomeCreative: () => void
+        fly: () => void
+        resetState: () => Promise<void>
+        setInventorySlot: () => void
+        placeBlock: () => void
+        runExample: () => void
+        tellAndListen: () => void
+        wait: () => void
+    }
 }
 
 interface EntityWithDistance extends Entity {

@@ -1,30 +1,29 @@
+
 import botConfigLoader from '@/modules/botConfig'
 const botConfig = botConfigLoader()
 import inventoryModule from '@/modules/inventoryModule'
+import { bot } from '../hooks'
 import { Config } from '@/types'
 import { Jobs } from '@/types/defaultTypes'
-import { bot } from '../hooks'
 
-
-describe('10 Breed cows', function () {
+describe('08 Farming cactus', function () {
 
   const config: Config = {
     ...botConfig.defaultConfig,
-    job: Jobs.breeder,
+    job: Jobs.farmer,
     pickUpItems: true,
+    itemsCanBeEat: ['golden_carrot'],
     itemsToBeReady: [],
-    farmAnimal: {
-      ...botConfig.defaultConfig.farmAnimal,
-      cow: 5,
-      seconds: 10
-    },
-    farmAreas: [
+    plantAreas: [
       {
-        xStart: 5,
-        xEnd: -5,
-        zStart: -5,
-        zEnd: 5,
-        yLayer: -61,
+        plant: "cactus",
+        layer: {
+          yLayer: -61,
+          xStart: 10,
+          zStart: 20,
+          xEnd: 20,
+          zEnd: 20
+        }
       }
     ],
   }
@@ -32,12 +31,13 @@ describe('10 Breed cows', function () {
   before(async () => {
     await bot.test.resetState()
     bot.chat(`/give flatbot minecraft:iron_axe`)
+    bot.chat(`/give flatbot minecraft:iron_hoe`)
+
+    bot.chat(`/fill 10 -61 20 20 -61 20 minecraft:sand`)
     bot.chat(`/gamerule randomTickSpeed 500`)
-    bot.chat(`/give flatbot minecraft:wheat 256`)
-    bot.chat(`/fill -6 -59 6 6 -60 -6 minecraft:stone`)
-    bot.chat(`/fill -5 -59 5 5 -60 -5 minecraft:air`)
-    bot.chat(`/summon cow 3 -60 -3`)
-    bot.chat(`/summon cow 3 -60 3`)
+
+    bot.chat(`/give flatbot minecraft:cactus 4`)
+    bot.chat(`/give flatbot minecraft:golden_carrot 64`)
 
     bot.creative.stopFlying()
     bot.test.becomeSurvival()
@@ -46,8 +46,13 @@ describe('10 Breed cows', function () {
     bot.emit('reloadBotConfig')
   })
 
-  it('Breeded cows', (): Promise<void> => {
+
+  it('Farming catus', (): Promise<void> => {
     return new Promise((resolve) => {
+
+      const clearItemsInterval = setInterval(() => {
+        bot.chat('/kill @e[type=!player]')
+      }, 20000)
 
       const { getResumeInventory } = inventoryModule(bot);
       const interval = setInterval(() => {
@@ -57,7 +62,7 @@ describe('10 Breed cows', function () {
           quantity: number
         }> = [
             {
-              name: 'beef', quantity: 3
+              name: 'cactus', quantity: 10
             }
           ]
 
@@ -71,6 +76,7 @@ describe('10 Breed cows', function () {
         })
 
         if (foundAll) {
+          clearInterval(clearItemsInterval)
           clearInterval(interval)
           resolve()
         }

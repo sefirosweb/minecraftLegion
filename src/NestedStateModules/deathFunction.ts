@@ -177,7 +177,6 @@ function deathFunction(bot: Bot, targets: LegionStateMachineTargets) {
   })
 
   bot.on('reloadBotConfig', () => {
-    console.log('Reloading bot config')
     reloadTrigger()
   })
 

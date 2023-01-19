@@ -1,5 +1,4 @@
-import { LegionStateMachineTargets } from '@/types'
-import { Bot } from 'mineflayer'
+import { Bot, LegionStateMachineTargets } from '@/types'
 import {
   StateTransition,
   BehaviorIdle,

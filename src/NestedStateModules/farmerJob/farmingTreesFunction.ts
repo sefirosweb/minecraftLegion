@@ -71,10 +71,10 @@ function farmingTreesFunction(bot: Bot, targets: LegionStateMachineTargets) {
       finished = true
     }
 
-    targets.farmerJob.plantArea.xStart = xCurrent
-    targets.farmerJob.plantArea.xEnd = xCurrent
-    targets.farmerJob.plantArea.zStart = zCurrent
-    targets.farmerJob.plantArea.zEnd = zCurrent
+    targets.farmerJob.plantArea.layer.xStart = xCurrent
+    targets.farmerJob.plantArea.layer.xEnd = xCurrent
+    targets.farmerJob.plantArea.layer.zStart = zCurrent
+    targets.farmerJob.plantArea.layer.zEnd = zCurrent
   }
 
   const transitions = [
@@ -83,18 +83,18 @@ function farmingTreesFunction(bot: Bot, targets: LegionStateMachineTargets) {
       parent: start,
       child: selectTree,
       onTransition: () => {
-        xStart = targets.farmerJob.plantArea.xStart! < targets.farmerJob.plantArea.xEnd! ? targets.farmerJob.plantArea.xStart! : targets.farmerJob.plantArea.xEnd!
-        xEnd = targets.farmerJob.plantArea.xStart! > targets.farmerJob.plantArea.xEnd! ? targets.farmerJob.plantArea.xStart! : targets.farmerJob.plantArea.xEnd!
-        zStart = targets.farmerJob.plantArea.zStart! < targets.farmerJob.plantArea.zEnd! ? targets.farmerJob.plantArea.zStart! : targets.farmerJob.plantArea.zEnd!
-        zEnd = targets.farmerJob.plantArea.zStart! > targets.farmerJob.plantArea.zEnd! ? targets.farmerJob.plantArea.zStart! : targets.farmerJob.plantArea.zEnd!
+        xStart = targets.farmerJob.plantArea.layer.xStart! < targets.farmerJob.plantArea.layer.xEnd! ? targets.farmerJob.plantArea.layer.xStart! : targets.farmerJob.plantArea.layer.xEnd!
+        xEnd = targets.farmerJob.plantArea.layer.xStart! > targets.farmerJob.plantArea.layer.xEnd! ? targets.farmerJob.plantArea.layer.xStart! : targets.farmerJob.plantArea.layer.xEnd!
+        zStart = targets.farmerJob.plantArea.layer.zStart! < targets.farmerJob.plantArea.layer.zEnd! ? targets.farmerJob.plantArea.layer.zStart! : targets.farmerJob.plantArea.layer.zEnd!
+        zEnd = targets.farmerJob.plantArea.layer.zStart! > targets.farmerJob.plantArea.layer.zEnd! ? targets.farmerJob.plantArea.layer.zStart! : targets.farmerJob.plantArea.layer.zEnd!
         xCurrent = xStart
         zCurrent = zStart
         finished = false
 
-        targets.farmerJob.plantArea.xStart = xCurrent
-        targets.farmerJob.plantArea.xEnd = xCurrent
-        targets.farmerJob.plantArea.zStart = zCurrent
-        targets.farmerJob.plantArea.zEnd = zCurrent
+        targets.farmerJob.plantArea.layer.xStart = xCurrent
+        targets.farmerJob.plantArea.layer.xEnd = xCurrent
+        targets.farmerJob.plantArea.layer.zStart = zCurrent
+        targets.farmerJob.plantArea.layer.zEnd = zCurrent
       },
       shouldTransition: () => true
     }),

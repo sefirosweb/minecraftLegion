@@ -99,10 +99,10 @@ function inject(bot) {
   async function resetState() {
     await teleport(new Vec3(0, -60, 0))
     await bot.test.wait(1000)
-    bot.test.sayEverywhere('/weather clear 999999')
-    bot.test.sayEverywhere('/time set day')
-    bot.test.sayEverywhere('/kill @e[type=!player]')
-    bot.test.sayEverywhere('/gamerule randomTickSpeed 20')
+    bot.chat('/weather clear 999999')
+    bot.chat('/time set day')
+    bot.chat('/kill @e[type=!player]')
+    bot.chat('/gamerule randomTickSpeed 20')
     botConfig.saveFullConfig(bot.username, botConfig.defaultConfig);
     await becomeCreative()
     await clearInventory()

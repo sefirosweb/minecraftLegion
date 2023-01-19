@@ -158,7 +158,6 @@ const startStateMachine = (bot: Bot) => {
       parent: start,
       child: watiState,
       onTransition: () => {
-        console.log('start')
         setTimeout(() => {
           checkPortalsOnSpawn()
           transitions[1].trigger()

@@ -5,26 +5,24 @@ import { Config } from '@/types'
 import { Jobs } from '@/types/defaultTypes'
 import { bot } from '../hooks'
 
-
-describe('10 Breed cows', function () {
+describe('07 Farming bamboo', function () {
 
   const config: Config = {
     ...botConfig.defaultConfig,
-    job: Jobs.breeder,
+    job: Jobs.farmer,
     pickUpItems: true,
+    itemsCanBeEat: [],
     itemsToBeReady: [],
-    farmAnimal: {
-      ...botConfig.defaultConfig.farmAnimal,
-      cow: 5,
-      seconds: 10
-    },
-    farmAreas: [
+    plantAreas: [
       {
-        xStart: 5,
-        xEnd: -5,
-        zStart: -5,
-        zEnd: 5,
-        yLayer: -61,
+        plant: "bamboo",
+        layer: {
+          xStart: 10,
+          xEnd: 20,
+          zStart: 0,
+          zEnd: 0,
+          yLayer: -61,
+        }
       }
     ],
   }
@@ -32,12 +30,11 @@ describe('10 Breed cows', function () {
   before(async () => {
     await bot.test.resetState()
     bot.chat(`/give flatbot minecraft:iron_axe`)
+    bot.chat(`/give flatbot minecraft:iron_hoe`)
+    bot.chat(`/give flatbot minecraft:iron_sword`)
     bot.chat(`/gamerule randomTickSpeed 500`)
-    bot.chat(`/give flatbot minecraft:wheat 256`)
-    bot.chat(`/fill -6 -59 6 6 -60 -6 minecraft:stone`)
-    bot.chat(`/fill -5 -59 5 5 -60 -5 minecraft:air`)
-    bot.chat(`/summon cow 3 -60 -3`)
-    bot.chat(`/summon cow 3 -60 3`)
+
+    bot.chat(`/give flatbot minecraft:bamboo 1`)
 
     bot.creative.stopFlying()
     bot.test.becomeSurvival()
@@ -46,8 +43,13 @@ describe('10 Breed cows', function () {
     bot.emit('reloadBotConfig')
   })
 
-  it('Breeded cows', (): Promise<void> => {
+
+  it('Farming bamboo', (): Promise<void> => {
     return new Promise((resolve) => {
+
+      const clearItemsInterval = setInterval(() => {
+        bot.chat('/kill @e[type=!player]')
+      }, 20000)
 
       const { getResumeInventory } = inventoryModule(bot);
       const interval = setInterval(() => {
@@ -57,7 +59,7 @@ describe('10 Breed cows', function () {
           quantity: number
         }> = [
             {
-              name: 'beef', quantity: 3
+              name: 'bamboo', quantity: 20
             }
           ]
 
@@ -71,6 +73,7 @@ describe('10 Breed cows', function () {
         })
 
         if (foundAll) {
+          clearInterval(clearItemsInterval)
           clearInterval(interval)
           resolve()
         }
