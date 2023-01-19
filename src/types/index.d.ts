@@ -48,19 +48,20 @@ type FarmerJob = {
 
 type FarmAnimal = {
     seconds: number,
-    cow: 10,
-    sheep: 10,
-    chicken: 10,
-    horse: 10,
-    donkey: 10,
-    llama: 10,
-    bee: 10,
-    panda: 10,
-    wolf: 10,
-    cat: 10,
-    rabbit: 10,
-    pig: 10,
-    turtles: 10,
+    cow: number,
+    sheep: number,
+    chicken: number,
+    horse: number,
+    donkey: number,
+    llama: number,
+    bee: number,
+    fox: number,
+    panda: number,
+    wolf: number,
+    cat: number,
+    rabbit: number,
+    pig: number,
+    turtles: number,
 }
 
 type BreederJob = {
@@ -102,6 +103,9 @@ type Config = {
     itemsToBeReady: Array<Item>
     itemsCanBeEat: Array<string>
     helpFriends: boolean
+    randomFarmArea: boolean,
+    firstPickUpItemsFromKnownChests: boolean,
+    farmAnimal: FarmAnimal
 }
 
 type Portals = {
@@ -199,6 +203,7 @@ declare module 'mineflayer' {
         customEventPhysicTick: Function | void
         reloadBotConfig: () => void
         beatMob: () => void
+        finishedJob: () => void
 
         customEventChat: (
             username: string,
@@ -341,4 +346,9 @@ type PendingTransaction = {
 type ShotDirection = {
     yaw: number,
     pitch: number
+}
+
+type Test = {
+    name: string,
+    f: () => Promise<void>
 }

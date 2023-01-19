@@ -9,21 +9,16 @@ import Filesync from 'lowdb/adapters/FileSync'
 import path from 'path'
 import { Vec3 } from 'vec3'
 
-const defaultConfig = {
-  job: 'none', // guard, miner -- For a now...
+const defaultConfig: Config = {
+  job: Jobs.none,
   mode: 'none', // none, pve, pvp
   distance: 10,
   helpFriends: false,
   pickUpItems: false,
   randomFarmArea: false,
-  isCopingPatrol: false,
   canDig: false,
   canSleep: true,
-  sleepArea: {
-    x: null,
-    y: null,
-    z: null
-  },
+  sleepArea: undefined,
   canPlaceBlocks: false,
   allowSprinting: false,
   firstPickUpItemsFromKnownChests: true,
@@ -44,11 +39,11 @@ const defaultConfig = {
     'cooked_porkchop',
     'cooked_mutton'
   ],
-  chests: [],
-  patrol: [],
-  plantAreas: [],
-  chestAreas: [],
-  farmAreas: [],
+  // chests: [],
+  // patrol: [],
+  // plantAreas: [],
+  // chestAreas: [],
+  // farmAreas: [],
   farmAnimal: {
     seconds: 60,
     cow: 10,
@@ -67,14 +62,15 @@ const defaultConfig = {
     bee: 10
   },
   minerCords: {
-    xStart: null,
-    yStart: null,
-    zStart: null,
-    xEnd: null,
-    yEnd: null,
-    zEnd: null,
-    orientation: null,
-    tunel: null,
+    orientation: 'x+',
+    tunel: 'horizontally',
+    world: 'minecraft:overworld',
+    xEnd: 0,
+    xStart: 0,
+    yEnd: 80,
+    yStart: 80,
+    zEnd: 0,
+    zStart: 0,
     reverse: false
   }
 }
