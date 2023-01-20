@@ -1,7 +1,15 @@
 //@ts-nocheck
 import { LegionStateMachineTargets, BotwebsocketAction, Bot } from "@/types"
-import { Jobs } from "@/types/defaultTypes"
 import { BotEvents } from "mineflayer"
+import { Vec3 } from "vec3"
+import config from '@/config'
+import mcDataLoader from 'minecraft-data'
+import movementModule from '@/modules/movementModule'
+import botWebsocket from '@/modules/botWebsocket'
+import mineflayerPathfinder from 'mineflayer-pathfinder'
+import { startPrismarineViewer } from '@/modules/viewer'
+import DeathFunction from '@/NestedStateModules/deathFunction'
+import botConfigLoader from '@/modules/botConfig'
 import {
   StateTransition,
   BotStateMachine,
@@ -10,18 +18,13 @@ import {
   NestedStateMachine
 } from 'mineflayer-statemachine'
 
-import { Vec3 } from "vec3"
-
-import { debugMode } from '@/config'
-import mcDataLoader from 'minecraft-data'
-import movementModule from '@/modules/movementModule'
-import botWebsocket from '@/modules/botWebsocket'
-import mineflayerPathfinder from 'mineflayer-pathfinder'
+//@ts-ignore
 import inventoryViewer from 'mineflayer-web-inventory'
-import { startPrismarineViewer } from '@/modules/viewer'
-import DeathFunction from '@/NestedStateModules/deathFunction'
+
+const botConfig = botConfigLoader()
 
 const startStateMachine = (bot: Bot) => {
+  const { debugMode } = config
   const mcData = mcDataLoader(bot.version)
   const isInDebug = debugMode || false
 
@@ -59,28 +62,7 @@ const startStateMachine = (bot: Bot) => {
   const movements = new mineflayerPathfinder.Movements(bot, mcData)
 
   const targets: LegionStateMachineTargets = {
-    config: {
-      job: Jobs.none,
-      allowSprinting: false,
-      canDig: false,
-      canPlaceBlocks: false,
-      canSleep: false,
-      canCraftItemWithdrawChest: false,
-      mode: 'none',
-      distance: 10,
-      minerCords: {
-        orientation: "x+",
-        reverse: false,
-        tunel: "horizontally",
-        world: "minecraft:overworld",
-        xEnd: 0,
-        xStart: 0,
-        yEnd: 0,
-        yStart: 0,
-        zEnd: 0,
-        zStart: 0,
-      }
-    },
+    config: botConfig.defaultConfig,
     movements: movements,
     chests: [],
     portals: {

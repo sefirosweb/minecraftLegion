@@ -67,25 +67,31 @@ function breederFunction(bot: Bot, targets: LegionStateMachineTargets) {
           entity.position.y >= yStart && entity.position.y <= yEnd &&
           entity.position.z >= zStart && entity.position.z <= zEnd
         ) {
+
+          //@ts-ignore
+          if (entity.metadata[16] === true) { // is a baby
+            continue
+          }
+
           const animalId = targets.breederJob.breededAnimals.findIndex(b => {
             return b.id === entity.id
           })
 
-          if (animalId !== undefined && animalId >= 0) {
-            if (
-              !targets.breederJob.breededAnimals[animalId].breededDate ||
-              (
-                targets.breederJob &&
-                Date.now() - (targets.breederJob.breededAnimals[animalId].breededDate ?? 0) > targets.breederJob.farmAnimal.seconds * 1000
-              )
-            ) {
-              if (targets.breederJob) {
-                animalsToFeed.push(targets.breederJob.breededAnimals[animalId])
-              }
-            }
-          } else {
+          if (animalId === -1) {
             targets.breederJob.breededAnimals.push(entity)
             animalsToFeed.push(entity)
+            continue
+          }
+
+          const animalToFeed = targets.breederJob.breededAnimals[animalId]
+
+          if (!animalToFeed.breededDate) {
+            animalsToFeed.push(animalToFeed)
+            continue
+          }
+
+          if (Date.now() - (animalToFeed.breededDate ?? 0) > targets.breederJob.farmAnimal.seconds * 1000) {
+            animalsToFeed.push(targets.breederJob.breededAnimals[animalId])
           }
         }
       }
@@ -98,7 +104,6 @@ function breederFunction(bot: Bot, targets: LegionStateMachineTargets) {
       parent: start,
       child: loadConfig,
       onTransition: () => {
-        targets.breederJob.breededAnimals = []
       },
       shouldTransition: () => true
     }),

@@ -17,7 +17,7 @@ const defaultConfig: Config = {
   pickUpItems: false,
   randomFarmArea: false,
   canDig: false,
-  canSleep: true,
+  canSleep: false,
   sleepArea: undefined,
   canPlaceBlocks: false,
   allowSprinting: false,

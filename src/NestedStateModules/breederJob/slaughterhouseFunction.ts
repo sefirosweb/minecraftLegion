@@ -46,11 +46,23 @@ function slaughterhouseFunction(bot: Bot, targets: LegionStateMachineTargets) {
       //@ts-ignore
       const animalQuantity = targets.breederJob.farmAnimal[animalName]
       spare = targets.breederJob.breededAnimals.filter(e => {
-        return e.name === animalName
+        //@ts-ignore e.metadata[16] ==> is a baby
+        return e.name === animalName && e.metadata[16] === false
       })
+
       if (spare.length > animalQuantity) {
-        spare.splice(0, animalQuantity)
-        spareAnimals.push(...spare)
+        const currentEntities = Object.values(bot.entities).map(e => e.uuid)
+        const realSpare = spare.filter((e) => currentEntities.includes(e.uuid))
+
+        if (realSpare.length > animalQuantity) {
+          const missingEntities = spare.filter((e) => !currentEntities.includes(e.uuid)).map(e => e.uuid)
+          if (missingEntities.length > 0) {
+            targets.breederJob.breededAnimals = targets.breederJob.breededAnimals.filter(e => !missingEntities.includes(e.uuid))
+          }
+
+          realSpare.splice(realSpare.length - animalQuantity, realSpare.length)
+          spareAnimals.push(...realSpare)
+        }
       }
 
     })
@@ -63,7 +75,6 @@ function slaughterhouseFunction(bot: Bot, targets: LegionStateMachineTargets) {
       parent: start,
       child: check,
       onTransition: () => {
-        targets.breederJob.breededAnimals = []
         animalsToKill = getSpareAnimals()
       },
       shouldTransition: () => true

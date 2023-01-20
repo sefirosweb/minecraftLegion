@@ -53,7 +53,6 @@ function feedAnimalFunction(bot: Bot, targets: LegionStateMachineTargets) {
       parent: start,
       child: equip,
       onTransition: () => {
-        targets.breederJob.breededAnimals = []
         const feedEntity = targets.breederJob.feedEntity
         const validFoods = animalType[feedEntity.name ?? ''].foods
         const validFood = bot.inventory.items().find(item => validFoods.includes(item.name))
