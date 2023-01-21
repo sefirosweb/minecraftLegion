@@ -6,7 +6,36 @@ import { Jobs } from '@/types/defaultTypes'
 import { bot } from '../hooks'
 
 
-describe('10 Breed cows', function () {
+const listOfAnimalstoFeed = [
+  // {
+  //   name: 'Cows',
+  //   summon: 'cow',
+  //   raw_meat: 'beef'
+  // },
+  // {
+  //   name: 'Sheeps',
+  //   summon: 'sheep',
+  //   raw_meat: 'mutton'
+  // },
+  // {
+  //   name: 'Chickens',
+  //   summon: 'chicken',
+  //   raw_meat: 'chicken'
+  // },
+  // {
+  //   name: 'Pigs',
+  //   summon: 'pig',
+  //   raw_meat: 'porkchop'
+  // },
+  {
+    name: 'Rabits',
+    summon: 'rabbit',
+    raw_meat: 'rabbit'
+  },
+
+]
+
+describe('10 Breeding animals', function () {
 
   const config: Config = {
     ...botConfig.defaultConfig,
@@ -16,83 +45,105 @@ describe('10 Breed cows', function () {
     farmAnimal: {
       ...botConfig.defaultConfig.farmAnimal,
       cow: 3,
+      sheep: 3,
+      chicken: 3,
+      pig: 3,
+      rabbit: 2,
+      // bee: 3,
+      cat: 3,
+      donkey: 3,
+      fox: 3,
+      horse: 3,
+      llama: 3,
+      panda: 3,
+      turtles: 3,
+      wolf: 3,
       seconds: 10
     },
     farmAreas: [
       {
-        xStart: 5,
-        xEnd: -5,
-        zStart: -5,
-        zEnd: 5,
+        xStart: 7,
+        xEnd: -7,
+        zStart: -7,
+        zEnd: 7,
         yLayer: -61,
       }
     ],
   }
 
-  before(async () => {
+  const beforeEachAnimal = async () => {
     await bot.test.resetState()
     bot.chat(`/give flatbot minecraft:iron_axe`)
-    bot.chat(`/give flatbot minecraft:wheat 256`)
+    bot.chat(`/give flatbot minecraft:wheat 64`)
+    bot.chat(`/give flatbot minecraft:wheat_seeds 64`)
+    bot.chat(`/give flatbot minecraft:potato 64`)
+    bot.chat(`/give flatbot minecraft:carrot 64`)
     bot.chat(`/fill -6 -59 6 6 -60 -6 minecraft:stone`)
     bot.chat(`/fill -5 -59 5 5 -60 -5 minecraft:air`)
-    bot.chat(`/summon cow 3 -60 -3`)
-    bot.chat(`/summon cow 3 -60 3`)
 
     bot.creative.stopFlying()
     bot.test.becomeSurvival()
 
     botConfig.saveFullConfig(bot.username, config)
     bot.emit('reloadBotConfig')
-  })
+  }
 
-  it('Breeded cows', (): Promise<void> => {
+  for (let i = 0; i < listOfAnimalstoFeed.length; i++) {
+    const animalToFeed = listOfAnimalstoFeed[i]
 
-    return new Promise((resolve) => {
-      const intervalFeedCows = setInterval(() => {
-        const entities = bot.entities
+    it(animalToFeed.name, async (): Promise<void> => {
+      await beforeEachAnimal();
+      return new Promise((resolve) => {
+        bot.chat(`/summon ${animalToFeed.summon} 0 -60 -3`)
+        bot.chat(`/summon ${animalToFeed.summon} 0 -60 -3`)
 
-        for (const entityName of Object.keys(entities)) {
-          const entity = entities[entityName]
-          //@ts-ignore
-          if (entity.name !== 'cow') {
-            continue
-          }
+        const intervalFeedCows = setInterval(() => {
+          const entities = bot.entities
 
-          bot.chat(`/data merge entity ${entity.uuid} {Age:0}`)
-        }
-
-
-      }, 5000)
-
-      const { getResumeInventory } = inventoryModule(bot);
-      const interval = setInterval(() => {
-        let foundAll = true
-        const itemsToFind: Array<{
-          name: string,
-          quantity: number
-        }> = [
-            {
-              name: 'beef', quantity: 4
+          for (const entityName of Object.keys(entities)) {
+            const entity = entities[entityName]
+            //@ts-ignore
+            if (entity.name !== animalToFeed.summon) {
+              continue
             }
-          ]
 
-        itemsToFind.every((itemToFind) => {
-          const item = getResumeInventory().find(i => i.name === itemToFind.name && i.quantity >= itemToFind.quantity)
-          if (!item) {
-            foundAll = false
-            return false
+            // bot.chat(`/data merge entity ${entity.uuid} {Age:0}`)
           }
-          return true
-        })
 
-        if (foundAll) {
-          clearInterval(intervalFeedCows)
-          clearInterval(interval)
-          resolve()
-        }
-      }, 400)
+        }, 5000)
 
+        const { getResumeInventory } = inventoryModule(bot);
+        const interval = setInterval(() => {
+          let foundAll = true
+          const itemsToFind: Array<{
+            name: string,
+            quantity: number
+          }> = [
+              {
+                name: animalToFeed.raw_meat, quantity: 4
+              }
+            ]
+
+          itemsToFind.every((itemToFind) => {
+            const item = getResumeInventory().find(i => i.name === itemToFind.name && i.quantity >= itemToFind.quantity)
+            if (!item) {
+              foundAll = false
+              return false
+            }
+            return true
+          })
+
+          if (foundAll) {
+            botConfig.saveFullConfig(bot.username, botConfig.defaultConfig)
+            bot.emit('reloadBotConfig')
+
+            clearInterval(intervalFeedCows)
+            clearInterval(interval)
+            resolve()
+          }
+        }, 400)
+
+      })
     })
-  })
-
+  }
 })
