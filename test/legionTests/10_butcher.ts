@@ -5,37 +5,35 @@ import { Config } from '@/types'
 import { Jobs } from '@/types/defaultTypes'
 import { bot } from '../hooks'
 
-
 const listOfAnimalstoFeed = [
-  // {
-  //   name: 'Cows',
-  //   summon: 'cow',
-  //   raw_meat: 'beef'
-  // },
-  // {
-  //   name: 'Sheeps',
-  //   summon: 'sheep',
-  //   raw_meat: 'mutton'
-  // },
-  // {
-  //   name: 'Chickens',
-  //   summon: 'chicken',
-  //   raw_meat: 'chicken'
-  // },
-  // {
-  //   name: 'Pigs',
-  //   summon: 'pig',
-  //   raw_meat: 'porkchop'
-  // },
+  {
+    name: 'Cows',
+    summon: 'cow',
+    raw_meat: 'beef'
+  },
+  {
+    name: 'Sheeps',
+    summon: 'sheep',
+    raw_meat: 'mutton'
+  },
+  {
+    name: 'Chickens',
+    summon: 'chicken',
+    raw_meat: 'chicken'
+  },
+  {
+    name: 'Pigs',
+    summon: 'pig',
+    raw_meat: 'porkchop'
+  },
   {
     name: 'Rabits',
     summon: 'rabbit',
     raw_meat: 'rabbit'
-  },
-
+  }
 ]
 
-describe('10 Breeding animals', function () {
+describe('10 Butcher animals', function () {
 
   const config: Config = {
     ...botConfig.defaultConfig,
@@ -48,16 +46,19 @@ describe('10 Breeding animals', function () {
       sheep: 3,
       chicken: 3,
       pig: 3,
-      rabbit: 2,
+      rabbit: 8,
+
+      // wolf: 3,
+      // fox: 3,
       // bee: 3,
-      cat: 3,
-      donkey: 3,
-      fox: 3,
-      horse: 3,
-      llama: 3,
-      panda: 3,
-      turtles: 3,
-      wolf: 3,
+      // horse: 3,
+      // cat: 3,
+
+      // donkey: 3,
+      // llama: 3,
+      // panda: 3,
+      // turtles: 3,
+
       seconds: 10
     },
     farmAreas: [
@@ -94,8 +95,18 @@ describe('10 Breeding animals', function () {
     it(animalToFeed.name, async (): Promise<void> => {
       await beforeEachAnimal();
       return new Promise((resolve) => {
-        bot.chat(`/summon ${animalToFeed.summon} 0 -60 -3`)
-        bot.chat(`/summon ${animalToFeed.summon} 0 -60 -3`)
+        let owner = ''
+
+        // if (['cat'].includes(animalToFeed.summon)) {
+        //   owner = '{Owner:flatbot}'
+        // }
+
+        // if (['horse'].includes(animalToFeed.summon)) {
+        //   owner = '{Tame:1}'
+        // }
+
+        bot.chat(`/summon ${animalToFeed.summon} 0 -60 -3 ${owner}`)
+        bot.chat(`/summon ${animalToFeed.summon} 0 -60 3 ${owner}`)
 
         const intervalFeedCows = setInterval(() => {
           const entities = bot.entities
@@ -107,7 +118,7 @@ describe('10 Breeding animals', function () {
               continue
             }
 
-            // bot.chat(`/data merge entity ${entity.uuid} {Age:0}`)
+            bot.chat(`/data merge entity ${entity.uuid} {Age:0}`)
           }
 
         }, 5000)
@@ -137,9 +148,11 @@ describe('10 Breeding animals', function () {
             botConfig.saveFullConfig(bot.username, botConfig.defaultConfig)
             bot.emit('reloadBotConfig')
 
-            clearInterval(intervalFeedCows)
-            clearInterval(interval)
-            resolve()
+            setTimeout(() => {
+              clearInterval(intervalFeedCows)
+              clearInterval(interval)
+              resolve()
+            }, 2000)
           }
         }, 400)
 

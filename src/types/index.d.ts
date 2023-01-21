@@ -195,7 +195,7 @@ interface Bot extends MineflayerBot {
         placeBlock: () => void
         runExample: () => void
         tellAndListen: () => void
-        wait: () => void
+        wait: (ms: number) => Promise<void>
     }
 }
 
