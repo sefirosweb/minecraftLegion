@@ -6,6 +6,7 @@ import { Jobs } from './defaultTypes'
 import { Block } from 'prismarine-block'
 import { Entity } from 'prismarine-entity'
 import { Item as PrismarineItem } from 'prismarine-item';
+import { animals, FarmAnimal } from '@/modules/animalType'
 
 type Layer = {
     xStart: number,
@@ -39,33 +40,16 @@ type PlantArea = {
 type GuardJob = {}
 type ArcherJob = {}
 type FarmerJob = {
-    plantArea: PlantArea
-}
-
-type FarmAnimal = {
-    seconds: number,
-    cow: number,
-    sheep: number,
-    chicken: number,
-    horse: number,
-    donkey: number,
-    llama: number,
-    bee: number,
-    fox: number,
-    panda: number,
-    wolf: number,
-    cat: number,
-    rabbit: number,
-    pig: number,
-    turtle: number,
+    plantArea: PlantArea | undefined
 }
 
 type BreederJob = {
-    farmAreas: Array<Layer>,
+    farmAreas: Config["farmAreas"],
+    farmAnimal: Config["farmAnimal"],
+    farmAnimalSeconds: Config["farmAnimalSeconds"]
     breededAnimals: Array<Entity>,
-    farmAnimal: FarmAnimal,
     animalsToBeFeed: Array<Entity>,
-    feedEntity: Entity
+    feedEntity: Entity | undefined
 }
 
 type SorterJob = {
@@ -77,7 +61,7 @@ type MinerJob = {
     blockForPlace: Array<any>
     original: MineCords
     mineBlock: Vec3,
-    nextLayer?: Layer
+    nextLayer: Layer | undefined
 }
 
 type DepositType = 'withdraw' | 'deposit' | 'depositAll'
@@ -105,7 +89,9 @@ type Config = {
     chests: Array<Chest>
     plantAreas: Array<PlantArea>
     farmAnimal: FarmAnimal
+    farmAnimalSeconds: number
     farmAreas: Array<Layer>
+    chestAreas: Array<Layer>
 }
 
 type Portals = {
@@ -193,7 +179,7 @@ interface Bot extends MineflayerBot {
         fly: (delta: Vec3) => Promise<void>
         resetState: () => Promise<void>
         placeBlock: (slot: number, position: Vec3) => void
-  
+
         wait: (ms: number) => Promise<void>
     }
 }
@@ -346,9 +332,7 @@ type ChestProperty = {
     type: ChestPosition
 }
 
-type Chests = {
-    [key: string]: ChestBlock
-};
+type Chests = Record<string, ChestBlock>
 
 type PendingTransaction = {
     chest: ChestBlock,
@@ -363,4 +347,13 @@ type ShotDirection = {
 type Test = {
     name: string,
     f: () => Promise<void>
+}
+
+type BotFriends = {
+    socketId: string,
+    name: string,
+    event: any
+    health: string
+    food: string
+    combat: boolean
 }

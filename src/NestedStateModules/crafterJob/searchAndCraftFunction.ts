@@ -1,18 +1,12 @@
-//@ts-nocheck
-import { Bot, LegionStateMachineTargets, Recipes } from '@/types'
-
-import {
-  StateTransition,
-  BehaviorIdle,
-  NestedStateMachine
-} from 'mineflayer-statemachine'
+import { Bot, LegionStateMachineTargets, Recipes, Recpie } from '@/types'
+import { StateTransition, BehaviorIdle, NestedStateMachine } from 'mineflayer-statemachine'
 import BehaviorCraft from '@/BehaviorModules/BehaviorCraft'
 import chestModule from '@/modules/chestModule'
 import craftModule, { GetItemsToPickUpBatch } from '@/modules/craftModule'
 import PickUpItems from '@/NestedStateModules/getReady/pickUpItems'
 import GoCraftingTableFunction from '@/NestedStateModules/crafterJob/goCraftingTableFunction'
 
-function searchAndCraftFunction(bot: Bot, targets: LegionStateMachineTargets) {
+export default (bot: Bot, targets: LegionStateMachineTargets) => {
   const { getItemsToPickUpBatch } = craftModule(bot)
   const { nearChests } = chestModule(bot, targets)
 
@@ -72,20 +66,26 @@ function searchAndCraftFunction(bot: Bot, targets: LegionStateMachineTargets) {
 
   const pickUpItems = PickUpItems(bot, targets)
   pickUpItems.stateName = 'Pick Up Items'
+  //@ts-ignore
   pickUpItems.x = 125
+  //@ts-ignore
   pickUpItems.y = 213
 
   const goTable = GoCraftingTableFunction(bot, targets)
   goTable.stateName = 'Go check recipes'
+  //@ts-ignore
   goTable.x = 625
+  //@ts-ignore
   goTable.y = 462
 
   const goTableToCraft = GoCraftingTableFunction(bot, targets)
   goTableToCraft.stateName = 'Go to Craft'
+  //@ts-ignore
   goTableToCraft.x = 325
+  //@ts-ignore
   goTableToCraft.y = 350
 
-  let recipes: Array<Recipes> = []
+  let recipes: Array<Recpie> = []
   let itemsToPickUpBatch: GetItemsToPickUpBatch
 
   const transitions = [
@@ -105,6 +105,7 @@ function searchAndCraftFunction(bot: Bot, targets: LegionStateMachineTargets) {
       parent: checkRecipes,
       child: checkMaterials,
       onTransition: () => {
+        // if (!itemsToPickUpBatch.repicesUsed) throw Error('Variable not defined itemsToPickUpBatch.repicesUsed')
         recipes = itemsToPickUpBatch.repicesUsed
       },
       shouldTransition: () => itemsToPickUpBatch.repicesUsed.length > 0
@@ -119,7 +120,7 @@ function searchAndCraftFunction(bot: Bot, targets: LegionStateMachineTargets) {
     new StateTransition({
       parent: checkMaterials,
       child: exit,
-      shouldTransition: () => itemsToPickUpBatch.itemToPickup.length === 0 && itemsToPickUpBatch.haveMaterials !== 'all'
+      shouldTransition: () => itemsToPickUpBatch.itemToPickup.length === 0
     }),
 
     new StateTransition({
@@ -128,7 +129,7 @@ function searchAndCraftFunction(bot: Bot, targets: LegionStateMachineTargets) {
       onTransition: () => {
         targets.pickUpItems = itemsToPickUpBatch.itemToPickup
       },
-      shouldTransition: () => itemsToPickUpBatch.itemToPickup.length > 0 || itemsToPickUpBatch.haveMaterials === 'all'
+      shouldTransition: () => itemsToPickUpBatch.itemToPickup.length > 0
     }),
 
     new StateTransition({
@@ -158,8 +159,7 @@ function searchAndCraftFunction(bot: Bot, targets: LegionStateMachineTargets) {
     new StateTransition({
       parent: goTableToCraft,
       child: craftItem,
-      shouldTransition: () =>
-        itemsToPickUpBatch.needCraftingTable && goTableToCraft.isFinished()
+      shouldTransition: () => itemsToPickUpBatch.needCraftingTable && goTableToCraft.isFinished()
     }),
 
     new StateTransition({
@@ -170,9 +170,7 @@ function searchAndCraftFunction(bot: Bot, targets: LegionStateMachineTargets) {
           name: recipes.shift()?.result.name
         }
       },
-      shouldTransition: () => {
-        return pickUpItems.isFinished()
-      }
+      shouldTransition: () => pickUpItems.isFinished()
     }),
 
     new StateTransition({
@@ -196,10 +194,11 @@ function searchAndCraftFunction(bot: Bot, targets: LegionStateMachineTargets) {
       parent: goTable,
       child: checkRecipesWithTable,
       onTransition: () => {
-        itemsToPickUpBatch = getItemsToPickUpBatch(
-          targets.craftItemBatch,
-          nearChests()
-        )
+        if (!targets.craftItemBatch) {
+          throw new Error('No items to craft targets.craftItemBatch')
+        }
+
+        itemsToPickUpBatch = getItemsToPickUpBatch(targets.craftItemBatch, nearChests())
       },
       shouldTransition: () => goTable.isFinished()
     }),
@@ -224,5 +223,3 @@ function searchAndCraftFunction(bot: Bot, targets: LegionStateMachineTargets) {
   nestedState.stateName = 'Search and craft item'
   return nestedState
 }
-
-export default searchAndCraftFunction

@@ -1,4 +1,3 @@
-//@ts-nocheck
 import { LegionStateMachineTargets, BotwebsocketAction, Bot } from "@/types"
 import { BotEvents } from "mineflayer"
 import { Vec3 } from "vec3"
@@ -21,9 +20,8 @@ import {
 //@ts-ignore
 import inventoryViewer from 'mineflayer-web-inventory'
 
-const botConfig = botConfigLoader()
-
 const startStateMachine = (bot: Bot) => {
+  const botConfig = botConfigLoader(bot.username)
   const { debugMode } = config
   const mcData = mcDataLoader(bot.version)
   const isInDebug = debugMode || false
@@ -64,7 +62,6 @@ const startStateMachine = (bot: Bot) => {
   const targets: LegionStateMachineTargets = {
     config: botConfig.defaultConfig,
     movements: movements,
-    chests: [],
     portals: {
       overworld: {
         the_nether: [],
@@ -77,39 +74,26 @@ const startStateMachine = (bot: Bot) => {
     isNight: false,
     triedToSleep: false,
 
-    farmerJob: {
-      plantArea: {}
-    },
-
     breederJob: {
       animalsToBeFeed: [],
       breededAnimals: [],
       farmAreas: [],
-      farmAnimal: {
-        seconds: 60,
-        bee: 10,
-        cat: 10,
-        chicken: 10,
-        cow: 10,
-        donkey: 10,
-        horse: 10,
-        llama: 10,
-        panda: 10,
-        pig: 10,
-        rabbit: 10,
-        sheep: 10,
-        turtle: 10,
-        wolf: 10
-      },
+      farmAnimalSeconds: botConfig.defaultConfig.farmAnimalSeconds,
+      farmAnimal: botConfig.defaultConfig.farmAnimal,
+      feedEntity: undefined
     },
     minerJob: {
       blockForPlace: [],
-      original: undefined,
+      original: botConfig.defaultConfig.minerCords,
       mineBlock: new Vec3(0, 0, 0),
       nextLayer: undefined
     },
     sorterJob: {
       emptyChests: []
+    },
+    chests: {},
+    farmerJob: {
+      plantArea: undefined
     }
   }
 
@@ -130,7 +114,9 @@ const startStateMachine = (bot: Bot) => {
   watiState.y = 313
 
   const death = DeathFunction(bot, targets)
+  //@ts-ignore
   death.x = 425
+  //@ts-ignore
   death.y = 213
 
   const { checkPortalsOnSpawn } = movementModule(bot, targets)

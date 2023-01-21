@@ -2,24 +2,22 @@ import botConfigLoader from '@/modules/botConfig'
 import { Config } from '@/types'
 import { Jobs } from '@/types/defaultTypes'
 import { Vec3 } from 'vec3'
-const botConfig = botConfigLoader()
 import { bot } from '../hooks'
 
 describe('05 Test bow long range', function () {
-
-  const patrol = []
-  patrol.push(new Vec3(50, -48, 0))
-
-  const config: Config = {
-    ...botConfig.defaultConfig,
-    job: Jobs.guard,
-    mode: 'pve',
-    distance: 120,
-    itemsToBeReady: [],
-    patrol
-  }
-
   before(async () => {
+    const botConfig = botConfigLoader(bot.username)
+    const patrol = []
+    patrol.push(new Vec3(50, -48, 0))
+    const config: Config = {
+      ...botConfig.defaultConfig,
+      job: Jobs.guard,
+      mode: 'pve',
+      distance: 120,
+      itemsToBeReady: [],
+      patrol
+    }
+
     await bot.test.resetState()
     bot.chat(`/fill 50 -49 0 50 -49 0 minecraft:stone`)
     bot.chat(`/fill -50 -48 0 -50 -48 0 minecraft:stone`)
@@ -31,7 +29,7 @@ describe('05 Test bow long range', function () {
     bot.creative.stopFlying()
     bot.test.becomeSurvival()
 
-    botConfig.saveFullConfig(bot.username, config)
+    botConfig.saveFullConfig(config)
     bot.emit('reloadBotConfig')
   })
 

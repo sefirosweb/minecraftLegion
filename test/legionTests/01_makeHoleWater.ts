@@ -1,12 +1,11 @@
 import botConfigLoader from '@/modules/botConfig'
 import { Config, MineCordsConfig } from '@/types'
 import { Jobs } from '@/types/defaultTypes'
-const botConfig = botConfigLoader()
 import { bot } from '../hooks'
 
 describe('01 Mining in water', function () {
-
   before(async () => {
+    const botConfig = botConfigLoader(bot.username)
     await bot.test.resetState()
     bot.chat(`/give flatbot minecraft:iron_pickaxe`)
     bot.chat(`/give flatbot minecraft:diamond_shovel`)
@@ -43,7 +42,7 @@ describe('01 Mining in water', function () {
       minerCords
     }
 
-    botConfig.saveFullConfig(bot.username, config)
+    botConfig.saveFullConfig(config)
     bot.emit('reloadBotConfig')
   })
 

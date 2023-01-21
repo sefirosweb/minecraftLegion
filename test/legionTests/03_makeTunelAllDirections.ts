@@ -1,12 +1,14 @@
 import botConfigLoader from '@/modules/botConfig'
 import { Config, MineCordsConfig } from '@/types'
 import { Jobs } from '@/types/defaultTypes'
-const botConfig = botConfigLoader()
 import { bot } from '../hooks'
 
 describe('03 Make tunel in all directions', function () {
+  let botConfig: ReturnType<typeof botConfigLoader>
 
   before(async () => {
+    botConfig = botConfigLoader(bot.username)
+
     await bot.test.resetState()
     bot.chat(`/give flatbot minecraft:iron_pickaxe`)
     bot.chat(`/give flatbot minecraft:diamond_shovel`)
@@ -52,7 +54,7 @@ describe('03 Make tunel in all directions', function () {
       minerCords
     }
 
-    botConfig.saveFullConfig(bot.username, config)
+    botConfig.saveFullConfig(config)
     bot.emit('reloadBotConfig')
 
     return new Promise((resolve) => {
@@ -87,7 +89,7 @@ describe('03 Make tunel in all directions', function () {
       minerCords
     }
 
-    botConfig.saveFullConfig(bot.username, config)
+    botConfig.saveFullConfig(config)
     bot.emit('reloadBotConfig')
 
 
@@ -123,7 +125,7 @@ describe('03 Make tunel in all directions', function () {
       minerCords
     }
 
-    botConfig.saveFullConfig(bot.username, config)
+    botConfig.saveFullConfig(config)
     bot.emit('reloadBotConfig')
 
     return new Promise((resolve) => {
@@ -158,7 +160,7 @@ describe('03 Make tunel in all directions', function () {
       minerCords
     }
 
-    botConfig.saveFullConfig(bot.username, config)
+    botConfig.saveFullConfig(config)
     bot.emit('reloadBotConfig')
 
     return new Promise((resolve) => {

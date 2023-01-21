@@ -1,18 +1,9 @@
-//@ts-nocheck
-
-import {
-  StateTransition,
-  BehaviorIdle,
-  NestedStateMachine
-} from 'mineflayer-statemachine'
-
+import { StateTransition, BehaviorIdle, NestedStateMachine } from 'mineflayer-statemachine'
 import BehaviorLoadConfig from '@/BehaviorModules/BehaviorLoadConfig'
-
 import BehaviorMinerCheckLayer from '@/BehaviorModules/minerJob/BehaviorMinerCheckLayer'
 import BehaviorMinerCurrentLayer from '@/BehaviorModules/minerJob/BehaviorMinerCurrentLayer'
 import BehaviorMinerCurrentBlock from '@/BehaviorModules/minerJob/BehaviorMinerCurrentBlock'
 import BehaviorGetReady from '@/BehaviorModules/BehaviorGetReady'
-
 import BehaviorDigBlock from '@/BehaviorModules/BehaviorDigBlock'
 import BehaviorEatFood from '@/BehaviorModules/BehaviorEatFood'
 import BehaviorMoveTo from '@/BehaviorModules/BehaviorMoveTo'
@@ -22,7 +13,6 @@ import FindItemsAndPickup from '@/NestedStateModules/findItemsAndPickup'
 
 import mineflayerPathfinder, { Movements } from 'mineflayer-pathfinder'
 import botConfigLoader from '@/modules/botConfig'
-const { setMinerCords } = botConfigLoader()
 import { Bot, LegionStateMachineTargets, MineCords, MineCordsConfig } from '@/types'
 
 const movingWhile = (bot: Bot, nextCurrentLayer: MineCords, movements: Movements) => {
@@ -59,14 +49,21 @@ const movingWhile = (bot: Bot, nextCurrentLayer: MineCords, movements: Movements
 }
 
 function miningFunction(bot: Bot, targets: LegionStateMachineTargets) {
+  const { setMinerCords } = botConfigLoader(bot.username)
+
+
   const start = new BehaviorIdle()
   start.stateName = 'Start'
+  //@ts-ignore
   start.x = 125
+  //@ts-ignore
   start.y = 113
 
   const finishedJob = new BehaviorIdle()
   finishedJob.stateName = 'Finished Job'
+  //@ts-ignore
   finishedJob.x = 525
+  //@ts-ignore
   finishedJob.y = 13
 
   const loadConfig = new BehaviorLoadConfig(bot, targets)
@@ -76,17 +73,23 @@ function miningFunction(bot: Bot, targets: LegionStateMachineTargets) {
 
   const exit = new BehaviorIdle()
   exit.stateName = 'Exit'
+  //@ts-ignore
   exit.x = 125
+  //@ts-ignore
   exit.y = 313
 
   const nextLayer = new BehaviorMinerCurrentLayer(bot, targets)
   nextLayer.stateName = 'Next Layer'
+  //@ts-ignore
   nextLayer.x = 525
+  //@ts-ignore
   nextLayer.y = 113
 
   const currentBlock = new BehaviorMinerCurrentBlock(bot, targets)
   currentBlock.stateName = 'Check next block'
+  //@ts-ignore
   currentBlock.x = 725
+  //@ts-ignore
   currentBlock.y = 113
 
   const digBlock = new BehaviorDigBlock(bot, targets)
@@ -118,7 +121,9 @@ function miningFunction(bot: Bot, targets: LegionStateMachineTargets) {
 
   const checkLayer = new BehaviorMinerCheckLayer(bot, targets)
   checkLayer.stateName = 'Check Layer Lava & Water'
+  //@ts-ignore
   checkLayer.x = 525
+  //@ts-ignore
   checkLayer.y = 213
 
   const eatFood = new BehaviorEatFood(bot, targets)
@@ -128,12 +133,16 @@ function miningFunction(bot: Bot, targets: LegionStateMachineTargets) {
 
   const fillBlocks = FillFunction(bot, targets)
   fillBlocks.stateName = 'Fill Water & Lava'
+  //@ts-ignore
   fillBlocks.x = 350
+  //@ts-ignore
   fillBlocks.y = 313
 
   const findItemsAndPickup = FindItemsAndPickup(bot, targets)
   findItemsAndPickup.stateName = 'Find Items'
+  //@ts-ignore
   findItemsAndPickup.x = 525
+  //@ts-ignore
   findItemsAndPickup.y = 363
 
   const saveCurrentLayer = () => {
@@ -143,14 +152,14 @@ function miningFunction(bot: Bot, targets: LegionStateMachineTargets) {
     const reverse = targets.config.minerCords.reverse
 
     const newMineCords: MineCords = {
-      xStart: parseInt(targets.minerJob.original.xStart),
-      xEnd: parseInt(targets.minerJob.original.xEnd),
+      xStart: targets.minerJob.original.xStart,
+      xEnd: targets.minerJob.original.xEnd,
 
-      yStart: parseInt(targets.minerJob.original.yStart),
-      yEnd: parseInt(targets.minerJob.original.yEnd),
+      yStart: targets.minerJob.original.yStart,
+      yEnd: targets.minerJob.original.yEnd,
 
-      zStart: parseInt(targets.minerJob.original.zStart),
-      zEnd: parseInt(targets.minerJob.original.zEnd),
+      zStart: targets.minerJob.original.zStart,
+      zEnd: targets.minerJob.original.zEnd,
     }
 
     if (tunel === 'horizontally') {
@@ -175,7 +184,7 @@ function miningFunction(bot: Bot, targets: LegionStateMachineTargets) {
       reverse: reverse
     }
 
-    setMinerCords(bot.username, mineCordsConfig)
+    setMinerCords(mineCordsConfig)
     targets.config.minerCords = mineCordsConfig
   }
 
@@ -185,7 +194,6 @@ function miningFunction(bot: Bot, targets: LegionStateMachineTargets) {
       child: loadConfig,
       name: 'start -> loadConfig',
       onTransition: () => {
-        targets.minerJob.nextLayer = nextLayer
 
         const yStart =
           targets.config.minerCords.yStart >
@@ -249,7 +257,7 @@ function miningFunction(bot: Bot, targets: LegionStateMachineTargets) {
       name: 'Mining finished',
       onTransition: () => {
         bot.pathfinder.setGoal(null)
-        bot.emit('finishedJob', 'Mining Job')
+        bot.emit('finishedJob')
       },
       shouldTransition: () => nextLayer.isFinished()
     }),
@@ -304,7 +312,7 @@ function miningFunction(bot: Bot, targets: LegionStateMachineTargets) {
       parent: fillBlocks,
       child: checkLayer,
       name: 'Finished fill block',
-      shouldTransition: () => fillBlocks.isFinished() && digAndPlaceBlock.getItemToPlace()
+      shouldTransition: () => fillBlocks.isFinished() && digAndPlaceBlock.getItemToPlace() !== undefined
     }),
 
     new StateTransition({
@@ -319,10 +327,13 @@ function miningFunction(bot: Bot, targets: LegionStateMachineTargets) {
       child: moveToBlock,
       name: 'currentBlock -> moveToBlock',
       onTransition: () => {
+        if (!targets.position) throw Error('Variable not defined targets.position')
         targets.minerJob.mineBlock = targets.position.clone()
+
+        if (!nextLayer.minerCords) throw Error('Variable not defined nextLayer.minerCords')
         if (nextLayer.minerCords.tunel === 'horizontally') {
-          // Move to base of block
-          targets.position.y = parseInt(checkLayer.minerCords.yStart)
+          if (!checkLayer.minerCords) throw Error('Variable not defined checkLayer.minerCords')
+          targets.position.y = checkLayer.minerCords.yStart
           targets.position.dimension = targets.config.minerCords.world
         }
       },

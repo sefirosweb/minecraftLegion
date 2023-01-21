@@ -1,26 +1,28 @@
-//@ts-nocheck
-import {
-  StateTransition,
-  BehaviorIdle,
-  NestedStateMachine
-} from 'mineflayer-statemachine'
+import { StateTransition, BehaviorIdle, NestedStateMachine } from 'mineflayer-statemachine'
 import BehaviorGetReady from '@/BehaviorModules/BehaviorGetReady'
 import BehaviorEquipAll from '@/BehaviorModules/BehaviorEquipAll'
 import GoChestsFunctions from '@/NestedStateModules/getReady/goChestsFunctions'
+import { Bot, LegionStateMachineTargets } from '@/types'
 
-function getReadyFunction(bot, targets) {
-  const start = new BehaviorIdle(targets)
+export default (bot: Bot, targets: LegionStateMachineTargets) => {
+  const start = new BehaviorIdle()
   start.stateName = 'Start'
+  //@ts-ignore
   start.x = 125
+  //@ts-ignore
   start.y = 113
 
-  const exit = new BehaviorIdle(targets)
+  const exit = new BehaviorIdle()
   exit.stateName = 'Exit'
+  //@ts-ignore
   exit.x = 125
+  //@ts-ignore
   exit.y = 313
 
   const goChests = GoChestsFunctions(bot, targets)
+  //@ts-ignore
   goChests.x = 725
+  //@ts-ignore
   goChests.y = 313
 
   const getReady = new BehaviorGetReady(bot, targets)
@@ -70,5 +72,3 @@ function getReadyFunction(bot, targets) {
   nestedState.stateName = 'getReadyFunction'
   return nestedState
 }
-
-export default getReadyFunction

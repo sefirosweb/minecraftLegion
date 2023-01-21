@@ -1,10 +1,4 @@
-//@ts-nocheck
-import {
-  StateTransition,
-  BehaviorIdle,
-  NestedStateMachine,
-  BehaviorFollowEntity
-} from 'mineflayer-statemachine'
+import { StateTransition, BehaviorIdle, NestedStateMachine, BehaviorFollowEntity } from 'mineflayer-statemachine'
 
 import { Bot } from '@/types'
 import { LegionStateMachineTargets } from '@/types/index'
@@ -35,27 +29,39 @@ function startWorkFunction(bot: Bot, targets: LegionStateMachineTargets) {
   loadedConfig.y = 213
 
   const guardJob = GuardJob(bot, targets)
+  // @ts-ignore
   guardJob.x = 525
+  // @ts-ignore
   guardJob.y = 313
 
   const archerJob = ArcherJob(bot, targets)
+  // @ts-ignore
   archerJob.x = 525
+  // @ts-ignore
   archerJob.y = 113
 
   const farmerJob = FarmerJob(bot, targets)
+  // @ts-ignore
   farmerJob.x = 325
+  // @ts-ignore
   farmerJob.y = 350
 
   const breederJob = BreederJob(bot, targets)
+  // @ts-ignore
   breederJob.x = 135
+  // @ts-ignore
   breederJob.y = 320
 
   const minerJob = MinerJob(bot, targets)
+  // @ts-ignore
   minerJob.x = 325
+  // @ts-ignore
   minerJob.y = 50
 
   const sorterJob = SorterJob(bot, targets)
+  // @ts-ignore
   sorterJob.x = 535
+  // @ts-ignore
   sorterJob.y = 213
 
   const crafterJobFunction = CrafterJobFunction(bot, targets)
@@ -106,7 +112,7 @@ function startWorkFunction(bot: Bot, targets: LegionStateMachineTargets) {
       child: minerJob,
       onTransition: () => {
         const blockForPlace = Object.values(mcData.blocksByName)
-          .filter(b => Object.values(DefaultBlockForPlace).includes(b.name))
+          .filter(b => Object.keys(DefaultBlockForPlace).includes(b.name))
           .filter(a => a.hardness !== null)
           .sort((a, b) => a.hardness! - b.hardness!)
           .map(b => b.name)

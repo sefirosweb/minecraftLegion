@@ -1,5 +1,4 @@
 import botConfigLoader from '@/modules/botConfig'
-const botConfig = botConfigLoader()
 import inventoryModule from '@/modules/inventoryModule'
 import { Config } from '@/types'
 import { Jobs } from '@/types/defaultTypes'
@@ -35,32 +34,36 @@ const listOfAnimalstoFeed = [
 
 describe('10 Butcher animals', function () {
 
-  const config: Config = {
-    ...botConfig.defaultConfig,
-    job: Jobs.breeder,
-    pickUpItems: true,
-    itemsToBeReady: [],
-    farmAnimal: {
-      ...botConfig.defaultConfig.farmAnimal,
-      cow: 3,
-      sheep: 3,
-      chicken: 3,
-      pig: 3,
-      rabbit: 8,
-      seconds: 10
-    },
-    farmAreas: [
-      {
-        xStart: 7,
-        xEnd: -7,
-        zStart: -7,
-        zEnd: 7,
-        yLayer: -61,
-      }
-    ],
-  }
+  let botConfig: ReturnType<typeof botConfigLoader>
 
   const beforeEachAnimal = async () => {
+    botConfig = botConfigLoader(bot.username)
+    const config: Config = {
+      ...botConfig.defaultConfig,
+      job: Jobs.breeder,
+      pickUpItems: true,
+      itemsToBeReady: [],
+      farmAnimalSeconds: 10,
+      farmAnimal: {
+        ...botConfig.defaultConfig.farmAnimal,
+        cow: 3,
+        sheep: 3,
+        chicken: 3,
+        pig: 3,
+        rabbit: 8,
+      },
+      farmAreas: [
+        {
+          xStart: 7,
+          xEnd: -7,
+          zStart: -7,
+          zEnd: 7,
+          yLayer: -61,
+        }
+      ],
+    }
+
+
     await bot.test.resetState()
     bot.chat(`/give flatbot minecraft:iron_axe`)
     bot.chat(`/give flatbot minecraft:wheat 64`)
@@ -73,7 +76,7 @@ describe('10 Butcher animals', function () {
     bot.creative.stopFlying()
     bot.test.becomeSurvival()
 
-    botConfig.saveFullConfig(bot.username, config)
+    botConfig.saveFullConfig(config)
     bot.emit('reloadBotConfig')
   }
 
@@ -123,7 +126,7 @@ describe('10 Butcher animals', function () {
           })
 
           if (foundAll) {
-            botConfig.saveFullConfig(bot.username, botConfig.defaultConfig)
+            botConfig.saveFullConfig(botConfig.defaultConfig)
             bot.emit('reloadBotConfig')
             clearInterval(intervalFeedCows)
             clearInterval(interval)

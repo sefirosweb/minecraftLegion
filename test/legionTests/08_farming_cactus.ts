@@ -1,34 +1,33 @@
 
 import botConfigLoader from '@/modules/botConfig'
-const botConfig = botConfigLoader()
 import inventoryModule from '@/modules/inventoryModule'
 import { bot } from '../hooks'
 import { Config } from '@/types'
 import { Jobs } from '@/types/defaultTypes'
 
 describe('08 Farming cactus', function () {
-
-  const config: Config = {
-    ...botConfig.defaultConfig,
-    job: Jobs.farmer,
-    pickUpItems: true,
-    itemsCanBeEat: ['golden_carrot'],
-    itemsToBeReady: [],
-    plantAreas: [
-      {
-        plant: "cactus",
-        layer: {
-          yLayer: -61,
-          xStart: 10,
-          zStart: 20,
-          xEnd: 20,
-          zEnd: 20
-        }
-      }
-    ],
-  }
-
   before(async () => {
+    const botConfig = botConfigLoader(bot.username)
+    const config: Config = {
+      ...botConfig.defaultConfig,
+      job: Jobs.farmer,
+      pickUpItems: true,
+      itemsCanBeEat: ['golden_carrot'],
+      itemsToBeReady: [],
+      plantAreas: [
+        {
+          plant: "cactus",
+          layer: {
+            yLayer: -61,
+            xStart: 10,
+            zStart: 20,
+            xEnd: 20,
+            zEnd: 20
+          }
+        }
+      ],
+    }
+
     await bot.test.resetState()
     bot.chat(`/give flatbot minecraft:iron_axe`)
     bot.chat(`/give flatbot minecraft:iron_hoe`)
@@ -42,7 +41,7 @@ describe('08 Farming cactus', function () {
     bot.creative.stopFlying()
     bot.test.becomeSurvival()
 
-    botConfig.saveFullConfig(bot.username, config)
+    botConfig.saveFullConfig(config)
     bot.emit('reloadBotConfig')
   })
 

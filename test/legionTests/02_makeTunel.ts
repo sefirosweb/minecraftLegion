@@ -1,11 +1,9 @@
 import botConfigLoader from '@/modules/botConfig'
 import { Config, MineCordsConfig } from '@/types'
 import { Jobs } from '@/types/defaultTypes'
-const botConfig = botConfigLoader()
 import { bot } from '../hooks'
 
 describe('02 Make basic tunel', function () {
-
   let xStart = -15
   let yStart = -60
   let zStart = -9
@@ -27,19 +25,23 @@ describe('02 Make basic tunel', function () {
     world: "minecraft:overworld"
   }
 
-  const config: Config = {
-    ...botConfig.defaultConfig,
-    job: Jobs.miner,
-    itemsToBeReady: [
-      {
-        name: "iron_pickaxe",
-        quantity: 1
-      }
-    ],
-    minerCords
-  }
+  let config: Config
+  let botConfig: ReturnType<typeof botConfigLoader>
 
   before(async () => {
+    botConfig = botConfigLoader(bot.username)
+    config = {
+      ...botConfig.defaultConfig,
+      job: Jobs.miner,
+      itemsToBeReady: [
+        {
+          name: "iron_pickaxe",
+          quantity: 1
+        }
+      ],
+      minerCords
+    }
+
     await bot.test.resetState()
     bot.chat(`/give flatbot minecraft:iron_pickaxe`)
     bot.chat(`/give flatbot minecraft:diamond_shovel`)
@@ -49,7 +51,7 @@ describe('02 Make basic tunel', function () {
     bot.creative.stopFlying()
     bot.test.becomeSurvival()
 
-    botConfig.saveFullConfig(bot.username, config)
+    botConfig.saveFullConfig(config)
     bot.emit('reloadBotConfig')
   })
 
@@ -73,7 +75,7 @@ describe('02 Make basic tunel', function () {
       minerCords: newMinerCords
     }
 
-    botConfig.saveFullConfig(bot.username, newConfig)
+    botConfig.saveFullConfig(newConfig)
     bot.emit('reloadBotConfig')
     return new Promise((resolve) => {
       bot.once('finishedJob', () => resolve())
@@ -96,7 +98,7 @@ describe('02 Make basic tunel', function () {
       minerCords: newMinerCords
     }
 
-    botConfig.saveFullConfig(bot.username, newConfig)
+    botConfig.saveFullConfig(newConfig)
     bot.emit('reloadBotConfig')
     return new Promise((resolve) => {
       bot.once('finishedJob', () => resolve())
@@ -119,7 +121,7 @@ describe('02 Make basic tunel', function () {
       minerCords: newMinerCords
     }
 
-    botConfig.saveFullConfig(bot.username, newConfig)
+    botConfig.saveFullConfig(newConfig)
     bot.emit('reloadBotConfig')
     return new Promise((resolve) => {
       bot.once('finishedJob', () => resolve())

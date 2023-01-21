@@ -1,33 +1,32 @@
 import botConfigLoader from '@/modules/botConfig'
-const botConfig = botConfigLoader()
 import inventoryModule from '@/modules/inventoryModule'
 import { Config } from '@/types'
 import { Jobs } from '@/types/defaultTypes'
 import { bot } from '../hooks'
 
 describe('07 Farming bamboo', function () {
-
-  const config: Config = {
-    ...botConfig.defaultConfig,
-    job: Jobs.farmer,
-    pickUpItems: true,
-    itemsCanBeEat: [],
-    itemsToBeReady: [],
-    plantAreas: [
-      {
-        plant: "bamboo",
-        layer: {
-          xStart: 10,
-          xEnd: 20,
-          zStart: 0,
-          zEnd: 0,
-          yLayer: -61,
-        }
-      }
-    ],
-  }
-
   before(async () => {
+    const botConfig = botConfigLoader(bot.username)
+    const config: Config = {
+      ...botConfig.defaultConfig,
+      job: Jobs.farmer,
+      pickUpItems: true,
+      itemsCanBeEat: [],
+      itemsToBeReady: [],
+      plantAreas: [
+        {
+          plant: "bamboo",
+          layer: {
+            xStart: 10,
+            xEnd: 20,
+            zStart: 0,
+            zEnd: 0,
+            yLayer: -61,
+          }
+        }
+      ],
+    }
+
     await bot.test.resetState()
     bot.chat(`/give flatbot minecraft:iron_axe`)
     bot.chat(`/give flatbot minecraft:iron_hoe`)
@@ -39,7 +38,7 @@ describe('07 Farming bamboo', function () {
     bot.creative.stopFlying()
     bot.test.becomeSurvival()
 
-    botConfig.saveFullConfig(bot.username, config)
+    botConfig.saveFullConfig(config)
     bot.emit('reloadBotConfig')
   })
 

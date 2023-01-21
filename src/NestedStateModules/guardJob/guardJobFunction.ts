@@ -1,11 +1,4 @@
-//@ts-nocheck
-
-import {
-  StateTransition,
-  BehaviorIdle,
-  NestedStateMachine,
-  BehaviorFollowEntity
-} from 'mineflayer-statemachine'
+import { StateTransition, BehaviorIdle, NestedStateMachine, BehaviorFollowEntity } from 'mineflayer-statemachine'
 import BehaviorLoadConfig from '@/BehaviorModules/BehaviorLoadConfig'
 import BehaviorMoveToArray from '@/BehaviorModules/BehaviorMoveToArray'
 import BehaviorEatFood from '@/BehaviorModules/BehaviorEatFood'
@@ -15,10 +8,8 @@ import BehaviorHelpFriend from '@/BehaviorModules/guardJob/BehaviorHelpFriend'
 import BehaviorMoveTo from '@/BehaviorModules/BehaviorMoveTo'
 import CombatStrategyFunction from '@/NestedStateModules/combat/combatStrategyFunction'
 import GetReadyFunction from '@/NestedStateModules/getReady/getReadyFunction'
-
 import getClosestEnemy from '@/modules/getClosestEnemy'
-import { LegionStateMachineTargets } from '@/types'
-import { Bot } from 'mineflayer'
+import { Bot, LegionStateMachineTargets } from '@/types'
 
 function guardJobFunction(bot: Bot, targets: LegionStateMachineTargets) {
   const start = new BehaviorIdle()
@@ -65,6 +56,7 @@ function guardJobFunction(bot: Bot, targets: LegionStateMachineTargets) {
   helpFriend.x = 525
   helpFriend.y = 813
 
+  //@ts-ignore
   const goFriend = new BehaviorFollowEntity(bot, targets)
   goFriend.stateName = 'Go To Help Friend'
   //@ts-ignore
@@ -73,12 +65,16 @@ function guardJobFunction(bot: Bot, targets: LegionStateMachineTargets) {
   goFriend.y = 813
 
   const combatStrategy = CombatStrategyFunction(bot, targets)
+  //@ts-ignore
   combatStrategy.x = 925
+  //@ts-ignore
   combatStrategy.y = 513
 
   const getReady = GetReadyFunction(bot, targets)
   getReady.stateName = 'Get Ready'
+  //@ts-ignore
   getReady.x = 525
+  //@ts-ignore
   getReady.y = 213
 
   const transitions = [
@@ -125,6 +121,7 @@ function guardJobFunction(bot: Bot, targets: LegionStateMachineTargets) {
       child: goToObject,
       name: 'patrol -> goToObject',
       onTransition: () => {
+        if (!targets.itemDrop) throw Error('Variable not defined targets.itemDrop')
         targets.position = targets.itemDrop.position.offset(0, 0.2, 0).clone()
       },
       shouldTransition: () => findItem.search() && bot.inventory.items().length < 33
@@ -135,7 +132,7 @@ function guardJobFunction(bot: Bot, targets: LegionStateMachineTargets) {
       child: patrol,
       name: 'goToObject -> patrol',
       shouldTransition: () => {
-        if (!goToObject.targets.itemDrop.isValid) {
+        if (!goToObject.targets.itemDrop?.isValid || targets.position === undefined || targets.itemDrop === undefined) {
           return true
         }
 
@@ -144,7 +141,7 @@ function guardJobFunction(bot: Bot, targets: LegionStateMachineTargets) {
           goToObject.restart()
         }
 
-        if (bot.inventory.items().length === 36) { // full
+        if (bot.inventory.items().length === 36) {
           return true
         }
 

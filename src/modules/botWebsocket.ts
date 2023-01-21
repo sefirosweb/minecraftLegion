@@ -1,22 +1,13 @@
 import socketIOClient, { Socket } from 'socket.io-client'
-import { Bot, BotwebsocketAction, Master } from '@/types'
-import { Jobs } from '@/types/defaultTypes'
+import { Bot, BotFriends, BotwebsocketAction, Chest, Dimensions, Master, MineCords } from '@/types'
 import { Vec3 } from 'vec3'
 
 import configBot from '@/config'
 const { webServer, webServerPort, webServerPassword } = configBot
 
 import botconfigLoader from '@/modules/botConfig'
-const botconfig = botconfigLoader()
+import { isAnimal } from './animalType'
 
-export type BotFriends = {
-  socketId: string,
-  name: string,
-  event: any
-  health: string
-  food: string
-  combat: boolean
-}
 
 let bot: Bot
 let socket: Socket
@@ -29,6 +20,8 @@ function loadBot(_bot: Bot) {
 }
 
 function connect() {
+  const botconfig = botconfigLoader(bot.username)
+
   socket = socketIOClient(`${webServer}:${webServerPort}`)
   socket.on('update', (data) => console.log(data))
   // socket.on('connect_error', (data) => console.log(data))
@@ -62,11 +55,22 @@ function connect() {
   })
 
   socket.on('botStatus', (data: { type: 'health' | 'food' | 'combat', socketId: string, value: string }) => {
-    const botIndex = friends.findIndex((e) => e.socketId === data.socketId)
+    const { socketId, type, value } = data
+
+    const botIndex = friends.findIndex((e) => e.socketId === socketId)
     if (botIndex >= 0) {
       const friendUpdate = [...friends]
-      //@ts-ignore
-      friendUpdate[botIndex][data.type] = data.value
+
+      const botToUpdate = friendUpdate[botIndex]
+
+      if (type === "food" || type === "health") {
+        botToUpdate[type] = value // TODO pending to check
+      }
+
+      if (type === "combat") {
+        botToUpdate[type] = value === "true" // TODO pending to check
+      }
+
       friends = friendUpdate
     }
   })
@@ -76,379 +80,452 @@ function connect() {
   })
 
   socket.on('changeConfig', (config) => {
-    let itemsToBeReady,
-      patrol,
-      index,
-      temp,
-      minerConfig,
-      chests,
-      itemsCanBeEat,
-      findMaster,
-      plantAreas,
-      farmAreas,
-      farmAnimal,
-      chestArea
+    const setConfigurations: Record<string, (...args: any) => void> = {}
 
-    let isEventLoaded: Function | undefined
-
-    const asd = config.value // TODO ???
-    switch (config.configToChange) {
-      case 'job':
-        if (asd in Jobs) { // TODO ???
-          botconfig.setJob(bot.username, asd)
-        }
-        break
-      case 'pickUpItems':
-        botconfig.setPickUpItems(bot.username, config.value)
-        break
-      case 'helpFriends':
-        botconfig.setHelpFriends(bot.username, config.value)
-        break
-      case 'allowSprinting':
-        botconfig.setAllowSprinting(bot.username, config.value)
-        break
-      case 'canDig':
-        botconfig.setCanDig(bot.username, config.value)
-        break
-      case 'canSleep':
-        botconfig.setCanSleep(bot.username, config.value)
-        break
-      case 'sleepArea':
-        minerConfig = botconfig.getSleepArea(bot.username)
-        minerConfig[config.value.coord] = config.value.pos
-        botconfig.setSleepArea(bot.username, minerConfig)
-        break
-      case 'canPlaceBlocks':
-        botconfig.setCanPlaceBlocks(bot.username, config.value)
-        break
-      case 'firstPickUpItemsFromKnownChests':
-        botconfig.setFirstPickUpItemsFromKnownChests(
-          bot.username,
-          config.value
-        )
-        break
-      case 'canCraftItemWithdrawChest':
-        botconfig.setCanCraftItemWithdrawChest(
-          bot.username,
-          config.value
-        )
-        break
-      case 'mode':
-        botconfig.setMode(bot.username, config.value)
-        break
-      case 'distance':
-        botconfig.setDistance(bot.username, config.value)
-        break
-      case 'InsertItemToBeReady':
-        itemsToBeReady = botconfig.getItemsToBeReady(bot.username)
-        itemsToBeReady.push({
-          name: config.value.name,
-          quantity: config.value.quantity
-        })
-        botconfig.setItemsToBeReady(bot.username, itemsToBeReady)
-        break
-      case 'DeleteItemToBeReady':
-        itemsToBeReady = botconfig.getItemsToBeReady(bot.username)
-        itemsToBeReady.splice(config.value, 1)
-        botconfig.setItemsToBeReady(bot.username, itemsToBeReady)
-        break
-      case 'InsertItemCanBeEat':
-        itemsCanBeEat = botconfig.getItemsCanBeEat(bot.username)
-        itemsCanBeEat.push(config.value.name)
-        botconfig.setItemsCanBeEat(bot.username, itemsCanBeEat)
-        break
-      case 'deleteItemCanBeEat':
-        itemsCanBeEat = botconfig.getItemsCanBeEat(bot.username)
-        itemsCanBeEat.splice(config.value, 1)
-        botconfig.setItemsCanBeEat(bot.username, itemsCanBeEat)
-        break
-      case 'moveItemCanBeEatNext':
-        itemsCanBeEat = botconfig.getItemsCanBeEat(bot.username)
-        index = config.value
-        if (itemsCanBeEat.length > index + 1) {
-          temp = itemsCanBeEat[index]
-          itemsCanBeEat[index] = itemsCanBeEat[index + 1]
-          itemsCanBeEat[index + 1] = temp
-          botconfig.setItemsCanBeEat(bot.username, itemsCanBeEat)
-        }
-        break
-      case 'moveItemCanBeEatPrev':
-        itemsCanBeEat = botconfig.getItemsCanBeEat(bot.username)
-        index = config.value
-        if (index > 0) {
-          temp = itemsCanBeEat[index]
-          itemsCanBeEat[index] = itemsCanBeEat[index - 1]
-          itemsCanBeEat[index - 1] = temp
-          botconfig.setItemsCanBeEat(bot.username, itemsCanBeEat)
-        }
-        break
-      case 'addPatrol':
-        patrol = botconfig.getPatrol(bot.username)
-        patrol.push(config.value)
-        botconfig.setPatrol(bot.username, patrol)
-        break
-      case 'removePatrol':
-        patrol = botconfig.getPatrol(bot.username)
-        patrol.splice(config.value, 1)
-        botconfig.setPatrol(bot.username, patrol)
-        break
-      case 'clearAllPositions':
-        botconfig.setPatrol(bot.username, [])
-        break
-      case 'copyPatrol':
-        findMaster = bot.nearestEntity(
-          (e) =>
-            e.type === 'player' &&
-            e.username === config.value &&
-            e.mobType !== 'Armor Stand'
-        )
-        if (!findMaster) {
-          return
-        }
-
-        isEventLoaded = bot.listeners('customEventPhysicTick')
-          .find((event) => {
-            return event.name === 'bound nextPointListener'
-          })
-
-        if (!isEventLoaded) {
-          prevPoint = undefined
-          bot.on(
-            'customEventPhysicTick',
-            //@ts-ignore
-            nextPointListener.bind(this, findMaster)
-          )
-          botconfig.setCopingPatrol(bot.username, true)
-        } else {
-          bot.removeListener('customEventPhysicTick', isEventLoaded)
-          botconfig.setCopingPatrol(bot.username, false)
-        }
-        break
-      case 'movePatrolNext':
-        patrol = botconfig.getPatrol(bot.username)
-        index = config.value
-        if (patrol.length > index + 1) {
-          temp = patrol[index]
-          patrol[index] = patrol[index + 1]
-          patrol[index + 1] = temp
-          botconfig.setPatrol(bot.username, patrol)
-        }
-        break
-      case 'movePatrolPrev':
-        patrol = botconfig.getPatrol(bot.username)
-        index = config.value
-        if (index > 0) {
-          temp = patrol[index]
-          patrol[index] = patrol[index - 1]
-          patrol[index - 1] = temp
-          botconfig.setPatrol(bot.username, patrol)
-        }
-        break
-      case 'savePositionHasMaster':
-        findMaster = bot.nearestEntity(
-          (e) =>
-            e.type === 'player' &&
-            e.username === config.value &&
-            e.mobType !== 'Armor Stand'
-        )
-        if (!findMaster) {
-          return
-        }
-        patrol = botconfig.getPatrol(bot.username)
-        patrol.push(
-          new Vec3(
-            Math.round(findMaster.position.x * 10) / 10,
-            Math.round(findMaster.position.y * 10) / 10,
-            Math.round(findMaster.position.z * 10) / 10
-          )
-        )
-        botconfig.setPatrol(bot.username, patrol)
-        break
-      case 'changeTunnel':
-        minerConfig = botconfig.getMinerCords(bot.username)
-        minerConfig.tunel = config.value
-        botconfig.setMinerCords(bot.username, minerConfig)
-        break
-      case 'changeOrientation':
-        minerConfig = botconfig.getMinerCords(bot.username)
-        minerConfig.orientation = config.value
-        botconfig.setMinerCords(bot.username, minerConfig)
-        break
-      case 'changeWorldMiner':
-        minerConfig = botconfig.getMinerCords(bot.username)
-        minerConfig.world = config.value
-        botconfig.setMinerCords(bot.username, minerConfig)
-        break
-      case 'changePosMiner':
-        minerConfig = botconfig.getMinerCords(bot.username)
-        minerConfig[config.value.coord] = config.value.pos
-        botconfig.setMinerCords(bot.username, minerConfig)
-        break
-      case 'changeReverseModeMiner':
-        minerConfig = botconfig.getMinerCords(bot.username)
-        minerConfig.reverse = config.value
-        botconfig.setMinerCords(bot.username, minerConfig)
-        break
-      case 'insertNewChest':
-        chests = botconfig.getChests(bot.username)
-        chests.push({
-          name: 'Input chest name',
-          type: 'withdraw', // deposit,
-          position: {
-            x: null,
-            y: null,
-            z: null
-          },
-          items: []
-        })
-        botconfig.setChests(bot.username, chests)
-        break
-      case 'deleteChest':
-        chests = botconfig.getChests(bot.username)
-        chests.splice(config.value, 1)
-        botconfig.setChests(bot.username, chests)
-        break
-      case 'changeChestType':
-        chests = botconfig.getChests(bot.username)
-        chests[config.value.chestId].type = config.value.value
-        botconfig.setChests(bot.username, chests)
-        break
-      case 'changeChestName':
-        chests = botconfig.getChests(bot.username)
-        chests[config.value.chestId].name = config.value.value
-        botconfig.setChests(bot.username, chests)
-        break
-      case 'changeChestPos':
-        chests = botconfig.getChests(bot.username)
-        chests[config.value.chestId].position[config.value.coord] =
-          config.value.pos
-        botconfig.setChests(bot.username, chests)
-        break
-      case 'changeChestPosMaster':
-        findMaster = bot.nearestEntity(
-          (e) =>
-            e.type === 'player' &&
-            e.username === config.value.master
-        )
-        if (!findMaster) {
-          return
-        }
-
-        chests = botconfig.getChests(bot.username)
-        chests[config.value.chestId].position = findMaster.position.floored()
-        chests[config.value.chestId].position.dimension = bot.game.dimension
-        botconfig.setChests(bot.username, chests)
-
-        break
-      case 'insertItemInChest':
-        chests = botconfig.getChests(bot.username)
-        chests[config.value.chestId].items.push({
-          name: config.value.name,
-          quantity: config.value.quantity
-        })
-        botconfig.setChests(bot.username, chests)
-        break
-      case 'removeItemFromChest':
-        chests = botconfig.getChests(bot.username)
-        chests[config.value.chestId].items.splice(config.value.itemIndex, 1)
-        botconfig.setChests(bot.username, chests)
-        break
-      case 'moveChestNext':
-        chests = botconfig.getChests(bot.username)
-        index = config.value
-        if (chests.length > index + 1) {
-          temp = chests[index]
-          chests[index] = chests[index + 1]
-          chests[index + 1] = temp
-          botconfig.setChests(bot.username, chests)
-        }
-        break
-      case 'moveChestPrev':
-        chests = botconfig.getChests(bot.username)
-        index = config.value
-        if (index > 0) {
-          temp = chests[index]
-          chests[index] = chests[index - 1]
-          chests[index - 1] = temp
-          botconfig.setChests(bot.username, chests)
-        }
-        break
-      case 'insertNewPlantArea':
-        plantAreas = botconfig.getPlantAreas(bot.username)
-        plantAreas.push({
-          plant: null,
-          yLayer: null,
-          xStart: null,
-          xEnd: null,
-          zStart: null,
-          zEnd: null
-        })
-        botconfig.setPlantAreas(bot.username, plantAreas)
-        break
-      case 'changePlantArea':
-        plantAreas = botconfig.getPlantAreas(bot.username)
-        plantAreas[config.value.id] = config.value.plantArea
-        botconfig.setPlantAreas(bot.username, plantAreas)
-        break
-      case 'deletePlantArea':
-        plantAreas = botconfig.getPlantAreas(bot.username)
-        plantAreas.splice(config.value, 1)
-        botconfig.setPlantAreas(bot.username, plantAreas)
-        break
-      case 'insertNewFarmArea':
-        farmAreas = botconfig.getFarmAreas(bot.username)
-        farmAreas.push({
-          yLayer: null,
-          xStart: null,
-          xEnd: null,
-          zStart: null,
-          zEnd: null
-        })
-        botconfig.setFarmAreas(bot.username, farmAreas)
-        break
-      case 'changeFarmArea':
-        farmAreas = botconfig.getFarmAreas(bot.username)
-        farmAreas[config.value.id] = config.value.farmArea
-        botconfig.setFarmAreas(bot.username, farmAreas)
-        break
-      case 'deleteFarmArea':
-        farmAreas = botconfig.getFarmAreas(bot.username)
-        farmAreas.splice(config.value, 1)
-        botconfig.setFarmAreas(bot.username, farmAreas)
-        break
-      case 'changeAnimalValue':
-        farmAnimal = botconfig.getFarmAnimal(bot.username)
-        farmAnimal[config.value.animal] = parseInt(config.value.value)
-        botconfig.setFarmAnimal(bot.username, farmAnimal)
-        break
-      case 'randomFarmArea':
-        botconfig.setRandomFarmArea(bot.username, config.value)
-        break
-      case 'insertNewChestArea':
-        chestArea = botconfig.getChestArea(bot.username)
-        chestArea.push({
-          yLayer: null,
-          xStart: null,
-          xEnd: null,
-          zStart: null,
-          zEnd: null
-        })
-        botconfig.setChestArea(bot.username, chestArea)
-        break
-      case 'changeChestArea':
-        chestArea = botconfig.getChestArea(bot.username)
-        chestArea[config.value.id] = config.value.chestArea
-        botconfig.setChestArea(bot.username, chestArea)
-        break
-      case 'deleteChestArea':
-        chestArea = botconfig.getChestArea(bot.username)
-        chestArea.splice(config.value, 1)
-        botconfig.setChestArea(bot.username, chestArea)
-        break
-      case 'saveFullConfig':
-        botconfig.saveFullConfig(bot.username, config.value)
-        break
+    setConfigurations['insertNewChest'] = () => {
+      const chests = botconfig.getChests()
+      const chest: Chest = {
+        name: 'Input chest name',
+        type: 'withdraw',
+        position: new Vec3(0, 0, 0),
+        dimension: 'minecraft:overworld',
+        items: []
+      }
+      chests.push(chest)
+      botconfig.setChests(chests)
     }
+
+    setConfigurations['job'] = (value) => {
+      botconfig.setJob(value)
+    }
+
+    setConfigurations['pickUpItems'] = (value) => {
+      botconfig.setPickUpItems(value)
+    }
+
+    setConfigurations['helpFriends'] = (value) => {
+      botconfig.setHelpFriends(value)
+    }
+
+    setConfigurations['allowSprinting'] = (value) => {
+      botconfig.setAllowSprinting(value)
+    }
+
+    setConfigurations['canDig'] = (value) => {
+      botconfig.setCanDig(value)
+    }
+
+    setConfigurations['canSleep'] = (value) => {
+      botconfig.setCanSleep(value)
+    }
+
+    setConfigurations['sleepArea'] = (value: { coord: string, pos: string }) => {
+      const { coord, pos } = value
+      let sleepArea = botconfig.getSleepArea()
+      if (!sleepArea) {
+        sleepArea = new Vec3(0, 0, 0)
+      }
+
+      if (coord === "x" || coord === "y" || coord === "z") {
+        sleepArea[coord] = parseInt(pos)
+      }
+
+      botconfig.setSleepArea(sleepArea)
+    }
+
+    setConfigurations['canPlaceBlocks'] = (value) => {
+      botconfig.setCanPlaceBlocks(value)
+    }
+
+    setConfigurations['firstPickUpItemsFromKnownChests'] = (value) => {
+      botconfig.setFirstPickUpItemsFromKnownChests(value)
+    }
+
+    setConfigurations['canCraftItemWithdrawChest'] = (value) => {
+      botconfig.setCanCraftItemWithdrawChest(value)
+    }
+
+    setConfigurations['mode'] = (value) => {
+      botconfig.setMode(value)
+    }
+
+    setConfigurations['distance'] = (value) => {
+      botconfig.setDistance(value)
+    }
+
+    setConfigurations['InsertItemToBeReady'] = (value) => {
+      const itemsToBeReady = botconfig.getItemsToBeReady()
+      itemsToBeReady.push({
+        name: value.name,
+        quantity: value.quantity
+      })
+      botconfig.setItemsToBeReady(itemsToBeReady)
+    }
+
+    setConfigurations['DeleteItemToBeReady'] = (value) => {
+      const itemsToBeReady = botconfig.getItemsToBeReady()
+      itemsToBeReady.splice(value, 1)
+      botconfig.setItemsToBeReady(itemsToBeReady)
+    }
+
+    setConfigurations['InsertItemCanBeEat'] = () => {
+      const itemsCanBeEat = botconfig.getItemsCanBeEat()
+      itemsCanBeEat.push(config.value.name)
+      botconfig.setItemsCanBeEat(itemsCanBeEat)
+    }
+
+    setConfigurations['deleteItemCanBeEat'] = (value) => {
+      const itemsCanBeEat = botconfig.getItemsCanBeEat()
+      itemsCanBeEat.splice(value, 1)
+      botconfig.setItemsCanBeEat(itemsCanBeEat)
+    }
+
+    setConfigurations['moveItemCanBeEatNext'] = (value) => {
+      const itemsCanBeEat = botconfig.getItemsCanBeEat()
+      const index = value
+      if (itemsCanBeEat.length > index + 1) {
+        const temp = itemsCanBeEat[index]
+        itemsCanBeEat[index] = itemsCanBeEat[index + 1]
+        itemsCanBeEat[index + 1] = temp
+        botconfig.setItemsCanBeEat(itemsCanBeEat)
+      }
+    }
+
+    setConfigurations['moveItemCanBeEatPrev'] = (value) => {
+      const itemsCanBeEat = botconfig.getItemsCanBeEat()
+      const index = value
+      if (index > 0) {
+        const temp = itemsCanBeEat[index]
+        itemsCanBeEat[index] = itemsCanBeEat[index - 1]
+        itemsCanBeEat[index - 1] = temp
+        botconfig.setItemsCanBeEat(itemsCanBeEat)
+      }
+    }
+
+    setConfigurations['addPatrol'] = (value) => {
+      const patrol = botconfig.getPatrol()
+      patrol.push(value)
+      botconfig.setPatrol(patrol)
+    }
+
+    setConfigurations['removePatrol'] = (value) => {
+      const patrol = botconfig.getPatrol()
+      patrol.splice(value, 1)
+      botconfig.setPatrol(patrol)
+    }
+
+    setConfigurations['clearAllPositions'] = () => {
+      botconfig.setPatrol([])
+    }
+
+    setConfigurations['copyPatrol'] = (value) => {
+      const findMaster = bot.nearestEntity(
+        (e) =>
+          e.type === 'player' &&
+          e.username === value &&
+          e.mobType !== 'Armor Stand'
+      )
+      if (!findMaster) {
+        return
+      }
+
+      const isEventLoaded = bot.listeners('customEventPhysicTick')
+        .find((event) => {
+          return event.name === 'bound nextPointListener'
+        })
+
+      if (!isEventLoaded) {
+        prevPoint = undefined
+        bot.on(
+          'customEventPhysicTick',
+          //@ts-ignore
+          nextPointListener.bind(this, findMaster)
+        )
+      } else {
+        bot.removeListener('customEventPhysicTick', isEventLoaded)
+      }
+    }
+
+    setConfigurations['movePatrolNext'] = (value) => {
+      const patrol = botconfig.getPatrol()
+      const index = value
+      if (patrol.length > index + 1) {
+        const temp = patrol[index]
+        patrol[index] = patrol[index + 1]
+        patrol[index + 1] = temp
+        botconfig.setPatrol(patrol)
+      }
+    }
+
+    setConfigurations['movePatrolPrev'] = (value) => {
+      const patrol = botconfig.getPatrol()
+      const index = value
+      if (index > 0) {
+        const temp = patrol[index]
+        patrol[index] = patrol[index - 1]
+        patrol[index - 1] = temp
+        botconfig.setPatrol(patrol)
+      }
+    }
+
+    setConfigurations['savePositionHasMaster'] = (value) => {
+      const findMaster = bot.nearestEntity(
+        (e) =>
+          e.type === 'player' &&
+          e.username === value &&
+          e.mobType !== 'Armor Stand'
+      )
+      if (!findMaster) {
+        return
+      }
+      const patrol = botconfig.getPatrol()
+      patrol.push(
+        new Vec3(
+          Math.round(findMaster.position.x * 10) / 10,
+          Math.round(findMaster.position.y * 10) / 10,
+          Math.round(findMaster.position.z * 10) / 10
+        )
+      )
+      botconfig.setPatrol(patrol)
+    }
+
+    setConfigurations['changeTunnel'] = (value: string) => {
+      const minerConfig = botconfig.getMinerCords()
+      if (value === "horizontally" || value === "vertically") {
+        minerConfig.tunel = value
+      }
+      botconfig.setMinerCords(minerConfig)
+    }
+
+    setConfigurations['changeOrientation'] = (value: string) => {
+      const minerConfig = botconfig.getMinerCords()
+      if (value === 'x+' || value === 'x-' || value === 'z+' || value === 'z-') {
+        minerConfig.orientation = value
+      }
+      botconfig.setMinerCords(minerConfig)
+    }
+
+    setConfigurations['changeWorldMiner'] = (value: string) => {
+      const minerConfig = botconfig.getMinerCords()
+      if (value === 'minecraft:overworld' || value === 'minecraft:the_nether' || value === 'minecraft:the_end') {
+        minerConfig.world = value
+      }
+      botconfig.setMinerCords(minerConfig)
+    }
+
+    setConfigurations['changePosMiner'] = (value: { coord: string, pos: string }) => {
+      const { coord, pos } = value
+      const minerConfig = botconfig.getMinerCords()
+      if (isMineCoords(coord)) {
+        minerConfig[coord] = parseInt(pos);
+      }
+      botconfig.setMinerCords(minerConfig)
+    }
+
+    setConfigurations['changeReverseModeMiner'] = (value: boolean) => {
+      const minerConfig = botconfig.getMinerCords()
+      minerConfig.reverse = value
+      botconfig.setMinerCords(minerConfig)
+    }
+
+    setConfigurations['insertNewChest'] = () => {
+      const chests = botconfig.getChests()
+      chests.push({
+        name: 'Input chest name',
+        type: 'withdraw',
+        position: new Vec3(0, 0, 0),
+        items: [],
+        dimension: 'minecraft:overworld'
+      })
+      botconfig.setChests(chests)
+    }
+
+    setConfigurations['deleteChest'] = (value) => {
+      const chests = botconfig.getChests()
+      chests.splice(value, 1)
+      botconfig.setChests(chests)
+    }
+
+    setConfigurations['changeChestType'] = (value) => {
+      const chests = botconfig.getChests()
+      chests[value.chestId].type = value.value
+      botconfig.setChests(chests)
+    }
+
+    setConfigurations['changeChestName'] = (value) => {
+      const chests = botconfig.getChests()
+      chests[value.chestId].name = value.value
+      botconfig.setChests(chests)
+    }
+
+    setConfigurations['changeChestPos'] = (value: { chestId: number, coord: string, pos: string }) => {
+      const { chestId, coord, pos } = value
+      const chests = botconfig.getChests()
+
+      if (coord === "x" || coord === "y" || coord === "z") {
+        chests[chestId].position[coord] = parseInt(pos)
+      }
+
+      if (
+        coord === "dimension" &&
+        (pos === 'minecraft:overworld' || pos === 'minecraft:the_nether' || pos === 'minecraft:the_end')
+      ) {
+        chests[chestId].dimension = pos
+      }
+
+      botconfig.setChests(chests)
+    }
+
+    setConfigurations['changeChestPosMaster'] = (value) => {
+      const findMaster = bot.nearestEntity(
+        (e) =>
+          e.type === 'player' &&
+          e.username === value.master
+      )
+      if (!findMaster) {
+        return
+      }
+
+      const chests = botconfig.getChests()
+      chests[value.chestId].position = findMaster.position.floored()
+      chests[value.chestId].dimension = bot.game.dimension as Dimensions
+      botconfig.setChests(chests)
+    }
+
+    setConfigurations['insertItemInChest'] = (value) => {
+      const chests = botconfig.getChests()
+      chests[value.chestId].items.push({
+        name: value.name,
+        quantity: value.quantity
+      })
+      botconfig.setChests(chests)
+    }
+
+    setConfigurations['removeItemFromChest'] = (value) => {
+      const chests = botconfig.getChests()
+      chests[value.chestId].items.splice(value.itemIndex, 1)
+      botconfig.setChests(chests)
+    }
+
+    setConfigurations['moveChestNext'] = (value) => {
+      const chests = botconfig.getChests()
+      const index = value
+      if (chests.length > index + 1) {
+        const temp = chests[index]
+        chests[index] = chests[index + 1]
+        chests[index + 1] = temp
+        botconfig.setChests(chests)
+      }
+    }
+
+    setConfigurations['moveChestPrev'] = (value) => {
+      const chests = botconfig.getChests()
+      const index = value
+      if (index > 0) {
+        const temp = chests[index]
+        chests[index] = chests[index - 1]
+        chests[index - 1] = temp
+        botconfig.setChests(chests)
+      }
+    }
+
+    setConfigurations['insertNewPlantArea'] = () => {
+      const plantAreas = botconfig.getPlantAreas()
+      plantAreas.push({
+        layer: {
+          xEnd: 0,
+          xStart: 0,
+          yLayer: 0,
+          zEnd: 0,
+          zStart: 0
+        },
+        plant: ""
+      })
+      botconfig.setPlantAreas(plantAreas)
+    }
+
+    setConfigurations['changePlantArea'] = (value) => {
+      const plantAreas = botconfig.getPlantAreas()
+      plantAreas[value.id] = value.plantArea
+      botconfig.setPlantAreas(plantAreas)
+    }
+
+    setConfigurations['deletePlantArea'] = (value) => {
+      const plantAreas = botconfig.getPlantAreas()
+      plantAreas.splice(value, 1)
+      botconfig.setPlantAreas(plantAreas)
+    }
+
+    setConfigurations['insertNewFarmArea'] = (value) => {
+      const farmAreas = botconfig.getFarmAreas()
+      farmAreas.push({
+        yLayer: 0,
+        xStart: 0,
+        xEnd: 0,
+        zStart: 0,
+        zEnd: 0
+      })
+      botconfig.setFarmAreas(farmAreas)
+    }
+
+    setConfigurations['changeFarmArea'] = (value) => {
+      const farmAreas = botconfig.getFarmAreas()
+      farmAreas[value.id] = value.farmArea
+      botconfig.setFarmAreas(farmAreas)
+    }
+
+    setConfigurations['deleteFarmArea'] = (value) => {
+      const farmAreas = botconfig.getFarmAreas()
+      farmAreas.splice(value, 1)
+      botconfig.setFarmAreas(farmAreas)
+    }
+
+    setConfigurations['changeAnimalValue'] = (data: {
+      animal: string,
+      value: string
+    }) => {
+      const { animal, value } = data
+      if (isAnimal(animal)) {
+        const farmAnimal = botconfig.getFarmAnimal()
+        farmAnimal[animal] = parseInt(value)
+        botconfig.setFarmAnimal(farmAnimal)
+      }
+    }
+
+    setConfigurations['randomFarmArea'] = (value) => {
+      botconfig.setRandomFarmArea(value)
+    }
+
+    setConfigurations['insertNewChestArea'] = () => {
+      const chestArea = botconfig.getChestArea()
+      chestArea.push({
+        yLayer: 0,
+        xStart: 0,
+        xEnd: 0,
+        zStart: 0,
+        zEnd: 0
+      })
+      botconfig.setChestArea(chestArea)
+    }
+
+    setConfigurations['changeChestArea'] = (value) => {
+      const chestArea = botconfig.getChestArea()
+      chestArea[value.id] = value.chestArea
+      botconfig.setChestArea(chestArea)
+    }
+
+    setConfigurations['deleteChestArea'] = (value) => {
+      const chestArea = botconfig.getChestArea()
+      chestArea.splice(value, 1)
+      botconfig.setChestArea(chestArea)
+    }
+
+    setConfigurations['saveFullConfig'] = (value) => {
+      botconfig.saveFullConfig(value)
+    }
+
+
+    setConfigurations[config.configToChange](config.value)
 
     sendConfig()
   })
@@ -458,29 +535,31 @@ function connect() {
   })
 }
 
-function getLoged() {
+const getLoged = () => {
   return loged
 }
 
-function sendConfig() {
+const sendConfig = () => {
+  const botconfig = botconfigLoader(bot.username)
+
   socket.emit('sendAction', {
     action: 'sendConfig',
-    value: botconfig.getAll(bot.username)
+    value: botconfig.getAll()
   })
 }
 
-function sendAction(action: string, value: any) {
+const sendAction = (action: string, value: any) => {
   socket.emit('sendAction', { action, value })
 }
 
-function emit(chanel: string, data: any) {
+const emit = (chanel: string, data: any) => {
   if (!loged) {
     return
   }
   socket.emit(chanel, data)
 }
 
-function emitHealth(health: number) {
+const emitHealth = (health: number) => {
   const data = {
     type: 'health',
     value: health
@@ -488,7 +567,7 @@ function emitHealth(health: number) {
   emit('botStatus', data)
 }
 
-function emitCombat(combat: boolean) {
+const emitCombat = (combat: boolean) => {
   const data = {
     type: 'combat',
     value: combat
@@ -496,7 +575,7 @@ function emitCombat(combat: boolean) {
   emit('botStatus', data)
 }
 
-function emitFood(food: number) {
+const emitFood = (food: number) => {
   const data = {
     type: 'food',
     value: food
@@ -504,7 +583,7 @@ function emitFood(food: number) {
   emit('botStatus', data)
 }
 
-function emitEvents(events: Array<string>) {
+const emitEvents = (events: Array<string>) => {
   const data = {
     type: 'events',
     value: events
@@ -512,30 +591,32 @@ function emitEvents(events: Array<string>) {
   emit('botStatus', data)
 }
 
-function log(data: string) {
+const log = (data: string) => {
   if (!loged) {
     return
   }
   socket.emit('logs', data)
 }
 
-function on(listener: string, cb: (BotwebsocketAction: BotwebsocketAction) => void) {
+const on = (listener: string, cb: (BotwebsocketAction: BotwebsocketAction) => void) => {
   socket.on(listener, cb)
 }
 
-function getFriends() {
+const getFriends = () => {
   return friends
 }
 
-function getMasters() {
+const getMasters = () => {
   const allMasters = masters.concat(configBot.masters) // Gef offline + online config
   return allMasters
 }
 
 let prevPoint: Vec3 | undefined
-function nextPointListener(master: { position: Vec3 }) {
+const nextPointListener = (master: { position: Vec3 }) => {
+  const botconfig = botconfigLoader(bot.username)
+
   if (prevPoint === undefined || master.position.distanceTo(prevPoint) > 3) {
-    const patrol = botconfig.getPatrol(bot.username)
+    const patrol = botconfig.getPatrol()
     patrol.push(
       new Vec3(
         Math.round(master.position.x * 10) / 10,
@@ -544,7 +625,7 @@ function nextPointListener(master: { position: Vec3 }) {
       )
     )
     prevPoint = master.position.clone()
-    botconfig.setPatrol(bot.username, patrol)
+    botconfig.setPatrol(patrol)
     sendConfig()
   }
 }
@@ -563,6 +644,11 @@ const botWebsocketLoader = {
   getFriends,
   getMasters,
   sendAction
+}
+
+const isMineCoords = (value: string): value is keyof MineCords => {
+  const typesMineCord: Array<string> = ['xStart', 'xEnd', 'yEnd', 'yStart', 'zEnd', 'zStart']
+  return typesMineCord.includes(value)
 }
 
 export default botWebsocketLoader

@@ -1,5 +1,4 @@
 import botConfigLoader from '@/modules/botConfig'
-const botConfig = botConfigLoader()
 import { bot } from '../hooks'
 import { Config, MineCordsConfig } from '@/types'
 import { Jobs } from '@/types/defaultTypes'
@@ -19,19 +18,21 @@ describe('02 Make basic tunel in water & lava', function () {
     world: "minecraft:overworld"
   }
 
-  const config: Config = {
-    ...botConfig.defaultConfig,
-    job: Jobs.miner,
-    itemsToBeReady: [
-      {
-        name: "iron_pickaxe",
-        quantity: 1
-      }
-    ],
-    minerCords
-  }
 
   before(async () => {
+    const botConfig = botConfigLoader(bot.username)
+    const config: Config = {
+      ...botConfig.defaultConfig,
+      job: Jobs.miner,
+      itemsToBeReady: [
+        {
+          name: "iron_pickaxe",
+          quantity: 1
+        }
+      ],
+      minerCords
+    }
+
     await bot.test.resetState()
 
     bot.chat(`/give flatbot minecraft:iron_pickaxe`)
@@ -60,7 +61,7 @@ describe('02 Make basic tunel in water & lava', function () {
     bot.creative.stopFlying()
     bot.test.becomeSurvival()
 
-    botConfig.saveFullConfig(bot.username, config)
+    botConfig.saveFullConfig(config)
     bot.emit('reloadBotConfig')
   })
 

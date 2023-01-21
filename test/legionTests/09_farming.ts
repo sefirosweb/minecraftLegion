@@ -1,5 +1,4 @@
 import botConfigLoader from '@/modules/botConfig'
-const botConfig = botConfigLoader()
 import inventoryModule from '@/modules/inventoryModule'
 import { bot } from '../hooks'
 import { Config, PlantArea } from '@/types'
@@ -89,22 +88,22 @@ describe('09 General farming', function () {
     }
   ]
 
-  const config: Config = {
-    ...botConfig.defaultConfig,
-    job: Jobs.farmer,
-    pickUpItems: true,
-    itemsCanBeEat: [],
-    itemsToBeReady: [
-      {
-        name: "iron_axe",
-        quantity: 1
-      }
-    ],
-    plantAreas,
-  }
-
-
   before(async () => {
+    const botConfig = botConfigLoader(bot.username)
+    const config: Config = {
+      ...botConfig.defaultConfig,
+      job: Jobs.farmer,
+      pickUpItems: true,
+      itemsCanBeEat: [],
+      itemsToBeReady: [
+        {
+          name: "iron_axe",
+          quantity: 1
+        }
+      ],
+      plantAreas,
+    }
+
     await bot.test.resetState()
     bot.chat(`/give flatbot minecraft:iron_axe`)
     bot.chat(`/give flatbot minecraft:iron_hoe`)
@@ -124,7 +123,7 @@ describe('09 General farming', function () {
     bot.creative.stopFlying()
     bot.test.becomeSurvival()
 
-    botConfig.saveFullConfig(bot.username, config)
+    botConfig.saveFullConfig(config)
     bot.emit('reloadBotConfig')
   })
 

@@ -2,7 +2,7 @@ import { Bot, LegionStateMachineTargets, PendingTransaction, ChestTransaction } 
 import { StateTransition, BehaviorIdle, NestedStateMachine } from 'mineflayer-statemachine'
 import GoAndWithdraw from '@/NestedStateModules/getReady/goAndWithdraw'
 
-function pickUpItems(bot: Bot, targets: LegionStateMachineTargets) {
+export default (bot: Bot, targets: LegionStateMachineTargets) => {
 
   const start = new BehaviorIdle()
   start.stateName = 'Start'
@@ -112,5 +112,3 @@ function pickUpItems(bot: Bot, targets: LegionStateMachineTargets) {
   nestedState.stateName = 'pickUpItems'
   return nestedState
 }
-
-export default pickUpItems

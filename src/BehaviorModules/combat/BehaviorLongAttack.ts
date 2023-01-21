@@ -11,7 +11,7 @@ export default class BehaviorLongAttack implements StateBehavior {
   y?: number
 
   playername?: string
-  infoShot: ShotDirection | false
+  infoShot: ShotDirection | undefined
   prevTime: number | false
   playerIsFound: boolean
   preparingShot: boolean
@@ -31,7 +31,6 @@ export default class BehaviorLongAttack implements StateBehavior {
 
     this.preparingShot = false
     this.prevTime = false
-    this.infoShot = false
   }
 
   onStateEntered() {
@@ -61,7 +60,7 @@ export default class BehaviorLongAttack implements StateBehavior {
     }
   }
 
-  setInfoShot(infoShot: ShotDirection) {
+  setInfoShot(infoShot: ShotDirection | undefined) {
     this.infoShot = infoShot
   }
 

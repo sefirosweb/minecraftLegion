@@ -158,7 +158,7 @@ const inventoryModule = (bot: Bot) => {
     let block: BlockChest | null | undefined
     let secondBlock: Vec3
     let secondBlockIndex: number
-    let props: { [key: string]: string | number }
+    let props: Record<string, string | number>
 
     while (block = blocksFound.shift()) {
 

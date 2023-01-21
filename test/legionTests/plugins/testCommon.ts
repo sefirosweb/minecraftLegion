@@ -6,9 +6,9 @@ import { sleep, onceWithCleanup } from '../../lib/promise_utils'
 import botConfigLoader from '@/modules/botConfig'
 import { Bot } from '@/types'
 import { Block } from 'prismarine-block'
-const botConfig = botConfigLoader()
 
 export default (bot: Bot) => {
+  const botConfig = botConfigLoader(bot.username)
   const gameModeChangedMessages = ['commands.gamemode.success.self', 'gameMode.changed']
 
   let grassName
@@ -67,7 +67,7 @@ export default (bot: Bot) => {
     bot.chat('/kill @e[type=!player]')
     bot.chat('/gamerule doMobLoot true')
     bot.chat('/gamerule randomTickSpeed 20')
-    botConfig.saveFullConfig(bot.username, botConfig.defaultConfig);
+    botConfig.saveFullConfig(botConfig.defaultConfig);
     await becomeCreative()
     await clearInventory()
     bot.creative.startFlying()

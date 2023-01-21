@@ -84,6 +84,8 @@ function harvestFunction(bot: Bot, targets: LegionStateMachineTargets) {
   }
 
   function getPlantBlock() {
+    if (!targets.farmerJob.plantArea) return undefined
+
     const xStart = targets.farmerJob.plantArea.layer.xStart! < targets.farmerJob.plantArea.layer.xEnd! ? targets.farmerJob.plantArea.layer.xStart! : targets.farmerJob.plantArea.layer.xEnd!
     const xEnd = targets.farmerJob.plantArea.layer.xStart! > targets.farmerJob.plantArea.layer.xEnd! ? targets.farmerJob.plantArea.layer.xStart! : targets.farmerJob.plantArea.layer.xEnd!
     const zStart = targets.farmerJob.plantArea.layer.zStart! < targets.farmerJob.plantArea.layer.zEnd! ? targets.farmerJob.plantArea.layer.zStart! : targets.farmerJob.plantArea.layer.zEnd!
@@ -192,7 +194,7 @@ function harvestFunction(bot: Bot, targets: LegionStateMachineTargets) {
         targets.position = targets.digBlock?.position.clone()
         // botWebsocket.log(`Error on go to plant ${targets.farmerJob.plantArea.plant}`)
       },
-      shouldTransition: () => targets.digBlock !== undefined && bot.canDigBlock(targets.digBlock) && !bot.pathfinder.isMining() && targets.farmerJob.plantArea.plant !== 'sweet_berries'
+      shouldTransition: () => targets.digBlock !== undefined && bot.canDigBlock(targets.digBlock) && !bot.pathfinder.isMining() && targets.farmerJob.plantArea?.plant !== 'sweet_berries'
     }),
 
     new StateTransition({
@@ -201,14 +203,14 @@ function harvestFunction(bot: Bot, targets: LegionStateMachineTargets) {
       onTransition: () => {
         targets.position = targets.digBlock?.position.clone()
       },
-      shouldTransition: () => targets.digBlock !== undefined && bot.canDigBlock(targets.digBlock) && bot.canSeeBlock(targets.digBlock) && !bot.pathfinder.isMining() && targets.farmerJob.plantArea.plant === 'sweet_berries'
+      shouldTransition: () => targets.digBlock !== undefined && bot.canDigBlock(targets.digBlock) && bot.canSeeBlock(targets.digBlock) && !bot.pathfinder.isMining() && targets.farmerJob.plantArea?.plant === 'sweet_berries'
     }),
 
     new StateTransition({
       parent: goPlant,
       child: exit,
       onTransition: () => {
-        botWebsocket.log(`Error on go to plant ${targets.farmerJob.plantArea.plant}`)
+        botWebsocket.log(`Error on go to plant ${targets.farmerJob.plantArea?.plant}`)
       },
       shouldTransition: () => goPlant.isFinished() && !goPlant.isSuccess()
     }),

@@ -1,42 +1,43 @@
-//@ts-nocheck
-import {
-  StateTransition,
-  BehaviorIdle,
-  NestedStateMachine
-} from 'mineflayer-statemachine'
-
+import { StateTransition, BehaviorIdle, NestedStateMachine } from 'mineflayer-statemachine'
 import BehaviorLoadConfig from '@/BehaviorModules/BehaviorLoadConfig'
 import BehaviorWithdrawItemChest from '@/BehaviorModules/BehaviorWithdrawItemChest'
 import BehaviorDepositItemChest from '@/BehaviorModules/BehaviorDepositItemChest'
 import BehaviorCheckItemsInInventory from '@/BehaviorModules/BehaviorCheckItemsInInventory'
 import BehaviorMoveTo from '@/BehaviorModules/BehaviorMoveTo'
 import chestModule from '@/modules/chestModule'
-import inventoryModule from '@/modules/inventoryModule'
 import PickUpItems from '@/NestedStateModules/getReady/pickUpItems'
 import SearchAndCraftFunction from '@/NestedStateModules/crafterJob/searchAndCraftFunction'
+import { Bot, Chest, Item, LegionStateMachineTargets } from '@/types'
 
-function goChestsFunction(bot, targets) {
+export default (bot: Bot, targets: LegionStateMachineTargets) => {
   const { findChestsToWithdraw } = chestModule(bot, targets)
-  const { getResumeInventoryV2 } = inventoryModule(bot);
 
   const start = new BehaviorIdle()
   start.stateName = 'Start'
+  //@ts-ignore
   start.x = 75
+  //@ts-ignore
   start.y = 63
 
   const checkCraftItem = new BehaviorIdle()
   checkCraftItem.stateName = 'Check Craft Item'
+  //@ts-ignore
   checkCraftItem.x = 75
+  //@ts-ignore
   checkCraftItem.y = 513
 
   const exit = new BehaviorIdle()
   exit.stateName = 'Exit'
+  //@ts-ignore
   exit.x = 525
+  //@ts-ignore
   exit.y = 113
 
   const nextCheck = new BehaviorIdle()
   nextCheck.stateName = 'Next Check'
+  //@ts-ignore
   nextCheck.x = 325
+  //@ts-ignore
   nextCheck.y = 213
 
   const loadConfig = new BehaviorLoadConfig(bot, targets)
@@ -67,14 +68,18 @@ function goChestsFunction(bot, targets) {
 
   const pickUpItems = PickUpItems(bot, targets)
   pickUpItems.stateName = 'Pick Up Items'
+  //@ts-ignore
   pickUpItems.x = 325
+  //@ts-ignore
   pickUpItems.y = 63
 
   const searchAndCraft = SearchAndCraftFunction(bot, targets);
+  //@ts-ignore
   searchAndCraft.x = 75
+  //@ts-ignore
   searchAndCraft.y = 363
 
-  let chests = []
+  let chests: Array<Chest> = []
   let chestIndex = 0
   let itemsToCraft: Array<Item> = []
 
@@ -167,10 +172,7 @@ function goChestsFunction(bot, targets) {
 
         itemInChest.forEach(ic => {
           if (ic.quantity > 0) {
-            itemsToCraft.push({
-              name: ic.name,
-              quantity: ic.quantity
-            })
+            itemsToCraft.push(ic)
           }
         });
 
@@ -213,5 +215,3 @@ function goChestsFunction(bot, targets) {
   nestedState.stateName = 'Go Chests'
   return nestedState
 }
-
-export default goChestsFunction

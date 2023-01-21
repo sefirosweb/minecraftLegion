@@ -1,23 +1,16 @@
-//@ts-nocheck
-import botWebsocket from '@modules/botWebsocket'
-import mineflayerPathfinder from 'mineflayer-pathfinder'
-
-import {
-  StateTransition,
-  BehaviorIdle,
-  NestedStateMachine,
-  BehaviorFollowEntity
-} from 'mineflayer-statemachine'
+import { StateTransition, BehaviorIdle, NestedStateMachine, BehaviorFollowEntity } from 'mineflayer-statemachine'
 import BehaviorAttack from '@/BehaviorModules/combat/BehaviorAttack'
 import BehaviorLongAttack from '@/BehaviorModules/combat/BehaviorLongAttack'
-import { Bot, fakeVec3, LegionStateMachineTargets } from '@/types'
+import { Bot, fakeVec3, LegionStateMachineTargets, ShotDirection } from '@/types'
 import { Entity } from 'prismarine-entity'
 import mcDataLoader from 'minecraft-data'
 import inventoryModule from '@/modules/inventoryModule'
 import getClosestEnemy from '@/modules/getClosestEnemy'
+import botWebsocket from '@/modules/botWebsocket'
+import mineflayerPathfinder from 'mineflayer-pathfinder'
+
 //@ts-ignore
 import hawkEye from 'minecrafthawkeye'
-
 
 function combatFunction(bot: Bot, targets: LegionStateMachineTargets) {
   const inventory = inventoryModule(bot)
@@ -42,12 +35,16 @@ function combatFunction(bot: Bot, targets: LegionStateMachineTargets) {
 
   const start = new BehaviorIdle()
   start.stateName = 'Start'
+  //@ts-ignore
   start.x = 125
+  //@ts-ignore
   start.y = 113
 
   const exit = new BehaviorIdle()
   exit.stateName = 'Exit'
+  //@ts-ignore
   exit.x = 575
+  //@ts-ignore
   exit.y = 263
 
   const attack = new BehaviorAttack(bot, targets)
@@ -61,17 +58,21 @@ function combatFunction(bot: Bot, targets: LegionStateMachineTargets) {
   longRangeAttack.y = 413
 
 
+  //@ts-ignore
   const followMob = new BehaviorFollowEntity(bot, targets)
   followMob.stateName = 'Follow Enemy'
+  //@ts-ignore
   followMob.x = 725
+  //@ts-ignore
   followMob.y = 113
 
-  let targetGrade = false
+  let targetGrade: ShotDirection | undefined
   const prevPlayerPositions: Array<fakeVec3> = []
   let bowCountdown = Date.now() // Used for avoid bugs on jam between bow and sword
   let newTargetColdDown = Date.now()
 
   const filter = (e: Entity) =>
+    e.mobType !== undefined &&
     e.type === 'mob' &&
     e.position.distanceTo(bot.entity.position) < 10 &&
     e.mobType !== 'Armor Stand' &&
@@ -91,12 +92,12 @@ function combatFunction(bot: Bot, targets: LegionStateMachineTargets) {
     }
 
     if (Date.now() - bowCountdown < timeBowCountdown) {
-      longRangeAttack.setInfoShot(false)
+      longRangeAttack.setInfoShot(undefined)
       return
     }
 
     if (!targets.entity || targets.entity === undefined) {
-      longRangeAttack.setInfoShot(false)
+      longRangeAttack.setInfoShot(undefined)
       return
     }
 
@@ -128,6 +129,7 @@ function combatFunction(bot: Bot, targets: LegionStateMachineTargets) {
     speed.y = speed.y / prevPlayerPositions.length
     speed.z = speed.z / prevPlayerPositions.length
 
+    //@ts-ignore
     targetGrade = bot.hawkEye.getMasterGrade(targets.entity, speed, 'bow')
     longRangeAttack.setInfoShot(targetGrade)
   }
@@ -224,20 +226,22 @@ function combatFunction(bot: Bot, targets: LegionStateMachineTargets) {
       child: followMob,
       name: 'Mob is too far',
       onTransition: () => {
-        if (flyingMobs.includes(targets.entity?.name)) {
-
+        if (flyingMobs.includes(targets.entity?.name ?? '')) {
+          //@ts-ignore
           followMob.movements = movementsForFliyingMobs
         } else {
-
+          //@ts-ignore
           followMob.movements = movements
         }
         newTimeMobCountdown = Date.now()
         checkHandleSword()
       },
-      shouldTransition: () => targets.entity !== undefined &&
-        followMob.distanceToTarget() > rangeSword &&
-        followMob.distanceToTarget() < rangeFollowToShortAttack &&
-        targets.entity.isValid
+      shouldTransition: () => {
+        return targets.entity !== undefined &&
+          followMob.distanceToTarget() > rangeSword &&
+          followMob.distanceToTarget() < rangeFollowToShortAttack &&
+          targets.entity.isValid
+      }
     }),
 
     // Long Range Attack
@@ -245,9 +249,11 @@ function combatFunction(bot: Bot, targets: LegionStateMachineTargets) {
       parent: attack,
       child: longRangeAttack,
       name: 'Mob is too far',
-      shouldTransition: () => targets.entity !== undefined &&
-        followMob.distanceToTarget() > rangeFollowToShortAttack &&
-        targetGrade !== false && targets.entity.isValid
+      shouldTransition: () => {
+        return targets.entity !== undefined &&
+          followMob.distanceToTarget() > rangeFollowToShortAttack &&
+          targetGrade !== undefined && targets.entity.isValid
+      }
     }),
 
     new StateTransition({
@@ -259,7 +265,7 @@ function combatFunction(bot: Bot, targets: LegionStateMachineTargets) {
           followMob.distanceToTarget() < rangoBow &&
           followMob.distanceToTarget() > rangeFollowToShortAttack &&
           Date.now() - bowCountdown > timeBowCountdown &&
-          targetGrade !== false &&
+          targetGrade !== undefined &&
           targets.entity.isValid &&
           longRangeAttack.checkBowAndArrow() === true
       }
@@ -269,11 +275,11 @@ function combatFunction(bot: Bot, targets: LegionStateMachineTargets) {
       parent: longRangeAttack,
       child: followMob,
       onTransition: () => {
-        if (flyingMobs.includes(targets.entity?.name)) {
-
+        if (flyingMobs.includes(targets.entity?.name ?? '')) {
+          //@ts-ignore
           followMob.movements = movementsForFliyingMobs
         } else {
-
+          //@ts-ignore
           followMob.movements = movements
         }
         checkHandleSword()
@@ -286,7 +292,7 @@ function combatFunction(bot: Bot, targets: LegionStateMachineTargets) {
           (followMob.distanceToTarget() > rangoBow && targets.entity.isValid) ||
           (followMob.distanceToTarget() < rangeFollowToShortAttack && targets.entity.isValid) ||
           (targets.entity.mobType === 'Enderman' && targets.entity.isValid) ||
-          (targetGrade === false && targets.entity.isValid)
+          (targetGrade === undefined && targets.entity.isValid)
         )
       }
     }),

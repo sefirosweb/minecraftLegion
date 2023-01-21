@@ -6,10 +6,10 @@ import {
 
 import FeedAnimalFunction from '@/NestedStateModules/breederJob/feedAnimalFunction'
 import BehaviorLoadConfig from '@/BehaviorModules/BehaviorLoadConfig'
-import animalType from '@/modules/animalType'
+import { animals } from '@/modules/animalType'
 import { Bot, LegionStateMachineTargets } from '@/types'
 import { Entity } from 'prismarine-entity'
-const animalTypes = Object.keys(animalType)
+const animalTypes = Object.keys(animals)
 
 function breederFunction(bot: Bot, targets: LegionStateMachineTargets) {
   const start = new BehaviorIdle()
@@ -90,7 +90,7 @@ function breederFunction(bot: Bot, targets: LegionStateMachineTargets) {
             continue
           }
 
-          if (Date.now() - (animalToFeed.breededDate ?? 0) > targets.breederJob.farmAnimal.seconds * 1000) {
+          if (Date.now() - (animalToFeed.breededDate ?? 0) > targets.breederJob.farmAnimalSeconds * 1000) {
             animalsToFeed.push(targets.breederJob.breededAnimals[animalId])
           }
         }
@@ -112,8 +112,10 @@ function breederFunction(bot: Bot, targets: LegionStateMachineTargets) {
       parent: loadConfig,
       child: checkFarmAreas,
       onTransition: () => {
-        targets.breederJob.farmAnimal = loadConfig.getFarmAnimal()
-        targets.breederJob.farmAreas = loadConfig.getFarmAreas()
+        const config = loadConfig.getAllConfig()
+        targets.breederJob.farmAnimal = config.farmAnimal
+        targets.breederJob.farmAreas = config.farmAreas
+        targets.breederJob.farmAnimalSeconds = config.farmAnimalSeconds
         targets.breederJob.animalsToBeFeed = getAnimalsToBeFeed()
       },
       shouldTransition: () => true

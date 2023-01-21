@@ -1,16 +1,9 @@
-import {
-  StateTransition,
-  BehaviorIdle,
-  NestedStateMachine
-} from 'mineflayer-statemachine'
-
-//@ts-ignore
+import { StateTransition, BehaviorIdle, NestedStateMachine } from 'mineflayer-statemachine'
 import BehaviorDepositItemChest from '@/BehaviorModules/BehaviorDepositItemChest'
-//@ts-ignore
 import BehaviorMoveTo from '@/BehaviorModules/BehaviorMoveTo'
 import { Bot, LegionStateMachineTargets } from '@/types'
 
-function goAndDeposit(bot: Bot, targets: LegionStateMachineTargets) {
+export default (bot: Bot, targets: LegionStateMachineTargets) => {
   const start = new BehaviorIdle()
   start.stateName = 'Start'
   //@ts-ignore
@@ -60,5 +53,3 @@ function goAndDeposit(bot: Bot, targets: LegionStateMachineTargets) {
   nestedState.stateName = 'Go Chests and Deposit'
   return nestedState
 }
-
-export default goAndDeposit

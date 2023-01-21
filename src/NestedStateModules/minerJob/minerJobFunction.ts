@@ -1,22 +1,17 @@
-
-//@ts-nocheck
 import { Bot, LegionStateMachineTargets } from '@/types'
-
-import {
-  StateTransition,
-  NestedStateMachine
-} from 'mineflayer-statemachine'
-
+import { StateTransition, NestedStateMachine } from 'mineflayer-statemachine'
 import BehaviorEatFood from '@/BehaviorModules/BehaviorEatFood'
 import getClosestEnemy from '@/modules/getClosestEnemy'
 import GetReadyFunction from '@/NestedStateModules/getReady/getReadyFunction'
 import MiningFunction from '@/NestedStateModules/minerJob/miningFunction'
 import CombatStrategyFunction from '@/NestedStateModules/combat/combatStrategyFunction'
 
-function minerJobFunction(bot: Bot, targets: LegionStateMachineTargets) {
+export default (bot: Bot, targets: LegionStateMachineTargets) => {
   const getReady = GetReadyFunction(bot, targets)
   getReady.stateName = 'Get Ready'
+  //@ts-ignore
   getReady.x = 125
+  //@ts-ignore
   getReady.y = 113
 
   const eatFood = new BehaviorEatFood(bot, targets)
@@ -25,11 +20,15 @@ function minerJobFunction(bot: Bot, targets: LegionStateMachineTargets) {
   eatFood.y = 113
 
   const miningFunction = MiningFunction(bot, targets)
+  //@ts-ignore
   miningFunction.x = 125
+  //@ts-ignore
   miningFunction.y = 213
 
   const combatStrategy = CombatStrategyFunction(bot, targets)
+  //@ts-ignore
   combatStrategy.x = 325
+  //@ts-ignore
   combatStrategy.y = 213
 
   const getClosestMob = getClosestEnemy(bot, targets)
@@ -79,5 +78,3 @@ function minerJobFunction(bot: Bot, targets: LegionStateMachineTargets) {
   nestedState.stateName = 'Miner Job'
   return nestedState
 }
-
-export default minerJobFunction

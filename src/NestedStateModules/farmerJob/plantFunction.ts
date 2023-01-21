@@ -31,12 +31,12 @@ function plantFunction(bot: Bot, targets: LegionStateMachineTargets) {
       return
     }
 
-    targets.item = bot.inventory.items().find(item => plants[targets.farmerJob.plantArea.plant!].seed === item.name)
-    if (!targets.item && ['melon', 'pumpkin'].includes(targets.farmerJob.plantArea.plant!)) {
-      const ingredient = bot.inventory.items().find(item => plants[targets.farmerJob.plantArea.plant!].craftedBy === item.name)
+    targets.item = bot.inventory.items().find(item => plants[targets.farmerJob.plantArea?.plant!].seed === item.name)
+    if (!targets.item && ['melon', 'pumpkin'].includes(targets.farmerJob.plantArea?.plant!)) {
+      const ingredient = bot.inventory.items().find(item => plants[targets.farmerJob.plantArea?.plant!].craftedBy === item.name)
       if (ingredient) {
         targets.craftItem = {
-          name: plants[targets.farmerJob.plantArea.plant!].seed
+          name: plants[targets.farmerJob.plantArea?.plant!].seed
         }
       }
     }
@@ -46,6 +46,8 @@ function plantFunction(bot: Bot, targets: LegionStateMachineTargets) {
   }
 
   function getBlockCanPlant() {
+    if (!targets.farmerJob.plantArea) return undefined
+
     const xStart = targets.farmerJob.plantArea.layer.xStart! < targets.farmerJob.plantArea.layer.xEnd! ? targets.farmerJob.plantArea.layer.xStart! : targets.farmerJob.plantArea.layer.xEnd!
     const xEnd = targets.farmerJob.plantArea.layer.xStart! > targets.farmerJob.plantArea.layer.xEnd! ? targets.farmerJob.plantArea.layer.xStart! : targets.farmerJob.plantArea.layer.xEnd!
     const zStart = targets.farmerJob.plantArea.layer.zStart! < targets.farmerJob.plantArea.layer.zEnd! ? targets.farmerJob.plantArea.layer.zStart! : targets.farmerJob.plantArea.layer.zEnd!
@@ -190,13 +192,13 @@ function plantFunction(bot: Bot, targets: LegionStateMachineTargets) {
       parent: goPlant,
       child: placePlant,
       onTransition: () => {
-        if (targets.farmerJob.plantArea.plant === 'cactus') {
+        if (targets.farmerJob.plantArea?.plant === 'cactus') {
           placePlant.setCanJump(true)
         } else {
           placePlant.setCanJump(false)
         }
       },
-      shouldTransition: () => targets.farmerJob.plantArea.plant !== undefined && blockToPlant !== undefined &&
+      shouldTransition: () => targets.farmerJob.plantArea?.plant !== undefined && blockToPlant !== undefined &&
         goPlant.distanceToTarget() < 3 &&
         plants[targets.farmerJob.plantArea.plant].plantIn.includes(blockToPlant.name)
     }),
@@ -210,7 +212,7 @@ function plantFunction(bot: Bot, targets: LegionStateMachineTargets) {
     new StateTransition({
       parent: goPlant,
       child: fertilize,
-      shouldTransition: () => targets.farmerJob.plantArea.plant !== undefined && blockToPlant !== undefined &&
+      shouldTransition: () => targets.farmerJob.plantArea?.plant !== undefined && blockToPlant !== undefined &&
         goPlant.distanceToTarget() < 3 &&
         !plants[targets.farmerJob.plantArea.plant].plantIn.includes(blockToPlant.name) &&
         plants[targets.farmerJob.plantArea.plant].canPlantIn.includes(blockToPlant.name) &&
@@ -221,7 +223,7 @@ function plantFunction(bot: Bot, targets: LegionStateMachineTargets) {
       parent: fertilize,
       child: placePlant,
       onTransition: () => {
-        if (targets.farmerJob.plantArea.plant === 'cactus') {
+        if (targets.farmerJob.plantArea?.plant === 'cactus') {
           placePlant.setCanJump(true)
         } else {
           placePlant.setCanJump(false)

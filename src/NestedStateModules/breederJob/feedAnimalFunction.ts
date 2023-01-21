@@ -1,13 +1,8 @@
-import {
-  StateTransition,
-  BehaviorIdle,
-  BehaviorFollowEntity,
-  NestedStateMachine
-} from 'mineflayer-statemachine'
-
+import { StateTransition, BehaviorIdle, BehaviorFollowEntity, NestedStateMachine } from 'mineflayer-statemachine'
+import { Item } from 'prismarine-item';
 import BehaviorEquip from '@/BehaviorModules/BehaviorEquip'
 import BehaviorInteractEntity from '@/BehaviorModules/BehaviorInteractEntity'
-import animalType from '@/modules/animalType'
+import { animals as animalType, isAnimal } from '@/modules/animalType'
 import { Bot, LegionStateMachineTargets } from '@/types'
 import mcDataLoader from 'minecraft-data'
 
@@ -53,9 +48,14 @@ function feedAnimalFunction(bot: Bot, targets: LegionStateMachineTargets) {
       parent: start,
       child: equip,
       onTransition: () => {
+        let validFood: Item | undefined
         const feedEntity = targets.breederJob.feedEntity
-        const validFoods = animalType[feedEntity.name ?? ''].foods
-        const validFood = bot.inventory.items().find(item => validFoods.includes(item.name))
+        const feedEntityName = feedEntity?.name ?? ''
+        if (isAnimal(feedEntityName)) {
+          const validFoods = animalType[feedEntityName].foods
+          validFood = bot.inventory.items().find(item => validFoods.includes(item.name))
+        }
+
         if (validFood) {
           targets.item = mcData.itemsByName[validFood.name]
         } else {

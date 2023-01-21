@@ -19,13 +19,11 @@ export type Plant = {
     x: number,
     z: number
   },
-  plantIn:  typeof dirtType[keyof typeof dirtType],
-  canPlantIn:  typeof dirtType[keyof typeof dirtType],
+  plantIn: typeof dirtType[keyof typeof dirtType],
+  canPlantIn: typeof dirtType[keyof typeof dirtType],
 }
 
-export type Plants = {
-  [key: string]: Plant
-}
+export type Plants = Record<string, Plant>
 
 export const plants: Plants = {
   carrot: { plantName: 'carrots', type: 'normal', seed: 'carrot', harvestMode: 'massive', age: 7, craftedBy: null, marginPlant: { x: 0, z: 0 }, plantIn: dirtType.farmland, canPlantIn: dirtType.dirt },

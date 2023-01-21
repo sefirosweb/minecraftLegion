@@ -1,5 +1,5 @@
-import botWebsocket, { BotFriends } from '@/modules/botWebsocket'
-import { Bot, EntityWithDistance, LegionStateMachineTargets } from '@/types'
+import botWebsocket from '@/modules/botWebsocket'
+import { Bot, BotFriends, EntityWithDistance, LegionStateMachineTargets } from '@/types'
 import { StateBehavior } from 'mineflayer-statemachine'
 import { Entity } from 'prismarine-entity'
 

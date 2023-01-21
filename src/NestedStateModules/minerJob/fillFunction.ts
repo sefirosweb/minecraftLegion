@@ -1,11 +1,4 @@
-//@ts-nocheck
-import {
-  StateTransition,
-  BehaviorIdle,
-  NestedStateMachine,
-  BehaviorFindInteractPosition
-} from 'mineflayer-statemachine'
-
+import { StateTransition, BehaviorIdle, NestedStateMachine, BehaviorFindInteractPosition } from 'mineflayer-statemachine'
 import BehaviorDigBlock from '@/BehaviorModules/BehaviorDigBlock'
 import BehaviorCustomPlaceBlock from '@/BehaviorModules/BehaviorCustomPlaceBlock'
 import BehaviorLoadConfig from '@/BehaviorModules/BehaviorLoadConfig'
@@ -14,19 +7,22 @@ import { Bot, LegionStateMachineTargets } from '@/types'
 import { Vec3 } from 'vec3'
 import placeBlockModule from '@/modules/placeBlockModule'
 
-// let isDigging = false
 function fillFunction(bot: Bot, targets: LegionStateMachineTargets) {
   let placeBlock2Position: Vec3 | undefined
   const { getNewPositionForPlaceBlock, blocksCanBeReplaced, getPathToPlace } = placeBlockModule(bot)
 
   const start = new BehaviorIdle()
   start.stateName = 'Start'
+  //@ts-ignore
   start.x = 125
+  //@ts-ignore
   start.y = 113
 
   const exit = new BehaviorIdle()
   exit.stateName = 'Exit'
+  //@ts-ignore
   exit.x = 125
+  //@ts-ignore
   exit.y = 313
 
   const moveToCantSeeBlock = new BehaviorMoveTo(bot, targets)
@@ -35,9 +31,12 @@ function fillFunction(bot: Bot, targets: LegionStateMachineTargets) {
   moveToCantSeeBlock.x = 125
   moveToCantSeeBlock.y = 213
 
+  //@ts-ignore
   const findInteractPosition = new BehaviorFindInteractPosition(bot, targets)
   findInteractPosition.stateName = 'findInteractPosition'
+  //@ts-ignore
   findInteractPosition.x = 325
+  //@ts-ignore
   findInteractPosition.y = 113
 
   const moveToBlock = new BehaviorMoveTo(bot, targets)
@@ -53,12 +52,16 @@ function fillFunction(bot: Bot, targets: LegionStateMachineTargets) {
 
   const placeBlock1 = new BehaviorCustomPlaceBlock(bot, targets, true, true)
   placeBlock1.stateName = 'Place Block 1'
+  //@ts-ignore
   placeBlock1.x = 725
+  //@ts-ignore
   placeBlock1.y = 313
 
   const placeBlock2 = new BehaviorCustomPlaceBlock(bot, targets, true, true)
   placeBlock2.stateName = 'Place Block 2'
+  //@ts-ignore
   placeBlock2.x = 525
+  //@ts-ignore
   placeBlock2.y = 313
 
   const loadConfig = new BehaviorLoadConfig(bot, targets)
@@ -99,17 +102,22 @@ function fillFunction(bot: Bot, targets: LegionStateMachineTargets) {
       child: placeBlock2,
       name: 'if block is liquid',
       onTransition: () => {
+        if (!originalPosition) throw Error('Variable not defined originalPosition')
         listPlaceBlocks = getPathToPlace(originalPosition)
         const currentPlaceBlock = listPlaceBlocks.shift()
+
+        if (!currentPlaceBlock) throw Error('Variable not defined currentPlaceBlock')
         const positionForPlaceBlock = getNewPositionForPlaceBlock(currentPlaceBlock.position)
 
         targets.position = positionForPlaceBlock.newPosition
-        placeBlock2.setOffset(positionForPlaceBlock.blockOffset)
+        if (positionForPlaceBlock.blockOffset) {
+          placeBlock2.setOffset(positionForPlaceBlock.blockOffset)
+        }
       },
       shouldTransition: () => {
         const block = targets.position ? bot.blockAt(targets.position.offset(0, 1, 0)) : null
         return (moveToBlock.isFinished() || moveToBlock.distanceToTarget() < 2.5) &&
-          block && blocksCanBeReplaced.includes(block.name) &&
+          block !== null && blocksCanBeReplaced.includes(block.name) &&
           !bot.pathfinder.isMining()
       }
     }),
@@ -136,13 +144,19 @@ function fillFunction(bot: Bot, targets: LegionStateMachineTargets) {
       child: placeBlock1,
       name: 'mineBlock -> placeBlock1',
       onTransition: () => {
-        placeBlock2Position = targets.position?.clone()
+        if (!targets.position) throw Error('Variable not defined targets.position')
+
+        placeBlock2Position = targets.position.clone()
         listPlaceBlocks = getPathToPlace(targets.position?.offset(0, -1, 0))
         const currentPlaceBlock = listPlaceBlocks.shift()
+        if (!currentPlaceBlock) throw Error('Variable not defined currentPlaceBlock')
+
         const positionForPlaceBlock = getNewPositionForPlaceBlock(currentPlaceBlock.position)
 
         targets.position = positionForPlaceBlock.newPosition
-        placeBlock1.setOffset(positionForPlaceBlock.blockOffset)
+        if (positionForPlaceBlock.blockOffset) {
+          placeBlock1.setOffset(positionForPlaceBlock.blockOffset)
+        }
       },
       shouldTransition: () => mineBlock.isFinished()
     }),
@@ -152,10 +166,14 @@ function fillFunction(bot: Bot, targets: LegionStateMachineTargets) {
       child: placeBlock2,
       name: 'placeBlock1 -> placeBlock2',
       onTransition: () => {
+        if (!placeBlock2Position) throw Error('Variable not defined placeBlock2Position')
+
         targets.position = placeBlock2Position
         const positionForPlaceBlock = getNewPositionForPlaceBlock(targets.position)
         targets.position = positionForPlaceBlock.newPosition
-        placeBlock2.setOffset(positionForPlaceBlock.blockOffset)
+        if (positionForPlaceBlock.blockOffset) {
+          placeBlock2.setOffset(positionForPlaceBlock.blockOffset)
+        }
       },
       shouldTransition: () => placeBlock1.isFinished() || placeBlock1.isItemNotFound() || placeBlock1.isCantPlaceBlock()
     }),

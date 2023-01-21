@@ -1,11 +1,28 @@
 
-type Animals = {
-  [key: string]: {
-    foods: Array<string>
-  }
+export enum AnimalList {
+  sheep = "sheep",
+  cow = "cow",
+  wolf = "wolf",
+  chicken = "chicken",
+  cat = "cat",
+  horse = "horse",
+  donkey = "donkey",
+  llama = "llama",
+  pig = "pig",
+  rabbit = "rabbit",
+  turtle = "turtle",
+  panda = "panda",
+  fox = "fox",
+  bee = "bee",
 }
 
-const animals: Animals = {
+export type FarmAnimal = Record<keyof typeof AnimalList, number>
+
+type Animals = Record<keyof typeof AnimalList, {
+  foods: Array<string>
+}>
+
+export const animals: Animals = {
   sheep: {
     foods: ['wheat']
   },
@@ -50,4 +67,7 @@ const animals: Animals = {
   }
 }
 
-export default animals
+export const isAnimal = (value: string): value is keyof typeof AnimalList => {
+  const animalListed = Object.keys(AnimalList)
+  return animalListed.includes(value)
+}

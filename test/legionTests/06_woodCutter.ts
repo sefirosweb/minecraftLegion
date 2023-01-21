@@ -3,10 +3,8 @@ import inventoryModule from '@/modules/inventoryModule'
 import { Config, PlantArea } from '@/types'
 import { Jobs } from '@/types/defaultTypes'
 import { bot } from '../hooks'
-const botConfig = botConfigLoader()
 
 describe('06 Wood cutter', function () {
-
   const plantAreas: Array<PlantArea> = [
     {
       plant: "oak_sapling",
@@ -20,20 +18,21 @@ describe('06 Wood cutter', function () {
     }
   ]
 
-  const config: Config = {
-    ...botConfig.defaultConfig,
-    job: Jobs.farmer,
-    pickUpItems: true,
-    itemsToBeReady: [
-      {
-        name: "iron_axe",
-        quantity: 1
-      }
-    ],
-    plantAreas
-  }
-
   before(async () => {
+    const botConfig = botConfigLoader(bot.username)
+    const config: Config = {
+      ...botConfig.defaultConfig,
+      job: Jobs.farmer,
+      pickUpItems: true,
+      itemsToBeReady: [
+        {
+          name: "iron_axe",
+          quantity: 1
+        }
+      ],
+      plantAreas
+    }
+
     await bot.test.resetState()
     bot.chat(`/give flatbot minecraft:oak_sapling`)
     bot.chat(`/give flatbot minecraft:iron_axe`)
@@ -43,7 +42,7 @@ describe('06 Wood cutter', function () {
     bot.creative.stopFlying()
     bot.test.becomeSurvival()
 
-    botConfig.saveFullConfig(bot.username, config)
+    botConfig.saveFullConfig(config)
     bot.emit('reloadBotConfig')
   })
 

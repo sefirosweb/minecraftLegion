@@ -2,7 +2,6 @@ import botConfigLoader from '@/modules/botConfig'
 import { Config } from '@/types'
 import { Jobs } from '@/types/defaultTypes'
 import { bot } from '../hooks'
-const botConfig = botConfigLoader()
 
 const listOfAnimalstoFeed = [
   {
@@ -45,35 +44,40 @@ const listOfAnimalstoFeed = [
 
 describe('11 Breeder animals', function () {
 
-  const config: Config = {
-    ...botConfig.defaultConfig,
-    job: Jobs.breeder,
-    pickUpItems: true,
-    itemsToBeReady: [],
-    farmAnimal: {
-      ...botConfig.defaultConfig.farmAnimal,
-      wolf: 3,
-      fox: 3,
-      bee: 3,
-      horse: 3,
-      cat: 3,
-      donkey: 3,
-      llama: 3,
-      panda: 3,
-      turtle: 3,
+  let botConfig: ReturnType<typeof botConfigLoader>
+  let config: Config
 
-      seconds: 10
-    },
-    farmAreas: [
-      {
-        xStart: 7,
-        xEnd: -7,
-        zStart: -7,
-        zEnd: 7,
-        yLayer: -61,
-      }
-    ],
-  }
+  before(() => {
+    botConfig = botConfigLoader(bot.username)
+    config = {
+      ...botConfig.defaultConfig,
+      job: Jobs.breeder,
+      pickUpItems: true,
+      itemsToBeReady: [],
+      farmAnimalSeconds: 10,
+      farmAnimal: {
+        ...botConfig.defaultConfig.farmAnimal,
+        wolf: 3,
+        fox: 3,
+        bee: 3,
+        horse: 3,
+        cat: 3,
+        donkey: 3,
+        llama: 3,
+        panda: 3,
+        turtle: 3,
+      },
+      farmAreas: [
+        {
+          xStart: 7,
+          xEnd: -7,
+          zStart: -7,
+          zEnd: 7,
+          yLayer: -61,
+        }
+      ],
+    }
+  })
 
   const beforeEachAnimal = async () => {
     await bot.test.resetState()
@@ -94,7 +98,7 @@ describe('11 Breeder animals', function () {
     bot.creative.stopFlying()
     bot.test.becomeSurvival()
 
-    botConfig.saveFullConfig(bot.username, config)
+    botConfig.saveFullConfig(config)
     bot.emit('reloadBotConfig')
   }
 
@@ -136,7 +140,7 @@ describe('11 Breeder animals', function () {
           }
 
           if (finished) {
-            botConfig.saveFullConfig(bot.username, botConfig.defaultConfig)
+            botConfig.saveFullConfig(botConfig.defaultConfig)
             bot.emit('reloadBotConfig')
             clearInterval(interval)
             resolve()

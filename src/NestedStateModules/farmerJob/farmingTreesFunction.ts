@@ -71,6 +71,10 @@ function farmingTreesFunction(bot: Bot, targets: LegionStateMachineTargets) {
       finished = true
     }
 
+    if (!targets.farmerJob.plantArea) {
+      throw new Error('Variable plantArea is not defined!')
+    }
+
     targets.farmerJob.plantArea.layer.xStart = xCurrent
     targets.farmerJob.plantArea.layer.xEnd = xCurrent
     targets.farmerJob.plantArea.layer.zStart = zCurrent
@@ -83,6 +87,10 @@ function farmingTreesFunction(bot: Bot, targets: LegionStateMachineTargets) {
       parent: start,
       child: selectTree,
       onTransition: () => {
+        if (!targets.farmerJob.plantArea) {
+          throw new Error('Variable plantArea is not defined!')
+        }
+
         xStart = targets.farmerJob.plantArea.layer.xStart! < targets.farmerJob.plantArea.layer.xEnd! ? targets.farmerJob.plantArea.layer.xStart! : targets.farmerJob.plantArea.layer.xEnd!
         xEnd = targets.farmerJob.plantArea.layer.xStart! > targets.farmerJob.plantArea.layer.xEnd! ? targets.farmerJob.plantArea.layer.xStart! : targets.farmerJob.plantArea.layer.xEnd!
         zStart = targets.farmerJob.plantArea.layer.zStart! < targets.farmerJob.plantArea.layer.zEnd! ? targets.farmerJob.plantArea.layer.zStart! : targets.farmerJob.plantArea.layer.zEnd!
