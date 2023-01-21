@@ -15,7 +15,7 @@ describe('10 Breed cows', function () {
     itemsToBeReady: [],
     farmAnimal: {
       ...botConfig.defaultConfig.farmAnimal,
-      cow: 5,
+      cow: 3,
       seconds: 10
     },
     farmAreas: [
@@ -32,7 +32,6 @@ describe('10 Breed cows', function () {
   before(async () => {
     await bot.test.resetState()
     bot.chat(`/give flatbot minecraft:iron_axe`)
-    bot.chat(`/gamerule randomTickSpeed 500`)
     bot.chat(`/give flatbot minecraft:wheat 256`)
     bot.chat(`/fill -6 -59 6 6 -60 -6 minecraft:stone`)
     bot.chat(`/fill -5 -59 5 5 -60 -5 minecraft:air`)
@@ -47,7 +46,23 @@ describe('10 Breed cows', function () {
   })
 
   it('Breeded cows', (): Promise<void> => {
+
     return new Promise((resolve) => {
+      const intervalFeedCows = setInterval(() => {
+        const entities = bot.entities
+
+        for (const entityName of Object.keys(entities)) {
+          const entity = entities[entityName]
+          //@ts-ignore
+          if (entity.name !== 'cow') {
+            continue
+          }
+
+          bot.chat(`/data merge entity ${entity.uuid} {Age:0}`)
+        }
+
+
+      }, 5000)
 
       const { getResumeInventory } = inventoryModule(bot);
       const interval = setInterval(() => {
@@ -57,7 +72,7 @@ describe('10 Breed cows', function () {
           quantity: number
         }> = [
             {
-              name: 'beef', quantity: 3
+              name: 'beef', quantity: 4
             }
           ]
 
@@ -71,6 +86,7 @@ describe('10 Breed cows', function () {
         })
 
         if (foundAll) {
+          clearInterval(intervalFeedCows)
           clearInterval(interval)
           resolve()
         }

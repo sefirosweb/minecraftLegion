@@ -101,7 +101,9 @@ function inject(bot) {
     await bot.test.wait(1000)
     bot.chat('/weather clear 999999')
     bot.chat('/time set day')
+    bot.chat('/gamerule doMobLoot false')
     bot.chat('/kill @e[type=!player]')
+    bot.chat('/gamerule doMobLoot true')
     bot.chat('/gamerule randomTickSpeed 20')
     botConfig.saveFullConfig(bot.username, botConfig.defaultConfig);
     await becomeCreative()
