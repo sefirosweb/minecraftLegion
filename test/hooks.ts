@@ -1,18 +1,18 @@
 
-
 /* eslint-env mocha */
 //@ts-nocheck
+
 
 import 'module-alias/register';
 import { createNewBot } from "@/createNewBot";
 import { Bot } from '@/types';
 import mcDataLoader from 'minecraft-data'
-import { getPort } from './common/util'
 import assert from 'assert'
 import commonTest from './legionTests/plugins/testCommon'
 import fs from 'fs'
 import path from 'path'
 
+//@ts-ignore
 import { Wrap, download } from 'minecraft-wrap'
 
 // set this to false if you want to test without starting a server automatically
@@ -31,7 +31,8 @@ const propOverrides = {
     'spawn-monsters': 'false',
     'generate-structures': 'false',
     'enable-command-block': 'true',
-    'use-native-transport': 'false' // java 16 throws errors without this, https://www.spigotmc.org/threads/unable-to-access-address-of-buffer.311602
+    'use-native-transport': 'false', // java 16 throws errors without this, https://www.spigotmc.org/threads/unable-to-access-address-of-buffer.311602
+    'server-port': 255655
 }
 
 const MC_SERVER_PATH = path.join(__dirname, 'server')
@@ -55,8 +56,8 @@ export const mochaHooks = () => {
         beforeAll() {
 
             before((done) => {
-                let PORT
-                let HOST
+                let PORT: number
+                let HOST: string
 
                 if (bot !== undefined) {
                     done()
@@ -84,14 +85,15 @@ export const mochaHooks = () => {
                 if (START_THE_SERVER) {
                     console.log('Downloading and starting server')
 
-                    download(version.minecraftVersion, MC_SERVER_JAR, (err) => {
+                    download(version.minecraftVersion, MC_SERVER_JAR, (err: string | undefined) => {
                         if (err) {
                             console.log(err)
                             done(err)
                             return
                         }
+
                         propOverrides['server-port'] = PORT
-                        wrap.startServer(propOverrides, (err) => {
+                        wrap.startServer(propOverrides, (err: string | undefined) => {
                             if (err) return done(err)
                             console.log(`pinging ${version.minecraftVersion} port : ${PORT}`)
                             mc.ping({

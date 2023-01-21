@@ -1,12 +1,23 @@
-//@ts-nocheck
-function sleep (ms) {
+import EventEmitter from "events"
+
+type Task = {
+  done: boolean,
+  promise: Promise<any>,
+  cancel: (err: any) => void,
+  finish: (result: any) => void
+}
+
+type OnEventFunc = (data: any) => void
+
+function sleep(ms: number) {
   return new Promise(resolve => setTimeout(resolve, ms))
 }
 
-function createTask () {
-  const task = {
+function createTask(): Task {
+  const task: Partial<Task> = {
     done: false
   }
+
   task.promise = new Promise((resolve, reject) => {
     task.cancel = (err) => {
       if (!task.done) {
@@ -21,34 +32,25 @@ function createTask () {
       }
     }
   })
-  return task
+
+  return task as Task
 }
 
-function createDoneTask () {
+function createDoneTask() {
   const task = {
     done: true,
     promise: Promise.resolve(),
-    cancel: () => {},
-    finish: () => {}
+    cancel: () => { },
+    finish: () => { }
   }
   return task
 }
-
-/**
- * Similar to the 'once' function from the 'events' module, but allows you to add a condition for when you want to
- * actually handle the event, as well as a timeout. The listener is additionally removed if a timeout occurs, instead
- * of with 'once' where a listener might stay forever if it never triggers.
- * Note that timeout and checkCondition, both optional, are in the third parameter as an object.
- * @param emitter - The event emitter to listen to
- * @param event - The name of the event you want to listen for
- * @param [timeout=0] - An amount, in milliseconds, for which to wait before considering the promise failed. <0 = none.
- * @param [checkCondition] - A function which matches the same signature of an event emitter handler, and should return something truthy if you want the event to be handled. If this is not provided, all events are handled.
- * @returns {Promise} A promise which will either resolve to an *array* of values in the handled event, or will reject on timeout if applicable. This may never resolve if no timeout is set and the event does not fire.
- */
-function onceWithCleanup (emitter, event, { timeout = 0, checkCondition = undefined } = {}) {
+ 
+function onceWithCleanup(emitter: EventEmitter, event: string, tt: { timeout?: number, checkCondition?: (data: any) => boolean } = {}) {
+  const { timeout = 0, checkCondition = undefined } = tt
   const task = createTask()
 
-  const onEvent = (...data) => {
+  const onEvent: OnEventFunc = (...data) => {
     if (typeof checkCondition === 'function' && !checkCondition(...data)) {
       return
     }
@@ -73,7 +75,7 @@ function onceWithCleanup (emitter, event, { timeout = 0, checkCondition = undefi
   return task.promise
 }
 
-function withTimeout (promise, timeout) {
+function withTimeout(promise: Promise<void>, timeout: number) {
   return Promise.race([
     promise,
     sleep(timeout).then(() => {

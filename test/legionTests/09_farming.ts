@@ -131,10 +131,6 @@ describe('09 General farming', function () {
 
   it('Farmed vegetables', (): Promise<void> => {
     return new Promise((resolve) => {
-      const clearItemsInterval = setInterval(() => {
-        bot.chat('/kill @e[type=!player]')
-      }, 20000)
-
       const { getResumeInventory } = inventoryModule(bot);
       const interval = setInterval(() => {
         let foundAll = true
@@ -178,7 +174,6 @@ describe('09 General farming', function () {
         })
 
         if (foundAll) {
-          clearInterval(clearItemsInterval)
           clearInterval(interval)
           resolve()
         }
