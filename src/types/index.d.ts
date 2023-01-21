@@ -185,16 +185,15 @@ type Master = {
 interface Bot extends MineflayerBot {
     isABed: (bedBlock: Block) => boolean
     test: {
+        groundY: number,
         sayEverywhere: (msg: string) => void
         clearInventory: () => void
         becomeSurvival: () => void
         becomeCreative: () => void
-        fly: () => void
+        fly: (delta: Vec3) => Promise<void>
         resetState: () => Promise<void>
-        setInventorySlot: () => void
-        placeBlock: () => void
-        runExample: () => void
-        tellAndListen: () => void
+        placeBlock: (slot: number, position: Vec3) => void
+  
         wait: (ms: number) => Promise<void>
     }
 }

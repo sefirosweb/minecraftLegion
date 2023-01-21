@@ -9,11 +9,11 @@ type Task = {
 
 type OnEventFunc = (data: any) => void
 
-function sleep(ms: number) {
+export const sleep = (ms: number) => {
   return new Promise(resolve => setTimeout(resolve, ms))
 }
 
-function createTask(): Task {
+const createTask = (): Task => {
   const task: Partial<Task> = {
     done: false
   }
@@ -36,7 +36,7 @@ function createTask(): Task {
   return task as Task
 }
 
-function createDoneTask() {
+export const createDoneTask = () => {
   const task = {
     done: true,
     promise: Promise.resolve(),
@@ -45,8 +45,13 @@ function createDoneTask() {
   }
   return task
 }
- 
-function onceWithCleanup(emitter: EventEmitter, event: string, tt: { timeout?: number, checkCondition?: (data: any) => boolean } = {}) {
+
+type OnceCondition = {
+  timeout?: number,
+  checkCondition?: (...args: any[]) => boolean
+}
+
+export const onceWithCleanup = (emitter: EventEmitter, event: string, tt: OnceCondition) => {
   const { timeout = 0, checkCondition = undefined } = tt
   const task = createTask()
 
@@ -75,19 +80,11 @@ function onceWithCleanup(emitter: EventEmitter, event: string, tt: { timeout?: n
   return task.promise
 }
 
-function withTimeout(promise: Promise<void>, timeout: number) {
+export const withTimeout = (promise: Promise<void>, timeout: number) => {
   return Promise.race([
     promise,
     sleep(timeout).then(() => {
       throw new Error('Promise timed out.')
     })
   ])
-}
-
-module.exports = {
-  sleep,
-  createTask,
-  createDoneTask,
-  onceWithCleanup,
-  withTimeout
 }
