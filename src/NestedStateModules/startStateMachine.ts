@@ -98,7 +98,7 @@ const startStateMachine = (bot: Bot) => {
         pig: 10,
         rabbit: 10,
         sheep: 10,
-        turtles: 10,
+        turtle: 10,
         wolf: 10
       },
     },

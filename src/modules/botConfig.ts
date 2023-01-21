@@ -54,7 +54,7 @@ const defaultConfig: Config = {
     llama: 10,
     pig: 10,
     rabbit: 10,
-    turtles: 10,
+    turtle: 10,
     panda: 10,
     fox: 10,
     bee: 10

@@ -47,18 +47,6 @@ describe('10 Butcher animals', function () {
       chicken: 3,
       pig: 3,
       rabbit: 8,
-
-      // wolf: 3,
-      // fox: 3,
-      // bee: 3,
-      // horse: 3,
-      // cat: 3,
-
-      // donkey: 3,
-      // llama: 3,
-      // panda: 3,
-      // turtles: 3,
-
       seconds: 10
     },
     farmAreas: [
@@ -95,25 +83,15 @@ describe('10 Butcher animals', function () {
     it(animalToFeed.name, async (): Promise<void> => {
       await beforeEachAnimal();
       return new Promise((resolve) => {
-        let owner = ''
 
-        // if (['cat'].includes(animalToFeed.summon)) {
-        //   owner = '{Owner:flatbot}'
-        // }
-
-        // if (['horse'].includes(animalToFeed.summon)) {
-        //   owner = '{Tame:1}'
-        // }
-
-        bot.chat(`/summon ${animalToFeed.summon} 0 -60 -3 ${owner}`)
-        bot.chat(`/summon ${animalToFeed.summon} 0 -60 3 ${owner}`)
+        bot.chat(`/summon ${animalToFeed.summon} 0 -60 -3`)
+        bot.chat(`/summon ${animalToFeed.summon} 0 -60 3`)
 
         const intervalFeedCows = setInterval(() => {
           const entities = bot.entities
 
           for (const entityName of Object.keys(entities)) {
             const entity = entities[entityName]
-            //@ts-ignore
             if (entity.name !== animalToFeed.summon) {
               continue
             }
@@ -147,12 +125,9 @@ describe('10 Butcher animals', function () {
           if (foundAll) {
             botConfig.saveFullConfig(bot.username, botConfig.defaultConfig)
             bot.emit('reloadBotConfig')
-
-            setTimeout(() => {
-              clearInterval(intervalFeedCows)
-              clearInterval(interval)
-              resolve()
-            }, 2000)
+            clearInterval(intervalFeedCows)
+            clearInterval(interval)
+            resolve()
           }
         }, 400)
 

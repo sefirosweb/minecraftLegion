@@ -151,7 +151,10 @@ function deathFunction(bot: Bot, targets: LegionStateMachineTargets) {
   ]
 
   function reloadTrigger() {
+    targets.entity = undefined
     bot.stopDigging()
+    bot.pathfinder.setGoal(null)
+
     transitions[0].trigger()
     transitions[1].trigger()
   }

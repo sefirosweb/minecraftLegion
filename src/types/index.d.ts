@@ -57,7 +57,7 @@ type FarmAnimal = {
     cat: number,
     rabbit: number,
     pig: number,
-    turtles: number,
+    turtle: number,
 }
 
 type BreederJob = {
@@ -185,7 +185,7 @@ type Master = {
 interface Bot extends MineflayerBot {
     isABed: (bedBlock: Block) => boolean
     test: {
-        sayEverywhere: () => void
+        sayEverywhere: (msg: string) => void
         clearInventory: () => void
         becomeSurvival: () => void
         becomeCreative: () => void

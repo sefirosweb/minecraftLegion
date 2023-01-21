@@ -54,8 +54,8 @@ function breederFunction(bot: Bot, targets: LegionStateMachineTargets) {
       xEnd = area.xStart > area.xEnd ? area.xStart : area.xEnd
       zStart = area.zStart > area.zEnd ? area.zEnd : area.zStart
       zEnd = area.zStart > area.zEnd ? area.zStart : area.zEnd
-      yStart = area.yLayer - 1
-      yEnd = area.yLayer + 1
+      yStart = area.yLayer - 5
+      yEnd = area.yLayer + 5
 
       for (const entityName of Object.keys(bot.entities)) {
         const entity = bot.entities[entityName]

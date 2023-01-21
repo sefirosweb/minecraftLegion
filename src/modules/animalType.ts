@@ -36,7 +36,7 @@ const animals: Animals = {
   rabbit: {
     foods: ['carrot', 'golden_carrot', 'dandelion']
   },
-  turtles: {
+  turtle: {
     foods: ['seagrass']
   },
   panda: {
