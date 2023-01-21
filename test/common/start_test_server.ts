@@ -1,19 +1,11 @@
-/* eslint-env mocha */
-//@ts-nocheck
-const assert = require('assert')
-const mineflayer = require('mineflayer')
-const mc = require('minecraft-protocol')
-const fs = require('fs')
-const path = require('path')
-
+import mc from 'minecraft-protocol'
+import path from 'path'
 import mcDataLoader from 'minecraft-data'
 
-// set this to false if you want to test without starting a server automatically
-const START_THE_SERVER = true
-// if you want to have time to look what's happening increase this (milliseconds)
-const TEST_TIMEOUT_MS = 90000
-
-const excludedTests = ['digEverything', 'book', 'anvil', 'placeEntity']
+//@ts-ignore
+import { Wrap } from 'minecraft-wrap'
+//@ts-ignore
+import { download } from 'minecraft-wrap'
 
 const propOverrides = {
     'level-type': 'FLAT',
@@ -24,14 +16,11 @@ const propOverrides = {
     'spawn-monsters': 'false',
     'generate-structures': 'false',
     'enable-command-block': 'true',
-    'use-native-transport': 'false' // java 16 throws errors without this, https://www.spigotmc.org/threads/unable-to-access-address-of-buffer.311602
+    'use-native-transport': 'false', // java 16 throws errors without this, https://www.spigotmc.org/threads/unable-to-access-address-of-buffer.311602
+    'server-port': 255655
 }
 
-const Wrap = require('minecraft-wrap').Wrap
-const download = require('minecraft-wrap').download
-
 const MC_SERVER_PATH = path.join(__dirname, 'server')
-
 
 let PORT = 25565
 const supportedVersion = "1.18.2"
@@ -40,23 +29,26 @@ const version = mcData.version
 const MC_SERVER_JAR_DIR = process.env.MC_SERVER_JAR_DIR || `${process.cwd()}/server_jars`
 const MC_SERVER_JAR = `${MC_SERVER_JAR_DIR}/minecraft_server.${version.minecraftVersion}.jar`
 const wrap = new Wrap(MC_SERVER_JAR, `${MC_SERVER_PATH}_${supportedVersion}`)
-wrap.on('line', (line) => {
+
+wrap.on('line', (line: string) => {
     console.log(line)
 })
 
-download(version.minecraftVersion, MC_SERVER_JAR, (err) => {
+download(version.minecraftVersion, MC_SERVER_JAR, (err: Error) => {
     if (err) {
         console.log(err)
         return
     }
     propOverrides['server-port'] = PORT
-    wrap.startServer(propOverrides, (err) => {
-        if (err) return done(err)
+    wrap.startServer(propOverrides, () => {
         console.log(`pinging ${version.minecraftVersion} port : ${PORT}`)
-        mc.ping({
+
+        const serverConection = {
             port: PORT,
             version: supportedVersion
-        }, (err, results) => {
+        }
+
+        mc.ping(serverConection, () => {
             console.log('pong')
             wrap.writeServer('op flatbot\n')
             wrap.writeServer('op Lordvivi\n')

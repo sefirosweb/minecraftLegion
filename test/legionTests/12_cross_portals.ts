@@ -1,8 +1,6 @@
 //@ts-nocheck
 import botConfigLoader from '@/modules/botConfig'
 const botConfig = botConfigLoader()
-import startTests from './plugins/startTests'
-
 
 module.exports = () => async (bot) => {
   const tests = []
@@ -141,5 +139,4 @@ module.exports = () => async (bot) => {
     })
   })
 
-  return startTests(tests)
 }
