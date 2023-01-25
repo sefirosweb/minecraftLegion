@@ -55,9 +55,8 @@ function depositItems(bot: Bot, targets: LegionStateMachineTargets) {
       child: goAndDeposit,
       onTransition: () => {
         const currentChest = pendingTransaction.shift()
-        //@ts-ignore
+        if(!currentChest) throw new Error('Variable currentChest is not defined!')
         targets.position = currentChest.chest.position
-        //@ts-ignore
         targets.items = currentChest.items
       },
       shouldTransition: () => pendingTransaction.length > 0
