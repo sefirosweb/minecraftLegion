@@ -1,14 +1,8 @@
 import { BotwebsocketAction, LegionStateMachineTargets, Master } from '@/types'
 import { Bot } from '@/types'
-import {
-  StateTransition,
-  BehaviorIdle,
-  NestedStateMachine
-} from 'mineflayer-statemachine'
-//@ts-ignore
+import { StateTransition, BehaviorIdle, NestedStateMachine } from 'mineflayer-statemachine'
 import BehaviorGetPlayer from '@/BehaviorModules/BehaviorGetPlayer'
-//@ts-ignore
-import botWebsocket from '@modules/botWebsocket'
+import botWebsocket from '@/modules/botWebsocket'
 import BehaviorLoadConfig from '@/BehaviorModules/BehaviorLoadConfig'
 import mcDataLoader from 'minecraft-data'
 import StartWork from '@/NestedStateModules/startWorkFunction'
@@ -20,21 +14,15 @@ function deathFunction(bot: Bot, targets: LegionStateMachineTargets) {
 
   const start = new BehaviorIdle()
   start.stateName = 'Start'
-  //@ts-ignore
   start.x = 125
-  //@ts-ignore
   start.y = 113
 
   const startWork = StartWork(bot, targets)
-  //@ts-ignore
   startWork.x = 525
-  //@ts-ignore
   startWork.y = 413
 
   const commands = Commands(bot, targets)
-  //@ts-ignore
   commands.x = 325
-  //@ts-ignore
   commands.y = 263
 
   const playerEntity = new BehaviorGetPlayer(bot, targets)
@@ -48,9 +36,7 @@ function deathFunction(bot: Bot, targets: LegionStateMachineTargets) {
   loadConfig.y = 413
 
   const goSleep = GoSleep(bot, targets)
-  //@ts-ignore
   goSleep.x = 725
-  //@ts-ignore
   goSleep.y = 263
 
   const transitions = [

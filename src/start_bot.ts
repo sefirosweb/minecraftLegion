@@ -1,6 +1,5 @@
 require("module-alias/register");
-//@ts-ignore
-import config from "./config";
+import config from "@/config";
 const { server, port, customStart } = config
 
 import { createNewBot, Props } from "./createNewBot"

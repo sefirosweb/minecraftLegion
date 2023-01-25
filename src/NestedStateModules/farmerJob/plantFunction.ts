@@ -5,13 +5,9 @@ import {
   BehaviorIdle
 } from 'mineflayer-statemachine'
 
-//@ts-ignore
 import BehaviorCustomPlaceBlock from '@/BehaviorModules/BehaviorCustomPlaceBlock'
-//@ts-ignore
 import BehaviorFertilize from '@/BehaviorModules/BehaviorFertilize'
-//@ts-ignore
 import BehaviorMoveTo from '@/BehaviorModules/BehaviorMoveTo'
-//@ts-ignore
 import BehaviorCraft from '@/BehaviorModules/BehaviorCraft'
 import { plants, dirtCanBefertilized } from '@/modules/plantType'
 import { Bot, LegionStateMachineTargets } from '@/types'
@@ -80,53 +76,39 @@ function plantFunction(bot: Bot, targets: LegionStateMachineTargets) {
 
   const start = new BehaviorIdle()
   start.stateName = 'Start'
-  //@ts-ignore
   start.x = 125
-  //@ts-ignore
   start.y = 113
 
   const exit = new BehaviorIdle()
   exit.stateName = 'Exit'
-  //@ts-ignore
   exit.x = 325
-  //@ts-ignore
   exit.y = 513
 
   const goPlant = new BehaviorMoveTo(bot, targets, 10000)
   goPlant.stateName = 'Go Plant'
   goPlant.movements = targets.movements
-  //@ts-ignore
   goPlant.x = 525
-  //@ts-ignore
   goPlant.y = 313
 
   const checkArea = new BehaviorIdle()
   checkArea.stateName = 'Check Area for Plant'
-  //@ts-ignore
   checkArea.x = 325
-  //@ts-ignore
   checkArea.y = 113
 
   const checkPlant = new BehaviorIdle()
   checkPlant.stateName = 'Exsist Any Position To Plant'
-  //@ts-ignore
   checkPlant.x = 320
-  //@ts-ignore
   checkPlant.y = 313
 
   const placePlant = new BehaviorCustomPlaceBlock(bot, targets, false)
   placePlant.stateName = 'Place Plant'
-  //@ts-ignore
   placePlant.x = 625
-  //@ts-ignore
   placePlant.y = 113
   placePlant.setOffset(new Vec3(0, 1, 0))
 
   const fertilize = new BehaviorFertilize(bot, targets)
   fertilize.stateName = 'Fertilize'
-  //@ts-ignore
   fertilize.x = 750
-  //@ts-ignore
   fertilize.y = 313
 
   const craftItem = new BehaviorCraft(bot, targets)

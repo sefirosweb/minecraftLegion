@@ -35,16 +35,12 @@ function combatFunction(bot: Bot, targets: LegionStateMachineTargets) {
 
   const start = new BehaviorIdle()
   start.stateName = 'Start'
-  //@ts-ignore
   start.x = 125
-  //@ts-ignore
   start.y = 113
 
   const exit = new BehaviorIdle()
   exit.stateName = 'Exit'
-  //@ts-ignore
   exit.x = 575
-  //@ts-ignore
   exit.y = 263
 
   const attack = new BehaviorAttack(bot, targets)
@@ -58,12 +54,9 @@ function combatFunction(bot: Bot, targets: LegionStateMachineTargets) {
   longRangeAttack.y = 413
 
 
-  //@ts-ignore
   const followMob = new BehaviorFollowEntity(bot, targets)
   followMob.stateName = 'Follow Enemy'
-  //@ts-ignore
   followMob.x = 725
-  //@ts-ignore
   followMob.y = 113
 
   let targetGrade: ShotDirection | undefined
@@ -227,10 +220,8 @@ function combatFunction(bot: Bot, targets: LegionStateMachineTargets) {
       name: 'Mob is too far',
       onTransition: () => {
         if (flyingMobs.includes(targets.entity?.name ?? '')) {
-          //@ts-ignore
           followMob.movements = movementsForFliyingMobs
         } else {
-          //@ts-ignore
           followMob.movements = movements
         }
         newTimeMobCountdown = Date.now()
@@ -276,10 +267,8 @@ function combatFunction(bot: Bot, targets: LegionStateMachineTargets) {
       child: followMob,
       onTransition: () => {
         if (flyingMobs.includes(targets.entity?.name ?? '')) {
-          //@ts-ignore
           followMob.movements = movementsForFliyingMobs
         } else {
-          //@ts-ignore
           followMob.movements = movements
         }
         checkHandleSword()

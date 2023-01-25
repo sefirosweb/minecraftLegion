@@ -14,30 +14,22 @@ export default (bot: Bot, targets: LegionStateMachineTargets) => {
 
   const start = new BehaviorIdle()
   start.stateName = 'Start'
-  //@ts-ignore
   start.x = 75
-  //@ts-ignore
   start.y = 63
 
   const checkCraftItem = new BehaviorIdle()
   checkCraftItem.stateName = 'Check Craft Item'
-  //@ts-ignore
   checkCraftItem.x = 75
-  //@ts-ignore
   checkCraftItem.y = 513
 
   const exit = new BehaviorIdle()
   exit.stateName = 'Exit'
-  //@ts-ignore
   exit.x = 525
-  //@ts-ignore
   exit.y = 113
 
   const nextCheck = new BehaviorIdle()
   nextCheck.stateName = 'Next Check'
-  //@ts-ignore
   nextCheck.x = 325
-  //@ts-ignore
   nextCheck.y = 213
 
   const loadConfig = new BehaviorLoadConfig(bot, targets)
@@ -68,15 +60,11 @@ export default (bot: Bot, targets: LegionStateMachineTargets) => {
 
   const pickUpItems = PickUpItems(bot, targets)
   pickUpItems.stateName = 'Pick Up Items'
-  //@ts-ignore
   pickUpItems.x = 325
-  //@ts-ignore
   pickUpItems.y = 63
 
   const searchAndCraft = SearchAndCraftFunction(bot, targets);
-  //@ts-ignore
   searchAndCraft.x = 75
-  //@ts-ignore
   searchAndCraft.y = 363
 
   let chests: Array<Chest> = []

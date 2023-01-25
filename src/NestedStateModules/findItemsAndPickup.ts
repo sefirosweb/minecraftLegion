@@ -6,11 +6,8 @@ import {
   NestedStateMachine
 } from 'mineflayer-statemachine'
 
-//@ts-ignore
 import BehaviorFindItems from '@/BehaviorModules/BehaviorFindItems'
-//@ts-ignore
 import BehaviorLoadConfig from '@/BehaviorModules/BehaviorLoadConfig'
-//@ts-ignore
 import BehaviorMoveTo from '@/BehaviorModules/BehaviorMoveTo'
 import { Vec3 } from "vec3"
 
@@ -20,16 +17,12 @@ function findItemsAndPickup(bot: Bot, targets: LegionStateMachineTargets) {
 
   const start = new BehaviorIdle()
   start.stateName = 'Start'
-  //@ts-ignore
   start.x = 125
-  //@ts-ignore
   start.y = 113
 
   const exit = new BehaviorIdle()
   exit.stateName = 'Exit'
-  //@ts-ignore
   exit.x = 325
-  //@ts-ignore
   exit.y = 513
 
   const findItem = new BehaviorFindItems(bot, targets, 15, true)

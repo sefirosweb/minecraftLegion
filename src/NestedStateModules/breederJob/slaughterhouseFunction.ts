@@ -10,30 +10,22 @@ import SlaughterFunction from '@/NestedStateModules/breederJob/slaughterFunction
 function slaughterhouseFunction(bot: Bot, targets: LegionStateMachineTargets) {
   const start = new BehaviorIdle()
   start.stateName = 'Start'
-  //@ts-ignore
   start.x = 125
-  //@ts-ignore
   start.y = 113
 
   const exit = new BehaviorIdle()
   exit.stateName = 'Exit'
-  //@ts-ignore
   exit.x = 525
-  //@ts-ignore
   exit.y = 113
 
   const check = new BehaviorIdle()
   check.stateName = 'Check'
-  //@ts-ignore
   check.x = 325
-  //@ts-ignore
   check.y = 113
 
   const slaughter = SlaughterFunction(bot, targets)
   slaughter.stateName = 'Slaughter'
-  //@ts-ignore
   slaughter.x = 325
-  //@ts-ignore
   slaughter.y = 263
 
   let animalsToKill: Array<Entity>

@@ -14,9 +14,7 @@ const animalTypes = Object.keys(animals)
 function breederFunction(bot: Bot, targets: LegionStateMachineTargets) {
   const start = new BehaviorIdle()
   start.stateName = 'Start'
-  //@ts-ignore
   start.x = 125
-  //@ts-ignore
   start.y = 113
 
   const loadConfig = new BehaviorLoadConfig(bot, targets)
@@ -26,23 +24,17 @@ function breederFunction(bot: Bot, targets: LegionStateMachineTargets) {
 
   const exit = new BehaviorIdle()
   exit.stateName = 'Exit'
-  //@ts-ignore
   exit.x = 525
-  //@ts-ignore
   exit.y = 263
 
   const checkFarmAreas = new BehaviorIdle()
   checkFarmAreas.stateName = 'Check Animals'
-  //@ts-ignore
   checkFarmAreas.x = 325
-  //@ts-ignore
   checkFarmAreas.y = 263
 
   const feedAnimal = FeedAnimalFunction(bot, targets)
   feedAnimal.stateName = 'Feed'
-  //@ts-ignore
   feedAnimal.x = 325
-  //@ts-ignore
   feedAnimal.y = 413
 
   const getAnimalsToBeFeed = () => {

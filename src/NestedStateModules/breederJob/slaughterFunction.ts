@@ -1,13 +1,5 @@
-import {
-  StateTransition,
-  BehaviorIdle,
-  NestedStateMachine,
-  BehaviorFollowEntity
-} from 'mineflayer-statemachine'
-
-//@ts-ignore
+import { StateTransition, BehaviorIdle, NestedStateMachine, BehaviorFollowEntity } from 'mineflayer-statemachine'
 import BehaviorAttack from '@/BehaviorModules/combat/BehaviorAttack'
-//@ts-ignore
 import BehaviorEquip from '@/BehaviorModules/BehaviorEquip'
 import { Bot, LegionStateMachineTargets } from '@/types'
 const rangeSword = 3
@@ -15,26 +7,18 @@ const rangeSword = 3
 function slaughterhouseFunction(bot: Bot, targets: LegionStateMachineTargets) {
   const start = new BehaviorIdle()
   start.stateName = 'Start'
-  //@ts-ignore
   start.x = 125
-  //@ts-ignore
   start.y = 113
 
   const exit = new BehaviorIdle()
   exit.stateName = 'Exit'
-  //@ts-ignore
   exit.x = 325
-  //@ts-ignore
   exit.y = 413
 
-  //@ts-ignore
   const followMob = new BehaviorFollowEntity(bot, targets)
   followMob.stateName = 'Follow Enemy'
-  //@ts-ignore
   followMob.x = 325
-  //@ts-ignore
   followMob.y = 263
-  //@ts-ignore
   followMob.movements = targets.movements
 
   const attack = new BehaviorAttack(bot, targets)

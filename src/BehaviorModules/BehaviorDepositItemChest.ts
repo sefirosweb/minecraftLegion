@@ -99,7 +99,6 @@ export default class BehaviorDepositItemChest implements StateBehavior {
       return false
     })
 
-    //@ts-ignore pending to fix from mineflater
     const slots = container.slots.slice(0, container.inventoryStart)
     if (!chest) {
       chestToOpen.slots = slots
@@ -111,8 +110,7 @@ export default class BehaviorDepositItemChest implements StateBehavior {
         chestToOpen.secondBlock = chestToOpen.position.offset(offset.x, offset.y, offset.z)
       }
 
-      //@ts-ignore pending to fix from mineflater
-      chestToOpen.dimension = this.bot.game.dimension as Dimensions // Todo mending mineflayer fix
+      chestToOpen.dimension = this.bot.game.dimension
 
       const chestIndext = Object.keys(this.targets.chests).length
       this.targets.chests[chestIndext] = chestToOpen
@@ -125,13 +123,11 @@ export default class BehaviorDepositItemChest implements StateBehavior {
 
   checkItemDestinationAndMoveToInventory(container: Chest, toSlot: number): Promise<void> {
     return new Promise((resolve, reject) => {
-      //@ts-ignore pending to fix from mineflater
       if (container.slots[toSlot] === null) {
         resolve()
         return
       }
 
-      //@ts-ignore pending to fix from mineflater
       const emptySlot = container.slots.findIndex((s, sIndex) => s === null && sIndex > container.inventoryStart)
       this.bot.moveSlotItem(toSlot, emptySlot)
         .then(() => {
@@ -159,13 +155,9 @@ export default class BehaviorDepositItemChest implements StateBehavior {
           itemType: itemToDeposit.id,
           metadata: null,
           count: itemToDeposit.quantity,
-          //@ts-ignore pending to fix from mineflater
           sourceStart: container.inventoryStart,
-          //@ts-ignore pending to fix from mineflater
           sourceEnd: container.inventoryEnd,
-          //@ts-ignore pending to fix from mineflater
           destStart: itemToDeposit.toSlot,
-          //@ts-ignore pending to fix from mineflater
           destEnd: itemToDeposit.toSlot + 1
         }
 
@@ -190,7 +182,6 @@ export default class BehaviorDepositItemChest implements StateBehavior {
           })
       } else {
         // If the destination is NOT specific
-        //@ts-ignore pending to fix from mineflater
         if (container.containerItems().length === container.inventoryStart) {
           reject(new Error('The chest is full'))
           return

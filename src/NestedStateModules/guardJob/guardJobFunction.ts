@@ -14,9 +14,7 @@ import { Bot, LegionStateMachineTargets } from '@/types'
 function guardJobFunction(bot: Bot, targets: LegionStateMachineTargets) {
   const start = new BehaviorIdle()
   start.stateName = 'Start'
-  //@ts-ignore
   start.x = 125
-  //@ts-ignore
   start.y = 113
 
   const loadConfig = new BehaviorLoadConfig(bot, targets)
@@ -56,25 +54,18 @@ function guardJobFunction(bot: Bot, targets: LegionStateMachineTargets) {
   helpFriend.x = 525
   helpFriend.y = 813
 
-  //@ts-ignore
   const goFriend = new BehaviorFollowEntity(bot, targets)
   goFriend.stateName = 'Go To Help Friend'
-  //@ts-ignore
   goFriend.x = 725
-  //@ts-ignore
   goFriend.y = 813
 
   const combatStrategy = CombatStrategyFunction(bot, targets)
-  //@ts-ignore
   combatStrategy.x = 925
-  //@ts-ignore
   combatStrategy.y = 513
 
   const getReady = GetReadyFunction(bot, targets)
   getReady.stateName = 'Get Ready'
-  //@ts-ignore
   getReady.x = 525
-  //@ts-ignore
   getReady.y = 213
 
   const transitions = [

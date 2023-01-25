@@ -12,51 +12,37 @@ export default (bot: Bot, targets: LegionStateMachineTargets) => {
 
   const start = new BehaviorIdle()
   start.stateName = 'Start'
-  //@ts-ignore
   start.x = 125
-  //@ts-ignore
   start.y = 113
 
   const exit = new BehaviorIdle()
   exit.stateName = 'exit'
-  //@ts-ignore
   exit.x = 125
-  //@ts-ignore
   exit.y = 575
 
   const checkRecipes = new BehaviorIdle()
   checkRecipes.stateName = 'checkRecipes'
-  //@ts-ignore
   checkRecipes.x = 625
-  //@ts-ignore
   checkRecipes.y = 113
 
   const checkRecipesWithTable = new BehaviorIdle()
   checkRecipesWithTable.stateName = 'checkRecipesWithTable'
-  //@ts-ignore
   checkRecipesWithTable.x = 350
-  //@ts-ignore
   checkRecipesWithTable.y = 575
 
   const checkMaterials = new BehaviorIdle()
   checkMaterials.stateName = 'checkMaterials'
-  //@ts-ignore
   checkMaterials.x = 525
-  //@ts-ignore
   checkMaterials.y = 350
 
   const checkPickUpItems = new BehaviorIdle()
   checkPickUpItems.stateName = 'checkPickUpItems'
-  //@ts-ignore
   checkPickUpItems.x = 350
-  //@ts-ignore
   checkPickUpItems.y = 213
 
   const checkCraftingTable = new BehaviorIdle()
   checkCraftingTable.stateName = 'checkCraftingTable'
-  //@ts-ignore
   checkCraftingTable.x = 125
-  //@ts-ignore
   checkCraftingTable.y = 350
 
   const craftItem = new BehaviorCraft(bot, targets)
@@ -66,23 +52,17 @@ export default (bot: Bot, targets: LegionStateMachineTargets) => {
 
   const pickUpItems = PickUpItems(bot, targets)
   pickUpItems.stateName = 'Pick Up Items'
-  //@ts-ignore
   pickUpItems.x = 125
-  //@ts-ignore
   pickUpItems.y = 213
 
   const goTable = GoCraftingTableFunction(bot, targets)
   goTable.stateName = 'Go check recipes'
-  //@ts-ignore
   goTable.x = 625
-  //@ts-ignore
   goTable.y = 462
 
   const goTableToCraft = GoCraftingTableFunction(bot, targets)
   goTableToCraft.stateName = 'Go to Craft'
-  //@ts-ignore
   goTableToCraft.x = 325
-  //@ts-ignore
   goTableToCraft.y = 350
 
   let recipes: Array<Recpie> = []

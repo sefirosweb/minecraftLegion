@@ -22,6 +22,8 @@ export default class BehaviorCustomPlaceBlock implements StateBehavior {
   cantPlaceBlock: boolean
   offset?: Vec3
   timeLimit?: ReturnType<typeof setTimeout>
+  x?: number
+  y?: number
 
   constructor(bot: Bot, targets: LegionStateMachineTargets, canJump: boolean = true, canReplaceBlock: boolean = false) {
     this.active = false

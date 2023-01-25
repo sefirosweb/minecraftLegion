@@ -11,51 +11,37 @@ import FindItemsAndPickup from '@/NestedStateModules/findItemsAndPickup'
 function farmingTreesFunction(bot: Bot, targets: LegionStateMachineTargets) {
   const start = new BehaviorIdle()
   start.stateName = 'Start'
-  //@ts-ignore
   start.x = 125
-  //@ts-ignore
   start.y = 113
 
   const exit = new BehaviorIdle()
   exit.stateName = 'Exit'
-  //@ts-ignore
   exit.x = 725
-  //@ts-ignore
   exit.y = 113
 
   const selectTree = new BehaviorIdle()
   selectTree.stateName = 'Select Tree'
-  //@ts-ignore
   selectTree.x = 325
-  //@ts-ignore
   selectTree.y = 113
 
   const checkFarmingAreas = new BehaviorIdle()
   checkFarmingAreas.stateName = 'Next Area'
-  //@ts-ignore
   checkFarmingAreas.x = 525
-  //@ts-ignore
   checkFarmingAreas.y = 113
 
   const plant = PlantFunction(bot, targets)
   plant.stateName = 'Plant'
-  //@ts-ignore
   plant.x = 725
-  //@ts-ignore
   plant.y = 313
 
   const harvest = HarvestFunction(bot, targets)
   harvest.stateName = 'Harvest'
-  //@ts-ignore
   harvest.x = 325
-  //@ts-ignore
   harvest.y = 313
 
   const findItemsAndPickup = FindItemsAndPickup(bot, targets)
   findItemsAndPickup.stateName = 'Find Items'
-  //@ts-ignore
   findItemsAndPickup.x = 525
-  //@ts-ignore
   findItemsAndPickup.y = 313
 
   let xStart: number, xEnd: number, xCurrent: number, zStart: number, zEnd: number, zCurrent: number, finished: boolean

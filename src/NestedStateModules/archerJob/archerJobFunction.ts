@@ -9,9 +9,7 @@ import {
 } from 'mineflayer-statemachine'
 import { Entity } from 'prismarine-entity'
 
-//@ts-ignore
-import botWebsocket from '@modules/botWebsocket'
-//@ts-ignore
+import botWebsocket from '@/modules/botWebsocket'
 import BehaviorAttack from '@/BehaviorModules/combat/BehaviorAttack'
 import { Bot, LegionStateMachineTargets } from '@/types'
 
@@ -24,9 +22,7 @@ function archerJobFunction(bot: Bot, targets: LegionStateMachineTargets) {
     return entity.position.distanceTo(bot.player.entity.position) <= 10 &&
       (entity.type === 'mob' || entity.type === 'player')
   }
-  //@ts-ignore
   const getClosestMob = new BehaviorGetClosestEntity(bot, targets, distanceFilter)
-  //@ts-ignore
   const followMob = new BehaviorFollowEntity(bot, targets)
 
   const transitions = [

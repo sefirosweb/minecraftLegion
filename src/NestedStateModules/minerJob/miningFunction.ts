@@ -54,16 +54,12 @@ function miningFunction(bot: Bot, targets: LegionStateMachineTargets) {
 
   const start = new BehaviorIdle()
   start.stateName = 'Start'
-  //@ts-ignore
   start.x = 125
-  //@ts-ignore
   start.y = 113
 
   const finishedJob = new BehaviorIdle()
   finishedJob.stateName = 'Finished Job'
-  //@ts-ignore
   finishedJob.x = 525
-  //@ts-ignore
   finishedJob.y = 13
 
   const loadConfig = new BehaviorLoadConfig(bot, targets)
@@ -73,23 +69,17 @@ function miningFunction(bot: Bot, targets: LegionStateMachineTargets) {
 
   const exit = new BehaviorIdle()
   exit.stateName = 'Exit'
-  //@ts-ignore
   exit.x = 125
-  //@ts-ignore
   exit.y = 313
 
   const nextLayer = new BehaviorMinerCurrentLayer(bot, targets)
   nextLayer.stateName = 'Next Layer'
-  //@ts-ignore
   nextLayer.x = 525
-  //@ts-ignore
   nextLayer.y = 113
 
   const currentBlock = new BehaviorMinerCurrentBlock(bot, targets)
   currentBlock.stateName = 'Check next block'
-  //@ts-ignore
   currentBlock.x = 725
-  //@ts-ignore
   currentBlock.y = 113
 
   const digBlock = new BehaviorDigBlock(bot, targets)
@@ -121,9 +111,7 @@ function miningFunction(bot: Bot, targets: LegionStateMachineTargets) {
 
   const checkLayer = new BehaviorMinerCheckLayer(bot, targets)
   checkLayer.stateName = 'Check Layer Lava & Water'
-  //@ts-ignore
   checkLayer.x = 525
-  //@ts-ignore
   checkLayer.y = 213
 
   const eatFood = new BehaviorEatFood(bot, targets)
@@ -133,16 +121,12 @@ function miningFunction(bot: Bot, targets: LegionStateMachineTargets) {
 
   const fillBlocks = FillFunction(bot, targets)
   fillBlocks.stateName = 'Fill Water & Lava'
-  //@ts-ignore
   fillBlocks.x = 350
-  //@ts-ignore
   fillBlocks.y = 313
 
   const findItemsAndPickup = FindItemsAndPickup(bot, targets)
   findItemsAndPickup.stateName = 'Find Items'
-  //@ts-ignore
   findItemsAndPickup.x = 525
-  //@ts-ignore
   findItemsAndPickup.y = 363
 
   const saveCurrentLayer = () => {

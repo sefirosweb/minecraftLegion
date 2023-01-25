@@ -97,7 +97,6 @@ export default class BehaviorWithdrawItemChest implements StateBehavior {
       return false
     })
 
-    //@ts-ignore pending to fix from mineflater
     const slots = container.slots.slice(0, container.inventoryStart)
     if (!chest) {
       chestToOpen.slots = slots
@@ -109,7 +108,6 @@ export default class BehaviorWithdrawItemChest implements StateBehavior {
         chestToOpen.secondBlock = chestToOpen.position.offset(offset.x, offset.y, offset.z)
       }
 
-      //@ts-ignore pending to fix from mineflater
       chestToOpen.dimension = this.bot.game.dimension as Dimensions // Todo mending mineflayer fix
 
       const chestIndext = Object.keys(this.targets.chests).length
@@ -131,9 +129,7 @@ export default class BehaviorWithdrawItemChest implements StateBehavior {
       const itemToWithdraw: ChestTransaction = this.items.shift() as ChestTransaction
 
       const foundItem = itemToWithdraw.id !== undefined
-        //@ts-ignore pending to fix from mineflater
         ? container.containerItems().find(i => i.type === itemToWithdraw.id)
-        //@ts-ignore pending to fix from mineflater
         : container.containerItems().find(i => itemToWithdraw.name && i.name.includes(itemToWithdraw.name))
 
       if (!foundItem) {
@@ -159,9 +155,7 @@ export default class BehaviorWithdrawItemChest implements StateBehavior {
           count: quantity,
           sourceStart: itemToWithdraw.fromSlot,
           sourceEnd: itemToWithdraw.fromSlot + 1,
-          //@ts-ignore pending to fix from mineflater
           destStart: container.inventoryStart,
-          //@ts-ignore pending to fix from mineflater
           destEnd: container.inventoryEnd
         }
 

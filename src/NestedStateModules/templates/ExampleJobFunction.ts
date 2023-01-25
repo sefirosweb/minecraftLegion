@@ -1,10 +1,5 @@
-import {
-  StateTransition,
-  BehaviorIdle,
-  NestedStateMachine
-} from 'mineflayer-statemachine'
+import { StateTransition, BehaviorIdle, NestedStateMachine } from 'mineflayer-statemachine'
 
-//@ts-ignore
 import BehaviorLoadConfig from '@/BehaviorModules/BehaviorLoadConfig'
 import { Bot, LegionStateMachineTargets } from '@/types'
 

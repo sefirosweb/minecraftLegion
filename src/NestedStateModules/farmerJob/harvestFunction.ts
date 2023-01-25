@@ -8,24 +8,17 @@ import {
 
 import { plants } from '@/modules/plantType'
 
-//@ts-ignore
-import botWebsocket from '@modules/botWebsocket'
-//@ts-ignore
+import botWebsocket from '@/modules/botWebsocket'
 import BehaviorDigBlock from '@/BehaviorModules/BehaviorDigBlock'
-//@ts-ignore
 import BehaviorEatFood from '@/BehaviorModules/BehaviorEatFood'
-//@ts-ignore
 import BehaviorInteractBlock from '@/BehaviorModules/BehaviorInteractBlock'
-//@ts-ignore
 import BehaviorMoveTo from '@/BehaviorModules/BehaviorMoveTo'
 import { Bot, LegionStateMachineTargets } from '@/types'
 
 function harvestFunction(bot: Bot, targets: LegionStateMachineTargets) {
   const start = new BehaviorIdle()
   start.stateName = 'Start'
-  //@ts-ignore
   start.x = 125
-  //@ts-ignore
   start.y = 113
 
   const eatFood = new BehaviorEatFood(bot, targets)
@@ -41,23 +34,17 @@ function harvestFunction(bot: Bot, targets: LegionStateMachineTargets) {
 
   const exit = new BehaviorIdle()
   exit.stateName = 'Exit'
-  //@ts-ignore
   exit.x = 225
-  //@ts-ignore
   exit.y = 413
 
   const checkArea = new BehaviorIdle()
   checkArea.stateName = 'Check Area for Harvest'
-  //@ts-ignore
   checkArea.x = 525
-  //@ts-ignore
   checkArea.y = 113
 
   const checkHarvest = new BehaviorIdle()
   checkHarvest.stateName = 'Exsist Any Plant To Harvest'
-  //@ts-ignore
   checkHarvest.x = 225
-  //@ts-ignore
   checkHarvest.y = 263
 
   const harvestPlant = new BehaviorDigBlock(bot, targets)

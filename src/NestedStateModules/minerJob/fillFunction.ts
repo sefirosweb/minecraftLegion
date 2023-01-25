@@ -13,16 +13,12 @@ function fillFunction(bot: Bot, targets: LegionStateMachineTargets) {
 
   const start = new BehaviorIdle()
   start.stateName = 'Start'
-  //@ts-ignore
   start.x = 125
-  //@ts-ignore
   start.y = 113
 
   const exit = new BehaviorIdle()
   exit.stateName = 'Exit'
-  //@ts-ignore
   exit.x = 125
-  //@ts-ignore
   exit.y = 313
 
   const moveToCantSeeBlock = new BehaviorMoveTo(bot, targets)
@@ -31,12 +27,9 @@ function fillFunction(bot: Bot, targets: LegionStateMachineTargets) {
   moveToCantSeeBlock.x = 125
   moveToCantSeeBlock.y = 213
 
-  //@ts-ignore
   const findInteractPosition = new BehaviorFindInteractPosition(bot, targets)
   findInteractPosition.stateName = 'findInteractPosition'
-  //@ts-ignore
   findInteractPosition.x = 325
-  //@ts-ignore
   findInteractPosition.y = 113
 
   const moveToBlock = new BehaviorMoveTo(bot, targets)
@@ -52,16 +45,12 @@ function fillFunction(bot: Bot, targets: LegionStateMachineTargets) {
 
   const placeBlock1 = new BehaviorCustomPlaceBlock(bot, targets, true, true)
   placeBlock1.stateName = 'Place Block 1'
-  //@ts-ignore
   placeBlock1.x = 725
-  //@ts-ignore
   placeBlock1.y = 313
 
   const placeBlock2 = new BehaviorCustomPlaceBlock(bot, targets, true, true)
   placeBlock2.stateName = 'Place Block 2'
-  //@ts-ignore
   placeBlock2.x = 525
-  //@ts-ignore
   placeBlock2.y = 313
 
   const loadConfig = new BehaviorLoadConfig(bot, targets)

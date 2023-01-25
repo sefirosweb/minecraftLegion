@@ -9,13 +9,7 @@ import mineflayerPathfinder from 'mineflayer-pathfinder'
 import { startPrismarineViewer } from '@/modules/viewer'
 import DeathFunction from '@/NestedStateModules/deathFunction'
 import botConfigLoader from '@/modules/botConfig'
-import {
-  StateTransition,
-  BotStateMachine,
-  StateMachineWebserver,
-  BehaviorIdle,
-  NestedStateMachine
-} from 'mineflayer-statemachine'
+import { StateTransition, BotStateMachine, StateMachineWebserver, BehaviorIdle, NestedStateMachine } from 'mineflayer-statemachine'
 
 //@ts-ignore
 import inventoryViewer from 'mineflayer-web-inventory'
@@ -97,26 +91,20 @@ const startStateMachine = (bot: Bot) => {
     }
   }
 
-  let webserver: any
+  let webserver: StateMachineWebserver
 
   const start = new BehaviorIdle()
   start.stateName = 'Start'
-  // @ts-ignore
   start.x = 125
-  // @ts-ignore
   start.y = 113
 
   const watiState = new BehaviorIdle()
   watiState.stateName = 'Wait Second'
-  //@ts-ignore
   watiState.x = 125
-  //@ts-ignore
   watiState.y = 313
 
   const death = DeathFunction(bot, targets)
-  //@ts-ignore
   death.x = 425
-  //@ts-ignore
   death.y = 213
 
   const { checkPortalsOnSpawn } = movementModule(bot, targets)
@@ -135,7 +123,6 @@ const startStateMachine = (bot: Bot) => {
 
           bot.on('time', () => {
             const timeOfDay = bot.time.timeOfDay
-            //@ts-ignore
             const thunderstorm = bot.thunderState > 0
             if (!thunderstorm && !(timeOfDay >= 12541 && timeOfDay <= 23458)) {
               targets.isNight = false
@@ -170,7 +157,6 @@ const startStateMachine = (bot: Bot) => {
 
   const root = new NestedStateMachine(transitions, start)
   root.stateName = 'Main'
-  // @ts-ignore
   const stateMachine = new BotStateMachine(bot, root)
 
   bot.on('death', function () {
@@ -204,8 +190,7 @@ const startStateMachine = (bot: Bot) => {
     bot.emit('customEventChat', username, message, translate, jsonMsg, matches)
   })
 
-  //@ts-ignore
-  bot.on('move', (position: any) => {
+  bot.on('move', (position) => {
     bot.emit('customEventMove', position)
   })
 
@@ -231,7 +216,6 @@ const startStateMachine = (bot: Bot) => {
       botWebsocket.emitEvents(eventsToSend)
     })
 
-    // @ts-ignore
     webserver = new StateMachineWebserver(bot, stateMachine, 4550)
     if (!webserver.isServerRunning()) {
       webserver.startServer()
@@ -253,7 +237,6 @@ const startStateMachine = (bot: Bot) => {
         break
       case 'startStateMachine':
         if (!webserver || typeof webserver.isServerRunning !== 'function') {
-          // @ts-ignore
           webserver = new StateMachineWebserver(bot, stateMachine, value.port)
         }
         if (typeof webserver.isServerRunning === 'function') {

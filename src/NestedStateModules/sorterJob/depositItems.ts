@@ -5,30 +5,22 @@ import GoAndDeposit from '@/NestedStateModules/getReady/goAndDeposit'
 function depositItems(bot: Bot, targets: LegionStateMachineTargets) {
   const start = new BehaviorIdle()
   start.stateName = 'Start'
-  //@ts-ignore
   start.x = 125
-  //@ts-ignore
   start.y = 113
 
   const exit = new BehaviorIdle()
   exit.stateName = 'Exit'
-  //@ts-ignore
   exit.x = 325
-  //@ts-ignore
   exit.y = 313
 
   const startCheckNextChest = new BehaviorIdle()
   startCheckNextChest.stateName = 'Start Check Next Chest'
-  //@ts-ignore
   startCheckNextChest.x = 125
-  //@ts-ignore
   startCheckNextChest.y = 263
 
   const goAndDeposit = GoAndDeposit(bot, targets)
   goAndDeposit.stateName = 'Go chest and Deposit'
-  //@ts-ignore
   goAndDeposit.x = 125
-  //@ts-ignore
   goAndDeposit.y = 413
 
   let pendingTransaction: Array<PendingTransaction>

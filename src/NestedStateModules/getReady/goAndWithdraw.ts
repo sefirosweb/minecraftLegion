@@ -6,16 +6,12 @@ import { Bot, LegionStateMachineTargets } from '@/types'
 export default (bot: Bot, targets: LegionStateMachineTargets) => {
   const start = new BehaviorIdle()
   start.stateName = 'Start'
-  //@ts-ignore
   start.x = 125
-  //@ts-ignore
   start.y = 113
 
   const exit = new BehaviorIdle()
   exit.stateName = 'Exit'
-  //@ts-ignore
   exit.x = 125
-  //@ts-ignore
   exit.y = 413
 
   const goChest = new BehaviorMoveTo(bot, targets)

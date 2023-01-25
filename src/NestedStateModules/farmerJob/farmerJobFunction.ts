@@ -10,9 +10,7 @@ import CombatStrategyFunction from '@/NestedStateModules/combat/combatStrategyFu
 export default (bot: Bot, targets: LegionStateMachineTargets) => {
   const start = new BehaviorIdle()
   start.stateName = 'Start'
-  //@ts-ignore
   start.x = 125
-  //@ts-ignore
   start.y = 113
 
   const getReady = new BehaviorGetReady(bot, targets)
@@ -21,16 +19,12 @@ export default (bot: Bot, targets: LegionStateMachineTargets) => {
   getReady.y = 213
 
   const goChests = GoChestsFunctions(bot, targets)
-  //@ts-ignore
   goChests.x = 325
-  //@ts-ignore
   goChests.y = 213
 
   const farming = FarmingFunction(bot, targets)
   farming.stateName = 'Farming'
-  //@ts-ignore
   farming.x = 325
-  //@ts-ignore
   farming.y = 313
 
   const eatFood = new BehaviorEatFood(bot, targets)
@@ -40,9 +34,7 @@ export default (bot: Bot, targets: LegionStateMachineTargets) => {
 
   const getClosestMob = getClosestEnemy(bot, targets)
   const combatStrategy = CombatStrategyFunction(bot, targets)
-  //@ts-ignore
   combatStrategy.x = 325
-  //@ts-ignore
   combatStrategy.y = 413
 
   const transitions = [

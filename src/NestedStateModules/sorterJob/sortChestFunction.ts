@@ -14,44 +14,32 @@ function sortChestFunction(bot: Bot, targets: LegionStateMachineTargets) {
 
   const start = new BehaviorIdle()
   start.stateName = 'Start'
-  //@ts-ignore
   start.x = 125
-  //@ts-ignore
   start.y = 113
 
   const exit = new BehaviorIdle()
   exit.stateName = 'Exit'
-  //@ts-ignore
   exit.x = 125
-  //@ts-ignore
   exit.y = 413
 
   const checkChestsToSort = new BehaviorIdle()
   checkChestsToSort.stateName = 'Check Chests mus be sorted'
-  //@ts-ignore
   checkChestsToSort.x = 525
-  //@ts-ignore
   checkChestsToSort.y = 113
 
   const findItems = new BehaviorIdle()
   findItems.stateName = 'Find items in chests'
-  //@ts-ignore
   findItems.x = 525
-  //@ts-ignore
   findItems.y = 263
 
   const pickUpItems = PickUpItems(bot, targets)
   pickUpItems.stateName = 'Pick Up Items'
-  //@ts-ignore
   pickUpItems.x = 525
-  //@ts-ignore
   pickUpItems.y = 413
 
   const depositItems = DepositItems(bot, targets)
   depositItems.stateName = 'Deposit Items'
-  //@ts-ignore
   depositItems.x = 325
-  //@ts-ignore
   depositItems.y = 413
 
   const transitions = [

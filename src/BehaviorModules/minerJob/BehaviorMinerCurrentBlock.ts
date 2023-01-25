@@ -28,6 +28,8 @@ export default class BehaviorMinerCurrentBlock implements StateBehavior {
 
   getBlockInfo: boolean
 
+  x?: number
+  y?: number
 
   constructor(bot: Bot, targets: LegionStateMachineTargets) {
     this.active = false

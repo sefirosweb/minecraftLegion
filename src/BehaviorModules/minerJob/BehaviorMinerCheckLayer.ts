@@ -15,7 +15,6 @@ export default class BehaviorMinerCheckLayer implements StateBehavior {
   isEndFinished: boolean;
   isLayerFinished: boolean;
 
-
   foundLavaOrWater: boolean;
   minerCords: MineCordsConfig | undefined;
   blocksToFind: Array<string>;
@@ -32,6 +31,9 @@ export default class BehaviorMinerCheckLayer implements StateBehavior {
   yEnd: number | undefined
   zEnd: number | undefined
   xEnd: number | undefined
+
+  x?: number
+  y?: number
 
   constructor(bot: Bot, targets: LegionStateMachineTargets) {
     this.active = false

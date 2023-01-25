@@ -17,56 +17,39 @@ function startWorkFunction(bot: Bot, targets: LegionStateMachineTargets) {
   const mcData = mcDataLoader(bot.version)
   const { getAllBlocksExceptLeafs } = movementModule(bot, targets)
 
-  // @ts-ignore
   const start = new BehaviorFollowEntity(bot, targets)
   start.stateName = 'Start'
 
   const loadedConfig = new BehaviorIdle()
   loadedConfig.stateName = 'Loaded Config'
-  // @ts-ignore
   loadedConfig.x = 325
-  // @ts-ignore
   loadedConfig.y = 213
 
   const guardJob = GuardJob(bot, targets)
-  // @ts-ignore
   guardJob.x = 525
-  // @ts-ignore
   guardJob.y = 313
 
   const archerJob = ArcherJob(bot, targets)
-  // @ts-ignore
   archerJob.x = 525
-  // @ts-ignore
   archerJob.y = 113
 
   const farmerJob = FarmerJob(bot, targets)
-  // @ts-ignore
   farmerJob.x = 325
-  // @ts-ignore
   farmerJob.y = 350
 
   const breederJob = BreederJob(bot, targets)
-  // @ts-ignore
   breederJob.x = 135
-  // @ts-ignore
   breederJob.y = 320
 
   const minerJob = MinerJob(bot, targets)
-  // @ts-ignore
   minerJob.x = 325
-  // @ts-ignore
   minerJob.y = 50
 
   const sorterJob = SorterJob(bot, targets)
-  // @ts-ignore
   sorterJob.x = 535
-  // @ts-ignore
   sorterJob.y = 213
 
   const crafterJobFunction = CrafterJobFunction(bot, targets)
-  // sorterJob.x = 535
-  // sorterJob.y = 213
 
   const transitions = [
     new StateTransition({

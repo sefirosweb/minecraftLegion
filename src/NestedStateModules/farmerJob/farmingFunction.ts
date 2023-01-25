@@ -4,11 +4,8 @@ import {
   NestedStateMachine
 } from 'mineflayer-statemachine'
 
-//@ts-ignore
-import { shuffle } from '@modules/utils'
-//@ts-ignore
-import botWebsocket from '@modules/botWebsocket'
-//@ts-ignore
+import { shuffle } from '@/modules/utils'
+import botWebsocket from '@/modules/botWebsocket'
 import BehaviorLoadConfig from '@/BehaviorModules/BehaviorLoadConfig'
 import { Bot, LegionStateMachineTargets, PlantArea } from '@/types'
 import { plants } from '@/modules/plantType'
@@ -18,9 +15,7 @@ import FarmingTreesFunction from '@/NestedStateModules/farmerJob/farmingTreesFun
 function farmingFunction(bot: Bot, targets: LegionStateMachineTargets) {
   const start = new BehaviorIdle()
   start.stateName = 'Start'
-  //@ts-ignore
   start.x = 125
-  //@ts-ignore
   start.y = 113
 
   const loadConfig = new BehaviorLoadConfig(bot, targets)
@@ -30,37 +25,27 @@ function farmingFunction(bot: Bot, targets: LegionStateMachineTargets) {
 
   const exit = new BehaviorIdle()
   exit.stateName = 'Exit'
-  //@ts-ignore
   exit.x = 325
-  //@ts-ignore
   exit.y = 613
 
   const checkFarmingAreas = new BehaviorIdle()
   checkFarmingAreas.stateName = 'Check Area'
-  //@ts-ignore
   checkFarmingAreas.x = 325
-  //@ts-ignore
   checkFarmingAreas.y = 450
 
   const nextArea = new BehaviorIdle()
   nextArea.stateName = 'Next Area'
-  //@ts-ignore
   nextArea.x = 325
-  //@ts-ignore
   nextArea.y = 250
 
   const farmingPlantsFunction = FarmingPlantsFunction(bot, targets)
   farmingPlantsFunction.stateName = 'Farm Plants'
-  //@ts-ignore
   farmingPlantsFunction.x = 125
-  //@ts-ignore
   farmingPlantsFunction.y = 350
 
   const farmingTreesFunction = FarmingTreesFunction(bot, targets)
   farmingTreesFunction.stateName = 'Farm Trees'
-  //@ts-ignore
   farmingTreesFunction.x = 525
-  //@ts-ignore
   farmingTreesFunction.y = 350
 
   let plantArea: Array<PlantArea> = []

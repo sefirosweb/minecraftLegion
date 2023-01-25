@@ -1,6 +1,4 @@
-
 //@ts-nocheck
-
 import botWebsocket from '@/modules/botWebsocket'
 import { Bot, LegionStateMachineTargets } from '@/types';
 import { StateBehavior } from 'mineflayer-statemachine';
@@ -13,6 +11,7 @@ export default class BehaviorcCheckItemsInChest implements StateBehavior {
   isEndFinished: boolean
 
   canOpenChest: boolean
+  timeLimit?: ReturnType<typeof setTimeout>
 
   constructor(bot: Bot, targets: LegionStateMachineTargets) {
     this.active = false

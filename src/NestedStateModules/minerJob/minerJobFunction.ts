@@ -9,9 +9,7 @@ import CombatStrategyFunction from '@/NestedStateModules/combat/combatStrategyFu
 export default (bot: Bot, targets: LegionStateMachineTargets) => {
   const getReady = GetReadyFunction(bot, targets)
   getReady.stateName = 'Get Ready'
-  //@ts-ignore
   getReady.x = 125
-  //@ts-ignore
   getReady.y = 113
 
   const eatFood = new BehaviorEatFood(bot, targets)
@@ -20,15 +18,11 @@ export default (bot: Bot, targets: LegionStateMachineTargets) => {
   eatFood.y = 113
 
   const miningFunction = MiningFunction(bot, targets)
-  //@ts-ignore
   miningFunction.x = 125
-  //@ts-ignore
   miningFunction.y = 213
 
   const combatStrategy = CombatStrategyFunction(bot, targets)
-  //@ts-ignore
   combatStrategy.x = 325
-  //@ts-ignore
   combatStrategy.y = 213
 
   const getClosestMob = getClosestEnemy(bot, targets)

@@ -22,7 +22,6 @@ const movementModule = (bot: Bot, targets: LegionStateMachineTargets) => {
         const distanceToPortal = bot.entity.position.distanceTo(p)
 
         if (
-          //@ts-ignore wrong "game.dimenion"
           (bot.game.dimension === 'minecraft:the_nether' && dimension === 'minecraft:overworld') ||
           (bot.game.dimension === 'minecraft:overworld' && dimension === 'minecraft:the_nether')
         ) {
@@ -59,13 +58,11 @@ const movementModule = (bot: Bot, targets: LegionStateMachineTargets) => {
 
   const checkPortalsOnSpawn = () => {
     let portals, dimension: Dimensions
-    //@ts-ignore wrong "game.dimenion"
     if (bot.game.dimension === 'minecraft:the_nether') {
       dimension = 'minecraft:overworld'
       portals = findPortals(dimension)
       compareWithCurrentPortals(portals, dimension)
     }
-    //@ts-ignore wrong "game.dimenion"
     if (bot.game.dimension === 'minecraft:the_end') {
       dimension = 'minecraft:overworld'
       portals = findPortals(dimension)
@@ -85,11 +82,9 @@ const movementModule = (bot: Bot, targets: LegionStateMachineTargets) => {
 
   const compareWithCurrentPortals = (portals: Array<Vec3>, dimension: Dimensions): Array<Vec3> => {
     let currentPortals: Array<Vec3> = []
-    //@ts-ignore wrong "game.dimenion"
     if (bot.game.dimension === 'minecraft:the_nether' && dimension === 'minecraft:overworld') {
       currentPortals = targets.portals.the_nether
     }
-    //@ts-ignore wrong "game.dimenion"
     if (bot.game.dimension === 'minecraft:the_end' && dimension === 'minecraft:overworld') {
       currentPortals = targets.portals.the_end
     }
@@ -118,9 +113,7 @@ const movementModule = (bot: Bot, targets: LegionStateMachineTargets) => {
     let matching
     if ( // Nether portal
       dimension === 'minecraft:the_nether' && bot.game.dimension === 'minecraft:overworld' ||
-      //@ts-ignore wrong "game.dimenion"
       dimension === 'minecraft:overworld' && bot.game.dimension === 'minecraft:the_nether' ||
-      //@ts-ignore wrong "game.dimenion"
       dimension === 'minecraft:the_end' && bot.game.dimension === 'minecraft:the_nether'
     ) {
       matching = 'nether_portal'
@@ -128,9 +121,7 @@ const movementModule = (bot: Bot, targets: LegionStateMachineTargets) => {
 
     if ( // End Portal
       dimension === 'minecraft:the_end' && bot.game.dimension === 'minecraft:overworld' ||
-      //@ts-ignore wrong "game.dimenion"
       dimension === 'minecraft:overworld' && bot.game.dimension === 'minecraft:the_end' ||
-      //@ts-ignore wrong "game.dimenion"
       dimension === 'minecraft:the_nether' && bot.game.dimension === 'minecraft:the_end'
     ) {
       matching = 'end_portal'
@@ -150,8 +141,7 @@ const movementModule = (bot: Bot, targets: LegionStateMachineTargets) => {
   const deleteOldPortal = (position: Vec3, dimension: Dimensions) => {
     const newPortals = JSON.parse(JSON.stringify(targets.portals)) as Portals
 
-    //@ts-ignore
-    const currentDim = dimensions[bot.game.dimension] as string
+    const currentDim = dimensions[bot.game.dimension]
     const selectedDim = dimensions[dimension]
 
     //@ts-ignore

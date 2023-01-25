@@ -3,7 +3,6 @@ import {
   BehaviorIdle,
   NestedStateMachine
 } from 'mineflayer-statemachine'
-//@ts-ignore
 import BehaviorMoveTo from '@/BehaviorModules/BehaviorMoveTo'
 import { Bot, LegionStateMachineTargets } from '@/types'
 import { Block } from 'prismarine-block'
@@ -14,23 +13,17 @@ function goCraftingTableFunction(bot: Bot, targets: LegionStateMachineTargets) {
 
   const start = new BehaviorIdle()
   start.stateName = 'Start'
-  //@ts-ignore
   start.x = 125
-  //@ts-ignore
   start.y = 113
 
   const exit = new BehaviorIdle()
   exit.stateName = 'exit'
-  //@ts-ignore
   exit.x = 125
-  //@ts-ignore
   exit.y = 213
 
   const checkCraftingTable = new BehaviorIdle()
   checkCraftingTable.stateName = 'Check near crafting table'
-  //@ts-ignore
   checkCraftingTable.x = 325
-  //@ts-ignore
   checkCraftingTable.y = 113
 
   const goTable = new BehaviorMoveTo(bot, targets)

@@ -6,30 +6,22 @@ export default (bot: Bot, targets: LegionStateMachineTargets) => {
 
   const start = new BehaviorIdle()
   start.stateName = 'Start'
-  //@ts-ignore
   start.x = 125
-  //@ts-ignore
   start.y = 113
 
   const exit = new BehaviorIdle()
   exit.stateName = 'Exit'
-  //@ts-ignore
   exit.x = 325
-  //@ts-ignore
   exit.y = 313
 
   const startCheckNextChest = new BehaviorIdle()
   startCheckNextChest.stateName = 'Start Check Next Chest'
-  //@ts-ignore
   startCheckNextChest.x = 125
-  //@ts-ignore
   startCheckNextChest.y = 263
 
   const goAndWithdraw = GoAndWithdraw(bot, targets)
   goAndWithdraw.stateName = 'Go chest and Withdraw'
-  //@ts-ignore
   goAndWithdraw.x = 125
-  //@ts-ignore
   goAndWithdraw.y = 413
 
   let pendingTransaction: Array<PendingTransaction>

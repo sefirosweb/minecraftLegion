@@ -17,6 +17,8 @@ export default class BehaviorMinerCurrentLayer implements StateBehavior {
   minerCords: MineCordsConfig | undefined
   currentLayer: number | undefined
   endLayer: number | undefined
+  x?: number
+  y?: number
 
   constructor(bot: Bot, targets: LegionStateMachineTargets) {
     this.active = false

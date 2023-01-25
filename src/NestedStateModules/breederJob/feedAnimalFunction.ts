@@ -11,16 +11,12 @@ function feedAnimalFunction(bot: Bot, targets: LegionStateMachineTargets) {
 
   const start = new BehaviorIdle()
   start.stateName = 'Start'
-  //@ts-ignore
   start.x = 125
-  //@ts-ignore
   start.y = 113
 
   const exit = new BehaviorIdle()
   exit.stateName = 'Exit'
-  //@ts-ignore
   exit.x = 350
-  //@ts-ignore
   exit.y = 313
 
   const equip = new BehaviorEquip(bot, targets)
@@ -33,14 +29,10 @@ function feedAnimalFunction(bot: Bot, targets: LegionStateMachineTargets) {
   interactEntity.x = 575
   interactEntity.y = 313
 
-  //@ts-ignore
   const followAnimal = new BehaviorFollowEntity(bot, targets)
   followAnimal.stateName = 'Follow Animal'
-  //@ts-ignore
   followAnimal.x = 575
-  //@ts-ignore
   followAnimal.y = 113
-  //@ts-ignore
   followAnimal.movements = targets.movements
 
   const transitions = [

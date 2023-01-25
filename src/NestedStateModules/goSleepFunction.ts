@@ -1,28 +1,17 @@
-import {
-  StateTransition,
-  BehaviorIdle,
-  NestedStateMachine
-} from 'mineflayer-statemachine'
-
-//@ts-ignore
+import { StateTransition, BehaviorIdle, NestedStateMachine } from 'mineflayer-statemachine'
 import BehaviorMoveTo from '@/BehaviorModules/BehaviorMoveTo'
-
 import BehaviorSleep from '@/BehaviorModules/BehaviorSleep'
 import { Bot, LegionStateMachineTargets } from '@/types'
 
 const goSleepFunction = function (bot: Bot, targets: LegionStateMachineTargets) {
   const start = new BehaviorIdle()
   start.stateName = 'Start'
-  //@ts-ignore
   start.x = 125
-  //@ts-ignore
   start.y = 113
 
   const exit = new BehaviorIdle()
   exit.stateName = 'Exit'
-  //@ts-ignore
   exit.x = 125
-  //@ts-ignore
   exit.y = 313
 
   const goSleepArea = new BehaviorMoveTo(bot, targets);
@@ -33,16 +22,12 @@ const goSleepFunction = function (bot: Bot, targets: LegionStateMachineTargets) 
 
   const searchBeds = new BehaviorIdle()
   searchBeds.stateName = 'Search nearby beds'
-  //@ts-ignore
   searchBeds.x = 325
-  //@ts-ignore
   searchBeds.y = 213
 
   const waitUntilWakeUp = new BehaviorIdle()
   waitUntilWakeUp.stateName = 'Wait until wake up'
-  //@ts-ignore
   waitUntilWakeUp.x = 325
-  //@ts-ignore
   waitUntilWakeUp.y = 413
 
   const goToBed = new BehaviorMoveTo(bot, targets);
@@ -75,7 +60,6 @@ const goSleepFunction = function (bot: Bot, targets: LegionStateMachineTargets) 
       onTransition: () => {
 
         nearBeds = bot.findBlocks({
-          //@ts-ignore
           matching: block => bot.isABed(block),
           maxDistance: 16,
           count: 99
