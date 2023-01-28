@@ -2,7 +2,7 @@
 
 import botWebsocket from '@/modules/botWebsocket'
 import { sleep, getSecondBlockPosition } from '@/modules/utils'
-import { Bot, ChestBlock, ChestProperty, ChestTransaction, Dimensions, Item, LegionStateMachineTargets } from '@/types'
+import { Bot, ChestBlock, ChestProperty, ChestTransaction, Item, LegionStateMachineTargets } from '@/types'
 import { Chest, TransferOptions } from 'mineflayer'
 import { StateBehavior } from 'mineflayer-statemachine'
 import { Vec3 } from 'vec3'
@@ -150,10 +150,10 @@ export default class BehaviorDepositItemChest implements StateBehavior {
       if (itemToDeposit.toSlot !== undefined) {
         // If the destination is specific
         const options: TransferOptions = {
-          //@ts-ignore pending to fix from mineflater
-          windows: container,
+          window: container,
           itemType: itemToDeposit.id,
           metadata: null,
+          //@ts-ignore pending : https://github.com/PrismarineJS/mineflayer/pull/2913
           count: itemToDeposit.quantity,
           sourceStart: container.inventoryStart,
           sourceEnd: container.inventoryEnd,
