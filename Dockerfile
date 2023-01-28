@@ -4,4 +4,4 @@ RUN npm install npm-check-updates -g
 RUN npm install mocha -g
 RUN npm install nodemon -g
 RUN npm install ts-node -g
-RUN npm install -g npm@9.3.1
+RUN npm install -g npm@9.4.0
