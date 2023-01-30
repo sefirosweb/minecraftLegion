@@ -316,11 +316,12 @@ type ItemRecipe = {
     subRecipes?: Array<Recpie>
 }
 
-type ChestBlock = Block & {
-    dimension?: Dimensions
-    secondBlock?: Vec3
-    lastTimeOpen?: number
+type ChestBlock = {
+    position: Vec3
+    position_2?: Vec3
     slots: Array<Slot>
+    dimension: Dimensions
+    lastTimeOpen?: number
 }
 
 type Dimensions = 'minecraft:overworld' | 'minecraft:the_nether' | 'minecraft:the_end'

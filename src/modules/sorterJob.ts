@@ -10,13 +10,15 @@ const sorterJob = () => {
     const transactions: Array<ChestTransaction> = []
 
     items.forEach((item) => {
-      chests.forEach((chest, chestIndex) => {
+      Object.entries(chests).forEach((entry) => {
+        const chestIndex = entry[0]
+        const chest = entry[1]
         chest.slots.every((slot, slotIndex) => {
           if (exclude && exclude[chestIndex][slotIndex].correct === true) return true
           if (item.quantity === 0) return false
           if (!slot) return true
-          if (item.type) {
-            if (slot.type === item.type && slot.count > 0) {
+          if (item.id) {
+            if (slot.type === item.id && slot.count > 0) {
               const count = slot.count < item.quantity ? slot.count : item.quantity
               const slotCount = slot.count
               slot.count = 0
@@ -24,7 +26,7 @@ const sorterJob = () => {
               transactions.push({
                 fromChest: parseInt(chestIndex),
                 fromSlot: slotIndex,
-                type: slot.type,
+                id: slot.type,
                 name: slot.name,
                 quantity: slotCount,
               })

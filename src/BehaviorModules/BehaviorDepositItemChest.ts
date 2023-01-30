@@ -5,6 +5,7 @@ import { sleep, getSecondBlockPosition } from '@/modules/utils'
 import { Bot, ChestBlock, ChestProperty, ChestTransaction, Item, LegionStateMachineTargets } from '@/types'
 import { Chest, TransferOptions } from 'mineflayer'
 import { StateBehavior } from 'mineflayer-statemachine'
+import { Block } from 'prismarine-block'
 import { Vec3 } from 'vec3'
 export default class BehaviorDepositItemChest implements StateBehavior {
   active: boolean;
@@ -59,7 +60,7 @@ export default class BehaviorDepositItemChest implements StateBehavior {
       return
     }
 
-    const chestToOpen = this.bot.blockAt(new Vec3(this.targets.position.x, this.targets.position.y, this.targets.position.z)) as ChestBlock | null
+    const chestToOpen = this.bot.blockAt(new Vec3(this.targets.position.x, this.targets.position.y, this.targets.position.z))
     if (!chestToOpen || !['chest', 'ender_chest', 'trapped_chest'].includes(chestToOpen.name)) {
       botWebsocket.log('No chest found')
       this.isEndFinished = true
@@ -88,36 +89,40 @@ export default class BehaviorDepositItemChest implements StateBehavior {
       })
   }
 
-  refreshChest(chestToOpen: ChestBlock, container: Chest) {
+  refreshChest(chestToOpen: Block, container: Chest) {
     const chest = Object.values(this.targets.chests).find(c => {
       const chestPosition = new Vec3(c.position.x, c.position.y, c.position.z)
       if (chestPosition.equals(chestToOpen.position)) return true
 
-      if (!c.secondBlock) return false
-      const chestSecondBlock = new Vec3(c.secondBlock.x, c.secondBlock.y, c.secondBlock.z)
+      if (!c.position_2) return false
+      const chestSecondBlock = new Vec3(c.position_2.x, c.position_2.y, c.position_2.z)
       if (chestSecondBlock.equals(chestToOpen.position)) return true
       return false
     })
 
     const slots = container.slots.slice(0, container.inventoryStart)
+
     if (!chest) {
-      chestToOpen.slots = slots
-      chestToOpen.lastTimeOpen = Date.now()
+      const chestOpened: ChestBlock = {
+        dimension: this.bot.game.dimension,
+        position: chestToOpen.position,
+        slots: slots,
+        lastTimeOpen: Date.now()
+      }
 
       const props = chestToOpen.getProperties() as ChestProperty
       const offset = getSecondBlockPosition(props.facing, props.type)
       if (offset) {
-        chestToOpen.secondBlock = chestToOpen.position.offset(offset.x, offset.y, offset.z)
+        chestOpened.position_2 = chestToOpen.position.offset(offset.x, offset.y, offset.z)
       }
 
-      chestToOpen.dimension = this.bot.game.dimension
-
       const chestIndext = Object.keys(this.targets.chests).length
-      this.targets.chests[chestIndext] = chestToOpen
+      this.targets.chests[chestIndext] = chestOpened
     } else {
       chest.slots = slots
       chest.lastTimeOpen = Date.now()
     }
+
     botWebsocket.sendAction('setChests', this.targets.chests)
   }
 
