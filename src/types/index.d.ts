@@ -1,6 +1,6 @@
 import { Movements } from 'mineflayer-pathfinder'
 import { StateMachineTargets } from 'mineflayer-statemachine'
-import { Bot as MineflayerBot, Dispenser, Furnace } from 'mineflayer'
+import { Bot as MineflayerBot, Dimension, Dispenser, Furnace } from 'mineflayer'
 import { Vec3 } from 'vec3'
 import { Jobs } from './defaultTypes'
 import { Block } from 'prismarine-block'
@@ -28,7 +28,7 @@ type MineCords = {
 type MineCordsConfig = MineCords & {
     tunel: 'horizontally' | 'vertically'
     orientation: Coordinates
-    world: Dimensions
+    world: Dimension
     reverse: boolean
 }
 
@@ -68,7 +68,7 @@ type ChestTransaction = { // TODO quitar opcionales!
 
 type NewChestBlock = {
     position: Vec3
-    dimension: Dimensions
+    dimension: Dimension
 }
 
 type SorterJob = {
@@ -119,12 +119,10 @@ type Config = {
 }
 
 type Portals = {
-    overworld: {
-        the_nether: Array<Vec3>,
-        the_end: Array<Vec3>
-    },
-    the_nether: Array<Vec3>,
-    the_end: Array<Vec3>
+    overworld_to_the_nether: Array<Vec3>
+    overworld_to_the_end: Array<Vec3>
+    the_nether_to_overworld: Array<Vec3>,
+    the_end_to_overworld: Array<Vec3>,
 };
 
 type ItemDrop = {
@@ -150,7 +148,7 @@ type Vec3WithDistance = Vec3 & {
 }
 
 type Vec3WithDimension = Vec3 & {
-    dimension?: Dimensions
+    dimension?: Dimension
 }
 interface LegionStateMachineTargets extends StateMachineTargets {
     movements: Movements;
@@ -290,7 +288,7 @@ type Chest = {
     name: string
     type: DepositType
     position: Vec3
-    dimension: Dimensions
+    dimension: Dimension
 };
 
 type ItemArmor = 'helmet' | 'chestplate' | 'leggings' | 'boots' | 'sword' | 'shield' | 'bow'
@@ -335,12 +333,11 @@ type ChestBlock = {
     position: Vec3
     position_2?: Vec3
     slots: Array<Slot>
-    dimension: Dimensions
+    dimension: Dimension
     lastTimeOpen?: number
     chestFound?: boolean
 }
 
-type Dimensions = 'minecraft:overworld' | 'minecraft:the_nether' | 'minecraft:the_end'
 type Facing = 'south' | 'north' | 'east' | 'west'
 type ChestPosition = 'single' | 'left' | 'right'
 

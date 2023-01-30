@@ -1,9 +1,10 @@
 import mineflayerPathfinder, { Movements } from 'mineflayer-pathfinder'
 import botWebsocket from '@/modules/botWebsocket'
-import { Bot, Dimensions, LegionStateMachineTargets, Vec3WithDimension } from '@/types'
+import { Bot, LegionStateMachineTargets, Vec3WithDimension } from '@/types'
 import mcDataLoader from 'minecraft-data'
 import movementModule from '@/modules/movementModule'
 import { StateBehavior } from 'mineflayer-statemachine'
+import { Dimension } from 'mineflayer'
 
 export default class BehaviorMoveTo implements StateBehavior {
   active: boolean
@@ -114,7 +115,7 @@ export default class BehaviorMoveTo implements StateBehavior {
       goal = new mineflayerPathfinder.goals.GoalNear(position.x, position.y, position.z, this.distance)
     }
 
-    const dimension = position.dimension ? position.dimension : this.bot.game.dimension as Dimensions
+    const dimension = position.dimension ?? this.bot.game.dimension
 
     if (dimension === this.bot.game.dimension) {
       this.bot.pathfinder.setMovements(this.movements)
@@ -124,7 +125,7 @@ export default class BehaviorMoveTo implements StateBehavior {
     }
   }
 
-  crossThePortal(dimension: Dimensions, destination: Vec3WithDimension) {
+  crossThePortal(dimension: Dimension, destination: Vec3WithDimension) {
     this.movementModule.crossThePortal(dimension, destination)
       .then(() => {
         this.startMoving()

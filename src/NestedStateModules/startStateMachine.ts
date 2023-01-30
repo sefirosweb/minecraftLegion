@@ -57,12 +57,10 @@ const startStateMachine = (bot: Bot) => {
     config: botConfig.defaultConfig,
     movements: movements,
     portals: {
-      overworld: {
-        the_nether: [],
-        the_end: []
-      },
-      the_nether: [],
-      the_end: []
+      overworld_to_the_end: [],
+      overworld_to_the_nether: [],
+      the_end_to_overworld: [],
+      the_nether_to_overworld: []
     },
 
     isNight: false,

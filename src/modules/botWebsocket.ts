@@ -1,5 +1,5 @@
 import socketIOClient, { Socket } from 'socket.io-client'
-import { Bot, BotFriends, BotwebsocketAction, Chest, Dimensions, Master, MineCords } from '@/types'
+import { Bot, BotFriends, BotwebsocketAction, Chest, Master, MineCords } from '@/types'
 import { Vec3 } from 'vec3'
 
 import configBot from '@/config'
@@ -388,7 +388,7 @@ function connect() {
 
       const chests = botconfig.getChests()
       chests[value.chestId].position = findMaster.position.floored()
-      chests[value.chestId].dimension = bot.game.dimension as Dimensions
+      chests[value.chestId].dimension = bot.game.dimension
       botconfig.setChests(chests)
     }
 

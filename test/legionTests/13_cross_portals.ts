@@ -71,10 +71,15 @@ describe('12 Cross the portals', function () {
 
     return new Promise((resolve) => {
       bot.once('spawn', () => {
-        bot.chat(`/execute as flatbot in minecraft:overworld run teleport 0 -60 0`)
+        botConfig.saveFullConfig(botConfig.defaultConfig)
+        bot.emit('reloadBotConfig')
+
         setTimeout(() => {
-          resolve()
-        }, 1000)
+          bot.chat(`/execute as flatbot in minecraft:overworld run teleport 0 -60 0`)
+          setTimeout(() => {
+            resolve()
+          }, 2000);
+        }, 2000)
       })
     })
   })
@@ -125,10 +130,15 @@ describe('12 Cross the portals', function () {
 
     return new Promise((resolve) => {
       bot.once('spawn', () => {
-        bot.chat(`/execute as flatbot in minecraft:overworld run teleport 0 -60 0`)
+        botConfig.saveFullConfig(botConfig.defaultConfig)
+        bot.emit('reloadBotConfig')
+
         setTimeout(() => {
-          resolve()
-        }, 1000)
+          bot.chat(`/execute as flatbot in minecraft:overworld run teleport 0 -60 0`)
+          setTimeout(() => {
+            resolve()
+          }, 2000);
+        }, 2000)
       })
     })
   })

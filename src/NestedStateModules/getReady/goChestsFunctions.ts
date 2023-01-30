@@ -134,6 +134,7 @@ export default (bot: Bot, targets: LegionStateMachineTargets) => {
       child: goChest,
       onTransition: () => {
         targets.position = chests[chestIndex].position
+        targets.position.dimension = chests[chestIndex].dimension
       },
       shouldTransition: () => checkItemsInInventory.isFinished() && targets.items.length > 0
     }),
