@@ -1,8 +1,9 @@
 
 
 import botWebsocket from '@/modules/botWebsocket'
-import { sleep, getSecondBlockPosition } from '@/modules/utils'
-import { Bot, ChestBlock, ChestProperty, ChestTransaction, Item, LegionStateMachineTargets } from '@/types'
+import refreshChest from '@/modules/refreshChests'
+import { sleep } from '@/modules/utils'
+import { Bot, ChestTransaction, Item, LegionStateMachineTargets } from '@/types'
 import { Chest, TransferOptions } from 'mineflayer'
 import { StateBehavior } from 'mineflayer-statemachine'
 import { Block } from 'prismarine-block'
@@ -90,40 +91,7 @@ export default class BehaviorDepositItemChest implements StateBehavior {
   }
 
   refreshChest(chestToOpen: Block, container: Chest) {
-    const chest = Object.values(this.targets.chests).find(c => {
-      const chestPosition = new Vec3(c.position.x, c.position.y, c.position.z)
-      if (chestPosition.equals(chestToOpen.position)) return true
-
-      if (!c.position_2) return false
-      const chestSecondBlock = new Vec3(c.position_2.x, c.position_2.y, c.position_2.z)
-      if (chestSecondBlock.equals(chestToOpen.position)) return true
-      return false
-    })
-
-    const slots = container.slots.slice(0, container.inventoryStart)
-
-    if (!chest) {
-      const chestOpened: ChestBlock = {
-        dimension: this.bot.game.dimension,
-        position: chestToOpen.position,
-        slots: slots,
-        lastTimeOpen: Date.now()
-      }
-
-      const props = chestToOpen.getProperties() as ChestProperty
-      const offset = getSecondBlockPosition(props.facing, props.type)
-      if (offset) {
-        chestOpened.position_2 = chestToOpen.position.offset(offset.x, offset.y, offset.z)
-      }
-
-      const chestIndext = Object.keys(this.targets.chests).length
-      this.targets.chests[chestIndext] = chestOpened
-    } else {
-      chest.slots = slots
-      chest.lastTimeOpen = Date.now()
-    }
-
-    botWebsocket.sendAction('setChests', this.targets.chests)
+    refreshChest(chestToOpen, container, this.bot, this.targets)
   }
 
   checkItemDestinationAndMoveToInventory(container: Chest, toSlot: number): Promise<void> {
