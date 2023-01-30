@@ -1,6 +1,4 @@
 
-//@ts-nocheck
-
 import { Bot, LegionStateMachineTargets } from "@/types"
 import { StateBehavior } from "mineflayer-statemachine";
 

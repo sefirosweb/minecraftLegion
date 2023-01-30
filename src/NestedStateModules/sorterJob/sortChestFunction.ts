@@ -49,9 +49,7 @@ function sortChestFunction(bot: Bot, targets: LegionStateMachineTargets) {
       onTransition: () => {
         //@ts-ignore
         const calculatedSlotsToSort = calculateSlotsToSort(targets.chests, targets.sorterJob.newChestSort)
-        //@ts-ignore
         targets.sorterJob.correctChests = calculatedSlotsToSort.correctChests
-        //@ts-ignore
         targets.sorterJob.slotsToSort = calculatedSlotsToSort.slotsToSort
       },
       shouldTransition: () => true
@@ -61,8 +59,7 @@ function sortChestFunction(bot: Bot, targets: LegionStateMachineTargets) {
       parent: checkChestsToSort,
       child: findItems,
       onTransition: () => {
-        //@ts-ignore
-        targets.pickUpItems = findItemsInChests(Object.values(targets.chests), targets.sorterJob.slotsToSort, targets.sorterJob.correctChests)
+        targets.pickUpItems = findItemsInChests(targets.chests, targets.sorterJob.slotsToSort, targets.sorterJob.correctChests)
       },
       shouldTransition: () => true
     }),

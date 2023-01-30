@@ -1,5 +1,4 @@
-//@ts-nocheck
-import { ChestTransaction, Item, Chests } from "@/types"
+import { ChestTransaction, Item, Chests, CorrectChest } from "@/types"
 
 const sorterJob = () => {
 
@@ -40,6 +39,7 @@ const sorterJob = () => {
     return transactions
   }
 
+  //@ts-ignore
   const sortChestVec = (a, b, sortBy, sort) => {
     let tempA = a
     let tempB = b
@@ -73,13 +73,19 @@ const sorterJob = () => {
     return tempA.position.y - tempB.position.y
   }
 
+  //@ts-ignore
+
   const sortChests = (chestInput) => {
     const chests = Object.values(chestInput).sort((a, b) => sortChestVec(a, b, 'z', 'asc'))
+    //@ts-ignore
+
     const allChests = chests.map(chest => chest.slots)
     const allItems = allChests
       .reduce((items, chest) => {
+        //@ts-ignore
         chest.forEach(item => {
           if (item === null) return
+          //@ts-ignore
           const indexItem = items.findIndex(i => i.type === item.type)
           if (indexItem >= 0) {
             items[indexItem].count += item.count
@@ -88,12 +94,15 @@ const sorterJob = () => {
           }
         })
         return items
+        //@ts-ignore
       }, []).sort((a, b) => a.type - b.type)
 
     let chestIndex = 0
     const newChestSort = []
+    //@ts-ignore
     let newSlots = []
 
+    //@ts-ignore
     allItems.forEach(item => {
       let count = item.count
 
@@ -105,6 +114,7 @@ const sorterJob = () => {
           newSlots.push(itemToDeposit)
 
           if (newSlots.length === allChests[chestIndex].length) {
+            //@ts-ignore
             newChestSort.push(newSlots)
             chestIndex++
             newSlots = []
@@ -115,6 +125,7 @@ const sorterJob = () => {
         const freeSlots = allChests[chestIndex].length - newSlots.length
 
         if (slotNeeded > freeSlots) {
+          //@ts-ignore
           newChestSort.push(newSlots)
           chestIndex++
           newSlots = []
@@ -127,6 +138,7 @@ const sorterJob = () => {
           newSlots.push(itemToDeposit)
 
           if (newSlots.length === allChests[chestIndex].length) {
+            //@ts-ignore
             newChestSort.push(newSlots)
             chestIndex++
             newSlots = []
@@ -135,18 +147,24 @@ const sorterJob = () => {
       }
     })
 
+    //@ts-ignore
     newChestSort.push(newSlots)
     return newChestSort
   }
 
+  //@ts-ignore
   const calculateInventoryToSort = (inventoryItemsInput, inputChests, newChestSort) => {
     // Function in tests
     const chests = JSON.parse(JSON.stringify(inputChests))
     const inventoryItems = JSON.parse(JSON.stringify(inventoryItemsInput))
 
+    //@ts-ignore
     const slotsToSort = []
+    //@ts-ignore
     inventoryItems.forEach((everyInventoryItem) => {
+      //@ts-ignore
       newChestSort.every((chest, chestIndex) => {
+        //@ts-ignore
         chest.every((slot, slotIndex) => {
           if (slot.type !== everyInventoryItem.type) return true
 
@@ -186,28 +204,36 @@ const sorterJob = () => {
       })
     })
 
+    //@ts-ignore
     return slotsToSort
   }
 
+  //@ts-ignore
   const calculateSlotsToSort = (chests, newChestSort) => {
-    const correctChests = Object.values(chests).map(chest => chest.slots.map(slot => { return { correct: false } }))
+    //@ts-ignore
+    const correctChests: Array<CorrectChest> = Object.values(chests).map(chest => chest.slots.map(() => { return { correct: false } }))
 
-    const slotsToSort = []
+    const slotsToSort: Array<ChestTransaction> = []
+    //@ts-ignore
     newChestSort.every((chest, chestIndex) => {
+      //@ts-ignore
       chest.every((slot, slotIndex) => {
         if (
           !chests[chestIndex].slots[slotIndex] ||
           slot.type !== chests[chestIndex].slots[slotIndex].type ||
           slot.count !== chests[chestIndex].slots[slotIndex].count
         ) {
+
           slotsToSort.push({
             toChest: chestIndex,
             toSlot: slotIndex,
-            type: slot.type,
+            id: slot.type,
             name: slot.name,
             quantity: slot.count
           })
+
         } else {
+          //@ts-ignore
           correctChests[chestIndex][slotIndex].correct = true
         }
         if (slotsToSort.length < 27) return true

@@ -52,8 +52,24 @@ type BreederJob = {
     feedEntity: Entity | undefined
 }
 
+type CorrectChest = {
+    correct: boolean
+}
+
+type ChestTransaction = { // TODO quitar opcionales!
+    name?: string,
+    quantity: number,
+    fromChest?: number,
+    toChest?: number,
+    fromSlot?: number,
+    toSlot?: number,
+    id: number
+}
+
 type SorterJob = {
-    emptyChests: Array<any>
+    emptyChests: Array<ChestBlock>
+    correctChests: Array<CorrectChest>
+    slotsToSort: Array<ChestTransaction>
 }
 
 type CrafterJob = {}
@@ -297,16 +313,6 @@ type Recpie = {
     items: Array<ItemRecipe>
     result: ItemRecipe
     needCraftingTable: boolean
-}
-
-type ChestTransaction = {
-    fromChest: number,
-    fromSlot: number,
-    toChest?: number,
-    toSlot?: number,
-    id: number
-    name?: string,
-    quantity: number,
 }
 
 type ItemRecipe = {

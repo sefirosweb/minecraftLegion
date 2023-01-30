@@ -83,7 +83,9 @@ const startStateMachine = (bot: Bot) => {
       nextLayer: undefined
     },
     sorterJob: {
-      emptyChests: []
+      emptyChests: [],
+      correctChests: [],
+      slotsToSort: []
     },
     chests: {},
     farmerJob: {
