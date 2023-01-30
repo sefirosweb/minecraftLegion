@@ -62,7 +62,7 @@ function sortChestFunction(bot: Bot, targets: LegionStateMachineTargets) {
       child: findItems,
       onTransition: () => {
         //@ts-ignore
-        targets.pickUpItems = findItemsInChests(targets.chests, targets.sorterJob.slotsToSort, targets.sorterJob.correctChests)
+        targets.pickUpItems = findItemsInChests(Object.values(targets.chests), targets.sorterJob.slotsToSort, targets.sorterJob.correctChests)
       },
       shouldTransition: () => true
     }),

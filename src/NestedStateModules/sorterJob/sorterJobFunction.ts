@@ -61,8 +61,8 @@ const sorterJobFunction = (bot: Bot, targets: LegionStateMachineTargets) => {
   sortChestFunction.y = 263
 
   const findNewChests = () => {
-
-    targets.chests.forEach(c => {
+    
+    Object.entries(targets.chests).forEach(c => {
       c.chestFound = false
     })
 
@@ -109,13 +109,13 @@ const sorterJobFunction = (bot: Bot, targets: LegionStateMachineTargets) => {
 
     const removeValFromIndex = []
 
-    targets.chests.forEach((c, cKey) => {
+    Object.entries(targets.chests).forEach((c, cKey) => { // TODO pendiente
       if (c.chestFound === false) {
         removeValFromIndex.push(cKey)
       }
     })
 
-    if (removeValFromIndex.length > 0) {
+    if (removeValFromIndex.length > 0) { // TODO pendiente
       for (let i = removeValFromIndex.length - 1; i >= 0; i--) {
 
         targets.chests.splice(removeValFromIndex[i], 1)

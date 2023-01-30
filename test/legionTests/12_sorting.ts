@@ -2,6 +2,7 @@ import botConfigLoader from '@/modules/botConfig'
 import { Config } from '@/types'
 import { Jobs } from '@/types/defaultTypes'
 import { bot } from '../hooks'
+import botWebsocket from '@/modules/botWebsocket'
 
 describe('11 Sorting items', function () {
 
@@ -10,6 +11,7 @@ describe('11 Sorting items', function () {
     const config: Config = {
       ...botConfig.defaultConfig,
       job: Jobs.sorter,
+      // job: Jobs.none,
       itemsToBeReady: [],
     }
 
@@ -27,6 +29,8 @@ describe('11 Sorting items', function () {
   })
 
   it('Sorted', (): Promise<void> => {
+    botWebsocket.sendAction('setChests', {})
+
     return new Promise((resolve) => {
       bot.once('beatMob', () => { // TODO change
         resolve()

@@ -4,21 +4,19 @@ import { ChestTransaction, Item, Chests } from "@/types"
 const sorterJob = () => {
 
   const findItemsInChests = (chestInput: Chests, itemsInput: Array<Item>, exclude?: any) => {
-    const chests: Chests = JSON.parse(JSON.stringify(chestInput))
-    const items: Array<Item> = JSON.parse(JSON.stringify(itemsInput))
+    const chests = structuredClone(chestInput)
+    const items = structuredClone(itemsInput)
 
     const transactions: Array<ChestTransaction> = []
 
     items.forEach((item) => {
-      Object.entries(chests).forEach((entry) => {
-        const chestIndex = entry[0]
-        const chest = entry[1]
+      chests.forEach((chest, chestIndex) => {
         chest.slots.every((slot, slotIndex) => {
           if (exclude && exclude[chestIndex][slotIndex].correct === true) return true
           if (item.quantity === 0) return false
           if (!slot) return true
-          if (item.id) {
-            if (slot.type === item.id && slot.count > 0) {
+          if (item.type) {
+            if (slot.type === item.type && slot.count > 0) {
               const count = slot.count < item.quantity ? slot.count : item.quantity
               const slotCount = slot.count
               slot.count = 0
@@ -26,7 +24,7 @@ const sorterJob = () => {
               transactions.push({
                 fromChest: parseInt(chestIndex),
                 fromSlot: slotIndex,
-                id: slot.type,
+                type: slot.type,
                 name: slot.name,
                 quantity: slotCount,
               })
@@ -73,8 +71,8 @@ const sorterJob = () => {
     return tempA.position.y - tempB.position.y
   }
 
-  const sortChests = (chests) => {
-    chests.sort((a, b) => sortChestVec(a, b, 'z', 'asc'))
+  const sortChests = (chestInput) => {
+    const chests = Object.values(chestInput).sort((a, b) => sortChestVec(a, b, 'z', 'asc'))
     const allChests = chests.map(chest => chest.slots)
     const allItems = allChests
       .reduce((items, chest) => {
@@ -190,7 +188,7 @@ const sorterJob = () => {
   }
 
   const calculateSlotsToSort = (chests, newChestSort) => {
-    const correctChests = chests.map(chest => chest.slots.map(slot => { return { correct: false } }))
+    const correctChests = Object.values(chests).map(chest => chest.slots.map(slot => { return { correct: false } }))
 
     const slotsToSort = []
     newChestSort.every((chest, chestIndex) => {
