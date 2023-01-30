@@ -70,6 +70,7 @@ type SorterJob = {
     emptyChests: Array<ChestBlock>
     correctChests: Array<CorrectChest>
     slotsToSort: Array<ChestTransaction>
+    chest: Block | undefined
 }
 
 type CrafterJob = {}

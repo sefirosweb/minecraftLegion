@@ -1,5 +1,5 @@
 import botWebsocket from '@/modules/botWebsocket'
-import { Bot, LegionStateMachineTargets } from '@/types';
+import { Bot, ChestBlock, LegionStateMachineTargets } from '@/types';
 import { StateBehavior } from 'mineflayer-statemachine';
 import vec3 from 'vec3'
 export default class BehaviorcCheckItemsInChest implements StateBehavior {
@@ -21,9 +21,6 @@ export default class BehaviorcCheckItemsInChest implements StateBehavior {
     this.stateName = 'BehaviorcCheckItemsInChest'
     this.isEndFinished = false
     this.canOpenChest = false
-
-    //@ts-ignore
-    this.chest = false
   }
 
   onStateEntered() {
@@ -35,42 +32,48 @@ export default class BehaviorcCheckItemsInChest implements StateBehavior {
       this.isEndFinished = true
     }, 5000)
 
-    //@ts-ignore
-    this.bot.openContainer(this.targets.sorterJob.chest).then((container, i) => {
-      const slots = container.slots.slice(0, container.inventoryStart)
-      const chestIndex = Object.values(this.targets.chests).findIndex(c => {
-        //@ts-ignore
-        if (vec3(c.position).equals(this.targets.sorterJob.chest.position)) return true
-        //@ts-ignore
-        if (c.secondBlock && vec3(c.secondBlock.position).equals(this.targets.sorterJob.chest.position)) return true
-        //@ts-ignore
-        if (this.targets.sorterJob.chest.secondBlock && vec3(c.position).equals(this.targets.sorterJob.chest.secondBlock.position)) return true
-        //@ts-ignore
-        if (c.secondBlock && this.targets.sorterJob.chest.secondBlock && vec3(c.secondBlock.position).equals(this.targets.sorterJob.chest.secondBlock.position)) return true
-        return false
+
+    if (!this.targets.sorterJob.chest) {
+      throw new Error('Chest ist not defined!')
+    }
+
+    const chest = structuredClone(this.targets.sorterJob.chest)
+
+    this.bot.openContainer(this.targets.sorterJob.chest)
+      .then((container) => {
+        const slots = container.slots.slice(0, container.inventoryStart)
+        const chestIndex = Object.values(this.targets.chests).findIndex(c => {
+          if (vec3(c.position).equals(chest.position)) return true
+          if (c.position_2 && vec3(c.position_2).equals(chest.position)) return true
+          return false
+        })
+
+        if (chestIndex >= 0) {
+
+          this.targets.chests[chestIndex].slots = slots
+          this.targets.chests[chestIndex].lastTimeOpen = Date.now()
+
+        } else {
+
+          const newChest: ChestBlock = {
+            dimension: this.bot.game.dimension,
+            position: chest.position,
+            slots,
+            lastTimeOpen: Date.now()
+          }
+
+          const chestIndext = Object.keys(this.targets.chests).length
+          this.targets.chests[chestIndext] = newChest
+        }
+
+        botWebsocket.sendAction('setChests', this.targets.chests)
+
+        setTimeout(() => {
+          container.close()
+          this.canOpenChest = true
+          this.isEndFinished = true
+        }, 500)
       })
-      if (chestIndex >= 0) {
-        this.targets.chests[chestIndex].slots = slots
-        this.targets.chests[chestIndex].lastTimeOpen = Date.now()
-      } else {
-        //@ts-ignore
-        this.targets.sorterJob.chest.slots = slots
-        //@ts-ignore
-        this.targets.sorterJob.chest.lastTimeOpen = Date.now()
-
-        const chestIndext = Object.keys(this.targets.chests).length
-        //@ts-ignore
-        this.targets.chests[chestIndext] = this.targets.sorterJob.chest
-      }
-
-      botWebsocket.sendAction('setChests', this.targets.chests)
-
-      setTimeout(() => {
-        container.close()
-        this.canOpenChest = true
-        this.isEndFinished = true
-      }, 500)
-    })
   }
 
   onStateExited() {
