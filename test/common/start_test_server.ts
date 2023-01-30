@@ -8,7 +8,7 @@ import { Wrap } from 'minecraft-wrap'
 import { download } from 'minecraft-wrap'
 
 const propOverrides = {
-    'level-type': 'FLAT',
+    'level-type': 'DEFAULT',
     'spawn-npcs': 'true',
     'spawn-animals': 'true',
     'online-mode': 'false',
@@ -49,9 +49,11 @@ download(version.minecraftVersion, MC_SERVER_JAR, (err: Error) => {
         }
 
         mc.ping(serverConection, () => {
-            console.log('pong')
-            wrap.writeServer('op flatbot\n')
-            wrap.writeServer('op Lordvivi\n')
+            setTimeout(() => {
+                console.log('pong')
+                wrap.writeServer('op flatbot\n')
+                wrap.writeServer('op Lordvivi\n')
+            }, 10000);
         })
     })
 })
