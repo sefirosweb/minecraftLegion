@@ -32,9 +32,7 @@ describe('11 Sorting items', function () {
     botWebsocket.sendAction('setChests', {})
 
     return new Promise((resolve) => {
-      bot.once('beatMob', () => { // TODO change
-        resolve()
-      })
+      bot.once('finishedJob', () => resolve())
     })
   })
 

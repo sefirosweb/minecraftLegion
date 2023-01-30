@@ -278,7 +278,7 @@ const sorterJobFunction = (bot: Bot, targets: LegionStateMachineTargets) => {
         if (!checkItemsInChest.getCanOpenChest()) {
           const chestIndex = Object.values(targets.chests).findIndex(c => { // TODO revisar
 
-            if(!targets.sorterJob.chest) throw new Error('Chest is not defined!')
+            if (!targets.sorterJob.chest) throw new Error('Chest is not defined!')
             const chest = targets.sorterJob.chest
 
             if (vec3(c.position).equals(chest.position)) return true
@@ -308,6 +308,9 @@ const sorterJobFunction = (bot: Bot, targets: LegionStateMachineTargets) => {
     new StateTransition({
       parent: sortChestFunction,
       child: checkItemsInInventory,
+      onTransition() {
+        bot.emit('finishedJob')
+      },
       shouldTransition: () => sortChestFunction.isFinished()
     })
 
