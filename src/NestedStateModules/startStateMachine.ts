@@ -86,6 +86,8 @@ const startStateMachine = (bot: Bot) => {
       emptyChests: [],
       correctChests: [],
       slotsToSort: [],
+      newChestSort: [],
+      newChests: [],
       chest: undefined
     },
     chests: {},

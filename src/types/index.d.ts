@@ -66,9 +66,16 @@ type ChestTransaction = { // TODO quitar opcionales!
     id: number
 }
 
+type NewChestBlock = {
+    position: Vec3
+    dimension: Dimensions
+}
+
 type SorterJob = {
     emptyChests: Array<ChestBlock>
-    correctChests: Array<CorrectChest>
+    correctChests: Array<Array<CorrectChest>>
+    newChestSort: Array<Array<Slot>>
+    newChests: Array<NewChestBlock>
     slotsToSort: Array<ChestTransaction>
     chest: Block | undefined
 }
@@ -330,6 +337,7 @@ type ChestBlock = {
     slots: Array<Slot>
     dimension: Dimensions
     lastTimeOpen?: number
+    chestFound?: boolean
 }
 
 type Dimensions = 'minecraft:overworld' | 'minecraft:the_nether' | 'minecraft:the_end'

@@ -47,7 +47,6 @@ function sortChestFunction(bot: Bot, targets: LegionStateMachineTargets) {
       parent: start,
       child: checkChestsToSort,
       onTransition: () => {
-        //@ts-ignore
         const calculatedSlotsToSort = calculateSlotsToSort(targets.chests, targets.sorterJob.newChestSort)
         targets.sorterJob.correctChests = calculatedSlotsToSort.correctChests
         targets.sorterJob.slotsToSort = calculatedSlotsToSort.slotsToSort

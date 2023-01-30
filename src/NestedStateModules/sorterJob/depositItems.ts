@@ -26,9 +26,7 @@ function depositItems(bot: Bot, targets: LegionStateMachineTargets) {
   let pendingTransaction: Array<PendingTransaction>
   const findChests = () => {
     pendingTransaction = []
-    //@ts-ignore
     Object.values(targets.chests).forEach((chest, chestIndex) => {
-      //@ts-ignore
       const items = targets.sorterJob.slotsToSort.filter(i => i.toChest === chestIndex)
       if (items.length > 0) {
         pendingTransaction.push({

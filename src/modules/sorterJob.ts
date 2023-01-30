@@ -139,15 +139,11 @@ const sorterJob = () => {
   }
 
 
-  //@ts-ignore
-  const calculateSlotsToSort = (chests, newChestSort) => {
-    //@ts-ignore
-    const correctChests: Array<CorrectChest> = Object.values(chests).map(chest => chest.slots.map(() => { return { correct: false } }))
+  const calculateSlotsToSort = (chests: Chests, newChestSort: Array<Array<Slot>>) => {
+    const correctChests: Array<Array<CorrectChest>> = Object.values(chests).map(chest => chest.slots.map(() => { return { correct: false } }))
 
     const slotsToSort: Array<ChestTransaction> = []
-    //@ts-ignore
     newChestSort.every((chest, chestIndex) => {
-      //@ts-ignore
       chest.every((slot, slotIndex) => {
         if (
           !chests[chestIndex].slots[slotIndex] ||
@@ -164,7 +160,6 @@ const sorterJob = () => {
           })
 
         } else {
-          //@ts-ignore
           correctChests[chestIndex][slotIndex].correct = true
         }
         if (slotsToSort.length < 27) return true

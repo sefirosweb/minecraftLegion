@@ -4,11 +4,12 @@ import { StateTransition, BehaviorIdle, NestedStateMachine } from 'mineflayer-st
 import botWebsocket from '@/modules/botWebsocket'
 import BehaviorcCheckItemsInChest from '@/BehaviorModules/sorterJob/BehaviorcCheckItemsInChest'
 import BehaviorMoveTo from '@/BehaviorModules/BehaviorMoveTo'
-import { Bot, LegionStateMachineTargets } from '@/types'
+import { Bot, ChestBlock, LegionStateMachineTargets } from '@/types'
 import sorterJob from '@/modules/sorterJob'
 import inventoryModule from '@/modules/inventoryModule'
 import DepositItemsInInventory from '@/NestedStateModules/sorterJob/depositItemsInInventory'
 import SortChestFunction from '@/NestedStateModules/sorterJob/sortChestFunction'
+import { Block } from 'prismarine-block'
 
 const sorterJobFunction = (bot: Bot, targets: LegionStateMachineTargets) => {
   const { findChests } = inventoryModule(bot)
@@ -57,8 +58,7 @@ const sorterJobFunction = (bot: Bot, targets: LegionStateMachineTargets) => {
 
   const findNewChests = () => {
 
-    Object.entries(targets.chests).forEach(c => {
-      //@ts-ignore
+    Object.values(targets.chests).forEach(c => {
       c.chestFound = false
     })
 
@@ -69,24 +69,14 @@ const sorterJobFunction = (bot: Bot, targets: LegionStateMachineTargets) => {
 
 
     chests.forEach(chest => {
-      // Find chest in targets.chests
-      const cKey = Object.values(targets.chests).findIndex(tc => { // TODO revisar
+      const cKey = Object.values(targets.chests).findIndex(tc => {
         if (
-          // Both must be second block or not
-
-          //@ts-ignore
-          (tc.secondBlock === undefined) === (chest.secondBlock === undefined) &&
+          (tc.position_2 === undefined) === (chest.secondBlock === undefined) &&
           (
-
             vec3(tc.position).equals(chest.position) ||
-
-            //@ts-ignore
-            (tc.secondBlock && vec3(tc.secondBlock.position).equals(chest.position)) ||
-
+            (tc.position_2 && vec3(tc.position_2).equals(chest.position)) ||
             (chest.secondBlock && vec3(tc.position).equals(chest.secondBlock.position)) ||
-
-            //@ts-ignore
-            (tc.secondBlock && chest.secondBlock && vec3(tc.secondBlock.position).equals(chest.secondBlock.position))
+            (tc.position_2 && chest.secondBlock && vec3(tc.position_2).equals(chest.secondBlock.position))
           )
         ) {
           return true
@@ -97,7 +87,6 @@ const sorterJobFunction = (bot: Bot, targets: LegionStateMachineTargets) => {
 
       if (cKey >= 0) {
 
-        //@ts-ignore
         targets.chests[cKey].chestFound = true
       } else {
         //@ts-ignore
@@ -109,59 +98,47 @@ const sorterJobFunction = (bot: Bot, targets: LegionStateMachineTargets) => {
     })
 
 
-    //@ts-ignore
-    const removeValFromIndex = []
+    // const removeValFromIndex: Array<number> = []
 
-    Object.entries(targets.chests).forEach((c, cKey) => { // TODO pendiente
-      //@ts-ignore
-      if (c.chestFound === false) {
-        removeValFromIndex.push(cKey)
-      }
-    })
+    // Object.values(targets.chests).forEach((c, cKey) => { // TODO pendiente
+    //   if (c.chestFound === false) {
+    //     removeValFromIndex.push(cKey)
+    //   }
+    // })
 
-    if (removeValFromIndex.length > 0) { // TODO pendiente
-      for (let i = removeValFromIndex.length - 1; i >= 0; i--) {
-
-        //@ts-ignore
-        targets.chests.splice(removeValFromIndex[i], 1)
-      }
-
-      botWebsocket.sendAction('setChests', targets.chests)
-    }
+    // if (removeValFromIndex.length > 0) { // TODO pendiente
+    //   for (let i = removeValFromIndex.length - 1; i >= 0; i--) {
+    //     targets.chests.splice(removeValFromIndex[i], 1)
+    //   }
+    //   botWebsocket.sendAction('setChests', targets.chests)
+    // }
   }
 
-  const customSortJobAddNewChestToCheck = (chest: any, isOpen: any, secondBlock: any) => {
+  const customSortJobAddNewChestToCheck = (chest: Block, isOpen: number, secondBlock: Block) => {
     if (!isOpen) {
       if (
         /* Check if this chest closed is last chest closed by bot */
         (
 
-          //@ts-ignore
           !targets.sorterJob.chest ||
-
-          //@ts-ignore
           !chest.position.equals(targets.sorterJob.chest.position)
         ) &&
         /* Check if pending chest to open is in list */
 
-        //@ts-ignore
         !targets.sorterJob.newChests.find(c => {
           if (vec3(c.position).equals(chest.position)) return true
           if (secondBlock && vec3(c.position).equals(secondBlock.position)) return true
           return false
         })
       ) {
-        const chestInfo = Object.values(targets.chests).find(c => { // TODO revisar
 
+        const chestInfo = Object.values(targets.chests).find(c => {
           if (vec3(c.position).equals(chest.position)) return true
-
           if (secondBlock && vec3(c.position).equals(secondBlock.position)) return true
           return false
         })
 
-        //@ts-ignore
-        if (!chestInfo || Date.now() - chestInfo.lastTimeOpen > 5000) {
-
+        if (!chestInfo || chestInfo.lastTimeOpen === undefined || Date.now() - chestInfo.lastTimeOpen > 5000) {
           //@ts-ignore
           targets.sorterJob.newChests.push(chest)
         }
@@ -175,14 +152,12 @@ const sorterJobFunction = (bot: Bot, targets: LegionStateMachineTargets) => {
       child: checkItemsInInventory,
       onTransition: () => {
         targets.sorterJob.emptyChests = []
-
-        //@ts-ignore
         targets.sorterJob.newChests = []
 
-        //@ts-ignore
+        //@ts-ignore pendiente de PR: https://github.com/PrismarineJS/mineflayer/pull/2919
         bot.removeListener('chestLidMove', customSortJobAddNewChestToCheck)
 
-        //@ts-ignore
+        //@ts-ignore pendiente de PR: https://github.com/PrismarineJS/mineflayer/pull/2919
         bot.on('chestLidMove', customSortJobAddNewChestToCheck)
       },
       shouldTransition: () => true
@@ -250,8 +225,6 @@ const sorterJobFunction = (bot: Bot, targets: LegionStateMachineTargets) => {
           const newChestSort = sortChests(targets.chests)
           const calculatedSlotsToSort = calculateSlotsToSort(targets.chests, newChestSort)
           if (calculatedSlotsToSort.slotsToSort.length > 0) {
-
-            //@ts-ignore
             targets.sorterJob.newChestSort = newChestSort
             return true
           }
@@ -278,24 +251,23 @@ const sorterJobFunction = (bot: Bot, targets: LegionStateMachineTargets) => {
       child: checkNewChests,
       onTransition: () => {
         if (!checkItemsInChest.getCanOpenChest()) {
+          if (!targets.sorterJob.chest) throw new Error('Chest is not defined!')
+          const chest = targets.sorterJob.chest
           const chestIndex = Object.values(targets.chests).findIndex(c => { // TODO revisar
 
-            //@ts-ignore
-            if (vec3(c.position).equals(targets.sorterJob.chest.position)) return true
+            if (vec3(c.position).equals(chest.position)) return true
 
-            //@ts-ignore
-            if (targets.sorterJob.chest.secondBlock && vec3(c.position).equals(targets.sorterJob.chest.secondBlock.position)) return true
+            // if (chest.secondBlock && vec3(c.position).equals(chest.secondBlock.position)) return true // TODO revisar
             return false
           })
           if (chestIndex >= 0) {
 
             //@ts-ignore
-            targets.chests.splice(chestIndex, 1)
+            // targets.chests.splice(chestIndex, 1) // TODO revisar
           }
         }
       },
 
-      //@ts-ignore
       shouldTransition: () => checkItemsInChest.isFinished() && targets.sorterJob.newChests.length === 0
     }),
 
@@ -306,17 +278,18 @@ const sorterJobFunction = (bot: Bot, targets: LegionStateMachineTargets) => {
         if (!checkItemsInChest.getCanOpenChest()) {
           const chestIndex = Object.values(targets.chests).findIndex(c => { // TODO revisar
 
-            //@ts-ignore
-            if (vec3(c.position).equals(targets.sorterJob.chest.position)) return true
+            if(!targets.sorterJob.chest) throw new Error('Chest is not defined!')
+            const chest = targets.sorterJob.chest
 
-            //@ts-ignore
-            if (targets.sorterJob.chest.secondBlock && vec3(c.position).equals(targets.sorterJob.chest.secondBlock.position)) return true
+            if (vec3(c.position).equals(chest.position)) return true
+
+            // if (chest.secondBlock && vec3(c.position).equals(chest.secondBlock.position)) return true // TODO revisar
             return false
           })
           if (chestIndex >= 0) {
 
             //@ts-ignore
-            targets.chests.splice(chestIndex, 1)
+            // targets.chests.splice(chestIndex, 1) // TODO revisar
           }
         }
 
