@@ -8,7 +8,7 @@ import { Wrap } from 'minecraft-wrap'
 import { download } from 'minecraft-wrap'
 
 const propOverrides = {
-    'level-type': 'DEFAULT',
+    'level-type': 'FLAT',
     'spawn-npcs': 'true',
     'spawn-animals': 'true',
     'online-mode': 'false',
