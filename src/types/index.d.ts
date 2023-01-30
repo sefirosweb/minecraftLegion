@@ -308,6 +308,7 @@ type Slot = {
     name: string
     type: number
     count: number
+    stackSize: number
 }
 
 type Recpie = {

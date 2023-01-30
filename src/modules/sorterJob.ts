@@ -1,4 +1,4 @@
-import { ChestTransaction, Item, Chests, CorrectChest } from "@/types"
+import { ChestTransaction, Item, Chests, CorrectChest, ChestBlock, Slot } from "@/types"
 
 const sorterJob = () => {
 
@@ -39,8 +39,7 @@ const sorterJob = () => {
     return transactions
   }
 
-  //@ts-ignore
-  const sortChestVec = (a, b, sortBy, sort) => {
+  const sortChestVec = (a: ChestBlock, b: ChestBlock, sortBy: string, sort: string) => {
     let tempA = a
     let tempB = b
     if (sort === 'desc') {
@@ -48,7 +47,6 @@ const sorterJob = () => {
       tempB = a
     }
 
-    // Sort by Z
     if (sortBy === 'z') {
       if (tempA.position.z - tempB.position.z !== 0) {
         return tempA.position.z - tempB.position.z
@@ -61,7 +59,6 @@ const sorterJob = () => {
       return tempA.position.y - tempB.position.y
     }
 
-    // Sort by X
     if (tempA.position.x - tempB.position.x !== 0) {
       return tempA.position.x - tempB.position.x
     }
@@ -73,19 +70,14 @@ const sorterJob = () => {
     return tempA.position.y - tempB.position.y
   }
 
-  //@ts-ignore
-
-  const sortChests = (chestInput) => {
+  const sortChests = (chestInput: Chests) => {
     const chests = Object.values(chestInput).sort((a, b) => sortChestVec(a, b, 'z', 'asc'))
-    //@ts-ignore
 
     const allChests = chests.map(chest => chest.slots)
     const allItems = allChests
       .reduce((items, chest) => {
-        //@ts-ignore
         chest.forEach(item => {
           if (item === null) return
-          //@ts-ignore
           const indexItem = items.findIndex(i => i.type === item.type)
           if (indexItem >= 0) {
             items[indexItem].count += item.count
@@ -94,15 +86,12 @@ const sorterJob = () => {
           }
         })
         return items
-        //@ts-ignore
       }, []).sort((a, b) => a.type - b.type)
 
     let chestIndex = 0
-    const newChestSort = []
-    //@ts-ignore
-    let newSlots = []
+    const newChestSort: Array<Array<Slot>> = []
+    let newSlots: Array<Slot> = []
 
-    //@ts-ignore
     allItems.forEach(item => {
       let count = item.count
 
@@ -114,18 +103,17 @@ const sorterJob = () => {
           newSlots.push(itemToDeposit)
 
           if (newSlots.length === allChests[chestIndex].length) {
-            //@ts-ignore
             newChestSort.push(newSlots)
             chestIndex++
             newSlots = []
           }
         }
       } else {
+
         const slotNeeded = Math.ceil(count / item.stackSize)
         const freeSlots = allChests[chestIndex].length - newSlots.length
 
         if (slotNeeded > freeSlots) {
-          //@ts-ignore
           newChestSort.push(newSlots)
           chestIndex++
           newSlots = []
@@ -138,7 +126,6 @@ const sorterJob = () => {
           newSlots.push(itemToDeposit)
 
           if (newSlots.length === allChests[chestIndex].length) {
-            //@ts-ignore
             newChestSort.push(newSlots)
             chestIndex++
             newSlots = []
@@ -147,7 +134,6 @@ const sorterJob = () => {
       }
     })
 
-    //@ts-ignore
     newChestSort.push(newSlots)
     return newChestSort
   }
