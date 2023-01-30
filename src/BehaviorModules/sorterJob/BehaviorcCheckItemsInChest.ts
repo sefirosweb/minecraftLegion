@@ -39,7 +39,10 @@ export default class BehaviorcCheckItemsInChest implements StateBehavior {
 
     const chest = structuredClone(this.targets.sorterJob.chest)
 
-    this.bot.openContainer(this.targets.sorterJob.chest)
+    const chestBlock = this.bot.blockAt(this.targets.sorterJob.chest.position)
+    if(!chestBlock) throw new Error('Chest not found!')
+
+    this.bot.openContainer(chestBlock)
       .then((container) => {
         const slots = container.slots.slice(0, container.inventoryStart)
         const chestIndex = Object.values(this.targets.chests).findIndex(c => {

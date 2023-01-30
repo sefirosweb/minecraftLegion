@@ -198,12 +198,10 @@ const sorterJobFunction = (bot: Bot, targets: LegionStateMachineTargets) => {
       parent: checkNewChests,
       child: goChest,
       onTransition: () => {
-
-        //@ts-ignore
-        targets.sorterJob.chest = targets.sorterJob.newChests.shift()
-
-        //@ts-ignore
-        targets.position = targets.sorterJob.chest.position.clone()
+        const chest = targets.sorterJob.newChests.shift()
+        if(!chest) throw new Error('Chest is not defined!')
+        targets.sorterJob.chest = chest   
+        targets.position = chest.position.clone()
       },
       shouldTransition: () => {
         const newChestSort = sortChests(targets.chests)
@@ -212,7 +210,6 @@ const sorterJobFunction = (bot: Bot, targets: LegionStateMachineTargets) => {
           return false
         }
 
-        //@ts-ignore
         return targets.sorterJob.newChests.length > 0
       }
     }),

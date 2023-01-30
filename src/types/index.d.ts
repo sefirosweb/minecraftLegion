@@ -66,10 +66,7 @@ type ChestTransaction = { // TODO quitar opcionales!
     id: number
 }
 
-type NewChestBlock = {
-    position: Vec3
-    dimension: Dimension
-}
+
 
 type SorterJob = {
     emptyChests: Array<ChestBlock>
@@ -77,7 +74,7 @@ type SorterJob = {
     newChestSort: Array<Array<Slot>>
     newChests: Array<NewChestBlock>
     slotsToSort: Array<ChestTransaction>
-    chest: Block | undefined
+    chest: NewChestBlock | undefined
 }
 
 type CrafterJob = {}
@@ -276,7 +273,6 @@ type botType = {
     username: string
 }
 
-// Final types state
 
 type PositionsChecked = {
     position: Vec3,
@@ -327,6 +323,11 @@ type ItemRecipe = {
     name?: string,
     quantity: number,
     subRecipes?: Array<Recpie>
+}
+
+type NewChestBlock = {
+    position: Vec3
+    dimension: Dimension
 }
 
 type ChestBlock = {
