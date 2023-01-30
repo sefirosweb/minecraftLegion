@@ -138,61 +138,6 @@ const sorterJob = () => {
     return newChestSort
   }
 
-  //@ts-ignore
-  const calculateInventoryToSort = (inventoryItemsInput, inputChests, newChestSort) => {
-    // Function in tests
-    const chests = JSON.parse(JSON.stringify(inputChests))
-    const inventoryItems = JSON.parse(JSON.stringify(inventoryItemsInput))
-
-    //@ts-ignore
-    const slotsToSort = []
-    //@ts-ignore
-    inventoryItems.forEach((everyInventoryItem) => {
-      //@ts-ignore
-      newChestSort.every((chest, chestIndex) => {
-        //@ts-ignore
-        chest.every((slot, slotIndex) => {
-          if (slot.type !== everyInventoryItem.type) return true
-
-          if (
-            (
-              !chests[chestIndex].slots[slotIndex] ||
-              slot.type !== chests[chestIndex].slots[slotIndex].type ||
-              slot.count !== chests[chestIndex].slots[slotIndex].count
-            )
-          ) {
-            const currentStock = chests[chestIndex].slots[slotIndex] && chests[chestIndex].slots[slotIndex].type === everyInventoryItem.type ? chests[chestIndex].slots[slotIndex].count : 0
-            const stackSize = everyInventoryItem.stackSize
-            const freeSpace = stackSize - currentStock
-            const quantity = freeSpace >= everyInventoryItem.count ? everyInventoryItem.count : freeSpace
-            everyInventoryItem.count -= quantity
-
-            if (!chests[chestIndex].slots[slotIndex] || chests[chestIndex].slots[slotIndex].type !== everyInventoryItem.type) {
-              chests[chestIndex].slots[slotIndex] = everyInventoryItem
-            } else {
-              chests[chestIndex].slots[slotIndex].count += quantity
-            }
-
-            slotsToSort.push({
-              toChest: chestIndex,
-              toSlot: slotIndex,
-              type: slot.type,
-              name: slot.name,
-              quantity
-            })
-          }
-          if (everyInventoryItem.count === 0) return false
-          return true
-        })
-
-        if (everyInventoryItem.count === 0) return false
-        return true
-      })
-    })
-
-    //@ts-ignore
-    return slotsToSort
-  }
 
   //@ts-ignore
   const calculateSlotsToSort = (chests, newChestSort) => {
@@ -240,8 +185,7 @@ const sorterJob = () => {
     findItemsInChests,
     sortChestVec,
     sortChests,
-    calculateSlotsToSort,
-    calculateInventoryToSort
+    calculateSlotsToSort
   }
 }
 
