@@ -142,8 +142,13 @@ const sorterJobFunction = (bot: Bot, targets: LegionStateMachineTargets) => {
         })
 
         if (!chestInfo || chestInfo.lastTimeOpen === undefined || Date.now() - chestInfo.lastTimeOpen > 5000) {
-          //@ts-ignore
-          targets.sorterJob.newChests.push(chest)
+
+          const newChest: NewChestBlock = {
+            dimension: bot.game.dimension,
+            position: chest.position
+          }
+
+          targets.sorterJob.newChests.push(newChest)
         }
       }
     }
@@ -251,19 +256,21 @@ const sorterJobFunction = (bot: Bot, targets: LegionStateMachineTargets) => {
       child: checkNewChests,
       onTransition: () => {
         if (!checkItemsInChest.getCanOpenChest()) {
-          if (!targets.sorterJob.chest) throw new Error('Chest is not defined!')
-          const chest = targets.sorterJob.chest
-          const chestIndex = Object.values(targets.chests).findIndex(c => { // TODO revisar
+          const chestToDelete = Object.entries(targets.chests)
+            .find(c => {
+              const chest = c[1]
 
-            if (vec3(c.position).equals(chest.position)) return true
+              if (!targets.sorterJob.chest) throw new Error('Chest is not defined!')
+              const chestToFind = targets.sorterJob.chest
 
-            // if (chest.secondBlock && vec3(c.position).equals(chest.secondBlock.position)) return true // TODO revisar
-            return false
-          })
-          if (chestIndex >= 0) {
+              if (vec3(chest.position).equals(chestToFind.position)) return true
 
-            //@ts-ignore
-            // targets.chests.splice(chestIndex, 1) // TODO revisar
+              // if (chest.secondBlock && vec3(c.position).equals(chest.secondBlock.position)) return true // TODO revisar
+              return false
+            })
+
+          if (chestToDelete) {
+            delete targets.chests[chestToDelete[0]]
           }
         }
       },
@@ -279,7 +286,7 @@ const sorterJobFunction = (bot: Bot, targets: LegionStateMachineTargets) => {
         if (!checkItemsInChest.getCanOpenChest()) {
           const chestToDelete = Object.entries(targets.chests)
             .find(c => {
-              const [index, chest] = c
+              const chest = c[1]
 
               if (!targets.sorterJob.chest) throw new Error('Chest is not defined!')
               const chestToFind = targets.sorterJob.chest

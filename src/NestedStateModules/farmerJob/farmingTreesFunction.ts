@@ -57,7 +57,7 @@ function farmingTreesFunction(bot: Bot, targets: LegionStateMachineTargets) {
       finished = true
     }
 
-    if (!targets.farmerJob.plantArea) {
+    if (targets.farmerJob.plantArea === undefined) {
       throw new Error('Variable plantArea is not defined!')
     }
 
@@ -73,7 +73,7 @@ function farmingTreesFunction(bot: Bot, targets: LegionStateMachineTargets) {
       parent: start,
       child: selectTree,
       onTransition: () => {
-        if (!targets.farmerJob.plantArea) {
+        if (targets.farmerJob.plantArea === undefined) {
           throw new Error('Variable plantArea is not defined!')
         }
 

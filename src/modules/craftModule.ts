@@ -373,7 +373,7 @@ const craftModule = (bot: Bot) => {
               itemsInChest.quantity = itemsInChest.quantity > quantityToCraft ? quantityToCraft : itemsInChest.quantity
 
               quantityToCraft -= itemsInChest.quantity
-              //@ts-ignore
+              if (itemsInChest.fromChest === undefined || itemsInChest.fromSlot === undefined) throw new Error('FromChest | FromSlot ist not defined!')
               sharedChests[itemsInChest.fromChest].slots[itemsInChest.fromSlot].count -= itemsInChest.quantity
 
               itemToPickup.push(itemsInChest)

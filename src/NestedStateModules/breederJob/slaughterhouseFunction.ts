@@ -33,10 +33,8 @@ function slaughterhouseFunction(bot: Bot, targets: LegionStateMachineTargets) {
   const getSpareAnimals = () => {
     const spareAnimals: Array<Entity> = []
     let spare
-    Object.keys(targets.breederJob.farmAnimal).forEach(animalName => {
-
-      //@ts-ignore
-      const animalQuantity = targets.breederJob.farmAnimal[animalName]
+    Object.entries(targets.breederJob.farmAnimal).forEach((entry) => {
+      const [animalName, animalQuantity] = entry
       spare = targets.breederJob.breededAnimals.filter(e => {
         //@ts-ignore e.metadata[16] ==> is a baby
         return e.name === animalName && e.metadata[16] === false

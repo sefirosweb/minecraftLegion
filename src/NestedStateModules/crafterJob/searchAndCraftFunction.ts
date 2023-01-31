@@ -73,7 +73,7 @@ export default (bot: Bot, targets: LegionStateMachineTargets) => {
       parent: start,
       child: checkRecipes,
       onTransition: () => {
-        if (!targets.craftItemBatch) {
+        if (targets.craftItemBatch === undefined) {
           throw new Error('No items to craft targets.craftItemBatch')
         }
         itemsToPickUpBatch = getItemsToPickUpBatch(targets.craftItemBatch, nearChests())
@@ -174,7 +174,7 @@ export default (bot: Bot, targets: LegionStateMachineTargets) => {
       parent: goTable,
       child: checkRecipesWithTable,
       onTransition: () => {
-        if (!targets.craftItemBatch) {
+        if (targets.craftItemBatch === undefined) {
           throw new Error('No items to craft targets.craftItemBatch')
         }
 
