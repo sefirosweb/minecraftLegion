@@ -59,19 +59,21 @@ type CorrectChest = {
 type ChestTransaction = { // TODO quitar opcionales!
     name?: string,
     quantity: number,
-    fromChest?: number,
-    toChest?: number,
+    fromChest?: string,
+    toChest?: string,
     fromSlot?: number,
     toSlot?: number,
     id: number
 }
 
+type CorrectChests = Record<string, Array<CorrectChest>>
+type NewChestSort = Record<string, Array<Slot>>
 
 
 type SorterJob = {
     emptyChests: Array<ChestBlock>
-    correctChests: Array<Array<CorrectChest>>
-    newChestSort: Array<Array<Slot>>
+    correctChests: CorrectChests
+    newChestSort: NewChestSort
     newChests: Array<NewChestBlock>
     slotsToSort: Array<ChestTransaction>
     chest: NewChestBlock | undefined

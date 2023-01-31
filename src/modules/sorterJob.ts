@@ -1,4 +1,4 @@
-import { ChestTransaction, Item, Chests, CorrectChest, ChestBlock, Slot } from "@/types"
+import { ChestTransaction, Item, Chests, ChestBlock, Slot, CorrectChests, NewChestSort } from "@/types"
 
 const sorterJob = () => {
 
@@ -23,7 +23,7 @@ const sorterJob = () => {
               slot.count = 0
               item.quantity -= count
               transactions.push({
-                fromChest: parseInt(chestIndex),
+                fromChest: chestIndex,
                 fromSlot: slotIndex,
                 id: slot.type,
                 name: slot.name,
@@ -71,9 +71,12 @@ const sorterJob = () => {
   }
 
   const sortChests = (chestInput: Chests) => {
-    const chests = Object.values(chestInput).sort((a, b) => sortChestVec(a, b, 'z', 'asc'))
 
-    const allChests = chests.map(chest => chest.slots)
+    const chests = structuredClone(chestInput)
+    const chestPriority = Object.entries(chests).map((e) => { return { ...e[1], index: e[0] } }).sort((a, b) => sortChestVec(a, b, 'z', 'asc')).map(c => c.index)
+    const allChests = Object.values(chests).map(chest => chest.slots)
+
+
     const allItems = allChests
       .reduce((items, chest) => {
         chest.forEach(item => {
@@ -89,7 +92,7 @@ const sorterJob = () => {
       }, []).sort((a, b) => a.type - b.type)
 
     let chestIndex = 0
-    const newChestSort: Array<Array<Slot>> = []
+    const newChestSort: NewChestSort = {}
     let newSlots: Array<Slot> = []
 
     allItems.forEach(item => {
@@ -103,7 +106,7 @@ const sorterJob = () => {
           newSlots.push(itemToDeposit)
 
           if (newSlots.length === allChests[chestIndex].length) {
-            newChestSort.push(newSlots)
+            newChestSort[chestPriority[chestIndex]] = newSlots
             chestIndex++
             newSlots = []
           }
@@ -114,7 +117,7 @@ const sorterJob = () => {
         const freeSlots = allChests[chestIndex].length - newSlots.length
 
         if (slotNeeded > freeSlots) {
-          newChestSort.push(newSlots)
+          newChestSort[chestPriority[chestIndex]] = newSlots
           chestIndex++
           newSlots = []
         }
@@ -126,7 +129,7 @@ const sorterJob = () => {
           newSlots.push(itemToDeposit)
 
           if (newSlots.length === allChests[chestIndex].length) {
-            newChestSort.push(newSlots)
+            newChestSort[chestPriority[chestIndex]] = newSlots
             chestIndex++
             newSlots = []
           }
@@ -134,16 +137,24 @@ const sorterJob = () => {
       }
     })
 
-    newChestSort.push(newSlots)
+    newChestSort[chestPriority[chestIndex]] = newSlots
     return newChestSort
   }
 
 
-  const calculateSlotsToSort = (chests: Chests, newChestSort: Array<Array<Slot>>) => {
-    const correctChests: Array<Array<CorrectChest>> = Object.values(chests).map(chest => chest.slots.map(() => { return { correct: false } }))
+  const calculateSlotsToSort = (chests: Chests, newChestSort: NewChestSort) => {
+    const correctChests: CorrectChests = {}
+
+    Object.entries(chests).forEach(c => {
+      const [index, chest] = c
+
+      correctChests[index] = chest.slots.map(() => { return { correct: false } })
+    })
 
     const slotsToSort: Array<ChestTransaction> = []
-    newChestSort.every((chest, chestIndex) => {
+    Object.entries(newChestSort).every((entry) => {
+      const [chestIndex, chest] = entry
+
       chest.every((slot, slotIndex) => {
         if (
           !chests[chestIndex].slots[slotIndex] ||

@@ -26,7 +26,8 @@ function depositItems(bot: Bot, targets: LegionStateMachineTargets) {
   let pendingTransaction: Array<PendingTransaction>
   const findChests = () => {
     pendingTransaction = []
-    Object.values(targets.chests).forEach((chest, chestIndex) => {
+    Object.entries(targets.chests).forEach((chestEntry) => {
+      const [chestIndex, chest] = chestEntry
       const items = targets.sorterJob.slotsToSort.filter(i => i.toChest === chestIndex)
       if (items.length > 0) {
         pendingTransaction.push({
@@ -53,7 +54,7 @@ function depositItems(bot: Bot, targets: LegionStateMachineTargets) {
       child: goAndDeposit,
       onTransition: () => {
         const currentChest = pendingTransaction.shift()
-        if(!currentChest) throw new Error('Variable currentChest is not defined!')
+        if (!currentChest) throw new Error('Variable currentChest is not defined!')
         targets.position = currentChest.chest.position
         targets.items = currentChest.items
       },

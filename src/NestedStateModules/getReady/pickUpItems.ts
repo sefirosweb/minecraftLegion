@@ -39,7 +39,7 @@ export default (bot: Bot, targets: LegionStateMachineTargets) => {
 
       pickupItems.forEach((i) => {
         if (
-          i.fromChest === parseInt(chestIndex)
+          i.fromChest === chestIndex
           && chest.dimension === bot.game.dimension
           && bot.entity.position.distanceTo(chest.position) < 128
         ) {

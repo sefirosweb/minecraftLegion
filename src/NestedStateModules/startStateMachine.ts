@@ -82,9 +82,9 @@ const startStateMachine = (bot: Bot) => {
     },
     sorterJob: {
       emptyChests: [],
-      correctChests: [],
+      correctChests: {},
       slotsToSort: [],
-      newChestSort: [],
+      newChestSort: {},
       newChests: [],
       chest: undefined
     },

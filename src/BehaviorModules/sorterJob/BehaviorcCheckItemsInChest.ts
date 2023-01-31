@@ -2,6 +2,7 @@ import botWebsocket from '@/modules/botWebsocket'
 import { Bot, ChestBlock, LegionStateMachineTargets } from '@/types';
 import { StateBehavior } from 'mineflayer-statemachine';
 import vec3 from 'vec3'
+import { v4 as uuidv4 } from 'uuid';
 export default class BehaviorcCheckItemsInChest implements StateBehavior {
   active: boolean;
   readonly bot: Bot;
@@ -40,7 +41,7 @@ export default class BehaviorcCheckItemsInChest implements StateBehavior {
     const chest = structuredClone(this.targets.sorterJob.chest)
 
     const chestBlock = this.bot.blockAt(this.targets.sorterJob.chest.position)
-    if(!chestBlock) throw new Error('Chest not found!')
+    if (!chestBlock) throw new Error('Chest not found!')
 
     this.bot.openContainer(chestBlock)
       .then((container) => {
@@ -65,7 +66,7 @@ export default class BehaviorcCheckItemsInChest implements StateBehavior {
             lastTimeOpen: Date.now()
           }
 
-          const chestIndext = Object.keys(this.targets.chests).length
+          const chestIndext = uuidv4()
           this.targets.chests[chestIndext] = newChest
         }
 
