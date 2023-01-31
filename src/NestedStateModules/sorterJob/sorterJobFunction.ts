@@ -1,10 +1,9 @@
 import vec3 from 'vec3'
 import { StateTransition, BehaviorIdle, NestedStateMachine } from 'mineflayer-statemachine'
 
-import botWebsocket from '@/modules/botWebsocket'
 import BehaviorcCheckItemsInChest from '@/BehaviorModules/sorterJob/BehaviorcCheckItemsInChest'
 import BehaviorMoveTo from '@/BehaviorModules/BehaviorMoveTo'
-import { Bot, ChestBlock, LegionStateMachineTargets } from '@/types'
+import { Bot, NewChestBlock, LegionStateMachineTargets } from '@/types'
 import sorterJob from '@/modules/sorterJob'
 import inventoryModule from '@/modules/inventoryModule'
 import DepositItemsInInventory from '@/NestedStateModules/sorterJob/depositItemsInInventory'
@@ -69,31 +68,35 @@ const sorterJobFunction = (bot: Bot, targets: LegionStateMachineTargets) => {
 
 
     chests.forEach(chest => {
-      const cKey = Object.values(targets.chests).findIndex(tc => {
-        if (
-          (tc.position_2 === undefined) === (chest.secondBlock === undefined) &&
-          (
-            vec3(tc.position).equals(chest.position) ||
-            (tc.position_2 && vec3(tc.position_2).equals(chest.position)) ||
-            (chest.secondBlock && vec3(tc.position).equals(chest.secondBlock.position)) ||
-            (tc.position_2 && chest.secondBlock && vec3(tc.position_2).equals(chest.secondBlock.position))
-          )
-        ) {
-          return true
+
+      const cKey = Object.entries(targets.chests)
+        .find(entry => {
+          const [, tc] = entry
+          if (
+            (tc.position_2 === undefined) === (chest.secondBlock === undefined) &&
+            (
+              vec3(tc.position).equals(chest.position) ||
+              (tc.position_2 && vec3(tc.position_2).equals(chest.position)) ||
+              (chest.secondBlock && vec3(tc.position).equals(chest.secondBlock.position)) ||
+              (tc.position_2 && chest.secondBlock && vec3(tc.position_2).equals(chest.secondBlock.position))
+            )
+          ) {
+            return true
+          }
+
+          return false
+        })
+
+      if (cKey) {
+        targets.chests[cKey[0]].chestFound = true
+      } else {
+
+        const newChest: NewChestBlock = {
+          dimension: bot.game.dimension,
+          position: chest.position
         }
 
-        return false
-      })
-
-      if (cKey >= 0) {
-
-        targets.chests[cKey].chestFound = true
-      } else {
-        //@ts-ignore
-        chest.chestFound = true
-
-        //@ts-ignore
-        targets.sorterJob.newChests.push(chest)
+        targets.sorterJob.newChests.push(newChest)
       }
     })
 
@@ -199,8 +202,8 @@ const sorterJobFunction = (bot: Bot, targets: LegionStateMachineTargets) => {
       child: goChest,
       onTransition: () => {
         const chest = targets.sorterJob.newChests.shift()
-        if(!chest) throw new Error('Chest is not defined!')
-        targets.sorterJob.chest = chest   
+        if (!chest) throw new Error('Chest is not defined!')
+        targets.sorterJob.chest = chest
         targets.position = chest.position.clone()
       },
       shouldTransition: () => {
@@ -272,33 +275,32 @@ const sorterJobFunction = (bot: Bot, targets: LegionStateMachineTargets) => {
       parent: checkItemsInChest,
       child: goChest,
       onTransition: () => {
+
         if (!checkItemsInChest.getCanOpenChest()) {
-          const chestIndex = Object.values(targets.chests).findIndex(c => { // TODO revisar
+          const chestToDelete = Object.entries(targets.chests)
+            .find(c => {
+              const [index, chest] = c
 
-            if (!targets.sorterJob.chest) throw new Error('Chest is not defined!')
-            const chest = targets.sorterJob.chest
+              if (!targets.sorterJob.chest) throw new Error('Chest is not defined!')
+              const chestToFind = targets.sorterJob.chest
 
-            if (vec3(c.position).equals(chest.position)) return true
+              if (vec3(chest.position).equals(chestToFind.position)) return true
 
-            // if (chest.secondBlock && vec3(c.position).equals(chest.secondBlock.position)) return true // TODO revisar
-            return false
-          })
-          if (chestIndex >= 0) {
+              // if (chest.secondBlock && vec3(c.position).equals(chest.secondBlock.position)) return true // TODO revisar
+              return false
+            })
 
-            //@ts-ignore
-            // targets.chests.splice(chestIndex, 1) // TODO revisar
+          if (chestToDelete) {
+            delete targets.chests[chestToDelete[0]]
           }
         }
 
 
-        //@ts-ignore
         targets.sorterJob.chest = targets.sorterJob.newChests.shift()
-
-        //@ts-ignore
+        if (!targets.sorterJob.chest) throw Error('Chest ist not defined!')
         targets.position = targets.sorterJob.chest.position.clone()
       },
 
-      //@ts-ignore
       shouldTransition: () => checkItemsInChest.isFinished() && targets.sorterJob.newChests.length > 0
     }),
 

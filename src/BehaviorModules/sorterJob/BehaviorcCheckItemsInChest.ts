@@ -46,16 +46,17 @@ export default class BehaviorcCheckItemsInChest implements StateBehavior {
     this.bot.openContainer(chestBlock)
       .then((container) => {
         const slots = container.slots.slice(0, container.inventoryStart)
-        const chestIndex = Object.values(this.targets.chests).findIndex(c => {
+        const chestIndex = Object.entries(this.targets.chests).find(entry => {
+          const c = entry[1]
           if (vec3(c.position).equals(chest.position)) return true
           if (c.position_2 && vec3(c.position_2).equals(chest.position)) return true
           return false
         })
 
-        if (chestIndex >= 0) {
+        if (chestIndex) {
 
-          this.targets.chests[chestIndex].slots = slots
-          this.targets.chests[chestIndex].lastTimeOpen = Date.now()
+          this.targets.chests[chestIndex[0]].slots = slots
+          this.targets.chests[chestIndex[0]].lastTimeOpen = Date.now()
 
         } else {
 
