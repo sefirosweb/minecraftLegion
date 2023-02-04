@@ -1,0 +1,15 @@
+version: "3"
+services:
+  minecraftLegionServer:
+    container_name: minecraftLegionServer
+    hostname: minecraftLegionServer
+    image: node:18
+    restart: always
+    user: node
+    working_dir: "/home/app"
+    volumes:
+      - ".:/home/app"
+    ports:
+      - "4001:4001"
+    command: bash -c "npm install && npm start"
+
