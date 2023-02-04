@@ -5,7 +5,7 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Docker: Attach to Node",
+      "name": "Docker attach Core",
       "type": "node",
       "request": "attach",
       "restart": true,
@@ -13,7 +13,16 @@
       "address": "localhost",
       "localRoot": "${workspaceFolder}",
       "remoteRoot": "/home/app",
-      "protocol": "inspector"
+    },
+    {
+      "name": "Docker: attach Server",
+      "type": "node",
+      "request": "attach",
+      "restart": true,
+      "port": 9250,
+      "address": "localhost",
+      "localRoot": "${workspaceFolder}",
+      "remoteRoot": "/home/app",
     }
   ]
 }
