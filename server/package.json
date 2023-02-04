@@ -1,0 +1,43 @@
+{
+  "name": "minecraftlegionwebserver",
+  "version": "1.2.0",
+  "private": false,
+  "description": "Project backend for minecraft legion web server",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon --inspect=0.0.0.0:9250 src/index.ts",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "standard": "npx standard --fix",
+    "dockerbuild": "docker build -t minecraftlegionwebserver .",
+    "dockerrun": "docker run --rm -p:4001:4001 minecraftlegionwebserver",
+    "docker": "docker run --rm -it --name minecraftLegionWebServer --hostname minecraftLegionWebServer --network minecraftLegionNetwork -v ~/.gitconfig:/etc/gitconfig -p 4001:4001 -p 9250:9250 -v $PWD:/home/app -w /home/app -u node node:16.13-bullseye /bin/bash",
+    "update": "npx npm-check-updates"
+  },
+  "author": "Sefirosweb",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sefirosweb/minecraftLegionWebServer.git"
+  },
+  "bugs": {
+    "url": "https://github.com/sefirosweb/minecraftLegionWebServer/issues"
+  },
+  "homepage": "https://github.com/sefirosweb/minecraftLegionWebServer#readme",
+  "dependencies": {
+    "dotenv": "16.0.0",
+    "socket.io": "4.4.1"
+  },
+  "devDependencies": {
+    "chalk": "5.0.1",
+    "mineflayer": "^4.8.0",
+    "module-alias": "^2.2.2",
+    "nodemon": "2.0.15",
+    "prismarine-item": "^1.12.1",
+    "ts-node": "^10.9.1",
+    "typescript": "^4.9.5",
+    "vec3": "^0.1.7"
+  },
+  "_moduleAliases": {
+    "@": "./src/"
+  }
+}
