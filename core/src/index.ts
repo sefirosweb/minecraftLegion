@@ -47,8 +47,8 @@ const start_bot = () => {
 
   const botsToStart: botType[] = [
     // { username: 'Sephi' }
-    { username: 'Types' },
-    { username: 'Type' },
+    // { username: 'Types' },
+    // { username: 'Type' },
 
     // { username: "MinerY1" },
     // { username: "MinerY2" },
