@@ -5,13 +5,12 @@ import { BotsConnected } from "@/types";
 import { defaultConfig } from "@/types/types";
 
 export default () => {
-  const { adminPassword, debug, listenPort, webClient } = config
+  const { adminPassword, debug, listenPort, originCors } = config
 
   const server = http.createServer();
   const io = new Server(server, {
     cors: {
-      origin: webClient,
-      credentials: true,
+      origin: originCors,
     },
   });
 

@@ -1,7 +1,7 @@
 
 // import { mcAssets } from '../utils/mc';
-import smallChest from "../images/smallChest.png";
-import largeChest from "../images/largeChest.png";
+import smallChest from "@/images/smallChest.png";
+import largeChest from "@/images/largeChest.png";
 import Canvas from "./Canvas";
 import windowSlotsCoords from '../utils/windowSlotsCoords';
 import { Card, Col, Row, Button } from 'react-bootstrap';

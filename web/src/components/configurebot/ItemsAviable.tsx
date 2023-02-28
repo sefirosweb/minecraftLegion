@@ -1,4 +1,4 @@
-import { mcData } from "../../utils/mc";
+import { items as itemsArray, foods as foodsArray } from "../../utils/mcData";
 
 const plants = [
   { displayName: 'Carrot', name: 'carrot' },
@@ -28,16 +28,16 @@ const ItemsAviable = (props: Props) => { // TODO change to differents methos
     let type
     switch (props.type) {
       case 'all':
-        type = mcData.itemsArray
+        type = itemsArray
         break
       case 'foods':
-        type = mcData.foodsArray
+        type = foodsArray
         break
       case 'plants':
         type = plants
         break
       default:
-        type = mcData.itemsArray
+        type = itemsArray
         break
     }
 

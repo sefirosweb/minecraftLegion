@@ -40,15 +40,7 @@ const Layout = (props) => {
       socket.close();
     }
 
-    const socketConection = socketIOClient(
-      `${webServerSocketURL}:${webServerSocketPort}`,
-      {
-        withCredentials: true,
-        extraHeaders: {
-          "my-custom-header": "abcd",
-        },
-      }
-    );
+    const socketConection = socketIOClient(`${webServerSocketURL}:${webServerSocketPort}`,);
 
     setSocket(socketConection);
 
