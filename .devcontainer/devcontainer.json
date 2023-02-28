@@ -1,0 +1,18 @@
+// See https://containers.dev/implementors/json_reference/ for configuration reference
+{
+	"name": "Development container",
+	"remoteUser": "node",
+	"postCreateCommand": "bash .devcontainer/start.sh",
+	"build": {
+		"dockerfile": "Dockerfile"
+	},
+	"customizations": {
+		"vscode": {
+			"settings": {},
+			"extensions": [
+				"eamodio.gitlens",
+				"usernamehw.errorlens"
+			]
+		}
+	}
+}
