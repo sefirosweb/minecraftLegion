@@ -1,3 +1,3 @@
 #!/bin/bash
-cd /user/node/core
+cd /app/core
 node index.js

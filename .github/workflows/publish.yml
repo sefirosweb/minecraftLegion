@@ -24,6 +24,10 @@ jobs:
         with:
           node-version: "18.x"
 
+      - name: Copy example file to custom start
+        run: cp core/src/custom_start/custom_example.ts core/src/custom_start/custom.ts
+      
+      - name: Build the bot files
       - run: npm run build
 
       - name: Build and push Docker image

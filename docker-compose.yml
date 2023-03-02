@@ -18,7 +18,8 @@ services:
     hostname: minecraft_legion
 
     volumes:
-      - "./botConfig:/user/node/core/botConfig"
+      - "./botConfig:/app/core/botConfig"
+      - "./custom_start:/app/core/custom_start"
 
     ports:
       - "80:80"

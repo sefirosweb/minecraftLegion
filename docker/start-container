@@ -1,3 +1,13 @@
 #!/usr/bin/env bash
 
+if [ ! -f /app/core/custom_start/custom.js ]
+then
+    echo "const custom = (bot) => { return true }" > /app/core/custom_start/custom.js
+    echo "module.export = custom" >> /app/core/custom_start/custom.js
+fi
+
+chmod 777 /app/core/botConfig
+chmod 777 /app/core/custom_start
+chmod 666 /app/core/custom_start/custom.js
+
 supervisord -c /etc/supervisor/supervisord.conf

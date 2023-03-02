@@ -7,17 +7,19 @@ Example of docker-compose.yml file:
 version: "3"
 services:
   app:
-    image: @sefirosweb/minecraft-legion
+    image: ghcr.io/sefirosweb/minecraft-legion:latest
     environment:
       SERVER: localhost # Minecraft Server
       PORT: 25565 # Minecraft Port
       MASTERS: player1,player2 # Names of master players, separated with comma
       WEB_SERVER_PASSWORD: admin # Password to login into front end
       AUTO_RESTART: true # If bot crashes they auto reload again
+      CUSTOM_START: false # If you want to do some actions before start bot, you can put here your own custom.js file (used for logging into servers)
       ORIGIN_CORS: "*" # To avoid CORS enter here your public domain
 
     volumes:
-      - "./botConfig:/user/node/core/botConfig"
+      - "./botConfig:/app/core/botConfig"
+      - "./custom_start:/app/core/custom_start"
 
     ports:
       - "80:80"

@@ -1,15 +1,14 @@
 {
   "name": "main",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Project Minecraft Legion",
-  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "npm run install_all && npm run build_all",
     "build_all": "npm run build --prefix ./web/ && npm run build --prefix ./server/ && npm run build --prefix ./core/",
     "install_all": "npm install --prefix ./web/ && npm install --prefix ./core/ && npm install --prefix ./server/",
     "build:docker": "docker build -f docker/Dockerfile --no-cache -t minecraft-legion:latest .",
-    "dr": "docker-compose build --no-cache && docker-compose up"
+    "dr": "docker-compose build && docker-compose up"
   },
   "repository": {
     "type": "git",
