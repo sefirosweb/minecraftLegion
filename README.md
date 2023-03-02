@@ -4,6 +4,9 @@ Minecraft multipurpose bot
 
 This project are based on <a target="_blank" href="https://github.com/PrismarineJS/mineflayer">mineflayer</a> & <a target="_blank" href="https://github.com/PrismarineJS">PrismarineJS</a> repository
 
+## How to install?
+Go to docs: https://github.com/sefirosweb/minecraftLegion/blob/master/INSTALLATION.md
+
 ## What can does the bot?
 
 - Can combat automatically when detect nearby enemies, he know use the weapons and bow

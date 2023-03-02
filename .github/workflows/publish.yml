@@ -1,12 +1,10 @@
 name: Build and deploy docker
-on: [push]
-# on:
-#   push:
-#     tags:        
-#       - v2.*
+on:
+  push:
+    tags:
+      - v2.*
 
-
-jobs: 
+jobs:
   publish-docker-image:
     name: Push Docker image to Docker Hub
     runs-on: ubuntu-latest
@@ -24,8 +22,8 @@ jobs:
       - name: Install and build files
         uses: actions/setup-node@v3
         with:
-          node-version: '18.x'  
-          
+          node-version: "18.x"
+
       - run: npm run build
 
       - name: Build and push Docker image
