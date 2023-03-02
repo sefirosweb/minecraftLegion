@@ -26,9 +26,9 @@ cd minecraftLegionWebServer
 cp .env_example .env
 
 // Listen port of server
-LISTEN_PORT=4001
+WEB_SERVER_PORT=4001
 // Password to access to the server
-ADMIN_PASSWORD=admin
+WEB_SERVER_PASSWORD=admin
 // The FRONT END URL for avoid CORS error
 WEB_CLIENT=http://localhost:3000
 ```

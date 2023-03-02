@@ -1,4 +1,4 @@
-
+import fs from 'fs'
 import { Config } from '@/types'
 import { Jobs } from '@/types/defaultTypes'
 
@@ -77,11 +77,14 @@ const defaultConfig: Config = {
 
 const botConfiguration = (botName: string) => {
   const getConn = () => {
-    const adapter = new Filesync(
-      path.join(__dirname, '../botConfig/') + botName + '.json'
-    )
-    const db = low(adapter)
 
+    const dir = path.join(__dirname, '..', 'botConfig')
+    if (!fs.existsSync(dir)) {
+      fs.mkdirSync(dir);
+    }
+
+    const adapter = new Filesync(path.join(dir, `${botName}.json`))
+    const db = low(adapter)
 
     db.defaults({ config: defaultConfig }).write()
 

@@ -26,8 +26,8 @@ git clone https://github.com/sefirosweb/minecraftLegionWebServer.git
 cd minecraftLegionWebServer/
 
 echo "
-LISTEN_PORT=4001
-ADMIN_PASSWORD=admin
+WEB_SERVER_PORT=4001
+WEB_SERVER_PASSWORD=admin
 WEB_CLIENT=http://$PUBLIC_IPV4
 " > .env
 

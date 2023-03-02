@@ -1,4 +1,3 @@
-require("module-alias/register");
 import config from "@/config";
 const { server, port, customStart } = config
 

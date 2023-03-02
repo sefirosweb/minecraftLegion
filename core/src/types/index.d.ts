@@ -185,10 +185,7 @@ type BotwebsocketAction = {
 
 type Coordinates = 'x+' | 'x-' | 'z+' | 'z-'
 
-type Master = {
-    name: string,
-    position?: Vec3
-}
+type Master = string
 interface Bot extends MineflayerBot {
     isABed: (bedBlock: Block) => boolean
     test: {

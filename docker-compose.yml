@@ -1,0 +1,25 @@
+version: "3"
+services:
+  app:
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile
+    environment:
+      SERVER: host.docker.internal
+      PORT: 25565
+      MASTERS: player1,player2
+      WEB_SERVER_PASSWORD: admin
+      DEBUG_MODE: false
+      CUSTOM_START: false
+      AUTO_RESTART: true
+      ORIGIN_CORS: "*"
+    image: minecraft_legion
+    container_name: minecraft_legion
+    hostname: minecraft_legion
+
+    volumes:
+      - "./botConfig:/user/node/core/botConfig"
+
+    ports:
+      - "80:80"
+      - "4001:4001"

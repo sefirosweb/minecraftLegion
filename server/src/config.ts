@@ -9,13 +9,13 @@ type Config = {
   debug: boolean
 }
 
-if (process.env.LISTEN_PORT === undefined) throw Error('MISSING LISTEN_PORT')
-if (process.env.ADMIN_PASSWORD === undefined) throw Error('MISSING ADMIN_PASSWORD')
+if (process.env.WEB_SERVER_PORT === undefined) throw Error('MISSING WEB_SERVER_PORT')
+if (process.env.WEB_SERVER_PASSWORD === undefined) throw Error('MISSING WEB_SERVER_PASSWORD')
 if (process.env.ORIGIN_CORS === undefined) throw Error('MISSING ORIGIN_CORS')
 
 const config: Config = {
-  listenPort: parseInt(process.env.LISTEN_PORT),
-  adminPassword: process.env.ADMIN_PASSWORD,
+  listenPort: parseInt(process.env.WEB_SERVER_PORT),
+  adminPassword: process.env.WEB_SERVER_PASSWORD,
   originCors: process.env.ORIGIN_CORS,
   debug: process.env.DEBUG == "true" ? true : false,
 };

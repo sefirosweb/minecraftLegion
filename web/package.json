@@ -9,16 +9,10 @@
   "homepage": "https://sefirosweb.github.io/minecraftLegionWebClient",
   "scripts": {
     "dev": "vite",
-    "build": "rm dist/ -rf && tsc && vite build && cp ./prod/default.conf ./dist/ && cp ./docker-compose.yml ./dist/docker-compose.yml && cp .gitignore ./dist/ && cp ./README.md ./dist/",
+    "build": "rm dist/ -rf && tsc && vite build",
+    "build:docker": "rm dist/ -rf && tsc && vite build && cp ./prod/default.conf ./dist/ && cp ./docker-compose.yml ./dist/docker-compose.yml && cp .gitignore ./dist/ && cp ./README.md ./dist/",
     "preview": "vite preview",
-    "start-old": "PUBLIC_URL=/ craco start",
-    "build-old": "PUBLIC_URL=/ craco build && cp ./prod/default.conf ./dist/ && cp ./docker-compose.yml ./dist/docker-compose.yml && cp .gitignore ./dist/ && cp ./README.md ./dist/",
-    "deploy": "gh-pages -d build",
-    "standard": "npx standard --fix",
-    "dockerbuildprod": "docker build -t minecraftlegionwebclient -f Dockerfile.prod .",
-    "dockerrun": "docker run -d --rm -p:3000:3000 minecraftlegionwebclient",
-    "docker": "docker run --rm -it --name minecraftLegionWebClient -v ~/.gitconfig:/etc/gitconfig -p 3000:3000 --network minecraftLegionNetwork  -v $PWD:/home/app -w /home/app -u node node:16.13-bullseye /bin/bash",
-    "update": "npx npm-check-updates"
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": [
@@ -50,7 +44,6 @@
     "socket.io-client": "^4.6.1"
   },
   "devDependencies": {
-    "@craco/craco": "^7.0.0",
     "@types/js-cookie": "^3.0.3",
     "@types/react": "^18.0.28",
     "@types/react-dom": "^18.0.11",

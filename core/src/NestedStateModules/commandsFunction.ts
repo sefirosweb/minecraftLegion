@@ -202,7 +202,7 @@ function commandsFunction(bot: Bot, targets: LegionStateMachineTargets) {
 
   function botChatCommandFunctionListener(username: string, message: string) {
     const masters = botWebsocket.getMasters() as Master[] // TODO this is a hotfix
-    const findMaster = masters.find(e => e.name === username)
+    const findMaster = masters.find(e => e === username)
 
     if (findMaster === undefined) {
       // botWebsocket.log(`${username} is no in master list!`)
@@ -215,7 +215,7 @@ function commandsFunction(bot: Bot, targets: LegionStateMachineTargets) {
         endCommandsTrigger()
         break
       case (message === 'come'):
-        followTrigger(findMaster.name)
+        followTrigger(findMaster)
         break
       case (message === 'stay'):
         stayTrigger()

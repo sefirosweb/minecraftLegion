@@ -1,48 +1,35 @@
-require("module-alias/register");
-import fs from "fs";
-import path from "path";
 import { botSocket, botType, socketAuth } from "./types";
 import Config from '@/config'
 import io from 'socket.io-client'
-
-const filePath = path.join(__dirname, "config.ts")
-
-fs.access(filePath, 0, (err) => {
-  if (err) {
-    fs.copyFile(path.join(__dirname, "config_example.ts"), filePath, (err) => {
-      if (err) throw err;
-      start_bot();
-      return;
-    });
-  }
-
-  start_bot();
-});
+import { exec } from "child_process"
 
 const start_bot = () => {
-  const { autoRestart } = Config
-  const cp = require("child_process");
+  const { autoRestart, environment } = Config
 
   function startBot(botName: string, password?: string) {
-    const command = `npm run ts ${botName} ${password ?? ''}`;
-    cp.exec(command, (err: string, stdout: string, stderr: string) => {
+    const command = environment === 'stage' ? `npm run ts ${botName} ${password ?? ''}` : `node start_bot.js ${botName} ${password ?? ''}`
+
+    exec(command, (err, stdout, stderr) => {
       if (err) {
-        console.log(`Error: ${err}`);
         console.log(`Bot broken: ${botName}`);
+        console.log(`Error: ${err}`);
+
+        if (autoRestart) {
+          setTimeout(() => {
+            startBot(botName, password);
+          }, 1000);
+        }
         return;
       }
 
       if (stdout) {
         console.log(`Stdout: ${stdout}`);
-        if (autoRestart) {
-          startBot(botName, password);
-        }
       }
 
       if (stderr) {
         console.log(`Stderr: ${stderr}`);
       }
-    });
+    })
   }
 
   const botsToStart: botType[] = [
@@ -117,3 +104,6 @@ const start_bot = () => {
     startBot(data.botName, data.botPassword);
   });
 };
+
+
+start_bot()

@@ -130,7 +130,7 @@ const getClosestEnemy = (bot: Bot, targets: LegionStateMachineTargets) => {
         if (!entity.username) return true
 
         const masters = botWebsocket.getMasters()
-        const mFriend = masters.find(b => b.name === entity.username)
+        const mFriend = masters.find(b => b === entity.username)
         if (mFriend !== undefined) {
           return false
         }

@@ -1,6 +1,6 @@
 {
   "execMap": {
-    "ts": "node --require ts-node/register"
+    "ts": "node -r ts-node/register -r tsconfig-paths/register"
   },
   "verbose": false,
   "ignore": []

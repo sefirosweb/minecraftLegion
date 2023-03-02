@@ -10,9 +10,6 @@
       "request": "attach",
       "restart": true,
       "port": 9229,
-      "address": "localhost",
-      "localRoot": "${workspaceFolder}",
-      "remoteRoot": "/home/app",
     },
     {
       "name": "Docker: attach Server",
@@ -20,9 +17,6 @@
       "request": "attach",
       "restart": true,
       "port": 9250,
-      "address": "localhost",
-      "localRoot": "${workspaceFolder}",
-      "remoteRoot": "/home/app",
     }
   ]
 }

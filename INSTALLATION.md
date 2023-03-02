@@ -1,3 +1,30 @@
+# Production using docker
+
+I recommend that you use docker to run this bot, because it takes a lot of steps to prepare and build all the configuration files.
+
+Example of docker-compose.yml file:
+```yml
+version: "3"
+services:
+  app:
+    image: @sefirosweb/minecraft-legion
+    environment:
+      SERVER: localhost # Minecraft Server
+      PORT: 25565 # Minecraft Port
+      MASTERS: player1,player2 # Names of master players, separated with comma
+      WEB_SERVER_PASSWORD: admin # Password to login into front end
+      AUTO_RESTART: true # If bot crashes they auto reload again
+      ORIGIN_CORS: "*" # To avoid CORS enter here your public domain
+
+    volumes:
+      - "./botConfig:/user/node/core/botConfig"
+
+    ports:
+      - "80:80"
+      - "4001:4001"
+
+```
+
 # How to install:
 
 1. Clone or download the repositorio `git clone && cd minecraftLegion/`
@@ -22,8 +49,8 @@ docker run --rm -it -v $PWD/web:/home/app -w /home/app -u node node:18 npm run b
 
 Example:
 ```
-LISTEN_PORT=4001
-ADMIN_PASSWORD=admin
+WEB_SERVER_PORT=4001
+WEB_SERVER_PASSWORD=admin
 WEB_CLIENT=http://localhost:3000
 ```
 

@@ -1,5 +1,4 @@
 
-import 'module-alias/register';
 import { createNewBot } from "@/createNewBot";
 import { Bot } from '@/types';
 import injectCommonTest from './legionTests/plugins/testCommon'

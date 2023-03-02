@@ -3,7 +3,8 @@
   "version": "1.2.0",
   "private": false,
   "description": "Project backend for minecraft legion web server",
-  "main": "index.js",
+  "author": "Sefirosweb",
+  "license": "ISC",
   "scripts": {
     "start": "nodemon --inspect=0.0.0.0:9250 src/index.ts",
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -11,10 +12,8 @@
     "dockerbuild": "docker build -t minecraftlegionwebserver .",
     "dockerrun": "docker run --rm -p:4001:4001 minecraftlegionwebserver",
     "docker": "docker run --rm -it --name minecraftLegionWebServer --hostname minecraftLegionWebServer --network minecraftLegionNetwork -v ~/.gitconfig:/etc/gitconfig -p 4001:4001 -p 9250:9250 -v $PWD:/home/app -w /home/app -u node node:16.13-bullseye /bin/bash",
-    "update": "npx npm-check-updates"
+    "build": "rm dist/ -rf && babel src --extensions \".ts,.js\" --out-dir dist"
   },
-  "author": "Sefirosweb",
-  "license": "ISC",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/sefirosweb/minecraftLegionWebServer.git"
@@ -25,19 +24,24 @@
   "homepage": "https://github.com/sefirosweb/minecraftLegionWebServer#readme",
   "dependencies": {
     "dotenv": "16.0.0",
+    "install": "^0.13.0",
+    "npm": "^9.5.1",
     "socket.io": "4.4.1"
   },
   "devDependencies": {
+    "@babel/cli": "^7.21.0",
+    "@babel/core": "^7.21.0",
+    "@babel/node": "^7.20.7",
+    "@babel/preset-env": "^7.20.2",
+    "@babel/preset-typescript": "^7.21.0",
+    "babel-plugin-module-resolver": "^5.0.0",
     "chalk": "5.0.1",
     "mineflayer": "^4.8.0",
-    "module-alias": "^2.2.2",
     "nodemon": "2.0.15",
     "prismarine-item": "^1.12.1",
     "ts-node": "^10.9.1",
+    "tsconfig-paths": "^3.14.2",
     "typescript": "^4.9.5",
     "vec3": "^0.1.7"
-  },
-  "_moduleAliases": {
-    "@": "./src/"
   }
 }

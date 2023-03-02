@@ -1,5 +1,5 @@
 import socketIOClient, { Socket } from 'socket.io-client'
-import { Bot, BotFriends, BotwebsocketAction, Chest, Master, MineCords } from '@/types'
+import type { Bot, BotFriends, BotwebsocketAction, Chest, Master, MineCords } from '@/types'
 import { Vec3 } from 'vec3'
 
 import configBot from '@/config'
@@ -47,7 +47,7 @@ function connect() {
   })
 
   socket.on('sendDisconnect', () => {
-    process.exit(1)
+    process.exit(0)
   })
 
   socket.on('botsOnline', (botsOnline) => {

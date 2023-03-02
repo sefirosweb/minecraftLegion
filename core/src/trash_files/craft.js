@@ -1,4 +1,3 @@
-require('module-alias/register')
 const mineflayer = require('mineflayer')
 if (process.argv.length < 2 || process.argv.length > 6) {
   console.log('Usage : node craft.js <host> <port> [<name>] [<password>]')

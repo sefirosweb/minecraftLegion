@@ -172,7 +172,7 @@ function deathFunction(bot: Bot, targets: LegionStateMachineTargets) {
   bot.on('chat', (master, message) => {
     if (message === 'hi ' + bot.username || message === 'hi all') {
       const masters = botWebsocket.getMasters() as Master[]
-      const findMaster = masters.find(e => e?.name === master)
+      const findMaster = masters.find(e => e === master)
 
       if (findMaster === undefined) {
         botWebsocket.log(`${master} is no in master list!`)

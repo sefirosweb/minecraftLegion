@@ -1,8 +1,6 @@
 import mineflayer from "mineflayer";
 import customStartLoader from "@/custom_start/custom"
 
-require("module-alias/register");
-
 import botWebsocket from "@/modules/botWebsocket";
 import mcDataLoader from 'minecraft-data'
 import { Bot } from "./types";
