@@ -1,2 +1,4 @@
 botConfig/*
 custom_start/*
+node_modules/
+.env

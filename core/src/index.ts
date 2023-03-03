@@ -1,13 +1,14 @@
 import { botSocket, botType, socketAuth } from "./types";
 import Config from '@/config'
 import io from 'socket.io-client'
+import path from 'path'
 import { exec } from "child_process"
 
 const start_bot = () => {
   const { autoRestart, environment } = Config
 
   function startBot(botName: string, password?: string) {
-    const command = environment === 'stage' ? `npm run ts ${botName} ${password ?? ''}` : `node start_bot.js ${botName} ${password ?? ''}`
+    const command = environment === 'stage' ? `npm run ts ${botName} ${password ?? ''}` : `node ${path.join(__dirname, 'start_bot.js')} ${botName} ${password ?? ''}`
 
     exec(command, (err, stdout, stderr) => {
       if (err) {

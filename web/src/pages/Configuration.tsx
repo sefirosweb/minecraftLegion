@@ -1,9 +1,11 @@
-import { Fragment } from 'react'
+import { Fragment, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import Form from 'react-bootstrap/Form'
-import { Col, Row } from 'react-bootstrap'
+import { Button, Col, Row } from 'react-bootstrap'
 import { actionCreators, State } from '@/state'
 import { bindActionCreators } from 'redux'
+import axios from 'axios'
+axios.defaults.withCredentials = true;
 
 const Configuration = () => {
 
@@ -49,6 +51,24 @@ const Configuration = () => {
         updateBotServer(event.target.value)
     }
 
+    // useEffect(() => {
+    //     axios.get('http://localhost:5000/api/login')
+    // }, [])
+
+    // const handleLogin = () => {
+    //     axios.post('http://localhost:5000/api/login', {
+    //         password: 'admin'
+    //     })
+    // }
+
+    // const checkLogin = () => {
+    //     axios.get('http://localhost:5000/api/login')
+    // }
+
+    // const logout = () => {
+    //     axios.post('http://localhost:5000/api/logout')
+    // }
+
     return (
         <Fragment>
             <Row>
@@ -84,6 +104,17 @@ const Configuration = () => {
                             <Form.Label>Server Bots (Used for connect to Bots Viewers)</Form.Label>
                             <Form.Control type="text" value={serverBots} onChange={handleChangeBotServer} />
                         </Form.Group>
+
+                        {/* <div>
+                            <Button className='my-3' variant='success' onClick={handleLogin}>Login</Button>
+                        </div>
+
+                        <div>
+                            <Button className='my-3' variant='success' onClick={checkLogin}>checkLogin</Button>
+                        </div>
+                        <div>
+                            <Button className='my-3' variant='success' onClick={logout}>logout</Button>
+                        </div> */}
 
                         <div>
                             Server status:

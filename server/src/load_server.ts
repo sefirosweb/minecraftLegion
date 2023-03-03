@@ -3,9 +3,14 @@ import http from 'http'
 import { Server, Socket } from 'socket.io'
 import { BotsConnected } from "@/types";
 import { defaultConfig } from "@/types/types";
+import app from '@/app'
 
 export default () => {
-  const { adminPassword, debug, listenPort, originCors } = config
+  const { adminPassword, debug, listenPort, originCors, frontEndPort } = config
+
+  app.listen(frontEndPort, (() => {
+    console.log(`Server running on port: ${frontEndPort}`)
+  }))
 
   const server = http.createServer();
   const io = new Server(server, {
