@@ -8,7 +8,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "npm run install_all && npm run build_all",
     "build_all": "npm run build --prefix ./web/ && npm run build --prefix ./server/ && npm run build --prefix ./core/ && rm server/src/public/ -rf && cp web/dist/ server/dist/public -R",
-    "install_all": "npm install --prefix ./web/ && npm install --prefix ./core/ && npm install --prefix ./server/",
+    "install_all": "npm install && npm install --prefix ./web/ && npm install --prefix ./core/ && npm install --prefix ./server/",
     "build:docker": "docker build -f docker/Dockerfile --no-cache -t minecraft-legion:latest .",
     "dr": "docker-compose build && docker-compose up"
   },
