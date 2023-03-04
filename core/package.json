@@ -20,7 +20,7 @@
         "dockerbuild": "docker build -t docker_minecraftlegion .",
         "update": "npx npm-check-updates",
         "lint": "standard && standard-markdown",
-        "build": "rm dist/ -rf && babel src --extensions \".ts,.js\" --out-dir dist",
+        "build": "babel src --extensions \".ts,.js\" --delete-dir-on-start --out-dir dist",
         "ts": "ts-node -r tsconfig-paths/register ./src/start_bot $1 $2"
     },
     "dependencies": {

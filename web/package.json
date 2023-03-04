@@ -9,8 +9,8 @@
   "homepage": "https://sefirosweb.github.io/minecraftLegionWebClient",
   "scripts": {
     "dev": "vite",
-    "build": "rm dist/ -rf && tsc && vite build",
-    "build:docker": "rm dist/ -rf && tsc && vite build && cp ./prod/default.conf ./dist/ && cp ./docker-compose.yml ./dist/docker-compose.yml && cp .gitignore ./dist/ && cp ./README.md ./dist/",
+    "build": "tsc && vite build",
+    "build:docker": "npm run build && cp ./prod/default.conf ./dist/ && cp ./docker-compose.yml ./dist/docker-compose.yml && cp .gitignore ./dist/ && cp ./README.md ./dist/",
     "preview": "vite preview",
     "deploy": "gh-pages -d build"
   },

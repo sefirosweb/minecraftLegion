@@ -13,7 +13,7 @@
     "dockerbuild": "docker build -t minecraftlegionwebserver .",
     "dockerrun": "docker run --rm -p:4001:4001 minecraftlegionwebserver",
     "docker": "docker run --rm -it --name minecraftLegionWebServer --hostname minecraftLegionWebServer --network minecraftLegionNetwork -v ~/.gitconfig:/etc/gitconfig -p 4001:4001 -p 9250:9250 -v $PWD:/home/app -w /home/app -u node node:16.13-bullseye /bin/bash",
-    "build": "rm dist/ -rf && babel src --extensions \".ts,.js\" --out-dir dist"
+    "build": "babel src --extensions \".ts,.js\" --delete-dir-on-start --out-dir dist"
   },
   "repository": {
     "type": "git",

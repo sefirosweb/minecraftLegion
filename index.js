@@ -1,6 +1,6 @@
 const dotenv = require('dotenv')
 const path = require("path")
-const fs = require("fs")
+const fs = require("fs-extra")
 const fork = require("child_process").fork
 
 const startAllchildProcess = () => {
@@ -12,19 +12,19 @@ const startAllchildProcess = () => {
 }
 
 const checkAllFiles = () => {
-    fs.promises.access(path.join(__dirname, 'custom_start'))
-        .catch((e) => fs.promises.mkdir(path.join(__dirname, 'custom_start'), { recursive: true }))
-        .then(() => fs.promises.access(path.join(__dirname, 'custom_start', 'custom.js')))
-        .catch((e) => fs.promises.copyFile(
+    fs.access(path.join(__dirname, 'custom_start'))
+        .catch((e) => fs.mkdir(path.join(__dirname, 'custom_start'), { recursive: true }))
+        .then(() => fs.access(path.join(__dirname, 'custom_start', 'custom.js')))
+        .catch((e) => fs.copyFile(
             path.join(__dirname, 'core', 'dist', 'custom_start', 'custom_example.js'),
             path.join(__dirname, 'custom_start', 'custom.js')
         ))
-        .then((e) => fs.promises.copyFile(
+        .then((e) => fs.copyFile(
             path.join(__dirname, 'custom_start', 'custom.js'),
             path.join(__dirname, 'core', 'dist', 'custom_start', 'custom.js')
         ))
-        .then(() => fs.promises.access(path.join(__dirname, '.env')))
-        .catch(() => fs.promises.copyFile(
+        .then(() => fs.access(path.join(__dirname, '.env')))
+        .catch(() => fs.copyFile(
             path.join(__dirname, '.env_example'),
             path.join(__dirname, '.env')
         ))
