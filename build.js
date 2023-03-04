@@ -5,11 +5,11 @@ const fs = require("fs-extra")
 const exec = util.promisify(require('child_process').exec)
 
 const build = async () => {
-    console.log('Building core')
-    await exec('npm run build --prefix ' + path.join(__dirname, 'web'))
-    console.log('Building server')
-    await exec('npm run build --prefix ' + path.join(__dirname, 'server'))
     console.log('Building web')
+    await exec('npm run build --prefix ' + path.join(__dirname, 'web'))
+    console.log('Building core')
+    await exec('npm run build --prefix ' + path.join(__dirname, 'core'))
+    console.log('Building server')
     await exec('npm run build --prefix ' + path.join(__dirname, 'server'))
 
     fs.access(path.join(__dirname, 'server', 'dist', 'public'))
