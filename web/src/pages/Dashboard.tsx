@@ -47,7 +47,7 @@ const Dashboard = () => {
                                     {
                                         logs
                                             .filter(log => selectedSocketId === undefined || log.socketId === selectedSocketId)
-                                            .map((log, key) => <div key={key}>{log.time} {log.botName} {log.message}</div>)
+                                            .map((log, key) => <div key={key}>{log.time} {log.botName} {typeof log.message === "string" ? log.message : JSON.stringify(log.message)}</div>)
                                     }
                                     <div ref={messagesEndRef} />
                                 </div>

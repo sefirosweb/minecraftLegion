@@ -48,7 +48,7 @@ export default (bot: Bot) => {
       const realY = y + bot.test.groundY - 4
       bot.chat(`/fill ~-50 ${realY} ~-50 ~50 ${realY} ~50 ` + layerNames[y])
     }
-    bot.chat(`/fill 0 -61 0 0 -61 0 minecraft:gold_block`)
+    bot.chat(`/fill 0 -61 0 0 -61 0 gold_block`)
     await bot.test.wait(100)
   }
 
@@ -115,7 +115,7 @@ export default (bot: Bot) => {
   }
 
   async function teleport(position: Vec3) {
-    bot.chat(`/execute as flatbot in minecraft:overworld run teleport 0 -60 0`)
+    bot.chat(`/execute as flatbot in overworld run teleport 0 -60 0`)
 
     return onceWithCleanup(bot, 'move', {
       checkCondition: () => bot.entity.position.distanceTo(position) < 0.9

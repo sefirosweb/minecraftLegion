@@ -1,16 +1,16 @@
 import { StateTransition, BehaviorIdle, NestedStateMachine, BehaviorFollowEntity } from 'mineflayer-statemachine'
 import BehaviorAttack from '@/BehaviorModules/combat/BehaviorAttack'
 import BehaviorLongAttack from '@/BehaviorModules/combat/BehaviorLongAttack'
-import { Bot, fakeVec3, LegionStateMachineTargets, ShotDirection } from '@/types'
+import { fakeVec3, LegionStateMachineTargets } from '@/types'
 import { Entity } from 'prismarine-entity'
 import mcDataLoader from 'minecraft-data'
 import inventoryModule from '@/modules/inventoryModule'
 import getClosestEnemy from '@/modules/getClosestEnemy'
 import botWebsocket from '@/modules/botWebsocket'
 import mineflayerPathfinder from 'mineflayer-pathfinder'
-
-//@ts-ignore
-import hawkEye from 'minecrafthawkeye'
+import hawkEye, { GetMasterGrade, Weapons } from 'minecrafthawkeye'
+import { Bot } from 'mineflayer'
+import { Vec3 } from 'vec3'
 
 function combatFunction(bot: Bot, targets: LegionStateMachineTargets) {
   const inventory = inventoryModule(bot)
@@ -59,7 +59,7 @@ function combatFunction(bot: Bot, targets: LegionStateMachineTargets) {
   followMob.x = 725
   followMob.y = 113
 
-  let targetGrade: ShotDirection | undefined
+  let targetGrade: GetMasterGrade | undefined
   const prevPlayerPositions: Array<fakeVec3> = []
   let bowCountdown = Date.now() // Used for avoid bugs on jam between bow and sword
   let newTargetColdDown = Date.now()
@@ -104,11 +104,7 @@ function combatFunction(bot: Bot, targets: LegionStateMachineTargets) {
     }
     prevPlayerPositions.push(position)
 
-    const speed = {
-      x: 0,
-      y: 0,
-      z: 0
-    }
+    const speed = new Vec3(0, 0, 0);
 
     for (let i = 1; i < prevPlayerPositions.length; i++) {
       const pos = prevPlayerPositions[i]
@@ -122,8 +118,7 @@ function combatFunction(bot: Bot, targets: LegionStateMachineTargets) {
     speed.y = speed.y / prevPlayerPositions.length
     speed.z = speed.z / prevPlayerPositions.length
 
-    //@ts-ignore
-    targetGrade = bot.hawkEye.getMasterGrade(targets.entity, speed, 'bow')
+    targetGrade = bot.hawkEye.getMasterGrade(targets.entity, speed, Weapons.bow)
     longRangeAttack.setInfoShot(targetGrade)
   }
 

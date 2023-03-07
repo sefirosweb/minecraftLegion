@@ -1,7 +1,8 @@
 
-import { Bot, LegionStateMachineTargets } from "@/types"
+import { LegionStateMachineTargets } from "@/types"
 import { Vec3 } from 'vec3'
 import placeBlockModule from '@/modules/placeBlockModule'
+import { Bot } from "mineflayer"
 
 const minerModule = (bot: Bot, targets: LegionStateMachineTargets) => {
   const blocksToBeRplaced = placeBlockModule(bot).blocksToBeRplaced

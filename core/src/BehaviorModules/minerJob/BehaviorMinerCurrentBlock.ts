@@ -1,4 +1,5 @@
-import { Bot, LegionStateMachineTargets, MineCordsConfig } from '@/types'
+import { LegionStateMachineTargets, MineCordsConfig } from '@/types'
+import { Bot } from 'mineflayer';
 import { StateBehavior } from 'mineflayer-statemachine';
 import { Vec3 } from 'vec3'
 export default class BehaviorMinerCurrentBlock implements StateBehavior {

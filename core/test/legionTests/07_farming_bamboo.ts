@@ -28,12 +28,12 @@ describe('07 Farming bamboo', function () {
     }
 
     await bot.test.resetState()
-    bot.chat(`/give flatbot minecraft:iron_axe`)
-    bot.chat(`/give flatbot minecraft:iron_hoe`)
-    bot.chat(`/give flatbot minecraft:iron_sword`)
+    bot.chat(`/give flatbot iron_axe`)
+    bot.chat(`/give flatbot iron_hoe`)
+    bot.chat(`/give flatbot iron_sword`)
     bot.chat(`/gamerule randomTickSpeed 500`)
 
-    bot.chat(`/give flatbot minecraft:bamboo 1`)
+    bot.chat(`/give flatbot bamboo 1`)
 
     bot.creative.stopFlying()
     bot.test.becomeSurvival()

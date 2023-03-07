@@ -1,15 +1,10 @@
-import { Bot, LegionStateMachineTargets } from "@/types"
-
-import {
-  StateTransition,
-  BehaviorIdle,
-  NestedStateMachine
-} from 'mineflayer-statemachine'
-
+import { LegionStateMachineTargets } from "@/types"
+import { StateTransition, BehaviorIdle, NestedStateMachine } from 'mineflayer-statemachine'
 import BehaviorFindItems from '@/BehaviorModules/BehaviorFindItems'
 import BehaviorLoadConfig from '@/BehaviorModules/BehaviorLoadConfig'
 import BehaviorMoveTo from '@/BehaviorModules/BehaviorMoveTo'
 import { Vec3 } from "vec3"
+import { Bot } from "mineflayer"
 
 function findItemsAndPickup(bot: Bot, targets: LegionStateMachineTargets) {
   let botPosition: Vec3

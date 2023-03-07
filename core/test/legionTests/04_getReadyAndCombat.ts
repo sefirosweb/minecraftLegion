@@ -12,7 +12,7 @@ describe('04 Get ready for combat', function () {
       name: "Input chest name",
       type: "withdraw",
       position: new Vec3(-3, -60, 2),
-      dimension: "minecraft:overworld",
+      dimension: "overworld",
       items: [
         {
           name: "iron_sword",
@@ -60,7 +60,7 @@ describe('04 Get ready for combat', function () {
       name: "Input chest name",
       type: "deposit",
       position: new Vec3(3, -60, 0),
-      dimension: "minecraft:overworld",
+      dimension: "overworld",
       items: [
         {
           name: "oak_door",
@@ -80,7 +80,7 @@ describe('04 Get ready for combat', function () {
       name: "Input chest name",
       type: "depositAll",
       position: new Vec3(3, -60, -2),
-      dimension: "minecraft:overworld",
+      dimension: "overworld",
       items: [
         {
           name: "iron_sword",
@@ -139,13 +139,13 @@ describe('04 Get ready for combat', function () {
     bot.chat(`/setblock -3 -60 2 chest[facing=east]{Items:[{Slot:0,id:iron_block,Count:64},{Slot:1,id:oak_log,Count:64},{Slot:2,id:stone,Count:64}]} replace`)
     bot.chat(`/setblock 3 -60 -2 chest[facing=west] replace`)
     bot.chat(`/setblock 3 -60 0 chest[facing=west] replace`)
-    bot.chat(`/fill -3 -60 -7 -3 -60 -7 minecraft:crafting_table`)
-    bot.chat(`/fill 15 -60 35 -3 -58 17 minecraft:dirt`)
-    bot.chat(`/fill -1 -58 19 13 -60 33 minecraft:air`)
-    bot.chat(`/fill 0 -60 15 1 -59 15 minecraft:dirt`)
-    bot.chat(`/fill 1 -60 14 0 -60 14 minecraft:dirt`)
-    bot.chat(`/fill 8 -59 20 9 -60 20 minecraft:dirt`)
-    bot.chat(`/fill 8 -60 21 9 -60 21 minecraft:dirt`)
+    bot.chat(`/fill -3 -60 -7 -3 -60 -7 crafting_table`)
+    bot.chat(`/fill 15 -60 35 -3 -58 17 dirt`)
+    bot.chat(`/fill -1 -58 19 13 -60 33 air`)
+    bot.chat(`/fill 0 -60 15 1 -59 15 dirt`)
+    bot.chat(`/fill 1 -60 14 0 -60 14 dirt`)
+    bot.chat(`/fill 8 -59 20 9 -60 20 dirt`)
+    bot.chat(`/fill 8 -60 21 9 -60 21 dirt`)
     bot.chat(`/summon husk 1 -60 22 {HandItems:[{Count:1,id:diamond_sword,tag:{Enchantments:[{id:sharpness,lvl:5}]}},{}],ArmorItems:[{Count:1,id:diamond_boots},{Count:1,id:diamond_leggings},{Count:1,id:diamond_chestplate},{Count:1,id:diamond_helmet}]}`)
 
     bot.creative.stopFlying()

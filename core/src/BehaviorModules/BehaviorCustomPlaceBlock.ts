@@ -5,7 +5,8 @@ import placeBlockModule from '@/modules/placeBlockModule'
 import inventoryModule from '@/modules/inventoryModule'
 import { Vec3 } from "vec3"
 import { StateBehavior } from "mineflayer-statemachine"
-import { Bot, LegionStateMachineTargets } from '@/types'
+import { LegionStateMachineTargets } from '@/types'
+import { Bot } from 'mineflayer'
 export default class BehaviorCustomPlaceBlock implements StateBehavior {
   active: boolean;
   readonly bot: Bot

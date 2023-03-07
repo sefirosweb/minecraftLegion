@@ -1,5 +1,4 @@
 import { BotwebsocketAction, LegionStateMachineTargets, Master } from '@/types'
-import { Bot } from '@/types'
 import { StateTransition, BehaviorIdle, NestedStateMachine } from 'mineflayer-statemachine'
 import BehaviorGetPlayer from '@/BehaviorModules/BehaviorGetPlayer'
 import botWebsocket from '@/modules/botWebsocket'
@@ -8,6 +7,7 @@ import mcDataLoader from 'minecraft-data'
 import StartWork from '@/NestedStateModules/startWorkFunction'
 import Commands from '@/NestedStateModules/commandsFunction'
 import GoSleep from '@/NestedStateModules/goSleepFunction'
+import { Bot } from 'mineflayer'
 
 function deathFunction(bot: Bot, targets: LegionStateMachineTargets) {
   const mcData = mcDataLoader(bot.version)

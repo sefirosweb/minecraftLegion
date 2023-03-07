@@ -1,8 +1,9 @@
 
-import { Bot, Chest, Chests, Item, LegionStateMachineTargets } from "@/types"
+import { Chest, Chests, Item, LegionStateMachineTargets } from "@/types"
 import sorterJob from '@/modules/sorterJob'
 import inventoryModule from '@/modules/inventoryModule'
 import _ from 'lodash'
+import { Bot } from "mineflayer"
 
 const chestModule = (bot: Bot, targets: LegionStateMachineTargets) => {
   const { findItemsInChests } = sorterJob()

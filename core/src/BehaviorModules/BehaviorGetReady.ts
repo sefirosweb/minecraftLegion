@@ -1,6 +1,7 @@
-import { Bot, LegionStateMachineTargets } from "@/types"
+import { LegionStateMachineTargets } from "@/types"
 import inventoryModule from '@/modules/inventoryModule'
 import { StateBehavior } from "mineflayer-statemachine"
+import { Bot } from "mineflayer";
 export default class BehaviorGetReady implements StateBehavior {
   active: boolean;
   readonly bot: Bot

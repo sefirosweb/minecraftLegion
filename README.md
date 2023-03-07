@@ -1,4 +1,4 @@
-# minecraftLegion
+# MinecraftLegion
 
 Minecraft multipurpose bot
 
@@ -66,7 +66,7 @@ to finish commands
 
 ## Manual:
 
-1. Clone or download the repositorio `git clone && cd minecraftLegion/`
+1. Clone or download the repositorio `git clone https://github.com/sefirosweb/minecraftLegion.git && cd minecraftLegion/`
 2. Auto Install all the dependencies and build them `npm run build`
 3. Go to server folder and create `.env` file with password
 

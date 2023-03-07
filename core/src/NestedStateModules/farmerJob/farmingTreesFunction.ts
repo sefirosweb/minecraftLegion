@@ -1,4 +1,4 @@
-import { Bot, LegionStateMachineTargets } from '@/types'
+import { LegionStateMachineTargets } from '@/types'
 import {
   StateTransition,
   BehaviorIdle,
@@ -7,6 +7,7 @@ import {
 import PlantFunction from '@/NestedStateModules/farmerJob/plantFunction'
 import HarvestFunction from '@/NestedStateModules/farmerJob/harvestFunction'
 import FindItemsAndPickup from '@/NestedStateModules/findItemsAndPickup'
+import { Bot } from 'mineflayer'
 
 function farmingTreesFunction(bot: Bot, targets: LegionStateMachineTargets) {
   const start = new BehaviorIdle()

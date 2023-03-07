@@ -1,10 +1,11 @@
-import { Bot, LegionStateMachineTargets, MineCordsConfig } from "@/types"
+import { LegionStateMachineTargets, MineCordsConfig } from "@/types"
 
 import mineflayerPathfinder from 'mineflayer-pathfinder'
 import botWebsocket from '@/modules/botWebsocket'
 import { Vec3 } from 'vec3'
 import { StateBehavior } from "mineflayer-statemachine";
 import { Block } from "prismarine-block";
+import { Bot } from "mineflayer";
 
 export default class BehaviorMinerCheckLayer implements StateBehavior {
   active: boolean;

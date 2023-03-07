@@ -2,7 +2,8 @@ import { StateTransition, BehaviorIdle, NestedStateMachine } from 'mineflayer-st
 import BehaviorGetReady from '@/BehaviorModules/BehaviorGetReady'
 import BehaviorEquipAll from '@/BehaviorModules/BehaviorEquipAll'
 import GoChestsFunctions from '@/NestedStateModules/getReady/goChestsFunctions'
-import { Bot, LegionStateMachineTargets } from '@/types'
+import { LegionStateMachineTargets } from '@/types'
+import { Bot } from 'mineflayer'
 
 export default (bot: Bot, targets: LegionStateMachineTargets) => {
   const start = new BehaviorIdle()

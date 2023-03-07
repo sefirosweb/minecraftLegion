@@ -83,7 +83,7 @@ export const defaultConfig: Config = {
     minerCords: {
       orientation: 'x+',
       tunel: 'horizontally',
-      world: 'minecraft:overworld',
+      world: 'overworld',
       xEnd: 0,
       xStart: 0,
       yEnd: 80,

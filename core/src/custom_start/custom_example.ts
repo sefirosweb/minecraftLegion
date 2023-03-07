@@ -1,8 +1,8 @@
-import { Bot } from "@/types"
 import { Entity } from 'prismarine-entity'
 import { sleep } from '@/modules/utils'
 import mcDataLoader from 'minecraft-data'
 import mineflayerPathfinder from 'mineflayer-pathfinder'
+import { Bot } from 'mineflayer'
 
 const custom = (bot: Bot) => {
   const start = (): Promise<void> => {

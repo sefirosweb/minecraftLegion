@@ -1,9 +1,10 @@
 
 
-import { Bot, Food, LegionStateMachineTargets } from "@/types"
+import { Food, LegionStateMachineTargets } from "@/types"
 import botWebsocket from '@/modules/botWebsocket'
 import mcDataLoader from 'minecraft-data'
 import { StateBehavior } from "mineflayer-statemachine"
+import { Bot } from "mineflayer";
 
 export default class BehaviorEatFood implements StateBehavior{
   active: boolean;

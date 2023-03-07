@@ -10,8 +10,9 @@ import BehaviorFertilize from '@/BehaviorModules/BehaviorFertilize'
 import BehaviorMoveTo from '@/BehaviorModules/BehaviorMoveTo'
 import BehaviorCraft from '@/BehaviorModules/BehaviorCraft'
 import { plants, dirtCanBefertilized } from '@/modules/plantType'
-import { Bot, LegionStateMachineTargets } from '@/types'
+import { LegionStateMachineTargets } from '@/types'
 import { Block } from 'prismarine-block'
+import { Bot } from 'mineflayer'
 
 function plantFunction(bot: Bot, targets: LegionStateMachineTargets) {
   const blockAir = ['air', 'cave_air']

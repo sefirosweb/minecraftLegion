@@ -1,5 +1,5 @@
 
-import { Bot, Item, LegionStateMachineTargets, PositionsChecked } from "@/types"
+import { Item, LegionStateMachineTargets, PositionsChecked } from "@/types"
 import botWebsocket from '@/modules/botWebsocket'
 import digBlockModule from '@/modules/digBlockModule'
 import minerModule from '@/modules/minerModule'
@@ -8,6 +8,7 @@ import inventoryModule from '@/modules/inventoryModule'
 import { Vec3 } from "vec3"
 import mcDataLoader from 'minecraft-data'
 import { StateBehavior } from "mineflayer-statemachine"
+import { Bot } from "mineflayer"
 
 type ItemWithHardness = Item & {
   name: NonNullable<Item['name']>

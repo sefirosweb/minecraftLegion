@@ -1,6 +1,4 @@
 import { StateTransition, BehaviorIdle, NestedStateMachine, BehaviorFollowEntity } from 'mineflayer-statemachine'
-
-import { Bot } from '@/types'
 import { LegionStateMachineTargets } from '@/types/index'
 import mcDataLoader from 'minecraft-data'
 import { DefaultBlockForPlace, Jobs } from '@/types/defaultTypes'
@@ -12,6 +10,7 @@ import BreederJob from '@/NestedStateModules/breederJob/breederJobFunction'
 import MinerJob from '@/NestedStateModules/minerJob/minerJobFunction'
 import SorterJob from '@/NestedStateModules/sorterJob/sorterJobFunction'
 import CrafterJobFunction from '@/NestedStateModules/crafterJob/crafterJobFunction'
+import { Bot } from 'mineflayer'
 
 function startWorkFunction(bot: Bot, targets: LegionStateMachineTargets) {
   const mcData = mcDataLoader(bot.version)

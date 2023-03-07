@@ -1,8 +1,9 @@
 
-import { Bot, LegionStateMachineTargets, MineCordsConfig } from '@/types'
+import { LegionStateMachineTargets, MineCordsConfig } from '@/types'
 
 import botWebsocket from '@/modules/botWebsocket'
 import { StateBehavior } from 'mineflayer-statemachine';
+import { Bot } from 'mineflayer';
 
 export default class BehaviorMinerCurrentLayer implements StateBehavior {
   active: boolean;

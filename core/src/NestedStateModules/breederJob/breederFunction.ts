@@ -7,8 +7,9 @@ import {
 import FeedAnimalFunction from '@/NestedStateModules/breederJob/feedAnimalFunction'
 import BehaviorLoadConfig from '@/BehaviorModules/BehaviorLoadConfig'
 import { animals } from '@/modules/animalType'
-import { Bot, LegionStateMachineTargets } from '@/types'
+import { LegionStateMachineTargets } from '@/types'
 import { Entity } from 'prismarine-entity'
+import { Bot } from 'mineflayer'
 const animalTypes = Object.keys(animals)
 
 function breederFunction(bot: Bot, targets: LegionStateMachineTargets) {
@@ -60,7 +61,7 @@ function breederFunction(bot: Bot, targets: LegionStateMachineTargets) {
           entity.position.z >= zStart && entity.position.z <= zEnd
         ) {
 
-          //@ts-ignore
+          // @ts-ignore
           if (entity.metadata[16] === true) { // is a baby
             continue
           }

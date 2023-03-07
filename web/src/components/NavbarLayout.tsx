@@ -35,7 +35,7 @@ const NavbarLayout = () => {
       botPassword
     }
 
-    //@ts-ignore
+    // @ts-ignore
     socket.emit('botConnect', message)
     handleClose()
   }

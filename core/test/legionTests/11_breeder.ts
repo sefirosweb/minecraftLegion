@@ -81,18 +81,18 @@ describe('11 Breeder animals', function () {
 
   const beforeEachAnimal = async () => {
     await bot.test.resetState()
-    bot.chat(`/give flatbot minecraft:iron_axe`)
-    bot.chat(`/give flatbot minecraft:beef 64`)
-    bot.chat(`/give flatbot minecraft:sweet_berries 64`)
-    bot.chat(`/give flatbot minecraft:red_tulip 64`)
-    bot.chat(`/give flatbot minecraft:golden_apple 64`)
-    bot.chat(`/give flatbot minecraft:cod 64`)
-    bot.chat(`/give flatbot minecraft:hay_block 64`)
-    bot.chat(`/give flatbot minecraft:bamboo 64`)
-    bot.chat(`/give flatbot minecraft:seagrass 64`)
-    bot.chat(`/fill -6 -50 6 6 -61 -6 minecraft:glass hollow`)
-    bot.chat(`/fill -5 -61 -5 5 -61 5 minecraft:sand`)
-    bot.chat(`/fill 2 -61 0 2 -58 0 minecraft:bamboo`)
+    bot.chat(`/give flatbot iron_axe`)
+    bot.chat(`/give flatbot beef 64`)
+    bot.chat(`/give flatbot sweet_berries 64`)
+    bot.chat(`/give flatbot red_tulip 64`)
+    bot.chat(`/give flatbot golden_apple 64`)
+    bot.chat(`/give flatbot cod 64`)
+    bot.chat(`/give flatbot hay_block 64`)
+    bot.chat(`/give flatbot bamboo 64`)
+    bot.chat(`/give flatbot seagrass 64`)
+    bot.chat(`/fill -6 -50 6 6 -61 -6 glass hollow`)
+    bot.chat(`/fill -5 -61 -5 5 -61 5 sand`)
+    bot.chat(`/fill 2 -61 0 2 -58 0 bamboo`)
     bot.chat(`/gamerule randomTickSpeed 10000`)
 
     bot.creative.stopFlying()
@@ -132,7 +132,7 @@ describe('11 Breeder animals', function () {
               continue
             }
 
-            //@ts-ignore
+            // @ts-ignore
             if (entity.metadata[16] === true) { // is a baby
               finished = true
               break

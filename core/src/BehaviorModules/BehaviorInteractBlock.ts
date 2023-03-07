@@ -1,7 +1,8 @@
-import { Bot, LegionStateMachineTargets } from "@/types"
+import { LegionStateMachineTargets } from "@/types"
+import { Bot } from "mineflayer";
 import { StateBehavior } from "mineflayer-statemachine"
 
-export default class template implements StateBehavior {
+export default class BehaviorInteractBlock implements StateBehavior {
   active: boolean;
   readonly bot: Bot
   readonly targets: LegionStateMachineTargets

@@ -1,7 +1,9 @@
-import { Bot, LegionStateMachineTargets, ShotDirection } from "@/types"
+import { LegionStateMachineTargets } from "@/types"
 import inventoryModule from '@/modules/inventoryModule'
 import botWebsocket from '@/modules/botWebsocket'
 import { StateBehavior } from "mineflayer-statemachine"
+import { Bot } from "mineflayer";
+import { GetMasterGrade } from "minecrafthawkeye";
 export default class BehaviorLongAttack implements StateBehavior {
   active: boolean;
   readonly bot: Bot
@@ -11,7 +13,7 @@ export default class BehaviorLongAttack implements StateBehavior {
   y?: number
 
   playername?: string
-  infoShot: ShotDirection | undefined
+  infoShot: GetMasterGrade | undefined
   prevTime: number | false
   playerIsFound: boolean
   preparingShot: boolean
@@ -60,7 +62,7 @@ export default class BehaviorLongAttack implements StateBehavior {
     }
   }
 
-  setInfoShot(infoShot: ShotDirection | undefined) {
+  setInfoShot(infoShot: GetMasterGrade | undefined) {
     this.infoShot = infoShot
   }
 

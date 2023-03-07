@@ -3,8 +3,9 @@ import { Item } from 'prismarine-item';
 import BehaviorEquip from '@/BehaviorModules/BehaviorEquip'
 import BehaviorInteractEntity from '@/BehaviorModules/BehaviorInteractEntity'
 import { animals as animalType, isAnimal } from '@/modules/animalType'
-import { Bot, LegionStateMachineTargets } from '@/types'
+import { LegionStateMachineTargets } from '@/types'
 import mcDataLoader from 'minecraft-data'
+import { Bot } from 'mineflayer';
 
 function feedAnimalFunction(bot: Bot, targets: LegionStateMachineTargets) {
   const mcData = mcDataLoader(bot.version)

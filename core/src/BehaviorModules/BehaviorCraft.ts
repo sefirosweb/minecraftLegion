@@ -1,10 +1,11 @@
 
-import { Bot, LegionStateMachineTargets } from "@/types"
+import { LegionStateMachineTargets } from "@/types"
 import { Block } from 'prismarine-block'
 import mcDataLoader from 'minecraft-data'
 import botWebsocket from '@/modules/botWebsocket'
 import inventoryModule from '@/modules/inventoryModule'
 import { StateBehavior } from "mineflayer-statemachine"
+import { Bot } from "mineflayer"
 export default class BehaviorCraft implements StateBehavior {
   active: boolean;
   readonly bot: Bot

@@ -11,4 +11,4 @@ const botConfig: Props = {
     botName: process.argv[2]
 }
 
-createNewBot(botConfig)
+export const bot = createNewBot(botConfig)

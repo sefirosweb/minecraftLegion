@@ -19,5 +19,9 @@ module.exports = {
                 }
             }
         ]
+    ],
+    "ignore": [
+        "**/trash_files/*"
     ]
+
 };

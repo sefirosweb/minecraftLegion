@@ -1,12 +1,13 @@
 import { StateTransition, BehaviorIdle, NestedStateMachine } from 'mineflayer-statemachine'
 import BehaviorEatFood from '@/BehaviorModules/BehaviorEatFood'
-import { Bot, LegionStateMachineTargets } from '@/types'
+import { LegionStateMachineTargets } from '@/types'
 import getClosestEnemy from '@/modules/getClosestEnemy'
 import GetReadyFunction from '@/NestedStateModules/getReady/getReadyFunction'
 import BreederFunction from '@/NestedStateModules/breederJob/breederFunction'
 import SlaughterhouseFunction from '@/NestedStateModules/breederJob/slaughterhouseFunction'
 import CombatStrategyFunction from '@/NestedStateModules/combat/combatStrategyFunction'
 import FindItemsAndPickup from '@/NestedStateModules/findItemsAndPickup'
+import { Bot } from 'mineflayer'
 
 function breederJobFunction(bot: Bot, targets: LegionStateMachineTargets) {
   const start = new BehaviorIdle()

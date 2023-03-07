@@ -11,7 +11,8 @@ import { Entity } from 'prismarine-entity'
 
 import botWebsocket from '@/modules/botWebsocket'
 import BehaviorAttack from '@/BehaviorModules/combat/BehaviorAttack'
-import { Bot, LegionStateMachineTargets } from '@/types'
+import { LegionStateMachineTargets } from '@/types'
+import { Bot } from 'mineflayer'
 
 function archerJobFunction(bot: Bot, targets: LegionStateMachineTargets) {
   const enter = new BehaviorIdle()

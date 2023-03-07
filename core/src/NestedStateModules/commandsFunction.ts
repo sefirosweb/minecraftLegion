@@ -2,9 +2,10 @@ import { StateTransition, BehaviorIdle, BehaviorFollowEntity, BehaviorLookAtEnti
 import { Vec3 } from 'vec3'
 import botConfigLoader from '@/modules/botConfig'
 import botWebsocket from '@/modules/botWebsocket'
-import { Bot, BotwebsocketAction, Coordinates, LegionStateMachineTargets, Master } from '@/types'
+import { BotwebsocketAction, Coordinates, LegionStateMachineTargets, Master } from '@/types'
 import { Entity } from 'prismarine-entity'
 import mineflayerPathfinder from 'mineflayer-pathfinder'
+import { Bot } from 'mineflayer'
 
 function commandsFunction(bot: Bot, targets: LegionStateMachineTargets) {
   const start = new BehaviorIdle()

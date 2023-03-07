@@ -1,14 +1,14 @@
 import vec3 from 'vec3'
 import { StateTransition, BehaviorIdle, NestedStateMachine } from 'mineflayer-statemachine'
-
 import BehaviorcCheckItemsInChest from '@/BehaviorModules/sorterJob/BehaviorcCheckItemsInChest'
 import BehaviorMoveTo from '@/BehaviorModules/BehaviorMoveTo'
-import { Bot, NewChestBlock, LegionStateMachineTargets } from '@/types'
+import { NewChestBlock, LegionStateMachineTargets } from '@/types'
 import sorterJob from '@/modules/sorterJob'
 import inventoryModule from '@/modules/inventoryModule'
 import DepositItemsInInventory from '@/NestedStateModules/sorterJob/depositItemsInInventory'
 import SortChestFunction from '@/NestedStateModules/sorterJob/sortChestFunction'
 import { Block } from 'prismarine-block'
+import { Bot } from 'mineflayer'
 
 const sorterJobFunction = (bot: Bot, targets: LegionStateMachineTargets) => {
   const { findChests } = inventoryModule(bot)
@@ -162,10 +162,10 @@ const sorterJobFunction = (bot: Bot, targets: LegionStateMachineTargets) => {
         targets.sorterJob.emptyChests = []
         targets.sorterJob.newChests = []
 
-        //@ts-ignore pendiente de PR: https://github.com/PrismarineJS/mineflayer/pull/2919
+        // @ts-ignore pendiente de PR: https://github.com/PrismarineJS/mineflayer/pull/2919
         bot.removeListener('chestLidMove', customSortJobAddNewChestToCheck)
 
-        //@ts-ignore pendiente de PR: https://github.com/PrismarineJS/mineflayer/pull/2919
+        // @ts-ignore pendiente de PR: https://github.com/PrismarineJS/mineflayer/pull/2919
         bot.on('chestLidMove', customSortJobAddNewChestToCheck)
       },
       shouldTransition: () => true

@@ -22,7 +22,7 @@ describe('01 Basic Mining', function () {
     orientation: "x+",
     reverse: false,
     tunel: "vertically",
-    world: "minecraft:overworld"
+    world: "overworld"
   }
 
   let config: Config
@@ -46,10 +46,10 @@ describe('01 Basic Mining', function () {
 
 
     await bot.test.resetState()
-    bot.chat(`/give flatbot minecraft:iron_pickaxe`)
-    bot.chat(`/give flatbot minecraft:diamond_shovel`)
-    bot.chat(`/give flatbot minecraft:dirt 64`)
-    bot.chat(`/fill ${xStart} ${yStart} ${zStart} ${xEnd} ${yEnd} ${zEnd} minecraft:dirt`)
+    bot.chat(`/give flatbot iron_pickaxe`)
+    bot.chat(`/give flatbot diamond_shovel`)
+    bot.chat(`/give flatbot dirt 64`)
+    bot.chat(`/fill ${xStart} ${yStart} ${zStart} ${xEnd} ${yEnd} ${zEnd} dirt`)
     bot.chat(`/teleport ${xStart} ${yStart + 2} ${zStart}`)
     bot.creative.stopFlying()
     bot.test.becomeSurvival()

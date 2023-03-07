@@ -11,13 +11,13 @@ describe('12 Cross the portals', function () {
     botConfig = botConfigLoader(bot.username)
     await bot.test.resetState()
 
-    bot.chat(`/fill -4 -60 13 0 -55 13 minecraft:obsidian`)
-    bot.chat(`/fill -3 -59 13 -1 -56 13 minecraft:nether_portal`)
-    bot.chat(`/fill 16 -60 -1 16 -60 1 minecraft:end_portal_frame[eye=true,facing=west]`)
-    bot.chat(`/fill 20 -60 -1 20 -60 1 minecraft:end_portal_frame[eye=true,facing=west]`)
-    bot.chat(`/fill 19 -60 2 17 -60 2 minecraft:end_portal_frame[eye=true,facing=north]`)
-    bot.chat(`/fill 17 -60 -2 19 -60 -2 minecraft:end_portal_frame[eye=true,facing=north]`)
-    bot.chat(`/fill 17 -60 -1 19 -60 1 minecraft:end_portal`)
+    bot.chat(`/fill -4 -60 13 0 -55 13 obsidian`)
+    bot.chat(`/fill -3 -59 13 -1 -56 13 nether_portal`)
+    bot.chat(`/fill 16 -60 -1 16 -60 1 end_portal_frame[eye=true,facing=west]`)
+    bot.chat(`/fill 20 -60 -1 20 -60 1 end_portal_frame[eye=true,facing=west]`)
+    bot.chat(`/fill 19 -60 2 17 -60 2 end_portal_frame[eye=true,facing=north]`)
+    bot.chat(`/fill 17 -60 -2 19 -60 -2 end_portal_frame[eye=true,facing=north]`)
+    bot.chat(`/fill 17 -60 -1 19 -60 1 end_portal`)
 
     bot.creative.stopFlying()
     bot.test.becomeSurvival()
@@ -36,7 +36,7 @@ describe('12 Cross the portals', function () {
       orientation: "x+",
       reverse: false,
       tunel: "vertically",
-      world: "minecraft:the_nether"
+      world: "the_nether"
     }
 
 
@@ -55,7 +55,7 @@ describe('12 Cross the portals', function () {
           name: "Input chest name",
           type: "withdraw",
           position: new Vec3(-2, -35, 1),
-          dimension: "minecraft:the_nether",
+          dimension: "the_nether",
           items: [
             {
               name: "iron_pickaxe",
@@ -75,7 +75,7 @@ describe('12 Cross the portals', function () {
         bot.emit('reloadBotConfig')
 
         setTimeout(() => {
-          bot.chat(`/execute as flatbot in minecraft:overworld run teleport 0 -60 0`)
+          bot.chat(`/execute as flatbot in overworld run teleport 0 -60 0`)
           setTimeout(() => {
             resolve()
           }, 2000);
@@ -95,7 +95,7 @@ describe('12 Cross the portals', function () {
       orientation: "x+",
       reverse: false,
       tunel: "vertically",
-      world: "minecraft:the_end"
+      world: "the_end"
     }
 
     const config: Config = {
@@ -113,7 +113,7 @@ describe('12 Cross the portals', function () {
           name: "Input chest name",
           type: "withdraw",
           position: new Vec3(-2, -35, 1),
-          dimension: "minecraft:the_end",
+          dimension: "the_end",
           items: [
             {
               name: "iron_pickaxe",
@@ -134,7 +134,7 @@ describe('12 Cross the portals', function () {
         bot.emit('reloadBotConfig')
 
         setTimeout(() => {
-          bot.chat(`/execute as flatbot in minecraft:overworld run teleport 0 -60 0`)
+          bot.chat(`/execute as flatbot in overworld run teleport 0 -60 0`)
           setTimeout(() => {
             resolve()
           }, 2000);

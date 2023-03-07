@@ -118,7 +118,7 @@ export default () => {
         };
 
         io.to("usersLoged").emit("botStatus", message);
-        //@ts-ignore via web socket can update any data
+        // @ts-ignore via web socket can update any data
         botsConnected[botIndex][message.type] = message.value;
       }
     });

@@ -1,9 +1,10 @@
 
-import { Bot, CustomItem } from "@/types"
+import { CustomItem } from "@/types"
 import { Vec3 } from "vec3"
 import { Block } from 'prismarine-block'
 import mcDataLoader from 'minecraft-data'
 import { Item } from 'prismarine-item';
+import { Bot } from "mineflayer";
 
 const digBlockModule = (bot: Bot) => {
 
@@ -70,9 +71,7 @@ const digBlockModule = (bot: Bot) => {
       return undefined
     }
 
-    const toolsIdForMaterial = Object.keys(toolsForMaterial).map(function (x) {
-      return parseInt(x, 10)
-    })
+    const toolsIdForMaterial = Object.keys(toolsForMaterial).map((x) => parseInt(x, 10))
 
     const tools: Array<CustomItem> = []
 

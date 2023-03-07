@@ -1,7 +1,8 @@
 import { StateTransition, BehaviorIdle, NestedStateMachine, BehaviorFollowEntity } from 'mineflayer-statemachine'
 import BehaviorAttack from '@/BehaviorModules/combat/BehaviorAttack'
 import BehaviorEquip from '@/BehaviorModules/BehaviorEquip'
-import { Bot, LegionStateMachineTargets } from '@/types'
+import { LegionStateMachineTargets } from '@/types'
+import { Bot } from 'mineflayer'
 const rangeSword = 3
 
 function slaughterhouseFunction(bot: Bot, targets: LegionStateMachineTargets) {

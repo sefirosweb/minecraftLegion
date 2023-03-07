@@ -1,6 +1,7 @@
-import { Bot, ChestBlock, LegionStateMachineTargets } from '@/types'
+import { ChestBlock, LegionStateMachineTargets } from '@/types'
 import { StateTransition, BehaviorIdle, NestedStateMachine } from 'mineflayer-statemachine'
 import GoAndDeposit from '@/NestedStateModules/getReady/goAndDeposit'
+import { Bot } from 'mineflayer'
 
 function depositItemsInInventory(bot: Bot, targets: LegionStateMachineTargets) {
   const start = new BehaviorIdle()

@@ -1,5 +1,5 @@
 import socketIOClient, { Socket } from 'socket.io-client'
-import type { Bot, BotFriends, BotwebsocketAction, Chest, Master, MineCords } from '@/types'
+import type { BotFriends, BotwebsocketAction, Chest, Master, MineCords } from '@/types'
 import { Vec3 } from 'vec3'
 
 import configBot from '@/config'
@@ -7,13 +7,14 @@ const { webServer, webServerPort, webServerPassword } = configBot
 
 import botconfigLoader from '@/modules/botConfig'
 import { isAnimal } from './animalType'
+import { Entity } from 'prismarine-entity'
+import { Bot } from 'mineflayer'
 
-
-let bot: Bot
 let socket: Socket
 let friends: Array<BotFriends> = []
 let masters: Array<Master> = []
 let loged = false
+let bot: Bot
 
 function loadBot(_bot: Bot) {
   bot = _bot
@@ -88,7 +89,7 @@ function connect() {
         name: 'Input chest name',
         type: 'withdraw',
         position: new Vec3(0, 0, 0),
-        dimension: 'minecraft:overworld',
+        dimension: 'overworld',
         items: []
       }
       chests.push(chest)
@@ -229,20 +230,14 @@ function connect() {
         return
       }
 
-      const isEventLoaded = bot.listeners('customEventPhysicTick')
-        .find((event) => {
-          return event.name === 'bound nextPointListener'
-        })
-
       if (!isEventLoaded) {
         prevPoint = undefined
-        bot.on(
-          'customEventPhysicTick',
-          //@ts-ignore
-          nextPointListener.bind(this, findMaster)
-        )
+        isEventLoaded = true
+        masterPointListener = findMaster
+        bot.on('customEventPhysicTick', nextPointListener)
       } else {
-        bot.removeListener('customEventPhysicTick', isEventLoaded)
+        bot.removeListener('customEventPhysicTick', nextPointListener)
+        isEventLoaded = false
       }
     }
 
@@ -307,7 +302,7 @@ function connect() {
 
     setConfigurations['changeWorldMiner'] = (value: string) => {
       const minerConfig = botconfig.getMinerCords()
-      if (value === 'minecraft:overworld' || value === 'minecraft:the_nether' || value === 'minecraft:the_end') {
+      if (value === 'overworld' || value === 'the_nether' || value === 'the_end') {
         minerConfig.world = value
       }
       botconfig.setMinerCords(minerConfig)
@@ -335,7 +330,7 @@ function connect() {
         type: 'withdraw',
         position: new Vec3(0, 0, 0),
         items: [],
-        dimension: 'minecraft:overworld'
+        dimension: 'overworld'
       })
       botconfig.setChests(chests)
     }
@@ -368,7 +363,7 @@ function connect() {
 
       if (
         coord === "dimension" &&
-        (pos === 'minecraft:overworld' || pos === 'minecraft:the_nether' || pos === 'minecraft:the_end')
+        (pos === 'overworld' || pos === 'the_nether' || pos === 'the_end')
       ) {
         chests[chestId].dimension = pos
       }
@@ -388,6 +383,7 @@ function connect() {
 
       const chests = botconfig.getChests()
       chests[value.chestId].position = findMaster.position.floored()
+      // @ts-ignore https://github.com/PrismarineJS/mineflayer/pull/2963
       chests[value.chestId].dimension = bot.game.dimension
       botconfig.setChests(chests)
     }
@@ -612,8 +608,12 @@ const getMasters = () => {
 }
 
 let prevPoint: Vec3 | undefined
-const nextPointListener = (master: { position: Vec3 }) => {
+let isEventLoaded = false
+let masterPointListener: Entity | undefined
+const nextPointListener = () => {
   const botconfig = botconfigLoader(bot.username)
+  if (!masterPointListener) return
+  const master = masterPointListener
 
   if (prevPoint === undefined || master.position.distanceTo(prevPoint) > 3) {
     const patrol = botconfig.getPatrol()

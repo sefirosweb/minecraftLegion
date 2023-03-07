@@ -1,6 +1,7 @@
 
 
-import { Bot, LegionStateMachineTargets } from "@/types"
+import { LegionStateMachineTargets } from "@/types"
+import { Bot } from "mineflayer";
 import { StateBehavior } from "mineflayer-statemachine"
 
 export default class BehaviorGetPlayer implements StateBehavior {

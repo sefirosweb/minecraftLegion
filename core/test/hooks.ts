@@ -1,10 +1,9 @@
-
-import { createNewBot } from "@/createNewBot";
-import { Bot } from '@/types';
 import injectCommonTest from './legionTests/plugins/testCommon'
+import { createNewBot } from "../src/createNewBot";
+import { TestBot } from '@/types';
 
 export const TEST_TIMEOUT_MS = 180000
-export let bot: Bot
+export let bot: TestBot
 
 export const mochaHooks = () => {
     return {
@@ -19,7 +18,7 @@ export const mochaHooks = () => {
                 }
 
                 PORT = 25565
-                HOST = 'minecraftLegion_test_server'
+                HOST = 'localhost'
                 console.log(`Port chosen: ${PORT}`)
 
                 function begin() {
@@ -28,7 +27,7 @@ export const mochaHooks = () => {
                         botName: 'flatbot',
                         port: PORT,
                         customStart: false
-                    })
+                    }) as TestBot
 
                     bot.once('spawn', () => {
                         injectCommonTest(bot)

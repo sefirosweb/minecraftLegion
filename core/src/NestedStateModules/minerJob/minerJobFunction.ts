@@ -1,10 +1,11 @@
-import { Bot, LegionStateMachineTargets } from '@/types'
+import { LegionStateMachineTargets } from '@/types'
 import { StateTransition, NestedStateMachine } from 'mineflayer-statemachine'
 import BehaviorEatFood from '@/BehaviorModules/BehaviorEatFood'
 import getClosestEnemy from '@/modules/getClosestEnemy'
 import GetReadyFunction from '@/NestedStateModules/getReady/getReadyFunction'
 import MiningFunction from '@/NestedStateModules/minerJob/miningFunction'
 import CombatStrategyFunction from '@/NestedStateModules/combat/combatStrategyFunction'
+import { Bot } from 'mineflayer'
 
 export default (bot: Bot, targets: LegionStateMachineTargets) => {
   const getReady = GetReadyFunction(bot, targets)

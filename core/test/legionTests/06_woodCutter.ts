@@ -34,9 +34,9 @@ describe('06 Wood cutter', function () {
     }
 
     await bot.test.resetState()
-    bot.chat(`/give flatbot minecraft:oak_sapling`)
-    bot.chat(`/give flatbot minecraft:iron_axe`)
-    bot.chat(`/fill 8 -54 8 8 -54 8 minecraft:stone`)
+    bot.chat(`/give flatbot oak_sapling`)
+    bot.chat(`/give flatbot iron_axe`)
+    bot.chat(`/fill 8 -54 8 8 -54 8 stone`)
     bot.chat(`/gamerule randomTickSpeed 500`)
 
     bot.creative.stopFlying()

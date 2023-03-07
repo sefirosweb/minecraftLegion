@@ -65,13 +65,13 @@ describe('10 Butcher animals', function () {
 
 
     await bot.test.resetState()
-    bot.chat(`/give flatbot minecraft:iron_axe`)
-    bot.chat(`/give flatbot minecraft:wheat 64`)
-    bot.chat(`/give flatbot minecraft:wheat_seeds 64`)
-    bot.chat(`/give flatbot minecraft:potato 64`)
-    bot.chat(`/give flatbot minecraft:carrot 64`)
-    bot.chat(`/fill -6 -59 6 6 -60 -6 minecraft:stone`)
-    bot.chat(`/fill -5 -59 5 5 -60 -5 minecraft:air`)
+    bot.chat(`/give flatbot iron_axe`)
+    bot.chat(`/give flatbot wheat 64`)
+    bot.chat(`/give flatbot wheat_seeds 64`)
+    bot.chat(`/give flatbot potato 64`)
+    bot.chat(`/give flatbot carrot 64`)
+    bot.chat(`/fill -6 -59 6 6 -60 -6 stone`)
+    bot.chat(`/fill -5 -59 5 5 -60 -5 air`)
 
     bot.creative.stopFlying()
     bot.test.becomeSurvival()

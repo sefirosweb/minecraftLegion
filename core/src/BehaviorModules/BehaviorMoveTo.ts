@@ -1,10 +1,10 @@
 import mineflayerPathfinder, { Movements } from 'mineflayer-pathfinder'
 import botWebsocket from '@/modules/botWebsocket'
-import { Bot, LegionStateMachineTargets, Vec3WithDimension } from '@/types'
+import { LegionStateMachineTargets, Vec3WithDimension } from '@/types'
 import mcDataLoader from 'minecraft-data'
 import movementModule from '@/modules/movementModule'
 import { StateBehavior } from 'mineflayer-statemachine'
-import { Dimension } from 'mineflayer'
+import { Bot, Dimension, Dimension_V2 } from 'mineflayer'
 
 export default class BehaviorMoveTo implements StateBehavior {
   active: boolean
@@ -16,7 +16,7 @@ export default class BehaviorMoveTo implements StateBehavior {
   y?: number
 
   currentDate?: number
-  success: Boolean
+  success: boolean
   isEndFinished: boolean
   distance: number
   movements: Movements
@@ -115,9 +115,9 @@ export default class BehaviorMoveTo implements StateBehavior {
       goal = new mineflayerPathfinder.goals.GoalNear(position.x, position.y, position.z, this.distance)
     }
 
-    const dimension = position.dimension ?? this.bot.game.dimension
+    const dimension = position.dimension ?? this.bot.game.dimension as Dimension_V2
 
-    if (dimension === this.bot.game.dimension) {
+    if (dimension === this.bot.game.dimension as Dimension_V2) {
       this.bot.pathfinder.setMovements(this.movements)
       this.bot.pathfinder.setGoal(goal)
     } else {
@@ -125,8 +125,8 @@ export default class BehaviorMoveTo implements StateBehavior {
     }
   }
 
-  crossThePortal(dimension: Dimension, destination: Vec3WithDimension) {
-    this.movementModule.crossThePortal(dimension, destination)
+  crossThePortal(dimension: Dimension_V2, destination: Vec3WithDimension) {
+    this.movementModule.crossThePortal(dimension as Dimension_V2, destination)
       .then(() => {
         this.startMoving()
       })

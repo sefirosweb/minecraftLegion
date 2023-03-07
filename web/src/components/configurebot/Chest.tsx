@@ -255,9 +255,9 @@ const Chest = (props) => {
             value={chest.dimension ? chest.dimension : ""}
             onChange={handleChangeChestPos}
           >
-            <option value='minecraft:overworld'>Overworld</option>
-            <option value='minecraft:the_nether'>The Nether</option>
-            <option value='minecraft:the_end'>The End</option>
+            <option value='overworld'>Overworld</option>
+            <option value='the_nether'>The Nether</option>
+            <option value='the_end'>The End</option>
           </Form.Select>
         </Form.Group>
 

@@ -1,7 +1,7 @@
 
-import { BlockChest, Bot, Facing, ChestPosition, Item, ItemArmor } from "@/types"
+import { BlockChest, Facing, ChestPosition, Item, ItemArmor } from "@/types"
 import { getSecondBlockPosition } from '@/modules/utils'
-import { EquipmentDestination, FindBlockOptions } from "mineflayer"
+import { Bot, EquipmentDestination, FindBlockOptions } from "mineflayer"
 import { Vec3 } from "vec3"
 import mcDataLoader from 'minecraft-data'
 

@@ -10,20 +10,20 @@ describe('03 Make tunel in all directions', function () {
     botConfig = botConfigLoader(bot.username)
 
     await bot.test.resetState()
-    bot.chat(`/give flatbot minecraft:iron_pickaxe`)
-    bot.chat(`/give flatbot minecraft:diamond_shovel`)
-    bot.chat(`/give flatbot minecraft:dirt 256`)
+    bot.chat(`/give flatbot iron_pickaxe`)
+    bot.chat(`/give flatbot diamond_shovel`)
+    bot.chat(`/give flatbot dirt 256`)
 
-    bot.chat(`/fill 9 -60 -9 -9 -55 9 minecraft:glass`)
-    bot.chat(`/fill -8 -56 8 8 -63 -8 minecraft:water`)
-    bot.chat(`/fill -1 -61 -1 1 -61 1 minecraft:glass`)
-    bot.chat(`/fill -1 -57 -1 1 -57 1 minecraft:glass`)
-    bot.chat(`/fill -1 -60 1 1 -58 -1 minecraft:air`)
+    bot.chat(`/fill 9 -60 -9 -9 -55 9 glass`)
+    bot.chat(`/fill -8 -56 8 8 -63 -8 water`)
+    bot.chat(`/fill -1 -61 -1 1 -61 1 glass`)
+    bot.chat(`/fill -1 -57 -1 1 -57 1 glass`)
+    bot.chat(`/fill -1 -60 1 1 -58 -1 air`)
 
-    bot.chat(`/fill 2 -60 -2 -2 -57 -2 minecraft:dirt`)
-    bot.chat(`/fill 2 -60 -2 2 -57 2 minecraft:dirt`)
-    bot.chat(`/fill 2 -60 2 -2 -57 2 minecraft:dirt`)
-    bot.chat(`/fill -2 -60 2 -2 -57 -2 minecraft:dirt`)
+    bot.chat(`/fill 2 -60 -2 -2 -57 -2 dirt`)
+    bot.chat(`/fill 2 -60 -2 2 -57 2 dirt`)
+    bot.chat(`/fill 2 -60 2 -2 -57 2 dirt`)
+    bot.chat(`/fill -2 -60 2 -2 -57 -2 dirt`)
     bot.creative.stopFlying()
     bot.test.becomeSurvival()
   })
@@ -39,7 +39,7 @@ describe('03 Make tunel in all directions', function () {
       orientation: "x+",
       reverse: false,
       tunel: "horizontally",
-      world: "minecraft:overworld"
+      world: "overworld"
     }
 
     const config: Config = {
@@ -73,7 +73,7 @@ describe('03 Make tunel in all directions', function () {
       orientation: "x-",
       reverse: true,
       tunel: "horizontally",
-      world: "minecraft:overworld"
+      world: "overworld"
     }
 
 
@@ -109,7 +109,7 @@ describe('03 Make tunel in all directions', function () {
       orientation: "z+",
       reverse: true,
       tunel: "horizontally",
-      world: "minecraft:overworld"
+      world: "overworld"
     }
 
 
@@ -144,7 +144,7 @@ describe('03 Make tunel in all directions', function () {
       orientation: "z-",
       reverse: true,
       tunel: "horizontally",
-      world: "minecraft:overworld"
+      world: "overworld"
     }
 
 

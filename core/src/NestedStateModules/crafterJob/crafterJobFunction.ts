@@ -1,4 +1,4 @@
-import { Bot, LegionStateMachineTargets } from '@/types'
+import { LegionStateMachineTargets } from '@/types'
 import {
   StateTransition,
   BehaviorIdle,
@@ -8,6 +8,7 @@ import { Vec3 } from 'vec3'
 import inventoryModule from '@/modules/inventoryModule'
 import SearchAndCraftFunction from '@/NestedStateModules/crafterJob/searchAndCraftFunction'
 import GoAndDeposit from '@/NestedStateModules/getReady/goAndDeposit'
+import { Bot } from 'mineflayer'
 
 function crafterJobFunction(bot: Bot, targets: LegionStateMachineTargets) {
   const { getResumeInventory } = inventoryModule(bot)

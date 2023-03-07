@@ -11,7 +11,8 @@
 			"settings": {},
 			"extensions": [
 				"eamodio.gitlens",
-				"usernamehw.errorlens"
+				"usernamehw.errorlens",
+				"dbaeumer.vscode-eslint"
 			]
 		}
 	}

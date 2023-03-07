@@ -2,9 +2,9 @@ import fs from 'fs'
 import { Config } from '@/types'
 import { Jobs } from '@/types/defaultTypes'
 
-//@ts-ignore
+// @ts-ignore
 import low from 'lowdb'
-//@ts-ignore
+// @ts-ignore
 import Filesync from 'lowdb/adapters/FileSync'
 import path from 'path'
 import { Vec3 } from 'vec3'
@@ -62,7 +62,7 @@ const defaultConfig: Config = {
   minerCords: {
     orientation: 'x+',
     tunel: 'horizontally',
-    world: 'minecraft:overworld',
+    world: 'overworld',
     xEnd: 0,
     xStart: 0,
     yEnd: 80,

@@ -2,9 +2,9 @@ import mc from 'minecraft-protocol'
 import path from 'path'
 import mcDataLoader from 'minecraft-data'
 
-//@ts-ignore
+// @ts-ignore
 import { Wrap } from 'minecraft-wrap'
-//@ts-ignore
+// @ts-ignore
 import { download } from 'minecraft-wrap'
 
 const propOverrides = {
@@ -23,7 +23,7 @@ const propOverrides = {
 const MC_SERVER_PATH = path.join(__dirname, 'server')
 
 let PORT = 25565
-const supportedVersion = "1.19.3"
+const supportedVersion = "1.18.2"
 const mcData = mcDataLoader(supportedVersion)
 const version = mcData.version
 const MC_SERVER_JAR_DIR = process.env.MC_SERVER_JAR_DIR || `${process.cwd()}/server_jars`

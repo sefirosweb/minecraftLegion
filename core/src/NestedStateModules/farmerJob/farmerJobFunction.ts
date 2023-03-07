@@ -1,11 +1,12 @@
 import { StateTransition, BehaviorIdle, NestedStateMachine } from 'mineflayer-statemachine'
 import BehaviorGetReady from '@/BehaviorModules/BehaviorGetReady'
 import BehaviorEatFood from '@/BehaviorModules/BehaviorEatFood'
-import { Bot, LegionStateMachineTargets } from '@/types'
+import { LegionStateMachineTargets } from '@/types'
 import getClosestEnemy from '@/modules/getClosestEnemy'
 import GoChestsFunctions from '@/NestedStateModules/getReady/goChestsFunctions'
 import FarmingFunction from '@/NestedStateModules/farmerJob/farmingFunction'
 import CombatStrategyFunction from '@/NestedStateModules/combat/combatStrategyFunction'
+import { Bot } from 'mineflayer'
 
 export default (bot: Bot, targets: LegionStateMachineTargets) => {
   const start = new BehaviorIdle()

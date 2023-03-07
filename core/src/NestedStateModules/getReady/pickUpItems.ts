@@ -1,6 +1,7 @@
-import { Bot, LegionStateMachineTargets, PendingTransaction, ChestTransaction } from "@/types"
+import { LegionStateMachineTargets, PendingTransaction, ChestTransaction } from "@/types"
 import { StateTransition, BehaviorIdle, NestedStateMachine } from 'mineflayer-statemachine'
 import GoAndWithdraw from '@/NestedStateModules/getReady/goAndWithdraw'
+import { Bot } from "mineflayer"
 
 export default (bot: Bot, targets: LegionStateMachineTargets) => {
 

@@ -1,6 +1,7 @@
-import { Bot, PositionsChecked, Queue } from '@/types'
+import { PositionsChecked, Queue } from '@/types'
 import { Vec3 } from 'vec3'
 import { Block } from 'prismarine-block'
+import { Bot } from 'mineflayer'
 
 const placeBlockModule = (bot: Bot) => {
   const blocksCanBeReplaced = ['air', 'cave_air', 'lava', 'water', 'bubble_column', 'seagrass', 'tall_seagrass', 'kelp_plant']
@@ -20,11 +21,11 @@ const placeBlockModule = (bot: Bot) => {
   }
 
   let queue: Array<Queue> = []
-  let positions_checked: Array<PositionsChecked> = []
+  let positionsChecked: Array<PositionsChecked> = []
 
   const getPathToPlace = (position: Vec3): Array<PositionsChecked> => {
     queue = []
-    positions_checked = []
+    positionsChecked = []
 
     let result = getRecursivePosition(position, null)
     while (!result) {
@@ -37,7 +38,7 @@ const placeBlockModule = (bot: Bot) => {
     const positionsToPlaceBlocks: Array<PositionsChecked> = []
     let currentParent: number | null = result.parent
     do {
-      const positionToplaceBlock: PositionsChecked = positions_checked[currentParent]
+      const positionToplaceBlock: PositionsChecked = positionsChecked[currentParent]
       positionsToPlaceBlocks.push(positionToplaceBlock)
       currentParent = positionToplaceBlock.parent
     } while (currentParent !== null)
@@ -48,8 +49,8 @@ const placeBlockModule = (bot: Bot) => {
   const getRecursivePosition = (position: Vec3, parent: number | null) => {
     let newPosition: Vec3
     let offset
-    positions_checked.push({ position, parent })
-    const currentParent = positions_checked.length - 1
+    positionsChecked.push({ position, parent })
+    const currentParent = positionsChecked.length - 1
 
     const offsetPlaceBlock = getOffsetPlaceBlock(position)
     if (offsetPlaceBlock) {
@@ -62,27 +63,27 @@ const placeBlockModule = (bot: Bot) => {
     // down
     offset = new Vec3(0, -1, 0)
     newPosition = position.clone().add(offset)
-    if (!positions_checked.find((p) => p.position.equals(newPosition))) { queue.push({ position: newPosition, parent: currentParent }) }
+    if (!positionsChecked.find((p) => p.position.equals(newPosition))) { queue.push({ position: newPosition, parent: currentParent }) }
     // front
     offset = new Vec3(1, 0, 0)
     newPosition = position.clone().add(offset)
-    if (!positions_checked.find((p) => p.position.equals(newPosition))) { queue.push({ position: newPosition, parent: currentParent }) }
+    if (!positionsChecked.find((p) => p.position.equals(newPosition))) { queue.push({ position: newPosition, parent: currentParent }) }
     // back
     offset = new Vec3(-1, 0, 0)
     newPosition = position.clone().add(offset)
-    if (!positions_checked.find((p) => p.position.equals(newPosition))) { queue.push({ position: newPosition, parent: currentParent }) }
+    if (!positionsChecked.find((p) => p.position.equals(newPosition))) { queue.push({ position: newPosition, parent: currentParent }) }
     // right
     offset = new Vec3(0, 0, 1)
     newPosition = position.clone().add(offset)
-    if (!positions_checked.find((p) => p.position.equals(newPosition))) { queue.push({ position: newPosition, parent: currentParent }) }
+    if (!positionsChecked.find((p) => p.position.equals(newPosition))) { queue.push({ position: newPosition, parent: currentParent }) }
     // left
     offset = new Vec3(0, 0, -1)
     newPosition = position.clone().add(offset)
-    if (!positions_checked.find((p) => p.position.equals(newPosition))) { queue.push({ position: newPosition, parent: currentParent }) }
+    if (!positionsChecked.find((p) => p.position.equals(newPosition))) { queue.push({ position: newPosition, parent: currentParent }) }
     // up
     offset = new Vec3(0, 1, 0)
     newPosition = position.clone().add(offset)
-    if (!positions_checked.find((p) => p.position.equals(newPosition))) { queue.push({ position: newPosition, parent: currentParent }) }
+    if (!positionsChecked.find((p) => p.position.equals(newPosition))) { queue.push({ position: newPosition, parent: currentParent }) }
 
     return false
   }

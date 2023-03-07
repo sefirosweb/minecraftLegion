@@ -1,10 +1,11 @@
-import { Bot, LegionStateMachineTargets, Recipes, Recpie } from '@/types'
+import { LegionStateMachineTargets, Recipes, Recpie } from '@/types'
 import { StateTransition, BehaviorIdle, NestedStateMachine } from 'mineflayer-statemachine'
 import BehaviorCraft from '@/BehaviorModules/BehaviorCraft'
 import chestModule from '@/modules/chestModule'
 import craftModule, { GetItemsToPickUpBatch } from '@/modules/craftModule'
 import PickUpItems from '@/NestedStateModules/getReady/pickUpItems'
 import GoCraftingTableFunction from '@/NestedStateModules/crafterJob/goCraftingTableFunction'
+import { Bot } from 'mineflayer'
 
 export default (bot: Bot, targets: LegionStateMachineTargets) => {
   const { getItemsToPickUpBatch } = craftModule(bot)

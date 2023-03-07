@@ -3,9 +3,10 @@ import BehaviorDigBlock from '@/BehaviorModules/BehaviorDigBlock'
 import BehaviorCustomPlaceBlock from '@/BehaviorModules/BehaviorCustomPlaceBlock'
 import BehaviorLoadConfig from '@/BehaviorModules/BehaviorLoadConfig'
 import BehaviorMoveTo from '@/BehaviorModules/BehaviorMoveTo'
-import { Bot, LegionStateMachineTargets } from '@/types'
+import { LegionStateMachineTargets } from '@/types'
 import { Vec3 } from 'vec3'
 import placeBlockModule from '@/modules/placeBlockModule'
+import { Bot } from 'mineflayer'
 
 function fillFunction(bot: Bot, targets: LegionStateMachineTargets) {
   let placeBlock2Position: Vec3 | undefined

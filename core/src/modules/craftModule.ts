@@ -1,10 +1,11 @@
-import { Bot, Chests, ChestTransaction, Item, ItemRecipe, Recpie } from "@/types"
+import { Chests, ChestTransaction, Item, ItemRecipe, Recpie } from "@/types"
 import sorterJob from '@/modules/sorterJob'
 import inventoryModule from '@/modules/inventoryModule'
 import { Item as ItemMC } from "minecraft-data"
 import { Block } from "prismarine-block"
 import mcDataLoader from 'minecraft-data'
 import _ from 'lodash'
+import { Bot } from "mineflayer"
 
 type HaveMaterials = 'all' | 'none' | 'some'
 

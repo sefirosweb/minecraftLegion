@@ -13,7 +13,8 @@ import BehaviorDigBlock from '@/BehaviorModules/BehaviorDigBlock'
 import BehaviorEatFood from '@/BehaviorModules/BehaviorEatFood'
 import BehaviorInteractBlock from '@/BehaviorModules/BehaviorInteractBlock'
 import BehaviorMoveTo from '@/BehaviorModules/BehaviorMoveTo'
-import { Bot, LegionStateMachineTargets } from '@/types'
+import { LegionStateMachineTargets } from '@/types'
+import { Bot } from 'mineflayer'
 
 function harvestFunction(bot: Bot, targets: LegionStateMachineTargets) {
   const start = new BehaviorIdle()

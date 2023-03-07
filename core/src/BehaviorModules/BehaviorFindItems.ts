@@ -1,4 +1,5 @@
-import { Bot, LegionStateMachineTargets, EntityWithDistance } from "@/types"
+import { LegionStateMachineTargets, EntityWithDistance } from "@/types"
+import { Bot } from "mineflayer";
 import { StateBehavior } from "mineflayer-statemachine"
 export default class BehaviorFindItems implements StateBehavior {
   active: boolean;
@@ -67,7 +68,7 @@ export default class BehaviorFindItems implements StateBehavior {
     })
 
     if (itemsFound.length > 0) {
-      itemsFound.sort(function (a, b) {
+      itemsFound.sort((a, b) => {
         return a.distance - b.distance
       })
       this.targets.itemDrop = itemsFound[0]

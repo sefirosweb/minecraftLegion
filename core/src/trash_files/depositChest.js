@@ -23,7 +23,7 @@ bot.once('spawn', () => {
     for (let i = 0; i < 36; i++) {
       const item = items[Math.floor(Math.random() * items.length)]
       const stack = Math.floor(Math.random() * item.stackSize)
-      bot.chat(`/give ${bot.username} minecraft:${item.name} ${stack}`)
+      bot.chat(`/give ${bot.username} ${item.name} ${stack}`)
     }
   }
 

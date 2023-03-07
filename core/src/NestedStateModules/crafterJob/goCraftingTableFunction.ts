@@ -4,9 +4,10 @@ import {
   NestedStateMachine
 } from 'mineflayer-statemachine'
 import BehaviorMoveTo from '@/BehaviorModules/BehaviorMoveTo'
-import { Bot, LegionStateMachineTargets } from '@/types'
+import { LegionStateMachineTargets } from '@/types'
 import { Block } from 'prismarine-block'
 import mcDataLoader from 'minecraft-data'
+import { Bot } from 'mineflayer'
 
 function goCraftingTableFunction(bot: Bot, targets: LegionStateMachineTargets) {
   const mcData = mcDataLoader(bot.version)

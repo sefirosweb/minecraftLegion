@@ -22,7 +22,7 @@ describe('02 Make basic tunel', function () {
     orientation: "x-",
     reverse: false,
     tunel: "horizontally",
-    world: "minecraft:overworld"
+    world: "overworld"
   }
 
   let config: Config
@@ -43,10 +43,10 @@ describe('02 Make basic tunel', function () {
     }
 
     await bot.test.resetState()
-    bot.chat(`/give flatbot minecraft:iron_pickaxe`)
-    bot.chat(`/give flatbot minecraft:diamond_shovel`)
-    bot.chat(`/give flatbot minecraft:dirt 64`)
-    bot.chat(`/fill ${xStart} ${yStart} ${zStart} ${xEnd} ${yEnd} ${zEnd} minecraft:dirt`)
+    bot.chat(`/give flatbot iron_pickaxe`)
+    bot.chat(`/give flatbot diamond_shovel`)
+    bot.chat(`/give flatbot dirt 64`)
+    bot.chat(`/fill ${xStart} ${yStart} ${zStart} ${xEnd} ${yEnd} ${zEnd} dirt`)
     bot.chat(`/teleport -2 -60 -9`)
     bot.creative.stopFlying()
     bot.test.becomeSurvival()

@@ -1,4 +1,4 @@
-import { Bot, LegionStateMachineTargets } from '@/types'
+import { LegionStateMachineTargets } from '@/types'
 import {
   StateTransition,
   BehaviorIdle,
@@ -8,6 +8,7 @@ import {
 import sorterJob from '@/modules/sorterJob'
 import PickUpItems from '@/NestedStateModules/getReady/pickUpItems'
 import DepositItems from '@/NestedStateModules/sorterJob/depositItems'
+import { Bot } from 'mineflayer'
 
 function sortChestFunction(bot: Bot, targets: LegionStateMachineTargets) {
   const { findItemsInChests, calculateSlotsToSort } = sorterJob()

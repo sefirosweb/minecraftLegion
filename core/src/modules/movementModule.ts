@@ -1,25 +1,25 @@
 
-import { Bot, LegionStateMachineTargets, Portals, Vec3WithDimension, Vec3WithDistance } from "@/types"
+import { LegionStateMachineTargets, Portals, PortalType, Vec3WithDimension, Vec3WithDistance } from "@/types"
 import botWebsocket from '@/modules/botWebsocket'
 import mineflayerPathfinder from 'mineflayer-pathfinder'
 import { Vec3 } from 'vec3'
 import mcDataLoader from 'minecraft-data'
-import { Dimension } from "mineflayer"
+import { Bot, Dimension_V2 } from "mineflayer"
 
-const parseDestination = (origin: Dimension, destination: Dimension): keyof Portals => {
-  if (origin === "minecraft:overworld" && destination === "minecraft:the_end") {
+const parseDestination = (origin: Dimension_V2, destination: Dimension_V2): keyof Portals => {
+  if (origin === "overworld" && destination === "the_end") {
     return "overworld_to_the_end"
   }
 
-  if (origin === "minecraft:overworld" && destination === "minecraft:the_nether") {
+  if (origin === "overworld" && destination === "the_nether") {
     return "overworld_to_the_nether"
   }
 
-  if (origin === "minecraft:the_end" && destination === "minecraft:overworld") {
+  if (origin === "the_end" && destination === "overworld") {
     return "the_end_to_overworld"
   }
 
-  if (origin === "minecraft:the_nether" && destination === "minecraft:overworld") {
+  if (origin === "the_nether" && destination === "overworld") {
     return "the_nether_to_overworld"
   }
 
@@ -28,7 +28,7 @@ const parseDestination = (origin: Dimension, destination: Dimension): keyof Port
 
 const movementModule = (bot: Bot, targets: LegionStateMachineTargets) => {
   const mcData = mcDataLoader(bot.version)
-  const getNearestPortal = (dimension: Dimension, destination: Vec3WithDimension) => {
+  const getNearestPortal = (dimension: Dimension_V2, destination: Vec3WithDimension) => {
     const portalsFound = findPortals(dimension)
     const portals: Array<Vec3WithDistance> = compareWithCurrentPortals(portalsFound, dimension)
 
@@ -37,18 +37,18 @@ const movementModule = (bot: Bot, targets: LegionStateMachineTargets) => {
         const distanceToPortal = bot.entity.position.distanceTo(p)
 
         if (
-          (bot.game.dimension === 'minecraft:the_nether' && dimension === 'minecraft:overworld') ||
-          (bot.game.dimension === 'minecraft:overworld' && dimension === 'minecraft:the_nether')
+          (bot.game.dimension as Dimension_V2 === 'the_nether' && dimension === 'overworld') ||
+          (bot.game.dimension as Dimension_V2 === 'overworld' && dimension === 'the_nether')
         ) {
           const otherDimensionPosition = new Vec3(p.x, p.y, p.z)
-          if (dimension === 'minecraft:overworld') {
+          if (dimension === 'overworld') {
             otherDimensionPosition.x = otherDimensionPosition.x * 8
             otherDimensionPosition.z = otherDimensionPosition.z * 8
             const plusDistance = otherDimensionPosition.distanceTo(destination)
             p.distance = distanceToPortal + plusDistance
           }
 
-          if (dimension === 'minecraft:the_nether') {
+          if (dimension === 'the_nether') {
             otherDimensionPosition.x = otherDimensionPosition.x / 8
             otherDimensionPosition.z = otherDimensionPosition.z / 8
             const plusDistance = otherDimensionPosition.distanceTo(destination)
@@ -72,33 +72,34 @@ const movementModule = (bot: Bot, targets: LegionStateMachineTargets) => {
   }
 
   const checkPortalsOnSpawn = () => {
-    let portals, dimension: Dimension // TODO pending to check
-    if (bot.game.dimension === 'minecraft:the_nether') {
-      dimension = 'minecraft:overworld'
+    let portals: Array<Vec3>
+    let dimension: Dimension_V2
+    if (bot.game.dimension as Dimension_V2 === 'the_nether') {
+      dimension = 'overworld'
       portals = findPortals(dimension)
       compareWithCurrentPortals(portals, dimension)
     }
-    if (bot.game.dimension === 'minecraft:the_end') {
-      dimension = 'minecraft:overworld'
+    if (bot.game.dimension as Dimension_V2 === 'the_end') {
+      dimension = 'overworld'
       portals = findPortals(dimension)
       compareWithCurrentPortals(portals, dimension)
     }
 
-    if (bot.game.dimension === 'minecraft:overworld') {
-      dimension = 'minecraft:the_nether'
+    if (bot.game.dimension as Dimension_V2 === 'overworld') {
+      dimension = 'the_nether'
       portals = findPortals(dimension)
       compareWithCurrentPortals(portals, dimension)
 
-      dimension = 'minecraft:the_end'
+      dimension = 'the_end'
       portals = findPortals(dimension)
       compareWithCurrentPortals(portals, dimension)
     }
   }
 
-  const compareWithCurrentPortals = (portals: Array<Vec3>, dimension: Dimension): Array<Vec3> => {
+  const compareWithCurrentPortals = (portals: Array<Vec3>, dimension: Dimension_V2): Array<Vec3> => {
     let currentPortals: Array<Vec3> = []
 
-    const selectDimension = parseDestination(bot.game.dimension, dimension)
+    const selectDimension = parseDestination(bot.game.dimension as Dimension_V2, dimension)
     currentPortals = targets.portals[selectDimension]
 
     portals.forEach(portal => {
@@ -113,25 +114,28 @@ const movementModule = (bot: Bot, targets: LegionStateMachineTargets) => {
     return currentPortals
   }
 
-  const findPortals = (dimension: Dimension): Array<Vec3> => {
-    let matching
-    if ( // Nether portal
-      dimension === 'minecraft:the_nether' && bot.game.dimension === 'minecraft:overworld' ||
-      dimension === 'minecraft:overworld' && bot.game.dimension === 'minecraft:the_nether' ||
-      dimension === 'minecraft:the_end' && bot.game.dimension === 'minecraft:the_nether'
+  const findPortals = (dimension: Dimension_V2): Array<Vec3> => {
+    let matching: PortalType | undefined
+
+    if (
+      dimension === 'the_nether' && bot.game.dimension as Dimension_V2 === 'overworld' ||
+      dimension === 'overworld' && bot.game.dimension as Dimension_V2 === 'the_nether' ||
+      dimension === 'the_end' && bot.game.dimension as Dimension_V2 === 'the_nether'
     ) {
       matching = 'nether_portal'
     }
 
-    if ( // End Portal
-      dimension === 'minecraft:the_end' && bot.game.dimension === 'minecraft:overworld' ||
-      dimension === 'minecraft:overworld' && bot.game.dimension === 'minecraft:the_end' ||
-      dimension === 'minecraft:the_nether' && bot.game.dimension === 'minecraft:the_end'
+    if (
+      dimension === 'the_end' && bot.game.dimension as Dimension_V2 === 'overworld' ||
+      dimension === 'overworld' && bot.game.dimension as Dimension_V2 === 'the_end' ||
+      dimension === 'the_nether' && bot.game.dimension as Dimension_V2 === 'the_end'
     ) {
       matching = 'end_portal'
     }
 
-    const matchingId = [matching].map(name => name && mcData.blocksByName[name].id) as number[]
+    if (!matching) throw new Error('Portal type not found')
+
+    const matchingId = mcData.blocksByName[matching].id
 
     const blocksFound = bot.findBlocks({
       matching: matchingId,
@@ -142,9 +146,9 @@ const movementModule = (bot: Bot, targets: LegionStateMachineTargets) => {
     return blocksFound
   }
 
-  const deleteOldPortal = (position: Vec3, dimension: Dimension) => {
+  const deleteOldPortal = (position: Vec3, dimension: Dimension_V2) => {
     const newPortals = structuredClone(targets.portals)
-    const selectedDim = parseDestination(bot.game.dimension, dimension)
+    const selectedDim = parseDestination(bot.game.dimension as Dimension_V2, dimension)
 
     newPortals[selectedDim] = newPortals[selectedDim].filter(portal => {
       return portal.x !== position.x || portal.y !== position.y || portal.z !== position.z
@@ -154,9 +158,9 @@ const movementModule = (bot: Bot, targets: LegionStateMachineTargets) => {
     botWebsocket.sendAction('setPortals', targets.portals)
   }
 
-  const crossThePortal = (dimension: Dimension, destination: Vec3WithDimension): Promise<void> => {
+  const crossThePortal = (dimension: Dimension_V2, destination: Vec3WithDimension): Promise<void> => {
     return new Promise((resolve, reject) => {
-      const portal = getNearestPortal(dimension, destination)
+      const portal = getNearestPortal(dimension as Dimension_V2, destination)
 
       if (!portal) {
         reject(`Can't find the portal to dimension ${dimension}`)
@@ -167,10 +171,10 @@ const movementModule = (bot: Bot, targets: LegionStateMachineTargets) => {
         const block = bot.blockAt(new Vec3(portal.x, portal.y, portal.z))
         if (block !== undefined) {
           if (
-            (dimension === 'minecraft:the_nether' && block?.name !== 'nether_portal') ||
-            (dimension === 'minecraft:overworld' && block?.name !== 'nether_portal') ||
-            (dimension === 'minecraft:the_end' && block?.name !== 'end_portal') ||
-            (dimension === 'minecraft:overworld' && block?.name !== 'end_portal')
+            (dimension === 'the_nether' && block?.name !== 'nether_portal') ||
+            (dimension === 'overworld' && block?.name !== 'nether_portal') ||
+            (dimension === 'the_end' && block?.name !== 'end_portal') ||
+            (dimension === 'overworld' && block?.name !== 'end_portal')
           ) {
             deleteOldPortal(portal, dimension)
             reject(`Portal not found!`) // TODO pending to check if works fine

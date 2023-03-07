@@ -3,8 +3,8 @@
 import botWebsocket from '@/modules/botWebsocket'
 import refreshChest from '@/modules/refreshChests'
 import { sleep } from '@/modules/utils'
-import { Bot, ChestTransaction, Item, LegionStateMachineTargets } from '@/types'
-import { Chest, TransferOptions } from 'mineflayer'
+import { ChestTransaction, Item, LegionStateMachineTargets } from '@/types'
+import { Bot, Chest, TransferOptions } from 'mineflayer'
 import { StateBehavior } from 'mineflayer-statemachine'
 import { Block } from 'prismarine-block'
 import { Vec3 } from 'vec3'
@@ -126,7 +126,7 @@ export default class BehaviorDepositItemChest implements StateBehavior {
           window: container,
           itemType: itemToDeposit.id,
           metadata: null,
-          //@ts-ignore pending : https://github.com/PrismarineJS/mineflayer/pull/2913
+          // @ts-ignore pending : https://github.com/PrismarineJS/mineflayer/pull/2913
           count: itemToDeposit.quantity,
           sourceStart: container.inventoryStart,
           sourceEnd: container.inventoryEnd,

@@ -1,9 +1,9 @@
 
-import { Bot, LegionStateMachineTargets } from "@/types"
+import { LegionStateMachineTargets } from "@/types"
 import mcDataLoader from 'minecraft-data'
 import botWebsocket from '@/modules/botWebsocket'
 import { Item as PrismarineItem } from 'prismarine-item';
-import { EquipmentDestination } from "mineflayer";
+import { Bot, EquipmentDestination } from "mineflayer";
 import { StateBehavior } from "mineflayer-statemachine";
 
 export default class BehaviorEquip implements StateBehavior {

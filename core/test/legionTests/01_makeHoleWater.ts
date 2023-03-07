@@ -7,10 +7,10 @@ describe('01 Mining in water', function () {
   before(async () => {
     const botConfig = botConfigLoader(bot.username)
     await bot.test.resetState()
-    bot.chat(`/give flatbot minecraft:iron_pickaxe`)
-    bot.chat(`/give flatbot minecraft:diamond_shovel`)
-    bot.chat(`/give flatbot minecraft:dirt 256`)
-    bot.chat(`/fill -1 -60 4 10 -56 14 minecraft:glass`)
+    bot.chat(`/give flatbot iron_pickaxe`)
+    bot.chat(`/give flatbot diamond_shovel`)
+    bot.chat(`/give flatbot dirt 256`)
+    bot.chat(`/fill -1 -60 4 10 -56 14 glass`)
     bot.chat(`/fill 0 -60 5 9 -56 13 water`)
     bot.chat(`/teleport -1 -55 4`)
 
@@ -27,7 +27,7 @@ describe('01 Mining in water', function () {
       orientation: "x+",
       reverse: false,
       tunel: "vertically",
-      world: "minecraft:overworld"
+      world: "overworld"
     }
 
     const config: Config = {

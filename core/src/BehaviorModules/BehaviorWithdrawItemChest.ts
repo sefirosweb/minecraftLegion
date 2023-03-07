@@ -2,8 +2,8 @@
 import botWebsocket from '@/modules/botWebsocket'
 import refreshChest from '@/modules/refreshChests'
 import { sleep, } from '@/modules/utils'
-import { Bot, ChestTransaction, LegionStateMachineTargets } from '@/types'
-import { Chest, TransferOptions } from 'mineflayer'
+import { ChestTransaction, LegionStateMachineTargets } from '@/types'
+import { Bot, Chest, TransferOptions } from 'mineflayer'
 import { StateBehavior } from 'mineflayer-statemachine'
 import { Block } from 'prismarine-block'
 import { Vec3 } from 'vec3'
@@ -120,7 +120,7 @@ export default class BehaviorWithdrawItemChest implements StateBehavior {
       if (itemToWithdraw.fromSlot !== undefined) {
 
         const options: TransferOptions = {
-          //@ts-ignore pending to fix from mineflater
+          // @ts-ignore pending to fix from mineflater
           windows: container,
           itemType: foundItem.type,
           metadata: null,

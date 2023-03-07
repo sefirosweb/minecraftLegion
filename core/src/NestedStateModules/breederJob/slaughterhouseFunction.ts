@@ -1,4 +1,4 @@
-import { Bot, LegionStateMachineTargets } from '@/types'
+import { LegionStateMachineTargets } from '@/types'
 import {
   StateTransition,
   BehaviorIdle,
@@ -6,6 +6,7 @@ import {
 } from 'mineflayer-statemachine'
 import { Entity } from 'prismarine-entity'
 import SlaughterFunction from '@/NestedStateModules/breederJob/slaughterFunction'
+import { Bot } from 'mineflayer'
 
 function slaughterhouseFunction(bot: Bot, targets: LegionStateMachineTargets) {
   const start = new BehaviorIdle()
@@ -36,7 +37,7 @@ function slaughterhouseFunction(bot: Bot, targets: LegionStateMachineTargets) {
     Object.entries(targets.breederJob.farmAnimal).forEach((entry) => {
       const [animalName, animalQuantity] = entry
       spare = targets.breederJob.breededAnimals.filter(e => {
-        //@ts-ignore e.metadata[16] ==> is a baby
+        // @ts-ignore e.metadata[16] ==> is a baby
         return e.name === animalName && e.metadata[16] === false
       })
 

@@ -1,7 +1,8 @@
 import { StateBehavior } from "mineflayer-statemachine"
-import { Bot, Config, LegionStateMachineTargets } from "@/types"
+import { Config, LegionStateMachineTargets } from "@/types"
 import botConfigLoader from '@/modules/botConfig'
 import { Jobs } from "@/types/defaultTypes"
+import { Bot } from "mineflayer"
 
 export default class BehaviorLoadConfig implements StateBehavior {
   active: boolean

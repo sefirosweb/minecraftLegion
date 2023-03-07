@@ -19,11 +19,11 @@ describe('05 Test bow long range', function () {
     }
 
     await bot.test.resetState()
-    bot.chat(`/fill 50 -49 0 50 -49 0 minecraft:stone`)
-    bot.chat(`/fill -50 -48 0 -50 -48 0 minecraft:stone`)
+    bot.chat(`/fill 50 -49 0 50 -49 0 stone`)
+    bot.chat(`/fill -50 -48 0 -50 -48 0 stone`)
     bot.chat(`/teleport 50 -46 0`)
     bot.chat(`/give flatbot bow`)
-    bot.chat(`/give flatbot minecraft:arrow 256`)
+    bot.chat(`/give flatbot arrow 256`)
     bot.chat(`/summon creeper -50 -47 0 {PersistenceRequired:1}`)
 
     bot.creative.stopFlying()

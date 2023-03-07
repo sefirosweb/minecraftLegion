@@ -1,9 +1,8 @@
-import mineflayer from "mineflayer";
+import mineflayer, { Bot } from "mineflayer";
 import customStartLoader from "@/custom_start/custom"
 
 import botWebsocket from "@/modules/botWebsocket";
 import mcDataLoader from 'minecraft-data'
-import { Bot } from "./types";
 import mineflayerPathfinder from 'mineflayer-pathfinder'
 import StartStateMachine from '@/NestedStateModules/startStateMachine'
 
@@ -15,7 +14,6 @@ export type Props = {
   customStart?: boolean,
   version?: string
 }
-
 
 export const createNewBot = (props: Props): Bot => {
   const {
@@ -32,7 +30,7 @@ export const createNewBot = (props: Props): Bot => {
     host: server,
     port: port,
     version
-  }) as Bot;
+  })
 
   botWebsocket.loadBot(bot);
   bot.setMaxListeners(0);

@@ -7,7 +7,8 @@ import BehaviorMoveTo from '@/BehaviorModules/BehaviorMoveTo'
 import chestModule from '@/modules/chestModule'
 import PickUpItems from '@/NestedStateModules/getReady/pickUpItems'
 import SearchAndCraftFunction from '@/NestedStateModules/crafterJob/searchAndCraftFunction'
-import { Bot, Chest, Item, LegionStateMachineTargets } from '@/types'
+import { Chest, Item, LegionStateMachineTargets } from '@/types'
+import { Bot } from 'mineflayer'
 
 export default (bot: Bot, targets: LegionStateMachineTargets) => {
   const { findChestsToWithdraw } = chestModule(bot, targets)

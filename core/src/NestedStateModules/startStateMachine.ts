@@ -1,5 +1,5 @@
-import { LegionStateMachineTargets, BotwebsocketAction, Bot } from "@/types"
-import { BotEvents } from "mineflayer"
+import { LegionStateMachineTargets, BotwebsocketAction } from "@/types"
+import { Bot, BotEvents } from "mineflayer"
 import { Vec3 } from "vec3"
 import config from '@/config'
 import mcDataLoader from 'minecraft-data'
@@ -11,7 +11,7 @@ import DeathFunction from '@/NestedStateModules/deathFunction'
 import botConfigLoader from '@/modules/botConfig'
 import { StateTransition, BotStateMachine, StateMachineWebserver, BehaviorIdle, NestedStateMachine } from 'mineflayer-statemachine'
 
-//@ts-ignore
+// @ts-ignore
 import inventoryViewer from 'mineflayer-web-inventory'
 
 const startStateMachine = (bot: Bot) => {

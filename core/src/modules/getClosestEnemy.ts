@@ -1,10 +1,11 @@
 
 
-import { Bot, CustomEntity, LegionStateMachineTargets } from '@/types'
+import { CustomEntity, LegionStateMachineTargets } from '@/types'
 import botWebsocket from '@/modules/botWebsocket'
 import { Entity } from 'prismarine-entity'
 import mcDataLoader from 'minecraft-data'
 import mineflayerPathfinder from 'mineflayer-pathfinder'
+import { Bot } from 'mineflayer'
 
 const getClosestEnemy = (bot: Bot, targets: LegionStateMachineTargets) => {
   let entities: Array<CustomEntity> = []

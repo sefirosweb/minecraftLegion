@@ -29,14 +29,14 @@ describe('08 Farming cactus', function () {
     }
 
     await bot.test.resetState()
-    bot.chat(`/give flatbot minecraft:iron_axe`)
-    bot.chat(`/give flatbot minecraft:iron_hoe`)
+    bot.chat(`/give flatbot iron_axe`)
+    bot.chat(`/give flatbot iron_hoe`)
 
-    bot.chat(`/fill 10 -61 20 20 -61 20 minecraft:sand`)
+    bot.chat(`/fill 10 -61 20 20 -61 20 sand`)
     bot.chat(`/gamerule randomTickSpeed 500`)
 
-    bot.chat(`/give flatbot minecraft:cactus 4`)
-    bot.chat(`/give flatbot minecraft:golden_carrot 64`)
+    bot.chat(`/give flatbot cactus 4`)
+    bot.chat(`/give flatbot golden_carrot 64`)
 
     bot.creative.stopFlying()
     bot.test.becomeSurvival()
