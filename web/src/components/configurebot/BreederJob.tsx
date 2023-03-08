@@ -35,7 +35,6 @@ const BreederJob = () => {
       value: {
         configToChange: 'changeAnimalValue',
         value: {
-          id: id,
           animal,
           value
         }
@@ -64,7 +63,7 @@ const BreederJob = () => {
           <Form.Label>Feed every seconds</Form.Label>
           <Form.Control
             type="text"
-            value={botConfig.config.farmAnimal.seconds}
+            value={botConfig.config.farmAnimalSeconds}
             onChange={(e) => handleUpdateAnimal('seconds', e)}
           />
         </Form.Group>
