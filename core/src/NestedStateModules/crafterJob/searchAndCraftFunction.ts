@@ -1,4 +1,4 @@
-import { LegionStateMachineTargets, Recipes, Recpie } from '@/types'
+import { LegionStateMachineTargets, Recipes, Recpie } from 'types/index'
 import { StateTransition, BehaviorIdle, NestedStateMachine } from 'mineflayer-statemachine'
 import BehaviorCraft from '@/BehaviorModules/BehaviorCraft'
 import chestModule from '@/modules/chestModule'

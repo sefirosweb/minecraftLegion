@@ -1,7 +1,7 @@
 import botConfigLoader from '@/modules/botConfig'
 import { bot } from '../hooks'
-import { Config, MineCordsConfig } from '@/types'
-import { Jobs } from '@/types/defaultTypes'
+import { Config, MineCordsConfig } from 'types/index'
+import { Jobs } from 'types/defaultTypes'
 import { Vec3 } from 'vec3'
 
 describe('12 Cross the portals', function () {

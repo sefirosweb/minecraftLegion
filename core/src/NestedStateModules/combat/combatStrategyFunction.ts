@@ -1,6 +1,6 @@
 import { StateTransition, BehaviorIdle, NestedStateMachine } from 'mineflayer-statemachine'
 import BehaviorEatFood from '@/BehaviorModules/BehaviorEatFood'
-import { LegionStateMachineTargets } from '@/types'
+import { LegionStateMachineTargets } from 'types/index'
 import CombatFunction from '@/NestedStateModules/combat/combatFunction'
 import { Bot } from 'mineflayer'
 

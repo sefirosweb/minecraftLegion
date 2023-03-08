@@ -1,6 +1,6 @@
 import botConfigLoader from '@/modules/botConfig'
-import { Config } from '@/types'
-import { Jobs } from '@/types/defaultTypes'
+import { Config } from 'types/index'
+import { Jobs } from 'types/defaultTypes'
 import { Vec3 } from 'vec3'
 import { bot } from '../hooks'
 

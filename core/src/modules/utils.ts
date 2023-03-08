@@ -1,4 +1,4 @@
-import { Facing, ChestPosition } from '@/types'
+import { Facing, ChestPosition } from 'types/index'
 import { Vec3 } from 'vec3'
 
 export const sleep = (ms: number) => {

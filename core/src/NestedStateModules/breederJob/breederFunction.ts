@@ -1,15 +1,10 @@
-import {
-  StateTransition,
-  BehaviorIdle,
-  NestedStateMachine
-} from 'mineflayer-statemachine'
-
+import { StateTransition, BehaviorIdle, NestedStateMachine } from 'mineflayer-statemachine'
 import FeedAnimalFunction from '@/NestedStateModules/breederJob/feedAnimalFunction'
 import BehaviorLoadConfig from '@/BehaviorModules/BehaviorLoadConfig'
-import { animals } from '@/modules/animalType'
-import { LegionStateMachineTargets } from '@/types'
+import { animals } from 'types/animals'
 import { Entity } from 'prismarine-entity'
 import { Bot } from 'mineflayer'
+import { LegionStateMachineTargets } from 'types/index'
 const animalTypes = Object.keys(animals)
 
 function breederFunction(bot: Bot, targets: LegionStateMachineTargets) {

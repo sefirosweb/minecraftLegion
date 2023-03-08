@@ -6,6 +6,7 @@
   "scripts": {
     "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
+    "server": "ts-node test/start_test_server.ts",
     "build": "npm run install_all && npm run build_all",
     "build_all": "node build",
     "install_all": "npm install && npm install --prefix ./web/ && npm install --prefix ./core/ && npm install --prefix ./server/",
@@ -25,5 +26,16 @@
   "dependencies": {
     "dotenv": "^16.0.3",
     "fs-extra": "^11.1.0"
+  },
+  "devDependencies": {
+    "minecraft-data": "^3.30.0",
+    "minecraft-wrap": "^1.5.1",
+    "mineflayer": "^4.8.1",
+    "mineflayer-pathfinder": "^2.4.2",
+    "mineflayer-statemachine": "^1.7.0",
+    "prismarine-block": "^1.16.3",
+    "prismarine-entity": "^2.2.0",
+    "prismarine-item": "^1.12.1",
+    "vec3": "^0.1.8"
   }
 }

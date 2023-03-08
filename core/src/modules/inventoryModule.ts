@@ -1,5 +1,5 @@
 
-import { BlockChest, Facing, ChestPosition, Item, ItemArmor } from "@/types"
+import { BlockChest, Facing, ChestPosition, Item, ItemArmor } from "types/index"
 import { getSecondBlockPosition } from '@/modules/utils'
 import { Bot, EquipmentDestination, FindBlockOptions } from "mineflayer"
 import { Vec3 } from "vec3"

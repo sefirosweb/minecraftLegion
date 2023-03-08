@@ -1,6 +1,6 @@
 
 
-import { Food, LegionStateMachineTargets } from "@/types"
+import { Food, LegionStateMachineTargets } from "types/index"
 import botWebsocket from '@/modules/botWebsocket'
 import mcDataLoader from 'minecraft-data'
 import { StateBehavior } from "mineflayer-statemachine"

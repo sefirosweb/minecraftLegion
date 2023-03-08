@@ -1,7 +1,7 @@
 import config from "@/config";
 import http from 'http'
 import { Server, Socket } from 'socket.io'
-import { BotsConnected } from "@/types";
+import { BotsConnected } from "types/index";
 import { defaultConfig } from "@/types/types";
 import app from '@/app'
 

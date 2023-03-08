@@ -1,7 +1,7 @@
-import { LegionStateMachineTargets, PendingTransaction, ChestTransaction } from "@/types"
+import { LegionStateMachineTargets, PendingTransaction, ChestTransaction } from "types/index"
 import { StateTransition, BehaviorIdle, NestedStateMachine } from 'mineflayer-statemachine'
 import GoAndWithdraw from '@/NestedStateModules/getReady/goAndWithdraw'
-import { Bot } from "mineflayer"
+import { Bot, Dimension_V2 } from "mineflayer"
 
 export default (bot: Bot, targets: LegionStateMachineTargets) => {
 
@@ -41,7 +41,7 @@ export default (bot: Bot, targets: LegionStateMachineTargets) => {
       pickupItems.forEach((i) => {
         if (
           i.fromChest === chestIndex
-          && chest.dimension === bot.game.dimension
+          && chest.dimension === bot.game.dimension as Dimension_V2
           && bot.entity.position.distanceTo(chest.position) < 128
         ) {
           items.push(i)

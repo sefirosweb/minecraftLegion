@@ -1,5 +1,5 @@
 
-import { LegionStateMachineTargets } from "@/types"
+import { LegionStateMachineTargets } from "types/index"
 import botWebsocket from '@/modules/botWebsocket'
 import digBlockModule from '@/modules/digBlockModule'
 import { Vec3 } from "vec3"

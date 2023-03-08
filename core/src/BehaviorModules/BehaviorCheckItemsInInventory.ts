@@ -1,5 +1,5 @@
 
-import { DepositType, LegionStateMachineTargets, Item } from "@/types"
+import { DepositType, LegionStateMachineTargets, Item } from "types/index"
 import inventoryModule from '@/modules/inventoryModule'
 import { Item as McItem } from "prismarine-item"
 import { StateBehavior } from "mineflayer-statemachine"

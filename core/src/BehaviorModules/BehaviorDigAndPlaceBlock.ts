@@ -1,5 +1,5 @@
 
-import { Item, LegionStateMachineTargets, PositionsChecked } from "@/types"
+import { Item, LegionStateMachineTargets, PositionsChecked } from "types/index"
 import botWebsocket from '@/modules/botWebsocket'
 import digBlockModule from '@/modules/digBlockModule'
 import minerModule from '@/modules/minerModule'

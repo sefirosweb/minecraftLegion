@@ -7,7 +7,7 @@ import {
 import { shuffle } from '@/modules/utils'
 import botWebsocket from '@/modules/botWebsocket'
 import BehaviorLoadConfig from '@/BehaviorModules/BehaviorLoadConfig'
-import { LegionStateMachineTargets, PlantArea } from '@/types'
+import { LegionStateMachineTargets, PlantArea } from 'types/index'
 import { plants } from '@/modules/plantType'
 import FarmingPlantsFunction from '@/NestedStateModules/farmerJob/farmingPlantsFunction'
 import FarmingTreesFunction from '@/NestedStateModules/farmerJob/farmingTreesFunction'

@@ -20,13 +20,13 @@ const propOverrides = {
     'server-port': 255655
 }
 
-const MC_SERVER_PATH = path.join(__dirname, 'server')
+const MC_SERVER_PATH = path.join(__dirname, 'server_jars', 'server')
 
 let PORT = 25565
 const supportedVersion = "1.18.2"
 const mcData = mcDataLoader(supportedVersion)
 const version = mcData.version
-const MC_SERVER_JAR_DIR = process.env.MC_SERVER_JAR_DIR || `${process.cwd()}/server_jars`
+const MC_SERVER_JAR_DIR = process.env.MC_SERVER_JAR_DIR || path.join(__dirname, 'server_jars')
 const MC_SERVER_JAR = `${MC_SERVER_JAR_DIR}/minecraft_server.${version.minecraftVersion}.jar`
 const wrap = new Wrap(MC_SERVER_JAR, `${MC_SERVER_PATH}_${supportedVersion}`)
 

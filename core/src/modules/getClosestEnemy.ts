@@ -1,6 +1,6 @@
 
 
-import { CustomEntity, LegionStateMachineTargets } from '@/types'
+import { CustomEntity, LegionStateMachineTargets } from 'types/index'
 import botWebsocket from '@/modules/botWebsocket'
 import { Entity } from 'prismarine-entity'
 import mcDataLoader from 'minecraft-data'

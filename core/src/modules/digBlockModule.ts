@@ -1,5 +1,5 @@
 
-import { CustomItem } from "@/types"
+import { CustomItem } from "types/index"
 import { Vec3 } from "vec3"
 import { Block } from 'prismarine-block'
 import mcDataLoader from 'minecraft-data'

@@ -1,4 +1,4 @@
-import { LegionStateMachineTargets } from "@/types"
+import { LegionStateMachineTargets } from "types/index"
 import { StateTransition, BehaviorIdle, NestedStateMachine } from 'mineflayer-statemachine'
 import BehaviorFindItems from '@/BehaviorModules/BehaviorFindItems'
 import BehaviorLoadConfig from '@/BehaviorModules/BehaviorLoadConfig'

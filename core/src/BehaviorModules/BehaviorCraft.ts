@@ -1,5 +1,5 @@
 
-import { LegionStateMachineTargets } from "@/types"
+import { LegionStateMachineTargets } from "types/index"
 import { Block } from 'prismarine-block'
 import mcDataLoader from 'minecraft-data'
 import botWebsocket from '@/modules/botWebsocket'

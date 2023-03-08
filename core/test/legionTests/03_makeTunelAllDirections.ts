@@ -1,6 +1,6 @@
 import botConfigLoader from '@/modules/botConfig'
-import { Config, MineCordsConfig } from '@/types'
-import { Jobs } from '@/types/defaultTypes'
+import { Config, MineCordsConfig } from 'types/index'
+import { Jobs } from 'types/defaultTypes'
 import { bot } from '../hooks'
 
 describe('03 Make tunel in all directions', function () {

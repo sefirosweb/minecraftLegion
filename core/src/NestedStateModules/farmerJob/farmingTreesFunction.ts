@@ -1,4 +1,4 @@
-import { LegionStateMachineTargets } from '@/types'
+import { LegionStateMachineTargets } from 'types/index'
 import {
   StateTransition,
   BehaviorIdle,

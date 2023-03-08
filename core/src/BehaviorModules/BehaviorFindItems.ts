@@ -1,4 +1,4 @@
-import { LegionStateMachineTargets, EntityWithDistance } from "@/types"
+import { LegionStateMachineTargets, EntityWithDistance } from "types/index"
 import { Bot } from "mineflayer";
 import { StateBehavior } from "mineflayer-statemachine"
 export default class BehaviorFindItems implements StateBehavior {

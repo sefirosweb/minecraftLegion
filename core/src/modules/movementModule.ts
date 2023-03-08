@@ -1,5 +1,5 @@
 
-import { LegionStateMachineTargets, Portals, PortalType, Vec3WithDimension, Vec3WithDistance } from "@/types"
+import { LegionStateMachineTargets, Portals, PortalType, Vec3WithDimension, Vec3WithDistance } from "types/index"
 import botWebsocket from '@/modules/botWebsocket'
 import mineflayerPathfinder from 'mineflayer-pathfinder'
 import { Vec3 } from 'vec3'

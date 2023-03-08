@@ -1,9 +1,9 @@
 import botWebsocket from '@/modules/botWebsocket'
-import { ChestBlock, LegionStateMachineTargets } from '@/types';
+import { ChestBlock, LegionStateMachineTargets } from 'types/index';
 import { StateBehavior } from 'mineflayer-statemachine';
 import vec3 from 'vec3'
 import { v4 as uuidv4 } from 'uuid';
-import { Bot } from 'mineflayer';
+import { Bot, Dimension_V2 } from 'mineflayer';
 export default class BehaviorcCheckItemsInChest implements StateBehavior {
   active: boolean;
   readonly bot: Bot;
@@ -62,7 +62,7 @@ export default class BehaviorcCheckItemsInChest implements StateBehavior {
         } else {
 
           const newChest: ChestBlock = {
-            dimension: this.bot.game.dimension,
+            dimension: this.bot.game.dimension as Dimension_V2,
             position: chest.position,
             slots,
             lastTimeOpen: Date.now()

@@ -2,10 +2,11 @@ import { StateTransition, BehaviorIdle, BehaviorFollowEntity, NestedStateMachine
 import { Item } from 'prismarine-item';
 import BehaviorEquip from '@/BehaviorModules/BehaviorEquip'
 import BehaviorInteractEntity from '@/BehaviorModules/BehaviorInteractEntity'
-import { animals as animalType, isAnimal } from '@/modules/animalType'
-import { LegionStateMachineTargets } from '@/types'
+import { isAnimal } from '@/modules/animalType'
+import { LegionStateMachineTargets } from 'types/index'
 import mcDataLoader from 'minecraft-data'
 import { Bot } from 'mineflayer';
+import { animals as animalType } from 'types/animals'
 
 function feedAnimalFunction(bot: Bot, targets: LegionStateMachineTargets) {
   const mcData = mcDataLoader(bot.version)

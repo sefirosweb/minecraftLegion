@@ -1,5 +1,5 @@
 
-import { LegionStateMachineTargets, MineCordsConfig } from '@/types'
+import { LegionStateMachineTargets, MineCordsConfig } from 'types/index'
 
 import botWebsocket from '@/modules/botWebsocket'
 import { StateBehavior } from 'mineflayer-statemachine';

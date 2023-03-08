@@ -1,5 +1,5 @@
 
-import { LegionStateMachineTargets } from "@/types"
+import { LegionStateMachineTargets } from "types/index"
 import { Bot } from "mineflayer";
 import { StateBehavior } from "mineflayer-statemachine"
 

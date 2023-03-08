@@ -1,4 +1,4 @@
-import { LegionStateMachineTargets, BotwebsocketAction } from "@/types"
+import { LegionStateMachineTargets, BotwebsocketAction } from "types/index"
 import { Bot, BotEvents } from "mineflayer"
 import { Vec3 } from "vec3"
 import config from '@/config'

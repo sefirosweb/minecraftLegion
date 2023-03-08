@@ -6,7 +6,7 @@ import { Jobs } from './defaultTypes'
 import { Block } from 'prismarine-block'
 import { Entity } from 'prismarine-entity'
 import { Item as PrismarineItem } from 'prismarine-item';
-import { FarmAnimal } from '@/modules/animalType'
+import { FarmAnimal } from './animals'
 
 export type Layer = {
     xStart: number,

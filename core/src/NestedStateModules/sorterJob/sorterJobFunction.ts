@@ -2,13 +2,13 @@ import vec3 from 'vec3'
 import { StateTransition, BehaviorIdle, NestedStateMachine } from 'mineflayer-statemachine'
 import BehaviorcCheckItemsInChest from '@/BehaviorModules/sorterJob/BehaviorcCheckItemsInChest'
 import BehaviorMoveTo from '@/BehaviorModules/BehaviorMoveTo'
-import { NewChestBlock, LegionStateMachineTargets } from '@/types'
+import { NewChestBlock, LegionStateMachineTargets } from 'types/index'
 import sorterJob from '@/modules/sorterJob'
 import inventoryModule from '@/modules/inventoryModule'
 import DepositItemsInInventory from '@/NestedStateModules/sorterJob/depositItemsInInventory'
 import SortChestFunction from '@/NestedStateModules/sorterJob/sortChestFunction'
 import { Block } from 'prismarine-block'
-import { Bot } from 'mineflayer'
+import { Bot, Dimension_V2 } from 'mineflayer'
 
 const sorterJobFunction = (bot: Bot, targets: LegionStateMachineTargets) => {
   const { findChests } = inventoryModule(bot)
@@ -92,7 +92,7 @@ const sorterJobFunction = (bot: Bot, targets: LegionStateMachineTargets) => {
       } else {
 
         const newChest: NewChestBlock = {
-          dimension: bot.game.dimension,
+          dimension: bot.game.dimension as Dimension_V2,
           position: chest.position
         }
 
@@ -144,7 +144,7 @@ const sorterJobFunction = (bot: Bot, targets: LegionStateMachineTargets) => {
         if (!chestInfo || chestInfo.lastTimeOpen === undefined || Date.now() - chestInfo.lastTimeOpen > 5000) {
 
           const newChest: NewChestBlock = {
-            dimension: bot.game.dimension,
+            dimension: bot.game.dimension as Dimension_V2,
             position: chest.position
           }
 

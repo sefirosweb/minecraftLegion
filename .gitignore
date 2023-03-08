@@ -2,3 +2,5 @@ botConfig/*
 custom_start/*
 node_modules/
 .env
+test/server_jars/*
+versions/*

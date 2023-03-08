@@ -1,5 +1,5 @@
-import { ChestBlock, ChestProperty, LegionStateMachineTargets } from "@/types"
-import { Bot, Chest } from "mineflayer"
+import { ChestBlock, ChestProperty, LegionStateMachineTargets } from "types/index"
+import { Bot, Chest, Dimension_V2 } from "mineflayer"
 import { Block } from "prismarine-block"
 import { Vec3 } from "vec3"
 import { getSecondBlockPosition } from "./utils"
@@ -25,7 +25,7 @@ const refreshChest = (chestToOpen: Block, container: Chest, bot: Bot, targets: L
 
     if (!chest) {
         const chestOpened: ChestBlock = {
-            dimension: bot.game.dimension,
+            dimension: bot.game.dimension as Dimension_V2,
             slots,
             position: chestToOpen.position,
             position_2: position2,

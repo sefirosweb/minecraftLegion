@@ -1,4 +1,4 @@
-import { botSocket, botType, socketAuth } from "./types";
+import { botSocket, botType, socketAuth } from "types/index";
 import Config from '@/config'
 import io from 'socket.io-client'
 import path from 'path'

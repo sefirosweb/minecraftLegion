@@ -1,4 +1,4 @@
-import { ChestTransaction, Item, Chests, ChestBlock, Slot, CorrectChests, NewChestSort } from "@/types"
+import { ChestTransaction, Item, Chests, ChestBlock, Slot, CorrectChests, NewChestSort } from "types/index"
 
 const sorterJob = () => {
 
