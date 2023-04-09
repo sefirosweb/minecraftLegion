@@ -4,3 +4,4 @@ node_modules/
 .env
 test/server_jars/*
 versions/*
+dist/*

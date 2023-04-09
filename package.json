@@ -1,13 +1,14 @@
 {
-  "name": "main",
+  "name": "base-types",
   "version": "2.0.3",
   "description": "Project Minecraft Legion",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
     "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "server": "ts-node test/start_test_server.ts",
-    "build": "npm run install_all && npm run build_all",
+    "build": "babel src --extensions \".ts,.js\" --delete-dir-on-start --out-dir dist && tsc",
+    "build:prod": "npm run install_all && npm run build_all",
     "build_all": "node build",
     "install_all": "npm install && npm install --prefix ./web/ && npm install --prefix ./core/ && npm install --prefix ./server/",
     "build:docker": "docker build -f docker/Dockerfile --no-cache -t minecraft-legion:latest .",
@@ -28,6 +29,12 @@
     "fs-extra": "^11.1.0"
   },
   "devDependencies": {
+    "@babel/cli": "^7.21.0",
+    "@babel/core": "^7.21.4",
+    "@babel/node": "^7.20.7",
+    "@babel/preset-env": "^7.21.4",
+    "@babel/preset-typescript": "^7.21.4",
+    "babel-plugin-module-resolver": "^5.0.0",
     "minecraft-data": "^3.30.0",
     "minecraft-wrap": "^1.5.1",
     "mineflayer": "^4.8.1",
@@ -36,6 +43,7 @@
     "prismarine-block": "^1.16.3",
     "prismarine-entity": "^2.2.0",
     "prismarine-item": "^1.12.1",
+    "typescript": "^5.0.4",
     "vec3": "^0.1.8"
   }
 }

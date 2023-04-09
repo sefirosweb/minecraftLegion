@@ -1,6 +1,6 @@
 import { Movements } from 'mineflayer-pathfinder'
 import { StateMachineTargets } from 'mineflayer-statemachine'
-import { Bot, Dimension, Dimension_V2 } from 'mineflayer'
+import { Bot, Dimension_V2 } from 'mineflayer'
 import { Vec3 } from 'vec3'
 import { Jobs } from './defaultTypes'
 import { Block } from 'prismarine-block'
