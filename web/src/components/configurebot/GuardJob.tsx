@@ -1,26 +1,25 @@
 //@ts-nocheck
 import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import ArrowUp from "./Icons/ArrowUp";
 import ArrowDown from "./Icons/ArrowDown";
 import TrashIcon from "./Icons/Trash";
 import FormCheck from "../forms/FormCheck";
-import { actionCreators, State } from "@/state";
-import { bindActionCreators } from "redux";
+import { State } from "@/state";
+import useGetSelectedBot from "@/hooks/useGetSelectedBot";
+import useGetSocket from "@/hooks/useGetSocket";
 
 export const GuardJob = () => {
-
   const configurationState = useSelector((state: State) => state.configurationReducer);
-  const { socket, selectedSocketId, master } = configurationState
-
-  const dispatch = useDispatch();
-  const { getBotBySocketId } = bindActionCreators(actionCreators, dispatch);
+  const { master } = configurationState
 
   const [x, setX] = useState("");
   const [y, setY] = useState("");
   const [z, setZ] = useState("");
 
-  const botConfig = getBotBySocketId(selectedSocketId);
+  const socket = useGetSocket()
+  const botConfig = useGetSelectedBot()
+
   if (botConfig === undefined) {
     return null;
   }
@@ -236,17 +235,3 @@ export const GuardJob = () => {
     </>
   );
 };
-
-// const mapStateToProps = (reducers) => {
-//   const { botsReducer, configurationReducer } = reducers;
-//   const { botsOnline } = botsReducer;
-//   const { socket, selectedSocketId, master } = configurationReducer;
-
-//   return { botsOnline, socket, selectedSocketId, master };
-// };
-
-// const mapDispatchToProps = {
-//   getBotBySocketId,
-// };
-
-// export default connect(mapStateToProps, mapDispatchToProps)(GuardJob);

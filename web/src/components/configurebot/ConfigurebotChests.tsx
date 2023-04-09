@@ -1,18 +1,14 @@
 //@ts-nocheck
 import { Button, Col, ListGroup, Row } from "react-bootstrap";
-import FormCheck from '../forms/FormCheck';
+import FormCheck from '@/components/forms/FormCheck';
 import Chest from './Chest'
-import { useSelector } from "react-redux";
-import { State } from "@/state";
+import useGetSelectedBot from "@/hooks/useGetSelectedBot";
+import useGetSocket from "@/hooks/useGetSocket";
 
 export const ConfigurebotChests = () => {
-  const botState = useSelector((state: State) => state.botsReducer);
-  const { botsOnline } = botState
+  const socket = useGetSocket()
+  const botConfig = useGetSelectedBot()
 
-  const configurationState = useSelector((state: State) => state.configurationReducer);
-  const { socket, selectedSocketId } = configurationState
-
-  const botConfig = botsOnline.find((e) => { return e.socketId === selectedSocketId })
   if (botConfig === undefined) { return null }
 
   const changeConfig = (configToChange, value) => {
@@ -87,18 +83,3 @@ export const ConfigurebotChests = () => {
     </>
   );
 };
-
-// const mapStateToProps = (reducers) => {
-//   const { configurationReducer, botsReducer } = reducers;
-//   const { socket, selectedSocketId } = configurationReducer;
-//   const { botsOnline } = botsReducer
-
-
-//   return { socket, selectedSocketId, botsOnline };
-// };
-
-// const mapDispatchToProps = {
-//   getBotBySocketId,
-// };
-
-// export default connect(mapStateToProps, mapDispatchToProps)(Chests);

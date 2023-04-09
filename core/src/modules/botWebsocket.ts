@@ -536,7 +536,9 @@ const getLoged = () => {
 }
 
 const sendConfig = () => {
+  console.log('Sending back')
   const botconfig = botconfigLoader(bot.username)
+  console.log(botconfig.getAll())
 
   socket.emit('sendAction', {
     action: 'sendConfig',

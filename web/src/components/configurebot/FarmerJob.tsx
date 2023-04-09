@@ -1,18 +1,13 @@
 //@ts-nocheck
 import { Button, Col, Row } from 'react-bootstrap'
 import HarvestArea from './HarvestArea'
-import { useSelector } from "react-redux";
-import { State } from '@/state';
+import useGetSocket from '@/hooks/useGetSocket';
+import useGetSelectedBot from '@/hooks/useGetSelectedBot';
 
 export const FarmerJob = () => {
-  const botState = useSelector((state: State) => state.botsReducer);
-  const { botsOnline } = botState
+  const socket = useGetSocket()
+  const botConfig = useGetSelectedBot()
 
-  const configurationState = useSelector((state: State) => state.configurationReducer);
-  const { socket, selectedSocketId } = configurationState
-
-
-  const botConfig = botsOnline.find((e) => { return e.socketId === selectedSocketId })
   if (botConfig === undefined) { return null }
 
   const handleInsertNewPlantArea = () => {

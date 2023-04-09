@@ -1,20 +1,14 @@
 //@ts-nocheck
 import { Col, Form, Row } from 'react-bootstrap'
-import { useSelector } from 'react-redux'
 import FormCheck from "../forms/FormCheck";
-import HouseXYZ from '../../images/HouseXYZ.png'
-import { State } from '@/state';
+import HouseXYZ from '@/images/HouseXYZ.png'
+import useGetSelectedBot from '@/hooks/useGetSelectedBot';
+import useGetSocket from '@/hooks/useGetSocket';
 
 export const MinerJob = () => {
+  const socket = useGetSocket()
+  const botConfig = useGetSelectedBot()
 
-  const botState = useSelector((state: State) => state.botsReducer);
-  const { botsOnline } = botState
-
-  const configurationState = useSelector((state: State) => state.configurationReducer);
-  const { socket, selectedSocketId } = configurationState
-
-
-  const botConfig = botsOnline.find((e) => { return e.socketId === selectedSocketId })
   if (botConfig === undefined) { return null }
 
   const handleChangeTunnel = (event) => {
@@ -291,17 +285,3 @@ export const MinerJob = () => {
     </>
   )
 }
-
-// const mapStateToProps = (reducers) => {
-//   const { botsReducer, configurationReducer } = reducers
-//   const { botsOnline } = botsReducer
-//   const { socket, selectedSocketId } = configurationReducer
-
-//   return { botsOnline, socket, selectedSocketId }
-// }
-
-// const mapDispatchToProps = {
-//   getBotBySocketId
-// }
-
-// export default connect(mapStateToProps, mapDispatchToProps)(MinerJob)

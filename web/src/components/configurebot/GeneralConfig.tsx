@@ -1,26 +1,18 @@
 //@ts-nocheck
 import { Suspense, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import TrashIcon from "./Icons/Trash";
 import ArrowUp from "./Icons/ArrowUp";
 import ArrowDown from "./Icons/ArrowDown";
 import FormCheck from "../forms/FormCheck";
 import Coords from "../forms/Coords";
 import ItemsAviable from "./ItemsAviable";
-import { bindActionCreators } from "redux";
-import { actionCreators, State } from "@/state";
+import useGetSelectedBot from "@/hooks/useGetSelectedBot";
+import useGetSocket from "@/hooks/useGetSocket";
 
 export const GeneralConfig = () => {
-
-  const configurationState = useSelector((state: State) => state.configurationReducer);
-  const { socket, selectedSocketId } = configurationState
-
-  const dispatch = useDispatch();
-  const { getBotBySocketId } = bindActionCreators(actionCreators, dispatch);
-
-
   const [itemName, setItemName] = useState("");
-  const botConfig = getBotBySocketId(selectedSocketId);
+  const socket = useGetSocket()
+  const botConfig = useGetSelectedBot()
 
   if (botConfig === undefined) {
     return null;
@@ -41,7 +33,7 @@ export const GeneralConfig = () => {
     setItemName(event.target.value);
   };
 
-  const handleInsertItem = (event) => {
+  const handleInsertItem = () => {
     if (itemName === "") {
       return null;
     }
@@ -321,17 +313,3 @@ export const GeneralConfig = () => {
     </>
   );
 };
-
-// const mapStateToProps = (reducers) => {
-//   const { botsReducer, configurationReducer } = reducers;
-//   const { botsOnline } = botsReducer;
-//   const { socket, selectedSocketId } = configurationReducer;
-
-//   return { botsOnline, socket, selectedSocketId };
-// };
-
-// const mapDispatchToProps = {
-//   getBotBySocketId,
-// };
-
-// export default connect(mapStateToProps, mapDispatchToProps)(GeneralConfig);

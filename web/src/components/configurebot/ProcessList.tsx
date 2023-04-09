@@ -1,18 +1,9 @@
 //@ts-nocheck
-import { useSelector } from 'react-redux'
-import { bindActionCreators } from "redux";
-import { useDispatch } from "react-redux";
-import { actionCreators, State } from '@/state';
+
+import useGetSelectedBot from "@/hooks/useGetSelectedBot"
 
 export const ProcessList = () => {
-  const dispatch = useDispatch();
-  const { getBotBySocketId } = bindActionCreators(actionCreators, dispatch);
-  const configurationState = useSelector((state: State) => state.configurationReducer);
-  const { selectedSocketId } = configurationState
-
-  if (selectedSocketId === undefined) { return null }
-
-  const botConfig = getBotBySocketId(selectedSocketId)
+  const botConfig = useGetSelectedBot()
 
   if (botConfig === undefined) { return null }
 

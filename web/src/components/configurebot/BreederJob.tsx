@@ -1,17 +1,15 @@
 //@ts-nocheck
 import { Col, Form, Row } from 'react-bootstrap'
 import FarmArea from './FarmArea'
-import { useSelector } from "react-redux";
-import { State } from '@/state';
+import useGetSocket from '@/hooks/useGetSocket';
+import useGetSelectedBot from '@/hooks/useGetSelectedBot';
+import useGetSelectedBotSocket from '@/hooks/useGetSelectedBotSocket';
 
 export const BreederJob = () => {
-  const botState = useSelector((state: State) => state.botsReducer);
-  const { botsOnline } = botState
+  const socket = useGetSocket()
+  const selectedSocketId = useGetSelectedBotSocket()
+  const botConfig = useGetSelectedBot()
 
-  const configurationState = useSelector((state: State) => state.configurationReducer);
-  const { socket, selectedSocketId } = configurationState
-
-  const botConfig = botsOnline.find((e) => { return e.socketId === selectedSocketId })
   if (botConfig === undefined) { return null }
 
   const handleInsertNewFarmArea = () => {
@@ -218,17 +216,3 @@ export const BreederJob = () => {
     </>
   )
 }
-
-// const mapStateToProps = (reducers) => {
-//   const { configurationReducer, botsReducer } = reducers
-//   const { socket, selectedSocketId } = configurationReducer
-//   const { botsOnline } = botsReducer
-
-//   return { socket, selectedSocketId, botsOnline }
-// }
-
-// const mapDispatchToProps = {
-//   getBotBySocketId
-// }
-
-// export default connect(mapStateToProps, mapDispatchToProps)(BreederJob)

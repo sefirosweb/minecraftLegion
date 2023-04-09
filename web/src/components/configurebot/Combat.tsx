@@ -1,19 +1,12 @@
 //@ts-nocheck
 import { Col, Row } from 'react-bootstrap'
-import { useDispatch } from "react-redux";
-import { actionCreators, State } from "@/state";
-import { useSelector } from "react-redux";
-import { bindActionCreators } from "redux";
+import useGetSelectedBot from '@/hooks/useGetSelectedBot';
+import useGetSocket from '@/hooks/useGetSocket';
 
 export const Combat = () => {
-  const configurationState = useSelector((state: State) => state.configurationReducer);
-  const { socket, selectedSocketId } = configurationState
+  const socket = useGetSocket()
+  const botConfig = useGetSelectedBot()
 
-  const dispatch = useDispatch();
-  const { getBotBySocketId } = bindActionCreators(actionCreators, dispatch);
-
-  if (selectedSocketId === undefined) { return null }
-  const botConfig = getBotBySocketId(selectedSocketId)
   if (botConfig === undefined) { return null }
 
   const handleChangeMode = (event) => {
@@ -81,17 +74,3 @@ export const Combat = () => {
     </>
   )
 }
-
-// const mapStateToProps = (reducers) => {
-//   const { botsReducer, configurationReducer } = reducers
-//   const { botsOnline } = botsReducer
-//   const { socket, selectedSocketId } = configurationReducer
-
-//   return { botsOnline, socket, selectedSocketId }
-// }
-
-// const mapDispatchToProps = {
-//   getBotBySocketId
-// }
-
-// export default connect(mapStateToProps, mapDispatchToProps)(Combat)

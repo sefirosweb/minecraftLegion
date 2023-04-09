@@ -1,23 +1,17 @@
 //@ts-nocheck
 import { useState } from 'react'
 import ItemsAviable from './ItemsAviable'
-import { useDispatch, useSelector } from 'react-redux'
 import TrashIcon from './Icons/Trash'
-import { actionCreators, State } from '@/state'
-import { bindActionCreators } from 'redux'
+import useGetSelectedBot from '@/hooks/useGetSelectedBot'
+import useGetSocket from '@/hooks/useGetSocket'
 
 export const ItemsToBeReady = () => {
-
-  const configurationState = useSelector((state: State) => state.configurationReducer);
-  const { socket, selectedSocketId } = configurationState
-
-  const dispatch = useDispatch();
-  const { getBotBySocketId } = bindActionCreators(actionCreators, dispatch);
-
   const [itemName, setItemName] = useState('')
   const [quantity, setQuantity] = useState(1)
-
-  const botConfig = getBotBySocketId(selectedSocketId)
+  
+  const socket = useGetSocket()
+  const botConfig = useGetSelectedBot()
+  
   if (botConfig === undefined) { return null }
 
   const handleQuantityChange = (event) => {
@@ -132,17 +126,3 @@ export const ItemsToBeReady = () => {
   )
 }
 
-
-// const mapStateToProps = (reducers) => {
-//   const { botsReducer, configurationReducer } = reducers
-//   const { botsOnline } = botsReducer
-//   const { socket, selectedSocketId } = configurationReducer
-
-//   return { botsOnline, socket, selectedSocketId }
-// }
-
-// const mapDispatchToProps = {
-//   getBotBySocketId
-// }
-
-// export default connect(mapStateToProps, mapDispatchToProps)(ItemsToBeReady)

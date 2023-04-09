@@ -1,18 +1,12 @@
 //@ts-nocheck
-import { actionCreators, State } from '@/state';
-import {  useDispatch, useSelector } from 'react-redux'
-import { bindActionCreators } from 'redux';
 import ChestArea from './ChestArea'
+import useGetSocket from '@/hooks/useGetSocket';
+import useGetSelectedBot from '@/hooks/useGetSelectedBot';
 
 export const SorterJob = () => {
+  const socket = useGetSocket()
+  const botConfig = useGetSelectedBot()
 
-  const configurationState = useSelector((state: State) => state.configurationReducer);
-  const { socket, selectedSocketId } = configurationState
-
-  const dispatch = useDispatch();
-  const { getBotBySocketId } = bindActionCreators(actionCreators, dispatch);
-
-  const botConfig = getBotBySocketId(selectedSocketId)
   if (botConfig === undefined) { return null }
 
   const handleInsertNewChestArea = () => {

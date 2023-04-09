@@ -1,30 +1,25 @@
 //@ts-nocheck
 import { useState, useEffect } from 'react'
 import { Button, Col, Form, Row } from 'react-bootstrap'
-import { useDispatch } from "react-redux";
-import { actionCreators, State } from "@/state";
-import { useSelector } from "react-redux";
-import { bindActionCreators } from "redux";
+import useGetSelectedBotSocket from '@/hooks/useGetSelectedBotSocket';
+import useGetSocket from '@/hooks/useGetSocket';
+import useGetSelectedBot from '@/hooks/useGetSelectedBot';
 
 export const FullConfig = () => {
-  const configurationState = useSelector((state: State) => state.configurationReducer);
-  const { socket, selectedSocketId } = configurationState
-
-  const dispatch = useDispatch();
-  const { getBotBySocketId } = bindActionCreators(actionCreators, dispatch);
+  const socket = useGetSocket()
+  const selectedSocketId = useGetSelectedBotSocket()
+  const botConfig = useGetSelectedBot()
 
   const [jsonText, setJsonText] = useState("")
 
   useEffect(() => {
-    const botConfig = getBotBySocketId(selectedSocketId)
+    if(botConfig === undefined) return
     const config = { ...botConfig.config }
     delete config.socketId
     setJsonText(JSON.stringify(config, null, 2))
-  }, [getBotBySocketId, selectedSocketId])
+  }, [botConfig, selectedSocketId])
 
-  const botConfig = getBotBySocketId(selectedSocketId)
   if (botConfig === undefined) { return null }
-
 
   const download = () => {
     const config = { ...botConfig.config }

@@ -25,12 +25,3 @@ export const Portals = () => {
   );
 };
 
-
-// const mapStateToProps = (reducers) => {
-//   const { botsReducer } = reducers;
-//   const { portals } = botsReducer;
-
-//   return { portals };
-// };
-
-// export default connect(mapStateToProps)(Portals);

@@ -5,14 +5,13 @@ import BotActionsButtons from '../components/BotActionsButtons'
 import { Button, Col, Row } from 'react-bootstrap'
 import { useSelector } from "react-redux";
 import { State } from "@/state";
+import useGetSelectedBotSocket from '@/hooks/useGetSelectedBotSocket'
 
 export const Dashboard = () => {
     const botState = useSelector((state: State) => state.botsReducer);
     const { logs } = botState
 
-    const configurationState = useSelector((state: State) => state.configurationReducer);
-    const { selectedSocketId } = configurationState
-
+    const selectedSocketId = useGetSelectedBotSocket()
     const messagesEndRef = useRef<HTMLDivElement>(null)
 
     useEffect(() => {
