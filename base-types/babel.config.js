@@ -10,16 +10,6 @@ module.exports = {
         ],
         '@babel/preset-typescript'
     ],
-    plugins: [
-        [
-            'module-resolver',
-            {
-                alias: {
-                    '@': './src',
-                }
-            }
-        ]
-    ],
     "ignore": [
         "**/custom_start/*"
     ]

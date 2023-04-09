@@ -1,0 +1,28 @@
+{
+  "name": "base-types",
+  "version": "0.0.1",
+  "description": "Types used for MinecraftLegion project",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "babel src --extensions \".ts,.js\" --delete-dir-on-start --out-dir dist && tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sefirosweb/minecraftLegion.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sefirosweb/minecraftLegion/issues"
+  },
+  "homepage": "https://github.com/sefirosweb/minecraftLegion#readme",
+  "devDependencies": {
+    "@babel/cli": "^7.21.0",
+    "@babel/core": "^7.21.4",
+    "@babel/node": "^7.20.7",
+    "@babel/preset-env": "^7.21.4",
+    "@babel/preset-typescript": "^7.21.4",
+    "babel-plugin-module-resolver": "^5.0.0",
+    "typescript": "^5.0.4"
+  }
+}
