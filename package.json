@@ -1,6 +1,6 @@
 {
   "name": "main",
-  "version": "2.0.3",
+  "version": "2.0.4",
   "description": "Project Minecraft Legion",
   "main": "index.js",
   "scripts": {
