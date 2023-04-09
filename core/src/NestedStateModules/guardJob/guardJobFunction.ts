@@ -9,7 +9,7 @@ import BehaviorMoveTo from '@/BehaviorModules/BehaviorMoveTo'
 import CombatStrategyFunction from '@/NestedStateModules/combat/combatStrategyFunction'
 import GetReadyFunction from '@/NestedStateModules/getReady/getReadyFunction'
 import getClosestEnemy from '@/modules/getClosestEnemy'
-import { LegionStateMachineTargets } from 'types/index'
+import { LegionStateMachineTargets } from 'base-types'
 import { Bot } from 'mineflayer'
 
 function guardJobFunction(bot: Bot, targets: LegionStateMachineTargets) {

@@ -15,7 +15,7 @@ module.exports = {
             'module-resolver',
             {
                 alias: {
-                    '@': './src',
+                    '@': './src'
                 }
             }
         ]
@@ -23,5 +23,4 @@ module.exports = {
     "ignore": [
         "**/trash_files/*"
     ]
-
 };

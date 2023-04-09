@@ -1,5 +1,5 @@
 import botWebsocket from '@/modules/botWebsocket'
-import { ChestBlock, LegionStateMachineTargets } from 'types/index';
+import { ChestBlock, LegionStateMachineTargets } from 'base-types';
 import { StateBehavior } from 'mineflayer-statemachine';
 import vec3 from 'vec3'
 import { v4 as uuidv4 } from 'uuid';

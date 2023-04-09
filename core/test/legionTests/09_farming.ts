@@ -1,8 +1,7 @@
 import botConfigLoader from '@/modules/botConfig'
 import inventoryModule from '@/modules/inventoryModule'
 import { bot } from '../hooks'
-import { Config, PlantArea } from 'types/index'
-import { Jobs } from 'types/defaultTypes'
+import { Jobs, Config, PlantArea } from 'base-types'
 
 describe('09 General farming', function () {
   const plantAreas: Array<PlantArea> = [

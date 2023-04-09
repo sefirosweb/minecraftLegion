@@ -1,4 +1,4 @@
-import { Chests, ChestTransaction, Item, ItemRecipe, Recpie } from "types/index"
+import { Chests, ChestTransaction, Item, ItemRecipe, Recpie } from "base-types"
 import sorterJob from '@/modules/sorterJob'
 import inventoryModule from '@/modules/inventoryModule'
 import { Item as ItemMC } from "minecraft-data"

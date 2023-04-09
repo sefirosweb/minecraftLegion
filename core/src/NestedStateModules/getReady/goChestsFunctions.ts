@@ -7,7 +7,7 @@ import BehaviorMoveTo from '@/BehaviorModules/BehaviorMoveTo'
 import chestModule from '@/modules/chestModule'
 import PickUpItems from '@/NestedStateModules/getReady/pickUpItems'
 import SearchAndCraftFunction from '@/NestedStateModules/crafterJob/searchAndCraftFunction'
-import { Chest, Item, LegionStateMachineTargets } from 'types/index'
+import { Chest, Item, LegionStateMachineTargets } from 'base-types'
 import { Bot } from 'mineflayer'
 
 export default (bot: Bot, targets: LegionStateMachineTargets) => {

@@ -1,4 +1,4 @@
-import { BotwebsocketAction, LegionStateMachineTargets, Master } from 'types/index'
+import { BotwebsocketAction, LegionStateMachineTargets, Master } from 'base-types'
 import { StateTransition, BehaviorIdle, NestedStateMachine } from 'mineflayer-statemachine'
 import BehaviorGetPlayer from '@/BehaviorModules/BehaviorGetPlayer'
 import botWebsocket from '@/modules/botWebsocket'

@@ -2,8 +2,7 @@
 import botConfigLoader from '@/modules/botConfig'
 import inventoryModule from '@/modules/inventoryModule'
 import { bot } from '../hooks'
-import { Config } from 'types/index'
-import { Jobs } from 'types/defaultTypes'
+import { Jobs, Config } from 'base-types'
 
 describe('08 Farming cactus', function () {
   before(async () => {

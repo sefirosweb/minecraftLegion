@@ -1,4 +1,4 @@
-import { PositionsChecked, Queue } from 'types/index'
+import { PositionsChecked, Queue } from 'base-types'
 import { Vec3 } from 'vec3'
 import { Block } from 'prismarine-block'
 import { Bot } from 'mineflayer'

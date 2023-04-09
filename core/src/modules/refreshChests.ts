@@ -1,4 +1,4 @@
-import { ChestBlock, ChestProperty, LegionStateMachineTargets } from "types/index"
+import { ChestBlock, ChestProperty, LegionStateMachineTargets } from "base-types"
 import { Bot, Chest, Dimension_V2 } from "mineflayer"
 import { Block } from "prismarine-block"
 import { Vec3 } from "vec3"

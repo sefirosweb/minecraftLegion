@@ -1,4 +1,4 @@
-import { LegionStateMachineTargets, MineCordsConfig } from "types/index"
+import { LegionStateMachineTargets, MineCordsConfig } from "base-types"
 
 import mineflayerPathfinder from 'mineflayer-pathfinder'
 import botWebsocket from '@/modules/botWebsocket'

@@ -1,7 +1,6 @@
 import botConfigLoader from '@/modules/botConfig'
 import inventoryModule from '@/modules/inventoryModule'
-import { Config, PlantArea } from 'types/index'
-import { Jobs } from 'types/defaultTypes'
+import { Jobs, Config, PlantArea } from 'base-types'
 import { bot } from '../hooks'
 
 describe('06 Wood cutter', function () {

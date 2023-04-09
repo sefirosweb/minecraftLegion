@@ -1,4 +1,4 @@
-import { LegionStateMachineTargets, PendingTransaction, ChestTransaction } from "types/index"
+import { LegionStateMachineTargets, PendingTransaction, ChestTransaction } from "base-types"
 import { StateTransition, BehaviorIdle, NestedStateMachine } from 'mineflayer-statemachine'
 import GoAndWithdraw from '@/NestedStateModules/getReady/goAndWithdraw'
 import { Bot, Dimension_V2 } from "mineflayer"

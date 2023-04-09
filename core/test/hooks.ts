@@ -1,6 +1,6 @@
 import injectCommonTest from './legionTests/plugins/testCommon'
 import { createNewBot } from "../src/createNewBot";
-import { TestBot } from 'types/index';
+import { TestBot } from 'base-types';
 
 export const TEST_TIMEOUT_MS = 180000
 export let bot: TestBot

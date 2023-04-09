@@ -1,7 +1,7 @@
 import { StateTransition, BehaviorIdle, NestedStateMachine } from 'mineflayer-statemachine'
 import BehaviorMoveTo from '@/BehaviorModules/BehaviorMoveTo'
 import BehaviorSleep from '@/BehaviorModules/BehaviorSleep'
-import { LegionStateMachineTargets } from 'types/index'
+import { LegionStateMachineTargets } from 'base-types'
 import { Bot } from 'mineflayer'
 
 const goSleepFunction = function (bot: Bot, targets: LegionStateMachineTargets) {

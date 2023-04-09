@@ -1,4 +1,4 @@
-import { LegionStateMachineTargets } from "types/index"
+import { LegionStateMachineTargets } from "base-types"
 import inventoryModule from '@/modules/inventoryModule'
 import { StateBehavior } from "mineflayer-statemachine"
 import { Bot } from "mineflayer";

@@ -1,6 +1,5 @@
 import botConfigLoader from '@/modules/botConfig'
-import { Config, MineCordsConfig } from 'types/index'
-import { Jobs } from 'types/defaultTypes'
+import { Jobs, Config, MineCordsConfig } from 'base-types'
 import { bot } from '../hooks'
 
 describe('01 Make hole in liquid & lava', function () {
@@ -22,8 +21,8 @@ describe('01 Make hole in liquid & lava', function () {
   let botConfig: ReturnType<typeof botConfigLoader>
 
   before(async () => {
-     botConfig = botConfigLoader(bot.username)
-     config = {
+    botConfig = botConfigLoader(bot.username)
+    config = {
       ...botConfig.defaultConfig,
       job: Jobs.miner,
       itemsToBeReady: [

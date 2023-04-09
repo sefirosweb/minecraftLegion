@@ -1,4 +1,4 @@
-import { ChestBlock, LegionStateMachineTargets } from 'types/index'
+import { ChestBlock, LegionStateMachineTargets } from 'base-types'
 import { StateTransition, BehaviorIdle, NestedStateMachine } from 'mineflayer-statemachine'
 import GoAndDeposit from '@/NestedStateModules/getReady/goAndDeposit'
 import { Bot } from 'mineflayer'

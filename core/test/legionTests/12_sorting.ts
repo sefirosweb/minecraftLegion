@@ -1,6 +1,5 @@
 import botConfigLoader from '@/modules/botConfig'
-import { Config } from 'types/index'
-import { Jobs } from 'types/defaultTypes'
+import { Jobs, Config } from 'base-types'
 import { bot } from '../hooks'
 import botWebsocket from '@/modules/botWebsocket'
 

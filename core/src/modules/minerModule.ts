@@ -1,5 +1,5 @@
 
-import { LegionStateMachineTargets } from "types/index"
+import { LegionStateMachineTargets } from "base-types"
 import { Vec3 } from 'vec3'
 import placeBlockModule from '@/modules/placeBlockModule'
 import { Bot } from "mineflayer"

@@ -1,6 +1,5 @@
 import fs from 'fs'
-import { Config } from 'types/index'
-import { Jobs } from 'types/defaultTypes'
+import { Config, Jobs } from 'base-types'
 
 // @ts-ignore
 import low from 'lowdb'

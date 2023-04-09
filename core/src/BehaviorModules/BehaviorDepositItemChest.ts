@@ -3,7 +3,7 @@
 import botWebsocket from '@/modules/botWebsocket'
 import refreshChest from '@/modules/refreshChests'
 import { sleep } from '@/modules/utils'
-import { ChestTransaction, Item, LegionStateMachineTargets } from 'types/index'
+import { ChestTransaction, Item, LegionStateMachineTargets } from 'base-types'
 import { Bot, Chest, TransferOptions } from 'mineflayer'
 import { StateBehavior } from 'mineflayer-statemachine'
 import { Block } from 'prismarine-block'

@@ -1,7 +1,6 @@
 import botConfigLoader from '@/modules/botConfig'
 import { bot } from '../hooks'
-import { Config, MineCordsConfig } from 'types/index'
-import { Jobs } from 'types/defaultTypes'
+import { Jobs, Config, MineCordsConfig } from 'base-types'
 
 describe('02 Make basic tunel in water & lava', function () {
 

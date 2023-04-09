@@ -1,5 +1,5 @@
 import socketIOClient, { Socket } from 'socket.io-client'
-import type { BotFriends, BotwebsocketAction, Chest, Master, MineCords } from 'types/index'
+import type { BotFriends, BotwebsocketAction, Chest, Master, MineCords } from 'base-types'
 import { Vec3 } from 'vec3'
 
 import configBot from '@/config'

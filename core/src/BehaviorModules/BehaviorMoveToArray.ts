@@ -1,6 +1,6 @@
 import mineflayerPathfinder, { Movements } from 'mineflayer-pathfinder'
 import botWebsocket from '@/modules/botWebsocket'
-import { LegionStateMachineTargets } from 'types/index'
+import { LegionStateMachineTargets } from 'base-types'
 import mcDataLoader from 'minecraft-data'
 import { Vec3 } from 'vec3'
 import { StateBehavior } from 'mineflayer-statemachine'

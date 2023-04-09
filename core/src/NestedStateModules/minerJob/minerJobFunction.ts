@@ -1,4 +1,4 @@
-import { LegionStateMachineTargets } from 'types/index'
+import { LegionStateMachineTargets } from 'base-types'
 import { StateTransition, NestedStateMachine } from 'mineflayer-statemachine'
 import BehaviorEatFood from '@/BehaviorModules/BehaviorEatFood'
 import getClosestEnemy from '@/modules/getClosestEnemy'

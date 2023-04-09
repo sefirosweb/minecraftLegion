@@ -1,6 +1,5 @@
 
-import { LegionStateMachineTargets } from "types/index"
-import { BlocksCanFertilize } from "types/defaultTypes"
+import { LegionStateMachineTargets, BlocksCanFertilize } from "base-types"
 import { Bot } from "mineflayer";
 import { StateBehavior } from "mineflayer-statemachine"
 import { Vec3 } from "vec3"

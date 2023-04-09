@@ -1,7 +1,6 @@
 import { StateTransition, BehaviorIdle, NestedStateMachine, BehaviorFollowEntity } from 'mineflayer-statemachine'
-import { LegionStateMachineTargets } from 'types/index'
 import mcDataLoader from 'minecraft-data'
-import { DefaultBlockForPlace, Jobs } from 'types/defaultTypes'
+import { DefaultBlockForPlace, Jobs, LegionStateMachineTargets } from 'base-types'
 import movementModule from '@/modules/movementModule'
 import GuardJob from '@/NestedStateModules/guardJob/guardJobFunction'
 import ArcherJob from '@/NestedStateModules/archerJob/archerJobFunction'

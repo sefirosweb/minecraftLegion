@@ -1,5 +1,5 @@
 
-import { Chest, Chests, Item, LegionStateMachineTargets } from "types/index"
+import { Chest, Chests, Item, LegionStateMachineTargets } from "base-types"
 import sorterJob from '@/modules/sorterJob'
 import inventoryModule from '@/modules/inventoryModule'
 import _ from 'lodash'

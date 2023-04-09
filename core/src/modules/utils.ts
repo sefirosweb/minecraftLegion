@@ -1,4 +1,4 @@
-import { Facing, ChestPosition } from 'types/index'
+import { Facing, ChestPosition } from 'base-types'
 import { Vec3 } from 'vec3'
 
 export const sleep = (ms: number) => {

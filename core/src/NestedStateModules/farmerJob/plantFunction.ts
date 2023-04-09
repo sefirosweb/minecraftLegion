@@ -10,7 +10,7 @@ import BehaviorFertilize from '@/BehaviorModules/BehaviorFertilize'
 import BehaviorMoveTo from '@/BehaviorModules/BehaviorMoveTo'
 import BehaviorCraft from '@/BehaviorModules/BehaviorCraft'
 import { plants, dirtCanBefertilized } from '@/modules/plantType'
-import { LegionStateMachineTargets } from 'types/index'
+import { LegionStateMachineTargets } from 'base-types'
 import { Block } from 'prismarine-block'
 import { Bot } from 'mineflayer'
 

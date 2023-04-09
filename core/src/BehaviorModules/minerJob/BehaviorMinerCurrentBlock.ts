@@ -1,4 +1,4 @@
-import { LegionStateMachineTargets, MineCordsConfig } from 'types/index'
+import { LegionStateMachineTargets, MineCordsConfig } from 'base-types'
 import { Bot } from 'mineflayer';
 import { StateBehavior } from 'mineflayer-statemachine';
 import { Vec3 } from 'vec3'
