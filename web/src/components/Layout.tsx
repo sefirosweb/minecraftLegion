@@ -6,7 +6,7 @@ import socketIOClient from "socket.io-client";
 import { bindActionCreators } from "redux";
 import { actionCreators, State } from "@/state";
 
-const Layout = (props) => {
+export const Layout = (props) => {
   const { socket, children } = props
 
   const configurationState = useSelector((state: State) => state.configurationReducer);
@@ -129,7 +129,6 @@ const Layout = (props) => {
   );
 }
 
-export default Layout
 
 // const mapStateToProps = (reducers) => {
 //   const { botsReducer, configurationReducer } = reducers;

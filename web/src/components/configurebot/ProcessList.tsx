@@ -4,7 +4,7 @@ import { bindActionCreators } from "redux";
 import { useDispatch } from "react-redux";
 import { actionCreators, State } from '@/state';
 
-const FarmerJob = () => {
+export const ProcessList = () => {
   const dispatch = useDispatch();
   const { getBotBySocketId } = bindActionCreators(actionCreators, dispatch);
   const configurationState = useSelector((state: State) => state.configurationReducer);
@@ -37,8 +37,6 @@ const FarmerJob = () => {
     </>
   )
 }
-
-export default FarmerJob
 
 // const mapStateToProps = (reducers) => {
 //   const { configurationReducer } = reducers

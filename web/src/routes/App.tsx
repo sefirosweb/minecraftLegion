@@ -1,31 +1,33 @@
-import "bootstrap/dist/css/bootstrap.min.css";
-import "../css/general.css";
+import { Suspense, lazy } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
-import Layout from "../components/Layout";
-import NotFound from "../pages/NotFound"
-import Dashboard from "../pages/Dashboard"
-import Masterlist from "../pages/Masterlist"
-import Chests from "../pages/Chests"
-import Portals from "../pages/Portals"
-import GeneralConfig from "../components/configurebot/GeneralConfig"
-import ItemsToBeReady from "../components/configurebot/ItemsToBeReady"
-import ConfigurebotChests from "../components/configurebot/Chests"
-import Combat from "../components/configurebot/Combat"
-import GuardJob from "../components/configurebot/GuardJob"
-import MinerJob from "../components/configurebot/MinerJob"
-import FarmerJob from "../components/configurebot/FarmerJob"
-import BreederJob from "../components/configurebot/BreederJob"
-import SorterJob from "../components/configurebot/SorterJob"
-import ProcessList from "../components/configurebot/ProcessList"
-import FullConfig from "../components/configurebot/FullConfig"
-import ConfigureBotLayout from "../components/configurebot/ConfigureBotLayout"
-import Authenticated from "../hooks/Authenticated"
-import SelectedBot from "../hooks/SelectedBot"
-import Configuration from '../pages/Configuration'
+import { LoadingPage } from "@/pages/LoadingPage";
+
+const Layout = lazy(() => import("../components/Layout").then((module) => ({ default: module.Layout })))
+const NotFound = lazy(() => import("../pages/NotFound").then((module) => ({ default: module.NotFound })))
+const Dashboard = lazy(() => import("../pages/Dashboard").then((module) => ({ default: module.Dashboard })))
+const Masterlist = lazy(() => import("../pages/Masterlist").then((module) => ({ default: module.Masterlist })))
+const Chests = lazy(() => import("../pages/Chests").then((module) => ({ default: module.Chests })))
+const Portals = lazy(() => import("../pages/Portals").then((module) => ({ default: module.Portals })))
+const GeneralConfig = lazy(() => import("../components/configurebot/GeneralConfig").then((module) => ({ default: module.GeneralConfig })))
+const ItemsToBeReady = lazy(() => import("../components/configurebot/ItemsToBeReady").then((module) => ({ default: module.ItemsToBeReady })))
+const ConfigurebotChests = lazy(() => import("../components/configurebot/ConfigurebotChests").then((module) => ({ default: module.ConfigurebotChests })));
+const Combat = lazy(() => import("../components/configurebot/Combat").then((module) => ({ default: module.Combat })))
+const GuardJob = lazy(() => import("../components/configurebot/GuardJob").then((module) => ({ default: module.GuardJob })))
+const MinerJob = lazy(() => import("../components/configurebot/MinerJob").then((module) => ({ default: module.MinerJob })))
+const FarmerJob = lazy(() => import("../components/configurebot/FarmerJob").then((module) => ({ default: module.FarmerJob })))
+const BreederJob = lazy(() => import("../components/configurebot/BreederJob").then((module) => ({ default: module.BreederJob })))
+const SorterJob = lazy(() => import("../components/configurebot/SorterJob").then((module) => ({ default: module.SorterJob })))
+const ProcessList = lazy(() => import("../components/configurebot/ProcessList").then((module) => ({ default: module.ProcessList })))
+const FullConfig = lazy(() => import("../components/configurebot/FullConfig").then((module) => ({ default: module.FullConfig })))
+const ConfigureBotLayout = lazy(() => import("../components/configurebot/ConfigureBotLayout").then((module) => ({ default: module.ConfigureBotLayout })));
+const Authenticated = lazy(() => import("../hooks/Authenticated").then((module) => ({ default: module.Authenticated })))
+const SelectedBot = lazy(() => import("../hooks/SelectedBot").then((module) => ({ default: module.SelectedBot })))
+const Configuration = lazy(() => import('../pages/Configuration').then((module) => ({ default: module.Configuration })))
 
 const App = () => {
   return (
     <Layout>
+      <Suspense fallback={<LoadingPage />}>
         <Routes>
           <Route path="/configuration" element={<Configuration />} />
 
@@ -55,8 +57,8 @@ const App = () => {
             <Route path="*" element={<NotFound />} />
 
           </Route>
-
         </Routes>
+      </Suspense>
     </Layout>
   );
 }

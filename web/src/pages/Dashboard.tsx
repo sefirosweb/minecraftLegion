@@ -6,7 +6,7 @@ import { Button, Col, Row } from 'react-bootstrap'
 import { useSelector } from "react-redux";
 import { State } from "@/state";
 
-const Dashboard = () => {
+export const Dashboard = () => {
     const botState = useSelector((state: State) => state.botsReducer);
     const { logs } = botState
 
@@ -73,5 +73,3 @@ const Dashboard = () => {
     )
 
 }
-
-export default Dashboard

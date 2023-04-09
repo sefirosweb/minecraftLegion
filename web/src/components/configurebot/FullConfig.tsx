@@ -6,7 +6,7 @@ import { actionCreators, State } from "@/state";
 import { useSelector } from "react-redux";
 import { bindActionCreators } from "redux";
 
-const FullConfig = () => {
+export const FullConfig = () => {
   const configurationState = useSelector((state: State) => state.configurationReducer);
   const { socket, selectedSocketId } = configurationState
 
@@ -88,8 +88,6 @@ const FullConfig = () => {
     </>
   )
 }
-
-export default FullConfig
 
 // const mapStateToProps = (reducers) => {
 //   const { configurationReducer } = reducers

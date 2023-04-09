@@ -5,7 +5,7 @@ import FormCheck from "../forms/FormCheck";
 import HouseXYZ from '../../images/HouseXYZ.png'
 import { State } from '@/state';
 
-const MinerJob = () => {
+export const MinerJob = () => {
 
   const botState = useSelector((state: State) => state.botsReducer);
   const { botsOnline } = botState
@@ -291,8 +291,6 @@ const MinerJob = () => {
     </>
   )
 }
-
-export default MinerJob
 
 // const mapStateToProps = (reducers) => {
 //   const { botsReducer, configurationReducer } = reducers

@@ -5,7 +5,7 @@ import { actionCreators, State } from "@/state";
 import { useSelector } from "react-redux";
 import { bindActionCreators } from "redux";
 
-const Combat = () => {
+export const Combat = () => {
   const configurationState = useSelector((state: State) => state.configurationReducer);
   const { socket, selectedSocketId } = configurationState
 
@@ -81,8 +81,6 @@ const Combat = () => {
     </>
   )
 }
-
-export default Combat
 
 // const mapStateToProps = (reducers) => {
 //   const { botsReducer, configurationReducer } = reducers

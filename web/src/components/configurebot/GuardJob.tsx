@@ -8,7 +8,7 @@ import FormCheck from "../forms/FormCheck";
 import { actionCreators, State } from "@/state";
 import { bindActionCreators } from "redux";
 
-const GuardJob = () => {
+export const GuardJob = () => {
 
   const configurationState = useSelector((state: State) => state.configurationReducer);
   const { socket, selectedSocketId, master } = configurationState
@@ -236,8 +236,6 @@ const GuardJob = () => {
     </>
   );
 };
-
-export default GuardJob
 
 // const mapStateToProps = (reducers) => {
 //   const { botsReducer, configurationReducer } = reducers;

@@ -1,13 +1,11 @@
-import { Fragment, useEffect } from 'react'
+import { Fragment } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import Form from 'react-bootstrap/Form'
-import { Button, Col, Row } from 'react-bootstrap'
+import { Col, Row } from 'react-bootstrap'
 import { actionCreators, State } from '@/state'
 import { bindActionCreators } from 'redux'
-import axios from 'axios'
-axios.defaults.withCredentials = true;
 
-const Configuration = () => {
+export const Configuration = () => {
 
     const configurationState = useSelector((state: State) => state.configurationReducer);
     const {
@@ -138,5 +136,3 @@ const Configuration = () => {
     );
 
 }
-
-export default Configuration

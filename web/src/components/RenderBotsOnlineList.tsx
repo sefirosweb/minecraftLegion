@@ -1,7 +1,6 @@
 //@ts-nocheck
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import '../css/botlist.css'
 import ProgressBar from 'react-bootstrap/ProgressBar'
 import { actionCreators, State } from '@/state'
 import { bindActionCreators } from 'redux'

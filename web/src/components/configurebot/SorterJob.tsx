@@ -4,7 +4,7 @@ import {  useDispatch, useSelector } from 'react-redux'
 import { bindActionCreators } from 'redux';
 import ChestArea from './ChestArea'
 
-const SorterJob = () => {
+export const SorterJob = () => {
 
   const configurationState = useSelector((state: State) => state.configurationReducer);
   const { socket, selectedSocketId } = configurationState
@@ -51,8 +51,6 @@ const SorterJob = () => {
     </>
   )
 }
-
-export default SorterJob
 
 // const mapStateToProps = (reducers) => {
 //   const { configurationReducer } = reducers

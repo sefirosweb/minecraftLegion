@@ -2,7 +2,7 @@ import { State } from '@/state';
 import { useSelector } from 'react-redux'
 import { Navigate, Outlet } from "react-router-dom";
 
-const SelectedBot = () => {
+export const SelectedBot = () => {
 
   const botState = useSelector((state: State) => state.botsReducer);
   const { botsOnline } = botState
@@ -20,5 +20,3 @@ const SelectedBot = () => {
 
   return <Outlet />
 }
-
-export default SelectedBot

@@ -10,7 +10,7 @@ import ItemsAviable from "./ItemsAviable";
 import { bindActionCreators } from "redux";
 import { actionCreators, State } from "@/state";
 
-const GeneralConfig = () => {
+export const GeneralConfig = () => {
 
   const configurationState = useSelector((state: State) => state.configurationReducer);
   const { socket, selectedSocketId } = configurationState
@@ -321,8 +321,6 @@ const GeneralConfig = () => {
     </>
   );
 };
-
-export default GeneralConfig
 
 // const mapStateToProps = (reducers) => {
 //   const { botsReducer, configurationReducer } = reducers;

@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 import { Socket } from "socket.io-client";
 import DrawChest from "../components/DrawChest";
 
-const Chests = () => {
+export const Chests = () => {
   const botState = useSelector((state: State) => state.botsReducer);
   const { chests } = botState
 
@@ -43,5 +43,3 @@ const Chests = () => {
     </>
   );
 };
-
-export default Chests

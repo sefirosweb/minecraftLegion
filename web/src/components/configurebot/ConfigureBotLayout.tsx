@@ -9,7 +9,7 @@ import { useSelector } from "react-redux";
 import { bindActionCreators } from "redux";
 
 
-const ConfigureBotLayout = () => {
+export const ConfigureBotLayout = () => {
   const configurationState = useSelector((state: State) => state.configurationReducer);
   const { socket, selectedSocketId } = configurationState
 
@@ -92,5 +92,3 @@ const ConfigureBotLayout = () => {
     </>
   )
 }
-
-export default ConfigureBotLayout

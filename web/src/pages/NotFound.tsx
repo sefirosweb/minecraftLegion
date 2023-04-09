@@ -1,11 +1,10 @@
-import '../css/NotFound.css'
+import style from '../css/NotFound.module.scss'
 
-const NotFound = () => {
+export const NotFound = () => {
   return (
-    <div className='not-found'>
+    <div className={style.NotFound}>
       <h1>Web Site Not Found!</h1>
     </div>
   )
 }
 
-export default NotFound

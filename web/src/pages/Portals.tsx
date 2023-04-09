@@ -2,7 +2,8 @@ import { State } from "@/state";
 import { Card } from "react-bootstrap";
 import { useSelector } from "react-redux";
 import CoordsTable from "../components/CoordsTable";
-const Portals = () => {
+
+export const Portals = () => {
   const botState = useSelector((state: State) => state.botsReducer);
   const { portals } = botState
 
@@ -24,7 +25,6 @@ const Portals = () => {
   );
 };
 
-export default Portals
 
 // const mapStateToProps = (reducers) => {
 //   const { botsReducer } = reducers;

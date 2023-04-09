@@ -6,7 +6,7 @@ import TrashIcon from './Icons/Trash'
 import { actionCreators, State } from '@/state'
 import { bindActionCreators } from 'redux'
 
-const ItemsToBeReady = () => {
+export const ItemsToBeReady = () => {
 
   const configurationState = useSelector((state: State) => state.configurationReducer);
   const { socket, selectedSocketId } = configurationState
@@ -132,7 +132,6 @@ const ItemsToBeReady = () => {
   )
 }
 
-export default ItemsToBeReady
 
 // const mapStateToProps = (reducers) => {
 //   const { botsReducer, configurationReducer } = reducers

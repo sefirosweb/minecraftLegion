@@ -5,7 +5,7 @@ import Chest from './Chest'
 import { useSelector } from "react-redux";
 import { State } from "@/state";
 
-const Chests = () => {
+export const ConfigurebotChests = () => {
   const botState = useSelector((state: State) => state.botsReducer);
   const { botsOnline } = botState
 
@@ -87,8 +87,6 @@ const Chests = () => {
     </>
   );
 };
-
-export default Chests
 
 // const mapStateToProps = (reducers) => {
 //   const { configurationReducer, botsReducer } = reducers;

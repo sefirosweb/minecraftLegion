@@ -4,7 +4,7 @@ import HarvestArea from './HarvestArea'
 import { useSelector } from "react-redux";
 import { State } from '@/state';
 
-const FarmerJob = () => {
+export const FarmerJob = () => {
   const botState = useSelector((state: State) => state.botsReducer);
   const { botsOnline } = botState
 
@@ -55,8 +55,6 @@ const FarmerJob = () => {
     </>
   )
 }
-
-export default FarmerJob
 
 // const mapStateToProps = (reducers) => {
 //   const { configurationReducer, botsReducer } = reducers
