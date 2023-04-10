@@ -22,12 +22,16 @@ const FullConfig = lazy(() => import("../components/configurebot/FullConfig").th
 const ConfigureBotLayout = lazy(() => import("../components/configurebot/ConfigureBotLayout").then((module) => ({ default: module.ConfigureBotLayout })));
 const Authenticated = lazy(() => import("../hooks/Authenticated").then((module) => ({ default: module.Authenticated })))
 const SelectedBot = lazy(() => import("../hooks/SelectedBot").then((module) => ({ default: module.SelectedBot })))
+
 const Configuration = lazy(() => import('../pages/Configuration').then((module) => ({ default: module.Configuration })))
+const Login = lazy(() => import('../pages/Login').then((module) => ({ default: module.Login })))
 
 export const App = () => {
   return (
     <Suspense fallback={<LoadingPage />}>
       <Routes>
+        <Route path="/login" element={<Login />} />
+
         <Route element={<Layout />}>
           <Route path="/configuration" element={<Configuration />} />
 
