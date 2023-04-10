@@ -26,9 +26,9 @@ const Configuration = lazy(() => import('../pages/Configuration').then((module) 
 
 export const App = () => {
   return (
-    <Layout>
-      <Suspense fallback={<LoadingPage />}>
-        <Routes>
+    <Suspense fallback={<LoadingPage />}>
+      <Routes>
+        <Route element={<Layout />}>
           <Route path="/configuration" element={<Configuration />} />
 
           <Route path='/' element={<Authenticated />}>
@@ -57,8 +57,8 @@ export const App = () => {
             <Route path="*" element={<NotFound />} />
 
           </Route>
-        </Routes>
-      </Suspense>
-    </Layout>
+        </Route>
+      </Routes>
+    </Suspense>
   );
 }

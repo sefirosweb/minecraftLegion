@@ -5,9 +5,9 @@ import NavbarLayout from "./NavbarLayout";
 import socketIOClient from "socket.io-client";
 import { bindActionCreators } from "redux";
 import { actionCreators, State } from "@/state";
+import { Outlet } from "react-router";
 
-export const Layout = (props) => {
-  const { socket, children } = props
+export const Layout = () => {
   const dispatch = useDispatch();
 
   const configurationState = useSelector((state: State) => state.configurationReducer);
@@ -42,133 +42,112 @@ export const Layout = (props) => {
       updateBotStatus,
     } = bindActionCreators(actionCreators, dispatch);
 
-    console.log("Conecting to server...");
+    let socketConection
+    const interval = setTimeout(() => {
 
-    if (socket !== undefined) {
-      socket.disconnect();
-      socket.close();
-    }
 
-    const socketConection = socketIOClient(`${webServerSocketURL}:${webServerSocketPort}`,);
+      console.log("Conecting to server...");
 
-    setSocket(socketConection);
+      socketConection = socketIOClient(`${webServerSocketURL}:${webServerSocketPort}`,);
 
-    socketConection.on("connect", () => {
-      setOnlineServer(true);
-      console.log(
-        `Connected to: ${webServerSocketURL}:${webServerSocketPort}`
-      );
+      setSocket(socketConection);
 
-      socketConection.emit("login", webServerSocketPassword);
-    });
+      socketConection.on("connect", () => {
+        setOnlineServer(true);
+        console.log(
+          `Connected to: ${webServerSocketURL}:${webServerSocketPort}`
+        );
 
-    socketConection.on("login", (authenticate) => {
-      if (authenticate.auth) {
-        console.log('Logged in!');
-        setLoged(true);
-
-        socketConection.emit("sendAction", {
-          action: "addMaster",
-          value: master,
-        });
-        socketConection.emit("getBotsOnline");
-        socketConection.emit("sendAction", { action: "getChests" });
-        socketConection.emit("sendAction", { action: "getPortals" });
-      } else {
-        console.log('Login failed');
-        setLoged(false);
-      }
-    });
-
-    socketConection.on("disconnect", () => {
-      setOnlineServer(false);
-      setLoged(false);
-      setBots([]);
-    });
-
-    socketConection.on("logs", (message) => {
-      addLog(message);
-    });
-
-    socketConection.on("botStatus", (data) => {
-      updateBotStatus(data);
-    });
-
-    socketConection.on("mastersOnline", (data) => {
-      updateMasters(data);
-    });
-
-    socketConection.on("action", ({ type, value }) => {
-      if (type === "getChests") {
-        updateChests(value);
-      }
-    });
-    socketConection.on("action", ({ type, value }) => {
-      if (type === "getPortals") {
-        updatePortals(value);
-      }
-    });
-
-    socketConection.on("botsOnline", (botsOnline) => {
-      const botsConnected = botsOnline.sort(function (a, b) {
-        if (a.name < b.name) {
-          return -1;
-        }
-        if (a.name > b.firsnametname) {
-          return 1;
-        }
-        return 0;
+        socketConection.emit("login", webServerSocketPassword);
       });
 
-      setBots(botsConnected);
-    });
+      socketConection.on("login", (authenticate) => {
+        if (authenticate.auth) {
+          console.log('Logged in!');
+          setLoged(true);
 
-    socketConection.on("sendConfig", (data) => {
-      setConfig(data);
-    });
+          socketConection.emit("sendAction", {
+            action: "addMaster",
+            value: master,
+          });
+          socketConection.emit("getBotsOnline");
+          socketConection.emit("sendAction", { action: "getChests" });
+          socketConection.emit("sendAction", { action: "getPortals" });
+        } else {
+          console.log('Login failed');
+          setLoged(false);
+        }
+      });
 
-    return () => socketConection.disconnect();
-  }, [master, socket, webServerSocketPassword, webServerSocketPort, webServerSocketURL, dispatch])
+      socketConection.on("disconnect", () => {
+        setOnlineServer(false);
+        setLoged(false);
+        setBots([]);
+      });
+
+      socketConection.on("logs", (message) => {
+        addLog(message);
+      });
+
+      socketConection.on("botStatus", (data) => {
+        updateBotStatus(data);
+      });
+
+      socketConection.on("mastersOnline", (data) => {
+        updateMasters(data);
+      });
+
+      socketConection.on("action", ({ type, value }) => {
+        if (type === "getChests") {
+          updateChests(value);
+        }
+      });
+      socketConection.on("action", ({ type, value }) => {
+        if (type === "getPortals") {
+          updatePortals(value);
+        }
+      });
+
+      socketConection.on("botsOnline", (botsOnline) => {
+        const botsConnected = botsOnline.sort(function (a, b) {
+          if (a.name < b.name) {
+            return -1;
+          }
+          if (a.name > b.firsnametname) {
+            return 1;
+          }
+          return 0;
+        });
+
+        setBots(botsConnected);
+      });
+
+      socketConection.on("sendConfig", (data) => {
+        setConfig(data);
+      });
+    }, 300)
+
+    return () => {
+      clearInterval(interval)
+      if (socketConection) {
+        console.log('Disconected from server')
+        socketConection.disconnect()
+      }
+    };
+  }, [master, webServerSocketPassword, webServerSocketPort, webServerSocketURL, dispatch])
 
   return (
     <>
       <NavbarLayout />
-      <div className="container">{children}</div>
+      <div className="container">
+        <Outlet />
+      </div>
+
+      <div className="fixed-bottom bg-light">
+        <div className="container">
+          Core connected:
+        </div>
+      </div>
     </>
   );
 }
-
-
-// const mapStateToProps = (reducers) => {
-//   const { botsReducer, configurationReducer } = reducers;
-//   const { botsOnline } = botsReducer;
-//   const {
-//     webServerSocketURL,
-//     webServerSocketPort,
-//     webServerSocketPassword,
-//     master,
-//   } = configurationReducer;
-
-//   return {
-//     webServerSocketURL,
-//     webServerSocketPort,
-//     webServerSocketPassword,
-//     botsOnline,
-//     master,
-//   };
-// };
-
-// const mapDispatchToProps = {
-//   setLoged,
-//   setSocket,
-//   setConfig,
-//   setOnlineServer,
-//   updateMasters,
-//   updateChests,
-//   updatePortals,
-//   setBots,
-//   addLog,
-//   updateBotStatus,
-// };
-
-// export default connect(mapStateToProps, mapDispatchToProps)(Layout);
