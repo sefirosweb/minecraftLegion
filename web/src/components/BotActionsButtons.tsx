@@ -14,7 +14,6 @@ const BotActionButtons = (props) => {
   const dispatch = useDispatch();
   const { getBotBySocketId, updateBotStatus } = bindActionCreators(actionCreators, dispatch);
 
-
   const navigation = useNavigate();
   const [chat, setChat] = useState("");
 
@@ -39,7 +38,6 @@ const BotActionButtons = (props) => {
       socketId,
       value: "Disconnect Bot",
     });
-    navigation("/");
   };
 
   const handleStartStateMachineButton = () => {

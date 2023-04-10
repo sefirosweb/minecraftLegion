@@ -17,6 +17,13 @@
       "request": "attach",
       "restart": true,
       "port": 9250,
+    },
+    {
+      "name": "Web Server",
+      "request": "launch",
+      "type": "chrome",
+      "url": "http://localhost:5173",
+      "webRoot": "${workspaceFolder}/web"
     }
   ]
 }

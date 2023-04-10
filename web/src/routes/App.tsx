@@ -24,7 +24,7 @@ const Authenticated = lazy(() => import("../hooks/Authenticated").then((module) 
 const SelectedBot = lazy(() => import("../hooks/SelectedBot").then((module) => ({ default: module.SelectedBot })))
 const Configuration = lazy(() => import('../pages/Configuration').then((module) => ({ default: module.Configuration })))
 
-const App = () => {
+export const App = () => {
   return (
     <Layout>
       <Suspense fallback={<LoadingPage />}>
@@ -62,5 +62,3 @@ const App = () => {
     </Layout>
   );
 }
-
-export default App;

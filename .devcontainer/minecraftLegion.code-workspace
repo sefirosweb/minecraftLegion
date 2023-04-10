@@ -1,0 +1,22 @@
+{
+	"folders": [
+		{
+			"path": ".."
+		},
+		{
+			"path": "../core"
+		},
+		{
+			"path": "../web"
+		},
+		{
+			"path": "../server"
+		},
+		{
+			"path": "../base-types"
+		},
+	],
+	"settings": {
+		"javascript.validate.enable": false
+	}
+}

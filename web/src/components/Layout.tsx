@@ -8,16 +8,25 @@ import { actionCreators, State } from "@/state";
 
 export const Layout = (props) => {
   const { socket, children } = props
+  const dispatch = useDispatch();
 
   const configurationState = useSelector((state: State) => state.configurationReducer);
-  const {
-    webServerSocketURL,
-    webServerSocketPort,
-    webServerSocketPassword,
-    master
-  } = configurationState
+  const { webServerSocketURL, webServerSocketPort, webServerSocketPassword, master, selectedSocketId } = configurationState
 
-  const dispatch = useDispatch();
+  const botsState = useSelector((state: State) => state.botsReducer);
+  const { botsOnline } = botsState
+
+  const { setSelectedSocketId } = bindActionCreators(actionCreators, dispatch);
+
+  useEffect(() => {
+    if (!selectedSocketId) return
+
+    const bot = botsOnline.find((e) => { return e.socketId === selectedSocketId })
+    if (!bot) {
+      setSelectedSocketId(null)
+    }
+
+  }, [botsOnline, selectedSocketId, setSelectedSocketId])
 
   useEffect(() => {
     const {
