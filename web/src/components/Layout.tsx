@@ -7,6 +7,8 @@ import { bindActionCreators } from "redux";
 import { actionCreators, State } from "@/state";
 import { Outlet } from "react-router";
 import { Socket } from "socket.io-client";
+import green_lamp from '@/images/green_lamp.png'
+import red_lamp from '@/images/red_lamp.png'
 
 export const Layout = () => {
   const dispatch = useDispatch();
@@ -153,7 +155,9 @@ export const Layout = () => {
 
       <div className="fixed-bottom bg-light">
         <div className="container">
-          Core connected: {coreConnected ? 'O' : 'X'}
+          <div className="d-flex align-items-center">
+            <span className="me-2">Core connected:</span> <img width={'16px'} src={coreConnected ? green_lamp : red_lamp} />
+          </div>
         </div>
       </div>
     </>
