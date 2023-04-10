@@ -22,6 +22,7 @@ export default () => {
   const botsConnected: Array<BotsConnected> = [];
   const masters: Array<{ name: string }> = [];
   const usersLoged: Array<string> = [];
+  const usersCoreLogged: Array<string> = [];
   let chests = {};
 
   let portals = {
@@ -41,6 +42,13 @@ export default () => {
       if (userLogedIdx >= 0) {
         usersLoged.splice(userLogedIdx, 1);
       }
+
+      const usersCoreLoggedIdx = usersCoreLogged.indexOf(socket.id);
+      if (usersCoreLoggedIdx >= 0) {
+        usersCoreLogged.splice(usersCoreLoggedIdx, 1);
+      }
+
+      sendCoreIsConnected()
 
       const botDisconnected = botsConnected.find(
         (botConection) => botConection.socketId === socket.id
@@ -63,7 +71,8 @@ export default () => {
         socket.join("usersLoged");
         usersLoged.push(socket.id);
 
-        socket.emit("mastersOnline", masters);
+        sendMastersOnline()
+        sendCoreIsConnected()
       } else {
         socket.emit("login", { auth: false });
       }
@@ -74,9 +83,11 @@ export default () => {
       if (!isLoged()) {
         return;
       }
+
       const find = botsConnected.find(
         (botConection) => botConection.name === botName
       );
+
       if (find === undefined) {
         botsConnected.push({
           // Default Data
@@ -95,6 +106,16 @@ export default () => {
       io.to("usersLoged").emit("botsOnline", botsConnected);
       sendLogs("Login", botName, socket.id);
     });
+
+    socket.on('isCore', () => {
+
+      if (!isLoged()) {
+        return;
+      }
+
+      usersCoreLogged.push(socket.id);
+      sendCoreIsConnected()
+    })
 
     socket.on("getBotsOnline", () => {
       if (!isLoged()) {
@@ -223,7 +244,7 @@ export default () => {
             });
           }
 
-          io.to("usersLoged").emit("mastersOnline", masters);
+          sendMastersOnline()
           break;
         case "removeMaster":
           if (data.value === undefined) {
@@ -238,7 +259,7 @@ export default () => {
             masters.splice(masterToRemoveIndex, 1);
           }
 
-          io.to("usersLoged").emit("mastersOnline", masters);
+          sendMastersOnline()
           break;
         case "setChests":
           if (data.value === undefined) {
@@ -269,9 +290,18 @@ export default () => {
       }
     });
 
-    function isLoged() {
+    const isLoged = () => {
       return usersLoged.find((userId) => userId === socket.id);
     }
+
+    const sendCoreIsConnected = () => {
+      io.to("usersLoged").emit("coreConnected", usersCoreLogged.length > 0);
+    }
+
+    const sendMastersOnline = () => {
+      io.to("usersLoged").emit("mastersOnline", masters);
+    }
+
   });
 
   function sendLogs(data: string, botName = "", socketId = "") {

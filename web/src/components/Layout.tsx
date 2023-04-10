@@ -88,6 +88,7 @@ export const Layout = () => {
         setOnlineServer(false);
         setLoged(false);
         setBots([]);
+        setCoreConnection(false)
       });
 
       socket.on("logs", (message) => {
@@ -103,6 +104,7 @@ export const Layout = () => {
       });
 
       socket.on("coreConnected", (connected: boolean) => {
+        console.log('connected')
         setCoreConnection(connected);
       });
 

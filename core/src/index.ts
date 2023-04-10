@@ -88,6 +88,7 @@ const start_bot = () => {
   socket.on("login", (authenticate: socketAuth) => {
     if (authenticate.auth) {
       loged = true;
+      socket.emit('isCore')
     } else {
       loged = false;
     }
