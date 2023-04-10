@@ -6,6 +6,7 @@ import socketIOClient from "socket.io-client";
 import { bindActionCreators } from "redux";
 import { actionCreators, State } from "@/state";
 import { Outlet } from "react-router";
+import { Socket } from "socket.io-client";
 
 export const Layout = () => {
   const dispatch = useDispatch();
@@ -42,73 +43,75 @@ export const Layout = () => {
       updateBotStatus,
     } = bindActionCreators(actionCreators, dispatch);
 
-    let socketConection
+    let socket: Socket | undefined
     const interval = setTimeout(() => {
 
 
       console.log("Conecting to server...");
 
-      socketConection = socketIOClient(`${webServerSocketURL}:${webServerSocketPort}`,);
+      socket = socketIOClient(`${webServerSocketURL}:${webServerSocketPort}`,);
 
-      setSocket(socketConection);
+      setSocket(socket);
 
-      socketConection.on("connect", () => {
+      socket.on("connect", () => {
         setOnlineServer(true);
         console.log(
           `Connected to: ${webServerSocketURL}:${webServerSocketPort}`
         );
 
-        socketConection.emit("login", webServerSocketPassword);
+        socket.emit("login", webServerSocketPassword);
       });
 
-      socketConection.on("login", (authenticate) => {
+      socket.on("login", (authenticate) => {
         if (authenticate.auth) {
           console.log('Logged in!');
           setLoged(true);
 
-          socketConection.emit("sendAction", {
+          socket.emit("sendAction", {
             action: "addMaster",
             value: master,
           });
-          socketConection.emit("getBotsOnline");
-          socketConection.emit("sendAction", { action: "getChests" });
-          socketConection.emit("sendAction", { action: "getPortals" });
+
+          socket.emit("getBotsOnline");
+          socket.emit("sendAction", { action: "getChests" });
+          socket.emit("sendAction", { action: "getPortals" });
+
         } else {
           console.log('Login failed');
           setLoged(false);
         }
       });
 
-      socketConection.on("disconnect", () => {
+      socket.on("disconnect", () => {
         setOnlineServer(false);
         setLoged(false);
         setBots([]);
       });
 
-      socketConection.on("logs", (message) => {
+      socket.on("logs", (message) => {
         addLog(message);
       });
 
-      socketConection.on("botStatus", (data) => {
+      socket.on("botStatus", (data) => {
         updateBotStatus(data);
       });
 
-      socketConection.on("mastersOnline", (data) => {
+      socket.on("mastersOnline", (data) => {
         updateMasters(data);
       });
 
-      socketConection.on("action", ({ type, value }) => {
+      socket.on("action", ({ type, value }) => {
         if (type === "getChests") {
           updateChests(value);
         }
       });
-      socketConection.on("action", ({ type, value }) => {
+      socket.on("action", ({ type, value }) => {
         if (type === "getPortals") {
           updatePortals(value);
         }
       });
 
-      socketConection.on("botsOnline", (botsOnline) => {
+      socket.on("botsOnline", (botsOnline) => {
         const botsConnected = botsOnline.sort(function (a, b) {
           if (a.name < b.name) {
             return -1;
@@ -122,16 +125,16 @@ export const Layout = () => {
         setBots(botsConnected);
       });
 
-      socketConection.on("sendConfig", (data) => {
+      socket.on("sendConfig", (data) => {
         setConfig(data);
       });
     }, 300)
 
     return () => {
       clearInterval(interval)
-      if (socketConection) {
+      if (socket) {
         console.log('Disconected from server')
-        socketConection.disconnect()
+        socket.disconnect()
       }
     };
   }, [master, webServerSocketPassword, webServerSocketPort, webServerSocketURL, dispatch])
