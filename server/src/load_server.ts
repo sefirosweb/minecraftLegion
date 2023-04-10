@@ -1,13 +1,11 @@
 import http from 'http'
-import config from "@/config";
+import { adminPassword, debug, listenPort, originCors, frontEndPort } from "@/config";
 import { Server, Socket } from 'socket.io'
 import { BotsConnected } from "./types/index";
 import { defaultConfig } from "@/types/types";
 import app from '@/app'
 
 export default () => {
-  const { adminPassword, debug, listenPort, originCors, frontEndPort } = config
-
   app.listen(frontEndPort, (() => {
     console.log(`Server running on port: ${frontEndPort}`)
   }))
