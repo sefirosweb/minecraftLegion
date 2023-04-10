@@ -25,7 +25,8 @@ const INITIAL_STATE: InitialState = {
   socket: null,
   selectedSocketId: undefined,
   master: Cookies.get('master') ?? 'PlayerName',
-  loged: false
+  loged: localStorage.getItem('logedIn') === 'true'
+
 }
 
 const reducer = (state = INITIAL_STATE, action: ConfiguracionAction) => {
@@ -77,6 +78,7 @@ const reducer = (state = INITIAL_STATE, action: ConfiguracionAction) => {
       }
 
     case ConfigurationType.SET_LOGED:
+      localStorage.setItem('logedIn', action.payload ? 'true' : 'false');
       return {
         ...state,
         loged: action.payload

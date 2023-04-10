@@ -1,6 +1,8 @@
 import { Suspense, lazy } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import { LoadingPage } from "@/pages/LoadingPage";
+import { Authenticated } from "@/hooks/Authenticated";
+import { UnAuthenticated } from "@/hooks/UnAuthenticated";
 
 const Layout = lazy(() => import("../components/Layout").then((module) => ({ default: module.Layout })))
 const NotFound = lazy(() => import("../pages/NotFound").then((module) => ({ default: module.NotFound })))
@@ -20,9 +22,7 @@ const SorterJob = lazy(() => import("../components/configurebot/SorterJob").then
 const ProcessList = lazy(() => import("../components/configurebot/ProcessList").then((module) => ({ default: module.ProcessList })))
 const FullConfig = lazy(() => import("../components/configurebot/FullConfig").then((module) => ({ default: module.FullConfig })))
 const ConfigureBotLayout = lazy(() => import("../components/configurebot/ConfigureBotLayout").then((module) => ({ default: module.ConfigureBotLayout })));
-const Authenticated = lazy(() => import("../hooks/Authenticated").then((module) => ({ default: module.Authenticated })))
 const SelectedBot = lazy(() => import("../hooks/SelectedBot").then((module) => ({ default: module.SelectedBot })))
-
 const Configuration = lazy(() => import('../pages/Configuration').then((module) => ({ default: module.Configuration })))
 const Login = lazy(() => import('../pages/Login').then((module) => ({ default: module.Login })))
 
@@ -30,12 +30,14 @@ export const App = () => {
   return (
     <Suspense fallback={<LoadingPage />}>
       <Routes>
-        <Route path="/login" element={<Login />} />
 
-        <Route element={<Layout />}>
-          <Route path="/configuration" element={<Configuration />} />
+        <Route path='/' element={<UnAuthenticated />}>
+          <Route path="/login" element={<Login />} />
+        </Route>
 
-          <Route path='/' element={<Authenticated />}>
+        <Route path='/' element={<Authenticated />}>
+          <Route element={<Layout />}>
+            <Route path="/configuration" element={<Configuration />} />
             <Route path="/" element={<Navigate replace to="/dashboard" />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/masterlist" element={<Masterlist />} />

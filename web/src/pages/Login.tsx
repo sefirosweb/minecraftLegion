@@ -1,9 +1,15 @@
+import { actionCreators } from "@/state"
 import axios from "axios"
 import { useEffect, useRef, useState } from "react"
 import { Button, Col, Container, Form, Row } from "react-bootstrap"
+import { useDispatch } from "react-redux"
+import { bindActionCreators } from "redux"
 
 
 export const Login = () => {
+    const dispatch = useDispatch();
+    const { setLoged } = bindActionCreators(actionCreators, dispatch);
+
     const passInput = useRef<HTMLInputElement>(null)
     const [password, setPassword] = useState('')
 
@@ -12,6 +18,9 @@ export const Login = () => {
         axios.post('api/login', {
             password
         })
+            .then(() => {
+                setLoged(true)
+            })
             .catch((e) => {
                 console.log(e.response.data.error)
             })
