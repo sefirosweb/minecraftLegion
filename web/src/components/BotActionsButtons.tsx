@@ -3,7 +3,6 @@ import { actionCreators, State } from "@/state";
 import { useState } from "react";
 import { Button, Col, Row } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router";
 import { bindActionCreators } from "redux";
 
 const BotActionButtons = (props) => {
@@ -14,7 +13,6 @@ const BotActionButtons = (props) => {
   const dispatch = useDispatch();
   const { getBotBySocketId, updateBotStatus } = bindActionCreators(actionCreators, dispatch);
 
-  const navigation = useNavigate();
   const [chat, setChat] = useState("");
 
   const handleChangeMessage = (event) => {
