@@ -4,10 +4,20 @@ import cors from 'cors'
 import routerApi from "@/routes/api"
 import routerPublic from "@/routes/public"
 import session from 'express-session'
-import { login, logout } from './routes/login'
+import { routerLogin } from './routes/login'
 import { secretToken } from '@/config'
 
 const app = express()
+
+export const sessionMiddleware = session({
+    secret: secretToken,
+    resave: true,
+    saveUninitialized: true,
+    cookie: {
+        maxAge: 60 * 60 * 1000,
+    },
+})
+
 app.use(morgan('dev'))
 app.use(express.json())
 app.use(cors({
@@ -16,18 +26,9 @@ app.use(cors({
     credentials: true
 }));
 
-app.use(session({
-    secret: secretToken,
-    resave: true,
-    saveUninitialized: true,
-    cookie: {
-        maxAge: 60 * 60 * 1000,
-    },
-}))
+app.use(sessionMiddleware)
 
-app.post('/api/login', login)
-app.all('/api/logout', logout)
-
+app.use("/", routerLogin)
 app.use("/api", routerApi)
 app.use("/", routerPublic)
 

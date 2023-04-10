@@ -9,11 +9,12 @@ export const Login = () => {
 
     const handleLogin = (e: React.FormEvent) => {
         e.preventDefault()
-        console.log({ password })
-
-        axios.post('/api/login', {
-
+        axios.post('api/login', {
+            password
         })
+            .catch((e) => {
+                console.log(e.response.data.error)
+            })
     }
 
     useEffect(() => {

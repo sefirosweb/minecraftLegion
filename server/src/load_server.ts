@@ -1,22 +1,12 @@
-import http from 'http'
-import { adminPassword, debug, listenPort, originCors, frontEndPort } from "@/config";
-import { Server, Socket } from 'socket.io'
+import { adminPassword, debug, listenPort } from "@/config";
+import { Socket } from 'socket.io'
 import { BotsConnected } from "./types/index";
 import { defaultConfig } from "@/types/types";
-import app from '@/app'
+import { sessionMiddleware } from '@/app'
+import { NextFunction, Request, Response } from 'express';
+import { httServer, io } from './socket.io/server';
 
 export default () => {
-  app.listen(frontEndPort, (() => {
-    console.log(`Server running on port: ${frontEndPort}`)
-  }))
-
-  const server = http.createServer();
-  const io = new Server(server, {
-    cors: {
-      origin: originCors,
-    },
-  });
-
   const botsConnected: Array<BotsConnected> = [];
   const masters: Array<{ name: string }> = [];
   const usersLoged: Array<string> = [];
@@ -30,7 +20,23 @@ export default () => {
     the_nether_to_overworld: []
   };
 
+  io.use((socket, next) => {
+    sessionMiddleware(socket.request as Request, {} as Response, next as NextFunction);
+  });
+
+  io.use((socket, next) => {
+    const logedIn = socket.request.session.logedIn;
+    if (logedIn) {
+      next();
+    } else {
+      next(new Error('Unauthorized'));
+    }
+  });
+
   io.on("connection", (socket) => {
+    const sessionId = socket.request.session.id;
+    socket.join(sessionId);
+
     console.log(`New client connected => ${socket.id}`);
 
     socket.on("disconnect", () => {
@@ -332,7 +338,7 @@ export default () => {
     }
   }
 
-  server.listen(listenPort, () =>
+  httServer.listen(listenPort, () =>
     console.log(`Listening on port ${listenPort}`)
   );
 };

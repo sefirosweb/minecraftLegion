@@ -12,7 +12,8 @@
 			"extensions": [
 				"eamodio.gitlens",
 				"usernamehw.errorlens",
-				"dbaeumer.vscode-eslint"
+				"dbaeumer.vscode-eslint",
+				"rangav.vscode-thunder-client"
 			]
 		}
 	}
