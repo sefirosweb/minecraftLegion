@@ -5,6 +5,7 @@ import routerApi from "@/routes/api"
 import routerPublic from "@/routes/public"
 import session from 'express-session'
 import { login, logout } from './routes/login'
+import { secretToken } from '@/config'
 
 const app = express()
 app.use(morgan('dev'))
@@ -16,7 +17,7 @@ app.use(cors({
 }));
 
 app.use(session({
-    secret: 'keyboard cat',
+    secret: secretToken,
     resave: true,
     saveUninitialized: true,
     cookie: {
@@ -29,5 +30,6 @@ app.all('/api/logout', logout)
 
 app.use("/api", routerApi)
 app.use("/", routerPublic)
+
 
 export default app

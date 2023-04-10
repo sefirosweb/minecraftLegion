@@ -1,5 +1,5 @@
-import config from "@/config";
 import http from 'http'
+import config from "@/config";
 import { Server, Socket } from 'socket.io'
 import { BotsConnected } from "./types/index";
 import { defaultConfig } from "@/types/types";
