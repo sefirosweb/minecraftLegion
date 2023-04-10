@@ -5,6 +5,7 @@ export enum BotsType {
     SET_MASTERS = 'set_masters',
     SET_CHESTS = 'set_chests',
     SET_PORTALS = 'set_portals',
+    SET_CORE_CONNECTION = 'set_core_connection',
 }
 
 export enum ConfigurationType {

@@ -12,6 +12,7 @@ export type InitialState = {
   masters: Array<{ name: string }>,
   chests: Record<string, any>,
   portals: Record<string, any>,
+  coreConnected: Boolean
 }
 
 const INITIAL_STATE: InitialState = {
@@ -20,6 +21,7 @@ const INITIAL_STATE: InitialState = {
   masters: [],
   chests: {},
   portals: {},
+  coreConnected: false
 }
 
 const reducer = (state = INITIAL_STATE, action: BotsAction) => {
@@ -52,6 +54,12 @@ const reducer = (state = INITIAL_STATE, action: BotsAction) => {
       return {
         ...state,
         portals: action.payload
+      }
+
+    case BotsType.SET_CORE_CONNECTION:
+      return {
+        ...state,
+        coreConnected: action.payload
       }
 
     default: return state

@@ -81,3 +81,10 @@ export const getBotBySocketId = (socketId: string) => (dispatch: Dispatch<BotsAc
     const bot = botsOnline.find((e) => { return e.socketId === socketId })
     return bot
 }
+
+export const setCoreConnection = (connected: boolean) => (dispatch: Dispatch<BotsAction>, getState: () => State) => {
+    dispatch({
+        type: BotsType.SET_CORE_CONNECTION,
+        payload: connected
+    })
+}

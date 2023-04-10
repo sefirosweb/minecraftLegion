@@ -24,10 +24,15 @@ interface SetPortalsAction {
     type: BotsType.SET_PORTALS,
     payload: InitialState["portals"]
 }
+interface SetCoreConnection {
+    type: BotsType.SET_CORE_CONNECTION,
+    payload: InitialState["coreConnected"]
+}
 
 export type BotsAction =
     SetBotsAction |
     SetLogsAction |
     SetMastersAction |
     SetChestsAction |
-    SetPortalsAction
+    SetPortalsAction |
+    SetCoreConnection

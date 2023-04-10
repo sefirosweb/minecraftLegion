@@ -15,7 +15,7 @@ export const Layout = () => {
   const { webServerSocketURL, webServerSocketPort, webServerSocketPassword, master, selectedSocketId } = configurationState
 
   const botsState = useSelector((state: State) => state.botsReducer);
-  const { botsOnline } = botsState
+  const { botsOnline, coreConnected } = botsState
 
   const { setSelectedSocketId } = bindActionCreators(actionCreators, dispatch);
 
@@ -41,11 +41,11 @@ export const Layout = () => {
       setBots,
       addLog,
       updateBotStatus,
+      setCoreConnection
     } = bindActionCreators(actionCreators, dispatch);
 
     let socket: Socket | undefined
     const interval = setTimeout(() => {
-
 
       console.log("Conecting to server...");
 
@@ -100,11 +100,16 @@ export const Layout = () => {
         updateMasters(data);
       });
 
+      socket.on("coreConnected", (connected: boolean) => {
+        setCoreConnection(connected);
+      });
+
       socket.on("action", ({ type, value }) => {
         if (type === "getChests") {
           updateChests(value);
         }
       });
+
       socket.on("action", ({ type, value }) => {
         if (type === "getPortals") {
           updatePortals(value);
@@ -148,7 +153,7 @@ export const Layout = () => {
 
       <div className="fixed-bottom bg-light">
         <div className="container">
-          Core connected:
+          Core connected: {coreConnected ? 'O' : 'X'}
         </div>
       </div>
     </>
