@@ -31,6 +31,8 @@ export const App = () => {
     <Suspense fallback={<LoadingPage />}>
       <Routes>
 
+        <Route index element={<Navigate to={'/login'} />} />
+
         <Route path='/' element={<UnAuthenticated />}>
           <Route path="/login" element={<Login />} />
         </Route>
