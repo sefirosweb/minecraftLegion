@@ -2,7 +2,7 @@ import { State, actionCreators } from '@/state';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import socketIOClient, { Socket } from "socket.io-client";
+import { Socket, io } from "socket.io-client";
 import { useVerifyLoggedIn } from './useVerifyLoggedIn';
 
 export const useSocketSetup = () => {
@@ -31,7 +31,7 @@ export const useSocketSetup = () => {
             const connectedTo = `${webServerSocketURL}:${webServerSocketPort}`
             console.log(`Conecting to server ${connectedTo}`);
 
-            socket = socketIOClient(connectedTo, {
+            socket = io(connectedTo, {
                 withCredentials: true
             });
 
@@ -45,6 +45,7 @@ export const useSocketSetup = () => {
             });
 
             socket.on("connect_error", (err) => {
+                console.log(err.message)
                 verifyLoggedIn()
                     .then(() => {
                         setTimeout(() => {

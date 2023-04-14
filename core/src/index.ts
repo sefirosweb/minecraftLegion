@@ -1,37 +1,8 @@
-import { botSocket, botType, socketAuth } from "base-types";
-import Config from '@/config'
-import io from 'socket.io-client'
-import path from 'path'
-import { exec } from "child_process"
+import { botType } from "base-types";
+import { startBot } from "@/startBot";
+import { connectToServer } from "@/modules/connectSocket";
 
-const start_bot = () => {
-  const { autoRestart, environment } = Config
-
-  function startBot(botName: string, password?: string) {
-    const command = environment === 'stage' ? `npm run ts ${botName} ${password ?? ''}` : `node ${path.join(__dirname, 'start_bot.js')} ${botName} ${password ?? ''}`
-
-    exec(command, (err, stdout, stderr) => {
-      if (err) {
-        console.log(`Bot broken: ${botName}`);
-        console.log(`Error: ${err}`);
-
-        if (autoRestart) {
-          setTimeout(() => {
-            startBot(botName, password);
-          }, 1000);
-        }
-        return;
-      }
-
-      if (stdout) {
-        console.log(`Stdout: ${stdout}`);
-      }
-
-      if (stderr) {
-        console.log(`Stderr: ${stderr}`);
-      }
-    })
-  }
+const index = () => {
 
   const botsToStart: botType[] = [
     // { username: 'Sephi' }
@@ -74,38 +45,8 @@ const start_bot = () => {
 
   runNextBot();
 
-  // Master websocket for load bots
-  const { webServer, webServerPort, webServerPassword } = Config;
-  const socket = io(webServer + ":" + webServerPort);
-  let loged = false;
-
-  socket.on("connect", () => {
-    console.log("Connected to webserver");
-    socket.emit("botMaster", "on");
-    socket.emit("login", webServerPassword);
-  });
-
-  socket.on("login", (authenticate: socketAuth) => {
-    if (authenticate.auth) {
-      loged = true;
-      socket.emit('isCore')
-    } else {
-      loged = false;
-    }
-  });
-
-  socket.on("disconnect", () => {
-    console.log("disconnected from webserver");
-  });
-
-  socket.on("botConnect", (data: botSocket) => {
-    if (!loged) {
-      return;
-    }
-    console.log(`Starting bot ${data.botName}`);
-    startBot(data.botName, data.botPassword);
-  });
+  connectToServer()
 };
 
 
-start_bot()
+index()

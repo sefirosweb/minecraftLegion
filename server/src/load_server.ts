@@ -22,7 +22,9 @@ export default () => {
     const sessionId = socket.request.session.id;
     console.log(`New client connected => ${socket.id}`);
     socket.join(sessionId);
-
+    usersLoged.push(socket.id);
+    // sendMastersOnline
+    // sendCoreIsConnected()
 
     socket.on("disconnect", () => {
       console.log(`Client disconnected => ${socket.id}`);
@@ -53,26 +55,7 @@ export default () => {
     });
 
     // When bot logins
-    // socket.on("login", (password) => {
-    //   if (password === adminPassword) {
-    //     console.log(`User loged correctly => ${socket.id}`);
-    //     socket.emit("login", { auth: true });
-    //     socket.join("usersLoged");
-    //     usersLoged.push(socket.id);
-
-    //     sendMastersOnline()
-    //     sendCoreIsConnected()
-    //   } else {
-    //     socket.emit("login", { auth: false });
-    //   }
-    // });
-
-    // When bot logins
     socket.on("addFriend", (botName) => {
-      if (!isLoged()) {
-        return;
-      }
-
       const find = botsConnected.find(
         (botConection) => botConection.name === botName
       );
@@ -97,26 +80,15 @@ export default () => {
     });
 
     socket.on('isCore', () => {
-
-      if (!isLoged()) {
-        return;
-      }
-
       usersCoreLogged.push(socket.id);
       sendCoreIsConnected()
     })
 
     socket.on("getBotsOnline", () => {
-      if (!isLoged()) {
-        return;
-      }
       socket.emit("botsOnline", botsConnected);
     });
 
     socket.on("botStatus", (data) => {
-      if (!isLoged()) {
-        return;
-      }
       const botIndex = botsConnected.findIndex((e) => {
         return e.socketId === socket.id;
       });
@@ -134,17 +106,11 @@ export default () => {
     });
 
     socket.on("botConnect", (message) => {
-      if (!isLoged()) {
-        return;
-      }
       io.to("usersLoged").emit("botConnect", message);
     });
 
     // Reciving logs
     socket.on("logs", (data) => {
-      if (!isLoged()) {
-        return;
-      }
       const find = findBotSocket(socket);
       if (find) {
         sendLogs(data, find.name, socket.id);
@@ -153,9 +119,6 @@ export default () => {
 
     // Receiving chatMessage
     socket.on("sendAction", (data) => {
-      if (!isLoged()) {
-        return;
-      }
       let index;
 
       if (debug) console.log(data);
@@ -278,10 +241,6 @@ export default () => {
           break;
       }
     });
-
-    const isLoged = () => {
-      return usersLoged.find((userId) => userId === socket.id);
-    }
 
     const sendCoreIsConnected = () => {
       io.to("usersLoged").emit("coreConnected", usersCoreLogged.length > 0);
