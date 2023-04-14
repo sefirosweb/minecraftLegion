@@ -1,7 +1,7 @@
 import express, { NextFunction, Request, RequestHandler, Response } from "express"
 import createHttpError, { isHttpError } from "http-errors"
 import { adminPassword } from "@/config"
-import { io } from "@/socket.io/server"
+import { io } from "@/server"
 interface LoginBody {
     password?: string
 }
@@ -48,7 +48,7 @@ const logout: RequestHandler<unknown, unknown, LoginBody, unknown> = async (req,
                 throw createHttpError(400, err)
             }
 
-            // io.in(sessionId).disconnectSockets();
+            io.in(sessionId).disconnectSockets();
             res.sendStatus(200)
         })
     } catch (error) {

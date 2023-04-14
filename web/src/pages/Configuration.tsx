@@ -12,7 +12,6 @@ export const Configuration = () => {
         loged,
         connected,
         master,
-        webServerSocketPassword,
         webServerSocketURL,
         webServerSocketPort,
         serverBots
@@ -23,11 +22,8 @@ export const Configuration = () => {
         updateMaster,
         updateServer,
         updateServerPort,
-        updateServerPassword,
         updateBotServer
     } = bindActionCreators(actionCreators, dispatch);
-
-
 
     const handleChangeMaster = (event: React.ChangeEvent<HTMLInputElement>) => {
         updateMaster(event.target.value)
@@ -41,31 +37,9 @@ export const Configuration = () => {
         updateServerPort(parseInt(event.target.value))
     }
 
-    const handleChangeWebSocketServerPassword = (event: React.ChangeEvent<HTMLInputElement>) => {
-        updateServerPassword(event.target.value)
-    }
-
     const handleChangeBotServer = (event: React.ChangeEvent<HTMLInputElement>) => {
         updateBotServer(event.target.value)
     }
-
-    // useEffect(() => {
-    //     axios.get('http://localhost:5000/api/login')
-    // }, [])
-
-    // const handleLogin = () => {
-    //     axios.post('http://localhost:5000/api/login', {
-    //         password: 'admin'
-    //     })
-    // }
-
-    // const checkLogin = () => {
-    //     axios.get('http://localhost:5000/api/login')
-    // }
-
-    // const logout = () => {
-    //     axios.post('http://localhost:5000/api/logout')
-    // }
 
     return (
         <Fragment>
@@ -77,11 +51,6 @@ export const Configuration = () => {
             <Row>
                 <Col>
                     <Form>
-
-                        <Form.Group controlId="handleChangeWebSocketServerPassword">
-                            <Form.Label>Web Socket Server Password</Form.Label>
-                            <Form.Control type="password" value={webServerSocketPassword} onChange={handleChangeWebSocketServerPassword} />
-                        </Form.Group>
 
                         <Form.Group controlId="handleChangeMaster">
                             <Form.Label>Master</Form.Label>
@@ -102,17 +71,6 @@ export const Configuration = () => {
                             <Form.Label>Server Bots (Used for connect to Bots Viewers)</Form.Label>
                             <Form.Control type="text" value={serverBots} onChange={handleChangeBotServer} />
                         </Form.Group>
-
-                        {/* <div>
-                            <Button className='my-3' variant='success' onClick={handleLogin}>Login</Button>
-                        </div>
-
-                        <div>
-                            <Button className='my-3' variant='success' onClick={checkLogin}>checkLogin</Button>
-                        </div>
-                        <div>
-                            <Button className='my-3' variant='success' onClick={logout}>logout</Button>
-                        </div> */}
 
                         <div>
                             Server status:

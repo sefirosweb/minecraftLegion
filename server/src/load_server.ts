@@ -1,10 +1,8 @@
-import { adminPassword, debug, listenPort } from "@/config";
+import { debug, listenPort } from "@/config";
 import { Socket } from 'socket.io'
 import { BotsConnected } from "./types/index";
 import { defaultConfig } from "@/types/types";
-import { sessionMiddleware } from '@/app'
-import { NextFunction, Request, Response } from 'express';
-import { httServer, io } from './socket.io/server';
+import { httpServer, io } from '@/server';
 
 export default () => {
   const botsConnected: Array<BotsConnected> = [];
@@ -20,27 +18,14 @@ export default () => {
     the_nether_to_overworld: []
   };
 
-  io.use((socket, next) => {
-    sessionMiddleware(socket.request as Request, {} as Response, next as NextFunction);
-  });
-
-  io.use((socket, next) => {
-    const logedIn = socket.request.session.logedIn;
-    if (logedIn) {
-      next();
-    } else {
-      next(new Error('Unauthorized'));
-    }
-  });
-
   io.on("connection", (socket) => {
     const sessionId = socket.request.session.id;
+    console.log(`New client connected => ${socket.id}`);
     socket.join(sessionId);
 
-    console.log(`New client connected => ${socket.id}`);
 
     socket.on("disconnect", () => {
-      console.log("Client disconnected");
+      console.log(`Client disconnected => ${socket.id}`);
 
       const userLogedIdx = usersLoged.indexOf(socket.id);
       if (userLogedIdx >= 0) {
@@ -68,19 +53,19 @@ export default () => {
     });
 
     // When bot logins
-    socket.on("login", (password) => {
-      if (password === adminPassword) {
-        console.log(`User loged correctly => ${socket.id}`);
-        socket.emit("login", { auth: true });
-        socket.join("usersLoged");
-        usersLoged.push(socket.id);
+    // socket.on("login", (password) => {
+    //   if (password === adminPassword) {
+    //     console.log(`User loged correctly => ${socket.id}`);
+    //     socket.emit("login", { auth: true });
+    //     socket.join("usersLoged");
+    //     usersLoged.push(socket.id);
 
-        sendMastersOnline()
-        sendCoreIsConnected()
-      } else {
-        socket.emit("login", { auth: false });
-      }
-    });
+    //     sendMastersOnline()
+    //     sendCoreIsConnected()
+    //   } else {
+    //     socket.emit("login", { auth: false });
+    //   }
+    // });
 
     // When bot logins
     socket.on("addFriend", (botName) => {
@@ -338,7 +323,7 @@ export default () => {
     }
   }
 
-  httServer.listen(listenPort, () =>
+  httpServer.listen(listenPort, () =>
     console.log(`Listening on port ${listenPort}`)
   );
 };

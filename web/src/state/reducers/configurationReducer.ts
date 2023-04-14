@@ -5,7 +5,6 @@ import { Socket } from "socket.io-client";
 
 export type InitialState = {
   connected: boolean
-  webServerSocketPassword: string
   webServerSocketURL: string
   webServerSocketPort: number,
   serverBots: string,
@@ -18,7 +17,6 @@ export type InitialState = {
 
 const INITIAL_STATE: InitialState = {
   connected: false,
-  webServerSocketPassword: window.localStorage.getItem('webServerSocketPassword') ?? '',
   webServerSocketURL: Cookies.get('webServerSocketURL') ?? 'localhost',
   webServerSocketPort: parseInt(Cookies.get('webServerSocketPort') ?? '4001'),
   serverBots: Cookies.get('serverBots') ?? 'localhost',
@@ -68,13 +66,6 @@ const reducer = (state = INITIAL_STATE, action: ConfiguracionAction) => {
       return {
         ...state,
         webServerSocketPort: action.payload
-      }
-
-    case ConfigurationType.SET_SOCKET_SERVER_PASSWORD:
-      window.localStorage.setItem('webServerSocketPassword', action.payload)
-      return {
-        ...state,
-        webServerSocketPassword: action.payload
       }
 
     case ConfigurationType.SET_LOGED:

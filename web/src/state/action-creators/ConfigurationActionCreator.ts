@@ -40,13 +40,6 @@ export const updateServerPort = (newPort: InitialState["webServerSocketPort"]) =
     })
 }
 
-export const updateServerPassword = (password: InitialState["webServerSocketPassword"]) => (dispatch: Dispatch<ConfiguracionAction>) => {
-    dispatch({
-        type: ConfigurationType.SET_SOCKET_SERVER_PASSWORD,
-        payload: password
-    })
-}
-
 export const setLoged = (loged: InitialState["loged"]) => (dispatch: Dispatch<ConfiguracionAction>) => {
     dispatch({
         type: ConfigurationType.SET_LOGED,

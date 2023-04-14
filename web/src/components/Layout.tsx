@@ -1,9 +1,8 @@
 import NavbarLayout from "./NavbarLayout";
 import { Outlet } from "react-router";
-
 import { useSocketSetup } from "@/utils/useSocketSetup";
-import { useSetSelectedSocket } from "@/utils/useSetSelectedSocket";
 import { FooterNav } from "./FooterNav";
+import { useSetSelectedSocket } from "@/utils/useSetSelectedSocket";
 
 export const Layout = () => {
 

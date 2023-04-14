@@ -3,5 +3,7 @@
     "ts": "node --inspect=0.0.0.0:9229 -r ts-node/register -r tsconfig-paths/register"
   },
   "verbose": false,
-  "ignore": []
+  "ignore": [
+    "sessions"
+  ]
 }

@@ -3,15 +3,17 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import socketIOClient, { Socket } from "socket.io-client";
+import { useVerifyLoggedIn } from './useVerifyLoggedIn';
 
 export const useSocketSetup = () => {
     const dispatch = useDispatch();
     const configurationState = useSelector((state: State) => state.configurationReducer);
-    const { webServerSocketURL, webServerSocketPort, webServerSocketPassword, master } = configurationState
+    const { webServerSocketURL, webServerSocketPort } = configurationState
+
+    const verifyLoggedIn = useVerifyLoggedIn()
 
     useEffect(() => {
         const {
-            setLoged,
             setSocket,
             setConfig,
             setOnlineServer,
@@ -26,10 +28,10 @@ export const useSocketSetup = () => {
 
         let socket: Socket | undefined
         const interval = setTimeout(() => {
+            const connectedTo = `${webServerSocketURL}:${webServerSocketPort}`
+            console.log(`Conecting to server ${connectedTo}`);
 
-            console.log("Conecting to server...");
-
-            socket = socketIOClient(`${webServerSocketURL}:${webServerSocketPort}`, {
+            socket = socketIOClient(connectedTo, {
                 withCredentials: true
             });
 
@@ -37,19 +39,27 @@ export const useSocketSetup = () => {
 
             socket.on("connect", () => {
                 setOnlineServer(true);
-                console.log(
-                    `Connected to: ${webServerSocketURL}:${webServerSocketPort}`
-                );
+                console.log(`Connected to: ${connectedTo}`);
 
                 if (!socket) return
-                socket.emit("login", webServerSocketPassword);
+            });
+
+            socket.on("connect_error", (err) => {
+                verifyLoggedIn()
+                    .then(() => {
+                        setTimeout(() => {
+                            if (socket) {
+                                socket.connect();
+                            }
+                        }, 3000);
+                    })
             });
 
             socket.on("disconnect", () => {
+                console.log("disconnect")
                 setOnlineServer(false);
                 setBots([]);
                 setCoreConnection(false)
-                setLoged(false)
             });
 
             socket.on("logs", (message) => {
@@ -65,7 +75,7 @@ export const useSocketSetup = () => {
             });
 
             socket.on("coreConnected", (connected: boolean) => {
-                console.log('connected')
+                console.log('Core connected connected => ', connected)
                 setCoreConnection(connected);
             });
 
@@ -99,14 +109,19 @@ export const useSocketSetup = () => {
             socket.on("sendConfig", (data) => {
                 setConfig(data);
             });
-        }, 300)
+
+        })
 
         return () => {
             clearInterval(interval)
             if (socket) {
+                console.log('remove socket')
                 console.log('Disconected from server')
+                socket.off('connect_error');
                 socket.disconnect()
+                socket = undefined
             }
         };
-    }, [master, webServerSocketPassword, webServerSocketPort, webServerSocketURL, dispatch])
+
+    }, [webServerSocketURL, webServerSocketPort])
 }

@@ -31,11 +31,6 @@ interface SetSocketServerPortAction {
     payload: InitialState["webServerSocketPort"]
 }
 
-interface SetSocketServerPasswordAction {
-    type: ConfigurationType.SET_SOCKET_SERVER_PASSWORD,
-    payload: InitialState["webServerSocketPassword"]
-}
-
 interface SetLogedAction {
     type: ConfigurationType.SET_LOGED,
     payload: InitialState["loged"]

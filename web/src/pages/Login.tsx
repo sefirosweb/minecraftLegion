@@ -22,7 +22,7 @@ export const Login = () => {
                 setLoged(true)
             })
             .catch((e) => {
-                console.log(e.response.data.error)
+                console.log(e)
             })
     }
 
