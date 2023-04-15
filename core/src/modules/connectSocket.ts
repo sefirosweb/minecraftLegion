@@ -13,21 +13,31 @@ const login = (): Promise<string> => {
         password: 'admin'
     };
 
-    return fetch(url, {
-        method: 'POST',
-        body: JSON.stringify(credentials),
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    })
-        .then((response) => {
-            const cookies = response.headers.get('set-cookie');
-            if (!cookies) {
-                throw new Error('Session not iniziated!')
+    return new Promise((resolve, reject) => {
+        fetch(url, {
+            method: 'POST',
+            body: JSON.stringify(credentials),
+            headers: {
+                'Content-Type': 'application/json'
             }
-
-            return cookies
         })
+            .then((response) => {
+                const cookies = response.headers.get('set-cookie');
+                if (!cookies) {
+                    throw new Error('Session not iniziated!')
+                }
+
+                resolve(cookies)
+            })
+            .catch(() => {
+                console.log('Login failed, retry...')
+                setTimeout(() => {
+                    login()
+                        .then(resolve)
+                }, 3000)
+            })
+    })
+
 }
 
 const connectSocket = (cookies: string) => {

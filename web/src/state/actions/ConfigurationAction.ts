@@ -48,6 +48,5 @@ export type ConfiguracionAction =
     SetMasterAction |
     SetSocketServerAction |
     SetSocketServerPortAction |
-    SetSocketServerPasswordAction |
     SetLogedAction |
     SetBotServerAction
