@@ -111,3 +111,4 @@ examples/nodejs/serverchat/public/files
 botConfig/*.json
 src/public/*
 sessions/
+database.sqlite

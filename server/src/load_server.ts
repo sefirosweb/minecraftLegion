@@ -7,8 +7,9 @@ import { sendCoreIsConnected } from "@/socketEmit/sendCoreIsConnected";
 import { sendBotsOnline } from './socketEmit/sendBotsOnline';
 import { loadSocketEvents } from "./loadSocketEvents";
 import { removeBotSocket } from "./libs/botStore";
+import "@/models/syncDb";
 
-export default () => {
+export default async () => {
   io.on("connection", async (socket) => {
     const sessionId = socket.request.session.id;
     socket.join(sessionId);
