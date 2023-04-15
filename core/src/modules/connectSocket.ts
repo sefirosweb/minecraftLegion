@@ -1,9 +1,9 @@
-import io from 'socket.io-client'
+import io, { Socket } from 'socket.io-client'
 import { botSocket, socketAuth } from "base-types";
 import { webServer, webServerPort, webServerPassword } from '@/config'
 import { startBot } from '@/startBot';
 
-const verifyLogedIn = () => {
+export const verifyLogedIn = () => {
 
 }
 
@@ -39,29 +39,34 @@ const connectSocket = (cookies: string) => {
         }
     });
 
-    let loged = false;
-
-    socket.on("connect", () => {
-        console.log("Connected to webserver");
-        socket.emit("botMaster", "on");
-        socket.emit('isCore')
-    });
-
-    socket.on("disconnect", () => {
-        console.log("disconnected from webserver");
-    });
-
-    socket.on("botConnect", (data: botSocket) => {
-        if (!loged) {
-            return;
-        }
-        console.log(`Starting bot ${data.botName}`);
-        startBot(data.botName, data.botPassword);
-    });
+    return socket
 }
 
-export const connectToServer = () => {
-
+export const connectCore = () => {
     login()
         .then((cookie) => connectSocket(cookie))
+        .then((socket) => {
+            socket.on("connect", () => {
+                console.log("Connected to webserver");
+                socket.emit("botMaster", "on");
+                socket.emit('isCore')
+            });
+
+            socket.on("disconnect", () => {
+                console.log("Disconnected from webserver");
+            });
+
+            socket.on("botConnect", (data: botSocket) => {
+                console.log(`Starting bot ${data.botName}`);
+                startBot(data.botName, data.botPassword);
+            });
+        })
+}
+
+export const connectBotToServer = (): Promise<Socket> => {
+    return new Promise((resolve) => {
+        login()
+            .then((cookie) => connectSocket(cookie))
+            .then((socket) => resolve(socket))
+    })
 }

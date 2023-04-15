@@ -1,6 +1,6 @@
 import { botType } from "base-types";
 import { startBot } from "@/startBot";
-import { connectToServer } from "@/modules/connectSocket";
+import { connectCore } from "@/modules/connectSocket";
 
 const index = () => {
 
@@ -45,7 +45,7 @@ const index = () => {
 
   runNextBot();
 
-  connectToServer()
+  connectCore()
 };
 
 
