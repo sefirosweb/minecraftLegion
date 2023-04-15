@@ -13,7 +13,7 @@ const login = (): Promise<string> => {
         password: 'admin'
     };
 
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
         fetch(url, {
             method: 'POST',
             body: JSON.stringify(credentials),

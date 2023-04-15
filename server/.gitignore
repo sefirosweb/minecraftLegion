@@ -110,5 +110,4 @@ examples/nodejs/serverchat/public/files
 # Exclude bot configurations
 botConfig/*.json
 src/public/*
-sessions/
 database.sqlite

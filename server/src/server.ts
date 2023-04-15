@@ -8,12 +8,15 @@ import http from 'http'
 import { Server as WebSocketServer } from 'socket.io'
 import { secretToken } from './config'
 import session from 'express-session'
-import FileStore from 'session-file-store';
+import SequelizeStoresession from 'connect-session-sequelize';
+import { sequelize } from '@/models/sequalize'
 
-const fileStore = FileStore(session);
+const SequelizeStore = SequelizeStoresession(session.Store)
 
 const sessionMiddleware = session({
-    store: new fileStore(),
+    store: new SequelizeStore({
+        db: sequelize,
+    }),
     secret: secretToken,
     name: 'sid',
     resave: false,

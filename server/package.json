@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/sefirosweb/minecraftLegionWebServer#readme",
   "dependencies": {
+    "connect-session-sequelize": "^7.1.5",
     "cors": "^2.8.5",
     "dotenv": "16.0.3",
     "express": "^4.18.2",
@@ -29,7 +30,6 @@
     "install": "^0.13.0",
     "morgan": "^1.10.0",
     "sequelize": "^6.31.0",
-    "session-file-store": "^1.5.0",
     "socket.io": "4.6.1",
     "sqlite3": "^5.1.6"
   },
@@ -43,7 +43,6 @@
     "@types/express-session": "^1.17.7",
     "@types/http-errors": "^2.0.1",
     "@types/morgan": "^1.9.4",
-    "@types/session-file-store": "^1.2.2",
     "babel-plugin-module-resolver": "^5.0.0",
     "mineflayer": "^4.8.1",
     "nodemon": "2.0.22",
