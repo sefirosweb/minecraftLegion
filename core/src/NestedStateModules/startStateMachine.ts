@@ -176,8 +176,15 @@ const startStateMachine = (bot: Bot) => {
   })
 
   bot.on('health', () => {
-    botWebsocket.emitHealth(bot.health)
-    botWebsocket.emitFood(bot.food)
+    botWebsocket.emit('botStatus', {
+      type: 'health',
+      value: bot.health
+    })
+
+    botWebsocket.emit('botStatus', {
+      type: 'food',
+      value: bot.food
+    })
   })
 
 

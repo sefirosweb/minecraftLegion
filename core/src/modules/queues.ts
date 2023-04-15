@@ -5,9 +5,10 @@ type Task = {
     cb: () => void
 }
 
-export const webSocketQueue = async.queue((task: Task) => {
+export const webSocketQueue = async.queue((task: Task, callback: () => void) => {
     const { cb } = task
     cb();
+    callback()
 }, 1);
 
 webSocketQueue.pause();

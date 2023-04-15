@@ -544,26 +544,10 @@ const emit = (channel: string, data: any) => {
   });
 }
 
-const emitHealth = (health: number) => {
-  const data = {
-    type: 'health',
-    value: health
-  }
-  emit('botStatus', data)
-}
-
 const emitCombat = (combat: boolean) => {
   const data = {
     type: 'combat',
     value: combat
-  }
-  emit('botStatus', data)
-}
-
-const emitFood = (food: number) => {
-  const data = {
-    type: 'food',
-    value: food
   }
   emit('botStatus', data)
 }
@@ -626,8 +610,6 @@ const botWebsocketLoader = {
   on,
   emit,
   log,
-  emitHealth,
-  emitFood,
   emitCombat,
   emitEvents,
   getFriends,
