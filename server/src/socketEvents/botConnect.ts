@@ -1,11 +1,14 @@
-import { socketVariables } from "@/libs/socketVariables";
+import { sendBotConnect } from "@/socketEmit/sendBotConnect";
 import { Socket } from "socket.io";
 
-export default (socket: Socket) => {
-    const { io } = socketVariables
+export type BotCredentials = {
+    botName: string,
+    botPassword: string
+}
 
-    socket.on("botConnect", (message) => {
+export default (socket: Socket) => {
+    socket.on("botConnect", (message: BotCredentials) => {
         console.log('Send start bot ', message)
-        io.to("usersLoged").emit("botConnect", message);
+        sendBotConnect(message)
     });
 }

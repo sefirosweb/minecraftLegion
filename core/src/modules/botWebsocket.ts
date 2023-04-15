@@ -30,7 +30,7 @@ const connect = async () => {
 
   socket.on('connect', () => {
     console.log('Bot connected to webserver')
-    socket.emit('addFriend', bot.username)
+    socket.emit('isBot', bot.username)
   })
 
   socket.on('disconnect', () => {

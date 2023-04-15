@@ -45,7 +45,7 @@ io.use((socket, next) => {
 io.use((socket, next) => {
     const logedIn = socket.request.session.logedIn;
     if (logedIn) {
-        console.log('Socket.io logged in!', socket.id)
+        console.log(`New client connected => ${socket.id}`)
         next();
     } else {
         console.log('Error on auth')

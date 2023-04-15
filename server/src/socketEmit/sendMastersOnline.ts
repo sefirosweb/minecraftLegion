@@ -2,5 +2,5 @@ import { socketVariables } from "@/libs/socketVariables";
 import { io } from "@/server";
 
 export const sendMastersOnline = () => {
-    io.to("usersLoged").emit("mastersOnline", socketVariables.masters);
+    io.to("core").to('web').emit("mastersOnline", socketVariables.masters);
 }

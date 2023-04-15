@@ -1,12 +1,13 @@
-import { socketVariables } from "@/libs/socketVariables";
+import { Socket } from "socket.io";
 import { sendBotsOnline } from "@/socketEmit/sendBotsOnline";
 import { sendLogs } from "@/socketEmit/sendLogs";
-import { Socket } from "socket.io";
+import { socketVariables } from "@/libs/socketVariables";
 
 export default (socket: Socket) => {
-    const { botsConnected, defaultConfig } = socketVariables
+    socket.on('isBot', (botName: string) => {
+        const { botsConnected, defaultConfig } = socketVariables
+        socket.join("bot");
 
-    socket.on("addFriend", (botName: string) => {
         const find = botsConnected.find(
             (botConection) => botConection.name === botName
         );
@@ -28,5 +29,5 @@ export default (socket: Socket) => {
 
         sendBotsOnline()
         sendLogs("Login", botName, socket.id);
-    });
+    })
 }

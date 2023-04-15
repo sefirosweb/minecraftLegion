@@ -4,5 +4,5 @@ import { io } from "@/server";
 export const sendLogs = (message: string, botName = "", socketId = "") => {
     const time = getCurrentDate()
     const data = { message, time, socketId, botName, };
-    io.to("usersLoged").emit("logs", data);
+    io.to("web").emit("logs", data);
 }

@@ -1,6 +1,8 @@
-import { socketVariables } from "@/libs/socketVariables";
 import { io } from "@/server";
 
 export const sendCoreIsConnected = () => {
-    io.to("usersLoged").emit("coreConnected", socketVariables.usersCoreLogged.length > 0);
+    const room = io.sockets.adapter.rooms.get('core')
+    const numClients = room ? room.size : 0;
+    console.log({ numClients })
+    io.to("web").emit("coreConnected", numClients > 0);
 }

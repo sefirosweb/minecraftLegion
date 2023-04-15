@@ -26,22 +26,23 @@ export const useSocketSetup = () => {
             setCoreConnection
         } = bindActionCreators(actionCreators, dispatch);
 
-        let socket: Socket | undefined
+        let tempSocket: Socket | undefined
         const interval = setTimeout(() => {
             const connectedTo = `${webServerSocketURL}:${webServerSocketPort}`
             console.log(`Conecting to server ${connectedTo}`);
 
-            socket = io(connectedTo, {
+            const socket = io(connectedTo, {
                 withCredentials: true
             });
+
+            tempSocket = socket
 
             setSocket(socket);
 
             socket.on("connect", () => {
                 setOnlineServer(true);
                 console.log(`Connected to: ${connectedTo}`);
-
-                if (!socket) return
+                socket.emit('isWeb')
             });
 
             socket.on("connect_error", (err) => {
@@ -115,12 +116,12 @@ export const useSocketSetup = () => {
 
         return () => {
             clearInterval(interval)
-            if (socket) {
+            if (tempSocket) {
                 console.log('remove socket')
                 console.log('Disconected from server')
-                socket.off('connect_error');
-                socket.disconnect()
-                socket = undefined
+                tempSocket.off('connect_error');
+                tempSocket.disconnect()
+                tempSocket = undefined
             }
         };
 

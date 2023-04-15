@@ -9,7 +9,6 @@ export type SocketProps = {
     io: typeof io
     botsConnected: Array<BotsConnected>
     defaultConfig: Config
-    usersCoreLogged: Array<string>
     masters: Array<string>
     findBotSocket: (socket: Socket) => BotsConnected | undefined
     sendMastersOnline: () => void
@@ -32,7 +31,6 @@ export const socketVariables: SocketProps = {
     botsConnected: [],
     defaultConfig,
     io,
-    usersCoreLogged: [],
     findBotSocket,
     sendMastersOnline,
     chests: {},

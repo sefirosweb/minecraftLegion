@@ -1,23 +1,34 @@
 import { socketVariables } from "@/libs/socketVariables";
+import { BotsConnected } from "@/types";
 import { Socket } from "socket.io";
+
+type SocketMessage = {
+    type: keyof BotsConnected
+    value: number
+}
 
 export default (socket: Socket) => {
     const { io, botsConnected } = socketVariables
 
-    socket.on("botStatus", (data) => {
-        const botIndex = botsConnected.findIndex((e) => {
-            return e.socketId === socket.id;
-        });
-        if (botIndex >= 0) {
+    socket.on("botStatus", (data: SocketMessage) => {
+        const bot = botsConnected.find((e) => e.socketId === socket.id);
+
+        if (bot) {
             const message = {
                 type: data.type,
                 value: data.value,
                 socketId: socket.id,
             };
 
-            io.to("usersLoged").emit("botStatus", message);
-            // @ts-ignore via web socket can update any data
-            botsConnected[botIndex][message.type] = message.value;
+            io.to("web").emit("botStatus", message);
+
+            if (data.type === 'health') {
+                bot.health = message.value;
+            }
+
+            if (data.type === 'food') {
+                bot.food = message.value;
+            }
         }
     });
 }
