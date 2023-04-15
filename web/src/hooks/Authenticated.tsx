@@ -18,7 +18,7 @@ export const Authenticated = () => {
     return () => {
       clearInterval(interval)
     }
-  }, [verifyLoggedIn])
+  }, [])
 
   return loged ? <Outlet /> : <Navigate to="/login" />;
 }
