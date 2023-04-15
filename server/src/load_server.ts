@@ -6,6 +6,7 @@ import { socketVariables } from "@/libs/socketVariables";
 import { sendCoreIsConnected } from "@/socketEmit/sendCoreIsConnected";
 import { sendBotsOnline } from './socketEmit/sendBotsOnline';
 import { loadSocketEvents } from "./loadSocketEvents";
+import { removeBotSocket } from "./libs/botStore";
 
 export default () => {
   io.on("connection", async (socket) => {
@@ -15,21 +16,12 @@ export default () => {
 
     socket.on("disconnect", () => {
       console.log(`Client disconnected => ${socket.id}`);
+      const bot = removeBotSocket(socket)
+      if (!bot) return
 
       sendCoreIsConnected()
-
-      const botDisconnected = socketVariables.botsConnected.find(
-        (botConection) => botConection.socketId === socket.id
-      );
-      // If connection is not bot o continue
-      if (botDisconnected === undefined) {
-        return;
-      }
-
-      socketVariables.botsConnected.splice(socketVariables.botsConnected.indexOf(botDisconnected), 1);
-
       sendBotsOnline()
-      sendLogs("Disconnected", botDisconnected.name, socket.id);
+      sendLogs("Disconnected", bot.name, socket.id);
     });
 
   });

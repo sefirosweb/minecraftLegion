@@ -1,5 +1,7 @@
 import { debug } from "@/config";
+import { findBotBySocketId } from "@/libs/botStore";
 import { socketVariables } from "@/libs/socketVariables";
+import { BotsConnected } from "@/types";
 import { Socket } from "socket.io";
 
 export default (socket: Socket) => {
@@ -7,6 +9,7 @@ export default (socket: Socket) => {
 
     socket.on("sendAction", (data) => {
         let index;
+        let bot: BotsConnected | undefined;
 
         if (debug) console.log(data);
 
@@ -14,59 +17,67 @@ export default (socket: Socket) => {
             case "action":
                 io.to(data.socketId).emit("action", data.toBotData);
                 break;
+
             case "startStateMachine":
                 io.to(data.socketId).emit("action", {
                     type: "startStateMachine",
                     value: data.value,
                 });
-                index = botsConnected.findIndex((e) => {
-                    return e.socketId === data.socketId;
-                });
-                if (index >= 0) {
-                    botsConnected[index].stateMachinePort = data.value.port;
-                    io.to("usersLoged").emit("botsOnline", botsConnected);
-                }
+
+                bot = findBotBySocketId(data.socketId)
+                if (!bot) return
+
+                bot.stateMachinePort = data.value.port;
+                io.to("usersLoged").emit("botsOnline", botsConnected);
+
                 break;
+
             case "startInventory":
                 io.to(data.socketId).emit("action", {
                     type: "startInventory",
                     value: data.value,
                 });
-                index = botsConnected.findIndex((e) => {
-                    return e.socketId === data.socketId;
-                });
-                if (index >= 0) {
-                    botsConnected[index].inventoryPort = data.value.port;
-                    io.to("usersLoged").emit("botsOnline", botsConnected);
-                }
+
+                bot = findBotBySocketId(data.socketId)
+                if (!bot) return
+
+                bot.inventoryPort = data.value.port;
+                io.to("usersLoged").emit("botsOnline", botsConnected);
+
                 break;
+
             case "startViewer":
                 io.to(data.socketId).emit("action", {
                     type: "startViewer",
                     value: data.value,
                 });
-                index = botsConnected.findIndex((e) => {
-                    return e.socketId === data.socketId;
-                });
-                if (index >= 0) {
-                    botsConnected[index].viewerPort = data.value.port;
-                    io.to("usersLoged").emit("botsOnline", botsConnected);
-                }
+
+                bot = findBotBySocketId(data.socketId)
+                if (!bot) return
+
+                bot.viewerPort = data.value.port;
+                io.to("usersLoged").emit("botsOnline", botsConnected);
+
                 break;
+
             case "sendDisconnect":
                 io.to(data.socketId).emit("sendDisconnect", data.value);
                 break;
+
             case "getConfig":
                 io.to(data.socketId).emit("getConfig", socket.id);
                 break;
+
             case "sendConfig":
                 data.value.socketId = socket.id;
                 io.to("usersLoged").emit("sendConfig", data.value);
                 break;
+
             case "changeConfig":
                 data.value.fromSocketId = socket.id;
                 io.to(data.socketId).emit("changeConfig", data.value);
                 break;
+
             case "addMaster":
                 if (data.value === undefined || data.value === "") {
                     return;
@@ -80,6 +91,7 @@ export default (socket: Socket) => {
 
                 sendMastersOnline()
                 break;
+
             case "removeMaster":
                 if (data.value === undefined) {
                     return;
@@ -93,6 +105,7 @@ export default (socket: Socket) => {
 
                 sendMastersOnline()
                 break;
+
             case "setChests":
                 if (data.value === undefined) {
                     return;

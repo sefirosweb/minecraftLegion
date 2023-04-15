@@ -1,3 +1,4 @@
+import { findBotBySocket } from "@/libs/botStore";
 import { socketVariables } from "@/libs/socketVariables";
 import { BotsConnected } from "@/types";
 import { Socket } from "socket.io";
@@ -8,27 +9,26 @@ type SocketMessage = {
 }
 
 export default (socket: Socket) => {
-    const { io, botsConnected } = socketVariables
+    const { io } = socketVariables
 
     socket.on("botStatus", (data: SocketMessage) => {
-        const bot = botsConnected.find((e) => e.socketId === socket.id);
+        const bot = findBotBySocket(socket)
+        if (!bot) return
 
-        if (bot) {
-            const message = {
-                type: data.type,
-                value: data.value,
-                socketId: socket.id,
-            };
+        const message = {
+            type: data.type,
+            value: data.value,
+            socketId: socket.id,
+        };
 
-            io.to("web").emit("botStatus", message);
+        io.to("web").emit("botStatus", message);
 
-            if (data.type === 'health') {
-                bot.health = message.value;
-            }
+        if (data.type === 'health') {
+            bot.health = message.value;
+        }
 
-            if (data.type === 'food') {
-                bot.food = message.value;
-            }
+        if (data.type === 'food') {
+            bot.food = message.value;
         }
     });
 }

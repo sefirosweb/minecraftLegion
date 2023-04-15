@@ -2,7 +2,7 @@ import { io } from "@/server"
 import { BotsConnected, Config } from "@/types"
 import { Socket } from "socket.io"
 import { sendMastersOnline } from '@/socketEmit/sendMastersOnline'
-import { findBotSocket } from '@/libs/findBotSocket'
+import { findBotBySocket } from '@/libs/botStore'
 import { defaultConfig } from "@/types/types";
 
 export type SocketProps = {
@@ -10,7 +10,7 @@ export type SocketProps = {
     botsConnected: Array<BotsConnected>
     defaultConfig: Config
     masters: Array<string>
-    findBotSocket: (socket: Socket) => BotsConnected | undefined
+    findBotBySocket: (socket: Socket) => BotsConnected | undefined
     sendMastersOnline: () => void
     chests: any
     setChests: (chests: any) => void
@@ -31,7 +31,7 @@ export const socketVariables: SocketProps = {
     botsConnected: [],
     defaultConfig,
     io,
-    findBotSocket,
+    findBotBySocket,
     sendMastersOnline,
     chests: {},
     setChests,

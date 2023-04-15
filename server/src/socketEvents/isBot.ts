@@ -2,15 +2,14 @@ import { Socket } from "socket.io";
 import { sendBotsOnline } from "@/socketEmit/sendBotsOnline";
 import { sendLogs } from "@/socketEmit/sendLogs";
 import { socketVariables } from "@/libs/socketVariables";
+import { sendMastersOnline } from "@/socketEmit/sendMastersOnline";
 
 export default (socket: Socket) => {
     socket.on('isBot', (botName: string) => {
         const { botsConnected, defaultConfig } = socketVariables
         socket.join("bot");
 
-        const find = botsConnected.find(
-            (botConection) => botConection.name === botName
-        );
+        const find = botsConnected.find(bot => bot.name === botName);
 
         if (find === undefined) {
             botsConnected.push({
@@ -27,6 +26,7 @@ export default (socket: Socket) => {
             });
         }
 
+        sendMastersOnline()
         sendBotsOnline()
         sendLogs("Login", botName, socket.id);
     })
