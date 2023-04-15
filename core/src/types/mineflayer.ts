@@ -1,11 +1,10 @@
-import'mineflayer'
+import 'mineflayer'
 import { Vec3 } from "vec3";
 declare module 'mineflayer' {
 
     export type Dimension_V2 = 'overworld' | 'the_end' | 'the_nether'
 
     interface BotEvents {
-        webSocketLogin: () => void
         customEventPhysicTick: () => void
         reloadBotConfig: () => void
         beatMob: () => void

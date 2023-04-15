@@ -1,46 +1,36 @@
-import socketIOClient, { Socket } from 'socket.io-client'
+import { Socket } from 'socket.io-client'
 import type { BotFriends, BotwebsocketAction, Chest, Master, MineCords } from 'base-types'
 import { Vec3 } from 'vec3'
 
 import configBot from '@/config'
-const { webServer, webServerPort, webServerPassword } = configBot
 
 import botconfigLoader from '@/modules/botConfig'
 import { isAnimal } from './animalType'
 import { Entity } from 'prismarine-entity'
 import { Bot } from 'mineflayer'
+import { connectBotToServer } from '@/modules/connectSocket'
+import { webSocketQueue } from './queues'
 
 let socket: Socket
 let friends: Array<BotFriends> = []
 let masters: Array<Master> = []
-let loged = false
 let bot: Bot
 
 function loadBot(_bot: Bot) {
   bot = _bot
 }
 
-function connect() {
+const connect = async () => {
   const botconfig = botconfigLoader(bot.username)
 
-  socket = socketIOClient(`${webServer}:${webServerPort}`)
+  socket = await connectBotToServer()
   socket.on('update', (data) => console.log(data))
-  // socket.on('connect_error', (data) => console.log(data))
-  // socket.on('connect_failed', (data) => console.log(data))
+  socket.on('connect_error', (data) => console.log(data))
+  socket.on('connect_failed', (data) => console.log(data))
 
   socket.on('connect', () => {
-    console.log('Connected to webserver')
-    socket.emit('login', webServerPassword)
-  })
-
-  socket.on('login', (authenticate) => {
-    if (authenticate.auth) {
-      loged = true
-      socket.emit('addFriend', bot.username)
-      bot.emit('webSocketLogin')
-    } else {
-      loged = false
-    }
+    console.log('Bot connected to webserver')
+    socket.emit('addFriend', bot.username)
   })
 
   socket.on('disconnect', () => {
@@ -529,10 +519,8 @@ function connect() {
   socket.on('getConfig', () => {
     sendConfig()
   })
-}
 
-const getLoged = () => {
-  return loged
+  webSocketQueue.resume()
 }
 
 const sendConfig = () => {
@@ -550,11 +538,10 @@ const sendAction = (action: string, value: any) => {
   socket.emit('sendAction', { action, value })
 }
 
-const emit = (chanel: string, data: any) => {
-  if (!loged) {
-    return
-  }
-  socket.emit(chanel, data)
+const emit = (channel: string, data: any) => {
+  webSocketQueue.push({
+    cb: () => socket.emit(channel, data)
+  });
 }
 
 const emitHealth = (health: number) => {
@@ -590,14 +577,15 @@ const emitEvents = (events: Array<string>) => {
 }
 
 const log = (data: string) => {
-  if (!loged) {
-    return
-  }
-  socket.emit('logs', data)
+  webSocketQueue.push({
+    cb: () => socket.emit('logs', data)
+  });
 }
 
 const on = (listener: string, cb: (BotwebsocketAction: BotwebsocketAction) => void) => {
-  socket.on(listener, cb)
+  webSocketQueue.push({
+    cb: () => socket.on(listener, cb)
+  });
 }
 
 const getFriends = () => {
@@ -635,7 +623,6 @@ const nextPointListener = () => {
 const botWebsocketLoader = {
   loadBot,
   connect,
-  getLoged,
   on,
   emit,
   log,

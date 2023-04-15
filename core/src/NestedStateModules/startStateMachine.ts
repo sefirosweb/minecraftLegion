@@ -272,15 +272,9 @@ const startStateMachine = (bot: Bot) => {
     })
   }
 
-  if (botWebsocket.getLoged()) {
-    getChests()
-    getPortals()
-  } else {
-    bot.once('webSocketLogin', () => {
-      getChests()
-      getPortals()
-    })
-  }
+  getChests()
+  getPortals()
+
 }
 
 export default startStateMachine
