@@ -15,11 +15,12 @@ export default () => {
     loadSocketEvents(socket)
 
     socket.on("disconnect", () => {
+      sendCoreIsConnected()
+
       console.log(`Client disconnected => ${socket.id}`);
       const bot = removeBotSocket(socket)
       if (!bot) return
 
-      sendCoreIsConnected()
       sendBotsOnline()
       sendLogs("Disconnected", bot.name, socket.id);
     });
