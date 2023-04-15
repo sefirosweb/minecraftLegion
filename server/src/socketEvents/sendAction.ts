@@ -1,6 +1,7 @@
 import { debug } from "@/config";
 import { findBotBySocketId } from "@/libs/botStore";
 import { socketVariables } from "@/libs/socketVariables";
+import { sendBotsOnline } from "@/socketEmit/sendBotsOnline";
 import { BotsConnected } from "@/types";
 import { Socket } from "socket.io";
 
@@ -8,7 +9,6 @@ export default (socket: Socket) => {
     const { io, botsConnected, masters, sendMastersOnline, chests, setChests, portals, setPortals } = socketVariables
 
     socket.on("sendAction", (data) => {
-        let index;
         let bot: BotsConnected | undefined;
 
         if (debug) console.log(data);
@@ -28,7 +28,7 @@ export default (socket: Socket) => {
                 if (!bot) return
 
                 bot.stateMachinePort = data.value.port;
-                io.to("usersLoged").emit("botsOnline", botsConnected);
+                sendBotsOnline()
 
                 break;
 
@@ -42,8 +42,7 @@ export default (socket: Socket) => {
                 if (!bot) return
 
                 bot.inventoryPort = data.value.port;
-                io.to("usersLoged").emit("botsOnline", botsConnected);
-
+                sendBotsOnline()
                 break;
 
             case "startViewer":
@@ -56,7 +55,7 @@ export default (socket: Socket) => {
                 if (!bot) return
 
                 bot.viewerPort = data.value.port;
-                io.to("usersLoged").emit("botsOnline", botsConnected);
+                sendBotsOnline()
 
                 break;
 
@@ -70,7 +69,7 @@ export default (socket: Socket) => {
 
             case "sendConfig":
                 data.value.socketId = socket.id;
-                io.to("usersLoged").emit("sendConfig", data.value);
+                io.to("web").emit("sendConfig", data.value);
                 break;
 
             case "changeConfig":
