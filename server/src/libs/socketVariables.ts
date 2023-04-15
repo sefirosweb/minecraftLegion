@@ -10,7 +10,7 @@ export type SocketProps = {
     botsConnected: Array<BotsConnected>
     defaultConfig: Config
     usersCoreLogged: Array<string>
-    masters: Array<{ name: string }>
+    masters: Array<string>
     findBotSocket: (socket: Socket) => BotsConnected | undefined
     sendMastersOnline: () => void
     chests: any

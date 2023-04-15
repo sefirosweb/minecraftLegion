@@ -9,7 +9,7 @@ export type InitialState = {
     time: string
   }>
   botsOnline: Array<Bot>,
-  masters: Array<{ name: string }>,
+  masters: Array<string>,
   chests: Record<string, any>,
   portals: Record<string, any>,
   coreConnected: Boolean

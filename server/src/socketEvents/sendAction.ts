@@ -68,18 +68,14 @@ export default (socket: Socket) => {
                 io.to(data.socketId).emit("changeConfig", data.value);
                 break;
             case "addMaster":
-                if (data.value === undefined) {
+                if (data.value === undefined || data.value === "") {
                     return;
                 }
                 data.value = data.value.trim();
 
-                const masterToAddIndex = masters.findIndex((e) => {
-                    return e.name === data.value;
-                });
-                if (masterToAddIndex < 0 && data.value !== "") {
-                    masters.push({
-                        name: data.value,
-                    });
+                const masterToAddIndex = masters.findIndex((e) => e === data.value);
+                if (masterToAddIndex < 0) {
+                    masters.push(data.value);
                 }
 
                 sendMastersOnline()
@@ -90,9 +86,7 @@ export default (socket: Socket) => {
                 }
                 data.value = data.value.trim();
 
-                const masterToRemoveIndex = masters.findIndex((e) => {
-                    return e.name === data.value;
-                });
+                const masterToRemoveIndex = masters.findIndex((e) => e === data.value);
                 if (masterToRemoveIndex >= 0) {
                     masters.splice(masterToRemoveIndex, 1);
                 }

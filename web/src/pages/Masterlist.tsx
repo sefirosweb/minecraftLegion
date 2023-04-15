@@ -42,16 +42,16 @@ export const Masterlist = () => {
   }
 
   const renderMasterList = () => {
-    return masters.map((masterIndex, index) => {
+    return masters.map((name, index) => {
       return (
         <li
-          onClick={() => handleRemoveMaster(masterIndex.name)}
+          onClick={() => handleRemoveMaster(name)}
           style={{ cursor: "pointer" }}
           key={index}
           className={`list-group-item list-group-item-action
-           ${(masterIndex.name === master) ? 'active' : ''}`}
+           ${(name === master) ? 'active' : ''}`}
         >
-          {masterIndex.name}
+          {name}
         </li>
       )
     }, master)
