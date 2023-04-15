@@ -1,9 +1,9 @@
 import { debug } from "@/config";
-import { SocketProps } from "@/load_server";
+import { socketVariables } from "@/libs/socketVariables";
 import { Socket } from "socket.io";
 
-export default (socket: Socket, props: SocketProps) => {
-    const { io, botsConnected, masters, sendMastersOnline, chests, setChests, portals, setPortals } = props
+export default (socket: Socket) => {
+    const { io, botsConnected, masters, sendMastersOnline, chests, setChests, portals, setPortals } = socketVariables
 
     socket.on("sendAction", (data) => {
         let index;

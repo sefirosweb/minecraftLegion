@@ -1,17 +1,18 @@
-import { SocketProps } from "@/load_server";
+import { socketVariables } from "@/libs/socketVariables";
+import { sendBotsOnline } from "@/socketEmit/sendBotsOnline";
+import { sendLogs } from "@/socketEmit/sendLogs";
 import { Socket } from "socket.io";
 
-export default (socket: Socket, props: SocketProps) => {
-    const { botsConnected, defaultConfig, io, sendLogs } = props
+export default (socket: Socket) => {
+    const { botsConnected, defaultConfig } = socketVariables
 
-    socket.on("addFriend", (botName) => {
+    socket.on("addFriend", (botName: string) => {
         const find = botsConnected.find(
             (botConection) => botConection.name === botName
         );
 
         if (find === undefined) {
             botsConnected.push({
-                // Default Data
                 socketId: socket.id,
                 name: botName,
                 health: 20,
@@ -24,7 +25,8 @@ export default (socket: Socket, props: SocketProps) => {
                 config: defaultConfig
             });
         }
-        io.to("usersLoged").emit("botsOnline", botsConnected);
+
+        sendBotsOnline()
         sendLogs("Login", botName, socket.id);
     });
 }

@@ -1,8 +1,8 @@
-import { SocketProps } from "@/load_server";
+import { socketVariables } from "@/libs/socketVariables";
 import { Socket } from "socket.io";
 
-export default (socket: Socket, props: SocketProps) => {
-    const { io, botsConnected } = props
+export default (socket: Socket) => {
+    const { io, botsConnected } = socketVariables
 
     socket.on("botStatus", (data) => {
         const botIndex = botsConnected.findIndex((e) => {

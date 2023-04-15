@@ -1,8 +1,8 @@
-import { SocketProps } from "@/load_server";
+import { socketVariables } from "@/libs/socketVariables";
 import { Socket } from "socket.io";
 
-export default (socket: Socket, props: SocketProps) => {
-    const { io } = props
+export default (socket: Socket) => {
+    const { io } = socketVariables
 
     socket.on("botConnect", (message) => {
         console.log('Send start bot ', message)

@@ -1,8 +1,8 @@
-import { SocketProps } from "@/load_server";
+import { socketVariables } from "@/libs/socketVariables";
 import { Socket } from "socket.io";
 
-export default (socket: Socket, props: SocketProps) => {
-    const { botsConnected } = props
+export default (socket: Socket) => {
+    const { botsConnected } = socketVariables
 
     socket.on("getBotsOnline", () => {
         socket.emit("botsOnline", botsConnected);
