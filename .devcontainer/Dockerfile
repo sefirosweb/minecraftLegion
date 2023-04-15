@@ -1,4 +1,5 @@
 FROM node:18-bullseye
+WORKDIR /app
 RUN apt update && apt install -y openjdk-17-jdk
 RUN npm install npm-check-updates -g
 RUN npm install mocha -g
