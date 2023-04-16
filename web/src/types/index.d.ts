@@ -31,4 +31,7 @@ type Bot = {
     combat: false,
     events: Array<string>
     config: any
+    viewerPort?: number
+    inventoryPort?: number
+    stateMachinePort?: number
 }

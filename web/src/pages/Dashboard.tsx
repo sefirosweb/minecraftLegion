@@ -8,7 +8,6 @@ import { State } from "@/state";
 
 export const Dashboard = () => {
     const { selectedSocketId } = useParams()
-    console.log({ selectedSocketId })
     const botState = useSelector((state: State) => state.botsReducer);
     const { logs } = botState
 
@@ -21,11 +20,11 @@ export const Dashboard = () => {
     return (
         <>
             <Row className='mt-3'>
-                <Col md={8} className='mb-3'>
+                <Col md={6} lg={8} className='mb-3'>
                     <h1>Dashboard</h1>
                 </Col>
 
-                <Col md={2} className='mb-3'>
+                <Col md={3} lg={2} className='mb-3'>
                     {selectedSocketId &&
                         <Link to={`/configurebot/${selectedSocketId}/generalconfig`} style={{ textDecoration: "none", display: "grid" }}>
                             <Button variant='warning'>

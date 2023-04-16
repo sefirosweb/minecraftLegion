@@ -1,26 +1,30 @@
-//@ts-nocheck
+import { useGetSelectedBot } from "@/hooks/useGetSelectedBot";
 import { actionCreators, State } from "@/state";
-import { useState } from "react";
+import { getPort } from "@/utils/getFreePort";
+import { ChangeEvent, KeyboardEvent, useEffect, useState } from "react";
 import { Button, Col, Row } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate, useParams } from "react-router";
 import { bindActionCreators } from "redux";
 
-const BotActionButtons = (props) => {
-  const { socketId } = props
+const BotActionButtons = () => {
+  const { selectedSocketId } = useParams()
   const configurationState = useSelector((state: State) => state.configurationReducer);
-  const { socket, selectedSocketId, serverBots, master } = configurationState
+  const { socket, serverBots, master } = configurationState
+  const bot = useGetSelectedBot(selectedSocketId) as Bot
+  const navigate = useNavigate();
 
   const dispatch = useDispatch();
-  const { getBotBySocketId, updateBotStatus } = bindActionCreators(actionCreators, dispatch);
+  const { updateBotStatus } = bindActionCreators(actionCreators, dispatch);
 
   const [chat, setChat] = useState("");
 
-  const handleChangeMessage = (event) => {
+  const handleChangeMessage = (event: ChangeEvent<HTMLInputElement>) => {
     setChat(event.target.value);
   };
 
-  const handleKeyPress = (event) => {
-    if (event.charCode === 13) {
+  const handleKeyPress = (event: KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
       handleSendMessageButton();
     }
   };
@@ -32,20 +36,19 @@ const BotActionButtons = (props) => {
 
   const handleDisconnectButton = () => {
     socket.emit("sendAction", {
+      socketId: selectedSocketId,
       action: "sendDisconnect",
-      socketId,
       value: "Disconnect Bot",
     });
   };
 
   const handleStartStateMachineButton = () => {
-    const bot = getBotBySocketId(socketId);
     let port = bot.stateMachinePort
     if (!port) {
-      port = Math.floor(Math.random() * 50 + 1) + 4500;
+      port = getPort()
       socket.emit("sendAction", {
         action: "startStateMachine",
-        socketId,
+        socketId: selectedSocketId,
         value: {
           port,
         },
@@ -57,13 +60,12 @@ const BotActionButtons = (props) => {
   };
 
   const handleStartInventoryButton = () => {
-    const bot = getBotBySocketId(socketId);
     let port = bot.inventoryPort
     if (!port) {
-      port = Math.floor(Math.random() * 50 + 1) + 4500;
+      port = getPort()
       socket.emit("sendAction", {
         action: "startInventory",
-        socketId,
+        socketId: selectedSocketId,
         value: {
           port,
         },
@@ -75,13 +77,12 @@ const BotActionButtons = (props) => {
   };
 
   const handleStartViewerButton = () => {
-    const bot = getBotBySocketId(socketId);
     let port = bot.viewerPort
     if (!port) {
-      port = Math.floor(Math.random() * 50 + 1) + 4500;
+      port = getPort()
       socket.emit("sendAction", {
         action: "startViewer",
-        socketId,
+        socketId: selectedSocketId,
         value: {
           port,
         },
@@ -92,7 +93,7 @@ const BotActionButtons = (props) => {
     window.open(`http://${serverBots}:${port}`, "_blank");
   };
 
-  const handleSendAction = (type, value) => {
+  const handleSendAction = (type: string, value: string) => {
     socket.emit("sendAction", {
       action: "action",
       socketId: selectedSocketId,
@@ -102,6 +103,18 @@ const BotActionButtons = (props) => {
       },
     });
   };
+
+  useEffect(() => {
+    const interval = setTimeout(() => {
+      if (!bot) {
+        navigate("/dashboard");
+      }
+    })
+    return () => {
+      clearInterval(interval)
+    }
+  }, [bot])
+
 
   return (
     <>
@@ -113,7 +126,7 @@ const BotActionButtons = (props) => {
               type="text"
               placeholder="Send chat message"
               className="form-control"
-              onKeyPress={handleKeyPress}
+              onKeyDown={handleKeyPress}
               onChange={handleChangeMessage}
               value={chat}
             />
@@ -219,17 +232,3 @@ const BotActionButtons = (props) => {
 };
 
 export default BotActionButtons
-
-// const mapStateToProps = (reducers) => {
-//   const { configurationReducer } = reducers;
-//   const { socket, selectedSocketId, serverBots, master } = configurationReducer;
-
-//   return { socket, selectedSocketId, serverBots, master };
-// };
-
-// const mapDispatchToProps = {
-//   updateBotStatus,
-//   getBotBySocketId,
-// };
-
-// export default connect(mapStateToProps, mapDispatchToProps)(BotActionButtons);

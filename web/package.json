@@ -34,7 +34,7 @@
     "minecraft-assets": "^1.9.1",
     "minecraft-data": "^3.31.0",
     "react": "^18.2.0",
-    "react-bootstrap": "^2.7.2",
+    "react-bootstrap": "^2.7.4",
     "react-dom": "^18.2.0",
     "react-redux": "^8.0.5",
     "react-router": "^6.10.0",
@@ -46,10 +46,10 @@
   },
   "devDependencies": {
     "@types/js-cookie": "^3.0.3",
-    "@types/react": "^18.0.33",
+    "@types/react": "^18.0.35",
     "@types/react-dom": "^18.0.11",
     "@vitejs/plugin-react-swc": "^3.3.0",
-    "sass": "^1.61.0",
+    "sass": "^1.62.0",
     "typescript": "^5.0.4",
     "vite": "^4.2.1"
   }

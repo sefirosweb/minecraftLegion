@@ -29,9 +29,7 @@ export const updateBotStatus = (botDataStatus) => (dispatch: Dispatch<BotsAction
     const { botsOnline } = getState().botsReducer
     const botIndex = botsOnline.findIndex((e) => { return e.socketId === botDataStatus.socketId })
 
-    const botsOnlineUpdate = [
-        ...botsOnline
-    ]
+    const botsOnlineUpdate = structuredClone(botsOnline)
     botsOnlineUpdate[botIndex][botDataStatus.type] = botDataStatus.value
 
     dispatch({
