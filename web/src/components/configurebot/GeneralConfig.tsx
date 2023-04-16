@@ -12,7 +12,6 @@ import { Socket } from "socket.io-client";
 
 export const GeneralConfig = () => {
   const bot = useContext(BotSelectedContext);
-  console.log(bot.config.job)
 
   const [itemName, setItemName] = useState("");
   const socket = useGetSocket() as Socket

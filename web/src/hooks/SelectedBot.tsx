@@ -1,19 +1,30 @@
 import RenderBotsOnlineList from '@/components/RenderBotsOnlineList';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { Button, Col, Row } from 'react-bootstrap';
 import { Link, Outlet, useParams } from "react-router-dom";
 import { BotSelectedContext } from '@/utils/BotSelectedContext'
-import useGetSelectedBot from './useGetSelectedBot';
+import { useGetSelectedBot } from '@/hooks/useGetSelectedBot';
+import useGetSocket from './useGetSocket';
 
 export const SelectedBot = () => {
   const { selectedSocketId } = useParams()
-  const [socketId, setSocketId] = useState<string | undefined>(undefined)
+  const socket = useGetSocket()
+  const bot = useGetSelectedBot(selectedSocketId)
 
   useEffect(() => {
-    setSocketId(socketId)
-  }, [selectedSocketId, setSocketId])
+    const interval = setTimeout(() => {
+      if (!socket) return
 
-  const bot = useGetSelectedBot(selectedSocketId)
+      socket.emit("sendAction", {
+        action: "getConfig",
+        socketId: selectedSocketId,
+        value: "",
+      });
+
+    });
+    return (() => clearInterval(interval))
+  }, [selectedSocketId, socket])
+
 
   if (selectedSocketId === undefined || bot === undefined) {
     return (
@@ -42,7 +53,6 @@ export const SelectedBot = () => {
     )
   }
 
-  console.log(bot)
 
   return (
     <BotSelectedContext.Provider value={bot}>

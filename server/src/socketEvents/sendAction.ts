@@ -6,7 +6,7 @@ import { BotsConnected } from "@/types";
 import { Socket } from "socket.io";
 
 export default (socket: Socket) => {
-    const { io, botsConnected, masters, sendMastersOnline, chests, setChests, portals, setPortals } = socketVariables
+    const { io, masters, sendMastersOnline, chests, setChests, portals, setPortals } = socketVariables
 
     socket.on("sendAction", (data) => {
         let bot: BotsConnected | undefined;

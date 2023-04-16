@@ -63,11 +63,9 @@ export const updatePortals = (newPortals) => (dispatch: Dispatch<BotsAction>) =>
 
 export const setConfig = (botConfig) => (dispatch: Dispatch<BotsAction>, getState: () => State) => {
     const { botsOnline } = getState().botsReducer
-    const botIndex = botsOnline.findIndex((e) => { return e.socketId === botConfig.socketId })
+    const botIndex = botsOnline.findIndex((e) => e.socketId === botConfig.socketId)
 
-    const botsOnlineUpdate = [
-        ...botsOnline
-    ]
+    const botsOnlineUpdate = structuredClone(botsOnline)
     botsOnlineUpdate[botIndex].config = botConfig
 
     dispatch({
@@ -76,13 +74,13 @@ export const setConfig = (botConfig) => (dispatch: Dispatch<BotsAction>, getStat
     })
 }
 
-export const getBotBySocketId = (socketId: string) => (dispatch: Dispatch<BotsAction>, getState: () => State) => {
+export const getBotBySocketId = (socketId: string) => (_: Dispatch<BotsAction>, getState: () => State) => {
     const { botsOnline } = getState().botsReducer
-    const bot = botsOnline.find((e) => { return e.socketId === socketId })
+    const bot = botsOnline.find((e) => e.socketId === socketId)
     return bot
 }
 
-export const setCoreConnection = (connected: boolean) => (dispatch: Dispatch<BotsAction>, getState: () => State) => {
+export const setCoreConnection = (connected: boolean) => (dispatch: Dispatch<BotsAction>, _: () => State) => {
     dispatch({
         type: BotsType.SET_CORE_CONNECTION,
         payload: connected

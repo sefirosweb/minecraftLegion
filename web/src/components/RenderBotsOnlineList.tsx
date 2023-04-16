@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux'
 import ProgressBar from 'react-bootstrap/ProgressBar'
 import { State } from '@/state'
 import { useNavigate, useParams } from 'react-router'
+import style from '@/css/RenderBotsOnlineList.module.scss'
 
 const RenderBotsOnlineList = () => {
   const { selectedSocketId } = useParams()
@@ -35,9 +36,17 @@ const RenderBotsOnlineList = () => {
     return (
       botsOnline.map((bot) => {
         return (
-          <li key={bot.socketId} className={`list-group-item ${(bot.combat) ? 'botlistCombat' : 'botlist'}`}>
-            <div className={` ${(bot.combat) ? 'botCombat' : ''}`}>
-              <span className={`pointer ${selectedSocketId === bot.socketId ? 'is-selected' : ''}`} onClick={() => changeSelectedSocketId(bot.socketId)}>{bot.name}</span>
+          <li key={bot.socketId} className={`list-group-item ${style.botlist}`}>
+            <div className={` ${(bot.combat) ? style.botCombat : ''}`}>
+              <span
+                className={`${selectedSocketId === bot.socketId ? style.isSelected : ''}`}
+                style={{
+                  cursor: "pointer"
+                }}
+                onClick={() => changeSelectedSocketId(bot.socketId)}
+              >
+                {bot.name}
+              </span>
               <div>
                 <ProgressBar className='mt-1' variant='danger' now={bot.health / 20 * 100} />
                 <ProgressBar className='mt-1' variant='warning' now={bot.food / 20 * 100} />
