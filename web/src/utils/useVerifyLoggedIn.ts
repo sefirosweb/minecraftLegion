@@ -8,7 +8,7 @@ export const useVerifyLoggedIn = () => {
     const { setLoged } = bindActionCreators(actionCreators, dispatch);
 
     const verifyLoggedIn = async () => {
-        return axios.get('api/login')
+        return axios.get('/api/login')
             .catch((e) => {
                 if (e.response.status === 401 || e.response.data.error === 'Not authenticated') {
                     setLoged(false)

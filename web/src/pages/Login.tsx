@@ -15,7 +15,7 @@ export const Login = () => {
 
     const handleLogin = (e: React.FormEvent) => {
         e.preventDefault()
-        axios.post('api/login', {
+        axios.post('/api/login', {
             password
         })
             .then(() => {
