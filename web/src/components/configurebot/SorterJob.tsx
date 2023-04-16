@@ -1,13 +1,12 @@
 //@ts-nocheck
 import ChestArea from './ChestArea'
 import useGetSocket from '@/hooks/useGetSocket';
-import useGetSelectedBot from '@/hooks/useGetSelectedBot';
+import { BotSelectedContext } from '@/utils/BotSelectedContext'
+import { useContext } from 'react';
 
 export const SorterJob = () => {
+  const botConfig = useContext(BotSelectedContext);
   const socket = useGetSocket()
-  const botConfig = useGetSelectedBot()
-
-  if (botConfig === undefined) { return null }
 
   const handleInsertNewChestArea = () => {
     socket.emit('sendAction', {
@@ -18,7 +17,6 @@ export const SorterJob = () => {
       }
     })
   }
-
 
   const renderChestArea = () => {
     return botConfig.config.chestAreas.map((chestArea, index) => {
@@ -45,16 +43,3 @@ export const SorterJob = () => {
     </>
   )
 }
-
-// const mapStateToProps = (reducers) => {
-//   const { configurationReducer } = reducers
-//   const { socket, selectedSocketId } = configurationReducer
-
-//   return { socket, selectedSocketId }
-// }
-
-// const mapDispatchToProps = {
-//   getBotBySocketId
-// }
-
-// export default connect(mapStateToProps, mapDispatchToProps)(SorterJob)

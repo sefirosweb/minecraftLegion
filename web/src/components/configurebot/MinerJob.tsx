@@ -2,14 +2,13 @@
 import { Col, Form, Row } from 'react-bootstrap'
 import FormCheck from "../forms/FormCheck";
 import HouseXYZ from '@/images/HouseXYZ.png'
-import useGetSelectedBot from '@/hooks/useGetSelectedBot';
 import useGetSocket from '@/hooks/useGetSocket';
+import { BotSelectedContext } from '@/utils/BotSelectedContext'
+import { useContext } from 'react';
 
 export const MinerJob = () => {
+  const botConfig = useContext(BotSelectedContext);
   const socket = useGetSocket()
-  const botConfig = useGetSelectedBot()
-
-  if (botConfig === undefined) { return null }
 
   const handleChangeTunnel = (event) => {
     socket.emit('sendAction', {

@@ -1,17 +1,17 @@
 import { useEffect, useRef } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import RenderBotsOnlineList from '../components/RenderBotsOnlineList'
 import BotActionsButtons from '../components/BotActionsButtons'
 import { Button, Col, Row } from 'react-bootstrap'
 import { useSelector } from "react-redux";
 import { State } from "@/state";
-import useGetSelectedBotSocket from '@/hooks/useGetSelectedBotSocket'
 
 export const Dashboard = () => {
+    const { selectedSocketId } = useParams()
+    console.log({ selectedSocketId })
     const botState = useSelector((state: State) => state.botsReducer);
     const { logs } = botState
 
-    const selectedSocketId = useGetSelectedBotSocket()
     const messagesEndRef = useRef<HTMLDivElement>(null)
 
     useEffect(() => {
@@ -27,7 +27,7 @@ export const Dashboard = () => {
 
                 <Col md={2} className='mb-3'>
                     {selectedSocketId &&
-                        <Link to='/configurebot/generalconfig' style={{ textDecoration: "none", display: "grid" }}>
+                        <Link to={`/configurebot/${selectedSocketId}/generalconfig`} style={{ textDecoration: "none", display: "grid" }}>
                             <Button variant='warning'>
                                 Configure Bot
                             </Button>

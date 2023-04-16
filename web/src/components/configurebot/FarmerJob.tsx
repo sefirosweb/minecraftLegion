@@ -2,11 +2,12 @@
 import { Button, Col, Row } from 'react-bootstrap'
 import HarvestArea from './HarvestArea'
 import useGetSocket from '@/hooks/useGetSocket';
-import useGetSelectedBot from '@/hooks/useGetSelectedBot';
+import { BotSelectedContext } from '@/utils/BotSelectedContext'
+import { useContext } from 'react';
 
 export const FarmerJob = () => {
+  const botConfig = useContext(BotSelectedContext);
   const socket = useGetSocket()
-  const botConfig = useGetSelectedBot()
 
   if (botConfig === undefined) { return null }
 

@@ -41,13 +41,13 @@ export const App = () => {
           <Route element={<Layout />}>
             <Route path="/configuration" element={<Configuration />} />
             <Route path="/" element={<Navigate replace to="/dashboard" />} />
-            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/dashboard/:selectedSocketId?" element={<Dashboard />} />
             <Route path="/masterlist" element={<Masterlist />} />
             <Route path="/chests" element={<Chests />} />
             <Route path="/portals" element={<Portals />} />
 
-            <Route path='/configurebot' element={<SelectedBot />}>
-              <Route path="/configurebot" element={<ConfigureBotLayout />}>
+            <Route path='/configurebot/:selectedSocketId' element={<SelectedBot />}>
+              <Route path="" element={<ConfigureBotLayout />}>
                 <Route path="generalconfig" element={<GeneralConfig />} />
                 <Route path="itemstobeready" element={<ItemsToBeReady />} />
                 <Route path="chests" element={<ConfigurebotChests />} />

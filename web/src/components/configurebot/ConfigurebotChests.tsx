@@ -2,12 +2,13 @@
 import { Button, Col, ListGroup, Row } from "react-bootstrap";
 import FormCheck from '@/components/forms/FormCheck';
 import Chest from './Chest'
-import useGetSelectedBot from "@/hooks/useGetSelectedBot";
 import useGetSocket from "@/hooks/useGetSocket";
+import { useContext } from "react";
+import { BotSelectedContext } from '@/utils/BotSelectedContext'
 
 export const ConfigurebotChests = () => {
+  const botConfig = useContext(BotSelectedContext);
   const socket = useGetSocket()
-  const botConfig = useGetSelectedBot()
 
   if (botConfig === undefined) { return null }
 

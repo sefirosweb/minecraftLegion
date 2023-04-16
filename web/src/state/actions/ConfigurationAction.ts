@@ -11,11 +11,6 @@ interface SetSocketAction {
     payload: InitialState["socket"]
 }
 
-interface SetSelectedSocketidAction {
-    type: ConfigurationType.SET_SELECTED_SOCKETID,
-    payload: InitialState["selectedSocketId"]
-}
-
 interface SetMasterAction {
     type: ConfigurationType.SET_MASTER,
     payload: InitialState["master"]

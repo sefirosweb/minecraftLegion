@@ -1,34 +1,35 @@
-//@ts-nocheck
 import { useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 import ProgressBar from 'react-bootstrap/ProgressBar'
-import { actionCreators, State } from '@/state'
-import { bindActionCreators } from 'redux'
+import { State } from '@/state'
+import { useNavigate, useParams } from 'react-router'
 
 const RenderBotsOnlineList = () => {
-
-  const configurationState = useSelector((state: State) => state.configurationReducer);
-  const { selectedSocketId } = configurationState
+  const { selectedSocketId } = useParams()
 
   const botState = useSelector((state: State) => state.botsReducer);
   const { botsOnline } = botState
-
-  const dispatch = useDispatch();
-  const { setSelectedSocketId } = bindActionCreators(actionCreators, dispatch);
-
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const handleEsc = (event) => {
-      if (event.keyCode === 27) {
-        setSelectedSocketId(undefined)
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        navigate("/dashboard");
       }
     }
-    window.addEventListener('keydown', handleEsc)
+
+    window.addEventListener('keydown', handleKeyDown);
 
     return () => {
-      window.removeEventListener('keydown', handleEsc)
+      window.removeEventListener('keydown', handleKeyDown)
     }
-  }, [setSelectedSocketId])
+  }, [])
+
+  const changeSelectedSocketId = (socketId: string) => {
+    const currentPath = location.pathname;
+    const newPath = !selectedSocketId ? `${currentPath}/${socketId}` : currentPath.replace(selectedSocketId, socketId);
+    navigate(newPath)
+  }
 
   const renderBotList = () => {
     return (
@@ -36,13 +37,13 @@ const RenderBotsOnlineList = () => {
         return (
           <li key={bot.socketId} className={`list-group-item ${(bot.combat) ? 'botlistCombat' : 'botlist'}`}>
             <div className={` ${(bot.combat) ? 'botCombat' : ''}`}>
-              <span className={`pointer ${selectedSocketId === bot.socketId ? 'is-selected' : ''}`} onClick={() => { setSelectedSocketId(bot.socketId) }}>{bot.name}</span>
+              <span className={`pointer ${selectedSocketId === bot.socketId ? 'is-selected' : ''}`} onClick={() => changeSelectedSocketId(bot.socketId)}>{bot.name}</span>
               <div>
                 <ProgressBar className='mt-1' variant='danger' now={bot.health / 20 * 100} />
                 <ProgressBar className='mt-1' variant='warning' now={bot.food / 20 * 100} />
               </div>
             </div>
-          </li>
+          </li >
         )
       })
 
@@ -58,16 +59,3 @@ const RenderBotsOnlineList = () => {
 }
 
 export default RenderBotsOnlineList
-
-// const mapStateToProps = (reducers) => {
-//   const { botsReducer, configurationReducer } = reducers
-//   const { botsOnline } = botsReducer
-//   const { selectedSocketId } = configurationReducer
-//   return { botsOnline, selectedSocketId }
-// }
-
-// const mapDispatchToProps = {
-//   setSelectedSocketId
-// }
-
-// export default connect(mapStateToProps, mapDispatchToProps)(RenderBotsOnlineList)

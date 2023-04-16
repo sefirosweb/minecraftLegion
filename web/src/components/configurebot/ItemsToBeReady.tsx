@@ -1,18 +1,16 @@
 //@ts-nocheck
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import ItemsAviable from './ItemsAviable'
 import TrashIcon from './Icons/Trash'
-import useGetSelectedBot from '@/hooks/useGetSelectedBot'
 import useGetSocket from '@/hooks/useGetSocket'
+import { BotSelectedContext } from '@/utils/BotSelectedContext'
 
 export const ItemsToBeReady = () => {
+  const botConfig = useContext(BotSelectedContext);
   const [itemName, setItemName] = useState('')
   const [quantity, setQuantity] = useState(1)
-  
+
   const socket = useGetSocket()
-  const botConfig = useGetSelectedBot()
-  
-  if (botConfig === undefined) { return null }
 
   const handleQuantityChange = (event) => {
     const value = Number(event.target.value)

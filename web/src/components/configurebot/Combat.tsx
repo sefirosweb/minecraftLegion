@@ -1,11 +1,12 @@
 //@ts-nocheck
+import { useContext } from 'react';
 import { Col, Row } from 'react-bootstrap'
-import useGetSelectedBot from '@/hooks/useGetSelectedBot';
 import useGetSocket from '@/hooks/useGetSocket';
+import { BotSelectedContext } from '@/utils/BotSelectedContext'
 
 export const Combat = () => {
+  const botConfig = useContext(BotSelectedContext);
   const socket = useGetSocket()
-  const botConfig = useGetSelectedBot()
 
   if (botConfig === undefined) { return null }
 

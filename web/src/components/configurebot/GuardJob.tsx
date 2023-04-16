@@ -1,15 +1,16 @@
 //@ts-nocheck
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useSelector } from "react-redux";
 import ArrowUp from "./Icons/ArrowUp";
 import ArrowDown from "./Icons/ArrowDown";
 import TrashIcon from "./Icons/Trash";
 import FormCheck from "../forms/FormCheck";
 import { State } from "@/state";
-import useGetSelectedBot from "@/hooks/useGetSelectedBot";
 import useGetSocket from "@/hooks/useGetSocket";
+import { BotSelectedContext } from '@/utils/BotSelectedContext'
 
 export const GuardJob = () => {
+  const botConfig = useContext(BotSelectedContext);
   const configurationState = useSelector((state: State) => state.configurationReducer);
   const { master } = configurationState
 
@@ -18,11 +19,6 @@ export const GuardJob = () => {
   const [z, setZ] = useState("");
 
   const socket = useGetSocket()
-  const botConfig = useGetSelectedBot()
-
-  if (botConfig === undefined) {
-    return null;
-  }
 
   const changeConfig = (configToChange, value) => {
     socket.emit("sendAction", {

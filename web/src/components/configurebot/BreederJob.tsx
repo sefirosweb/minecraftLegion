@@ -2,15 +2,13 @@
 import { Col, Form, Row } from 'react-bootstrap'
 import FarmArea from './FarmArea'
 import useGetSocket from '@/hooks/useGetSocket';
-import useGetSelectedBot from '@/hooks/useGetSelectedBot';
-import useGetSelectedBotSocket from '@/hooks/useGetSelectedBotSocket';
+import { BotSelectedContext } from '@/utils/BotSelectedContext'
+import { useContext } from 'react';
 
 export const BreederJob = () => {
+  const botConfig = useContext(BotSelectedContext);
   const socket = useGetSocket()
-  const selectedSocketId = useGetSelectedBotSocket()
-  const botConfig = useGetSelectedBot()
-
-  if (botConfig === undefined) { return null }
+  const selectedSocketId = botConfig.socketId
 
   const handleInsertNewFarmArea = () => {
     if (socket) {

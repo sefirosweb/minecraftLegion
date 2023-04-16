@@ -1,5 +1,5 @@
 //@ts-nocheck
-import { useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
 import { Button, Col, Row } from 'react-bootstrap'
 import { Link, NavLink, Outlet } from 'react-router-dom'
 import RenderBotsOnlineList from './../../components/RenderBotsOnlineList'
@@ -7,16 +7,15 @@ import { useDispatch } from "react-redux";
 import { actionCreators, State } from "@/state";
 import { useSelector } from "react-redux";
 import { bindActionCreators } from "redux";
-
+import { BotSelectedContext } from '@/utils/BotSelectedContext'
 
 export const ConfigureBotLayout = () => {
+  const botConfig = useContext(BotSelectedContext);
   const configurationState = useSelector((state: State) => state.configurationReducer);
   const { socket, selectedSocketId } = configurationState
 
   const dispatch = useDispatch();
   const { getBotBySocketId } = bindActionCreators(actionCreators, dispatch);
-
-  const [botName, setBotName] = useState('')
 
   useEffect(() => {
     socket.emit("sendAction", {
@@ -25,7 +24,6 @@ export const ConfigureBotLayout = () => {
       value: "",
     });
 
-    setBotName(getBotBySocketId(selectedSocketId).name)
   }, [selectedSocketId, getBotBySocketId, socket])
 
   const updateReloadButton = () => {
@@ -45,7 +43,7 @@ export const ConfigureBotLayout = () => {
     <>
       <Row className="my-2">
         <Col md={6} lg={7}>
-          <h2>Bot Configuration - {botName ? botName : ''}</h2>
+          <h2>Bot Configuration - {botConfig.name}</h2>
         </Col>
         <Col md={3}>
           <Button as={Link} to='/dashboard' className="mb-1">
@@ -63,17 +61,17 @@ export const ConfigureBotLayout = () => {
           <Row>
             <Col>
               <ul className='nav nav-tabs bg-dark'>
-                <li className='nav-item'><NavLink className='nav-link linkSpan' to='/configurebot/generalconfig'>General Configuration</NavLink></li>
-                <li className='nav-item'><NavLink className='nav-link linkSpan' to='/configurebot/itemstobeready'>Items To Be Ready</NavLink></li>
-                <li className='nav-item'><NavLink className='nav-link linkSpan' to='/configurebot/chests'>Chests</NavLink></li>
-                <li className='nav-item'><NavLink className='nav-link linkSpan' to='/configurebot/combat'>Combat</NavLink></li>
-                <li className='nav-item'><NavLink className='nav-link linkSpan' to='/configurebot/guardjob'>Guard Job</NavLink></li>
-                <li className='nav-item'><NavLink className='nav-link linkSpan' to='/configurebot/minerjob'>Miner Job</NavLink></li>
-                <li className='nav-item'><NavLink className='nav-link linkSpan' to='/configurebot/farmerjob'>Farmer Job</NavLink></li>
-                <li className='nav-item'><NavLink className='nav-link linkSpan' to='/configurebot/breederjob'>Breeder Job</NavLink></li>
-                <li className='nav-item'><NavLink className='nav-link linkSpan' to='/configurebot/sorterjob'>Sorter Job</NavLink></li>
-                <li className='nav-item'><NavLink className='nav-link linkSpan' to='/configurebot/processlist'>Process list</NavLink></li>
-                <li className='nav-item'><NavLink className='nav-link linkSpan' to='/configurebot/full_config'>Full config</NavLink></li>
+                <li className='nav-item'><NavLink className='nav-link linkSpan' to='generalconfig'>General Configuration</NavLink></li>
+                <li className='nav-item'><NavLink className='nav-link linkSpan' to='itemstobeready'>Items To Be Ready</NavLink></li>
+                <li className='nav-item'><NavLink className='nav-link linkSpan' to='chests'>Chests</NavLink></li>
+                <li className='nav-item'><NavLink className='nav-link linkSpan' to='combat'>Combat</NavLink></li>
+                <li className='nav-item'><NavLink className='nav-link linkSpan' to='guardjob'>Guard Job</NavLink></li>
+                <li className='nav-item'><NavLink className='nav-link linkSpan' to='minerjob'>Miner Job</NavLink></li>
+                <li className='nav-item'><NavLink className='nav-link linkSpan' to='farmerjob'>Farmer Job</NavLink></li>
+                <li className='nav-item'><NavLink className='nav-link linkSpan' to='breederjob'>Breeder Job</NavLink></li>
+                <li className='nav-item'><NavLink className='nav-link linkSpan' to='sorterjob'>Sorter Job</NavLink></li>
+                <li className='nav-item'><NavLink className='nav-link linkSpan' to='processlist'>Process list</NavLink></li>
+                <li className='nav-item'><NavLink className='nav-link linkSpan' to='full_config'>Full config</NavLink></li>
               </ul>
             </Col>
           </Row>

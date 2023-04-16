@@ -12,13 +12,6 @@ export const setSocket = (socket: InitialState["socket"]) => (dispatch: Dispatch
     })
 }
 
-export const setSelectedSocketId = (socketId: InitialState["selectedSocketId"]) => (dispatch: Dispatch<ConfiguracionAction>) => {
-    dispatch({
-        type: ConfigurationType.SET_SELECTED_SOCKETID,
-        payload: socketId
-    })
-}
-
 export const updateMaster = (newMaster: InitialState["master"]) => (dispatch: Dispatch<ConfiguracionAction>) => {
     dispatch({
         type: ConfigurationType.SET_MASTER,

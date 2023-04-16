@@ -9,7 +9,6 @@ export type InitialState = {
   webServerSocketPort: number,
   serverBots: string,
   socket: Socket | null,
-  selectedSocketId: string | undefined,
   master: string,
   loged: boolean
 }
@@ -21,7 +20,6 @@ const INITIAL_STATE: InitialState = {
   webServerSocketPort: parseInt(Cookies.get('webServerSocketPort') ?? '4001'),
   serverBots: Cookies.get('serverBots') ?? 'localhost',
   socket: null,
-  selectedSocketId: undefined,
   master: Cookies.get('master') ?? 'PlayerName',
   loged: localStorage.getItem('logedIn') === 'true'
 
@@ -39,12 +37,6 @@ const reducer = (state = INITIAL_STATE, action: ConfiguracionAction) => {
       return {
         ...state,
         socket: action.payload
-      }
-
-    case ConfigurationType.SET_SELECTED_SOCKETID:
-      return {
-        ...state,
-        selectedSocketId: action.payload
       }
 
     case ConfigurationType.SET_MASTER:

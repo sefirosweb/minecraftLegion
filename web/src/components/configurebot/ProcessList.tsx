@@ -1,11 +1,8 @@
-//@ts-nocheck
-
-import useGetSelectedBot from "@/hooks/useGetSelectedBot"
+import { BotSelectedContext } from '@/utils/BotSelectedContext'
+import { useContext } from "react";
 
 export const ProcessList = () => {
-  const botConfig = useGetSelectedBot()
-
-  if (botConfig === undefined) { return null }
+  const botConfig = useContext(BotSelectedContext);
 
   const renderEvents = () => {
     return botConfig.events.map((e, i) => {
@@ -28,16 +25,3 @@ export const ProcessList = () => {
     </>
   )
 }
-
-// const mapStateToProps = (reducers) => {
-//   const { configurationReducer } = reducers
-//   const { socket, selectedSocketId } = configurationReducer
-
-//   return { socket, selectedSocketId }
-// }
-
-// const mapDispatchToProps = {
-//   getBotBySocketId
-// }
-
-// export default connect(mapStateToProps, mapDispatchToProps)(FarmerJob)

@@ -1,36 +1,31 @@
-//@ts-nocheck
-import { Suspense, useState } from "react";
+// @ts-nocheck
+import { Suspense, useContext, useState } from "react";
 import TrashIcon from "./Icons/Trash";
 import ArrowUp from "./Icons/ArrowUp";
 import ArrowDown from "./Icons/ArrowDown";
 import FormCheck from "../forms/FormCheck";
 import Coords from "../forms/Coords";
 import ItemsAviable from "./ItemsAviable";
-import useGetSelectedBot from "@/hooks/useGetSelectedBot";
 import useGetSocket from "@/hooks/useGetSocket";
+import { BotSelectedContext } from '@/utils/BotSelectedContext'
+import { Socket } from "socket.io-client";
 
 export const GeneralConfig = () => {
+  const bot = useContext(BotSelectedContext);
+  console.log(bot.config.job)
+
   const [itemName, setItemName] = useState("");
-  const socket = useGetSocket()
-  const botConfig = useGetSelectedBot()
+  const socket = useGetSocket() as Socket
 
-  if (botConfig === undefined) {
-    return null;
-  }
-
-  const changeConfig = (configToChange, value) => {
+  const changeConfig = (configToChange: string, value: any) => {
     socket.emit("sendAction", {
       action: "changeConfig",
-      socketId: botConfig.socketId,
+      socketId: bot.socketId,
       value: {
         configToChange,
         value,
       },
     });
-  };
-
-  const handleItemChange = (event) => {
-    setItemName(event.target.value);
   };
 
   const handleInsertItem = () => {
@@ -42,7 +37,7 @@ export const GeneralConfig = () => {
   };
 
   const renderItemsTable = () => {
-    return botConfig.config.itemsCanBeEat.map((food, index) => {
+    return bot.config.itemsCanBeEat.map((food, index) => {
       return (
         <tr key={index}>
           <th scope="row">{index + 1}</th>
@@ -78,7 +73,7 @@ export const GeneralConfig = () => {
 
     socket.emit('sendAction', {
       action: 'changeConfig',
-      socketId: botConfig.socketId,
+      socketId: bot.socketId,
       value: {
         configToChange: 'sleepArea',
         value: {
@@ -105,7 +100,7 @@ export const GeneralConfig = () => {
                   name="gridJob"
                   value="none"
                   onChange={handleChangeJob}
-                  checked={botConfig.config.job === "none"}
+                  checked={bot.config.job === "none"}
                 />
                 <label className="form-check-label">None</label>
               </div>
@@ -116,7 +111,7 @@ export const GeneralConfig = () => {
                   name="gridJob"
                   value="miner"
                   onChange={handleChangeJob}
-                  checked={botConfig.config.job === "miner"}
+                  checked={bot.config.job === "miner"}
                 />
                 <label className="form-check-label">Miner</label>
               </div>
@@ -127,7 +122,7 @@ export const GeneralConfig = () => {
                   name="gridJob"
                   value="guard"
                   onChange={handleChangeJob}
-                  checked={botConfig.config.job === "guard"}
+                  checked={bot.config.job === "guard"}
                 />
                 <label className="form-check-label">Guard</label>
               </div>
@@ -138,7 +133,7 @@ export const GeneralConfig = () => {
                   name="gridJob"
                   value="crafter"
                   onChange={handleChangeJob}
-                  checked={botConfig.config.job === "crafter"}
+                  checked={bot.config.job === "crafter"}
                 />
                 <label className="form-check-label">Crafter</label>
               </div>
@@ -151,7 +146,7 @@ export const GeneralConfig = () => {
                   name="gridJob"
                   value="farmer"
                   onChange={handleChangeJob}
-                  checked={botConfig.config.job === "farmer"}
+                  checked={bot.config.job === "farmer"}
                 />
                 <label className="form-check-label">Farmer</label>
               </div>
@@ -162,7 +157,7 @@ export const GeneralConfig = () => {
                   name="gridJob"
                   value="breeder"
                   onChange={handleChangeJob}
-                  checked={botConfig.config.job === "breeder"}
+                  checked={bot.config.job === "breeder"}
                 />
                 <label className="form-check-label">Breeder</label>
               </div>
@@ -173,7 +168,7 @@ export const GeneralConfig = () => {
                   name="gridJob"
                   value="sorter"
                   onChange={handleChangeJob}
-                  checked={botConfig.config.job === "sorter"}
+                  checked={bot.config.job === "sorter"}
                 />
                 <label className="form-check-label">Sorter</label>
               </div>
@@ -183,36 +178,36 @@ export const GeneralConfig = () => {
           <FormCheck
             id={"pickUpItems"}
             onChange={() =>
-              changeConfig("pickUpItems", !botConfig.config.pickUpItems)
+              changeConfig("pickUpItems", !bot.config.pickUpItems)
             }
             label={`Pick up items?`}
-            checked={botConfig.config.pickUpItems}
+            checked={bot.config.pickUpItems}
           />
 
           <FormCheck
             id={"randomFarmArea"}
             onChange={() =>
-              changeConfig("randomFarmArea", !botConfig.config.randomFarmArea)
+              changeConfig("randomFarmArea", !bot.config.randomFarmArea)
             }
             label={`Random Farmer area?`}
-            checked={botConfig.config.randomFarmArea}
+            checked={bot.config.randomFarmArea}
           />
 
           <FormCheck
             id={"canSleep"}
             onChange={() =>
-              changeConfig("canSleep", !botConfig.config.canSleep)
+              changeConfig("canSleep", !bot.config.canSleep)
             }
             label={`Can sleep`}
-            checked={botConfig.config.canSleep}
+            checked={bot.config.canSleep}
           />
 
           <Coords
             label='Coords'
             coords={{
-              x: botConfig.config.sleepArea?.x ?? '',
-              y: botConfig.config.sleepArea?.y ?? '',
-              z: botConfig.config.sleepArea?.z ?? ''
+              x: bot.config.sleepArea?.x ?? '',
+              y: bot.config.sleepArea?.y ?? '',
+              z: bot.config.sleepArea?.z ?? ''
             }}
             onChange={handleChangeSleepArea}
           />
@@ -222,32 +217,32 @@ export const GeneralConfig = () => {
           <FormCheck
             id={"allowSprinting"}
             onChange={() =>
-              changeConfig("allowSprinting", !botConfig.config.allowSprinting)
+              changeConfig("allowSprinting", !bot.config.allowSprinting)
             }
             label={`Allow Sprint`}
-            checked={botConfig.config.allowSprinting}
+            checked={bot.config.allowSprinting}
           />
 
           <FormCheck
             id={"allowScanDigprinting"}
-            onChange={() => changeConfig("canDig", !botConfig.config.canDig)}
+            onChange={() => changeConfig("canDig", !bot.config.canDig)}
             label={
               <>
                 Can dig? <br /> (!) Caution can stuck the bot
               </>
             }
-            checked={botConfig.config.canDig}
+            checked={bot.config.canDig}
           />
 
           <FormCheck
             id={"allowCanPlaceBlocks"}
-            onChange={() => changeConfig("canPlaceBlocks", !botConfig.config.canPlaceBlocks)}
+            onChange={() => changeConfig("canPlaceBlocks", !bot.config.canPlaceBlocks)}
             label={
               <>
                 Can place blosk? <br /> (!) Caution can stuck the bot
               </>
             }
-            checked={botConfig.config.canPlaceBlocks}
+            checked={bot.config.canPlaceBlocks}
           />
 
         </div>
@@ -270,7 +265,7 @@ export const GeneralConfig = () => {
               type="text"
               list="itemsList"
               value={itemName}
-              onChange={handleItemChange}
+              onChange={(e) => setItemName(e.target.value)}
             />
             <datalist id="itemsList">
               <Suspense fallback={

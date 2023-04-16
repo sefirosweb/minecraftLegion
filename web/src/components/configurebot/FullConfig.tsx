@@ -1,19 +1,18 @@
 //@ts-nocheck
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useContext } from 'react'
 import { Button, Col, Form, Row } from 'react-bootstrap'
-import useGetSelectedBotSocket from '@/hooks/useGetSelectedBotSocket';
 import useGetSocket from '@/hooks/useGetSocket';
-import useGetSelectedBot from '@/hooks/useGetSelectedBot';
+import { BotSelectedContext } from '@/utils/BotSelectedContext'
 
 export const FullConfig = () => {
+  const botConfig = useContext(BotSelectedContext);
   const socket = useGetSocket()
-  const selectedSocketId = useGetSelectedBotSocket()
-  const botConfig = useGetSelectedBot()
+  const selectedSocketId = botConfig.socketId
 
   const [jsonText, setJsonText] = useState("")
 
   useEffect(() => {
-    if(botConfig === undefined) return
+    if (botConfig === undefined) return
     const config = { ...botConfig.config }
     delete config.socketId
     setJsonText(JSON.stringify(config, null, 2))
