@@ -6,7 +6,7 @@ import routerPublic from "@/routes/public"
 import { routerLogin } from '@/routes/login'
 import http from 'http'
 import { Server as WebSocketServer } from 'socket.io'
-import { secretToken } from './config'
+import { secretToken, debug } from '@/config'
 import session from 'express-session'
 import SequelizeStoresession from 'connect-session-sequelize';
 import { sequelize } from '@/models/sequalize'
@@ -25,7 +25,10 @@ const sessionMiddleware = session({
 
 export const app = express()
 
-app.use(morgan('dev'))
+if (debug) {
+    app.use(morgan('dev'))
+}
+
 app.use(express.json())
 app.use(cors({
     credentials: true
@@ -36,7 +39,7 @@ app.use(sessionMiddleware);
 
 export const io = new WebSocketServer(httpServer, {
     cors: {
-        origin: ["http://localhost:5173"],
+        origin: ["http://localhost:5173"], // Used for develop
         credentials: true
     }
 });

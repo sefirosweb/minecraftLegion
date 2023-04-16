@@ -1,17 +1,24 @@
 import { useGetSelectedBot } from "@/hooks/useGetSelectedBot";
+import useGetSocket from "@/hooks/useGetSocket";
 import { actionCreators, State } from "@/state";
 import { getPort } from "@/utils/getFreePort";
 import { ChangeEvent, KeyboardEvent, useEffect, useState } from "react";
 import { Button, Col, Row } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate, useParams } from "react-router";
+import { useNavigate } from "react-router";
 import { bindActionCreators } from "redux";
+import { Socket } from "socket.io-client";
 
-const BotActionButtons = () => {
-  const { selectedSocketId } = useParams()
+type Props = {
+  selectedSocketId: string
+}
+
+const BotActionButtons = (props: Props) => {
+  const { selectedSocketId } = props
   const configurationState = useSelector((state: State) => state.configurationReducer);
-  const { socket, serverBots, master } = configurationState
+  const { serverBots, master } = configurationState
   const bot = useGetSelectedBot(selectedSocketId) as Bot
+  const socket = useGetSocket() as Socket
   const navigate = useNavigate();
 
   const dispatch = useDispatch();

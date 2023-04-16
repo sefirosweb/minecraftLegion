@@ -1,16 +1,12 @@
 import io, { Socket } from 'socket.io-client'
-import { botSocket, socketAuth } from "base-types";
+import { botSocket } from "base-types";
 import { webServer, webServerPort, webServerPassword } from '@/config'
 import { startBot } from '@/startBot';
 
-export const verifyLogedIn = () => {
-
-}
-
 const login = (): Promise<string> => {
-    const url = 'http://localhost:4001/api/login';
+    const url = `${webServer}:${webServerPort}/api/login`;
     const credentials = {
-        password: 'admin'
+        password: webServerPassword
     };
 
     return new Promise((resolve) => {
@@ -37,7 +33,6 @@ const login = (): Promise<string> => {
                 }, 3000)
             })
     })
-
 }
 
 const connectSocket = (cookies: string) => {

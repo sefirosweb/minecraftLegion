@@ -75,7 +75,6 @@ Example:
 SERVER=localhost
 PORT=25565
 MASTERS=player1,player2
-FRONT_END_PORT=80
 WEB_SERVER=http://localhost
 WEB_SERVER_PORT=4001
 WEB_SERVER_PASSWORD=admin

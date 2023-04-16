@@ -39,7 +39,6 @@ interface SetBotServerAction {
 export type ConfiguracionAction =
     OnlineServerAction |
     SetSocketAction |
-    SetSelectedSocketidAction |
     SetMasterAction |
     SetSocketServerAction |
     SetSocketServerPortAction |

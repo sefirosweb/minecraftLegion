@@ -56,7 +56,7 @@ export const Dashboard = () => {
                     <Row>
                         <Col xs={12}>
                             {selectedSocketId ?
-                                <BotActionsButtons socketId={selectedSocketId} /> :
+                                <BotActionsButtons selectedSocketId={selectedSocketId} /> :
                                 <div className='pendingSelectBot'>Select any bot for do actions</div>
                             }
                         </Col>
