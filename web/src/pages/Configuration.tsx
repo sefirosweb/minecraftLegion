@@ -8,37 +8,13 @@ import { bindActionCreators } from 'redux'
 export const Configuration = () => {
 
     const configurationState = useSelector((state: State) => state.configurationReducer);
-    const {
-        loged,
-        connected,
-        master,
-        webServerSocketURL,
-        webServerSocketPort,
-        serverBots
-    } = configurationState
+    const { master } = configurationState
 
     const dispatch = useDispatch();
-    const {
-        updateMaster,
-        updateServer,
-        updateServerPort,
-        updateBotServer
-    } = bindActionCreators(actionCreators, dispatch);
+    const { updateMaster, } = bindActionCreators(actionCreators, dispatch);
 
     const handleChangeMaster = (event: React.ChangeEvent<HTMLInputElement>) => {
         updateMaster(event.target.value)
-    }
-
-    const handleChangeWebSocketServer = (event: React.ChangeEvent<HTMLInputElement>) => {
-        updateServer(event.target.value)
-    }
-
-    const handleChangeWebSocketServerPort = (event: React.ChangeEvent<HTMLInputElement>) => {
-        updateServerPort(parseInt(event.target.value))
-    }
-
-    const handleChangeBotServer = (event: React.ChangeEvent<HTMLInputElement>) => {
-        updateBotServer(event.target.value)
     }
 
     return (
@@ -53,39 +29,9 @@ export const Configuration = () => {
                     <Form>
 
                         <Form.Group controlId="handleChangeMaster">
-                            <Form.Label>Master</Form.Label>
+                            <Form.Label>Your name in game</Form.Label>
                             <Form.Control type="text" value={master} onChange={handleChangeMaster} />
                         </Form.Group>
-
-                        <Form.Group controlId="handleChangeWebSocketServer">
-                            <Form.Label>Web Socket Server URL</Form.Label>
-                            <Form.Control type="text" value={webServerSocketURL} onChange={handleChangeWebSocketServer} />
-                        </Form.Group>
-
-                        <Form.Group controlId="handleChangeWebSocketServerPort">
-                            <Form.Label>Web Socket Server Port</Form.Label>
-                            <Form.Control type="text" value={webServerSocketPort} onChange={handleChangeWebSocketServerPort} />
-                        </Form.Group>
-
-                        <Form.Group controlId="handleChangeBotServer">
-                            <Form.Label>Server Bots (Used for connect to Bots Viewers)</Form.Label>
-                            <Form.Control type="text" value={serverBots} onChange={handleChangeBotServer} />
-                        </Form.Group>
-
-                        <div>
-                            Server status:
-                            {connected ?
-                                <span className='color-green'>Online</span> :
-                                <span className='color-red'>Offline</span>
-                            }
-                        </div>
-                        <div>
-                            Login status:
-                            {loged ?
-                                <span className='color-green'>Loged!</span> :
-                                <span className='color-red'>Not loged</span>
-                            }
-                        </div>
 
                     </Form>
                 </Col>

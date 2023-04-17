@@ -1,4 +1,4 @@
-import { debug } from "@/config";
+import { debugMode } from "@/config";
 import { findBotBySocketId } from "@/libs/botStore";
 import { socketVariables } from "@/libs/socketVariables";
 import { sendBotsOnline } from "@/socketEmit/sendBotsOnline";
@@ -11,7 +11,7 @@ export default (socket: Socket) => {
     socket.on("sendAction", (data) => {
         let bot: BotsConnected | undefined;
 
-        if (debug) console.log(data);
+        if (debugMode) console.log(data);
 
         switch (data.action) {
             case "action":

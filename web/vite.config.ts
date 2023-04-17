@@ -6,8 +6,12 @@ import path from 'path'
 export default defineConfig({
   server: {
     proxy: {
-      '/api': 'http://localhost:4001'
-    }
+      '/api': 'http://localhost:4001',
+      '/socket.io': {
+        target: 'http://localhost:4001',
+        ws: true,
+      },
+    },
   },
   plugins: [react()],
   resolve: {

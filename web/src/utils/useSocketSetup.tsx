@@ -1,14 +1,12 @@
-import { State, actionCreators } from '@/state';
+import { actionCreators } from '@/state';
 import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Socket, io } from "socket.io-client";
 import { useVerifyLoggedIn } from './useVerifyLoggedIn';
 
 export const useSocketSetup = () => {
     const dispatch = useDispatch();
-    const configurationState = useSelector((state: State) => state.configurationReducer);
-    const { webServerSocketURL, webServerSocketPort } = configurationState
 
     const verifyLoggedIn = useVerifyLoggedIn()
 
@@ -16,7 +14,6 @@ export const useSocketSetup = () => {
         const {
             setSocket,
             setConfig,
-            setOnlineServer,
             updateMasters,
             updateChests,
             updatePortals,
@@ -28,20 +25,12 @@ export const useSocketSetup = () => {
 
         let tempSocket: Socket | undefined
         const interval = setTimeout(() => {
-            const connectedTo = `${webServerSocketURL}:${webServerSocketPort}`
-            console.log(`Conecting to server ${connectedTo}`);
-
-            const socket = io(connectedTo, {
-                withCredentials: true
-            });
-
+            console.log(`Conecting to server`);
+            const socket = io();
             tempSocket = socket
-
             setSocket(socket);
-
             socket.on("connect", () => {
-                setOnlineServer(true);
-                console.log(`Connected to: ${connectedTo}`);
+                console.log(`Connected to`);
                 socket.emit('isWeb')
             });
 
@@ -59,7 +48,6 @@ export const useSocketSetup = () => {
 
             socket.on("disconnect", () => {
                 console.log("disconnect")
-                setOnlineServer(false);
                 setBots([]);
                 setCoreConnection(false)
             });
@@ -125,5 +113,5 @@ export const useSocketSetup = () => {
             }
         };
 
-    }, [webServerSocketURL, webServerSocketPort])
+    }, [])
 }

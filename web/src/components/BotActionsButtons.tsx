@@ -16,7 +16,7 @@ type Props = {
 const BotActionButtons = (props: Props) => {
   const { selectedSocketId } = props
   const configurationState = useSelector((state: State) => state.configurationReducer);
-  const { serverBots, master } = configurationState
+  const { master } = configurationState
   const bot = useGetSelectedBot(selectedSocketId) as Bot
   const socket = useGetSocket() as Socket
   const navigate = useNavigate();
@@ -63,7 +63,7 @@ const BotActionButtons = (props: Props) => {
       bot.stateMachinePort = port;
       updateBotStatus(bot);
     }
-    window.open(`http://${serverBots}:${port}`, "_blank");
+    window.open(`http://${window.location.hostname}:${port}`, "_blank");
   };
 
   const handleStartInventoryButton = () => {
@@ -80,7 +80,7 @@ const BotActionButtons = (props: Props) => {
       bot.inventoryPort = port;
       updateBotStatus(bot);
     }
-    window.open(`http://${serverBots}:${port}`, "_blank");
+    window.open(`http://${window.location.hostname}:${port}`, "_blank");
   };
 
   const handleStartViewerButton = () => {
@@ -97,7 +97,7 @@ const BotActionButtons = (props: Props) => {
       bot.viewerPort = port;
       updateBotStatus(bot);
     }
-    window.open(`http://${serverBots}:${port}`, "_blank");
+    window.open(`http://${window.location.hostname}:${port}`, "_blank");
   };
 
   const handleSendAction = (type: string, value: string) => {

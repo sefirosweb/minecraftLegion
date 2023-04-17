@@ -18,7 +18,6 @@ const startStateMachine = (bot: Bot) => {
   const botConfig = botConfigLoader(bot.username)
   const { debugMode } = config
   const mcData = mcDataLoader(bot.version)
-  const isInDebug = debugMode || false
 
   // const targets: LegionStateMachineTargets = {
   // aListener: function (object, val) {
@@ -204,7 +203,7 @@ const startStateMachine = (bot: Bot) => {
     bot.emit('customEventMove', position)
   })
 
-  if (isInDebug) { // Only enable on debug mode
+  if (debugMode) { // Only enable on debug mode
 
     bot.on('newListener', () => {
       const events = bot.eventNames()

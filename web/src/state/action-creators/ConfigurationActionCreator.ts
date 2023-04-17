@@ -19,37 +19,9 @@ export const updateMaster = (newMaster: InitialState["master"]) => (dispatch: Di
     })
 }
 
-export const updateServer = (newServer: InitialState["webServerSocketURL"]) => (dispatch: Dispatch<ConfiguracionAction>) => {
-    dispatch({
-        type: ConfigurationType.SET_SOCKET_SERVER,
-        payload: newServer
-    })
-}
-
-export const updateServerPort = (newPort: InitialState["webServerSocketPort"]) => (dispatch: Dispatch<ConfiguracionAction>) => {
-    dispatch({
-        type: ConfigurationType.SET_SOCKET_SERVER_PORT,
-        payload: newPort
-    })
-}
-
 export const setLoged = (loged: InitialState["loged"]) => (dispatch: Dispatch<ConfiguracionAction>) => {
     dispatch({
         type: ConfigurationType.SET_LOGED,
         payload: loged
-    })
-}
-
-export const setOnlineServer = (onlineServer: InitialState["connected"]) => (dispatch: Dispatch<ConfiguracionAction>) => {
-    dispatch({
-        type: ConfigurationType.ONLINE_SERVER,
-        payload: onlineServer
-    })
-}
-
-export const updateBotServer = (newBotServer: InitialState["serverBots"]) => (dispatch: Dispatch<ConfiguracionAction>) => {
-    dispatch({
-        type: ConfigurationType.SET_BOT_SERVER,
-        payload: newBotServer
     })
 }
