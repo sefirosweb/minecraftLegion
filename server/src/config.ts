@@ -1,6 +1,6 @@
 import 'dotenv/config'
 
-type Config = {
+type ConfigEnviorementVariables = {
   listenPort: number
   adminPassword: string
   debugMode: boolean
@@ -16,7 +16,7 @@ export const adminPassword = process.env.WEB_SERVER_PASSWORD
 export const debugMode = process.env.DEBUG_MODE === "true" ? true : false
 export const secretToken = process.env.SECRET_TOKEN
 
-export const config: Config = {
+export const config: ConfigEnviorementVariables = {
   listenPort,
   adminPassword,
   debugMode,

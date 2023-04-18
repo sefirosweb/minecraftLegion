@@ -338,3 +338,82 @@ export interface TestBot extends Bot {
         wait: (ms: number) => Promise<void>
     }
 }
+
+export const defaultConfig: Config = {
+    job: Jobs.none,
+    mode: 'none', // none, pve, pvp
+    distance: 10,
+    helpFriends: false,
+    pickUpItems: false,
+    randomFarmArea: false,
+    canDig: false,
+    canSleep: false,
+    sleepArea: undefined,
+    canPlaceBlocks: false,
+    allowSprinting: false,
+    firstPickUpItemsFromKnownChests: true,
+    canCraftItemWithdrawChest: true,
+    itemsToBeReady: [
+        {
+            name: 'iron_sword',
+            quantity: 1
+        }
+    ],
+    itemsCanBeEat: [
+        'bread',
+        'carrot',
+        'potato',
+        'sweet_berries',
+        'baked_potato',
+        'cooked_chicken',
+        'cooked_porkchop',
+        'cooked_mutton'
+    ],
+    plantAreas: [],
+    chestAreas: [],
+    farmAreas: [],
+    farmAnimalSeconds: 60,
+    farmAnimal: {
+        cow: 10,
+        sheep: 10,
+        wolf: 10,
+        chicken: 10,
+        cat: 10,
+        horse: 10,
+        donkey: 10,
+        llama: 10,
+        pig: 10,
+        rabbit: 10,
+        turtle: 10,
+        panda: 10,
+        fox: 10,
+        bee: 10
+    },
+    minerCords: {
+        orientation: 'x+',
+        tunel: 'horizontally',
+        world: 'overworld',
+        xEnd: 0,
+        xStart: 0,
+        yEnd: 80,
+        yStart: 80,
+        zEnd: 0,
+        zStart: 0,
+        reverse: false
+    },
+    chests: [],
+    patrol: []
+}
+
+export type BotsConnected = {
+    socketId: string,
+    name: string,
+    health: number,
+    food: number,
+    combat: boolean,
+    stateMachinePort?: number,
+    inventoryPort?: number,
+    viewerPort?: number,
+    events: [],
+    config: Config
+}

@@ -2,7 +2,7 @@ import dotenv from 'dotenv'
 
 dotenv.config()
 
-type Config = {
+type ConfigEnviorementVariables = {
   environment: string
   server: string
   port: number
@@ -30,7 +30,7 @@ export const debugMode = process.env.DEBUG_MODE && process.env.DEBUG_MODE === "t
 export const customStart = process.env.CUSTOM_START && process.env.CUSTOM_START === "true" ? true : false
 export const autoRestart = process.env.AUTO_RESTART && process.env.AUTO_RESTART === "true" ? true : false
 
-const config: Config = {
+const config: ConfigEnviorementVariables = {
   environment,
   server,
   port,

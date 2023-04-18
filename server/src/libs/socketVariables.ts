@@ -1,9 +1,8 @@
 import { io } from "@/server"
-import { BotsConnected, Config } from "@/types"
 import { Socket } from "socket.io"
 import { sendMastersOnline } from '@/socketEmit/sendMastersOnline'
 import { findBotBySocket } from '@/libs/botStore'
-import { defaultConfig } from "@/types/types";
+import { defaultConfig, Config, BotsConnected } from "base-types"
 
 export type SocketProps = {
     io: typeof io
