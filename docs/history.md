@@ -1,3 +1,19 @@
+## 2.0.6
+* Changed session system now uses a session based in express
+* Optimize the docker and building systems, now with 1 command can build all application (npm run build) and with 1 command can start all system (npm start)
+* Also added full dockerized system to avoid install dependencies, need use a template of docker-compose
+* Added sqlite databse to improve to store the sessions and bots info
+* Added "basic-types" local repo, now the "types" of typescript is in external dependencie to share the types with the 3 sub projects, to avoid copy the types from between projects
+* Fixed alot of bug of front end, optimized the code and refactorizing to tsx (no fully)
+* Now the configuration is more simply, now no have errors about CORS, all is self executed to avoid this error
+* And more.. but I forgot write here
+
+## 2.0.0
+* Full refact to typescript
+* Added huge test unitaries
+* Unified Web + Server + Core in same repository
+* OPtimized docker system
+
 ## 1.3
 * Add button for clear all positions of Guard
 * Refactorized targets variables and jobs folder (nested jobs functions)

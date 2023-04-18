@@ -1,8 +1,0 @@
-*.log
-.dockerignore
-.git
-.gitignore
-build/*
-Dockerfile
-node_modules
-npm-debug.log*
