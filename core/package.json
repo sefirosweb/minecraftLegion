@@ -19,7 +19,7 @@
     },
     "dependencies": {
         "async": "^3.2.4",
-        "base-types": "file:../base-types",
+        "base-types": "file:../base-types/base-types-1.0.0.tgz",
         "dotenv": "^16.0.3",
         "express": "4.18.2",
         "lowdb": "1.0.0",

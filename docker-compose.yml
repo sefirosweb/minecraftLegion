@@ -1,26 +1,22 @@
 version: "3"
 services:
   app:
-    build:
-      context: .
-      dockerfile: ./docker/Dockerfile
+    image: ghcr.io/sefirosweb/minecraft-legion:latest
     environment:
-      SERVER: host.docker.internal
-      PORT: 25565
-      MASTERS: player1,player2
-      WEB_SERVER_PASSWORD: admin
-      DEBUG_MODE: false
-      CUSTOM_START: false
-      AUTO_RESTART: true
-      ORIGIN_CORS: "*"
-    image: minecraft_legion
-    container_name: minecraft_legion
-    hostname: minecraft_legion
+      SERVER: host.docker.internal # Minecraft Server // "localhost" in reality is host.docker.internal 
+      PORT: 25565 # Minecraft Port
+      MASTERS: player1,player2 # Names of master players, separated with comma
+      WEB_SERVER_PASSWORD: admin # Password to login into front end
+      AUTO_RESTART: true # If bot crashes they auto reload again
+      CUSTOM_START: false # If you want to do some actions before start bot, you can put here your own custom.js file (used for logging into servers)
+      SECRET_TOKEN: input_here_random_text # This token is used to encrypt your session, must be randomnly and dont share it
 
     volumes:
-      - "./botConfig:/app/core/botConfig"
-      - "./custom_start:/app/core/custom_start"
+      - "./botConfig:/app/core/botConfig" # Folder on saved bot configuration
+      - "./custom_start:/app/core/custom_start" # Folder is execute custom start before start bot
+      - "./db:/app/db" # This file stored session info and all bot config
+
 
     ports:
-      - "80:80"
-      - "4001:4001"
+      - "80:80" # Web port
+      - "4500-4550:4500-4550" # Ports used to attach viewers

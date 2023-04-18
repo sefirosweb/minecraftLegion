@@ -11,8 +11,8 @@
     "docker:build": "docker build -t minecraft_server -f ./.devcontainer/Dockerfile .",
     "build": "npm run install_all && npm run build_all",
     "build_all": "node build",
-    "install_all": "npm install && npm install --prefix ./base-types/ && npm install --prefix ./web/ && npm install --prefix ./core/ && npm install --prefix ./server/",
-    "build:docker": "docker build -f docker/Dockerfile --no-cache -t minecraft-legion:latest .",
+    "install_all": "node install",
+    "build:docker": "docker build -f docker/Dockerfile --no-cache -t ghcr.io/sefirosweb/minecraft-legion:latest .",
     "dr": "docker-compose build && docker-compose up"
   },
   "repository": {

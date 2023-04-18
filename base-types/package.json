@@ -1,11 +1,14 @@
 {
   "name": "base-types",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "Types used for MinecraftLegion project",
   "main": "dist/index.js",
   "scripts": {
-    "build": "babel src --extensions \".ts,.js\" --delete-dir-on-start --out-dir dist && tsc"
+    "build": "babel src --extensions \".ts,.js\" --delete-dir-on-start --out-dir dist && tsc && npm pack"
   },
+  "files": [
+    "dist"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/sefirosweb/minecraftLegion.git"

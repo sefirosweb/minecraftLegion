@@ -5,3 +5,4 @@ node_modules/
 test/server_jars/*
 versions/*
 dist/*
+database.sqlite

@@ -82,7 +82,6 @@ DEBUG_MODE=false
 CUSTOM_START=false
 AUTO_RESTART=true
 ENVIRONMENT=prod
-ORIGIN_CORS=*
 ```
 
 4. Start all: `npm start`
@@ -98,21 +97,23 @@ services:
   app:
     image: ghcr.io/sefirosweb/minecraft-legion:latest
     environment:
-      SERVER: localhost # Minecraft Server
+      SERVER: host.docker.internal # Minecraft Server // "localhost" in reality is host.docker.internal 
       PORT: 25565 # Minecraft Port
       MASTERS: player1,player2 # Names of master players, separated with comma
       WEB_SERVER_PASSWORD: admin # Password to login into front end
       AUTO_RESTART: true # If bot crashes they auto reload again
       CUSTOM_START: false # If you want to do some actions before start bot, you can put here your own custom.js file (used for logging into servers)
-      ORIGIN_CORS: "*" # To avoid CORS enter here your public domain
+      SECRET_TOKEN: input_here_random_text # This token is used to encrypt your session, must be randomnly and dont share it
 
     volumes:
-      - "./botConfig:/app/core/botConfig"
-      - "./custom_start:/app/core/custom_start"
+      - "./botConfig:/app/core/botConfig" # Folder on saved bot configuration
+      - "./custom_start:/app/core/custom_start" # Folder is execute custom start before start bot
+      - "./db:/app/db/database.sqlite" # This file stored session info and all bot config
 
     ports:
-      - "80:80"
-      - "4001:4001"
+      - "80:80" # Web port
+      - "4500-4550:4500-4550" # Ports used to attach viewers
+
 
 ```
 ## Need to do actions before start bot?

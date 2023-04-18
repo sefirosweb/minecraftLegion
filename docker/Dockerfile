@@ -2,12 +2,14 @@ FROM node:18-bullseye
 WORKDIR /app
 
 RUN apt-get update && apt-get install -y \
-    supervisor nginx \
+    supervisor \
     && rm -rf /var/lib/apt/lists/*
 
 ENV ENVIRONMENT=prod
 ENV WEB_SERVER=http://localhost
-ENV WEB_SERVER_PORT=4001
+ENV WEB_SERVER_PORT=80
+
+COPY ./base-types/base-types-1.0.0.tgz /app/base-types/base-types-1.0.0.tgz
 
 COPY ./docker/core.sh /app/core.sh
 RUN chmod +x /app/core.sh
@@ -24,8 +26,6 @@ COPY ./server/package-lock.json /app/server/package-lock.json
 RUN npm install --omit=dev --prefix /app/server/
 
 COPY ./docker/supervisord.conf /etc/supervisor/supervisord.conf
-COPY ./docker/default.conf /etc/nginx/sites-available/default
-COPY ./web/dist /usr/share/nginx/html
-
 COPY ./docker/start-container /usr/local/bin/start-container
+
 CMD /bin/bash -c "chmod +x /usr/local/bin/start-container && /usr/local/bin/start-container;"
