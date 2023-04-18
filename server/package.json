@@ -21,7 +21,7 @@
   },
   "homepage": "https://github.com/sefirosweb/minecraftLegionWebServer#readme",
   "dependencies": {
-    "connect-session-sequelize": "^7.1.5",
+    "connect-session-sequelize": "^7.1.6",
     "cors": "^2.8.5",
     "dotenv": "16.0.3",
     "express": "^4.18.2",

@@ -1,6 +1,5 @@
 import { ConfigurationType } from "../action-types";
 import { ConfiguracionAction } from "../actions/";
-import Cookies from 'js-cookie' // TODO poner en local storage en vez de js cookie
 import { Socket } from "socket.io-client";
 
 export type InitialState = {
@@ -11,7 +10,7 @@ export type InitialState = {
 
 const INITIAL_STATE: InitialState = {
   socket: null,
-  master: Cookies.get('master') ?? 'PlayerName',
+  master: localStorage.getItem('master') ?? 'PlayerName',
   loged: localStorage.getItem('logedIn') === 'true'
 }
 
@@ -25,7 +24,7 @@ const reducer = (state = INITIAL_STATE, action: ConfiguracionAction) => {
       }
 
     case ConfigurationType.SET_MASTER:
-      Cookies.set('master', action.payload)
+      localStorage.setItem('master', action.payload);
       return {
         ...state,
         master: action.payload
