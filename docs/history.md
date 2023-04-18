@@ -1,4 +1,4 @@
-## 2.0.6
+## 2.1.0
 * Changed session system now uses a session based in express
 * Optimize the docker and building systems, now with 1 command can build all application (npm run build) and with 1 command can start all system (npm start)
 * Also added full dockerized system to avoid install dependencies, need use a template of docker-compose
