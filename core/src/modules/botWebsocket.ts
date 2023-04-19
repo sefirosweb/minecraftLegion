@@ -30,7 +30,7 @@ const connect = async () => {
 
   socket.on('connect', () => {
     console.log('Bot connected to webserver')
-    socket.emit('isBot', bot.username)
+    emit('isBot', bot.username)
   })
 
   socket.on('disconnect', () => {
@@ -528,14 +528,14 @@ const sendConfig = () => {
   const botconfig = botconfigLoader(bot.username)
   console.log(botconfig.getAll())
 
-  socket.emit('sendAction', {
+  emit('sendAction', {
     action: 'sendConfig',
     value: botconfig.getAll()
   })
 }
 
 const sendAction = (action: string, value: any) => {
-  socket.emit('sendAction', { action, value })
+  emit('sendAction', { action, value })
 }
 
 const emit = (channel: string, data: any) => {

@@ -8,14 +8,13 @@ import inventoryModule from '@/modules/inventoryModule'
 import getClosestEnemy from '@/modules/getClosestEnemy'
 import botWebsocket from '@/modules/botWebsocket'
 import mineflayerPathfinder from 'mineflayer-pathfinder'
-import hawkEye, { GetMasterGrade, Weapons } from 'minecrafthawkeye'
+import { GetMasterGrade, Weapons } from 'minecrafthawkeye'
 import { Bot } from 'mineflayer'
 import { Vec3 } from 'vec3'
 
 function combatFunction(bot: Bot, targets: LegionStateMachineTargets) {
   const inventory = inventoryModule(bot)
   const { ignoreMobs, flyingMobs } = getClosestEnemy(bot, targets)
-  bot.loadPlugin(hawkEye)
 
   const mcData = mcDataLoader(bot.version)
   const movements = new mineflayerPathfinder.Movements(bot, mcData)

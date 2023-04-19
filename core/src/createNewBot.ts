@@ -4,6 +4,7 @@ import customStartLoader from "@/custom_start/custom"
 import botWebsocket from "@/modules/botWebsocket";
 import mcDataLoader from 'minecraft-data'
 import mineflayerPathfinder from 'mineflayer-pathfinder'
+import hawkEye from 'minecrafthawkeye'
 import StartStateMachine from '@/NestedStateModules/startStateMachine'
 
 export type Props = {
@@ -36,6 +37,7 @@ export const createNewBot = (props: Props): Bot => {
   bot.setMaxListeners(0);
   bot.once("inject_allowed", () => {
     bot.loadPlugin(mineflayerPathfinder.pathfinder);
+    bot.loadPlugin(hawkEye)
     const mcData = mcDataLoader(bot.version)
     mcData.blocksArray[826].hardness = 3 // hotfix until wait a final relase
     mcData.blocksArray[274].boundingBox = 'block' // hot fix for cross the portal of the end
