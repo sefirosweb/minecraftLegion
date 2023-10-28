@@ -26,6 +26,7 @@ const refreshChest = (chestToOpen: Block, container: Chest, bot: Bot, targets: L
     if (!chest) {
         const chestOpened: ChestBlock = {
             dimension: bot.game.dimension as Dimension_V2,
+            // @ts-ignore
             slots,
             position: chestToOpen.position,
             position_2: position2,
@@ -38,6 +39,7 @@ const refreshChest = (chestToOpen: Block, container: Chest, bot: Bot, targets: L
 
         chest.position = chestToOpen.position,
             chest.position_2 = position2
+        // @ts-ignore
         chest.slots = slots
         chest.lastTimeOpen = Date.now()
     }

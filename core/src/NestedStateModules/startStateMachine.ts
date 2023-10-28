@@ -2,7 +2,6 @@ import { LegionStateMachineTargets, BotwebsocketAction } from "base-types"
 import { Bot, BotEvents } from "mineflayer"
 import { Vec3 } from "vec3"
 import config from '@/config'
-import mcDataLoader from 'minecraft-data'
 import movementModule from '@/modules/movementModule'
 import botWebsocket from '@/modules/botWebsocket'
 import mineflayerPathfinder from 'mineflayer-pathfinder'
@@ -17,7 +16,6 @@ import inventoryViewer from 'mineflayer-web-inventory'
 const startStateMachine = (bot: Bot) => {
   const botConfig = botConfigLoader(bot.username)
   const { debugMode } = config
-  const mcData = mcDataLoader(bot.version)
 
   // const targets: LegionStateMachineTargets = {
   // aListener: function (object, val) {
@@ -50,7 +48,7 @@ const startStateMachine = (bot: Bot) => {
   // }
   // }
 
-  const movements = new mineflayerPathfinder.Movements(bot, mcData)
+  const movements = new mineflayerPathfinder.Movements(bot)
 
   const targets: LegionStateMachineTargets = {
     config: botConfig.defaultConfig,
@@ -191,7 +189,7 @@ const startStateMachine = (bot: Bot) => {
     checkPortalsOnSpawn()
   })
 
-  bot.on('physicTick', () => {
+  bot.on('physicsTick', () => {
     bot.emit('customEventPhysicTick')
   })
 

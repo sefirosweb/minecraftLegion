@@ -3,7 +3,6 @@ import BehaviorAttack from '@/BehaviorModules/combat/BehaviorAttack'
 import BehaviorLongAttack from '@/BehaviorModules/combat/BehaviorLongAttack'
 import { fakeVec3, LegionStateMachineTargets } from 'base-types'
 import { Entity } from 'prismarine-entity'
-import mcDataLoader from 'minecraft-data'
 import inventoryModule from '@/modules/inventoryModule'
 import getClosestEnemy from '@/modules/getClosestEnemy'
 import botWebsocket from '@/modules/botWebsocket'
@@ -16,10 +15,9 @@ function combatFunction(bot: Bot, targets: LegionStateMachineTargets) {
   const inventory = inventoryModule(bot)
   const { ignoreMobs, flyingMobs } = getClosestEnemy(bot, targets)
 
-  const mcData = mcDataLoader(bot.version)
-  const movements = new mineflayerPathfinder.Movements(bot, mcData)
+  const movements = new mineflayerPathfinder.Movements(bot)
 
-  const movementsForFliyingMobs = new mineflayerPathfinder.Movements(bot, mcData)
+  const movementsForFliyingMobs = new mineflayerPathfinder.Movements(bot)
   movementsForFliyingMobs.canDig = false
   movementsForFliyingMobs.allow1by1towers = false
   movementsForFliyingMobs.scafoldingBlocks = []
@@ -64,20 +62,20 @@ function combatFunction(bot: Bot, targets: LegionStateMachineTargets) {
   let newTargetColdDown = Date.now()
 
   const filter = (e: Entity) =>
-    e.mobType !== undefined &&
-    e.type === 'mob' &&
+    e.displayName !== undefined &&
+    (e.type === 'hostile' || e.kind === 'Hostile mobs') &&
     e.position.distanceTo(bot.entity.position) < 10 &&
-    e.mobType !== 'Armor Stand' &&
+    e.displayName !== 'Armor Stand' &&
     e.kind !== 'Passive mobs' &&
     e.isValid &&
-    !ignoreMobs.includes(e.mobType)
+    !ignoreMobs.includes(e.displayName)
 
   const getGrades = function () {
     // Of other enemies aproax, change target (Ex clipper)
     if (Date.now() - newTargetColdDown > 1000) {
       const entity = bot.nearestEntity(filter)
       if (entity) {
-        botWebsocket.log('Change Target => ' + entity.mobType + ' ' + JSON.stringify(entity.position))
+        botWebsocket.log('Change Target => ' + entity.displayName + ' ' + JSON.stringify(entity.position))
         targets.entity = entity
         newTargetColdDown = Date.now()
       }
@@ -201,7 +199,7 @@ function combatFunction(bot: Bot, targets: LegionStateMachineTargets) {
       child: attack,
       onTransition: () => {
         botWebsocket.emitCombat(true)
-        botWebsocket.log('Start combat ' + targets.entity?.mobType + ' ' + JSON.stringify(targets.entity?.position))
+        botWebsocket.log('Start combat ' + targets.entity?.displayName + ' ' + JSON.stringify(targets.entity?.position))
         startGrades()
       },
       name: 'start -> followMob',
@@ -274,7 +272,7 @@ function combatFunction(bot: Bot, targets: LegionStateMachineTargets) {
           (longRangeAttack.checkBowAndArrow() === false && targets.entity.isValid) ||
           (followMob.distanceToTarget() > rangoBow && targets.entity.isValid) ||
           (followMob.distanceToTarget() < rangeFollowToShortAttack && targets.entity.isValid) ||
-          (targets.entity.mobType === 'Enderman' && targets.entity.isValid) ||
+          (targets.entity.displayName === 'Enderman' && targets.entity.isValid) ||
           (targetGrade === undefined && targets.entity.isValid)
         )
       }

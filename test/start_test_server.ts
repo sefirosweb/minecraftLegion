@@ -23,7 +23,7 @@ const propOverrides = {
 const MC_SERVER_PATH = path.join(__dirname, 'server_jars', 'server')
 
 let PORT = 25565
-const supportedVersion = "1.18.2"
+const supportedVersion = "1.20.1"
 const mcData = mcDataLoader(supportedVersion)
 const version = mcData.version
 const MC_SERVER_JAR_DIR = process.env.MC_SERVER_JAR_DIR || path.join(__dirname, 'server_jars')
@@ -53,7 +53,7 @@ download(version.minecraftVersion, MC_SERVER_JAR, (err: Error) => {
                 console.log('pong')
                 wrap.writeServer('op flatbot\n')
                 wrap.writeServer('op Lordvivi\n')
-            }, 10000);
+                            }, 10000);
         })
     })
 })

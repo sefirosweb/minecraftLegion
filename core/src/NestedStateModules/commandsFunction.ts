@@ -102,7 +102,7 @@ function commandsFunction(bot: Bot, targets: LegionStateMachineTargets) {
 
     const filter = (e: Entity) => e.type === 'player' &&
       e.username === master &&
-      e.mobType !== 'Armor Stand'
+      e.displayName !== 'Armor Stand'
 
     const entity = bot.nearestEntity(filter)
 

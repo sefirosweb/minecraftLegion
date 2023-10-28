@@ -60,7 +60,7 @@ export default class BehaviorFindItems implements StateBehavior {
         !this.isOnFloor ||
         Math.abs(entity.position.y - this.bot.entity.position.y) <= 1
       )) {
-        if (entity.objectType === 'Item' /* || entity.objectType === 'Arrow' */) {
+        if (entity.displayName === 'Item' /* || entity.displayName === 'Arrow' */) {
           entity.distance = disatanceToObject
           itemsFound.push(entity as EntityWithDistance)
         }

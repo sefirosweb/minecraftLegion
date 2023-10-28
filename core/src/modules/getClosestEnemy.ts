@@ -3,7 +3,6 @@
 import { CustomEntity, LegionStateMachineTargets } from 'base-types'
 import botWebsocket from '@/modules/botWebsocket'
 import { Entity } from 'prismarine-entity'
-import mcDataLoader from 'minecraft-data'
 import mineflayerPathfinder from 'mineflayer-pathfinder'
 import { Bot } from 'mineflayer'
 
@@ -40,8 +39,7 @@ const getClosestEnemy = (bot: Bot, targets: LegionStateMachineTargets) => {
     'Wither'
   ]
 
-  const mcData = mcDataLoader(bot.version)
-  const movements = new mineflayerPathfinder.Movements(bot, mcData)
+  const movements = new mineflayerPathfinder.Movements(bot)
   movements.canDig = false
 
   // const movementsForFliyingMobs = new mineflayerPathfinder.Movements(bot, mcData)
@@ -75,9 +73,9 @@ const getClosestEnemy = (bot: Bot, targets: LegionStateMachineTargets) => {
 
   const getValidPath = (entity: Entity) => { // UNUSED FOR A NOW
     if (entity.type === 'mob' && (
-      entity.mobType === 'Phantom' ||
-      entity.mobType === 'Blaze' ||
-      entity.mobType === 'Ender Dragon'
+      entity.displayName === 'Phantom' ||
+      entity.displayName === 'Blaze' ||
+      entity.displayName === 'Ender Dragon'
     )) { return true }
 
     const goal = new mineflayerPathfinder.goals.GoalNear(entity.position.x, entity.position.y, entity.position.z, 2)
@@ -116,11 +114,11 @@ const getClosestEnemy = (bot: Bot, targets: LegionStateMachineTargets) => {
     if (targets.config.mode === 'pvp') {
       if (
         (entity.position.distanceTo(bot.player.entity.position) <= targets.config.distance) &&
-        (entity.type === 'mob' || entity.type === 'player') &&
-        (entity.kind !== 'Passive mobs') &&
-        entity.mobType &&
-        !ignoreMobs.includes(entity.mobType) &&
-        (entity.isValid)
+        (entity.type === 'hostile' || entity.kind === 'Hostile mobs' || entity.type === 'player') &&
+        // entity.kind !== 'Passive mobs' &&
+        entity.displayName &&
+        !ignoreMobs.includes(entity.displayName) &&
+        entity.isValid
       ) {
         const botFriends = botWebsocket.getFriends()
         const bFriend = botFriends.find(b => b.name === entity.username)
@@ -141,11 +139,12 @@ const getClosestEnemy = (bot: Bot, targets: LegionStateMachineTargets) => {
     }
 
     if (targets.config.mode === 'pve') {
+      // console.log(`${entity.displayName} + ${entity.type} + ${entity.kind}`)
       return (entity.position.distanceTo(bot.player.entity.position) <= targets.config.distance) &&
-        (entity.type === 'mob') &&
-        (entity.kind !== 'Passive mobs') &&
-        entity.mobType &&
-        !ignoreMobs.includes(entity.mobType) &&
+        (entity.type === 'hostile' || entity.kind === 'Hostile mobs') &&
+        // (entity.kind !== 'Passive mobs') &&
+        entity.displayName &&
+        !ignoreMobs.includes(entity.displayName) &&
         (entity.isValid)
     }
 

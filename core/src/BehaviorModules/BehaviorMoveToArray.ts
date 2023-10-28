@@ -1,7 +1,6 @@
 import mineflayerPathfinder, { Movements } from 'mineflayer-pathfinder'
 import botWebsocket from '@/modules/botWebsocket'
 import { LegionStateMachineTargets } from 'base-types'
-import mcDataLoader from 'minecraft-data'
 import { Vec3 } from 'vec3'
 import { StateBehavior } from 'mineflayer-statemachine'
 import { Bot } from 'mineflayer'
@@ -9,7 +8,6 @@ import { Bot } from 'mineflayer'
 export default class BehaviorMoveToArray implements StateBehavior {
   readonly bot: Bot
   readonly targets: LegionStateMachineTargets
-  readonly mcData: mcDataLoader.IndexedData
   stateName: string
   x?: number
   y?: number
@@ -37,8 +35,7 @@ export default class BehaviorMoveToArray implements StateBehavior {
     this.endPatrol = false
     this.active = false
 
-    this.mcData = mcDataLoader(bot.version)
-    this.movements = new mineflayerPathfinder.Movements(this.bot, this.mcData)
+    this.movements = new mineflayerPathfinder.Movements(this.bot)
 
     if (this.startNearestPoint === true && this.patrol !== undefined) {
       this.sortPatrol()

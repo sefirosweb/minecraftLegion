@@ -56,6 +56,7 @@ export default class BehaviorcCheckItemsInChest implements StateBehavior {
 
         if (chestIndex) {
 
+          // @ts-ignore
           this.targets.chests[chestIndex[0]].slots = slots
           this.targets.chests[chestIndex[0]].lastTimeOpen = Date.now()
 
@@ -64,6 +65,7 @@ export default class BehaviorcCheckItemsInChest implements StateBehavior {
           const newChest: ChestBlock = {
             dimension: this.bot.game.dimension as Dimension_V2,
             position: chest.position,
+            // @ts-ignore
             slots,
             lastTimeOpen: Date.now()
           }

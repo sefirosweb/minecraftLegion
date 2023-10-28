@@ -158,7 +158,6 @@ const inventoryModule = (bot: Bot) => {
     let block: BlockChest | null | undefined
     let secondBlock: Vec3
     let secondBlockIndex: number
-    let props: Record<string, string | number>
 
     while (block = blocksFound.shift()) {
 
@@ -166,7 +165,7 @@ const inventoryModule = (bot: Bot) => {
         break
       }
 
-      props = block.getProperties()
+      const props = block.getProperties()
       const facing: Facing = props.facing as Facing
       const type: ChestPosition = props.type as ChestPosition
       const offset = getSecondBlockPosition(facing, type)

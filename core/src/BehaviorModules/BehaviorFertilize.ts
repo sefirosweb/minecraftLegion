@@ -57,7 +57,7 @@ export default class BehaviorFertilize implements StateBehavior {
       const targetPosition = new Vec3(this.targets.position.x, this.targets.position.y, this.targets.position.z)
 
       const slotID = this.bot.getEquipmentDestSlot('hand')
-      if (this.bot.inventory.slots[slotID] === null || !this.bot.inventory.slots[slotID].name.includes('hoe')) {
+      if (this.bot.inventory.slots[slotID] === null || !this.bot.inventory.slots[slotID]?.name.includes('hoe')) {
         const hoe = this.bot.inventory.items().find(item => item.name.includes('hoe'))
 
         if (!hoe) {

@@ -214,7 +214,7 @@ const connect = async () => {
         (e) =>
           e.type === 'player' &&
           e.username === value &&
-          e.mobType !== 'Armor Stand'
+          e.displayName !== 'Armor Stand'
       )
       if (!findMaster) {
         return
@@ -258,7 +258,7 @@ const connect = async () => {
         (e) =>
           e.type === 'player' &&
           e.username === value &&
-          e.mobType !== 'Armor Stand'
+          e.displayName !== 'Armor Stand'
       )
       if (!findMaster) {
         return

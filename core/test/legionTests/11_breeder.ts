@@ -92,7 +92,7 @@ describe('11 Breeder animals', function () {
     bot.chat(`/fill -6 -50 6 6 -61 -6 glass hollow`)
     bot.chat(`/fill -5 -61 -5 5 -61 5 sand`)
     bot.chat(`/fill 2 -61 0 2 -58 0 bamboo`)
-    bot.chat(`/gamerule randomTickSpeed 10000`)
+    bot.chat(`/gamerule randomTickSpeed 1000`)
 
     bot.creative.stopFlying()
     bot.test.becomeSurvival()
@@ -110,15 +110,15 @@ describe('11 Breeder animals', function () {
         let owner = ''
 
         if (['cat', 'wolf'].includes(animalToFeed.summon)) {
-          owner = '{Owner:flatbot}'
+          owner = ' {Owner:flatbot}'
         }
 
         if (['horse', 'donkey', 'llama'].includes(animalToFeed.summon)) {
-          owner = '{Tame:1}'
+          owner = ' {Tame:1}'
         }
 
-        bot.chat(`/summon ${animalToFeed.summon} 0 -60 -3 ${owner}`)
-        bot.chat(`/summon ${animalToFeed.summon} 0 -60 3 ${owner}`)
+        bot.chat(`/summon ${animalToFeed.summon} 0 -60 -3${owner}`)
+        bot.chat(`/summon ${animalToFeed.summon} 0 -60 3${owner}`)
 
         const interval = setInterval(() => {
           let finished = false
