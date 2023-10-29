@@ -12,7 +12,7 @@ const propOverrides = {
     'spawn-npcs': 'true',
     'spawn-animals': 'true',
     'online-mode': 'false',
-    gamemode: '1',
+    gamemode: '2',
     'spawn-monsters': 'false',
     'generate-structures': 'false',
     'enable-command-block': 'true',
