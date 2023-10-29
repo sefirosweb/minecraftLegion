@@ -5,6 +5,7 @@ import mineflayerPathfinder from 'mineflayer-pathfinder'
 import { Vec3 } from 'vec3'
 import mcDataLoader from 'minecraft-data'
 import { Bot, Dimension_V2 } from "mineflayer"
+import { lazyFind } from "./lazyFind"
 
 const parseDestination = (origin: Dimension_V2, destination: Dimension_V2): keyof Portals => {
   if (origin === "overworld" && destination === "the_end") {
@@ -28,8 +29,8 @@ const parseDestination = (origin: Dimension_V2, destination: Dimension_V2): keyo
 
 const movementModule = (bot: Bot, targets: LegionStateMachineTargets) => {
   const mcData = mcDataLoader(bot.version)
-  const getNearestPortal = (dimension: Dimension_V2, destination: Vec3WithDimension) => {
-    const portalsFound = findPortals(dimension)
+  const getNearestPortal = async (dimension: Dimension_V2, destination: Vec3WithDimension) => {
+    const portalsFound = await findPortals(dimension)
     const portals: Array<Vec3WithDistance> = compareWithCurrentPortals(portalsFound, dimension)
 
     portals.map(
@@ -71,27 +72,27 @@ const movementModule = (bot: Bot, targets: LegionStateMachineTargets) => {
     return portal
   }
 
-  const checkPortalsOnSpawn = () => {
+  const checkPortalsOnSpawn = async () => {
     let portals: Array<Vec3>
     let dimension: Dimension_V2
     if (bot.game.dimension as Dimension_V2 === 'the_nether') {
       dimension = 'overworld'
-      portals = findPortals(dimension)
+      portals = await findPortals(dimension)
       compareWithCurrentPortals(portals, dimension)
     }
     if (bot.game.dimension as Dimension_V2 === 'the_end') {
       dimension = 'overworld'
-      portals = findPortals(dimension)
+      portals = await findPortals(dimension)
       compareWithCurrentPortals(portals, dimension)
     }
 
     if (bot.game.dimension as Dimension_V2 === 'overworld') {
       dimension = 'the_nether'
-      portals = findPortals(dimension)
+      portals = await findPortals(dimension)
       compareWithCurrentPortals(portals, dimension)
 
       dimension = 'the_end'
-      portals = findPortals(dimension)
+      portals = await findPortals(dimension)
       compareWithCurrentPortals(portals, dimension)
     }
   }
@@ -114,7 +115,8 @@ const movementModule = (bot: Bot, targets: LegionStateMachineTargets) => {
     return currentPortals
   }
 
-  const findPortals = (dimension: Dimension_V2): Array<Vec3> => {
+  const findPortals = async (dimension: Dimension_V2): Promise<Array<Vec3>> => {
+
     let matching: PortalType | undefined
 
     if (
@@ -137,7 +139,9 @@ const movementModule = (bot: Bot, targets: LegionStateMachineTargets) => {
 
     const matchingId = mcData.blocksByName[matching].id
 
-    const blocksFound = bot.findBlocks({
+    const lazy = lazyFind(bot) // https://github.com/PrismarineJS/mineflayer/pull/3218
+
+    const blocksFound = await lazy.findBlocks({
       matching: matchingId,
       maxDistance: 128,
       count: 99
@@ -159,8 +163,8 @@ const movementModule = (bot: Bot, targets: LegionStateMachineTargets) => {
   }
 
   const crossThePortal = (dimension: Dimension_V2, destination: Vec3WithDimension): Promise<void> => {
-    return new Promise((resolve, reject) => {
-      const portal = getNearestPortal(dimension as Dimension_V2, destination)
+    return new Promise(async (resolve, reject) => {
+      const portal = await getNearestPortal(dimension as Dimension_V2, destination)
 
       if (!portal) {
         reject(`Can't find the portal to dimension ${dimension}`)

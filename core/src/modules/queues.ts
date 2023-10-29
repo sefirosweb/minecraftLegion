@@ -2,13 +2,14 @@ import * as async from 'async'
 
 type Task = {
     name?: string,
-    cb: () => void
+    cb: () => Promise<void>
 }
 
 export const webSocketQueue = async.queue((task: Task, callback: () => void) => {
     const { cb } = task
-    cb();
-    callback()
+    cb()
+        .then(callback)
 }, 1);
+
 
 webSocketQueue.pause();

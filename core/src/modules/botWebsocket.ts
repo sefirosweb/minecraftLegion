@@ -541,7 +541,9 @@ const sendAction = (action: string, value: any) => {
 
 const emit = (channel: string, data: any) => {
   webSocketQueue.push({
-    cb: () => socket.emit(channel, data)
+    cb: async () => {
+      socket.emit(channel, data)
+    }
   });
 }
 
@@ -563,13 +565,17 @@ const emitEvents = (events: Array<string>) => {
 
 const log = (data: string) => {
   webSocketQueue.push({
-    cb: () => socket.emit('logs', data)
+    cb: async () => {
+      socket.emit('logs', data)
+    }
   });
 }
 
 const on = (listener: string, cb: (BotwebsocketAction: BotwebsocketAction) => void) => {
   webSocketQueue.push({
-    cb: () => socket.on(listener, cb)
+    cb: async () => {
+      socket.on(listener, cb)
+    }
   });
 }
 
