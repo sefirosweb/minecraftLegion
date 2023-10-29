@@ -65,21 +65,28 @@ describe('12 Cross the portals', function () {
       ],
     }
 
-    botConfig.saveFullConfig(config)
-    bot.emit('reloadBotConfig')
+    bot.once('checkPortalsOnSpawn', async () => {
+      botConfig.saveFullConfig(config)
+      bot.emit('reloadBotConfig')
+    })
+
 
     return new Promise((resolve) => {
-      bot.once('spawn', () => {
-        botConfig.saveFullConfig(botConfig.defaultConfig)
-        bot.emit('reloadBotConfig')
+      bot.once('spawn', async () => {
+        bot.once('checkPortalsOnSpawn', async () => {
 
-        setTimeout(() => {
-          bot.chat(`/execute as flatbot in overworld run teleport 0 -60 0`)
+          botConfig.saveFullConfig(botConfig.defaultConfig)
+          bot.emit('reloadBotConfig')
+
           setTimeout(() => {
-            resolve()
-          }, 2000);
-        }, 2000)
+            bot.chat(`/execute as flatbot in overworld run teleport 0 -60 0`)
+            setTimeout(() => {
+              resolve()
+            }, 2000);
+          }, 2000)
+        })
       })
+
     })
   })
 
@@ -124,20 +131,24 @@ describe('12 Cross the portals', function () {
     }
 
 
-    botConfig.saveFullConfig(config)
-    bot.emit('reloadBotConfig')
+    bot.once('checkPortalsOnSpawn', async () => {
+      botConfig.saveFullConfig(config)
+      bot.emit('reloadBotConfig')
+    })
 
     return new Promise((resolve) => {
       bot.once('spawn', () => {
-        botConfig.saveFullConfig(botConfig.defaultConfig)
-        bot.emit('reloadBotConfig')
+        bot.once('checkPortalsOnSpawn', async () => {
+          botConfig.saveFullConfig(botConfig.defaultConfig)
+          bot.emit('reloadBotConfig')
 
-        setTimeout(() => {
-          bot.chat(`/execute as flatbot in overworld run teleport 0 -60 0`)
           setTimeout(() => {
-            resolve()
-          }, 2000);
-        }, 2000)
+            bot.chat(`/execute as flatbot in overworld run teleport 0 -60 0`)
+            setTimeout(() => {
+              resolve()
+            }, 2000);
+          }, 2000)
+        })
       })
     })
   })

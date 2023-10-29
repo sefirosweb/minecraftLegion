@@ -137,7 +137,7 @@ export const lazyFind = (bot: Bot) => {
             blocks = blocks.slice(0, count)
         }
 
-        console.log(`Found ${blocks.length} blocks in ${performance.now() - microtime}ms`)
+        // console.log(`Found ${blocks.length} blocks in ${performance.now() - microtime}ms`)
         return blocks
     }
 

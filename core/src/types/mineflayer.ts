@@ -6,6 +6,7 @@ declare module 'mineflayer' {
 
     interface BotEvents {
         customEventPhysicTick: () => void
+        checkPortalsOnSpawn: (portals: Array<Vec3>) => void
         reloadBotConfig: () => void
         beatMob: () => void
         finishedJob: () => void

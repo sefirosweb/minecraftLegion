@@ -73,7 +73,7 @@ const movementModule = (bot: Bot, targets: LegionStateMachineTargets) => {
   }
 
   const checkPortalsOnSpawn = async () => {
-    let portals: Array<Vec3>
+    let portals: Array<Vec3> = []
     let dimension: Dimension_V2
     if (bot.game.dimension as Dimension_V2 === 'the_nether') {
       dimension = 'overworld'
@@ -95,6 +95,8 @@ const movementModule = (bot: Bot, targets: LegionStateMachineTargets) => {
       portals = await findPortals(dimension)
       compareWithCurrentPortals(portals, dimension)
     }
+
+    bot.emit('checkPortalsOnSpawn', portals)
   }
 
   const compareWithCurrentPortals = (portals: Array<Vec3>, dimension: Dimension_V2): Array<Vec3> => {
