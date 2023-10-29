@@ -1,3 +1,7 @@
+## 2.1.1
+* Upgrade mineflayer 4.14 and now is compatible with minecraft version 1.20.1
+* Fix some changes to use correct new versions
+
 ## 2.1.0
 * Changed session system now uses a session based in express
 * Optimize the docker and building systems, now with 1 command can build all application (npm run build) and with 1 command can start all system (npm start)
