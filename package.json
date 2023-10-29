@@ -7,7 +7,7 @@
     "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "server": "ts-node test/start_test_server.ts",
-    "server:docker": "docker run --rm -it -p:25565:25565 -v $(pwd):/app/ minecraft_server ts-node /app//test/start_test_server.ts",
+    "server:docker": "docker run --rm -it -p:25565:25565 -v $(pwd):/app/ minecraft_server ts-node /app/test/start_test_server.ts",
     "docker:build": "docker build -t minecraft_server -f ./.devcontainer/Dockerfile .",
     "build": "npm run install_all && npm run build_all",
     "build_all": "node build",

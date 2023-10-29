@@ -108,11 +108,12 @@ services:
     volumes:
       - "./botConfig:/app/core/botConfig" # Folder on saved bot configuration
       - "./custom_start:/app/core/custom_start" # Folder is execute custom start before start bot
-      - "./db:/app/db/database.sqlite" # This file stored session info and all bot config
+      - "./db:/app/db" # This file stored session info and all bot config
 
     ports:
       - "80:80" # Web port
       - "4500-4550:4500-4550" # Ports used to attach viewers
+
 
 
 ```
