@@ -1,5 +1,4 @@
 import { StateTransition, BehaviorIdle, NestedStateMachine, BehaviorFollowEntity } from 'mineflayer-statemachine'
-import mcDataLoader from 'minecraft-data'
 import { DefaultBlockForPlace, Jobs, LegionStateMachineTargets } from 'base-types'
 import movementModule from '@/modules/movementModule'
 import GuardJob from '@/NestedStateModules/guardJob/guardJobFunction'
@@ -12,7 +11,6 @@ import CrafterJobFunction from '@/NestedStateModules/crafterJob/crafterJobFuncti
 import { Bot } from 'mineflayer'
 
 function startWorkFunction(bot: Bot, targets: LegionStateMachineTargets) {
-  const mcData = mcDataLoader(bot.version)
   const { getAllBlocksExceptLeafs } = movementModule(bot, targets)
 
   const start = new BehaviorFollowEntity(bot, targets)
@@ -92,7 +90,7 @@ function startWorkFunction(bot: Bot, targets: LegionStateMachineTargets) {
       parent: loadedConfig,
       child: minerJob,
       onTransition: () => {
-        const blockForPlace = Object.values(mcData.blocksByName)
+        const blockForPlace = Object.values(bot.mcData.blocksByName)
           .filter(b => Object.keys(DefaultBlockForPlace).includes(b.name))
           .filter(a => a.hardness !== null)
           .sort((a, b) => a.hardness! - b.hardness!)

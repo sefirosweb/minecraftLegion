@@ -1,6 +1,5 @@
 
 import { LegionStateMachineTargets } from "base-types"
-import mcDataLoader from 'minecraft-data'
 import botWebsocket from '@/modules/botWebsocket'
 import { Item as PrismarineItem } from 'prismarine-item';
 import { Bot, EquipmentDestination } from "mineflayer";
@@ -10,7 +9,6 @@ export default class BehaviorEquip implements StateBehavior {
   active: boolean;
   readonly bot: Bot
   readonly targets: LegionStateMachineTargets
-  readonly mcData: mcDataLoader.IndexedData
   stateName: string
   x?: number
   y?: number
@@ -25,8 +23,6 @@ export default class BehaviorEquip implements StateBehavior {
     this.bot = bot
     this.targets = targets
     this.stateName = 'BehaviorEquip'
-
-    this.mcData = mcDataLoader(bot.version)
 
     this.isEndFinished = false
     this.wasEquipped = false
@@ -58,7 +54,7 @@ export default class BehaviorEquip implements StateBehavior {
 
   equip(): Promise<void> {
     return new Promise((resolve, reject) => {
-      const itemId = this.mcData.itemsByName[this.targets.item.name].id
+      const itemId = this.bot.mcData.itemsByName[this.targets.item.name].id
 
       if (!this.destination) {
         reject(new Error('Destination not found'))
@@ -108,43 +104,43 @@ export default class BehaviorEquip implements StateBehavior {
 
   isHelmet(item: PrismarineItem) {
     const id = item.type
-    if (id === this.mcData.itemsByName.leather_helmet.id) return true
-    if (id === this.mcData.itemsByName.iron_helmet.id) return true
-    if (id === this.mcData.itemsByName.golden_helmet.id) return true
-    if (id === this.mcData.itemsByName.diamond_helmet.id) return true
-    if (id === this.mcData.itemsByName.turtle_helmet.id) return true
-    if (id === this.mcData.itemsByName.turtle_helmet.id) return true
-    if (id === this.mcData.itemsByName.netherite_helmet.id) return true
+    if (id === this.bot.mcData.itemsByName.leather_helmet.id) return true
+    if (id === this.bot.mcData.itemsByName.iron_helmet.id) return true
+    if (id === this.bot.mcData.itemsByName.golden_helmet.id) return true
+    if (id === this.bot.mcData.itemsByName.diamond_helmet.id) return true
+    if (id === this.bot.mcData.itemsByName.turtle_helmet.id) return true
+    if (id === this.bot.mcData.itemsByName.turtle_helmet.id) return true
+    if (id === this.bot.mcData.itemsByName.netherite_helmet.id) return true
     return false
   }
 
   isChestplate(item: PrismarineItem) {
     const id = item.type
-    if (id === this.mcData.itemsByName.leather_chestplate.id) return true
-    if (id === this.mcData.itemsByName.iron_chestplate.id) return true
-    if (id === this.mcData.itemsByName.golden_chestplate.id) return true
-    if (id === this.mcData.itemsByName.diamond_chestplate.id) return true
-    if (id === this.mcData.itemsByName.netherite_chestplate.id) return true
+    if (id === this.bot.mcData.itemsByName.leather_chestplate.id) return true
+    if (id === this.bot.mcData.itemsByName.iron_chestplate.id) return true
+    if (id === this.bot.mcData.itemsByName.golden_chestplate.id) return true
+    if (id === this.bot.mcData.itemsByName.diamond_chestplate.id) return true
+    if (id === this.bot.mcData.itemsByName.netherite_chestplate.id) return true
     return false
   }
 
   isLeggings(item: PrismarineItem) {
     const id = item.type
-    if (id === this.mcData.itemsByName.leather_leggings.id) return true
-    if (id === this.mcData.itemsByName.iron_leggings.id) return true
-    if (id === this.mcData.itemsByName.golden_leggings.id) return true
-    if (id === this.mcData.itemsByName.diamond_leggings.id) return true
-    if (id === this.mcData.itemsByName.netherite_leggings.id) return true
+    if (id === this.bot.mcData.itemsByName.leather_leggings.id) return true
+    if (id === this.bot.mcData.itemsByName.iron_leggings.id) return true
+    if (id === this.bot.mcData.itemsByName.golden_leggings.id) return true
+    if (id === this.bot.mcData.itemsByName.diamond_leggings.id) return true
+    if (id === this.bot.mcData.itemsByName.netherite_leggings.id) return true
     return false
   }
 
   isBoots(item: PrismarineItem) {
     const id = item.type
-    if (id === this.mcData.itemsByName.leather_boots.id) return true
-    if (id === this.mcData.itemsByName.iron_boots.id) return true
-    if (id === this.mcData.itemsByName.golden_boots.id) return true
-    if (id === this.mcData.itemsByName.diamond_boots.id) return true
-    if (id === this.mcData.itemsByName.netherite_boots.id) return true
+    if (id === this.bot.mcData.itemsByName.leather_boots.id) return true
+    if (id === this.bot.mcData.itemsByName.iron_boots.id) return true
+    if (id === this.bot.mcData.itemsByName.golden_boots.id) return true
+    if (id === this.bot.mcData.itemsByName.diamond_boots.id) return true
+    if (id === this.bot.mcData.itemsByName.netherite_boots.id) return true
     return false
   }
 }

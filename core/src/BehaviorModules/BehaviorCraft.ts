@@ -1,7 +1,6 @@
 
 import { LegionStateMachineTargets } from "base-types"
 import { Block } from 'prismarine-block'
-import mcDataLoader from 'minecraft-data'
 import botWebsocket from '@/modules/botWebsocket'
 import inventoryModule from '@/modules/inventoryModule'
 import { StateBehavior } from "mineflayer-statemachine"
@@ -10,7 +9,6 @@ export default class BehaviorCraft implements StateBehavior {
   active: boolean;
   readonly bot: Bot
   readonly targets: LegionStateMachineTargets
-  readonly mcData: mcDataLoader.IndexedData
   stateName: string
   isEndFinished: boolean
   x?: number
@@ -30,7 +28,6 @@ export default class BehaviorCraft implements StateBehavior {
     this.isEndFinished = false
     this.success = false
     this.craftingTable = null
-    this.mcData = mcDataLoader(bot.version)
     this.inventoryModule = inventoryModule(bot)
   }
 
@@ -78,7 +75,7 @@ export default class BehaviorCraft implements StateBehavior {
       return
     }
 
-    const item = this.mcData.itemsByName[this.targets.craftItem.name]
+    const item = this.bot.mcData.itemsByName[this.targets.craftItem.name]
     const recipe = this.bot.recipesFor(
       item.id,
       null,
@@ -108,7 +105,7 @@ export default class BehaviorCraft implements StateBehavior {
 
   getCraftingTable(): Block | null {
     if (!this.craftingTable) {
-      const craftingTableID = this.mcData.blocksByName.crafting_table.id
+      const craftingTableID = this.bot.mcData.blocksByName.crafting_table.id
       this.craftingTable = this.bot.findBlock({
         matching: craftingTableID,
         maxDistance: 3
@@ -119,7 +116,7 @@ export default class BehaviorCraft implements StateBehavior {
   }
 
   enoughItemsForCraft(name: string) {
-    const item = this.mcData.itemsByName[name]
+    const item = this.bot.mcData.itemsByName[name]
 
     if (!item) {
       botWebsocket.log(`unknown item: ${name}`)

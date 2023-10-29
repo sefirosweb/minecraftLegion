@@ -3,10 +3,8 @@ import { BlockChest, Facing, ChestPosition, Item, ItemArmor } from "base-types"
 import { getSecondBlockPosition } from '@/modules/utils'
 import { Bot, EquipmentDestination, FindBlockOptions } from "mineflayer"
 import { Vec3 } from "vec3"
-import mcDataLoader from 'minecraft-data'
 
 const inventoryModule = (bot: Bot) => {
-  const mcData = mcDataLoader(bot.version)
 
   function countItemsInInventoryOrEquipped(item: string) {
     let currentItems = 0
@@ -138,7 +136,7 @@ const inventoryModule = (bot: Bot) => {
 
   const findChests = (options: Partial<FindBlockOptions> | undefined) => {
     options = options || {}
-    const matching = ['chest', 'ender_chest', 'trapped_chest'].map(name => mcData.blocksByName[name].id)
+    const matching = ['chest', 'ender_chest', 'trapped_chest'].map(name => bot.mcData.blocksByName[name].id)
     const maxDistance = options.maxDistance || 16
     const point = (options.point || bot.entity.position).floored()
     const count = (options.count || 1) * 2

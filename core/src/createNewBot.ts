@@ -41,6 +41,7 @@ export const createNewBot = (props: Props): Bot => {
     const mcData = mcDataLoader(bot.version)
     mcData.blocksArray[826].hardness = 3 // hotfix until wait a final relase
     mcData.blocksArray[274].boundingBox = 'block' // hot fix for cross the portal of the end
+    bot.mcData = mcData
     console.log('\x1b[33m%s\x1b[0m', 'Injected pathfinder');
   });
 

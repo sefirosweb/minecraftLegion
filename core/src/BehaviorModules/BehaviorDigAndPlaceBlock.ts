@@ -6,7 +6,6 @@ import minerModule from '@/modules/minerModule'
 import placeBlockModule from '@/modules/placeBlockModule'
 import inventoryModule from '@/modules/inventoryModule'
 import { Vec3 } from "vec3"
-import mcDataLoader from 'minecraft-data'
 import { StateBehavior } from "mineflayer-statemachine"
 import { Bot } from "mineflayer"
 
@@ -38,7 +37,6 @@ export default class template implements StateBehavior {
   }
 
   blocksCanBeReplaced: Array<string> // TODO CHECK
-  mcData: mcDataLoader.IndexedData
   sidesToPlaceBlock: Array<Vec3>
   outOfBlocks: boolean
   timeLimit?: ReturnType<typeof setTimeout>
@@ -62,8 +60,6 @@ export default class template implements StateBehavior {
     this.getNewPositionForPlaceBlock = getNewPositionForPlaceBlock
     this.getPathToPlace = getPathToPlace
     this.blocksCanBeReplaced = blocksCanBeReplaced
-
-    this.mcData = mcDataLoader(bot.version)
 
     this.isEndFinished = false
     this.sidesToPlaceBlock = []
@@ -124,7 +120,7 @@ export default class template implements StateBehavior {
         id: i.type,
         quantity: 1,
         name: i.name,
-        hardness: this.mcData.blocksByName[i.name].hardness ?? Infinity
+        hardness: this.bot.mcData.blocksByName[i.name].hardness ?? Infinity
       }
     }).sort((a, b) => a.hardness - b.hardness)[0]
 

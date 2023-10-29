@@ -3,7 +3,6 @@ import { LegionStateMachineTargets, Portals, PortalType, Vec3WithDimension, Vec3
 import botWebsocket from '@/modules/botWebsocket'
 import mineflayerPathfinder from 'mineflayer-pathfinder'
 import { Vec3 } from 'vec3'
-import mcDataLoader from 'minecraft-data'
 import { Bot, Dimension_V2 } from "mineflayer"
 import { lazyFind } from "./lazyFind"
 
@@ -28,7 +27,6 @@ const parseDestination = (origin: Dimension_V2, destination: Dimension_V2): keyo
 }
 
 const movementModule = (bot: Bot, targets: LegionStateMachineTargets) => {
-  const mcData = mcDataLoader(bot.version)
   const getNearestPortal = async (dimension: Dimension_V2, destination: Vec3WithDimension) => {
     const portalsFound = await findPortals(dimension)
     const portals: Array<Vec3WithDistance> = compareWithCurrentPortals(portalsFound, dimension)
@@ -139,7 +137,7 @@ const movementModule = (bot: Bot, targets: LegionStateMachineTargets) => {
 
     if (!matching) throw new Error('Portal type not found')
 
-    const matchingId = mcData.blocksByName[matching].id
+    const matchingId = bot.mcData.blocksByName[matching].id
 
     const lazy = lazyFind(bot) // https://github.com/PrismarineJS/mineflayer/pull/3218
 
@@ -218,7 +216,7 @@ const movementModule = (bot: Bot, targets: LegionStateMachineTargets) => {
   }
 
   const getAllBlocksExceptLeafs = () => {
-    return mcData.blocksArray.filter(b => !b.name.includes('leave')).map(b => b.id)
+    return bot.mcData.blocksArray.filter(b => !b.name.includes('leave')).map(b => b.id)
   }
 
   return {

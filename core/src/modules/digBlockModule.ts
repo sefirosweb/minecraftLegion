@@ -2,7 +2,6 @@
 import { CustomItem } from "base-types"
 import { Vec3 } from "vec3"
 import { Block } from 'prismarine-block'
-import mcDataLoader from 'minecraft-data'
 import { Item } from 'prismarine-item';
 import { Bot } from "mineflayer";
 
@@ -59,13 +58,12 @@ const digBlockModule = (bot: Bot) => {
 
   const getBestTool = (block: Block): Item | undefined => {
     const items = bot.inventory.items() as Array<CustomItem>
-    const mcData = mcDataLoader(bot.version)
 
     if (!block.material) {
       return undefined
     }
 
-    const toolsForMaterial = mcData.materials[block.material]
+    const toolsForMaterial = bot.mcData.materials[block.material]
 
     if (toolsForMaterial === undefined) {
       return undefined

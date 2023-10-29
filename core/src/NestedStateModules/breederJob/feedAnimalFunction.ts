@@ -4,12 +4,9 @@ import BehaviorEquip from '@/BehaviorModules/BehaviorEquip'
 import BehaviorInteractEntity from '@/BehaviorModules/BehaviorInteractEntity'
 import { isAnimal } from '@/modules/animalType'
 import { LegionStateMachineTargets, animals as animalType } from 'base-types'
-import mcDataLoader from 'minecraft-data'
 import { Bot } from 'mineflayer';
 
 function feedAnimalFunction(bot: Bot, targets: LegionStateMachineTargets) {
-  const mcData = mcDataLoader(bot.version)
-
   const start = new BehaviorIdle()
   start.stateName = 'Start'
   start.x = 125
@@ -50,7 +47,7 @@ function feedAnimalFunction(bot: Bot, targets: LegionStateMachineTargets) {
         }
 
         if (validFood) {
-          targets.item = mcData.itemsByName[validFood.name]
+          targets.item = bot.mcData.itemsByName[validFood.name]
         } else {
           targets.item = null
         }

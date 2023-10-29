@@ -3,15 +3,12 @@ import { StateTransition, BehaviorIdle, NestedStateMachine } from 'mineflayer-st
 import BehaviorGetPlayer from '@/BehaviorModules/BehaviorGetPlayer'
 import botWebsocket from '@/modules/botWebsocket'
 import BehaviorLoadConfig from '@/BehaviorModules/BehaviorLoadConfig'
-import mcDataLoader from 'minecraft-data'
 import StartWork from '@/NestedStateModules/startWorkFunction'
 import Commands from '@/NestedStateModules/commandsFunction'
 import GoSleep from '@/NestedStateModules/goSleepFunction'
 import { Bot } from 'mineflayer'
 
 function deathFunction(bot: Bot, targets: LegionStateMachineTargets) {
-  const mcData = mcDataLoader(bot.version)
-
   const start = new BehaviorIdle()
   start.stateName = 'Start'
   start.x = 125
@@ -109,10 +106,10 @@ function deathFunction(bot: Bot, targets: LegionStateMachineTargets) {
         targets.movements.canDig = targets.config.canDig
         targets.movements.allow1by1towers = targets.config.canPlaceBlocks
         targets.movements.scafoldingBlocks = targets.config.canPlaceBlocks ? targets.movements.scafoldingBlocks : []
-        targets.movements.blocksToAvoid.delete(mcData.blocksByName.wheat.id)
-        targets.movements.blocksToAvoid.add(mcData.blocksByName.sweet_berry_bush.id)
-        targets.movements.blocksCantBreak.add(mcData.blocksByName.sweet_berry_bush.id)
-        targets.movements.blocksCantBreak.add(mcData.blocksByName.cactus.id)
+        targets.movements.blocksToAvoid.delete(bot.mcData.blocksByName.wheat.id)
+        targets.movements.blocksToAvoid.add(bot.mcData.blocksByName.sweet_berry_bush.id)
+        targets.movements.blocksCantBreak.add(bot.mcData.blocksByName.sweet_berry_bush.id)
+        targets.movements.blocksCantBreak.add(bot.mcData.blocksByName.cactus.id)
       },
       shouldTransition: () => true
     }),

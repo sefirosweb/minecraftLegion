@@ -1,6 +1,5 @@
 import { Entity } from 'prismarine-entity'
 import { sleep } from '@/modules/utils'
-import mcDataLoader from 'minecraft-data'
 import mineflayerPathfinder from 'mineflayer-pathfinder'
 import { Bot } from 'mineflayer'
 
@@ -33,10 +32,9 @@ const custom = (bot: Bot) => {
   }
 
   const goPosition = (): Promise<void> => {
-    const mcData = mcDataLoader(bot.version)
     const { pathfinder, Movements, goals } = mineflayerPathfinder
     bot.loadPlugin(pathfinder)
-    bot.pathfinder.setMovements(new Movements(bot, mcData))
+    bot.pathfinder.setMovements(new Movements(bot))
     bot.pathfinder.setGoal(new goals.GoalBlock(37, 51, 11))
 
     return new Promise((resolve) => {

@@ -1,8 +1,14 @@
 import 'mineflayer'
 import { Vec3 } from "vec3";
+import mcDataLoader from 'minecraft-data'
+
 declare module 'mineflayer' {
 
     export type Dimension_V2 = 'overworld' | 'the_end' | 'the_nether'
+
+    interface Bot {
+        mcData: mcDataLoader.IndexedData
+    }
 
     interface BotEvents {
         customEventPhysicTick: () => void

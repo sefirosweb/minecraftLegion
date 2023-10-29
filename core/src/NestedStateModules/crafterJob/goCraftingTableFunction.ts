@@ -6,12 +6,9 @@ import {
 import BehaviorMoveTo from '@/BehaviorModules/BehaviorMoveTo'
 import { LegionStateMachineTargets } from 'base-types'
 import { Block } from 'prismarine-block'
-import mcDataLoader from 'minecraft-data'
 import { Bot } from 'mineflayer'
 
 function goCraftingTableFunction(bot: Bot, targets: LegionStateMachineTargets) {
-  const mcData = mcDataLoader(bot.version)
-
   const start = new BehaviorIdle()
   start.stateName = 'Start'
   start.x = 125
@@ -40,7 +37,7 @@ function goCraftingTableFunction(bot: Bot, targets: LegionStateMachineTargets) {
       parent: start,
       child: checkCraftingTable,
       onTransition: () => {
-        const craftingTableID = mcData.blocksByName.crafting_table.id
+        const craftingTableID = bot.mcData.blocksByName.crafting_table.id
         craftingTable = bot.findBlock({
           matching: craftingTableID,
           maxDistance: 15

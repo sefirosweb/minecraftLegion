@@ -3,7 +3,6 @@ import sorterJob from '@/modules/sorterJob'
 import inventoryModule from '@/modules/inventoryModule'
 import { Item as ItemMC } from "minecraft-data"
 import { Block } from "prismarine-block"
-import mcDataLoader from 'minecraft-data'
 import _ from 'lodash'
 import { Bot } from "mineflayer"
 
@@ -54,7 +53,6 @@ type GetItemsToPickUpRecursive = {
 }
 
 const craftModule = (bot: Bot) => {
-  const mcData = mcDataLoader(bot.version)
   const { getResumeInventory } = inventoryModule(bot)
   const { findItemsInChests } = sorterJob()
 
@@ -70,13 +68,13 @@ const craftModule = (bot: Bot) => {
       recipe.delta.forEach(itemsInRecipe => {
         if (itemsInRecipe.count > 0) {
           result = { // Item returned
-            name: mcData.items[itemsInRecipe.id].name,
+            name: bot.mcData.items[itemsInRecipe.id].name,
             id: itemsInRecipe.id,
             quantity: Math.abs(itemsInRecipe.count)
           }
         } else {
           const itemToAdd: ItemRecipe = {
-            name: mcData.items[itemsInRecipe.id].name,
+            name: bot.mcData.items[itemsInRecipe.id].name,
             id: itemsInRecipe.id,
             quantity: Math.abs(itemsInRecipe.count)
           }
@@ -112,7 +110,7 @@ const craftModule = (bot: Bot) => {
 
       for (let i = 0; i < recipes[r].items.length; i++) {
         const idItem = recipes[r].items[i].id
-        subItem = mcData.items[idItem]
+        subItem = bot.mcData.items[idItem]
         if (subItem && previousItem && subItem.id === previousItem.id) {
           itemsToRemove.push(r)
           continue
@@ -135,13 +133,13 @@ const craftModule = (bot: Bot) => {
   }
 
   const getFullTreeCraftToItem = (itemName: string): Array<Recpie> => {
-    const item = mcData.itemsByName[itemName]
+    const item = bot.mcData.itemsByName[itemName]
     const craftingTable = getCraftingTable()
     return recursiveRecipes(item, craftingTable, undefined)
   }
 
   const getCraftingTable = (): Block | null => {
-    const craftingTableID = mcData.blocksByName.crafting_table.id
+    const craftingTableID = bot.mcData.blocksByName.crafting_table.id
     const craftingTable = bot.findBlock({
       matching: craftingTableID,
       maxDistance: 3
