@@ -24,6 +24,7 @@ const connect = async () => {
   const botconfig = botconfigLoader(bot.username)
 
   socket = await connectBotToServer()
+  if (!socket) return
   socket.on('update', (data) => console.log(data))
   socket.on('connect_error', (data) => console.log(data))
   socket.on('connect_failed', (data) => console.log(data))

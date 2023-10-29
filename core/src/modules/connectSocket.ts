@@ -4,12 +4,18 @@ import { webServer, webServerPort, webServerPassword } from '@/config'
 import { startBot } from '@/startBot';
 
 const login = (): Promise<string> => {
+    if (!webServer || !webServerPort || !webServerPassword) {
+        return Promise.reject('Webserver not configured!')
+    }
+
     const url = `${webServer}:${webServerPort}/api/login`;
     const credentials = {
         password: webServerPassword
     };
 
     return new Promise((resolve) => {
+        console.log({ credentials })
+        console.log({ url })
         fetch(url, {
             method: 'POST',
             body: JSON.stringify(credentials),
@@ -66,6 +72,10 @@ export const connectCore = () => {
                 startBot(data.botName, data.botPassword);
             });
         })
+        .catch((err) => {
+            console.log(err);
+        });
+
 }
 
 export const connectBotToServer = (): Promise<Socket> => {
@@ -73,5 +83,8 @@ export const connectBotToServer = (): Promise<Socket> => {
         login()
             .then((cookie) => connectSocket(cookie))
             .then((socket) => resolve(socket))
+            .catch((err) => {
+                console.log(err);
+            });
     })
 }
