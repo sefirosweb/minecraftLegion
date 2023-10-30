@@ -1,4 +1,3 @@
-//@ts-nocheck
 import { useContext, useState } from "react";
 import { useSelector } from "react-redux";
 import ArrowUp from "./Icons/ArrowUp";
@@ -6,8 +5,8 @@ import ArrowDown from "./Icons/ArrowDown";
 import TrashIcon from "./Icons/Trash";
 import FormCheck from "../forms/FormCheck";
 import { State } from "@/state";
-import useGetSocket from "@/hooks/useGetSocket";
 import { BotSelectedContext } from '@/utils/BotSelectedContext'
+import { useChangeConfig } from "@/hooks/useChangeConfig";
 
 export const GuardJob = () => {
   const botConfig = useContext(BotSelectedContext);
@@ -18,20 +17,10 @@ export const GuardJob = () => {
   const [y, setY] = useState("");
   const [z, setZ] = useState("");
 
-  const socket = useGetSocket()
+  const sendConfig = useChangeConfig()
 
-  const changeConfig = (configToChange, value) => {
-    socket.emit("sendAction", {
-      action: "changeConfig",
-      socketId: botConfig.socketId,
-      value: {
-        configToChange,
-        value,
-      },
-    });
-  };
+  const changePos = (event: React.ChangeEvent<HTMLInputElement>) => {
 
-  const changePos = (event) => {
     const value = Number(event.target.value);
     if (!Number.isInteger(value) && event.target.value !== "-") {
       return null;
@@ -51,6 +40,7 @@ export const GuardJob = () => {
         return null;
     }
   };
+
   const insertPost = () => {
     if (
       !Number.isInteger(Number(x)) ||
@@ -60,7 +50,7 @@ export const GuardJob = () => {
       return null;
     }
 
-    changeConfig("addPatrol", {
+    sendConfig("addPatrol", {
       x: Number(x),
       y: Number(y),
       z: Number(z),
@@ -68,19 +58,20 @@ export const GuardJob = () => {
   };
 
   const handleRemovePos = (index) => {
-    changeConfig("removePatrol", index);
+    sendConfig("removePatrol", index);
   };
 
   const handleMovePosNext = (index) => {
-    changeConfig("movePatrolNext", index);
+    sendConfig("movePatrolNext", index);
   };
 
   const handleMovePosPrev = (index) => {
-    changeConfig("movePatrolPrev", index);
+    sendConfig("movePatrolPrev", index);
   };
 
   const handleButtonSavePositionHasMaster = () => {
-    changeConfig("savePositionHasMaster", master);
+
+    sendConfig("savePositionHasMaster", master);
   };
 
   const renderPatrolTable = () => {
@@ -96,11 +87,11 @@ export const GuardJob = () => {
             Z:{pos.z}
           </td>
           <td>
-            <ArrowUp onClick={handleMovePosPrev.bind(this, index)} />{" "}
-            <ArrowDown onClick={handleMovePosNext.bind(this, index)} />
+            <ArrowUp onClick={() => handleMovePosPrev(index)} />{" "}
+            <ArrowDown onClick={() => handleMovePosPrev(index)} />
           </td>
           <td>
-            <TrashIcon onClick={handleRemovePos.bind(this, index)} />
+            <TrashIcon onClick={() => handleRemovePos(index)} />
           </td>
         </tr>
       );
@@ -109,11 +100,11 @@ export const GuardJob = () => {
 
 
   const handleButtonClearPositions = () => {
-    changeConfig("clearAllPositions");
+    sendConfig("clearAllPositions");
   };
 
   const copyPatrol = () => {
-    changeConfig("copyPatrol", master);
+    sendConfig("copyPatrol", master);
   };
 
   return (
@@ -123,7 +114,7 @@ export const GuardJob = () => {
           <FormCheck
             id={"helpFriends"}
             onChange={() =>
-              changeConfig("helpFriends", !botConfig.config.helpFriends)
+              sendConfig("helpFriends", !botConfig.config.helpFriends)
             }
             label={`Help Friend?`}
             checked={botConfig.config.helpFriends}

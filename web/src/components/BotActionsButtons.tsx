@@ -1,5 +1,5 @@
 import { useGetSelectedBot } from "@/hooks/useGetSelectedBot";
-import useGetSocket from "@/hooks/useGetSocket";
+import { useSendActionSocket } from "@/hooks/useSendActionSocket";
 import { actionCreators, State } from "@/state";
 import { getPort } from "@/utils/getFreePort";
 import { ChangeEvent, KeyboardEvent, useEffect, useState } from "react";
@@ -7,7 +7,6 @@ import { Button, Col, Row } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 import { bindActionCreators } from "redux";
-import { Socket } from "socket.io-client";
 
 type Props = {
   selectedSocketId: string
@@ -18,8 +17,8 @@ const BotActionButtons = (props: Props) => {
   const configurationState = useSelector((state: State) => state.configurationReducer);
   const { master } = configurationState
   const bot = useGetSelectedBot(selectedSocketId) as Bot
-  const socket = useGetSocket() as Socket
   const navigate = useNavigate();
+  const sendAction = useSendActionSocket()
 
   const dispatch = useDispatch();
   const { updateBotStatus } = bindActionCreators(actionCreators, dispatch);
@@ -42,24 +41,18 @@ const BotActionButtons = (props: Props) => {
   };
 
   const handleDisconnectButton = () => {
-    socket.emit("sendAction", {
-      socketId: selectedSocketId,
-      action: "sendDisconnect",
-      value: "Disconnect Bot",
-    });
+    sendAction('sendDisconnect', 'Disconnect Bot')
   };
 
   const handleStartStateMachineButton = () => {
     let port = bot.stateMachinePort
     if (!port) {
       port = getPort()
-      socket.emit("sendAction", {
-        action: "startStateMachine",
-        socketId: selectedSocketId,
-        value: {
-          port,
-        },
-      });
+
+      sendAction('startStateMachine', {
+        port,
+      })
+
       bot.stateMachinePort = port;
       updateBotStatus(bot);
     }
@@ -70,13 +63,12 @@ const BotActionButtons = (props: Props) => {
     let port = bot.inventoryPort
     if (!port) {
       port = getPort()
-      socket.emit("sendAction", {
-        action: "startInventory",
-        socketId: selectedSocketId,
-        value: {
-          port,
-        },
-      });
+
+      sendAction('startInventory', {
+        port
+      })
+
+
       bot.inventoryPort = port;
       updateBotStatus(bot);
     }
@@ -87,13 +79,11 @@ const BotActionButtons = (props: Props) => {
     let port = bot.viewerPort
     if (!port) {
       port = getPort()
-      socket.emit("sendAction", {
-        action: "startViewer",
-        socketId: selectedSocketId,
-        value: {
-          port,
-        },
-      });
+
+      sendAction('startViewer', {
+        port
+      })
+
       bot.viewerPort = port;
       updateBotStatus(bot);
     }
@@ -101,14 +91,10 @@ const BotActionButtons = (props: Props) => {
   };
 
   const handleSendAction = (type: string, value: string) => {
-    socket.emit("sendAction", {
-      action: "action",
-      socketId: selectedSocketId,
-      toBotData: {
-        type: type,
-        value: value,
-      },
-    });
+    sendAction('action', {
+      type: type,
+      value: value,
+    })
   };
 
   useEffect(() => {

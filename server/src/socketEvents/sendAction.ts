@@ -2,7 +2,7 @@ import { debugMode } from "@/config";
 import { findBotBySocketId } from "@/libs/botStore";
 import { socketVariables } from "@/libs/socketVariables";
 import { sendBotsOnline } from "@/socketEmit/sendBotsOnline";
-import { BotsConnected } from "@/types";
+import { BotsConnected } from "base-types"
 import { Socket } from "socket.io";
 
 export default (socket: Socket) => {
@@ -15,7 +15,7 @@ export default (socket: Socket) => {
 
         switch (data.action) {
             case "action":
-                io.to(data.socketId).emit("action", data.toBotData);
+                io.to(data.socketId).emit("action", data.value);
                 break;
 
             case "startStateMachine":

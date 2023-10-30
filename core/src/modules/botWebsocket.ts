@@ -525,9 +525,7 @@ const connect = async () => {
 }
 
 const sendConfig = () => {
-  console.log('Sending back')
   const botconfig = botconfigLoader(bot.username)
-  console.log(botconfig.getAll())
 
   emit('sendAction', {
     action: 'sendConfig',

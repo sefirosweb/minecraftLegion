@@ -3,25 +3,18 @@ import { useContext } from "react";
 import { Button, Col, Row } from 'react-bootstrap'
 import { Link, NavLink, Outlet } from 'react-router-dom'
 import RenderBotsOnlineList from './../../components/RenderBotsOnlineList'
-import { useSelector } from "react-redux";
 import { BotSelectedContext } from '@/utils/BotSelectedContext'
+import { useSendActionSocket } from "@/hooks/useSendActionSocket";
 
 export const ConfigureBotLayout = () => {
   const botConfig = useContext(BotSelectedContext);
-  const configurationState = useSelector((state: State) => state.configurationReducer);
-  const { socket } = configurationState
+  const sendAction = useSendActionSocket()
 
   const updateReloadButton = () => {
-    if (socket) {
-      socket.emit("sendAction", {
-        action: "action",
-        socketId: selectedSocketId,
-        toBotData: {
-          type: "reloadConfig",
-          value: "",
-        },
-      });
-    }
+    sendAction('action', {
+      type: "reloadConfig",
+      value: "",
+    })
   }
 
   return (
