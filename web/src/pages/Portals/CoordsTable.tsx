@@ -1,5 +1,6 @@
 import React from 'react'
 import { Table } from 'react-bootstrap'
+import { Coords } from '@/types'
 
 type Props = {
     positions: Array<Coords>
@@ -7,8 +8,6 @@ type Props = {
 
 const CoordsTable: React.FC<Props> = (props) => {
     const { positions } = props
-
-    console.log({ positions })
 
     return (
         <Table striped bordered hover>
@@ -22,7 +21,7 @@ const CoordsTable: React.FC<Props> = (props) => {
             </thead>
             <tbody>
                 {
-                    positions.map((p, index) =>
+                    positions?.map((p, index) =>
                         <tr key={index}>
                             <td>{index}</td>
                             <td>{p.x}</td>
