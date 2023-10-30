@@ -1,5 +1,6 @@
-import { BotsType } from "../action-types";
-import { BotsAction } from "../actions/";
+import { BotsType } from "@/state/action-types";
+import { BotsAction } from "@/state/actions/";
+import { Bot } from "@/types";
 
 export type InitialState = {
   logs: Array<{

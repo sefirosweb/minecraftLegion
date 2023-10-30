@@ -1,5 +1,5 @@
-import { ConfigurationType } from "../action-types";
-import { InitialState } from "../reducers/configurationReducer";
+import { ConfigurationType } from "@/state/action-types";
+import { InitialState } from "@/state/reducers/configurationReducer";
 interface SetSocketAction {
     type: ConfigurationType.SET_SOCKET,
     payload: InitialState["socket"]

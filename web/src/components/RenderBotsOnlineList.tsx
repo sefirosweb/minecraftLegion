@@ -5,7 +5,7 @@ import { State } from '@/state'
 import { useNavigate, useParams } from 'react-router'
 import style from '@/css/RenderBotsOnlineList.module.scss'
 
-const RenderBotsOnlineList = () => {
+export const RenderBotsOnlineList: React.FC = () => {
   const { selectedSocketId } = useParams()
 
   const botState = useSelector((state: State) => state.botsReducer);
@@ -66,5 +66,3 @@ const RenderBotsOnlineList = () => {
     </ul>
   )
 }
-
-export default RenderBotsOnlineList

@@ -1,8 +1,8 @@
 
-import { ConfigurationType } from "../action-types";
+import { ConfigurationType } from "@/state/action-types";
 import { Dispatch } from "redux";
-import { ConfiguracionAction } from "../actions";
-import { InitialState } from "../reducers/configurationReducer"
+import { ConfiguracionAction } from "@/state/actions";
+import { InitialState } from "@/state/reducers/configurationReducer"
 
 
 export const setSocket = (socket: InitialState["socket"]) => (dispatch: Dispatch<ConfiguracionAction>) => {

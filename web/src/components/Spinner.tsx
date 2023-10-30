@@ -1,6 +1,7 @@
-import style from "../css/Spinner.module.scss";
+import React from "react";
+import style from "@/css/Spinner.module.scss";
 
-const Spinner = () => (
+const Spinner: React.FC = () => (
   <div className='center'>
     <div className={style.ldsHourglass} />
   </div>

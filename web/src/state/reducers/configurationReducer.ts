@@ -1,5 +1,5 @@
-import { ConfigurationType } from "../action-types";
-import { ConfiguracionAction } from "../actions/";
+import { ConfigurationType } from "@/state/action-types";
+import { ConfiguracionAction } from "@/state/actions/";
 import { Socket } from "socket.io-client";
 
 export type InitialState = {

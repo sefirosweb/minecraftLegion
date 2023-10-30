@@ -1,17 +1,19 @@
+import { useGetMaster } from '@/hooks/useGetMaster';
 import useGetSocket from '@/hooks/useGetSocket';
+import { useSendActionSocket } from '@/hooks/useSendActionSocket';
 import { State } from '@/state';
 import React, { useState } from 'react'
 import { useSelector } from 'react-redux'
 import { Socket } from 'socket.io-client';
 
 export const Masterlist = () => {
-
   const socket = useGetSocket() as Socket
-  const configurationState = useSelector((state: State) => state.configurationReducer);
-  const { master } = configurationState
+  const master = useGetMaster()
 
   const botState = useSelector((state: State) => state.botsReducer);
   const { masters } = botState
+
+  const sendAction = useSendActionSocket()
 
   const [inputBox, setInputBox] = useState('')
 

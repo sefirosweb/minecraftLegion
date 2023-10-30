@@ -1,9 +1,9 @@
 //@ts-nocheck
-import { BotsType } from "../action-types";
+import { BotsType } from "@/state/action-types";
 import { Dispatch } from "redux";
-import { BotsAction } from "../actions";
-import { InitialState } from "../reducers/botsReducer"
-import { State } from "../reducers";
+import { BotsAction } from "@/state/actions";
+import { InitialState } from "@/state/reducers/botsReducer"
+import { State } from "@/state/reducers";
 
 export const setBots = (bots: InitialState["botsOnline"]) => (dispatch: Dispatch<BotsAction>) => {
     dispatch({

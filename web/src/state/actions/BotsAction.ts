@@ -1,5 +1,5 @@
-import { BotsType } from "../action-types";
-import { InitialState } from "../reducers/botsReducer";
+import { BotsType } from "@/state/action-types";
+import { InitialState } from "@/state/reducers/botsReducer";
 
 interface SetBotsAction {
     type: BotsType.SET_BOTS,

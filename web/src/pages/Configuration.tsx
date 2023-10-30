@@ -1,14 +1,13 @@
 import { Fragment } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import Form from 'react-bootstrap/Form'
 import { Col, Row } from 'react-bootstrap'
-import { actionCreators, State } from '@/state'
+import { actionCreators } from '@/state'
 import { bindActionCreators } from 'redux'
+import { useGetMaster } from '@/hooks/useGetMaster'
 
 export const Configuration = () => {
-
-    const configurationState = useSelector((state: State) => state.configurationReducer);
-    const { master } = configurationState
+    const master = useGetMaster()
 
     const dispatch = useDispatch();
     const { updateMaster, } = bindActionCreators(actionCreators, dispatch);
