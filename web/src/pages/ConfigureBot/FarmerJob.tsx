@@ -2,10 +2,10 @@
 import { Button, Col, Row } from 'react-bootstrap'
 import HarvestArea from './HarvestArea'
 import { BotSelectedContext } from "./ConfigurationContext";
-import { useContext } from 'react';
+import React, { useContext } from 'react';
 import { useChangeConfig } from '@/hooks/useChangeConfig';
 
-export const FarmerJob = () => {
+export const FarmerJob: React.FC = () => {
   const botConfig = useContext(BotSelectedContext);
   const changeConfig = useChangeConfig()
 

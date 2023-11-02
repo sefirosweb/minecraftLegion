@@ -1,7 +1,7 @@
 import { BotSelectedContext } from "./ConfigurationContext";
-import { useContext } from "react";
+import React, { useContext } from "react";
 
-export const ProcessList = () => {
+export const ProcessList: React.FC = () => {
   const botConfig = useContext(BotSelectedContext);
 
   const renderEvents = () => {

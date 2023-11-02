@@ -1,12 +1,12 @@
 //@ts-nocheck
-import { useState } from "react";
+import React, { useState } from "react";
 import ItemsAviable from "./ItemsAviable";
 import { ArrowDown, ArrowUp, Trash } from "@/components";
 import { Button, Col, Form, Row, Table } from "react-bootstrap";
 import { useChangeConfig } from "@/hooks/useChangeConfig";
 import { useGetMaster } from "@/hooks/useGetMaster";
 
-const Chest = (props) => {
+const Chest: React.FC = (props) => {
   const { id, chest } = props
   const master = useGetMaster()
   const changeConfig = useChangeConfig()

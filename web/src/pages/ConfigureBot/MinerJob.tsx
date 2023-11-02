@@ -2,11 +2,11 @@
 import { Col, Form, Row } from 'react-bootstrap'
 import HouseXYZ from '@/images/HouseXYZ.png'
 import { BotSelectedContext } from "./ConfigurationContext";
-import { useContext } from 'react';
+import React, { useContext } from 'react';
 import { useChangeConfig } from '@/hooks/useChangeConfig';
 import { FormCheck } from '@/components';
 
-export const MinerJob = () => {
+export const MinerJob: React.FC = () => {
   const botConfig = useContext(BotSelectedContext);
   const changeConfig = useChangeConfig()
 

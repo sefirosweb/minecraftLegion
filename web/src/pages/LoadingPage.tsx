@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 
-export const LoadingPage = () => {
+export const LoadingPage: React.FC = () => {
     const [show, setShow] = useState(false)
     useEffect(() => {
         const interval = setTimeout(() => setShow(true), 300)

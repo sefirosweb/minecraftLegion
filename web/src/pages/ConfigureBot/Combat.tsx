@@ -1,10 +1,10 @@
 //@ts-nocheck
-import { useContext } from 'react';
+import React, { useContext } from 'react';
 import { Col, Row } from 'react-bootstrap'
 import { BotSelectedContext } from "./ConfigurationContext";
 import { useChangeConfig } from '@/hooks/useChangeConfig';
 
-export const Combat = () => {
+export const Combat: React.FC = () => {
   const botConfig = useContext(BotSelectedContext);
 
   const changeConfig = useChangeConfig()

@@ -1,4 +1,4 @@
-import { Fragment } from 'react'
+import React, { Fragment } from 'react'
 import { useDispatch } from 'react-redux'
 import Form from 'react-bootstrap/Form'
 import { Col, Row } from 'react-bootstrap'
@@ -6,7 +6,7 @@ import { actionCreators } from '@/state'
 import { bindActionCreators } from 'redux'
 import { useGetMaster } from '@/hooks/useGetMaster'
 
-export const Configuration = () => {
+export const Configuration: React.FC = () => {
     const master = useGetMaster()
 
     const dispatch = useDispatch();

@@ -6,7 +6,7 @@ import React, { useState } from 'react'
 import { useSelector } from 'react-redux'
 import { Socket } from 'socket.io-client';
 
-export const Masterlist = () => {
+export const Masterlist: React.FC = () => {
   const socket = useGetSocket() as Socket
   const master = useGetMaster()
 

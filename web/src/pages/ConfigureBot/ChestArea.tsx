@@ -1,12 +1,13 @@
 //@ts-nocheck
 import { useChangeConfig } from '@/hooks/useChangeConfig';
+import React from 'react';
 import { Col, Row } from 'react-bootstrap'
 
 const ChestArea = (props) => {
   const { chestArea, id } = props
   const changeConfig = useChangeConfig()
 
-  const handleChange = (type, event) => {
+  const handleChange: React.FC = (type, event) => {
     const copyChest = { ...chestArea }
     copyChest[type] = event.target.value
 

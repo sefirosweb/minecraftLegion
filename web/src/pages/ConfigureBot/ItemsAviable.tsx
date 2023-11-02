@@ -1,4 +1,5 @@
 import { items as itemsArray, foods as foodsArray } from "@/utils/mcData";
+import React from "react";
 
 const plants = [
   { displayName: 'Carrot', name: 'carrot' },
@@ -23,7 +24,7 @@ type Props = {
   item: string
 }
 
-const ItemsAviable = (props: Props) => { // TODO change to differents methos
+const ItemsAviable: React.FC<Props> = (props) => { // TODO change to differents methos
   const renderBlocks = () => {
     let type
     switch (props.type) {

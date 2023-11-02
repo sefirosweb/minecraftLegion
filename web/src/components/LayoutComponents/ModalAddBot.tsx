@@ -9,7 +9,7 @@ type Props = {
   setShow: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-export const ModalAddBot = (props: Props) => {
+export const ModalAddBot: React.FC<Props> = (props) => {
   const { show, setShow } = props
   const inputBotName = useRef<HTMLInputElement>(null)
   const [botName, setBotName] = useState('')

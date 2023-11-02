@@ -1,4 +1,4 @@
-import { Suspense, useContext } from "react";
+import React, { Suspense, useContext } from "react";
 import { Button, Col, Row } from 'react-bootstrap'
 import { Link, NavLink, Outlet } from 'react-router-dom'
 import { RenderBotsOnlineList } from '@/components'
@@ -6,7 +6,7 @@ import { useSendActionSocket } from "@/hooks/useSendActionSocket";
 import { BotSelectedContext } from "./ConfigurationContext";
 import { LoadingPage } from "../LoadingPage";
 
-export const ConfigureBotLayout = () => {
+export const ConfigureBotLayout: React.FC = () => {
   const botConfig = useContext(BotSelectedContext);
   const sendAction = useSendActionSocket()
 

@@ -1,11 +1,11 @@
 //@ts-nocheck
-import { useContext, useState } from "react";
+import React, { useContext, useState } from "react";
 import { ArrowDown, ArrowUp, Trash, FormCheck } from "@/components";
 import { BotSelectedContext } from "./ConfigurationContext";
 import { useChangeConfig } from "@/hooks/useChangeConfig";
 import { useGetMaster } from "@/hooks/useGetMaster";
 
-export const GuardJob = () => {
+export const GuardJob: React.FC = () => {
   const botConfig = useContext(BotSelectedContext);
   const master = useGetMaster()
 

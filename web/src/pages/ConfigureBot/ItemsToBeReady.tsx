@@ -1,11 +1,11 @@
 //@ts-nocheck
-import { useContext, useState } from 'react'
+import React, { useContext, useState } from 'react'
 import ItemsAviable from './ItemsAviable'
 import { Trash } from '@/components'
 import { BotSelectedContext } from "./ConfigurationContext";
 import { useChangeConfig } from '@/hooks/useChangeConfig';
 
-export const ItemsToBeReady = () => {
+export const ItemsToBeReady: React.FC = () => {
   const botConfig = useContext(BotSelectedContext);
   const [itemName, setItemName] = useState('')
   const [quantity, setQuantity] = useState(1)

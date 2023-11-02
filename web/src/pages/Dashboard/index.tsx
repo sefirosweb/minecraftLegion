@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import BotActionsButtons from './BotActionsButtons'
 import { Button, Col, Row } from 'react-bootstrap'
@@ -6,7 +6,7 @@ import { useSelector } from "react-redux";
 import { RenderBotsOnlineList } from '@/components';
 import { State } from "@/state";
 
-export const Dashboard = () => {
+export const Dashboard: React.FC = () => {
     const { selectedSocketId } = useParams()
     const botState = useSelector((state: State) => state.botsReducer);
     const { logs } = botState

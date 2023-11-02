@@ -1,12 +1,12 @@
 //@ts-nocheck
 import { Button, Col, ListGroup, Row } from "react-bootstrap";
 import Chest from './Chest'
-import { useContext } from "react";
+import React, { useContext } from "react";
 import { BotSelectedContext } from "./ConfigurationContext";
 import { useChangeConfig } from "@/hooks/useChangeConfig";
 import { FormCheck } from "@/components";
 
-export const ConfigurebotChests = () => {
+export const ConfigurebotChests: React.FC = () => {
   const botConfig = useContext(BotSelectedContext);
 
   const changeConfig = useChangeConfig()

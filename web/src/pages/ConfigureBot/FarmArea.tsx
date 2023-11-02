@@ -4,13 +4,14 @@ import { Button, Col, Row } from 'react-bootstrap'
 import { useSelector } from 'react-redux'
 import { useChangeConfig } from '@/hooks/useChangeConfig'
 import { LayerCoords } from '@/components'
+import React from 'react'
 
 type Props = {
   id: number,
   farmArea: string
 }
 
-const FarmArea = (props: Props) => {
+const FarmArea: React.FC = (props: Props) => {
 
   const { farmArea, id } = props
 

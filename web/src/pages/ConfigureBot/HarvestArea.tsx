@@ -3,8 +3,9 @@ import { Col, Row } from 'react-bootstrap'
 import ItemsAviable from './ItemsAviable'
 import { useChangeConfig } from '@/hooks/useChangeConfig'
 import { LayerCoords } from '@/components'
+import React from 'react'
 
-const HarvestArea = (props) => {
+const HarvestArea: React.FC = (props) => {
   const { id, plantArea } = props
 
   const changeConfig = useChangeConfig()

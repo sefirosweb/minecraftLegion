@@ -1,11 +1,11 @@
 // @ts-nocheck
-import { Suspense, useContext, useState } from "react";
+import React, { Suspense, useContext, useState } from "react";
 import { ArrowDown, ArrowUp, Trash, FormCheck, Coords } from "@/components";
 import ItemsAviable from "./ItemsAviable";
 import { BotSelectedContext } from "./ConfigurationContext";
 import { useChangeConfig } from "@/hooks/useChangeConfig";
 
-export const GeneralConfig = () => {
+export const GeneralConfig: React.FC = () => {
   const bot = useContext(BotSelectedContext);
 
   const [itemName, setItemName] = useState("");
