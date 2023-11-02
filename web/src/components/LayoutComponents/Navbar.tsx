@@ -10,11 +10,10 @@ export const Navbar: React.FC = () => {
     <>
       <BNavbar collapseOnSelect={true} bg="dark" variant="dark" expand="md">
         <Container>
-          <BNavbar.Brand as={Link} to="/configuration">Configuration</BNavbar.Brand>
+          <BNavbar.Brand as={Link} to="/dashboard">Dashboard</BNavbar.Brand>
           <BNavbar.Toggle aria-controls="basic-navbar-nav" />
           <BNavbar.Collapse id="basic-navbar-nav">
             <Nav className="me-auto">
-              <Nav.Link as={Link} to="/dashboard" eventKey="dashboard">Dashboard</Nav.Link>
               <Nav.Link onClick={() => setShow(true)}>Load New Bot</Nav.Link>
               <Nav.Link as={Link} to="/masterlist" eventKey="masterlist">Master List</Nav.Link>
               <Nav.Link as={Link} to="/chests" eventKey='chests'>Chests</Nav.Link>
@@ -24,6 +23,7 @@ export const Navbar: React.FC = () => {
           </BNavbar.Collapse>
         </Container>
       </BNavbar>
+
       <ModalAddBot show={show} setShow={setShow} />
     </>
   )

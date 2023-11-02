@@ -12,7 +12,7 @@ export const Layout: React.FC = () => {
     <>
       <Navbar />
 
-      <div className="mx-sm-3 mx-md-4 mx-lg-5">
+      <div className="mx-sm-3 mx-md-4 mx-lg-5 mt-3">
         <Suspense fallback={<LoadingPage />}>
           <Outlet />
         </Suspense>

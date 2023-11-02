@@ -1,9 +1,11 @@
 import { useGetMaster } from '@/hooks/useGetMaster';
 import useGetSocket from '@/hooks/useGetSocket';
 import { useSendActionSocket } from '@/hooks/useSendActionSocket';
-import { State } from '@/state';
+import { State, actionCreators } from '@/state';
 import React, { useState } from 'react'
-import { useSelector } from 'react-redux'
+import { Form } from 'react-bootstrap';
+import { useDispatch, useSelector } from 'react-redux'
+import { bindActionCreators } from 'redux';
 import { Socket } from 'socket.io-client';
 
 export const Masterlist: React.FC = () => {
@@ -14,6 +16,14 @@ export const Masterlist: React.FC = () => {
   const { masters } = botState
 
   const sendAction = useSendActionSocket()
+
+  const dispatch = useDispatch();
+  const { updateMaster, } = bindActionCreators(actionCreators, dispatch);
+
+  const handleChangeMaster = (event: React.ChangeEvent<HTMLInputElement>) => {
+    updateMaster(event.target.value)
+  }
+
 
   const [inputBox, setInputBox] = useState('')
 
@@ -61,23 +71,25 @@ export const Masterlist: React.FC = () => {
 
   return (
     <>
-      <div className='row'>
-        <div className='col-12'><h1>Master List</h1></div>
-      </div>
-      <div className='row'>
-        <div className='col-12'>
-          <div className='form-group'>
-            <input type='text' placeholder='Add new master' className='form-control' onKeyDown={handleKeyDown} onChange={handleInputBox} value={inputBox} />
-          </div>
-        </div>
+      <div className='mb-3'>
+        <Form.Group controlId="handleChangeMaster">
+          <Form.Label className='fw-bolder fs-4'>Your name in game</Form.Label>
+          <Form.Control type="text" value={master} onChange={handleChangeMaster} />
+        </Form.Group>
       </div>
 
-      <div className='row'>
-        <div className='col-12'>
-          <ul className='list-group'>
-            {renderMasterList()}
-          </ul>
-        </div>
+
+      <div className='mb-2'>
+        <Form.Group controlId="handleChangeMaster">
+          <Form.Label className='fw-bolder fs-4'>Master List</Form.Label>
+          <Form.Control type="text" value={inputBox} onChange={handleInputBox} onKeyDown={handleKeyDown} placeholder='Add new master' />
+        </Form.Group>
+      </div>
+
+      <div>
+        <ul className='list-group'>
+          {renderMasterList()}
+        </ul>
       </div>
     </>
   )

@@ -19,7 +19,7 @@ export const Dashboard: React.FC = () => {
 
     return (
         <>
-            <Row className='mt-3'>
+            <Row>
                 <Col md={6} lg={8} className='mb-3'>
                     <h1>Dashboard</h1>
                 </Col>

@@ -22,7 +22,6 @@ const ProcessList = lazy(() => import("@/pages/ConfigureBot/ProcessList").then((
 const FullConfig = lazy(() => import("@/pages/ConfigureBot/FullConfig").then((module) => ({ default: module.FullConfig })))
 const ConfigureBotLayout = lazy(() => import("@/pages/ConfigureBot/ConfigureBotLayout").then((module) => ({ default: module.ConfigureBotLayout })));
 const ConfigurationContext = lazy(() => import("@/pages/ConfigureBot/ConfigurationContext").then((module) => ({ default: module.ConfigurationContextProvider })))
-const Configuration = lazy(() => import('@/pages/Configuration').then((module) => ({ default: module.Configuration })))
 const NotFound = lazy(() => import('@/pages/NotFound').then((module) => ({ default: module.NotFound })))
 
 export const App: React.FC = () => {
@@ -36,7 +35,6 @@ export const App: React.FC = () => {
 
       <Route path='/' element={<Authenticated />}>
         <Route element={<Layout />}>
-          <Route path="/configuration" element={<Configuration />} />
           <Route path="/" element={<Navigate replace to="/dashboard" />} />
           <Route path="/dashboard/:selectedSocketId?" element={<Dashboard />} />
           <Route path="/masterlist" element={<Masterlist />} />
