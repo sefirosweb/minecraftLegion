@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux'
 import ProgressBar from 'react-bootstrap/ProgressBar'
 import { State } from '@/state'
 import { useNavigate, useParams } from 'react-router'
-import style from '@/css/RenderBotsOnlineList.module.scss'
+import { ListGroup } from 'react-bootstrap'
 
 export const RenderBotsOnlineList: React.FC = () => {
   const { selectedSocketId } = useParams()
@@ -36,23 +36,23 @@ export const RenderBotsOnlineList: React.FC = () => {
     return (
       botsOnline.map((bot) => {
         return (
-          <li key={bot.socketId} className={`list-group-item ${style.botlist}`}>
-            <div className={` ${(bot.combat) ? style.botCombat : ''}`}>
-              <span
-                className={`${selectedSocketId === bot.socketId ? style.isSelected : ''}`}
-                style={{
-                  cursor: "pointer"
-                }}
-                onClick={() => changeSelectedSocketId(bot.socketId)}
-              >
+          <ListGroup.Item
+            action
+            key={bot.socketId}
+            variant={`${selectedSocketId === bot.socketId ? 'info' : ''}`}
+            onClick={() => changeSelectedSocketId(bot.socketId)}
+          >
+            <div className={`${(bot.combat) ? 'text-danger fw-bolder' : ''}`}>
+              <div>
                 {bot.name}
-              </span>
+              </div>
               <div>
                 <ProgressBar className='mt-1' variant='danger' now={bot.health / 20 * 100} />
                 <ProgressBar className='mt-1' variant='warning' now={bot.food / 20 * 100} />
               </div>
             </div>
-          </li >
+          </ListGroup.Item>
+
         )
       })
 
@@ -60,9 +60,13 @@ export const RenderBotsOnlineList: React.FC = () => {
   }
 
   return (
-    <ul className='list-group'>
-      <li className='list-group-item active'>Bots Online ({botsOnline.length})</li>
+    <ListGroup>
+      <ListGroup.Item variant='primary'>
+        Bots Online ({botsOnline.length})
+      </ListGroup.Item>
+
       {renderBotList()}
-    </ul>
+    </ListGroup>
+
   )
 }
