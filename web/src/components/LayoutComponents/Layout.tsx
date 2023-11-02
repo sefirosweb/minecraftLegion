@@ -2,7 +2,8 @@ import { Navbar } from "./Navbar";
 import { Outlet } from "react-router";
 import { useSocketSetup } from "@/utils/useSocketSetup";
 import { FooterNav } from "./FooterNav";
-import React from "react";
+import React, { Suspense } from "react";
+import { LoadingPage } from "@/pages/LoadingPage";
 
 export const Layout: React.FC = () => {
   useSocketSetup()
@@ -12,7 +13,9 @@ export const Layout: React.FC = () => {
       <Navbar />
 
       <div className="mx-sm-3 mx-md-4 mx-lg-5">
-        <Outlet />
+        <Suspense fallback={<LoadingPage />}>
+          <Outlet />
+        </Suspense>
       </div>
 
       <FooterNav />

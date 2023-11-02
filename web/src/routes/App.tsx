@@ -1,11 +1,10 @@
-import { Suspense, lazy } from "react";
-import { Routes, Route, Navigate } from "react-router-dom";
-import { LoadingPage } from "@/pages/LoadingPage";
+import { Routes, Route, Navigate, Router } from "react-router-dom";
 import { Authenticated } from "@/hooks/Authenticated";
 import { UnAuthenticated } from "@/hooks/UnAuthenticated";
+import { Login } from "@/pages/Login";
+import { Layout } from "@/components";
+import { lazy } from "react";
 
-const Layout = lazy(() => import("@/components").then((module) => ({ default: module.Layout })))
-const NotFound = lazy(() => import("@/pages/NotFound").then((module) => ({ default: module.NotFound })))
 const Dashboard = lazy(() => import("@/pages/Dashboard").then((module) => ({ default: module.Dashboard })))
 const Masterlist = lazy(() => import("@/pages/Masterlist").then((module) => ({ default: module.Masterlist })))
 const Chests = lazy(() => import("@/pages/Chests").then((module) => ({ default: module.Chests })))
@@ -24,49 +23,45 @@ const FullConfig = lazy(() => import("@/pages/ConfigureBot/FullConfig").then((mo
 const ConfigureBotLayout = lazy(() => import("@/pages/ConfigureBot/ConfigureBotLayout").then((module) => ({ default: module.ConfigureBotLayout })));
 const ConfigurationContext = lazy(() => import("@/pages/ConfigureBot/ConfigurationContext").then((module) => ({ default: module.ConfigurationContextProvider })))
 const Configuration = lazy(() => import('@/pages/Configuration').then((module) => ({ default: module.Configuration })))
-const Login = lazy(() => import('@/pages/Login').then((module) => ({ default: module.Login })))
+const NotFound = lazy(() => import('@/pages/NotFound').then((module) => ({ default: module.NotFound })))
 
-export const App = () => {
+export const App: React.FC = () => {
   return (
-    <Suspense fallback={<LoadingPage />}>
-      <Routes>
+    <Routes>
+      <Route index element={<Navigate to={'/login'} />} />
 
-        <Route index element={<Navigate to={'/login'} />} />
+      <Route path='/' element={<UnAuthenticated />}>
+        <Route path="/login" element={<Login />} />
+      </Route>
 
-        <Route path='/' element={<UnAuthenticated />}>
-          <Route path="/login" element={<Login />} />
-        </Route>
+      <Route path='/' element={<Authenticated />}>
+        <Route element={<Layout />}>
+          <Route path="/configuration" element={<Configuration />} />
+          <Route path="/" element={<Navigate replace to="/dashboard" />} />
+          <Route path="/dashboard/:selectedSocketId?" element={<Dashboard />} />
+          <Route path="/masterlist" element={<Masterlist />} />
+          <Route path="/chests" element={<Chests />} />
+          <Route path="/portals" element={<Portals />} />
 
-        <Route path='/' element={<Authenticated />}>
-          <Route element={<Layout />}>
-            <Route path="/configuration" element={<Configuration />} />
-            <Route path="/" element={<Navigate replace to="/dashboard" />} />
-            <Route path="/dashboard/:selectedSocketId?" element={<Dashboard />} />
-            <Route path="/masterlist" element={<Masterlist />} />
-            <Route path="/chests" element={<Chests />} />
-            <Route path="/portals" element={<Portals />} />
-
-            <Route path='/configurebot/:selectedSocketId' element={<ConfigurationContext />}>
-              <Route path="" element={<ConfigureBotLayout />}>
-                <Route path="generalconfig" element={<GeneralConfig />} />
-                <Route path="itemstobeready" element={<ItemsToBeReady />} />
-                <Route path="chests" element={<ConfigurebotChests />} />
-                <Route path="combat" element={<Combat />} />
-                <Route path="guardjob" element={<GuardJob />} />
-                <Route path="minerjob" element={<MinerJob />} />
-                <Route path="farmerjob" element={<FarmerJob />} />
-                <Route path="breederjob" element={<BreederJob />} />
-                <Route path="SorterJob" element={<SorterJob />} />
-                <Route path="processlist" element={<ProcessList />} />
-                <Route path="full_config" element={<FullConfig />} />
-              </Route>
+          <Route path='/configurebot/:selectedSocketId' element={<ConfigurationContext />}>
+            <Route path="" element={<ConfigureBotLayout />}>
+              <Route path="generalconfig" element={<GeneralConfig />} />
+              <Route path="itemstobeready" element={<ItemsToBeReady />} />
+              <Route path="chests" element={<ConfigurebotChests />} />
+              <Route path="combat" element={<Combat />} />
+              <Route path="guardjob" element={<GuardJob />} />
+              <Route path="minerjob" element={<MinerJob />} />
+              <Route path="farmerjob" element={<FarmerJob />} />
+              <Route path="breederjob" element={<BreederJob />} />
+              <Route path="SorterJob" element={<SorterJob />} />
+              <Route path="processlist" element={<ProcessList />} />
+              <Route path="full_config" element={<FullConfig />} />
             </Route>
-
-            <Route path="*" element={<NotFound />} />
-
           </Route>
+
+          <Route path="*" element={<NotFound />} />
         </Route>
-      </Routes>
-    </Suspense>
+      </Route>
+    </Routes>
   );
 }

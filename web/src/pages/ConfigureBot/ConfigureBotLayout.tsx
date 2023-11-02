@@ -1,9 +1,10 @@
-import { useContext } from "react";
+import { Suspense, useContext } from "react";
 import { Button, Col, Row } from 'react-bootstrap'
 import { Link, NavLink, Outlet } from 'react-router-dom'
 import { RenderBotsOnlineList } from '@/components'
 import { useSendActionSocket } from "@/hooks/useSendActionSocket";
 import { BotSelectedContext } from "./ConfigurationContext";
+import { LoadingPage } from "../LoadingPage";
 
 export const ConfigureBotLayout = () => {
   const botConfig = useContext(BotSelectedContext);
@@ -63,7 +64,9 @@ export const ConfigureBotLayout = () => {
           <Row>
             <Col>
               <div className='card px-5 pt-4 mr-0'>
-                <Outlet />
+                <Suspense fallback={<LoadingPage />}>
+                  <Outlet />
+                </Suspense>
               </div>
             </Col>
           </Row>
