@@ -4,6 +4,7 @@ import { ArrowDown, ArrowUp, Trash, FormCheck, Coords } from "@/components";
 import ItemsAviable from "./ItemsAviable";
 import { BotSelectedContext } from "./ConfigurationContext";
 import { useChangeConfig } from "@/hooks/useChangeConfig";
+import { Button, Col, Form, Row, Table } from "react-bootstrap";
 
 export const GeneralConfig: React.FC = () => {
   const bot = useContext(BotSelectedContext);
@@ -27,9 +28,11 @@ export const GeneralConfig: React.FC = () => {
           <td>{food}</td>
           <td>
             <ArrowUp
+              disabled={index === 0}
               onClick={() => changeConfig("moveItemCanBeEatPrev", index)}
             />{" "}
             <ArrowDown
+              disabled={index === bot.config.itemsCanBeEat.length - 1}
               onClick={() => changeConfig("moveItemCanBeEatNext", index)}
             />
           </td>
@@ -62,141 +65,88 @@ export const GeneralConfig: React.FC = () => {
 
   return (
     <>
-      <div className="row">
-        <div className="col-7">
-          <fieldset className="form-group row">
-            <legend className="col-form-label col-sm-4 float-sm-left pt-0">
+      <Row className="mb-4">
+        <Col xs={12} md={6} lg={4}>
+          <Row className="mb-3">
+            <Col sm={4}>
               Job
-            </legend>
-            <div className="col-sm-2">
-              <div className="form-check">
-                <input
-                  className="form-check-input"
-                  type="radio"
-                  name="gridJob"
-                  value="none"
-                  onChange={handleChangeJob}
-                  checked={bot.config.job === "none"}
-                />
-                <label className="form-check-label">None</label>
-              </div>
-              <div className="form-check">
-                <input
-                  className="form-check-input"
-                  type="radio"
-                  name="gridJob"
-                  value="miner"
-                  onChange={handleChangeJob}
-                  checked={bot.config.job === "miner"}
-                />
-                <label className="form-check-label">Miner</label>
-              </div>
-              <div className="form-check">
-                <input
-                  className="form-check-input"
-                  type="radio"
-                  name="gridJob"
-                  value="guard"
-                  onChange={handleChangeJob}
-                  checked={bot.config.job === "guard"}
-                />
-                <label className="form-check-label">Guard</label>
-              </div>
-              <div className="form-check">
-                <input
-                  className="form-check-input"
-                  type="radio"
-                  name="gridJob"
-                  value="crafter"
-                  onChange={handleChangeJob}
-                  checked={bot.config.job === "crafter"}
-                />
-                <label className="form-check-label">Crafter</label>
-              </div>
-            </div>
-            <div className="col-sm-2">
-              <div className="form-check">
-                <input
-                  className="form-check-input"
-                  type="radio"
-                  name="gridJob"
-                  value="farmer"
-                  onChange={handleChangeJob}
-                  checked={bot.config.job === "farmer"}
-                />
-                <label className="form-check-label">Farmer</label>
-              </div>
-              <div className="form-check">
-                <input
-                  className="form-check-input"
-                  type="radio"
-                  name="gridJob"
-                  value="breeder"
-                  onChange={handleChangeJob}
-                  checked={bot.config.job === "breeder"}
-                />
-                <label className="form-check-label">Breeder</label>
-              </div>
-              <div className="form-check">
-                <input
-                  className="form-check-input"
-                  type="radio"
-                  name="gridJob"
-                  value="sorter"
-                  onChange={handleChangeJob}
-                  checked={bot.config.job === "sorter"}
-                />
-                <label className="form-check-label">Sorter</label>
-              </div>
-            </div>
-          </fieldset>
+            </Col>
+            <Col xs={6} sm={3}>
+              <Form.Check
+                id="none"
+                value="none"
+                label="None"
+                type="radio"
+                onChange={handleChangeJob}
+                checked={bot.config.job === "none"}
+              />
 
-          <FormCheck
-            id={"pickUpItems"}
-            onChange={() =>
-              changeConfig("pickUpItems", !bot.config.pickUpItems)
-            }
-            label={`Pick up items?`}
-            checked={bot.config.pickUpItems}
-          />
+              <Form.Check
+                id="miner"
+                value="miner"
+                label="Miner"
+                type="radio"
+                onChange={handleChangeJob}
+                checked={bot.config.job === "miner"}
+              />
 
-          <FormCheck
-            id={"randomFarmArea"}
-            onChange={() =>
-              changeConfig("randomFarmArea", !bot.config.randomFarmArea)
-            }
-            label={`Random Farmer area?`}
-            checked={bot.config.randomFarmArea}
-          />
+              <Form.Check
+                id="guard"
+                value="guard"
+                label="Guard"
+                type="radio"
+                onChange={handleChangeJob}
+                checked={bot.config.job === "guard"}
+              />
 
-          <FormCheck
-            id={"canSleep"}
-            onChange={() =>
-              changeConfig("canSleep", !bot.config.canSleep)
-            }
-            label={`Can sleep`}
-            checked={bot.config.canSleep}
-          />
+              <Form.Check
+                id="crafter"
+                value="crafter"
+                label="Crafter"
+                type="radio"
+                onChange={handleChangeJob}
+                checked={bot.config.job === "crafter"}
+              />
+            </Col>
+            <Col xs={6} sm={3}>
+              <Form.Check
+                id="farmer"
+                value="farmer"
+                label="Farmer"
+                type="radio"
+                onChange={handleChangeJob}
+                checked={bot.config.job === "farmer"}
+              />
 
-          <Coords
-            label='Coords'
-            coords={{
-              x: bot.config.sleepArea?.x ?? '',
-              y: bot.config.sleepArea?.y ?? '',
-              z: bot.config.sleepArea?.z ?? ''
-            }}
-            onChange={handleChangeSleepArea}
-          />
-        </div>
+              <Form.Check
+                id="breeder"
+                value="breeder"
+                label="Breeder"
+                type="radio"
+                onChange={handleChangeJob}
+                checked={bot.config.job === "breeder"}
+              />
 
-        <div className="col-5">
+              <Form.Check
+                id="sorter"
+                value="sorter"
+                label="Sorter"
+                type="radio"
+                onChange={handleChangeJob}
+                checked={bot.config.job === "sorter"}
+              />
+
+            </Col>
+          </Row>
+        </Col>
+
+        <Col xs={12} sm={6}>
           <FormCheck
             id={"allowSprinting"}
-            onChange={() =>
-              changeConfig("allowSprinting", !bot.config.allowSprinting)
-            }
+            onChange={() => changeConfig("allowSprinting", !bot.config.allowSprinting)}
             label={`Allow Sprint`}
             checked={bot.config.allowSprinting}
+            className="mb-3"
           />
 
           <FormCheck
@@ -204,10 +154,12 @@ export const GeneralConfig: React.FC = () => {
             onChange={() => changeConfig("canDig", !bot.config.canDig)}
             label={
               <>
-                Can dig? <br /> (!) Caution can stuck the bot
+                <div>Can dig?</div>
+                <div>(!) Caution can stuck the bot</div>
               </>
             }
             checked={bot.config.canDig}
+            className="mb-3"
           />
 
           <FormCheck
@@ -215,72 +167,95 @@ export const GeneralConfig: React.FC = () => {
             onChange={() => changeConfig("canPlaceBlocks", !bot.config.canPlaceBlocks)}
             label={
               <>
-                Can place blosk? <br /> (!) Caution can stuck the bot
+                <div>Can place blosk?</div>
+                <div>(!) Caution can stuck the bot</div>
               </>
             }
             checked={bot.config.canPlaceBlocks}
           />
 
-        </div>
+          <FormCheck
+            id={"pickUpItems"}
+            onChange={() => changeConfig("pickUpItems", !bot.config.pickUpItems)}
+            label={`Pick up items?`}
+            checked={bot.config.pickUpItems}
+          />
+
+          <FormCheck
+            id={"randomFarmArea"}
+            onChange={() => changeConfig("randomFarmArea", !bot.config.randomFarmArea)}
+            label={`Random Farmer area?`}
+            checked={bot.config.randomFarmArea}
+          />
+
+        </Col>
+      </Row>
+
+      <Row className="mb-3">
+        <Col sm={12} md={7} className="mb-3">
+          <div className="mb-3">
+            <Coords
+              label='Bed Coords'
+              coords={{
+                x: bot.config.sleepArea?.x ?? '',
+                y: bot.config.sleepArea?.y ?? '',
+                z: bot.config.sleepArea?.z ?? ''
+              }}
+              onChange={handleChangeSleepArea}
+            />
+            <FormCheck
+              id={"canSleep"}
+              onChange={() => changeConfig("canSleep", !bot.config.canSleep)}
+              label={`Can sleep`}
+              checked={bot.config.canSleep}
+            />
+          </div>
+        </Col>
+      </Row>
+
+      <div>
+        <h3>Valid food for eat</h3>
       </div>
 
-      <div className="row">
-        <div className="col-6">
-          <h3>Valid food for eat</h3>
-        </div>
-      </div>
+      <Row className="d-flex align-items-end">
+        <Col xs={12} sm={6} className="mb-2">
 
-      <div className="row">
-        <div className="col-6">
-          <div className="form-group">
-            <label htmlFor="inputItem">
+          <Form.Group>
+            <Form.Label>
               (!) The food consumition have priority based on # inserted
-            </label>
-            <input
-              className="form-control"
-              type="text"
-              list="itemsList"
+            </Form.Label>
+
+            <Form.Control
               value={itemName}
+              list="itemsList"
               onChange={(e) => setItemName(e.target.value)}
             />
-            <datalist id="itemsList">
-              <Suspense fallback={
-                <option>Loading...</option>
-              }>
-                <ItemsAviable item={itemName} type="foods" />
-              </Suspense>
-            </datalist>
-          </div>
-        </div>
 
-        <div className="col-2">
-          <div className="form-group">
-            <label>.</label>
-            <button
-              className="form-control btn btn-primary"
-              onClick={handleInsertItem}
-            >
-              Insert
-            </button>
-          </div>
-        </div>
-      </div>
+          </Form.Group>
 
-      <div className="row">
-        <div className="col-12">
-          <table className="table">
-            <thead className="thead-dark">
-              <tr>
-                <th scope="col">Priority</th>
-                <th scope="col">Food</th>
-                <th scope="col">Move</th>
-                <th scope="col" />
-              </tr>
-            </thead>
-            <tbody>{renderItemsTable()}</tbody>
-          </table>
-        </div>
-      </div>
+          <datalist id="itemsList">
+            <ItemsAviable item={itemName} type="foods" />
+          </datalist>
+        </Col>
+
+        <Col xs={12} sm={'auto'} className="mb-2">
+          <Button onClick={handleInsertItem}>
+            Insert
+          </Button>
+        </Col>
+      </Row>
+
+      <Table>
+        <thead>
+          <tr>
+            <th scope="col">Priority</th>
+            <th scope="col">Food</th>
+            <th scope="col">Move</th>
+            <th scope="col" />
+          </tr>
+        </thead>
+        <tbody>{renderItemsTable()}</tbody>
+      </Table>
     </>
   );
 };
