@@ -11,13 +11,16 @@ export const Portals: React.FC = () => {
     <>
       <Card>
         <Card.Body>
-          <h2>Overworld {'->'} Nether</h2>
+          <span className="fw-bolder fs-5">Overworld {'->'} Nether</span>
           <CoordsTable positions={portals.overworld_to_the_nether} />
-          <h2>Overworld {'->'} End</h2>
+
+          <span className="fw-bolder fs-5">Overworld {'->'} End</span>
           <CoordsTable positions={portals.overworld_to_the_end} />
-          <h2>Nether {'->'} Overworld</h2>
+
+          <span className="fw-bolder fs-5">Nether {'->'} Overworld</span>
           <CoordsTable positions={portals.the_nether_to_overworld} />
-          <h2>End {'->'} Overworld</h2>
+
+          <span className="fw-bolder fs-5">End {'->'} Overworld</span>
           <CoordsTable positions={portals.the_end_to_overworld} />
         </Card.Body>
       </Card>

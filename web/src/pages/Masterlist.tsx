@@ -1,6 +1,5 @@
 import { useGetMaster } from '@/hooks/useGetMaster';
 import useGetSocket from '@/hooks/useGetSocket';
-import { useSendActionSocket } from '@/hooks/useSendActionSocket';
 import { State, actionCreators } from '@/state';
 import React, { useState } from 'react'
 import { Form } from 'react-bootstrap';
@@ -14,8 +13,6 @@ export const Masterlist: React.FC = () => {
 
   const botState = useSelector((state: State) => state.botsReducer);
   const { masters } = botState
-
-  const sendAction = useSendActionSocket()
 
   const dispatch = useDispatch();
   const { updateMaster, } = bindActionCreators(actionCreators, dispatch);

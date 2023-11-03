@@ -42,11 +42,9 @@ export const Dashboard: React.FC = () => {
                         <Col xs={12}>
                             <div className='form-group'>
                                 <div className='textAreaStyle form-control'>
-                                    {
-                                        logs
-                                            .filter(log => selectedSocketId === undefined || log.socketId === selectedSocketId)
-                                            .map((log, key) => <div key={key}>{log.time} {log.botName} {typeof log.message === "string" ? log.message : JSON.stringify(log.message)}</div>)
-                                    }
+                                    {logs
+                                        .filter(log => selectedSocketId === undefined || log.socketId === selectedSocketId)
+                                        .map((log, key) => <div key={key}>{log.time} {log.botName} {typeof log.message === "string" ? log.message : JSON.stringify(log.message)}</div>)}
                                     <div ref={messagesEndRef} />
                                 </div>
                             </div>
