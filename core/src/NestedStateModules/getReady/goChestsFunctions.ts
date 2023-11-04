@@ -84,9 +84,9 @@ export default (bot: Bot, targets: LegionStateMachineTargets) => {
       child: nextCheck,
       onTransition: () => {
         chestIndex = 0
-        chests = loadConfig.getAllChests()
+        chests = bot.config.chests
       },
-      shouldTransition: () => !loadConfig.getFirstPickUpItemsFromKnownChests()
+      shouldTransition: () => !bot.config.firstPickUpItemsFromKnownChests
     }),
 
     new StateTransition({
@@ -95,10 +95,10 @@ export default (bot: Bot, targets: LegionStateMachineTargets) => {
       name: 'Is enabled first pickup items from know chests',
       onTransition: () => {
         chestIndex = 0
-        chests = loadConfig.getAllChests()
+        chests = bot.config.chests
         targets.pickUpItems = findChestsToWithdraw(chests, targets.chests)
       },
-      shouldTransition: () => loadConfig.getFirstPickUpItemsFromKnownChests()
+      shouldTransition: () => bot.config.firstPickUpItemsFromKnownChests
     }),
 
     new StateTransition({
@@ -174,7 +174,7 @@ export default (bot: Bot, targets: LegionStateMachineTargets) => {
       parent: checkCraftItem,
       child: nextCheck,
       onTransition: () => chestIndex++,
-      shouldTransition: () => itemsToCraft.length === 0 || !targets.config.canCraftItemWithdrawChest
+      shouldTransition: () => itemsToCraft.length === 0 || !bot.config.canCraftItemWithdrawChest
     }),
 
     new StateTransition({
@@ -183,7 +183,7 @@ export default (bot: Bot, targets: LegionStateMachineTargets) => {
       onTransition: () => {
         targets.craftItemBatch = itemsToCraft
       },
-      shouldTransition: () => itemsToCraft.length > 0 && targets.config.canCraftItemWithdrawChest
+      shouldTransition: () => itemsToCraft.length > 0 && bot.config.canCraftItemWithdrawChest
     }),
 
     new StateTransition({

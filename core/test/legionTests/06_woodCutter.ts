@@ -1,7 +1,7 @@
-import botConfigLoader from '@/modules/botConfig'
 import inventoryModule from '@/modules/inventoryModule'
 import { Jobs, Config, PlantArea } from 'base-types'
 import { bot } from '../hooks'
+import { defaultConfig } from 'base-types'
 
 describe('06 Wood cutter', function () {
   const plantAreas: Array<PlantArea> = [
@@ -18,9 +18,8 @@ describe('06 Wood cutter', function () {
   ]
 
   before(async () => {
-    const botConfig = botConfigLoader(bot.username)
     const config: Config = {
-      ...botConfig.defaultConfig,
+      ...structuredClone(defaultConfig),
       job: Jobs.farmer,
       pickUpItems: true,
       itemsToBeReady: [
@@ -41,7 +40,7 @@ describe('06 Wood cutter', function () {
     bot.creative.stopFlying()
     bot.test.becomeSurvival()
 
-    botConfig.saveFullConfig(config)
+    bot.config = config
     bot.emit('reloadBotConfig')
   })
 

@@ -32,8 +32,8 @@ export default class BehaviorGetReady implements StateBehavior {
   }
 
   checkImReady() {
-    for (let i = 0; i < this.targets.config.itemsToBeReady.length; i++) {
-      const itemToBeReady = this.targets.config.itemsToBeReady[i]
+    for (let i = 0; i < this.bot.config.itemsToBeReady.length; i++) {
+      const itemToBeReady = this.bot.config.itemsToBeReady[i]
       const itemsInUse = !itemToBeReady.name ? 0 : this.inventory.countItemsInInventoryOrEquipped(itemToBeReady.name)
       if (itemsInUse < itemToBeReady.quantity) {
         this.isReady = false

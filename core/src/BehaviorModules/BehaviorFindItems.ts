@@ -46,7 +46,7 @@ export default class BehaviorFindItems implements StateBehavior {
 
 
   search() {
-    if (!this.targets.config.pickUpItems) return false
+    if (!this.bot.config.pickUpItems) return false
 
     const entities = Object.keys(this.bot.entities)
 

@@ -187,7 +187,7 @@ export default class BehaviorMinerCurrentBlock implements StateBehavior {
     if (!block) {
       this.getBlockInfo = false
       this.targets.position = position
-      this.targets.position.dimension = this.targets.config.minerCords.world
+      this.targets.position.dimension = this.bot.config.minerCords.world
       return true
     }
 

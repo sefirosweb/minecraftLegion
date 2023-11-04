@@ -1,7 +1,7 @@
-import botConfigLoader from '@/modules/botConfig'
 import inventoryModule from '@/modules/inventoryModule'
 import { Jobs, Config } from 'base-types'
 import { bot } from '../hooks'
+import { defaultConfig } from 'base-types'
 
 const listOfAnimalstoFeed = [
   {
@@ -33,18 +33,16 @@ const listOfAnimalstoFeed = [
 
 describe('10 Butcher animals', function () {
 
-  let botConfig: ReturnType<typeof botConfigLoader>
 
   const beforeEachAnimal = async () => {
-    botConfig = botConfigLoader(bot.username)
     const config: Config = {
-      ...botConfig.defaultConfig,
+      ...structuredClone(defaultConfig),
       job: Jobs.breeder,
       pickUpItems: true,
       itemsToBeReady: [],
       farmAnimalSeconds: 10,
       farmAnimal: {
-        ...botConfig.defaultConfig.farmAnimal,
+        ...defaultConfig.farmAnimal,
         cow: 3,
         sheep: 3,
         chicken: 3,
@@ -75,7 +73,7 @@ describe('10 Butcher animals', function () {
     bot.creative.stopFlying()
     bot.test.becomeSurvival()
 
-    botConfig.saveFullConfig(config)
+    bot.config = config
     bot.emit('reloadBotConfig')
   }
 
@@ -125,7 +123,7 @@ describe('10 Butcher animals', function () {
           })
 
           if (foundAll) {
-            botConfig.saveFullConfig(botConfig.defaultConfig)
+            bot.config = defaultConfig
             bot.emit('reloadBotConfig')
             clearInterval(intervalFeedCows)
             clearInterval(interval)

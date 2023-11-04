@@ -1,6 +1,7 @@
 import 'mineflayer'
 import { Vec3 } from "vec3";
 import mcDataLoader from 'minecraft-data'
+import { Config } from 'base-types';
 
 declare module 'mineflayer' {
 
@@ -8,6 +9,7 @@ declare module 'mineflayer' {
 
     interface Bot {
         mcData: mcDataLoader.IndexedData
+        config: Config
     }
 
     interface BotEvents {
@@ -31,3 +33,11 @@ declare module 'mineflayer' {
         removeListener: () => void
     }
 }
+
+export type DeepPartial<T> = {
+    [P in keyof T]?: T[P] extends Array<infer U>
+    ? Array<DeepPartial<U>>
+    : T[P] extends ReadonlyArray<infer U>
+    ? ReadonlyArray<DeepPartial<U>>
+    : DeepPartial<T[P]>
+};

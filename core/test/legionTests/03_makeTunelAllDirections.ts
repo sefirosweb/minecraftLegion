@@ -1,13 +1,10 @@
-import botConfigLoader from '@/modules/botConfig'
-import { Jobs, Config, MineCordsConfig } from 'base-types'
+import { Config, Jobs, MineCordsConfig } from 'base-types'
 import { bot } from '../hooks'
+import { defaultConfig } from 'base-types'
 
 describe('03 Make tunel in all directions', function () {
-  let botConfig: ReturnType<typeof botConfigLoader>
 
   before(async () => {
-    botConfig = botConfigLoader(bot.username)
-
     await bot.test.resetState()
     bot.chat(`/give flatbot iron_pickaxe`)
     bot.chat(`/give flatbot diamond_shovel`)
@@ -42,7 +39,7 @@ describe('03 Make tunel in all directions', function () {
     }
 
     const config: Config = {
-      ...botConfig.defaultConfig,
+      ...structuredClone(defaultConfig),
       job: Jobs.miner,
       itemsToBeReady: [
         {
@@ -53,7 +50,7 @@ describe('03 Make tunel in all directions', function () {
       minerCords
     }
 
-    botConfig.saveFullConfig(config)
+    bot.config = config
     bot.emit('reloadBotConfig')
 
     return new Promise((resolve) => {
@@ -77,7 +74,7 @@ describe('03 Make tunel in all directions', function () {
 
 
     const config: Config = {
-      ...botConfig.defaultConfig,
+      ...structuredClone(defaultConfig),
       job: Jobs.miner,
       itemsToBeReady: [
         {
@@ -88,7 +85,7 @@ describe('03 Make tunel in all directions', function () {
       minerCords
     }
 
-    botConfig.saveFullConfig(config)
+    bot.config = config
     bot.emit('reloadBotConfig')
 
 
@@ -113,7 +110,7 @@ describe('03 Make tunel in all directions', function () {
 
 
     const config: Config = {
-      ...botConfig.defaultConfig,
+      ...structuredClone(defaultConfig),
       job: Jobs.miner,
       itemsToBeReady: [
         {
@@ -124,7 +121,7 @@ describe('03 Make tunel in all directions', function () {
       minerCords
     }
 
-    botConfig.saveFullConfig(config)
+    bot.config = config
     bot.emit('reloadBotConfig')
 
     return new Promise((resolve) => {
@@ -148,7 +145,7 @@ describe('03 Make tunel in all directions', function () {
 
 
     const config: Config = {
-      ...botConfig.defaultConfig,
+      ...structuredClone(defaultConfig),
       job: Jobs.miner,
       itemsToBeReady: [
         {
@@ -159,7 +156,7 @@ describe('03 Make tunel in all directions', function () {
       minerCords
     }
 
-    botConfig.saveFullConfig(config)
+    bot.config = config
     bot.emit('reloadBotConfig')
 
     return new Promise((resolve) => {

@@ -1,6 +1,6 @@
-import botConfigLoader from '@/modules/botConfig'
 import { Jobs, Config, MineCordsConfig } from 'base-types'
 import { bot } from '../hooks'
+import { defaultConfig } from 'base-types'
 
 describe('01 Make hole in liquid & lava', function () {
 
@@ -17,23 +17,19 @@ describe('01 Make hole in liquid & lava', function () {
     world: "overworld"
   }
 
-  let config: Config
-  let botConfig: ReturnType<typeof botConfigLoader>
+  const config: Config = {
+    ...structuredClone(defaultConfig),
+    job: Jobs.miner,
+    itemsToBeReady: [
+      {
+        name: "iron_pickaxe",
+        quantity: 1
+      }
+    ],
+    minerCords
+  }
 
   before(async () => {
-    botConfig = botConfigLoader(bot.username)
-    config = {
-      ...botConfig.defaultConfig,
-      job: Jobs.miner,
-      itemsToBeReady: [
-        {
-          name: "iron_pickaxe",
-          quantity: 1
-        }
-      ],
-      minerCords
-    }
-
     await bot.test.resetState()
     bot.chat(`/give flatbot iron_pickaxe`)
     bot.chat(`/give flatbot diamond_shovel`)
@@ -50,7 +46,7 @@ describe('01 Make hole in liquid & lava', function () {
     bot.creative.stopFlying()
     bot.test.becomeSurvival()
 
-    botConfig.saveFullConfig(config)
+    bot.config = config
     bot.emit('reloadBotConfig')
   })
 

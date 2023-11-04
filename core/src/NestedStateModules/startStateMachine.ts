@@ -7,14 +7,12 @@ import botWebsocket from '@/modules/botWebsocket'
 import mineflayerPathfinder from 'mineflayer-pathfinder'
 import { startPrismarineViewer } from '@/modules/viewer'
 import DeathFunction from '@/NestedStateModules/deathFunction'
-import botConfigLoader from '@/modules/botConfig'
 import { StateTransition, BotStateMachine, StateMachineWebserver, BehaviorIdle, NestedStateMachine } from 'mineflayer-statemachine'
 
 // @ts-ignore
 import inventoryViewer from 'mineflayer-web-inventory'
 
 const startStateMachine = (bot: Bot) => {
-  const botConfig = botConfigLoader(bot.username)
   const { debugMode } = config
 
   // const targets: LegionStateMachineTargets = {
@@ -51,7 +49,6 @@ const startStateMachine = (bot: Bot) => {
   const movements = new mineflayerPathfinder.Movements(bot)
 
   const targets: LegionStateMachineTargets = {
-    config: botConfig.defaultConfig,
     movements: movements,
     portals: {
       overworld_to_the_end: [],
@@ -67,13 +64,13 @@ const startStateMachine = (bot: Bot) => {
       animalsToBeFeed: [],
       breededAnimals: [],
       farmAreas: [],
-      farmAnimalSeconds: botConfig.defaultConfig.farmAnimalSeconds,
-      farmAnimal: botConfig.defaultConfig.farmAnimal,
+      farmAnimalSeconds: bot.config.farmAnimalSeconds,
+      farmAnimal: bot.config.farmAnimal,
       feedEntity: undefined
     },
     minerJob: {
       blockForPlace: [],
-      original: botConfig.defaultConfig.minerCords,
+      original: bot.config.minerCords,
       mineBlock: new Vec3(0, 0, 0),
       nextLayer: undefined
     },

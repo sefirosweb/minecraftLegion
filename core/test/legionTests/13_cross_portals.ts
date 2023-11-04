@@ -1,13 +1,11 @@
-import botConfigLoader from '@/modules/botConfig'
 import { bot } from '../hooks'
 import { Jobs, Config, MineCordsConfig } from 'base-types'
 import { Vec3 } from 'vec3'
+import { defaultConfig } from 'base-types'
 
 describe('12 Cross the portals', function () {
-  let botConfig: ReturnType<typeof botConfigLoader>
 
   before(async () => {
-    botConfig = botConfigLoader(bot.username)
     await bot.test.resetState()
 
     bot.chat(`/fill -4 -60 13 0 -55 13 obsidian`)
@@ -20,6 +18,7 @@ describe('12 Cross the portals', function () {
 
     bot.creative.stopFlying()
     bot.test.becomeSurvival()
+    bot.config = defaultConfig
     bot.emit('reloadBotConfig')
   })
 
@@ -40,7 +39,7 @@ describe('12 Cross the portals', function () {
 
 
     const config: Config = {
-      ...botConfig.defaultConfig,
+      ...structuredClone(defaultConfig),
       job: Jobs.miner,
       itemsToBeReady: [
         {
@@ -66,7 +65,7 @@ describe('12 Cross the portals', function () {
     }
 
     bot.once('checkPortalsOnSpawn', async () => {
-      botConfig.saveFullConfig(config)
+      bot.config = config
       bot.emit('reloadBotConfig')
     })
 
@@ -75,7 +74,7 @@ describe('12 Cross the portals', function () {
       bot.once('spawn', async () => {
         bot.once('checkPortalsOnSpawn', async () => {
 
-          botConfig.saveFullConfig(botConfig.defaultConfig)
+          bot.config = defaultConfig
           bot.emit('reloadBotConfig')
 
           setTimeout(() => {
@@ -105,7 +104,7 @@ describe('12 Cross the portals', function () {
     }
 
     const config: Config = {
-      ...botConfig.defaultConfig,
+      ...structuredClone(defaultConfig),
       job: Jobs.miner,
       itemsToBeReady: [
         {
@@ -132,14 +131,14 @@ describe('12 Cross the portals', function () {
 
 
     bot.once('checkPortalsOnSpawn', async () => {
-      botConfig.saveFullConfig(config)
+      bot.config = config
       bot.emit('reloadBotConfig')
     })
 
     return new Promise((resolve) => {
       bot.once('spawn', () => {
         bot.once('checkPortalsOnSpawn', async () => {
-          botConfig.saveFullConfig(botConfig.defaultConfig)
+          bot.config = defaultConfig
           bot.emit('reloadBotConfig')
 
           setTimeout(() => {

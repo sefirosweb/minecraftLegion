@@ -17,7 +17,7 @@ export const GeneralConfig: React.FC = () => {
       return null;
     }
 
-    changeConfig("InsertItemCanBeEat", { name: itemName });
+    changeConfig("insertItemCanBeEat", { name: itemName });
   };
 
   const renderItemsTable = () => {

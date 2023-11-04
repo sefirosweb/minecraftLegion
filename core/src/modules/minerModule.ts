@@ -11,12 +11,12 @@ const minerModule = (bot: Bot, targets: LegionStateMachineTargets) => {
     const sidesToCheck = []
 
     let off
-    const offsetX: number = targets.config.minerCords.orientation === 'x+' ? 1 : targets.config.minerCords.orientation === 'x-' ? -1 : 0
-    const offsetZ: number = targets.config.minerCords.orientation === 'z+' ? 1 : targets.config.minerCords.orientation === 'z-' ? -1 : 0
+    const offsetX: number = bot.config.minerCords.orientation === 'x+' ? 1 : bot.config.minerCords.orientation === 'x-' ? -1 : 0
+    const offsetZ: number = bot.config.minerCords.orientation === 'z+' ? 1 : bot.config.minerCords.orientation === 'z-' ? -1 : 0
 
     const backOffset = new Vec3(offsetX, 0, offsetZ)
 
-    if (targets.config.minerCords.tunel === 'vertically') {
+    if (bot.config.minerCords.tunel === 'vertically') {
       sidesToCheck.push({
         side: 'bottom',
         position: originalPosition.offset(0, -1, 0)
@@ -24,7 +24,7 @@ const minerModule = (bot: Bot, targets: LegionStateMachineTargets) => {
     }
 
     if (
-      targets.config.minerCords.tunel === 'horizontally' &&
+      bot.config.minerCords.tunel === 'horizontally' &&
       originalPosition.y === targets.minerJob.original.yStart
     ) {
       sidesToCheck.push({
@@ -38,7 +38,7 @@ const minerModule = (bot: Bot, targets: LegionStateMachineTargets) => {
     }
 
     if (
-      targets.config.minerCords.tunel === 'horizontally' &&
+      bot.config.minerCords.tunel === 'horizontally' &&
       originalPosition.y === targets.minerJob.original.yEnd
     ) {
       sidesToCheck.push({
@@ -52,15 +52,15 @@ const minerModule = (bot: Bot, targets: LegionStateMachineTargets) => {
     }
 
     if (
-      targets.config.minerCords.tunel === 'horizontally' &&
+      bot.config.minerCords.tunel === 'horizontally' &&
       (
-        (targets.config.minerCords.orientation === 'x+' && originalPosition.z === targets.minerJob.original.zStart) ||
-        (targets.config.minerCords.orientation === 'x-' && originalPosition.z === targets.minerJob.original.zEnd) ||
-        (targets.config.minerCords.orientation === 'z+' && originalPosition.x === targets.minerJob.original.xEnd) ||
-        (targets.config.minerCords.orientation === 'z-' && originalPosition.x === targets.minerJob.original.xStart)
+        (bot.config.minerCords.orientation === 'x+' && originalPosition.z === targets.minerJob.original.zStart) ||
+        (bot.config.minerCords.orientation === 'x-' && originalPosition.z === targets.minerJob.original.zEnd) ||
+        (bot.config.minerCords.orientation === 'z+' && originalPosition.x === targets.minerJob.original.xEnd) ||
+        (bot.config.minerCords.orientation === 'z-' && originalPosition.x === targets.minerJob.original.xStart)
       )
     ) {
-      switch (targets.config.minerCords.orientation) {
+      switch (bot.config.minerCords.orientation) {
         case 'x+':
           off = new Vec3(0, 0, -1)
           break
@@ -86,15 +86,15 @@ const minerModule = (bot: Bot, targets: LegionStateMachineTargets) => {
     }
 
     if (
-      targets.config.minerCords.tunel === 'horizontally' &&
+      bot.config.minerCords.tunel === 'horizontally' &&
       (
-        (targets.config.minerCords.orientation === 'x+' && originalPosition.z === targets.minerJob.original.zEnd) ||
-        (targets.config.minerCords.orientation === 'x-' && originalPosition.z === targets.minerJob.original.zStart) ||
-        (targets.config.minerCords.orientation === 'z+' && originalPosition.x === targets.minerJob.original.xStart) ||
-        (targets.config.minerCords.orientation === 'z-' && originalPosition.x === targets.minerJob.original.xEnd)
+        (bot.config.minerCords.orientation === 'x+' && originalPosition.z === targets.minerJob.original.zEnd) ||
+        (bot.config.minerCords.orientation === 'x-' && originalPosition.z === targets.minerJob.original.zStart) ||
+        (bot.config.minerCords.orientation === 'z+' && originalPosition.x === targets.minerJob.original.xStart) ||
+        (bot.config.minerCords.orientation === 'z-' && originalPosition.x === targets.minerJob.original.xEnd)
       )
     ) {
-      switch (targets.config.minerCords.orientation) {
+      switch (bot.config.minerCords.orientation) {
         case 'x+':
           off = new Vec3(0, 0, 1)
           break
@@ -119,7 +119,7 @@ const minerModule = (bot: Bot, targets: LegionStateMachineTargets) => {
       })
     }
 
-    if (targets.config.minerCords.tunel === 'horizontally') {
+    if (bot.config.minerCords.tunel === 'horizontally') {
       sidesToCheck.push({
         side: 'back',
         position: originalPosition.offset(offsetX, 0, offsetZ)

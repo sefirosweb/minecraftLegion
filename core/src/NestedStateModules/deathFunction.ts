@@ -101,11 +101,10 @@ function deathFunction(bot: Bot, targets: LegionStateMachineTargets) {
       parent: loadConfig,
       child: startWork,
       onTransition: () => {
-        targets.config = loadConfig.getAllConfig()
-        targets.movements.allowSprinting = targets.config.allowSprinting
-        targets.movements.canDig = targets.config.canDig
-        targets.movements.allow1by1towers = targets.config.canPlaceBlocks
-        targets.movements.scafoldingBlocks = targets.config.canPlaceBlocks ? targets.movements.scafoldingBlocks : []
+        targets.movements.allowSprinting = bot.config.allowSprinting
+        targets.movements.canDig = bot.config.canDig
+        targets.movements.allow1by1towers = bot.config.canPlaceBlocks
+        targets.movements.scafoldingBlocks = bot.config.canPlaceBlocks ? targets.movements.scafoldingBlocks : []
         targets.movements.blocksToAvoid.delete(bot.mcData.blocksByName.wheat.id)
         targets.movements.blocksToAvoid.add(bot.mcData.blocksByName.sweet_berry_bush.id)
         targets.movements.blocksCantBreak.add(bot.mcData.blocksByName.sweet_berry_bush.id)
@@ -120,7 +119,7 @@ function deathFunction(bot: Bot, targets: LegionStateMachineTargets) {
       onTransition: () => {
         targets.triedToSleep = true
       },
-      shouldTransition: () => targets.config.canSleep === true && targets.triedToSleep === false && targets.isNight === true
+      shouldTransition: () => bot.config.canSleep === true && targets.triedToSleep === false && targets.isNight === true
     }),
 
     new StateTransition({ // 10

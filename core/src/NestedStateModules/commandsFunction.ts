@@ -1,6 +1,5 @@
 import { StateTransition, BehaviorIdle, BehaviorFollowEntity, BehaviorLookAtEntity, NestedStateMachine } from 'mineflayer-statemachine'
 import { Vec3 } from 'vec3'
-import botConfigLoader from '@/modules/botConfig'
 import botWebsocket from '@/modules/botWebsocket'
 import { BotwebsocketAction, Coordinates, LegionStateMachineTargets, Master } from 'base-types'
 import { Entity } from 'prismarine-entity'
@@ -313,12 +312,6 @@ function commandsFunction(bot: Bot, targets: LegionStateMachineTargets) {
     botWebsocket.log('Point: ' + JSON.stringify(point))
 
     bot.on('customEventMove', nextPointListener)
-  }
-
-  function savePatrol() {
-    bot.removeListener('customEventMove', nextPointListener)
-    botConfigLoader(bot.username).setPatrol(patrol)
-    // bot.chat('Ok, I memorized the patrol')
   }
 
   const nestedState = new NestedStateMachine(transitions, start, exit)

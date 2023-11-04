@@ -57,13 +57,13 @@ function startWorkFunction(bot: Bot, targets: LegionStateMachineTargets) {
     new StateTransition({
       parent: loadedConfig,
       child: guardJob,
-      shouldTransition: () => targets.config.job === Jobs.guard
+      shouldTransition: () => bot.config.job === Jobs.guard
     }),
 
     new StateTransition({
       parent: loadedConfig,
       child: archerJob,
-      shouldTransition: () => targets.config.job === Jobs.archer
+      shouldTransition: () => bot.config.job === Jobs.archer
     }),
 
     new StateTransition({
@@ -77,13 +77,13 @@ function startWorkFunction(bot: Bot, targets: LegionStateMachineTargets) {
         }
 
       },
-      shouldTransition: () => targets.config.job === Jobs.farmer
+      shouldTransition: () => bot.config.job === Jobs.farmer
     }),
 
     new StateTransition({
       parent: loadedConfig,
       child: breederJob,
-      shouldTransition: () => targets.config.job === Jobs.breeder
+      shouldTransition: () => bot.config.job === Jobs.breeder
     }),
 
     new StateTransition({
@@ -99,19 +99,19 @@ function startWorkFunction(bot: Bot, targets: LegionStateMachineTargets) {
         targets.minerJob.blockForPlace = blockForPlace
 
       },
-      shouldTransition: () => targets.config.job === Jobs.miner
+      shouldTransition: () => bot.config.job === Jobs.miner
     }),
 
     new StateTransition({
       parent: loadedConfig,
       child: sorterJob,
-      shouldTransition: () => targets.config.job === Jobs.sorter
+      shouldTransition: () => bot.config.job === Jobs.sorter
     }),
 
     new StateTransition({
       parent: loadedConfig,
       child: crafterJobFunction,
-      shouldTransition: () => targets.config.job === Jobs.crafter
+      shouldTransition: () => bot.config.job === Jobs.crafter
     }),
 
   ]

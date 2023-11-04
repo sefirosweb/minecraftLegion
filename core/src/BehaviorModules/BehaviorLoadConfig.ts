@@ -1,8 +1,7 @@
 import { StateBehavior } from "mineflayer-statemachine"
 import { Config, LegionStateMachineTargets, Jobs } from "base-types"
-import botConfigLoader from '@/modules/botConfig'
 import { Bot } from "mineflayer"
-
+// TODO delete this file
 export default class BehaviorLoadConfig implements StateBehavior {
   active: boolean
   readonly bot: Bot
@@ -26,19 +25,13 @@ export default class BehaviorLoadConfig implements StateBehavior {
   plantAreas: Config['plantAreas']
   itemsCanBeEat: Config['itemsCanBeEat']
   itemsToBeReady: Config['itemsToBeReady']
-  minerCords: Config['minerCords']
   firstPickUpItemsFromKnownChests: Config['firstPickUpItemsFromKnownChests']
-  randomFarmArea: Config['randomFarmArea']
-  farmAnimal: Config['farmAnimal']
-  farmAreas: Config['farmAreas']
 
   constructor(bot: Bot, targets: LegionStateMachineTargets) {
     this.bot = bot
     this.targets = targets
     this.stateName = 'BehaviorLoadConfig'
     this.active = true
-
-    const botConfig = botConfigLoader(this.bot.username)
 
     this.job = Jobs.none
     this.mode = 'none'
@@ -54,105 +47,10 @@ export default class BehaviorLoadConfig implements StateBehavior {
     this.plantAreas = []
     this.itemsCanBeEat = []
     this.itemsToBeReady = []
-    this.minerCords = botConfig.defaultConfig.minerCords
     this.firstPickUpItemsFromKnownChests = false
-    this.randomFarmArea = botConfig.defaultConfig.randomFarmArea
-    this.farmAnimal = botConfig.defaultConfig.farmAnimal
-    this.farmAreas = botConfig.defaultConfig.farmAreas
+
   }
 
   onStateEntered() {
-    const botConfig = botConfigLoader(this.bot.username)
-    this.job = botConfig.getJob()
-    this.mode = botConfig.getMode()
-    this.helpFriends = botConfig.getHelpFriends()
-    this.distance = botConfig.getDistance()
-    this.patrol = botConfig.getPatrol()
-    this.minerCords = botConfig.getMinerCords()
-    this.chests = botConfig.getAllChests()
-    this.firstPickUpItemsFromKnownChests = botConfig.getFirstPickUpItemsFromKnownChests()
-    this.itemsToBeReady = botConfig.getItemsToBeReady()
-    this.pickUpItems = botConfig.getPickUpItems()
-    this.itemsCanBeEat = botConfig.getItemsCanBeEat()
-    this.canDig = botConfig.getCanDig()
-    this.canSleep = botConfig.getCanSleep()
-    this.allowSprinting = botConfig.getAllowSprinting()
-    this.plantAreas = botConfig.getPlantAreas()
-    this.randomFarmArea = botConfig.getRandomFarmArea()
-    this.farmAnimal = botConfig.getFarmAnimal()
-    this.farmAreas = botConfig.getFarmAreas()
-  }
-
-  getAllConfig() {
-    const botConfig = botConfigLoader(this.bot.username)
-    return botConfig.getAll()
-  }
-
-  getJob() {
-    return this.job
-  }
-
-  getMode() {
-    return this.mode
-  }
-
-  getHelpFriend() {
-    return this.helpFriends
-  }
-
-  getDistance() {
-    return this.distance
-  }
-
-  getPatrol() {
-    return this.patrol
-  }
-
-  getMinerCords() {
-    return this.minerCords
-  }
-
-  getAllChests() {
-    return this.chests
-  }
-
-  getItemsToBeReady() {
-    return this.itemsToBeReady
-  }
-
-  getPickUpItems() {
-    return this.pickUpItems
-  }
-
-  getItemsCanBeEat() {
-    return this.itemsCanBeEat
-  }
-
-  getCanDig() {
-    return this.canDig
-  }
-
-  getAllowSprinting() {
-    return this.allowSprinting
-  }
-
-  getPlantAreas() {
-    return this.plantAreas
-  }
-
-  getRandomFarmArea() {
-    return this.randomFarmArea
-  }
-
-  getFarmAnimal() {
-    return this.farmAnimal
-  }
-
-  getFarmAreas() {
-    return this.farmAreas
-  }
-
-  getFirstPickUpItemsFromKnownChests() {
-    return this.firstPickUpItemsFromKnownChests
   }
 }

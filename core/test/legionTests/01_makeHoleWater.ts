@@ -1,10 +1,9 @@
-import botConfigLoader from '@/modules/botConfig'
 import { Jobs, Config, MineCordsConfig } from 'base-types'
 import { bot } from '../hooks'
+import { defaultConfig } from 'base-types'
 
 describe('01 Mining in water', function () {
   before(async () => {
-    const botConfig = botConfigLoader(bot.username)
     await bot.test.resetState()
     bot.chat(`/give flatbot iron_pickaxe`)
     bot.chat(`/give flatbot diamond_shovel`)
@@ -30,7 +29,7 @@ describe('01 Mining in water', function () {
     }
 
     const config: Config = {
-      ...botConfig.defaultConfig,
+      ...structuredClone(defaultConfig),
       job: Jobs.miner,
       itemsToBeReady: [
         {
@@ -41,7 +40,7 @@ describe('01 Mining in water', function () {
       minerCords
     }
 
-    botConfig.saveFullConfig(config)
+    bot.config = config
     bot.emit('reloadBotConfig')
   })
 

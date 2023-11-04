@@ -99,10 +99,9 @@ function breederFunction(bot: Bot, targets: LegionStateMachineTargets) {
       parent: loadConfig,
       child: checkFarmAreas,
       onTransition: () => {
-        const config = loadConfig.getAllConfig()
-        targets.breederJob.farmAnimal = config.farmAnimal
-        targets.breederJob.farmAreas = config.farmAreas
-        targets.breederJob.farmAnimalSeconds = config.farmAnimalSeconds
+        targets.breederJob.farmAnimal = bot.config.farmAnimal
+        targets.breederJob.farmAreas = bot.config.farmAreas
+        targets.breederJob.farmAnimalSeconds = bot.config.farmAnimalSeconds
         targets.breederJob.animalsToBeFeed = getAnimalsToBeFeed()
       },
       shouldTransition: () => true

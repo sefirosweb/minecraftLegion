@@ -83,7 +83,7 @@ function guardJobFunction(bot: Bot, targets: LegionStateMachineTargets) {
       name: 'loadConfig -> patrol',
       onTransition: () => {
         targets.entity = undefined
-        patrol.setPatrol(loadConfig.getPatrol(), true)
+        patrol.setPatrol(bot.config.patrol, true)
       },
       shouldTransition: () => true
     }),

@@ -12,9 +12,9 @@ import FillFunction from '@/NestedStateModules/minerJob/fillFunction'
 import FindItemsAndPickup from '@/NestedStateModules/findItemsAndPickup'
 
 import mineflayerPathfinder, { Movements } from 'mineflayer-pathfinder'
-import botConfigLoader from '@/modules/botConfig'
 import { LegionStateMachineTargets, MineCords, MineCordsConfig } from 'base-types'
 import { Bot } from 'mineflayer'
+import { saveBotConfig } from '@/modules/botConfig'
 
 const movingWhile = (bot: Bot, nextCurrentLayer: MineCords, movements: Movements) => {
   let x, y, z
@@ -50,9 +50,6 @@ const movingWhile = (bot: Bot, nextCurrentLayer: MineCords, movements: Movements
 }
 
 function miningFunction(bot: Bot, targets: LegionStateMachineTargets) {
-  const { setMinerCords } = botConfigLoader(bot.username)
-
-
   const start = new BehaviorIdle()
   start.stateName = 'Start'
   start.x = 125
@@ -131,10 +128,10 @@ function miningFunction(bot: Bot, targets: LegionStateMachineTargets) {
   findItemsAndPickup.y = 363
 
   const saveCurrentLayer = () => {
-    const tunel = targets.config.minerCords.tunel
-    const orientation = targets.config.minerCords.orientation
-    const world = targets.config.minerCords.world
-    const reverse = targets.config.minerCords.reverse
+    const tunel = bot.config.minerCords.tunel
+    const orientation = bot.config.minerCords.orientation
+    const world = bot.config.minerCords.world
+    const reverse = bot.config.minerCords.reverse
 
     const newMineCords: MineCords = {
       xStart: targets.minerJob.original.xStart,
@@ -168,9 +165,8 @@ function miningFunction(bot: Bot, targets: LegionStateMachineTargets) {
       world: world,
       reverse: reverse
     }
-
-    setMinerCords(mineCordsConfig)
-    targets.config.minerCords = mineCordsConfig
+    bot.config.minerCords = mineCordsConfig
+    saveBotConfig()
   }
 
   const transitions = [
@@ -181,37 +177,37 @@ function miningFunction(bot: Bot, targets: LegionStateMachineTargets) {
       onTransition: () => {
 
         const yStart =
-          targets.config.minerCords.yStart >
-            targets.config.minerCords.yEnd
-            ? targets.config.minerCords.yEnd
-            : targets.config.minerCords.yStart
+          bot.config.minerCords.yStart >
+            bot.config.minerCords.yEnd
+            ? bot.config.minerCords.yEnd
+            : bot.config.minerCords.yStart
         const yEnd =
-          targets.config.minerCords.yStart >
-            targets.config.minerCords.yEnd
-            ? targets.config.minerCords.yStart
-            : targets.config.minerCords.yEnd
+          bot.config.minerCords.yStart >
+            bot.config.minerCords.yEnd
+            ? bot.config.minerCords.yStart
+            : bot.config.minerCords.yEnd
 
         const xStart =
-          targets.config.minerCords.xStart >
-            targets.config.minerCords.xEnd
-            ? targets.config.minerCords.xEnd
-            : targets.config.minerCords.xStart
+          bot.config.minerCords.xStart >
+            bot.config.minerCords.xEnd
+            ? bot.config.minerCords.xEnd
+            : bot.config.minerCords.xStart
         const xEnd =
-          targets.config.minerCords.xStart >
-            targets.config.minerCords.xEnd
-            ? targets.config.minerCords.xStart
-            : targets.config.minerCords.xEnd
+          bot.config.minerCords.xStart >
+            bot.config.minerCords.xEnd
+            ? bot.config.minerCords.xStart
+            : bot.config.minerCords.xEnd
 
         const zStart =
-          targets.config.minerCords.zStart >
-            targets.config.minerCords.zEnd
-            ? targets.config.minerCords.zEnd
-            : targets.config.minerCords.zStart
+          bot.config.minerCords.zStart >
+            bot.config.minerCords.zEnd
+            ? bot.config.minerCords.zEnd
+            : bot.config.minerCords.zStart
         const zEnd =
-          targets.config.minerCords.zStart >
-            targets.config.minerCords.zEnd
-            ? targets.config.minerCords.zStart
-            : targets.config.minerCords.zEnd
+          bot.config.minerCords.zStart >
+            bot.config.minerCords.zEnd
+            ? bot.config.minerCords.zStart
+            : bot.config.minerCords.zEnd
 
         targets.minerJob.original = {
           xStart,
@@ -231,7 +227,7 @@ function miningFunction(bot: Bot, targets: LegionStateMachineTargets) {
       name: 'loadConfig -> nextLayer',
       onTransition: () => {
         targets.entity = undefined
-        nextLayer.setMinerCords(loadConfig.getMinerCords())
+        nextLayer.setMinerCords(bot.config.minerCords)
       },
       shouldTransition: () => true
     }),
@@ -319,7 +315,7 @@ function miningFunction(bot: Bot, targets: LegionStateMachineTargets) {
         if (nextLayer.minerCords.tunel === 'horizontally') {
           if (!checkLayer.minerCords) throw Error('Variable not defined checkLayer.minerCords')
           targets.position.y = checkLayer.minerCords.yStart
-          targets.position.dimension = targets.config.minerCords.world
+          targets.position.dimension = bot.config.minerCords.world
         }
       },
       shouldTransition: () => currentBlock.isFinished() && currentBlock.canGetBlockInfo()

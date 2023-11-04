@@ -4,12 +4,11 @@ import { Vec3 } from 'vec3'
 import { sleep, onceWithCleanup } from '../../lib/promise_utils'
 
 import botConfigLoader from '@/modules/botConfig'
-import { TestBot as Bot } from 'base-types'
+import { TestBot as Bot, defaultConfig } from 'base-types'
 import { Block } from 'prismarine-block'
 import { Item } from 'prismarine-item'
 
 export default (bot: Bot) => {
-  const botConfig = botConfigLoader(bot.username)
   const gameModeChangedMessages = ['commands.gamemode.success.self', 'gameMode.changed']
 
   let grassName
@@ -68,7 +67,8 @@ export default (bot: Bot) => {
     bot.chat('/kill @e[type=!player]')
     bot.chat('/gamerule doMobLoot true')
     bot.chat('/gamerule randomTickSpeed 20')
-    botConfig.saveFullConfig(botConfig.defaultConfig);
+    bot.config = defaultConfig
+    bot.emit('reloadBotConfig')
     await becomeCreative()
     await clearInventory()
     bot.creative.startFlying()

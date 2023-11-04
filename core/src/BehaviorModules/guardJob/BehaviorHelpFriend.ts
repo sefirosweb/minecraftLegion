@@ -32,7 +32,7 @@ export default class BehaviorHelpFriend implements StateBehavior {
   }
 
   findHelpFriend() {
-    if (!this.targets.config.helpFriends) return false
+    if (!this.bot.config.helpFriends) return false
     const friends = botWebsocket.getFriends()
     const friendsNeedHelp = friends.filter(e => e.combat === true)
     if (friendsNeedHelp.length === 0) {

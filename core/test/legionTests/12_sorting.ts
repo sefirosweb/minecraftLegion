@@ -1,16 +1,14 @@
-import botConfigLoader from '@/modules/botConfig'
 import { Jobs, Config } from 'base-types'
 import { bot } from '../hooks'
 import botWebsocket from '@/modules/botWebsocket'
+import { defaultConfig } from 'base-types'
 
 describe('11 Sorting items', function () {
 
   before(async () => {
-    const botConfig = botConfigLoader(bot.username)
     const config: Config = {
-      ...botConfig.defaultConfig,
+      ...structuredClone(defaultConfig),
       job: Jobs.sorter,
-      // job: Jobs.none,
       itemsToBeReady: [],
     }
 
@@ -23,13 +21,12 @@ describe('11 Sorting items', function () {
 
     bot.creative.stopFlying()
     bot.test.becomeSurvival()
-    botConfig.saveFullConfig(config)
+    bot.config = config
     bot.emit('reloadBotConfig')
   })
 
   it('Sorted', (): Promise<void> => {
     botWebsocket.sendAction('setChests', {})
-
     return new Promise((resolve) => {
       bot.once('finishedJob', () => resolve())
     })

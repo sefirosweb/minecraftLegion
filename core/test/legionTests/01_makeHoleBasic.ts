@@ -1,6 +1,6 @@
-import botConfigLoader from '@/modules/botConfig'
-import { Jobs, Config, MineCordsConfig } from 'base-types'
+import { Config, Jobs, MineCordsConfig } from 'base-types'
 import { bot } from '../hooks'
+import { defaultConfig } from 'base-types'
 
 describe('01 Basic Mining', function () {
   let xStart = -10
@@ -24,26 +24,19 @@ describe('01 Basic Mining', function () {
     world: "overworld"
   }
 
-  let config: Config
-  let botConfig: ReturnType<typeof botConfigLoader>
+  const config: Config = {
+    ...structuredClone(defaultConfig),
+    job: Jobs.miner,
+    itemsToBeReady: [
+      {
+        name: "iron_pickaxe",
+        quantity: 1
+      }
+    ],
+    minerCords
+  }
 
   before(async () => {
-    botConfig = botConfigLoader(bot.username)
-
-    config = {
-      ...botConfig.defaultConfig,
-      job: Jobs.miner,
-      itemsToBeReady: [
-        {
-          name: "iron_pickaxe",
-          quantity: 1
-        }
-      ],
-      minerCords
-    }
-
-
-
     await bot.test.resetState()
     bot.chat(`/give flatbot iron_pickaxe`)
     bot.chat(`/give flatbot diamond_shovel`)
@@ -53,7 +46,7 @@ describe('01 Basic Mining', function () {
     bot.creative.stopFlying()
     bot.test.becomeSurvival()
 
-    botConfig.saveFullConfig(config)
+    bot.config = config
     bot.emit('reloadBotConfig')
   })
 
@@ -79,7 +72,7 @@ describe('01 Basic Mining', function () {
       minerCords: newMinerCords
     }
 
-    botConfig.saveFullConfig(newConfig)
+    bot.config = newConfig
     bot.emit('reloadBotConfig')
     return new Promise((resolve) => {
       bot.once('finishedJob', () => resolve())
@@ -102,7 +95,7 @@ describe('01 Basic Mining', function () {
       minerCords: newMinerCords
     }
 
-    botConfig.saveFullConfig(newConfig)
+    bot.config = newConfig
     bot.emit('reloadBotConfig')
     return new Promise((resolve) => {
       bot.once('finishedJob', () => resolve())
@@ -125,7 +118,7 @@ describe('01 Basic Mining', function () {
       minerCords: newMinerCords
     }
 
-    botConfig.saveFullConfig(newConfig)
+    bot.config = newConfig
     bot.emit('reloadBotConfig')
     return new Promise((resolve) => {
       bot.once('finishedJob', () => resolve())
@@ -148,7 +141,7 @@ describe('01 Basic Mining', function () {
       minerCords: newMinerCords
     }
 
-    botConfig.saveFullConfig(newConfig)
+    bot.config = newConfig
     bot.emit('reloadBotConfig')
     return new Promise((resolve) => {
       bot.once('finishedJob', () => resolve())
@@ -171,7 +164,7 @@ describe('01 Basic Mining', function () {
       minerCords: newMinerCords
     }
 
-    botConfig.saveFullConfig(newConfig)
+    bot.config = newConfig
     bot.emit('reloadBotConfig')
     return new Promise((resolve) => {
       bot.once('finishedJob', () => resolve())
@@ -194,7 +187,7 @@ describe('01 Basic Mining', function () {
       minerCords: newMinerCords
     }
 
-    botConfig.saveFullConfig(newConfig)
+    bot.config = newConfig
     bot.emit('reloadBotConfig')
     return new Promise((resolve) => {
       bot.once('finishedJob', () => resolve())
@@ -217,7 +210,7 @@ describe('01 Basic Mining', function () {
       minerCords: newMinerCords
     }
 
-    botConfig.saveFullConfig(newConfig)
+    bot.config = newConfig
     bot.emit('reloadBotConfig')
     return new Promise((resolve) => {
       bot.once('finishedJob', () => resolve())

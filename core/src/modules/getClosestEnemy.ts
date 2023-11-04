@@ -111,9 +111,9 @@ const getClosestEnemy = (bot: Bot, targets: LegionStateMachineTargets) => {
   }
 
   const filter = (entity: CustomEntity) => {
-    if (targets.config.mode === 'pvp') {
+    if (bot.config.mode === 'pvp') {
       if (
-        (entity.position.distanceTo(bot.player.entity.position) <= targets.config.distance) &&
+        (entity.position.distanceTo(bot.player.entity.position) <= bot.config.distance) &&
         (entity.type === 'hostile' || entity.kind === 'Hostile mobs' || entity.type === 'player') &&
         // entity.kind !== 'Passive mobs' &&
         entity.displayName &&
@@ -138,9 +138,9 @@ const getClosestEnemy = (bot: Bot, targets: LegionStateMachineTargets) => {
       }
     }
 
-    if (targets.config.mode === 'pve') {
+    if (bot.config.mode === 'pve') {
       // console.log(`${entity.displayName} + ${entity.type} + ${entity.kind}`)
-      return (entity.position.distanceTo(bot.player.entity.position) <= targets.config.distance) &&
+      return (entity.position.distanceTo(bot.player.entity.position) <= bot.config.distance) &&
         (entity.type === 'hostile' || entity.kind === 'Hostile mobs') &&
         // (entity.kind !== 'Passive mobs') &&
         entity.displayName &&

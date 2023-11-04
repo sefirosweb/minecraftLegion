@@ -1,15 +1,14 @@
-import botConfigLoader from '@/modules/botConfig'
 import { Jobs, Config } from 'base-types'
 import { Vec3 } from 'vec3'
 import { bot } from '../hooks'
+import { defaultConfig } from 'base-types'
 
 describe('05 Test bow long range', function () {
   before(async () => {
-    const botConfig = botConfigLoader(bot.username)
     const patrol = []
     patrol.push(new Vec3(50, -48, 0))
     const config: Config = {
-      ...botConfig.defaultConfig,
+      ...structuredClone(defaultConfig),
       job: Jobs.guard,
       mode: 'pve',
       distance: 120,
@@ -28,7 +27,7 @@ describe('05 Test bow long range', function () {
     bot.creative.stopFlying()
     bot.test.becomeSurvival()
 
-    botConfig.saveFullConfig(config)
+    bot.config = config
     bot.emit('reloadBotConfig')
   })
 

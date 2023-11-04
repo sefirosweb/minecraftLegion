@@ -6,7 +6,7 @@ import mcDataLoader from 'minecraft-data'
 import { StateBehavior } from "mineflayer-statemachine"
 import { Bot } from "mineflayer";
 
-export default class BehaviorEatFood implements StateBehavior{
+export default class BehaviorEatFood implements StateBehavior {
   active: boolean;
   readonly bot: Bot
   readonly targets: LegionStateMachineTargets
@@ -47,7 +47,7 @@ export default class BehaviorEatFood implements StateBehavior{
     const validFoods: Array<Food> = []
 
     this.bot.inventory.items().forEach((foodInventory) => {
-      const priority = this.targets.config.itemsCanBeEat.findIndex(
+      const priority = this.bot.config.itemsCanBeEat.findIndex(
         (food) => food === foodInventory.name
       )
 

@@ -65,8 +65,8 @@ function farmingFunction(bot: Bot, targets: LegionStateMachineTargets) {
       child: nextArea,
       onTransition: () => {
         plantAreaIndex = -1
-        plantArea = loadConfig.getPlantAreas()
-        const randomFarmArea = loadConfig.getRandomFarmArea()
+        plantArea = bot.config.plantAreas
+        const randomFarmArea = bot.config.randomFarmArea
         if (randomFarmArea) {
           shuffle(plantArea)
         }

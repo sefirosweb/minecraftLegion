@@ -1,13 +1,12 @@
-import botConfigLoader from '@/modules/botConfig'
 import inventoryModule from '@/modules/inventoryModule'
 import { Jobs, Config } from 'base-types'
 import { bot } from '../hooks'
+import { defaultConfig } from 'base-types'
 
 describe('07 Farming bamboo', function () {
   before(async () => {
-    const botConfig = botConfigLoader(bot.username)
     const config: Config = {
-      ...botConfig.defaultConfig,
+      ...structuredClone(defaultConfig),
       job: Jobs.farmer,
       pickUpItems: true,
       itemsCanBeEat: [],
@@ -37,7 +36,7 @@ describe('07 Farming bamboo', function () {
     bot.creative.stopFlying()
     bot.test.becomeSurvival()
 
-    botConfig.saveFullConfig(config)
+    bot.config = config
     bot.emit('reloadBotConfig')
   })
 

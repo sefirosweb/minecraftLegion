@@ -1,9 +1,8 @@
-import botConfigLoader from '@/modules/botConfig'
 import { bot } from '../hooks'
 import { Jobs, Chest, Config } from 'base-types'
 import { Vec3 } from 'vec3'
 import botWebsocket from '@/modules/botWebsocket'
-
+import { defaultConfig } from 'base-types'
 
 describe('04 Get ready for combat', function () {
   const chests: Array<Chest> = [
@@ -106,7 +105,6 @@ describe('04 Get ready for combat', function () {
   ]
 
   before(async () => {
-    const botConfig = botConfigLoader(bot.username)
     const patrol = []
     patrol.push(new Vec3(10, -60, 23))
     patrol.push(new Vec3(10, -60, 29))
@@ -119,7 +117,7 @@ describe('04 Get ready for combat', function () {
     ]
 
     const config: Config = {
-      ...botConfig.defaultConfig,
+      ...structuredClone(defaultConfig),
       job: Jobs.guard,
       mode: 'pve',
       allowSprinting: true,
@@ -150,7 +148,7 @@ describe('04 Get ready for combat', function () {
     bot.creative.stopFlying()
     bot.test.becomeSurvival()
 
-    botConfig.saveFullConfig(config)
+    bot.config = config
     bot.emit('reloadBotConfig')
   })
 

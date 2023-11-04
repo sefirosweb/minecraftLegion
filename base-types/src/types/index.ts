@@ -301,8 +301,6 @@ export interface LegionStateMachineTargets extends StateMachineTargets {
     isNight: boolean;
     triedToSleep: boolean;
 
-    config: Config;
-
     itemDrop?: ItemDrop; // TODO FIX
     position?: Vec3WithDimension;
     pickUpItems?: any;
