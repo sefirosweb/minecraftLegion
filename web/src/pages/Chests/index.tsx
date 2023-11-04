@@ -8,7 +8,7 @@ import axios from "axios";
 
 export const Chests: React.FC = () => {
   const { data: chests } = useQuery({
-    queryKey: ['portals'],
+    queryKey: ['chests'],
     queryFn: () => axios.get<{ chests: ChestsType }>('/api/chests').then((data) => data.data.chests),
     refetchInterval: 2000,
   })
