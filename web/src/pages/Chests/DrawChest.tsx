@@ -1,5 +1,3 @@
-//@ts-nocheck
-// import { mcAssets } from '@/utils/mc';
 import smallChest from "@/images/smallChest.png";
 import largeChest from "@/images/largeChest.png";
 import { Canvas } from "./Canvas";
@@ -22,35 +20,32 @@ export const DrawChest: React.FC<Props> = (props) => {
         base_image.src = chest.slots.length === 27 ? smallChest : largeChest
         base_image.onload = () => ctx.drawImage(base_image, 0, 0);
 
-        for (const item in chest.slots) {
-            if (!chest.slots[item]) continue;
-
-            const inventorySlot = windowSlotsCoords[chestType][chest.slots[item].slot];
-
-            // const itemInfo = chest.slots[item];
-            // const texture = mcAssets.textureContent[itemInfo.name].texture;
+        for (const slot in chest.slots) {
+            if (!chest.slots[slot]) continue;
+            const windowSlots = windowSlotsCoords[chestType]
+            const inventorySlot = windowSlots[slot];
+            const itemInfo = chest.slots[slot];
 
             const itemImage = new Image();
-            itemImage.src = ''; //texture;
+            itemImage.src = `/minecraft-assets/${itemInfo.name}`
 
             itemImage.onload = function () {
                 // Draw item image
                 ctx.imageSmoothingEnabled = false;
                 ctx.drawImage(itemImage, inventorySlot[0], inventorySlot[1], 32, 32);
-
                 // Draw item count
-                if (chest.slots[item].count > 1) {
+                if (chest.slots[slot].count > 1) {
                     ctx.font = "20px monospace";
                     ctx.fillStyle = "black";
                     ctx.textAlign = "end";
                     ctx.fillText(
-                        chest.slots[item].count,
+                        itemInfo.count.toString(),
                         inventorySlot[0] + 33,
                         inventorySlot[1] + 31
                     );
                     ctx.fillStyle = "white";
                     ctx.fillText(
-                        chest.slots[item].count,
+                        itemInfo.count.toString(),
                         inventorySlot[0] + 32,
                         inventorySlot[1] + 30
                     );
@@ -59,60 +54,56 @@ export const DrawChest: React.FC<Props> = (props) => {
         }
     }
 
-    const drawChestText = () => {
-        return chest.slots.map((i, key) => {
-            if (!i) return '';
-            return <div key={key}>{i.name} x {i.count}</div>
-        })
-    }
-
     return (
         <div>
             <Card className='m-3'>
                 <Card.Body>
                     <Card.Title>Chests {uuid}</Card.Title>
-                    <Card.Text>
-                        <Row>
-                            <Col xs={6}>
-                                <span>
-                                    Dimension: {chest.dimension}
-                                </span>
-                            </Col>
-                            <Col xs={2}>
-                                <span className='badge bg-primary text-white'>
-                                    X: {chest.position.x}
-                                </span>
-                            </Col>
-                            <Col xs={2}>
-                                <span className='badge bg-warning text-dark'>
-                                    Y: {chest.position.y}
-                                </span>
-                            </Col>
-                            <Col xs={2}>
-                                <span className='badge bg-secondary text-white'>
-                                    Z: {chest.position.z}
-                                </span>
-                            </Col>
-                        </Row>
-                        <Row>
-                            <Col className='mt-2'>
-                                <Button
-                                    variant='danger'
-                                    onClick={deleteChest}
-                                >
-                                    Delete Chest
-                                </Button>
-                            </Col>
-                        </Row>
-                    </Card.Text>
-                    <Card.Text>
-                        {drawChestText()}
-                    </Card.Text>
+
+                    <Row className="mb-3">
+                        <Col xs={6}>
+                            <span>
+                                Dimension: {chest.dimension}
+                            </span>
+                        </Col>
+                        <Col xs={2}>
+                            <span className='badge bg-primary text-white'>
+                                X: {chest.position.x}
+                            </span>
+                        </Col>
+                        <Col xs={2}>
+                            <span className='badge bg-warning text-dark'>
+                                Y: {chest.position.y}
+                            </span>
+                        </Col>
+                        <Col xs={2}>
+                            <span className='badge bg-secondary text-white'>
+                                Z: {chest.position.z}
+                            </span>
+                        </Col>
+                    </Row>
+
+                    <Row>
+                        <Col className='mb-3'>
+                            <Button
+                                variant='danger'
+                                onClick={deleteChest}
+                            >
+                                Delete Chest
+                            </Button>
+                        </Col>
+                    </Row>
+
+                    {chest.slots.filter(i => i).map((i, key) =>
+                        <div key={key}>{i.name} x {i.count}</div>
+                    )}
+
                     <Canvas
                         draw={draw}
                         width={352}
                         height={chest.slots.length === 27 ? 150 : 260}
                     />
+
                 </Card.Body>
             </Card>
         </div>

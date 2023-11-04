@@ -1,13 +1,18 @@
 import React from "react";
-import { State } from "@/state";
 import { Card, CardGroup } from "react-bootstrap";
-import { useSelector } from "react-redux";
 import { DrawChest } from "./DrawChest";
 import { useSendActionSocket } from "@/hooks/useSendActionSocket";
+import { Chests as ChestsType } from "base-types";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
 
 export const Chests: React.FC = () => {
-  const botState = useSelector((state: State) => state.botsReducer);
-  const { chests } = botState
+  const { data: chests } = useQuery({
+    queryKey: ['portals'],
+    queryFn: () => axios.get<{ chests: ChestsType }>('/api/chests').then((data) => data.data.chests),
+    refetchInterval: 2000,
+  })
+
 
   const sendAction = useSendActionSocket()
 
@@ -26,10 +31,9 @@ export const Chests: React.FC = () => {
           <Card.Title>Chests</Card.Title>
           <Card.Text>Contain all chests in memory of server</Card.Text>
           <CardGroup>
-            {Object.entries(chests).map((entry) => {
+            {chests && Object.entries(chests).map((entry) => {
               const key = entry[0]
               const chest = entry[1]
-              console.log({ chest })
               return <DrawChest key={key} uuid={key} chest={chest} deleteChest={() => deleteChest(key)} />;
             })}
           </CardGroup>

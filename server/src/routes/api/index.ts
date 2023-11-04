@@ -2,6 +2,7 @@ import express, { NextFunction, Request, Response } from 'express'
 import createHttpError, { isHttpError } from 'http-errors'
 import { getIsAuthenticated, isAuthenticated } from '@/routes/login'
 import portals from './portals'
+import chests from './chests'
 
 const router = express.Router()
 router.use(isAuthenticated)
@@ -10,8 +11,7 @@ router.get('/login', getIsAuthenticated)
 router.get('/', (req, res) => res.json({ message: 'Home API' }))
 router.post('/', (req, res) => res.json({ success: true, message: 'Logged in!' }))
 router.use("/", portals)
-
-
+router.use("/", chests)
 
 
 router.use('/', (req, res, next) => next(createHttpError(404, "Endpoint not found")))

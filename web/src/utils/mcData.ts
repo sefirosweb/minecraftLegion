@@ -3,5 +3,5 @@ import foods from 'minecraft-data/minecraft-data/data/pc/1.20/foods.json'
 
 export {
     items,
-    foods
+    foods,
 }
