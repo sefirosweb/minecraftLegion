@@ -1,8 +1,7 @@
-//@ts-nocheck
-import { Button, Col, Row } from 'react-bootstrap'
-import HarvestArea from './HarvestArea'
-import { BotSelectedContext } from "./ConfigurationContext";
 import React, { useContext } from 'react';
+import { Button, Col, Row } from 'react-bootstrap'
+import { HarvestArea } from './HarvestArea'
+import { BotSelectedContext } from "./ConfigurationContext";
 import { useChangeConfig } from '@/hooks/useChangeConfig';
 
 export const FarmerJob: React.FC = () => {
@@ -13,20 +12,14 @@ export const FarmerJob: React.FC = () => {
     changeConfig('insertNewPlantArea', '')
   }
 
-  const renderPlantAreas = () => {
-    return botConfig.config.plantAreas.map((plantArea, index) => {
-      return (
-        <HarvestArea key={index} id={index} plantArea={plantArea} />
-      )
-    })
-  }
-
   return (
     <>
       <Row className='mb-3'>
         <Col>
           <h4>Insert areas and type of plant for harvest</h4>
-          {renderPlantAreas()}
+          {botConfig.config.plantAreas.map((plantArea, index) => (
+            <HarvestArea key={index} id={index} plantArea={plantArea} />
+          ))}
         </Col>
       </Row>
 

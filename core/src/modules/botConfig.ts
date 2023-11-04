@@ -3,6 +3,7 @@ import { Config, defaultConfig } from 'base-types'
 import path from 'path'
 import { Vec3 } from 'vec3'
 import { Bot } from 'mineflayer'
+import _ from 'lodash'
 
 let bot: Bot
 
@@ -14,7 +15,7 @@ export default (_bot: Bot, botName: string) => {
     fs.mkdirSync(dir);
   }
 
-  const botConfig = structuredClone(defaultConfig)
+  const botConfig = _.cloneDeep(defaultConfig)
   let save = false
   try {
     const dataFromFile = fs.readFileSync(path.join(dir, `${botName}.json`), 'utf8');

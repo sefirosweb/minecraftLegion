@@ -7,7 +7,7 @@ type Props = {
 }
 
 
-const Canvas: React.FC<Props> = (props) => {
+export const Canvas: React.FC<Props> = (props) => {
   const { draw, height, width } = props
 
   const canvas = useRef<HTMLCanvasElement>(null);
@@ -19,6 +19,3 @@ const Canvas: React.FC<Props> = (props) => {
   });
   return <canvas ref={canvas} height={height} width={width} />;
 };
-
-
-export default Canvas;

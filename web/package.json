@@ -29,6 +29,7 @@
   },
   "dependencies": {
     "axios": "^1.6.0",
+    "base-types": "file:../base-types/base-types-1.0.0.tgz",
     "bootstrap": "^5.3.2",
     "minecraft-assets": "^1.9.1",
     "minecraft-data": "^3.47.0",
@@ -44,9 +45,11 @@
     "socket.io-client": "^4.7.2"
   },
   "devDependencies": {
+    "@types/lodash": "^4.14.200",
     "@types/react": "^18.2.33",
     "@types/react-dom": "^18.2.14",
     "@vitejs/plugin-react-swc": "^3.4.0",
+    "lodash": "^4.17.21",
     "react-icons": "^4.11.0",
     "sass": "^1.69.5",
     "typescript": "^5.2.2",

@@ -69,7 +69,7 @@ const furnace: Record<number, [number, number]> = {
   30: [15, 283],
 };
 
-const windowSlotsCoords = {
+export const windowSlotsCoords = {
   inventory,
   chest,
   "large-chest": largeChest,
@@ -140,5 +140,3 @@ for (let i = 3; i < 4 * 9; i += 9) {
     ];
   }
 }
-
-export default windowSlotsCoords;

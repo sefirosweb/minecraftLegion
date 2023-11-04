@@ -2,6 +2,7 @@ import { ChestBlock, LegionStateMachineTargets } from 'base-types'
 import { StateTransition, BehaviorIdle, NestedStateMachine } from 'mineflayer-statemachine'
 import GoAndDeposit from '@/NestedStateModules/getReady/goAndDeposit'
 import { Bot } from 'mineflayer'
+import _ from 'lodash'
 
 function depositItemsInInventory(bot: Bot, targets: LegionStateMachineTargets) {
   const start = new BehaviorIdle()
@@ -28,7 +29,7 @@ function depositItemsInInventory(bot: Bot, targets: LegionStateMachineTargets) {
   let currentChest
 
   const findEmptychests = () => {
-    const chests = structuredClone(targets.chests)
+    const chests = _.cloneDeep(targets.chests)
     return Object.values(chests)
       .filter(c => c.slots.filter(s => s === null).length > 0)
       .sort((a, b) => b.slots.filter(s => s === null).length - a.slots.filter(s => s === null).length)
@@ -51,7 +52,7 @@ function depositItemsInInventory(bot: Bot, targets: LegionStateMachineTargets) {
       child: goAndDeposit,
       onTransition: () => {
         currentChest = chestsFound.shift()
-        if(!currentChest) throw new Error('current chest is empty!')
+        if (!currentChest) throw new Error('current chest is empty!')
         targets.position = currentChest.position
         targets.items = bot.inventory.items().map(i => {
           return {

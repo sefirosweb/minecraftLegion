@@ -1,6 +1,7 @@
 import { Jobs, Config, MineCordsConfig } from 'base-types'
 import { bot } from '../hooks'
 import { defaultConfig } from 'base-types'
+import _ from 'lodash'
 
 describe('01 Mining in water', function () {
   before(async () => {
@@ -29,7 +30,7 @@ describe('01 Mining in water', function () {
     }
 
     const config: Config = {
-      ...structuredClone(defaultConfig),
+      ..._.cloneDeep(defaultConfig),
       job: Jobs.miner,
       itemsToBeReady: [
         {

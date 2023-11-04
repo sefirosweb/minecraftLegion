@@ -1,4 +1,3 @@
-//@ts-nocheck
 import React, { useContext, useState } from "react";
 import { ArrowDown, ArrowUp, Trash, FormCheck } from "@/components";
 import { BotSelectedContext } from "./ConfigurationContext";
@@ -53,15 +52,15 @@ export const GuardJob: React.FC = () => {
     });
   };
 
-  const handleRemovePos = (index) => {
+  const handleRemovePos = (index: number) => {
     sendConfig("removePatrol", index);
   };
 
-  const handleMovePosNext = (index) => {
+  const handleMovePosNext = (index: number) => {
     sendConfig("movePatrolNext", index);
   };
 
-  const handleMovePosPrev = (index) => {
+  const handleMovePosPrev = (index: number) => {
     sendConfig("movePatrolPrev", index);
   };
 
@@ -70,29 +69,6 @@ export const GuardJob: React.FC = () => {
     sendConfig("savePositionHasMaster", master);
   };
 
-  const renderPatrolTable = () => {
-    return botConfig.config.patrol.map((pos, index) => {
-      return (
-        <tr key={index}>
-          <th scope="row">{index}</th>
-          <td>
-            X:{pos.x}
-            <br />
-            Y:{pos.y}
-            <br />
-            Z:{pos.z}
-          </td>
-          <td>
-            <ArrowUp onClick={() => handleMovePosPrev(index)} />{" "}
-            <ArrowDown onClick={() => handleMovePosPrev(index)} />
-          </td>
-          <td>
-            <Trash onClick={() => handleRemovePos(index)} />
-          </td>
-        </tr>
-      );
-    });
-  };
 
 
   const handleButtonClearPositions = () => {
@@ -180,7 +156,7 @@ export const GuardJob: React.FC = () => {
           </button>
         </div>
         <div className="col-2">
-          {botConfig.config.isCopingPatrol ? (
+          {botConfig.isCopingPatrol ? (
             <button
               type="button"
               className="btn btn-warning form-control"
@@ -211,7 +187,27 @@ export const GuardJob: React.FC = () => {
                 <th scope="col" />
               </tr>
             </thead>
-            <tbody>{renderPatrolTable()}</tbody>
+            <tbody>
+              {botConfig.config.patrol.map((pos, index) => (
+                <tr key={index}>
+                  <th scope="row">{index}</th>
+                  <td>
+                    X:{pos.x}
+                    <br />
+                    Y:{pos.y}
+                    <br />
+                    Z:{pos.z}
+                  </td>
+                  <td>
+                    <ArrowUp onClick={() => handleMovePosPrev(index)} />{" "}
+                    <ArrowDown onClick={() => handleMovePosPrev(index)} />
+                  </td>
+                  <td>
+                    <Trash onClick={() => handleRemovePos(index)} />
+                  </td>
+                </tr>
+              ))}
+            </tbody>
           </table>
         </div>
       </div>

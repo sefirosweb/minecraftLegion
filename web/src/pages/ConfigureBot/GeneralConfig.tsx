@@ -1,7 +1,7 @@
 // @ts-nocheck
-import React, { Suspense, useContext, useState } from "react";
+import React, { useContext, useState } from "react";
 import { ArrowDown, ArrowUp, Trash, FormCheck, Coords } from "@/components";
-import ItemsAviable from "./ItemsAviable";
+import { ItemsAviable } from "./ItemsAviable";
 import { BotSelectedContext } from "./ConfigurationContext";
 import { useChangeConfig } from "@/hooks/useChangeConfig";
 import { Button, Col, Form, Row, Table } from "react-bootstrap";
@@ -20,31 +20,6 @@ export const GeneralConfig: React.FC = () => {
     changeConfig("insertItemCanBeEat", { name: itemName });
   };
 
-  const renderItemsTable = () => {
-    return bot.config.itemsCanBeEat.map((food, index) => {
-      return (
-        <tr key={index}>
-          <th scope="row">{index + 1}</th>
-          <td>{food}</td>
-          <td>
-            <ArrowUp
-              disabled={index === 0}
-              onClick={() => changeConfig("moveItemCanBeEatPrev", index)}
-            />{" "}
-            <ArrowDown
-              disabled={index === bot.config.itemsCanBeEat.length - 1}
-              onClick={() => changeConfig("moveItemCanBeEatNext", index)}
-            />
-          </td>
-          <td>
-            <Trash
-              onClick={() => changeConfig("deleteItemCanBeEat", index)}
-            />
-          </td>
-        </tr>
-      );
-    });
-  };
 
   const handleChangeJob = (event) => {
     changeConfig("job", event.target.value);
@@ -254,7 +229,29 @@ export const GeneralConfig: React.FC = () => {
             <th scope="col" />
           </tr>
         </thead>
-        <tbody>{renderItemsTable()}</tbody>
+        <tbody>
+          {bot.config.itemsCanBeEat.map((food, index) => (
+            <tr key={index}>
+              <th scope="row">{index + 1}</th>
+              <td>{food}</td>
+              <td>
+                <ArrowUp
+                  disabled={index === 0}
+                  onClick={() => changeConfig("moveItemCanBeEatPrev", index)}
+                />{" "}
+                <ArrowDown
+                  disabled={index === bot.config.itemsCanBeEat.length - 1}
+                  onClick={() => changeConfig("moveItemCanBeEatNext", index)}
+                />
+              </td>
+              <td>
+                <Trash
+                  onClick={() => changeConfig("deleteItemCanBeEat", index)}
+                />
+              </td>
+            </tr>
+          ))}
+        </tbody>
       </Table>
     </>
   );

@@ -1,15 +1,20 @@
-//@ts-nocheck
 import { useChangeConfig } from '@/hooks/useChangeConfig';
+import { Layer } from 'base-types';
 import React from 'react';
 import { Col, Row } from 'react-bootstrap'
 
-const ChestArea = (props) => {
+type Props = {
+  chestArea: Layer
+  id: number
+}
+
+export const ChestArea: React.FC<Props> = (props) => {
   const { chestArea, id } = props
   const changeConfig = useChangeConfig()
 
-  const handleChange: React.FC = (type, event) => {
+  const handleChange = (type: keyof Layer, value: string) => {
     const copyChest = { ...chestArea }
-    copyChest[type] = event.target.value
+    copyChest[type] = parseInt(value)
 
     changeConfig('changeChestArea', {
       id,
@@ -17,7 +22,7 @@ const ChestArea = (props) => {
     })
   }
 
-  const handleDeleteChestArea = (event) => {
+  const handleDeleteChestArea = () => {
     changeConfig('deleteChestArea', id)
   }
 
@@ -28,35 +33,35 @@ const ChestArea = (props) => {
         <Col xs={2}>
           <div className='form-group'>
             <label htmlFor='inputItem'><span className='badge bg-primary text-white'>X Start</span></label>
-            <input className='form-control' type='text' value={chestArea.xStart} onChange={handleChange.bind(props, 'xStart')} />
+            <input className='form-control' type='text' value={chestArea.xStart} onChange={(e) => handleChange('xStart', e.target.value)} />
           </div>
         </Col>
 
         <Col xs={2}>
           <div className='form-group'>
             <label htmlFor='inputItem'><span className='badge bg-warning text-dark'>Y Layer</span></label>
-            <input className='form-control' type='text' value={chestArea.yLayer} onChange={handleChange.bind(props, 'yLayer')} />
+            <input className='form-control' type='text' value={chestArea.yLayer} onChange={(e) => handleChange('yLayer', e.target.value)} />
           </div>
         </Col>
 
         <Col xs={2}>
           <div className='form-group'>
             <label htmlFor='inputItem'><span className='badge bg-secondary text-white'>Z Start</span></label>
-            <input className='form-control' type='text' value={chestArea.zStart} onChange={handleChange.bind(props, 'zStart')} />
+            <input className='form-control' type='text' value={chestArea.zStart} onChange={(e) => handleChange('zStart', e.target.value)} />
           </div>
         </Col>
 
         <Col xs={2}>
           <div className='form-group'>
             <label htmlFor='inputItem'><span className='badge bg-primary text-white'>X End</span></label>
-            <input className='form-control' type='text' value={chestArea.xEnd} onChange={handleChange.bind(props, 'xEnd')} />
+            <input className='form-control' type='text' value={chestArea.xEnd} onChange={(e) => handleChange('xEnd', e.target.value)} />
           </div>
         </Col>
 
         <Col xs={2}>
           <div className='form-group'>
             <label htmlFor='inputItem'><span className='badge bg-secondary text-white'>Z End</span></label>
-            <input className='form-control' type='text' value={chestArea.zEnd} onChange={handleChange.bind(props, 'zEnd')} />
+            <input className='form-control' type='text' value={chestArea.zEnd} onChange={(e) => handleChange('zEnd', e.target.value)} />
           </div>
         </Col>
 
@@ -71,6 +76,3 @@ const ChestArea = (props) => {
 
   )
 }
-
-
-export default ChestArea

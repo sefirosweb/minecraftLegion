@@ -1,5 +1,5 @@
 import { useGetMaster } from '@/hooks/useGetMaster';
-import useGetSocket from '@/hooks/useGetSocket';
+import { useGetSocket } from '@/hooks/useGetSocket';
 import { State, actionCreators } from '@/state';
 import React, { useState } from 'react'
 import { Form } from 'react-bootstrap';
@@ -50,22 +50,6 @@ export const Masterlist: React.FC = () => {
     })
   }
 
-  const renderMasterList = () => {
-    return masters.map((name, index) => {
-      return (
-        <li
-          onClick={() => handleRemoveMaster(name)}
-          style={{ cursor: "pointer" }}
-          key={index}
-          className={`list-group-item list-group-item-action
-           ${(name === master) ? 'active' : ''}`}
-        >
-          {name}
-        </li>
-      )
-    }, master)
-  }
-
   return (
     <>
       <div className='mb-3'>
@@ -85,7 +69,17 @@ export const Masterlist: React.FC = () => {
 
       <div>
         <ul className='list-group'>
-          {renderMasterList()}
+          {masters.map((name, index) => (
+            <li
+              onClick={() => handleRemoveMaster(name)}
+              style={{ cursor: "pointer" }}
+              key={index}
+              className={`list-group-item list-group-item-action
+                 ${(name === master) ? 'active' : ''}`}
+            >
+              {name}
+            </li>
+          ))}
         </ul>
       </div>
     </>

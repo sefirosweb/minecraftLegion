@@ -3,11 +3,12 @@ import inventoryModule from '@/modules/inventoryModule'
 import { bot } from '../hooks'
 import { Jobs, Config } from 'base-types'
 import { defaultConfig } from 'base-types'
+import _ from 'lodash'
 
 describe('08 Farming cactus', function () {
   before(async () => {
     const config: Config = {
-      ...structuredClone(defaultConfig),
+      ..._.cloneDeep(defaultConfig),
       job: Jobs.farmer,
       pickUpItems: true,
       itemsCanBeEat: ['golden_carrot'],

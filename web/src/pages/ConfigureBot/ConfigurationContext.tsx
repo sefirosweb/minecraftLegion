@@ -2,9 +2,10 @@ import React, { createContext, useEffect } from 'react';
 import { Button, Col, Row } from 'react-bootstrap';
 import { Link, Outlet, useParams } from "react-router-dom";
 import { useGetSelectedBot } from '@/hooks/useGetSelectedBot';
-import useGetSocket from '@/hooks/useGetSocket';
+import { useGetSocket } from '@/hooks/useGetSocket';
 import { RenderBotsOnlineList } from '@/components';
 import { useSendActionSocket } from '@/hooks/useSendActionSocket';
+import { Bot } from '@/types';
 
 export const BotSelectedContext = createContext<Bot>({} as Bot);
 

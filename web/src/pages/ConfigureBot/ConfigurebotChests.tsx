@@ -1,46 +1,31 @@
-//@ts-nocheck
 import { Button, Col, ListGroup, Row } from "react-bootstrap";
-import Chest from './Chest'
+import { Chest } from './Chest'
 import React, { useContext } from "react";
 import { BotSelectedContext } from "./ConfigurationContext";
 import { useChangeConfig } from "@/hooks/useChangeConfig";
 import { FormCheck } from "@/components";
 
 export const ConfigurebotChests: React.FC = () => {
-  const botConfig = useContext(BotSelectedContext);
-
+  const bot = useContext(BotSelectedContext);
   const changeConfig = useChangeConfig()
 
   const handleInsertNewChest = () => {
     changeConfig("insertNewChest", '')
   };
 
-  const renderChests = () => {
-    return botConfig.config.chests.map((chest, index) => {
-      return (
-        <Chest
-          key={index}
-          id={index}
-          chest={chest}
-          socketId={botConfig.socketId}
-        />
-      );
-    });
-  };
-
   return (
     <>
       <FormCheck
         id={"firstPickUpItemsFromKnownChests"}
-        onChange={() => changeConfig("firstPickUpItemsFromKnownChests", !botConfig.config.firstPickUpItemsFromKnownChests)}
+        onChange={() => changeConfig("firstPickUpItemsFromKnownChests", !bot.config.firstPickUpItemsFromKnownChests)}
         label='Use a memorized chest first?'
-        checked={botConfig.config.firstPickUpItemsFromKnownChests}
+        checked={bot.config.firstPickUpItemsFromKnownChests}
       />
       <FormCheck
         id={"canCraftItemWithdrawChest"}
-        onChange={() => changeConfig("canCraftItemWithdrawChest", !botConfig.config.canCraftItemWithdrawChest)}
+        onChange={() => changeConfig("canCraftItemWithdrawChest", !bot.config.canCraftItemWithdrawChest)}
         label='Craft item if it is possible?'
-        checked={botConfig.config.canCraftItemWithdrawChest}
+        checked={bot.config.canCraftItemWithdrawChest}
       />
 
       <Row>
@@ -55,7 +40,13 @@ export const ConfigurebotChests: React.FC = () => {
         </Col>
       </Row>
 
-      {renderChests()}
+      {bot.config.chests.map((chest, index) => (
+        <Chest
+          key={index}
+          id={index}
+          chest={chest}
+        />
+      ))}
 
       <Row className='mb-5'>
         <Col>

@@ -1,10 +1,11 @@
 import React from 'react';
 import { Badge, Col, Form, Row } from 'react-bootstrap';
+import { Vec3 } from 'vec3';
 
 type Props = {
     label?: string
-    coords: Coords
-    onChange: (e: React.ChangeEvent<HTMLInputElement>, pos: keyof Coords) => React.ChangeEventHandler
+    coords: Vec3
+    onChange: (e: React.ChangeEvent<HTMLInputElement>, pos: keyof Vec3) => React.ChangeEventHandler
 }
 
 export const Coords: React.FC<Props> = (props) => {

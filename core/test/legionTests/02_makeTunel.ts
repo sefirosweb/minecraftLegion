@@ -1,6 +1,7 @@
 import { Config, Jobs, MineCordsConfig } from 'base-types'
 import { bot } from '../hooks'
 import { defaultConfig } from 'base-types'
+import _ from 'lodash'
 
 describe('02 Make basic tunel', function () {
   let xStart = -15
@@ -25,7 +26,7 @@ describe('02 Make basic tunel', function () {
   }
 
   const config: Config = {
-    ...structuredClone(defaultConfig),
+    ..._.cloneDeep(defaultConfig),
     job: Jobs.miner,
     itemsToBeReady: [
       {

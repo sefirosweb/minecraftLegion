@@ -1,4 +1,3 @@
-//@ts-nocheck
 import { Col, Form, Row } from 'react-bootstrap'
 import HouseXYZ from '@/images/HouseXYZ.png'
 import { BotSelectedContext } from "./ConfigurationContext";
@@ -10,23 +9,23 @@ export const MinerJob: React.FC = () => {
   const botConfig = useContext(BotSelectedContext);
   const changeConfig = useChangeConfig()
 
-  const handleChangeTunnel = (event) => {
+  const handleChangeTunnel = (event: React.ChangeEvent<HTMLInputElement>) => {
     changeConfig('changeTunnel', event.target.value)
   }
 
-  const handleChangeWorld = (event) => {
+  const handleChangeWorld = (event: React.ChangeEvent<HTMLInputElement>) => {
     changeConfig('changeWorldMiner', event.target.value)
   }
 
-  const handleChangeOrientation = (event) => {
+  const handleChangeOrientation = (event: React.ChangeEvent<HTMLInputElement>) => {
     changeConfig('changeOrientation', event.target.value)
   }
 
-  const handleReverseMode = (mode) => {
+  const handleReverseMode = (mode: boolean) => {
     changeConfig('changeReverseModeMiner', mode)
   }
 
-  const handleChangePosMiner = (event) => {
+  const handleChangePosMiner = (event: React.ChangeEvent<HTMLInputElement>) => {
     const pos = Number(event.target.value)
 
     if (!Number.isInteger(pos) && event.target.value !== '-') {

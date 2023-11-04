@@ -1,4 +1,3 @@
-//@ts-nocheck
 import React, { useContext } from 'react';
 import { Col, Row } from 'react-bootstrap'
 import { BotSelectedContext } from "./ConfigurationContext";
@@ -6,14 +5,13 @@ import { useChangeConfig } from '@/hooks/useChangeConfig';
 
 export const Combat: React.FC = () => {
   const botConfig = useContext(BotSelectedContext);
-
   const changeConfig = useChangeConfig()
 
-  const handleChangeMode = (event) => {
+  const handleChangeMode = (event: React.ChangeEvent<HTMLInputElement>) => {
     changeConfig('mode', event.target.value)
   }
 
-  const handleChangeDistance = (event) => {
+  const handleChangeDistance = (event: React.ChangeEvent<HTMLInputElement>) => {
     const distance = Number(event.target.value)
     if (Number.isInteger(distance)) {
       changeConfig('distance', distance)

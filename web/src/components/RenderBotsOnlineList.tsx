@@ -32,32 +32,6 @@ export const RenderBotsOnlineList: React.FC = () => {
     navigate(newPath)
   }
 
-  const renderBotList = () => {
-    return (
-      botsOnline.map((bot) => {
-        return (
-          <ListGroup.Item
-            action
-            key={bot.socketId}
-            variant={`${selectedSocketId === bot.socketId ? 'info' : ''}`}
-            onClick={() => changeSelectedSocketId(bot.socketId)}
-          >
-            <div className={`${(bot.combat) ? 'text-danger fw-bolder' : ''}`}>
-              <div>
-                {bot.name}
-              </div>
-              <div>
-                <ProgressBar className='mt-1' variant='danger' now={bot.health / 20 * 100} />
-                <ProgressBar className='mt-1' variant='warning' now={bot.food / 20 * 100} />
-              </div>
-            </div>
-          </ListGroup.Item>
-
-        )
-      })
-
-    )
-  }
 
   return (
     <ListGroup>
@@ -65,7 +39,25 @@ export const RenderBotsOnlineList: React.FC = () => {
         Bots Online ({botsOnline.length})
       </ListGroup.Item>
 
-      {renderBotList()}
+      {botsOnline.map((bot) => (
+        <ListGroup.Item
+          action
+          key={bot.socketId}
+          variant={`${selectedSocketId === bot.socketId ? 'info' : ''}`}
+          onClick={() => changeSelectedSocketId(bot.socketId)}
+        >
+          <div className={`${(bot.combat) ? 'text-danger fw-bolder' : ''}`}>
+            <div>
+              {bot.name}
+            </div>
+            <div>
+              <ProgressBar className='mt-1' variant='danger' now={bot.health / 20 * 100} />
+              <ProgressBar className='mt-1' variant='warning' now={bot.food / 20 * 100} />
+            </div>
+          </div>
+        </ListGroup.Item>
+
+      ))}
     </ListGroup>
 
   )

@@ -1,10 +1,11 @@
 import { ChestTransaction, Item, Chests, ChestBlock, Slot, CorrectChests, NewChestSort } from "base-types"
+import _ from "lodash"
 
 const sorterJob = () => {
 
   const findItemsInChests = (chestInput: Chests, itemsInput: Array<Item>, exclude?: any) => {
-    const chests = structuredClone(chestInput)
-    const items = structuredClone(itemsInput)
+    const chests = _.cloneDeep(chestInput)
+    const items = _.cloneDeep(itemsInput)
 
     const transactions: Array<ChestTransaction> = []
 
@@ -72,7 +73,7 @@ const sorterJob = () => {
 
   const sortChests = (chestInput: Chests) => {
 
-    const chests = structuredClone(chestInput)
+    const chests = _.cloneDeep(chestInput)
     const chestPriority = Object.entries(chests).map((e) => { return { ...e[1], index: e[0] } }).sort((a, b) => sortChestVec(a, b, 'z', 'asc')).map(c => c.index)
     const allChests = Object.values(chests).map(chest => chest.slots)
 

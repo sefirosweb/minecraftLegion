@@ -1,10 +1,11 @@
-
+//@ts-nocheck
 // import { mcAssets } from '@/utils/mc';
 import smallChest from "@/images/smallChest.png";
 import largeChest from "@/images/largeChest.png";
-import Canvas from "./Canvas";
-import windowSlotsCoords from '@/utils/windowSlotsCoords';
+import { Canvas } from "./Canvas";
+import { windowSlotsCoords } from '@/utils/windowSlotsCoords';
 import { Card, Col, Row, Button } from 'react-bootstrap';
+import { ChestBlock } from "base-types";
 
 type Props = {
     chest: ChestBlock,
@@ -12,7 +13,7 @@ type Props = {
     uuid: string
 }
 
-const DrawChest: React.FC<Props> = (props) => {
+export const DrawChest: React.FC<Props> = (props) => {
     const { chest, deleteChest, uuid } = props
 
     const draw = (ctx: CanvasRenderingContext2D) => {
@@ -74,7 +75,7 @@ const DrawChest: React.FC<Props> = (props) => {
                         <Row>
                             <Col xs={6}>
                                 <span>
-                                    Dimension: {chest.position.dimension}
+                                    Dimension: {chest.dimension}
                                 </span>
                             </Col>
                             <Col xs={2}>
@@ -118,5 +119,3 @@ const DrawChest: React.FC<Props> = (props) => {
 
     )
 }
-
-export default DrawChest

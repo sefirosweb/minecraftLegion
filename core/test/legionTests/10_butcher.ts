@@ -2,6 +2,7 @@ import inventoryModule from '@/modules/inventoryModule'
 import { Jobs, Config } from 'base-types'
 import { bot } from '../hooks'
 import { defaultConfig } from 'base-types'
+import _ from 'lodash'
 
 const listOfAnimalstoFeed = [
   {
@@ -33,10 +34,9 @@ const listOfAnimalstoFeed = [
 
 describe('10 Butcher animals', function () {
 
-
   const beforeEachAnimal = async () => {
     const config: Config = {
-      ...structuredClone(defaultConfig),
+      ..._.cloneDeep(defaultConfig),
       job: Jobs.breeder,
       pickUpItems: true,
       itemsToBeReady: [],

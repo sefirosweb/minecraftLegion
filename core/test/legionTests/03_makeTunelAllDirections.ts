@@ -1,6 +1,7 @@
 import { Config, Jobs, MineCordsConfig } from 'base-types'
 import { bot } from '../hooks'
 import { defaultConfig } from 'base-types'
+import _ from 'lodash'
 
 describe('03 Make tunel in all directions', function () {
 
@@ -39,7 +40,7 @@ describe('03 Make tunel in all directions', function () {
     }
 
     const config: Config = {
-      ...structuredClone(defaultConfig),
+      ..._.cloneDeep(defaultConfig),
       job: Jobs.miner,
       itemsToBeReady: [
         {
@@ -74,7 +75,7 @@ describe('03 Make tunel in all directions', function () {
 
 
     const config: Config = {
-      ...structuredClone(defaultConfig),
+      ..._.cloneDeep(defaultConfig),
       job: Jobs.miner,
       itemsToBeReady: [
         {
@@ -110,7 +111,7 @@ describe('03 Make tunel in all directions', function () {
 
 
     const config: Config = {
-      ...structuredClone(defaultConfig),
+      ..._.cloneDeep(defaultConfig),
       job: Jobs.miner,
       itemsToBeReady: [
         {
@@ -145,7 +146,7 @@ describe('03 Make tunel in all directions', function () {
 
 
     const config: Config = {
-      ...structuredClone(defaultConfig),
+      ..._.cloneDeep(defaultConfig),
       job: Jobs.miner,
       itemsToBeReady: [
         {

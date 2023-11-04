@@ -1,12 +1,12 @@
 import React from 'react'
 import { Table } from 'react-bootstrap'
-import { Coords } from '@/types'
+import { Vec3 } from 'vec3'
 
 type Props = {
-    positions: Array<Coords>
+    positions: Array<Vec3>
 }
 
-const CoordsTable: React.FC<Props> = (props) => {
+export const CoordsTable: React.FC<Props> = (props) => {
     const { positions } = props
 
     return (
@@ -34,5 +34,3 @@ const CoordsTable: React.FC<Props> = (props) => {
         </Table>
     )
 }
-
-export default CoordsTable

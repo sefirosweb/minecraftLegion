@@ -1,6 +1,7 @@
 import { bot } from '../hooks'
 import { Config, Jobs, MineCordsConfig } from 'base-types'
 import { defaultConfig } from 'base-types'
+import _ from 'lodash'
 
 describe('02 Make basic tunel in water & lava', function () {
 
@@ -17,10 +18,9 @@ describe('02 Make basic tunel in water & lava', function () {
     world: "overworld"
   }
 
-
   before(async () => {
     const config: Config = {
-      ...structuredClone(defaultConfig),
+      ..._.cloneDeep(defaultConfig),
       job: Jobs.miner,
       itemsToBeReady: [
         {

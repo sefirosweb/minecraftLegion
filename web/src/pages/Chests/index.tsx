@@ -2,7 +2,7 @@ import React from "react";
 import { State } from "@/state";
 import { Card, CardGroup } from "react-bootstrap";
 import { useSelector } from "react-redux";
-import DrawChest from "./DrawChest";
+import { DrawChest } from "./DrawChest";
 import { useSendActionSocket } from "@/hooks/useSendActionSocket";
 
 export const Chests: React.FC = () => {

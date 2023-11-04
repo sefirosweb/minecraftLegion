@@ -65,7 +65,7 @@ function farmingFunction(bot: Bot, targets: LegionStateMachineTargets) {
       child: nextArea,
       onTransition: () => {
         plantAreaIndex = -1
-        plantArea = bot.config.plantAreas
+        plantArea = structuredClone(bot.config.plantAreas)
         const randomFarmArea = bot.config.randomFarmArea
         if (randomFarmArea) {
           shuffle(plantArea)
@@ -113,7 +113,7 @@ function farmingFunction(bot: Bot, targets: LegionStateMachineTargets) {
       parent: checkFarmingAreas,
       child: farmingPlantsFunction,
       onTransition: () => {
-        targets.farmerJob.plantArea = plantArea[plantAreaIndex]
+        targets.farmerJob.plantArea = structuredClone(plantArea[plantAreaIndex])
       },
       shouldTransition: () => plantArea[plantAreaIndex].plant !== undefined && plants[plantArea[plantAreaIndex].plant!].harvestMode === 'massive' && bot.inventory.items().length < 33
     }),
@@ -124,7 +124,7 @@ function farmingFunction(bot: Bot, targets: LegionStateMachineTargets) {
       parent: checkFarmingAreas,
       child: farmingTreesFunction,
       onTransition: () => {
-        targets.farmerJob.plantArea = plantArea[plantAreaIndex]
+        targets.farmerJob.plantArea = structuredClone(plantArea[plantAreaIndex])
       },
       shouldTransition: () => plantArea[plantAreaIndex].plant !== undefined && plants[plantArea[plantAreaIndex].plant!].harvestMode === 'onebyone' && bot.inventory.items().length < 33
     }),

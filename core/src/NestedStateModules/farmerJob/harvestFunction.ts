@@ -1,20 +1,13 @@
+import { Bot } from 'mineflayer'
 import { Vec3 } from 'vec3'
-
-import {
-  StateTransition,
-  BehaviorIdle,
-  NestedStateMachine
-} from 'mineflayer-statemachine'
-
+import { StateTransition, BehaviorIdle, NestedStateMachine } from 'mineflayer-statemachine'
 import { plants } from '@/modules/plantType'
-
 import botWebsocket from '@/modules/botWebsocket'
 import BehaviorDigBlock from '@/BehaviorModules/BehaviorDigBlock'
 import BehaviorEatFood from '@/BehaviorModules/BehaviorEatFood'
 import BehaviorInteractBlock from '@/BehaviorModules/BehaviorInteractBlock'
 import BehaviorMoveTo from '@/BehaviorModules/BehaviorMoveTo'
 import { LegionStateMachineTargets } from 'base-types'
-import { Bot } from 'mineflayer'
 
 function harvestFunction(bot: Bot, targets: LegionStateMachineTargets) {
   const start = new BehaviorIdle()
@@ -44,7 +37,7 @@ function harvestFunction(bot: Bot, targets: LegionStateMachineTargets) {
   checkArea.y = 113
 
   const checkHarvest = new BehaviorIdle()
-  checkHarvest.stateName = 'Exsist Any Plant To Harvest'
+  checkHarvest.stateName = 'Exist Any Plant To Harvest'
   checkHarvest.x = 225
   checkHarvest.y = 263
 
@@ -74,12 +67,14 @@ function harvestFunction(bot: Bot, targets: LegionStateMachineTargets) {
   function getPlantBlock() {
     if (!targets.farmerJob.plantArea) return undefined
 
-    const xStart = targets.farmerJob.plantArea.layer.xStart! < targets.farmerJob.plantArea.layer.xEnd! ? targets.farmerJob.plantArea.layer.xStart! : targets.farmerJob.plantArea.layer.xEnd!
-    const xEnd = targets.farmerJob.plantArea.layer.xStart! > targets.farmerJob.plantArea.layer.xEnd! ? targets.farmerJob.plantArea.layer.xStart! : targets.farmerJob.plantArea.layer.xEnd!
-    const zStart = targets.farmerJob.plantArea.layer.zStart! < targets.farmerJob.plantArea.layer.zEnd! ? targets.farmerJob.plantArea.layer.zStart! : targets.farmerJob.plantArea.layer.zEnd!
-    const zEnd = targets.farmerJob.plantArea.layer.zStart! > targets.farmerJob.plantArea.layer.zEnd! ? targets.farmerJob.plantArea.layer.zStart! : targets.farmerJob.plantArea.layer.zEnd!
-    const yLayer = targets.farmerJob.plantArea.layer.yLayer! + 1
-    const plant = targets.farmerJob.plantArea.plant!
+    const plantArea = targets.farmerJob.plantArea
+
+    const xStart = plantArea.layer.xStart! < plantArea.layer.xEnd! ? plantArea.layer.xStart! : plantArea.layer.xEnd!
+    const xEnd = plantArea.layer.xStart! > plantArea.layer.xEnd! ? plantArea.layer.xStart! : plantArea.layer.xEnd!
+    const zStart = plantArea.layer.zStart! < plantArea.layer.zEnd! ? plantArea.layer.zStart! : plantArea.layer.zEnd!
+    const zEnd = plantArea.layer.zStart! > plantArea.layer.zEnd! ? plantArea.layer.zStart! : plantArea.layer.zEnd!
+    const yLayer = plantArea.layer.yLayer! + 1
+    const plant = plantArea.plant!
     const plantName = plants[plant].plantName
     const type = plants[plant].type
     const age = plants[plant].age

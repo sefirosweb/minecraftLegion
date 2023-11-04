@@ -5,6 +5,7 @@ import mineflayerPathfinder from 'mineflayer-pathfinder'
 import { Vec3 } from 'vec3'
 import { Bot, Dimension_V2 } from "mineflayer"
 import { lazyFind } from "./lazyFind"
+import _ from "lodash"
 
 const parseDestination = (origin: Dimension_V2, destination: Dimension_V2): keyof Portals => {
   if (origin === "overworld" && destination === "the_end") {
@@ -151,7 +152,7 @@ const movementModule = (bot: Bot, targets: LegionStateMachineTargets) => {
   }
 
   const deleteOldPortal = (position: Vec3, dimension: Dimension_V2) => {
-    const newPortals = structuredClone(targets.portals)
+    const newPortals = _.cloneDeep(targets.portals)
     const selectedDim = parseDestination(bot.game.dimension as Dimension_V2, dimension)
 
     newPortals[selectedDim] = newPortals[selectedDim].filter(portal => {

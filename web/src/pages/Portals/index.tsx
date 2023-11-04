@@ -1,7 +1,7 @@
 import { State } from "@/state";
 import { Card } from "react-bootstrap";
 import { useSelector } from "react-redux";
-import CoordsTable from "./CoordsTable";
+import { CoordsTable } from "./CoordsTable";
 
 export const Portals: React.FC = () => {
   const botState = useSelector((state: State) => state.botsReducer);

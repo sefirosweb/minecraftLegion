@@ -2,7 +2,7 @@ import Modal from 'react-bootstrap/Modal'
 import Button from 'react-bootstrap/Button'
 import { Col, Form, Row } from 'react-bootstrap'
 import { FormEvent, useRef, useState } from 'react'
-import useGetSocket from '@/hooks/useGetSocket'
+import { useGetSocket } from '@/hooks/useGetSocket'
 
 type Props = {
   show: boolean,

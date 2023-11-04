@@ -2,12 +2,12 @@ import { Jobs, Config } from 'base-types'
 import { bot } from '../hooks'
 import botWebsocket from '@/modules/botWebsocket'
 import { defaultConfig } from 'base-types'
+import _ from 'lodash'
 
 describe('11 Sorting items', function () {
-
   before(async () => {
     const config: Config = {
-      ...structuredClone(defaultConfig),
+      ..._.cloneDeep(defaultConfig),
       job: Jobs.sorter,
       itemsToBeReady: [],
     }

@@ -2,6 +2,7 @@ import inventoryModule from '@/modules/inventoryModule'
 import { Jobs, Config, PlantArea } from 'base-types'
 import { bot } from '../hooks'
 import { defaultConfig } from 'base-types'
+import _ from 'lodash'
 
 describe('06 Wood cutter', function () {
   const plantAreas: Array<PlantArea> = [
@@ -19,7 +20,7 @@ describe('06 Wood cutter', function () {
 
   before(async () => {
     const config: Config = {
-      ...structuredClone(defaultConfig),
+      ..._.cloneDeep(defaultConfig),
       job: Jobs.farmer,
       pickUpItems: true,
       itemsToBeReady: [

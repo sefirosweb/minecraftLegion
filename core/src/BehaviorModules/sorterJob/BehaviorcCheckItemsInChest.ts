@@ -4,6 +4,8 @@ import { StateBehavior } from 'mineflayer-statemachine';
 import vec3 from 'vec3'
 import { v4 as uuidv4 } from 'uuid';
 import { Bot, Dimension_V2 } from 'mineflayer';
+import _ from 'lodash';
+
 export default class BehaviorcCheckItemsInChest implements StateBehavior {
   active: boolean;
   readonly bot: Bot;
@@ -39,7 +41,7 @@ export default class BehaviorcCheckItemsInChest implements StateBehavior {
       throw new Error('Chest ist not defined!')
     }
 
-    const chest = structuredClone(this.targets.sorterJob.chest)
+    const chest = _.cloneDeep(this.targets.sorterJob.chest)
 
     const chestBlock = this.bot.blockAt(this.targets.sorterJob.chest.position)
     if (!chestBlock) throw new Error('Chest not found!')

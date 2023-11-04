@@ -1,13 +1,11 @@
-//@ts-nocheck
 import React, { useState, useEffect, useContext } from 'react'
 import { Button, Col, Form, Row } from 'react-bootstrap'
-import useGetSocket from '@/hooks/useGetSocket';
+import { useGetSocket } from '@/hooks/useGetSocket';
 import { BotSelectedContext } from "./ConfigurationContext";
 import { useChangeConfig } from '@/hooks/useChangeConfig';
 
 export const FullConfig: React.FC = () => {
   const botConfig = useContext(BotSelectedContext);
-  const socket = useGetSocket()
   const selectedSocketId = botConfig.socketId
 
   const [jsonText, setJsonText] = useState("")
@@ -16,7 +14,6 @@ export const FullConfig: React.FC = () => {
   useEffect(() => {
     if (botConfig === undefined) return
     const config = { ...botConfig.config }
-    delete config.socketId
     setJsonText(JSON.stringify(config, null, 2))
   }, [botConfig, selectedSocketId])
 
@@ -24,7 +21,6 @@ export const FullConfig: React.FC = () => {
 
   const download = () => {
     const config = { ...botConfig.config }
-    delete config.socketId
     const text = JSON.stringify(config, null, 2)
 
     const filename = `${botConfig.name}`

@@ -3,6 +3,7 @@ import { Jobs, Chest, Config } from 'base-types'
 import { Vec3 } from 'vec3'
 import botWebsocket from '@/modules/botWebsocket'
 import { defaultConfig } from 'base-types'
+import _ from 'lodash'
 
 describe('04 Get ready for combat', function () {
   const chests: Array<Chest> = [
@@ -117,7 +118,7 @@ describe('04 Get ready for combat', function () {
     ]
 
     const config: Config = {
-      ...structuredClone(defaultConfig),
+      ..._.cloneDeep(defaultConfig),
       job: Jobs.guard,
       mode: 'pve',
       allowSprinting: true,

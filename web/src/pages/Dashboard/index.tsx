@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react'
 import { Link, useParams } from 'react-router-dom'
-import BotActionsButtons from './BotActionsButtons'
+import { BotActionButtons } from './BotActionsButtons'
 import { Button, Col, Row } from 'react-bootstrap'
 import { useSelector } from "react-redux";
 import { RenderBotsOnlineList } from '@/components';
@@ -54,7 +54,7 @@ export const Dashboard: React.FC = () => {
                     <Row>
                         <Col xs={12}>
                             {selectedSocketId ?
-                                <BotActionsButtons /> :
+                                <BotActionButtons /> :
                                 <div className='pendingSelectBot'>Select any bot for do actions</div>
                             }
                         </Col>

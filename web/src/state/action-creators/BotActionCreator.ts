@@ -4,6 +4,7 @@ import { Dispatch } from "redux";
 import { BotsAction } from "@/state/actions";
 import { InitialState } from "@/state/reducers/botsReducer"
 import { State } from "@/state/reducers";
+import _ from 'lodash'
 
 export const setBots = (bots: InitialState["botsOnline"]) => (dispatch: Dispatch<BotsAction>) => {
     dispatch({
@@ -29,7 +30,7 @@ export const updateBotStatus = (botDataStatus) => (dispatch: Dispatch<BotsAction
     const { botsOnline } = getState().botsReducer
     const botIndex = botsOnline.findIndex((e) => { return e.socketId === botDataStatus.socketId })
 
-    const botsOnlineUpdate = structuredClone(botsOnline)
+    const botsOnlineUpdate = _.cloneDeep(botsOnline)
     botsOnlineUpdate[botIndex][botDataStatus.type] = botDataStatus.value
 
     dispatch({
@@ -63,7 +64,7 @@ export const setConfig = (botConfig) => (dispatch: Dispatch<BotsAction>, getStat
     const { botsOnline } = getState().botsReducer
     const botIndex = botsOnline.findIndex((e) => e.socketId === botConfig.socketId)
 
-    const botsOnlineUpdate = structuredClone(botsOnline)
+    const botsOnlineUpdate = _.cloneDeep(botsOnline)
     botsOnlineUpdate[botIndex].config = botConfig
 
     dispatch({

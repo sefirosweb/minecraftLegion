@@ -1,4 +1,5 @@
 import React from 'react';
+import { Layer } from 'base-types';
 import { Col, Form, Row } from 'react-bootstrap';
 
 type Props = {

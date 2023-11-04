@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Socket, io } from "socket.io-client";
 import { useVerifyLoggedIn } from './useVerifyLoggedIn';
+import { Bot } from '@/types';
 
 export const useSocketSetup = () => {
     const dispatch = useDispatch();
@@ -81,14 +82,10 @@ export const useSocketSetup = () => {
                 }
             });
 
-            socket.on("botsOnline", (botsOnline) => {
-                //@ts-ignore
+            socket.on("botsOnline", (botsOnline: Array<Bot>) => {
                 const botsConnected = botsOnline.sort(function (a, b) {
                     if (a.name < b.name) {
                         return -1;
-                    }
-                    if (a.name > b.firsnametname) {
-                        return 1;
                     }
                     return 0;
                 });

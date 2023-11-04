@@ -1,6 +1,5 @@
-//@ts-nocheck
 import React, { useContext, useState } from 'react'
-import ItemsAviable from './ItemsAviable'
+import { ItemsAviable } from './ItemsAviable'
 import { Trash } from '@/components'
 import { BotSelectedContext } from "./ConfigurationContext";
 import { useChangeConfig } from '@/hooks/useChangeConfig';
@@ -12,14 +11,14 @@ export const ItemsToBeReady: React.FC = () => {
 
   const changeConfig = useChangeConfig()
 
-  const handleQuantityChange = (event) => {
+  const handleQuantityChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = Number(event.target.value)
     if (Number.isInteger(value)) {
       setQuantity(value)
     }
   }
 
-  const handleItemChange = (event) => {
+  const handleItemChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setItemName(event.target.value)
   }
 
@@ -34,21 +33,8 @@ export const ItemsToBeReady: React.FC = () => {
     })
   }
 
-  const handleRemoveItem = (index, event) => {
+  const handleRemoveItem = (index: number) => {
     changeConfig('deleteItemToBeReady', index)
-  }
-
-  const renderItemsTable = () => {
-    return botConfig.config.itemsToBeReady.map((item, index) => {
-      return (
-        <tr key={index}>
-          <th scope='row'>{index}</th>
-          <td>{item.name}</td>
-          <td>{item.quantity}</td>
-          <td><Trash onClick={handleRemoveItem.bind(this, index)} /></td>
-        </tr>
-      )
-    })
   }
 
   return (
@@ -101,7 +87,14 @@ export const ItemsToBeReady: React.FC = () => {
               </tr>
             </thead>
             <tbody>
-              {renderItemsTable()}
+              {botConfig.config.itemsToBeReady.map((item, index) => (
+                <tr key={index}>
+                  <th scope='row'>{index}</th>
+                  <td>{item.name}</td>
+                  <td>{item.quantity}</td>
+                  <td><Trash onClick={handleRemoveItem.bind(this, index)} /></td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>

@@ -1,4 +1,4 @@
-import useGetSocket from "./useGetSocket"
+import { useGetSocket } from "./useGetSocket"
 import { useParams } from "react-router";
 
 export const useSendActionSocket = () => {

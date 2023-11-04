@@ -1,27 +1,43 @@
-//@ts-nocheck
+import React from 'react'
 import { Col, Row } from 'react-bootstrap'
-import ItemsAviable from './ItemsAviable'
+import { Layer, PlantArea } from 'base-types'
+import { ItemsAviable } from './ItemsAviable'
 import { useChangeConfig } from '@/hooks/useChangeConfig'
 import { LayerCoords } from '@/components'
-import React from 'react'
 
-const HarvestArea: React.FC = (props) => {
+type Props = {
+  id: number,
+  plantArea: PlantArea
+}
+
+export const HarvestArea: React.FC<Props> = (props) => {
   const { id, plantArea } = props
 
   const changeConfig = useChangeConfig()
 
-  const handleChange = (event, type) => {
-    const copyPlant = { ...plantArea }
-    copyPlant[type] = event.target.value
+  const handleChangePlant = (value: string) => {
+    const newPlant = {
+      ...structuredClone(plantArea),
+      plant: value
+    }
 
     changeConfig('changePlantArea', {
       id,
-      plantArea: copyPlant
+      plantArea: newPlant
     })
   }
 
   const handleDeletePlantArea = () => {
     changeConfig('deletePlantArea', id)
+  }
+
+  const handleCHangeCoords = (e: React.ChangeEvent<HTMLInputElement>, pos: keyof Layer) => {
+    const newPlant = structuredClone(plantArea)
+    newPlant.layer[pos] = parseInt(e.target.value)
+    changeConfig('changePlantArea', {
+      id,
+      plantArea: newPlant
+    })
   }
 
   return (
@@ -31,8 +47,8 @@ const HarvestArea: React.FC = (props) => {
         <Col md={6}>
           <div className='form-group'>
             <label htmlFor='inputItem'>Select Plant</label>
-            <input className='form-control' type='text' list={id} value={plantArea.plant ? plantArea.plant : ''} onChange={(e) => handleChange(e, 'plant')} />
-            <datalist id={id}>
+            <input className='form-control' type='text' list={`${id}_plant_area`} value={plantArea.plant ? plantArea.plant : ''} onChange={(e) => handleChangePlant(e.target.value)} />
+            <datalist id={`${id}_plant_area`}>
               <ItemsAviable item={plantArea.plant ? plantArea.plant : ''} type='plants' />
             </datalist>
           </div>
@@ -44,13 +60,11 @@ const HarvestArea: React.FC = (props) => {
       </Row>
 
       <LayerCoords
-        area={plantArea}
-        onChange={handleChange}
+        area={plantArea.layer}
+        onChange={handleCHangeCoords}
       />
 
     </div>
 
   )
 }
-
-export default HarvestArea

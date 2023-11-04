@@ -99,8 +99,8 @@ function breederFunction(bot: Bot, targets: LegionStateMachineTargets) {
       parent: loadConfig,
       child: checkFarmAreas,
       onTransition: () => {
-        targets.breederJob.farmAnimal = bot.config.farmAnimal
-        targets.breederJob.farmAreas = bot.config.farmAreas
+        targets.breederJob.farmAnimal = structuredClone(bot.config.farmAnimal)
+        targets.breederJob.farmAreas = structuredClone(bot.config.farmAreas)
         targets.breederJob.farmAnimalSeconds = bot.config.farmAnimalSeconds
         targets.breederJob.animalsToBeFeed = getAnimalsToBeFeed()
       },

@@ -1,7 +1,9 @@
 import { State } from "@/state";
+import { Bot } from "@/types";
 import { useEffect, useState } from "react"
 import { useSelector } from "react-redux";
 import { useParams } from "react-router";
+
 export const useGetSelectedBot = () => {
     const { selectedSocketId } = useParams()
     const [selectedBot, setSelectedBot] = useState<Bot | undefined>()

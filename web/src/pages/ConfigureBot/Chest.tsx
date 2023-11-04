@@ -1,12 +1,17 @@
-//@ts-nocheck
 import React, { useState } from "react";
-import ItemsAviable from "./ItemsAviable";
+import { ItemsAviable } from "./ItemsAviable";
 import { ArrowDown, ArrowUp, Trash } from "@/components";
 import { Button, Col, Form, Row, Table } from "react-bootstrap";
 import { useChangeConfig } from "@/hooks/useChangeConfig";
 import { useGetMaster } from "@/hooks/useGetMaster";
+import { Chest as TypeChest } from "base-types";
 
-const Chest: React.FC = (props) => {
+type Props = {
+  id: number
+  chest: TypeChest
+}
+
+export const Chest: React.FC<Props> = (props) => {
   const { id, chest } = props
   const master = useGetMaster()
   const changeConfig = useChangeConfig()
@@ -17,22 +22,22 @@ const Chest: React.FC = (props) => {
   const chestId = `chest-${id}`;
   const radioId = `radio-${id}`;
 
-  const handleDeleteChest = (event) => {
+  const handleDeleteChest = () => {
     changeConfig("deleteChest", id);
   };
 
-  const handleQuantityChange = (event) => {
+  const handleQuantityChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = Number(event.target.value);
     if (Number.isInteger(value)) {
       setQuantity(value);
     }
   };
 
-  const handleItemChange = (event) => {
+  const handleItemChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setItemName(event.target.value);
   };
 
-  const handleInsertItemInChest = (event) => {
+  const handleInsertItemInChest = () => {
     changeConfig("insertItemInChest", {
       chestId: id,
       name: itemName,
@@ -40,53 +45,38 @@ const Chest: React.FC = (props) => {
     });
   };
 
-  const renderItemsTable = () => {
-    return chest.items.map((item, index) => {
-      return (
-        <tr key={index}>
-          <th scope="row">{index}</th>
-          <td>{item.name}</td>
-          <td>{item.quantity}</td>
-          <td>
-            <Trash onClick={() => handleRemoveItemFromChest(index)} />
-          </td>
-        </tr>
-      );
-    });
-  };
-
-  const handleRemoveItemFromChest = (index) => {
+  const handleRemoveItemFromChest = (index: number) => {
     changeConfig("removeItemFromChest", {
       chestId: id,
       itemIndex: index,
     });
   };
 
-  const handleChangeChestType = (event) => {
+  const handleChangeChestType = (event: React.ChangeEvent<HTMLInputElement>) => {
     changeConfig("changeChestType", {
       value: event.target.value,
       chestId: id,
     });
   };
 
-  const handleChangeChestName = (event) => {
+  const handleChangeChestName = (event: React.ChangeEvent<HTMLInputElement>) => {
     changeConfig("changeChestName", {
       value: event.target.value,
       chestId: id,
     });
   };
 
-  const handleChangeChestPos = (event) => {
-    const pos = Number(event.target.value);
+  const handleChangeChestPos = (value: string, element: string) => {
+    const pos = Number(value);
 
-    if (!Number.isInteger(pos) && event.target.value !== "-" && event.target.dataset.coord !== 'dimension') {
+    if (!Number.isInteger(pos) && value !== "-" && element !== 'dimension') {
       return null;
     }
 
     changeConfig("changeChestPos", {
-      pos: event.target.value,
+      pos: value,
       chestId: id,
-      coord: event.target.dataset.coord,
+      coord: element,
     });
   };
 
@@ -110,11 +100,11 @@ const Chest: React.FC = (props) => {
     }
   };
 
-  const handleMovePosNext = (index, event) => {
+  const handleMovePosNext = () => {
     changeConfig("moveChestNext", id);
   };
 
-  const handleMovePosPrev = (index, event) => {
+  const handleMovePosPrev = () => {
     changeConfig("moveChestPrev", id);
   };
 
@@ -238,9 +228,8 @@ const Chest: React.FC = (props) => {
         <Form.Group as={Col}>
           <Form.Label>Dimension:</Form.Label>
           <Form.Select
-            data-coord="dimension"
             value={chest.dimension ? chest.dimension : ""}
-            onChange={handleChangeChestPos}
+            onChange={(e) => handleChangeChestPos(e.target.value, 'dimension')}
           >
             <option value='overworld'>Overworld</option>
             <option value='the_nether'>The Nether</option>
@@ -251,27 +240,24 @@ const Chest: React.FC = (props) => {
         <Form.Group as={Col}>
           <Form.Label>X</Form.Label>
           <Form.Control
-            data-coord="x"
             value={chest.position.x ? chest.position.x : ""}
-            onChange={handleChangeChestPos}
+            onChange={(e) => handleChangeChestPos(e.target.value, 'x')}
           />
         </Form.Group>
 
         <Form.Group as={Col}>
           <Form.Label>Y</Form.Label>
           <Form.Control
-            data-coord="y"
             value={chest.position.y ? chest.position.y : ""}
-            onChange={handleChangeChestPos}
+            onChange={(e) => handleChangeChestPos(e.target.value, 'y')}
           />
         </Form.Group>
 
         <Form.Group as={Col}>
           <Form.Label>Z</Form.Label>
           <Form.Control
-            data-coord="z"
             value={chest.position.z ? chest.position.z : ""}
-            onChange={handleChangeChestPos}
+            onChange={(e) => handleChangeChestPos(e.target.value, 'z')}
           />
         </Form.Group>
       </Row>
@@ -295,7 +281,17 @@ const Chest: React.FC = (props) => {
                 <th scope="col" />
               </tr>
             </thead>
-            <tbody>{renderItemsTable()}</tbody>
+
+            <tbody>
+              {chest.items.map((item, index) => (
+                <tr key={index}>
+                  <th scope="row">{index}</th>
+                  <td>{item.name}</td>
+                  <td>{item.quantity}</td>
+                  <td><Trash onClick={() => handleRemoveItemFromChest(index)} /></td>
+                </tr>
+              ))}
+            </tbody>
           </Table>
         </Col>
       </Row>
@@ -316,5 +312,3 @@ const Chest: React.FC = (props) => {
     </div>
   );
 };
-
-export default Chest

@@ -2,6 +2,7 @@ import { bot } from '../hooks'
 import { Jobs, Config, MineCordsConfig } from 'base-types'
 import { Vec3 } from 'vec3'
 import { defaultConfig } from 'base-types'
+import _ from 'lodash'
 
 describe('12 Cross the portals', function () {
 
@@ -37,9 +38,8 @@ describe('12 Cross the portals', function () {
       world: "the_nether"
     }
 
-
     const config: Config = {
-      ...structuredClone(defaultConfig),
+      ..._.cloneDeep(defaultConfig),
       job: Jobs.miner,
       itemsToBeReady: [
         {
@@ -104,7 +104,7 @@ describe('12 Cross the portals', function () {
     }
 
     const config: Config = {
-      ...structuredClone(defaultConfig),
+      ..._.cloneDeep(defaultConfig),
       job: Jobs.miner,
       itemsToBeReady: [
         {

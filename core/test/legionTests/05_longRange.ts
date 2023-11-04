@@ -2,13 +2,14 @@ import { Jobs, Config } from 'base-types'
 import { Vec3 } from 'vec3'
 import { bot } from '../hooks'
 import { defaultConfig } from 'base-types'
+import _ from 'lodash'
 
 describe('05 Test bow long range', function () {
   before(async () => {
     const patrol = []
     patrol.push(new Vec3(50, -48, 0))
     const config: Config = {
-      ...structuredClone(defaultConfig),
+      ..._.cloneDeep(defaultConfig),
       job: Jobs.guard,
       mode: 'pve',
       distance: 120,

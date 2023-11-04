@@ -2,6 +2,7 @@ import { useGetMaster } from "@/hooks/useGetMaster";
 import { useGetSelectedBot } from "@/hooks/useGetSelectedBot";
 import { useSendActionSocket } from "@/hooks/useSendActionSocket";
 import { actionCreators } from "@/state";
+import { Bot } from "@/types";
 import { getPort } from "@/utils/getFreePort";
 import React, { ChangeEvent, KeyboardEvent, useEffect, useState } from "react";
 import { Button, Col, Row } from "react-bootstrap";
@@ -9,7 +10,7 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router";
 import { bindActionCreators } from "redux";
 
-const BotActionButtons: React.FC = () => {
+export const BotActionButtons: React.FC = () => {
   const master = useGetMaster()
   const bot = useGetSelectedBot() as Bot
   const navigate = useNavigate();
@@ -218,5 +219,3 @@ const BotActionButtons: React.FC = () => {
     </>
   );
 };
-
-export default BotActionButtons
