@@ -3,7 +3,7 @@ import { Table } from 'react-bootstrap'
 import { Vec3 } from 'vec3'
 
 type Props = {
-    positions: Array<Vec3>
+    positions?: Array<Vec3>
 }
 
 export const CoordsTable: React.FC<Props> = (props) => {

@@ -1,12 +1,13 @@
 import { debugMode } from "@/config";
 import { findBotBySocketId } from "@/libs/botStore";
 import { socketVariables } from "@/libs/socketVariables";
+import { io } from "@/server";
 import { sendBotsOnline } from "@/socketEmit/sendBotsOnline";
 import { BotsConnected } from "base-types"
 import { Socket } from "socket.io";
 
 export default (socket: Socket) => {
-    const { io, masters, sendMastersOnline, chests, setChests, portals, setPortals } = socketVariables
+    const { masters, sendMastersOnline, chests, setChests, portals, setPortals } = socketVariables
 
     socket.on("sendAction", (data) => {
         let bot: BotsConnected | undefined;

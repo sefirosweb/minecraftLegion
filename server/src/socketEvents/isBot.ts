@@ -4,10 +4,11 @@ import { sendLogs } from "@/socketEmit/sendLogs";
 import { socketVariables } from "@/libs/socketVariables";
 import { sendMastersOnline } from "@/socketEmit/sendMastersOnline";
 import { Bot } from "@/models/bot";
+import { defaultConfig } from "base-types";
 
 export default (socket: Socket) => {
     socket.on('isBot', async (botName: string) => {
-        const { botsConnected, defaultConfig } = socketVariables
+        const { botsConnected } = socketVariables
         socket.join("bot");
 
         const find = botsConnected.find(bot => bot.name === botName);

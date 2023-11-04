@@ -2,7 +2,6 @@
 import { listenPort } from "@/config";
 import { httpServer, io } from '@/server';
 import { sendLogs } from "./socketEmit/sendLogs";
-import { socketVariables } from "@/libs/socketVariables";
 import { sendCoreIsConnected } from "@/socketEmit/sendCoreIsConnected";
 import { sendBotsOnline } from './socketEmit/sendBotsOnline';
 import { loadSocketEvents } from "./loadSocketEvents";
