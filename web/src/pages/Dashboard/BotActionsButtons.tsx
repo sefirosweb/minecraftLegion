@@ -45,9 +45,11 @@ export const BotActionButtons: React.FC = () => {
         port,
       })
 
-      bot.stateMachinePort = port;
-      //@ts-ignore
-      updateBotStatus(bot);
+      updateBotStatus({
+        socketId: bot.socketId,
+        type: 'stateMachinePort',
+        value: port
+      });
     }
     window.open(`http://${window.location.hostname}:${port}`, "_blank");
   };
@@ -62,9 +64,11 @@ export const BotActionButtons: React.FC = () => {
       })
 
 
-      bot.inventoryPort = port;
-      //@ts-ignore
-      updateBotStatus(bot);
+      updateBotStatus({
+        socketId: bot.socketId,
+        type: 'inventoryPort',
+        value: port
+      });
     }
     window.open(`http://${window.location.hostname}:${port}`, "_blank");
   };
@@ -78,9 +82,11 @@ export const BotActionButtons: React.FC = () => {
         port
       })
 
-      bot.viewerPort = port;
-      //@ts-ignore
-      updateBotStatus(bot);
+      updateBotStatus({
+        socketId: bot.socketId,
+        type: 'viewerPort',
+        value: port
+      });
     }
     window.open(`http://${window.location.hostname}:${port}`, "_blank");
   };
