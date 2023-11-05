@@ -8,6 +8,7 @@ export default defineConfig({
     proxy: {
       '/api': 'http://localhost:4001',
       '/minecraft-assets': 'http://localhost:4001',
+      '/viewer': 'http://localhost:4001',
       '/socket.io': {
         target: 'http://localhost:4001',
         ws: true,

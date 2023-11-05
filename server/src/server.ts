@@ -3,6 +3,7 @@ import morgan from 'morgan'
 import cors from 'cors'
 import routerApi from "@/routes/api"
 import minecraftAssets from "@/routes/minecraft_assets"
+import viewer from "@/routes/viewer"
 import routerPublic from "@/routes/public"
 import { routerLogin } from '@/routes/login'
 import http from 'http'
@@ -57,5 +58,6 @@ io.use((socket, next) => {
 
 app.use("/", routerLogin)
 app.use("/minecraft-assets", minecraftAssets)
+app.use("/viewer", viewer)
 app.use("/api", routerApi)
 app.use("/", routerPublic)
