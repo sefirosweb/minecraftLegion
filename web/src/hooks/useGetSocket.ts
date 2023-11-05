@@ -1,13 +1,10 @@
-import { State } from "@/state";
 import { useEffect, useState } from "react"
-import { useSelector } from "react-redux";
 import { Socket } from "socket.io-client";
+import { useStore } from "./useStore";
 
 export const useGetSocket = () => {
     const [currentSocket, setCurrentSocket] = useState<Socket | null>(null)
-
-    const configurationState = useSelector((state: State) => state.configurationReducer);
-    const { socket } = configurationState
+    const socket = useStore((state) => state.socket)
 
     useEffect(() => {
         setCurrentSocket(socket)

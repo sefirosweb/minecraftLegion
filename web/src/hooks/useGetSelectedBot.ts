@@ -1,14 +1,12 @@
-import { State } from "@/state";
 import { Bot } from "@/types";
 import { useEffect, useState } from "react"
-import { useSelector } from "react-redux";
 import { useParams } from "react-router";
+import { useStore } from "./useStore";
 
 export const useGetSelectedBot = () => {
     const { selectedSocketId } = useParams()
     const [selectedBot, setSelectedBot] = useState<Bot | undefined>()
-    const botState = useSelector((state: State) => state.botsReducer);
-    const { botsOnline } = botState
+    const botsOnline = useStore((state) => state.botsOnline)
 
     useEffect(() => {
         if (!selectedSocketId) {

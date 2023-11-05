@@ -1,11 +1,8 @@
-import { State } from "@/state";
-import { useSelector } from "react-redux";
 import { Navigate, Outlet } from "react-router-dom";
+import { useStore } from "./useStore";
 
 export const UnAuthenticated = () => {
-  const configurationState = useSelector((state: State) => state.configurationReducer);
-  const { loged } = configurationState
-
+  const loged = useStore(state => state.loged)
   return loged ? <Navigate to="/dashboard" /> : <Outlet />;
 }
 

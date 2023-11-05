@@ -2,11 +2,11 @@ import React, { useContext, useState } from "react";
 import { ArrowDown, ArrowUp, Trash, FormCheck } from "@/components";
 import { BotSelectedContext } from "./ConfigurationContext";
 import { useChangeConfig } from "@/hooks/useChangeConfig";
-import { useGetMaster } from "@/hooks/useGetMaster";
+import { useStore } from "@/hooks/useStore";
 
 export const GuardJob: React.FC = () => {
   const botConfig = useContext(BotSelectedContext);
-  const master = useGetMaster()
+  const master = useStore(state => state.master)
 
   const [x, setX] = useState("");
   const [y, setY] = useState("");

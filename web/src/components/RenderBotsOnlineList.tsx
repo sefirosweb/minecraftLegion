@@ -1,15 +1,13 @@
 import { useEffect } from 'react'
-import { useSelector } from 'react-redux'
 import ProgressBar from 'react-bootstrap/ProgressBar'
-import { State } from '@/state'
 import { useNavigate, useParams } from 'react-router'
 import { ListGroup } from 'react-bootstrap'
+import { useStore } from '@/hooks/useStore'
 
 export const RenderBotsOnlineList: React.FC = () => {
   const { selectedSocketId } = useParams()
+  const botsOnline = useStore(state => state.botsOnline)
 
-  const botState = useSelector((state: State) => state.botsReducer);
-  const { botsOnline } = botState
   const navigate = useNavigate();
 
   useEffect(() => {

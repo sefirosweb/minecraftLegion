@@ -1,11 +1,9 @@
-import { actionCreators } from "@/state";
+
+import { useStore } from "@/hooks/useStore"
 import axios from "axios"
-import { useDispatch } from "react-redux";
-import { bindActionCreators } from "redux";
 
 export const useVerifyLoggedIn = () => {
-    const dispatch = useDispatch();
-    const { setLoged } = bindActionCreators(actionCreators, dispatch);
+    const setLoged = useStore((state) => state.setLoged)
 
     const verifyLoggedIn = async () => {
         return axios.get('/api/login')

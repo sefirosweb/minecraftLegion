@@ -1,13 +1,10 @@
-import { State } from "@/state";
 import { useVerifyLoggedIn } from "@/utils/useVerifyLoggedIn";
 import { useEffect } from "react";
-import { useSelector } from "react-redux";
 import { Navigate, Outlet } from "react-router-dom";
+import { useStore } from "./useStore";
 
 export const Authenticated = () => {
-  const configurationState = useSelector((state: State) => state.configurationReducer);
-  const { loged } = configurationState
-
+  const loged = useStore(state => state.loged)
   const verifyLoggedIn = useVerifyLoggedIn();
 
   useEffect(() => {

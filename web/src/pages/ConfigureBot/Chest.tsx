@@ -3,8 +3,8 @@ import { ItemsAviable } from "./ItemsAviable";
 import { ArrowDown, ArrowUp, Trash } from "@/components";
 import { Button, Col, Form, Row, Table } from "react-bootstrap";
 import { useChangeConfig } from "@/hooks/useChangeConfig";
-import { useGetMaster } from "@/hooks/useGetMaster";
 import { Chest as TypeChest } from "base-types";
+import { useStore } from "@/hooks/useStore";
 
 type Props = {
   id: number
@@ -13,7 +13,7 @@ type Props = {
 
 export const Chest: React.FC<Props> = (props) => {
   const { id, chest } = props
-  const master = useGetMaster()
+  const master = useStore(state => state.master)
   const changeConfig = useChangeConfig()
 
   const [itemName, setItemName] = useState("");

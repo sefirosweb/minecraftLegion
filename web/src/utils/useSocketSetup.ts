@@ -1,29 +1,34 @@
-import { actionCreators } from '@/state';
 import { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
-import { bindActionCreators } from 'redux';
 import { Socket, io } from "socket.io-client";
 import { useVerifyLoggedIn } from './useVerifyLoggedIn';
 import { Bot } from '@/types';
+import { useStore } from '@/hooks/useStore';
 
 export const useSocketSetup = () => {
-    const dispatch = useDispatch();
-
     const verifyLoggedIn = useVerifyLoggedIn()
+    const [
+        setSocket,
+        setBotsOnline,
+        setCoreConnected,
+        addLog,
+        updateBotStatus,
+        setMasters,
+        setChests,
+        setPortals,
+        setConfig] =
+        useStore(state => [
+            state.setSocket,
+            state.setBotsOnline,
+            state.setCoreConnected,
+            state.addLog,
+            state.updateBotStatus,
+            state.setMasters,
+            state.setChests,
+            state.setPortals,
+            state.setConfig
+        ])
 
     useEffect(() => {
-        const {
-            setSocket,
-            setConfig,
-            updateMasters,
-            updateChests,
-            updatePortals,
-            setBots,
-            addLog,
-            updateBotStatus,
-            setCoreConnection
-        } = bindActionCreators(actionCreators, dispatch);
-
         let tempSocket: Socket | undefined
         const interval = setTimeout(() => {
             console.log(`Conecting to server`);
@@ -48,9 +53,8 @@ export const useSocketSetup = () => {
             });
 
             socket.on("disconnect", () => {
-                console.log("disconnect")
-                setBots([]);
-                setCoreConnection(false)
+                setBotsOnline([]);
+                setCoreConnected(false)
             });
 
             socket.on("logs", (message) => {
@@ -62,23 +66,22 @@ export const useSocketSetup = () => {
             });
 
             socket.on("mastersOnline", (data) => {
-                updateMasters(data);
+                setMasters(data);
             });
 
             socket.on("coreConnected", (connected: boolean) => {
-                console.log('Core connected connected => ', connected)
-                setCoreConnection(connected);
+                setCoreConnected(connected);
             });
 
             socket.on("action", ({ type, value }) => {
                 if (type === "getChests") {
-                    updateChests(value);
+                    setChests(value);
                 }
             });
 
             socket.on("action", ({ type, value }) => {
                 if (type === "getPortals") {
-                    updatePortals(value);
+                    setPortals(value);
                 }
             });
 
@@ -90,7 +93,7 @@ export const useSocketSetup = () => {
                     return 0;
                 });
 
-                setBots(botsConnected);
+                setBotsOnline(botsConnected);
             });
 
             socket.on("sendConfig", (data) => {

@@ -2,14 +2,12 @@ import React, { useEffect, useRef } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { BotActionButtons } from './BotActionsButtons'
 import { Button, Col, Row } from 'react-bootstrap'
-import { useSelector } from "react-redux";
 import { RenderBotsOnlineList } from '@/components';
-import { State } from "@/state";
+import { useStore } from '@/hooks/useStore';
 
 export const Dashboard: React.FC = () => {
     const { selectedSocketId } = useParams()
-    const botState = useSelector((state: State) => state.botsReducer);
-    const { logs } = botState
+    const logs = useStore(state => state.logs)
 
     const messagesEndRef = useRef<HTMLDivElement>(null)
 

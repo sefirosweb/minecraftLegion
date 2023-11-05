@@ -1,14 +1,10 @@
-import { actionCreators } from "@/state"
-import axios from "axios"
 import React, { useEffect, useRef, useState } from "react"
 import { Button, Col, Container, Form, Row } from "react-bootstrap"
-import { useDispatch } from "react-redux"
-import { bindActionCreators } from "redux"
-
+import axios from "axios"
+import { useStore } from "@/hooks/useStore"
 
 export const Login: React.FC = () => {
-    const dispatch = useDispatch();
-    const { setLoged } = bindActionCreators(actionCreators, dispatch);
+    const setLoged = useStore(state => state.setLoged)
 
     const passInput = useRef<HTMLInputElement>(null)
     const [password, setPassword] = useState('')

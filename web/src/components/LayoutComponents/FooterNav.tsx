@@ -1,11 +1,9 @@
+import { useStore } from '@/hooks/useStore'
 import green_lamp from '@/images/green_lamp.png'
 import red_lamp from '@/images/red_lamp.png'
-import { State } from '@/state';
-import { useSelector } from 'react-redux';
 
 export const FooterNav: React.FC = () => {
-    const botsState = useSelector((state: State) => state.botsReducer);
-    const { coreConnected } = botsState
+    const coreConnected = useStore(state => state.coreConnected)
 
     return (
         <div className="fixed-bottom bg-light">

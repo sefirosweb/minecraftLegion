@@ -1,26 +1,19 @@
-import { useGetMaster } from '@/hooks/useGetMaster';
 import { useGetSocket } from '@/hooks/useGetSocket';
-import { State, actionCreators } from '@/state';
+import { useStore } from '@/hooks/useStore';
 import React, { useState } from 'react'
 import { Form } from 'react-bootstrap';
-import { useDispatch, useSelector } from 'react-redux'
-import { bindActionCreators } from 'redux';
 import { Socket } from 'socket.io-client';
 
 export const Masterlist: React.FC = () => {
   const socket = useGetSocket() as Socket
-  const master = useGetMaster()
+  const master = useStore(state => state.master)
 
-  const botState = useSelector((state: State) => state.botsReducer);
-  const { masters } = botState
-
-  const dispatch = useDispatch();
-  const { updateMaster, } = bindActionCreators(actionCreators, dispatch);
+  const setMaster = useStore(state => state.setMaster)
+  const masters = useStore(state => state.masters)
 
   const handleChangeMaster = (event: React.ChangeEvent<HTMLInputElement>) => {
-    updateMaster(event.target.value)
+    setMaster(event.target.value)
   }
-
 
   const [inputBox, setInputBox] = useState('')
 

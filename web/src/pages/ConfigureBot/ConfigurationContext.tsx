@@ -13,7 +13,6 @@ export const ConfigurationContextProvider: React.FC = () => {
   const { selectedSocketId } = useParams()
   const socket = useGetSocket()
   const bot = useGetSelectedBot()
-
   const sendAction = useSendActionSocket()
 
   useEffect(() => {
