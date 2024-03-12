@@ -10,6 +10,9 @@ declare module 'mineflayer' {
     interface Bot {
         mcData: mcDataLoader.IndexedData
         config: Config
+        stateMachinePort: number
+        viewerPort: number
+        inventoryPort: number
     }
 
     interface BotEvents {

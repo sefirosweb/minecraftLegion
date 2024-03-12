@@ -1,6 +1,6 @@
 import { findBotBySocket } from "@/libs/botStore";
 import { io } from "@/server";
-import { BotsConnected } from "@/types";
+import { BotsConnected } from "base-types";
 import { Socket } from "socket.io";
 
 type SocketMessage = {

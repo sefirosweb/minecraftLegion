@@ -8,6 +8,7 @@ import mineflayerPathfinder from 'mineflayer-pathfinder'
 import { startPrismarineViewer } from '@/modules/viewer'
 import DeathFunction from '@/NestedStateModules/deathFunction'
 import { StateTransition, BotStateMachine, StateMachineWebserver, BehaviorIdle, NestedStateMachine } from 'mineflayer-statemachine'
+import { getFreePort } from "@/modules/utils"
 
 // @ts-ignore
 import inventoryViewer from 'mineflayer-web-inventory'
@@ -221,34 +222,52 @@ const startStateMachine = (bot: Bot) => {
     })
 
     webserver = new StateMachineWebserver(bot, stateMachine, 4550)
+    bot.stateMachinePort = webserver.port
     if (!webserver.isServerRunning()) {
       webserver.startServer()
     }
 
     inventoryViewer(bot, { port: 4540 })
+    bot.inventoryPort = 4540
   }
 
-  botWebsocket.on('action', (toBotData: BotwebsocketAction) => {
-    const { type, value } = toBotData
+  botWebsocket.on('action', async (botwebsocketAction, response) => {
+    const { type, value } = botwebsocketAction
+
     switch (type) {
       case 'startInventory':
-        inventoryViewer(bot, { port: value.port })
-        botWebsocket.log(`Started inventory web server at http://localhost:${value.port}`)
+        if (!bot.inventoryPort) {
+          const port = await getFreePort()
+          inventoryViewer(bot, { port })
+          botWebsocket.log(`Started inventory web server at http://localhost:${port}`)
+          bot.inventoryPort = port
+        }
+        if (response) response({ port: bot.inventoryPort })
         break
       case 'startViewer':
-        startPrismarineViewer(bot, value.port)
-        botWebsocket.log(`Started viewer web server at http://localhost:${value.port}`)
+        if (!bot.viewerPort) {
+          const port = await getFreePort()
+          startPrismarineViewer(bot, port)
+          botWebsocket.log(`Started viewer web server at http://localhost:${port}`)
+          bot.viewerPort = port
+        }
+        if (response) response({ port: bot.viewerPort })
         break
       case 'startStateMachine':
-        if (!webserver || typeof webserver.isServerRunning !== 'function') {
-          webserver = new StateMachineWebserver(bot, stateMachine, value.port)
-        }
-        if (typeof webserver.isServerRunning === 'function') {
-          if (!webserver.isServerRunning()) {
-            webserver.startServer()
+        if (!bot.stateMachinePort) {
+          const port = await getFreePort()
+          if (!webserver || typeof webserver.isServerRunning !== 'function') {
+            webserver = new StateMachineWebserver(bot, stateMachine, port)
           }
-          botWebsocket.log(`Started state machine web server at http://localhost:${webserver.port}`)
+          if (typeof webserver.isServerRunning === 'function') {
+            if (!webserver.isServerRunning()) {
+              webserver.startServer()
+            }
+            botWebsocket.log(`Started state machine web server at http://localhost:${port}`)
+          }
+          bot.stateMachinePort = port
         }
+        if (response) response({ port: bot.stateMachinePort })
         break
       case 'getChests':
         targets.chests = value

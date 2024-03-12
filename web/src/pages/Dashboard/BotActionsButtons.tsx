@@ -2,15 +2,15 @@ import { useGetSelectedBot } from "@/hooks/useGetSelectedBot";
 import { useSendActionSocket } from "@/hooks/useSendActionSocket";
 import { useStore } from "@/hooks/useStore";
 import { Bot } from "@/types";
-import { getPort } from "@/utils/getFreePort";
 import React, { ChangeEvent, KeyboardEvent, useEffect, useState } from "react";
 import { Button, Col, Row } from "react-bootstrap";
-import { useNavigate } from "react-router";
+import { useNavigate, useParams } from "react-router";
 
 export const BotActionButtons: React.FC = () => {
   const bot = useGetSelectedBot() as Bot
   const navigate = useNavigate();
   const sendAction = useSendActionSocket()
+  const selectedSocketId = useParams().selectedSocketId
 
   const updateBotStatus = useStore(state => state.updateBotStatus)
   const master = useStore(state => state.master)
@@ -34,61 +34,6 @@ export const BotActionButtons: React.FC = () => {
 
   const handleDisconnectButton = () => {
     sendAction('sendDisconnect', 'Disconnect Bot')
-  };
-
-  const handleStartStateMachineButton = () => {
-    let port = bot.stateMachinePort
-    if (!port) {
-      port = getPort()
-
-      sendAction('startStateMachine', {
-        port,
-      })
-
-      updateBotStatus({
-        socketId: bot.socketId,
-        type: 'stateMachinePort',
-        value: port
-      });
-    }
-    window.open(`http://${window.location.hostname}:${port}`, "_blank");
-  };
-
-  const handleStartInventoryButton = () => {
-    let port = bot.inventoryPort
-    if (!port) {
-      port = getPort()
-
-      sendAction('startInventory', {
-        port
-      })
-
-
-      updateBotStatus({
-        socketId: bot.socketId,
-        type: 'inventoryPort',
-        value: port
-      });
-    }
-    window.open(`http://${window.location.hostname}:${port}`, "_blank");
-  };
-
-  const handleStartViewerButton = () => {
-    let port = bot.viewerPort
-    if (!port) {
-      port = getPort()
-
-      sendAction('startViewer', {
-        port
-      })
-
-      updateBotStatus({
-        socketId: bot.socketId,
-        type: 'viewerPort',
-        value: port
-      });
-    }
-    window.open(`http://${window.location.hostname}:${port}`, "_blank");
   };
 
   const handleSendAction = (type: string, value: string) => {
@@ -134,15 +79,24 @@ export const BotActionButtons: React.FC = () => {
             Send Message
           </Button>
           {' '}
-          <Button onClick={handleStartStateMachineButton} variant='success' className='mb-1'>
+          <Button
+            href={`/viewer/${selectedSocketId}/state_machine/`}
+            target="_blank"
+            variant='success' className='mb-1'>
             Show State Machine
           </Button>
           {' '}
-          <Button onClick={handleStartInventoryButton} variant='success' className='mb-1'>
+          <Button
+            href={`/viewer/${selectedSocketId}/inventory_viewer/`}
+            target="_blank"
+            variant='success' className='mb-1'>
             Show Item Inventory
           </Button>
           {' '}
-          <Button onClick={handleStartViewerButton} variant='success' className='mb-1'>
+          <Button
+            href={`/viewer/${selectedSocketId}/world/`}
+            target="_blank"
+            variant='success' className='mb-1'>
             Show Viewer
           </Button>
           {' '}

@@ -569,7 +569,7 @@ const log = (data: string) => {
   });
 }
 
-const on = (listener: string, cb: (BotwebsocketAction: BotwebsocketAction) => void) => {
+const on = (listener: string, cb: (BotwebsocketAction: BotwebsocketAction, response?: (data?: any) => void) => void) => {
   webSocketQueue.push({
     cb: async () => {
       socket.on(listener, cb)

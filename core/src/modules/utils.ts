@@ -65,3 +65,17 @@ export const getSecondBlockPosition = (facing: Facing, chestPosition: ChestPosit
 
   return false
 }
+
+export const getFreePort = (): Promise<number> => {
+  return new Promise((resolve, reject) => {
+    const server = require('net').createServer()
+    server.unref()
+    server.on('error', reject)
+    server.listen(() => {
+      const port = server.address().port as number
+      server.close(() => {
+        resolve(port)
+      })
+    })
+  })
+}

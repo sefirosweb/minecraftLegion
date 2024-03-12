@@ -10,6 +10,7 @@ export default (socket: Socket) => {
     socket.on('isBot', async (botName: string) => {
         const { botsConnected } = socketVariables
         socket.join("bot");
+        const address = socket.handshake.address;
 
         const find = botsConnected.find(bot => bot.name === botName);
 
@@ -24,7 +25,8 @@ export default (socket: Socket) => {
                 inventoryPort: undefined,
                 viewerPort: undefined,
                 events: [],
-                config: defaultConfig
+                config: defaultConfig,
+                address
             });
         }
 

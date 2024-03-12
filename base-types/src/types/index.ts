@@ -413,5 +413,6 @@ export type BotsConnected = {
     inventoryPort?: number,
     viewerPort?: number,
     events: [],
-    config: Config
+    config: Config,
+    address: string
 }

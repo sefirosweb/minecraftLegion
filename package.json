@@ -12,7 +12,7 @@
     "build": "npm run install_all && npm run build_all",
     "build_all": "node build",
     "install_all": "node install",
-    "build:docker": "docker build -f docker/Dockerfile --no-cache -t ghcr.io/sefirosweb/minecraft-legion:latest .",
+    "build:docker": "docker build -f docker/Dockerfile -t ghcr.io/sefirosweb/minecraft-legion:latest .",
     "dr": "docker-compose build && docker-compose up"
   },
   "repository": {

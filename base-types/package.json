@@ -20,12 +20,12 @@
   },
   "homepage": "https://github.com/sefirosweb/minecraftLegion#readme",
   "devDependencies": {
-    "@babel/cli": "^7.21.0",
-    "@babel/core": "^7.21.4",
-    "@babel/node": "^7.20.7",
-    "@babel/preset-env": "^7.21.4",
-    "@babel/preset-typescript": "^7.21.4",
+    "@babel/cli": "^7.23.9",
+    "@babel/core": "^7.24.0",
+    "@babel/node": "^7.23.9",
+    "@babel/preset-env": "^7.24.0",
+    "@babel/preset-typescript": "^7.23.3",
     "babel-plugin-module-resolver": "^5.0.0",
-    "typescript": "^5.0.4"
+    "typescript": "^5.4.2"
   }
 }
