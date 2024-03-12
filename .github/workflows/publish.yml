@@ -1,11 +1,13 @@
-name: Build and deploy docker
+name: Docker Image CI
+
 on:
   push:
-    tags:
-      - v2.*
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
 
 jobs:
-  publish-docker-image:
+  build:
     name: Push Docker image to Docker Hub
     runs-on: ubuntu-latest
     steps:
