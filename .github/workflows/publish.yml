@@ -19,14 +19,6 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Install and build files
-        uses: actions/setup-node@v3
-        with:
-          node-version: "18.x"
-      
-      - name: Build the bot files
-        run: npm run build
-
       - name: Build and push Docker image
         uses: docker/build-push-action@v4
         with:
