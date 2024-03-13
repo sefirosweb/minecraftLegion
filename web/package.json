@@ -39,7 +39,8 @@
     "react-router": "^6.17.0",
     "react-router-dom": "^6.17.0",
     "request": "^2.88.2",
-    "socket.io-client": "^4.7.2"
+    "socket.io-client": "^4.7.2",
+    "vec3": "^0.1.10"
   },
   "devDependencies": {
     "@tanstack/react-query": "^5.7.0",

@@ -1,8 +1,9 @@
-FROM node:18-bullseye as base
+FROM node:21.7.1-bullseye as base
 
 FROM base AS deps
 WORKDIR /app
 COPY . .
+RUN node -v
 RUN npm run build
 
 FROM base AS runner
