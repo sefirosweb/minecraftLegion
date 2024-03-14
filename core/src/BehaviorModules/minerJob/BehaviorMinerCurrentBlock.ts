@@ -146,15 +146,14 @@ export default class BehaviorMinerCurrentBlock implements StateBehavior {
       throw new Error('No setted: this.minerCords === undefined')
     }
 
-    if (
-      this.yCurrent === this.yEnd &&
-      this.zCurrent === this.zEnd &&
-      this.xCurrent === this.xEnd
-    ) {
-      if (allBlocks) {
-        this.isLayerFinished = true
+    do {
+      if (this.yCurrent === this.yEnd && this.zCurrent === this.zEnd && this.xCurrent === this.xEnd) {
+        if (allBlocks) {
+          this.isLayerFinished = true
+        }
+        return false
       }
-    } else {
+
       if (this.minerCords.orientation === 'z-' || this.minerCords.orientation === 'z+') {
         this.zNext()
       }
@@ -162,14 +161,9 @@ export default class BehaviorMinerCurrentBlock implements StateBehavior {
         this.xNext()
       }
 
-      if (this.calculateIsValid(allBlocks)) {
-        return true
-      } else {
-        return this.nextBlock(allBlocks)
-      }
-    }
+    } while (!this.calculateIsValid(allBlocks))
 
-    return false
+    return true
   }
 
   calculateIsValid(allBlocks: boolean) {
