@@ -37,3 +37,5 @@ COPY --from=deps /app/docker/supervisord.conf /etc/supervisor/supervisord.conf
 COPY --from=deps /app/docker/start-container /usr/local/bin/start-container
 
 CMD /bin/bash -c "chmod +x /usr/local/bin/start-container && /usr/local/bin/start-container;"
+
+EXPOSE 80
