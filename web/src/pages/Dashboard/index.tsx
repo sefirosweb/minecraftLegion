@@ -17,25 +17,24 @@ export const Dashboard: React.FC = () => {
 
     return (
         <>
-            <Row>
-                <Col md={6} lg={8} className='mb-3'>
-                    <h1>Dashboard</h1>
+            <Row className='align-items-end'>
+                <Col md={6} lg={8} className='mb-2'>
+                    <span className='fs-2 fw-bold'>Dashboard</span>
                 </Col>
 
-                <Col md={3} lg={2} className='mb-3'>
-                    {selectedSocketId &&
-                        <Link to={`/configurebot/${selectedSocketId}/generalconfig`} style={{ textDecoration: "none", display: "grid" }}>
+                {selectedSocketId &&
+                    <Col md={3} lg={2} className='mb-2'>
+                        <Link to={`/configurebot/${selectedSocketId}/generalconfig`}>
                             <Button variant='warning'>
                                 Configure Bot
                             </Button>
                         </Link>
-                    }
-                </Col>
+                    </Col>
+                }
             </Row>
 
             <Row>
                 <Col xs={{ span: 12, order: 2 }} md={{ span: 9, order: 1 }} lg={10}>
-
                     <Row className='mb-3'>
                         <Col xs={12}>
                             <div className='form-group'>

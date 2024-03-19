@@ -4,6 +4,7 @@ import { useSocketSetup } from "@/utils/useSocketSetup";
 import { FooterNav } from "./FooterNav";
 import React, { Suspense } from "react";
 import { LoadingPage } from "@/pages/LoadingPage";
+import { Container } from "react-bootstrap";
 
 export const Layout: React.FC = () => {
   useSocketSetup()
@@ -11,13 +12,11 @@ export const Layout: React.FC = () => {
   return (
     <>
       <Navbar />
-
-      <div className="mx-sm-3 mx-md-4 mx-lg-5 mt-3">
+      <Container>
         <Suspense fallback={<LoadingPage />}>
           <Outlet />
         </Suspense>
-      </div>
-
+      </Container>
       <FooterNav />
     </>
   );
