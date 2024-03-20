@@ -1,11 +1,10 @@
 import React, { Suspense, useContext } from "react";
-import { Button, Col, Row } from 'react-bootstrap'
+import { Button, Card, Col, Nav, Row } from 'react-bootstrap'
 import { Link, NavLink, Outlet } from 'react-router-dom'
 import { RenderBotsOnlineList } from '@/components'
 import { useSendActionSocket } from "@/hooks/useSendActionSocket";
 import { BotSelectedContext } from "./ConfigurationContext";
 import { LoadingPage } from "../LoadingPage";
-
 export const ConfigureBotLayout: React.FC = () => {
   const botConfig = useContext(BotSelectedContext);
   const sendAction = useSendActionSocket()
@@ -46,28 +45,28 @@ export const ConfigureBotLayout: React.FC = () => {
         <Col xs={{ span: 12, order: 2 }} md={{ span: 9, order: 1 }} lg={10}>
           <Row>
             <Col>
-              <ul className='nav nav-tabs bg-dark'>
-                <li className='nav-item'><NavLink className='nav-link linkSpan' to='generalconfig'>General Configuration</NavLink></li>
-                <li className='nav-item'><NavLink className='nav-link linkSpan' to='itemstobeready'>Items To Be Ready</NavLink></li>
-                <li className='nav-item'><NavLink className='nav-link linkSpan' to='chests'>Chests</NavLink></li>
-                <li className='nav-item'><NavLink className='nav-link linkSpan' to='combat'>Combat</NavLink></li>
-                <li className='nav-item'><NavLink className='nav-link linkSpan' to='guardjob'>Guard Job</NavLink></li>
-                <li className='nav-item'><NavLink className='nav-link linkSpan' to='minerjob'>Miner Job</NavLink></li>
-                <li className='nav-item'><NavLink className='nav-link linkSpan' to='farmerjob'>Farmer Job</NavLink></li>
-                <li className='nav-item'><NavLink className='nav-link linkSpan' to='breederjob'>Breeder Job</NavLink></li>
-                <li className='nav-item'><NavLink className='nav-link linkSpan' to='sorterjob'>Sorter Job</NavLink></li>
-                <li className='nav-item'><NavLink className='nav-link linkSpan' to='processlist'>Process list</NavLink></li>
-                <li className='nav-item'><NavLink className='nav-link linkSpan' to='full_config'>Full config</NavLink></li>
-              </ul>
+              <Nav variant="tabs">
+                <Nav.Item><Nav.Link as={NavLink} to='generalconfig'>General Configuration</Nav.Link></Nav.Item>
+                <Nav.Item><Nav.Link as={NavLink} to='itemstobeready'>Items To Be Ready</Nav.Link></Nav.Item>
+                <Nav.Item><Nav.Link as={NavLink} to='chests'>Chests</Nav.Link></Nav.Item>
+                <Nav.Item><Nav.Link as={NavLink} to='combat'>Combat</Nav.Link></Nav.Item>
+                <Nav.Item><Nav.Link as={NavLink} to='guardjob'>Guard Job</Nav.Link></Nav.Item>
+                <Nav.Item><Nav.Link as={NavLink} to='minerjob'>Miner Job</Nav.Link></Nav.Item>
+                <Nav.Item><Nav.Link as={NavLink} to='farmerjob'>Farmer Job</Nav.Link></Nav.Item>
+                <Nav.Item><Nav.Link as={NavLink} to='breederjob'>Breeder Job</Nav.Link></Nav.Item>
+                <Nav.Item><Nav.Link as={NavLink} to='sorterjob'>Sorter Job</Nav.Link></Nav.Item>
+                <Nav.Item><Nav.Link as={NavLink} to='processlist'>Process list</Nav.Link></Nav.Item>
+                <Nav.Item><Nav.Link as={NavLink} to='full_config'>Full config</Nav.Link></Nav.Item>
+              </Nav>
             </Col>
           </Row>
           <Row>
             <Col>
-              <div className='card px-5 pt-4 mr-0'>
+              <Card className='py-4 px-5'>
                 <Suspense fallback={<LoadingPage />}>
                   <Outlet />
                 </Suspense>
-              </div>
+              </Card>
             </Col>
           </Row>
         </Col>

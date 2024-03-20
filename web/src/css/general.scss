@@ -1,33 +1,12 @@
-body {
-    background-color: darkgrey;
+html {
+  overflow-y: scroll;
 }
 
 .textAreaStyle {
-    border: 1px inset #ccc;
-    background-color: white;
-    font: small courier, monospace black;
-    width: 100%;
-    height: 340px;
-    overflow: auto;
-}
-
-.color-green{
-    color:green
-}
-
-.color-red{
-    color:red
-}
-
-.pendingSelectBot{
-    background-color: rosybrown;
-    border: 1px solid black;
-    border-radius: 5px;
-    padding: 5px 10px;
-}
-
-
-.linkSpan {
-    color: white;
-    cursor: pointer;
+  border: 1px inset #ccc;
+  background-color: white;
+  font: small courier, monospace black;
+  width: 100%;
+  height: 340px;
+  overflow: auto;
 }

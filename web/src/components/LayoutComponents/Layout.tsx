@@ -12,7 +12,7 @@ export const Layout: React.FC = () => {
   return (
     <>
       <Navbar />
-      <Container>
+      <Container className="mb-5">
         <Suspense fallback={<LoadingPage />}>
           <Outlet />
         </Suspense>
