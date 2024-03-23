@@ -1,3 +1,4 @@
-export * from './types/animals'
-export * from './types/defaultTypes'
-export * from './types/index'
+export * from './animals'
+export * from './defaultTypes'
+export * from './types'
+export * from './guards'
