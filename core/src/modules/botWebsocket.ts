@@ -223,15 +223,6 @@ const connect = async () => {
       bot.config.minerCords = minerCords
     }
 
-    setConfigurations['changePosMiner'] = (value: { coord: string, pos: string }) => {
-      const { coord, pos } = value
-      const minerCords = bot.config.minerCords
-      if (isMineCoords(coord)) {
-        minerCords[coord] = parseInt(pos);
-      }
-      bot.config.minerCords = minerCords
-    }
-
     setConfigurations['changeReverseModeMiner'] = (value: boolean) => {
       const minerCords = bot.config.minerCords
       minerCords.reverse = value
@@ -462,11 +453,6 @@ const botWebsocketLoader = {
   getFriends,
   getMasters,
   sendAction
-}
-
-const isMineCoords = (value: string): value is keyof MineCords => {
-  const typesMineCord: Array<string> = ['xStart', 'xEnd', 'yEnd', 'yStart', 'zEnd', 'zStart']
-  return typesMineCord.includes(value)
 }
 
 export default botWebsocketLoader

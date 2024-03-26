@@ -1,31 +1,35 @@
+import React, { useContext } from 'react';
+import { Config, isCoordinates, isMineCoords, isWorld, istunnel } from 'base-types';
 import { Col, Form, Row } from 'react-bootstrap'
 import HouseXYZ from '@/images/HouseXYZ.png'
 import { BotSelectedContext } from "./ConfigurationContext";
-import React, { useContext } from 'react';
-import { useChangeConfig } from '@/hooks/useChangeConfig';
-import { istunnel } from 'base-types';
 
 export const MinerJob: React.FC = () => {
   const { botConfig, updateConfig } = useContext(BotSelectedContext);
-  const changeConfig = useChangeConfig()
 
-  const handleChangeTunnel = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const mineCords = botConfig.minerCords
-    if (!istunnel(event.target.value)) return
-    mineCords.tunnel = event.target.value
-    updateConfig('minerCords', mineCords)
+  const changeMinerConfig = <K extends keyof Config['minerCords']>(configToChange: K, value: Config['minerCords'][K]) => {
+    const newMinerCords = botConfig.minerCords
+    newMinerCords[configToChange] = value
+    updateConfig('minerCords', newMinerCords)
   }
 
-  const handleChangeWorld = (event: React.ChangeEvent<HTMLInputElement>) => {
-    changeConfig('changeWorldMiner', event.target.value)
+  const handleChangeTunnel = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!istunnel(e.target.value)) return
+    changeMinerConfig('tunnel', e.target.value)
   }
 
-  const handleChangeOrientation = (event: React.ChangeEvent<HTMLInputElement>) => {
-    changeConfig('changeOrientation', event.target.value)
+  const handleChangeWorld = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!isWorld(e.target.value)) return
+    changeMinerConfig('world', e.target.value)
+  }
+
+  const handleChangeOrientation = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!isCoordinates(e.target.value)) return
+    changeMinerConfig('orientation', e.target.value)
   }
 
   const handleReverseMode = (mode: boolean) => {
-    changeConfig('changeReverseModeMiner', mode)
+    changeMinerConfig('reverse', mode)
   }
 
   const handleChangePosMiner = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -36,98 +40,56 @@ export const MinerJob: React.FC = () => {
     }
 
     const coord = event.target.id
-    changeConfig('changePosMiner', {
-      coord,
-      pos
-    })
+    if (!isMineCoords(coord)) return
+    changeMinerConfig(coord, pos)
   }
 
   return (
     <>
-      <Row className='mb-3'>
-        <Col>
-          <label>
-            Depending the tunnel type and orientation have a different behavior
-          </label>
-        </Col>
-      </Row>
+      <div className='mb-3'>
+        Depending the tunnel type and orientation have a different behavior
+      </div>
 
-      <Row className='mb-3'>
-        <Col md={6}>
+      <Row>
+        <Col xs={12} md={6} className='mb-3'>
           <Form>
-            <Form.Group controlId='holeTypeSelect' as={Row}>
-              <Col md={3}>
-                tunnel type?
-              </Col>
-              <Col md={9}>
-                <Form.Check
-                  type='radio'
-                  id={`handleChangeTunnel`}
-                  label={`Make a Hole`}
-                  value='vertically'
-                  onChange={handleChangeTunnel}
-                  checked={botConfig.minerCords.tunnel === 'vertically'}
-                />
-                <Form.Check
-                  type='radio'
-                  id={`handleChangeTunnel`}
-                  label={`Make a tunnel`}
-                  value='horizontally'
-                  onChange={handleChangeTunnel}
-                  checked={botConfig.minerCords.tunnel === 'horizontally'}
-                />
-              </Col>
-            </Form.Group>
+            <Form.Label>Tunnel type?</Form.Label>
+            {['vertically', 'horizontally'].map((option) => (
+              <Form.Check
+                className="text-capitalize"
+                id={`${option}`}
+                key={`${option}`}
+                value={option}
+                label={option}
+                type="radio"
+                onChange={handleChangeTunnel}
+                checked={botConfig.minerCords.tunnel === option}
+              />
+            ))}
           </Form>
         </Col>
-        <Col md={6}>
 
+        <Col xs={12} md={6} className='mb-3'>
           <Form>
-            <Form.Group controlId='orientationSelect' as={Row}>
-              <Col md={3}>
-                Orientation?
-              </Col>
-              <Col md={9}>
-                <Form.Check
-                  type='radio'
-                  id={`handleChangeOrientation`}
-                  label={`X+`}
-                  value='x+'
-                  onChange={handleChangeOrientation}
-                  checked={botConfig.minerCords.orientation === 'x+'}
-                />
-                <Form.Check
-                  type='radio'
-                  id={`handleChangeOrientation`}
-                  label={`X-`}
-                  value='x-'
-                  onChange={handleChangeOrientation}
-                  checked={botConfig.minerCords.orientation === 'x-'}
-                />
-                <Form.Check
-                  type='radio'
-                  id={`handleChangeOrientation`}
-                  label={`Z+`}
-                  value='z+'
-                  onChange={handleChangeOrientation}
-                  checked={botConfig.minerCords.orientation === 'z+'}
-                />
-                <Form.Check
-                  type='radio'
-                  id={`handleChangeOrientation`}
-                  label={`Z-`}
-                  value='z-'
-                  onChange={handleChangeOrientation}
-                  checked={botConfig.minerCords.orientation === 'z-'}
-                />
-              </Col>
-            </Form.Group>
+            <Form.Label>Tunnel type?</Form.Label>
+            {['x+', 'x-', 'z+', 'z-'].map((option) => (
+              <Form.Check
+                className="text-capitalize"
+                id={`${option}`}
+                key={`${option}`}
+                value={option}
+                label={option}
+                type="radio"
+                onChange={handleChangeOrientation}
+                checked={botConfig.minerCords.orientation === option}
+              />
+            ))}
           </Form>
         </Col>
       </Row>
 
-      <Row className='mb-3'>
-        <Col md={6}>
+      <Row>
+        <Col md={6} className='mb-3'>
           <Form.Check
             type='switch'
             id="reverseMode"
@@ -136,42 +98,26 @@ export const MinerJob: React.FC = () => {
             onChange={() => handleReverseMode(!botConfig.minerCords.reverse)}
           />
         </Col>
-        <Col md={6}>
+
+        <Col md={6} className='mb-3'>
           <Form>
-            <Form.Group controlId='worldMinerSelect' as={Row}>
-              <Col md={3}>
-                World?
-              </Col>
-              <Col md={9}>
-                <Form.Check
-                  type='radio'
-                  id={`handleChangeWorld`}
-                  label={`Overworld`}
-                  value='overworld'
-                  onChange={handleChangeWorld}
-                  checked={botConfig.minerCords.world === 'overworld'}
-                />
-                <Form.Check
-                  type='radio'
-                  id={`handleChangeWorld`}
-                  label={`Nether`}
-                  value='the_nether'
-                  onChange={handleChangeWorld}
-                  checked={botConfig.minerCords.world === 'the_nether'}
-                />
-                <Form.Check
-                  type='radio'
-                  id={`handleChangeWorld`}
-                  label={`End`}
-                  value='the_end'
-                  onChange={handleChangeWorld}
-                  checked={botConfig.minerCords.world === 'the_end'}
-                />
-              </Col>
-            </Form.Group>
+            <Form.Label>World?</Form.Label>
+            {['overworld', 'the_nether', 'the_end'].map((option) => (
+              <Form.Check
+                className="text-capitalize"
+                id={`${option}`}
+                key={`${option}`}
+                value={option}
+                label={option}
+                type="radio"
+                onChange={handleChangeWorld}
+                checked={botConfig.minerCords.world === option}
+              />
+            ))}
           </Form>
         </Col>
       </Row>
+
 
       <div className='p-3 mb-3 border rounded'>
         <h5>Start Coords</h5>
