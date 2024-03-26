@@ -8,6 +8,10 @@ import { Entity } from 'prismarine-entity'
 import { Item as PrismarineItem } from 'prismarine-item';
 import { FarmAnimal } from './animals'
 
+export type DepositType = 'withdraw' | 'deposit' | 'depositAll'
+export type Agro = 'none' | 'pve' | 'pvp'
+export type tunnelType = 'horizontally' | 'vertically'
+
 export type Layer = {
     xStart: number,
     xEnd: number,
@@ -26,7 +30,7 @@ export type MineCords = {
 }
 
 export type MineCordsConfig = MineCords & {
-    tunel: 'horizontally' | 'vertically'
+    tunnel: tunnelType
     orientation: Coordinates
     world: Dimension_V2
     reverse: boolean
@@ -80,16 +84,13 @@ export type SorterJob = {
 }
 
 export type CrafterJob = {}
+
 export type MinerJob = {
     blockForPlace: Array<any>
     original: MineCords
     mineBlock: Vec3,
     nextLayer: Layer | undefined
 }
-
-export type DepositType = 'withdraw' | 'deposit' | 'depositAll'
-
-export type Agro = 'none' | 'pve' | 'pvp'
 
 export type Config = {
     job: Jobs
@@ -201,6 +202,7 @@ export type PositionsChecked = {
 }
 
 export type Chest = {
+    uuid: string
     items: Array<Item>
     name: string
     type: DepositType
@@ -389,7 +391,7 @@ export const defaultConfig: Config = {
     },
     minerCords: {
         orientation: 'x+',
-        tunel: 'horizontally',
+        tunnel: 'horizontally',
         world: 'overworld',
         xEnd: 0,
         xStart: 0,

@@ -4,10 +4,16 @@ import { BrowserRouter } from 'react-router-dom';
 import { App } from '@/routes/App';
 import axios from 'axios';
 import '@/css/styles.scss'
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { QueryClientProvider } from '@tanstack/react-query';
+import { useGetQueryClient } from '@/lib';
 
 axios.defaults.withCredentials = true;
-const queryClient = new QueryClient()
+const queryClient = useGetQueryClient();
+queryClient.setDefaultOptions({
+    queries: {
+        refetchOnWindowFocus: false,
+    }
+})
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>

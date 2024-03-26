@@ -3,7 +3,7 @@ import { Config, Jobs, MineCordsConfig } from 'base-types'
 import { defaultConfig } from 'base-types'
 import _ from 'lodash'
 
-describe('02 Make basic tunel in water & lava', function () {
+describe('02 Make basic tunnel in water & lava', function () {
 
   const minerCords: MineCordsConfig = {
     xStart: 2,
@@ -14,7 +14,7 @@ describe('02 Make basic tunel in water & lava', function () {
     zEnd: 0,
     orientation: "x+",
     reverse: false,
-    tunel: "horizontally",
+    tunnel: "horizontally",
     world: "overworld"
   }
 

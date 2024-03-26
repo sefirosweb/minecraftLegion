@@ -16,7 +16,7 @@ const minerModule = (bot: Bot, targets: LegionStateMachineTargets) => {
 
     const backOffset = new Vec3(offsetX, 0, offsetZ)
 
-    if (bot.config.minerCords.tunel === 'vertically') {
+    if (bot.config.minerCords.tunnel === 'vertically') {
       sidesToCheck.push({
         side: 'bottom',
         position: originalPosition.offset(0, -1, 0)
@@ -24,7 +24,7 @@ const minerModule = (bot: Bot, targets: LegionStateMachineTargets) => {
     }
 
     if (
-      bot.config.minerCords.tunel === 'horizontally' &&
+      bot.config.minerCords.tunnel === 'horizontally' &&
       originalPosition.y === targets.minerJob.original.yStart
     ) {
       sidesToCheck.push({
@@ -38,7 +38,7 @@ const minerModule = (bot: Bot, targets: LegionStateMachineTargets) => {
     }
 
     if (
-      bot.config.minerCords.tunel === 'horizontally' &&
+      bot.config.minerCords.tunnel === 'horizontally' &&
       originalPosition.y === targets.minerJob.original.yEnd
     ) {
       sidesToCheck.push({
@@ -52,7 +52,7 @@ const minerModule = (bot: Bot, targets: LegionStateMachineTargets) => {
     }
 
     if (
-      bot.config.minerCords.tunel === 'horizontally' &&
+      bot.config.minerCords.tunnel === 'horizontally' &&
       (
         (bot.config.minerCords.orientation === 'x+' && originalPosition.z === targets.minerJob.original.zStart) ||
         (bot.config.minerCords.orientation === 'x-' && originalPosition.z === targets.minerJob.original.zEnd) ||
@@ -86,7 +86,7 @@ const minerModule = (bot: Bot, targets: LegionStateMachineTargets) => {
     }
 
     if (
-      bot.config.minerCords.tunel === 'horizontally' &&
+      bot.config.minerCords.tunnel === 'horizontally' &&
       (
         (bot.config.minerCords.orientation === 'x+' && originalPosition.z === targets.minerJob.original.zEnd) ||
         (bot.config.minerCords.orientation === 'x-' && originalPosition.z === targets.minerJob.original.zStart) ||
@@ -119,7 +119,7 @@ const minerModule = (bot: Bot, targets: LegionStateMachineTargets) => {
       })
     }
 
-    if (bot.config.minerCords.tunel === 'horizontally') {
+    if (bot.config.minerCords.tunnel === 'horizontally') {
       sidesToCheck.push({
         side: 'back',
         position: originalPosition.offset(offsetX, 0, offsetZ)

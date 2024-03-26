@@ -1,9 +1,10 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Col, Row } from 'react-bootstrap'
 import { Layer, PlantArea } from 'base-types'
-import { ItemsAviable } from './ItemsAviable'
 import { useChangeConfig } from '@/hooks/useChangeConfig'
-import { LayerCoords } from '@/components'
+import { ItemWithImageOption, LayerCoords, SingleValueWithImage } from '@/components'
+import AsyncSelect from 'react-select/async';
+import { ItemOption, itemOptions } from '@/lib'
 
 type Props = {
   id: number,
@@ -12,6 +13,7 @@ type Props = {
 
 export const HarvestArea: React.FC<Props> = (props) => {
   const { id, plantArea } = props
+  const [itemName, setItemName] = useState<ItemOption | null>(null);
 
   const changeConfig = useChangeConfig()
 
@@ -47,10 +49,18 @@ export const HarvestArea: React.FC<Props> = (props) => {
         <Col md={6}>
           <div className='form-group'>
             <label htmlFor='inputItem'>Select Plant</label>
-            <input className='form-control' type='text' list={`${id}_plant_area`} value={plantArea.plant ? plantArea.plant : ''} onChange={(e) => handleChangePlant(e.target.value)} />
-            <datalist id={`${id}_plant_area`}>
-              <ItemsAviable item={plantArea.plant ? plantArea.plant : ''} type='plants' />
-            </datalist>
+
+            <AsyncSelect
+              defaultOptions
+              components={{
+                Option: ItemWithImageOption,
+                SingleValue: SingleValueWithImage,
+              }}
+              isMulti={false}
+              loadOptions={itemOptions}
+              value={itemName}
+              getOptionLabel={(option) => option.label}
+              onChange={(e) => setItemName(e as ItemOption)} />     
           </div>
         </Col>
         <Col md={{ span: 3, offset: 3 }}>

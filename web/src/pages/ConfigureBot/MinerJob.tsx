@@ -3,14 +3,17 @@ import HouseXYZ from '@/images/HouseXYZ.png'
 import { BotSelectedContext } from "./ConfigurationContext";
 import React, { useContext } from 'react';
 import { useChangeConfig } from '@/hooks/useChangeConfig';
-import { FormCheck } from '@/components';
+import { istunnel } from 'base-types';
 
 export const MinerJob: React.FC = () => {
-  const botConfig = useContext(BotSelectedContext);
+  const { botConfig, updateConfig } = useContext(BotSelectedContext);
   const changeConfig = useChangeConfig()
 
   const handleChangeTunnel = (event: React.ChangeEvent<HTMLInputElement>) => {
-    changeConfig('changeTunnel', event.target.value)
+    const mineCords = botConfig.minerCords
+    if (!istunnel(event.target.value)) return
+    mineCords.tunnel = event.target.value
+    updateConfig('minerCords', mineCords)
   }
 
   const handleChangeWorld = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -52,9 +55,9 @@ export const MinerJob: React.FC = () => {
       <Row className='mb-3'>
         <Col md={6}>
           <Form>
-            <Form.Group as={Row}>
+            <Form.Group controlId='holeTypeSelect' as={Row}>
               <Col md={3}>
-                Tunel type?
+                tunnel type?
               </Col>
               <Col md={9}>
                 <Form.Check
@@ -63,15 +66,15 @@ export const MinerJob: React.FC = () => {
                   label={`Make a Hole`}
                   value='vertically'
                   onChange={handleChangeTunnel}
-                  checked={botConfig.config.minerCords.tunel === 'vertically'}
+                  checked={botConfig.minerCords.tunnel === 'vertically'}
                 />
                 <Form.Check
                   type='radio'
                   id={`handleChangeTunnel`}
-                  label={`Make a Tunel`}
+                  label={`Make a tunnel`}
                   value='horizontally'
                   onChange={handleChangeTunnel}
-                  checked={botConfig.config.minerCords.tunel === 'horizontally'}
+                  checked={botConfig.minerCords.tunnel === 'horizontally'}
                 />
               </Col>
             </Form.Group>
@@ -80,7 +83,7 @@ export const MinerJob: React.FC = () => {
         <Col md={6}>
 
           <Form>
-            <Form.Group as={Row}>
+            <Form.Group controlId='orientationSelect' as={Row}>
               <Col md={3}>
                 Orientation?
               </Col>
@@ -91,7 +94,7 @@ export const MinerJob: React.FC = () => {
                   label={`X+`}
                   value='x+'
                   onChange={handleChangeOrientation}
-                  checked={botConfig.config.minerCords.orientation === 'x+'}
+                  checked={botConfig.minerCords.orientation === 'x+'}
                 />
                 <Form.Check
                   type='radio'
@@ -99,7 +102,7 @@ export const MinerJob: React.FC = () => {
                   label={`X-`}
                   value='x-'
                   onChange={handleChangeOrientation}
-                  checked={botConfig.config.minerCords.orientation === 'x-'}
+                  checked={botConfig.minerCords.orientation === 'x-'}
                 />
                 <Form.Check
                   type='radio'
@@ -107,7 +110,7 @@ export const MinerJob: React.FC = () => {
                   label={`Z+`}
                   value='z+'
                   onChange={handleChangeOrientation}
-                  checked={botConfig.config.minerCords.orientation === 'z+'}
+                  checked={botConfig.minerCords.orientation === 'z+'}
                 />
                 <Form.Check
                   type='radio'
@@ -115,7 +118,7 @@ export const MinerJob: React.FC = () => {
                   label={`Z-`}
                   value='z-'
                   onChange={handleChangeOrientation}
-                  checked={botConfig.config.minerCords.orientation === 'z-'}
+                  checked={botConfig.minerCords.orientation === 'z-'}
                 />
               </Col>
             </Form.Group>
@@ -125,18 +128,17 @@ export const MinerJob: React.FC = () => {
 
       <Row className='mb-3'>
         <Col md={6}>
-          <FormCheck
-            id={"reverseMode"}
-            onChange={() =>
-              handleReverseMode(!botConfig.config.minerCords.reverse)
-            }
-            label={`Reverse Mode?`}
-            checked={botConfig.config.minerCords.reverse}
+          <Form.Check
+            type='switch'
+            id="reverseMode"
+            label="Reverse Mode?"
+            checked={botConfig.minerCords.reverse}
+            onChange={() => handleReverseMode(!botConfig.minerCords.reverse)}
           />
         </Col>
         <Col md={6}>
           <Form>
-            <Form.Group as={Row}>
+            <Form.Group controlId='worldMinerSelect' as={Row}>
               <Col md={3}>
                 World?
               </Col>
@@ -147,7 +149,7 @@ export const MinerJob: React.FC = () => {
                   label={`Overworld`}
                   value='overworld'
                   onChange={handleChangeWorld}
-                  checked={botConfig.config.minerCords.world === 'overworld'}
+                  checked={botConfig.minerCords.world === 'overworld'}
                 />
                 <Form.Check
                   type='radio'
@@ -155,7 +157,7 @@ export const MinerJob: React.FC = () => {
                   label={`Nether`}
                   value='the_nether'
                   onChange={handleChangeWorld}
-                  checked={botConfig.config.minerCords.world === 'the_nether'}
+                  checked={botConfig.minerCords.world === 'the_nether'}
                 />
                 <Form.Check
                   type='radio'
@@ -163,7 +165,7 @@ export const MinerJob: React.FC = () => {
                   label={`End`}
                   value='the_end'
                   onChange={handleChangeWorld}
-                  checked={botConfig.config.minerCords.world === 'the_end'}
+                  checked={botConfig.minerCords.world === 'the_end'}
                 />
               </Col>
             </Form.Group>
@@ -179,7 +181,7 @@ export const MinerJob: React.FC = () => {
             <Form.Label><span className='badge bg-primary text-white'>X Start</span></Form.Label>
             <Form.Control
               type="text"
-              value={botConfig.config.minerCords.xStart}
+              value={botConfig.minerCords.xStart}
               onChange={handleChangePosMiner}
             />
           </Form.Group>
@@ -188,7 +190,7 @@ export const MinerJob: React.FC = () => {
             <Form.Label><span className='badge bg-warning text-dark'>Y Start</span></Form.Label>
             <Form.Control
               type="text"
-              value={botConfig.config.minerCords.yStart}
+              value={botConfig.minerCords.yStart}
               onChange={handleChangePosMiner}
             />
           </Form.Group>
@@ -197,7 +199,7 @@ export const MinerJob: React.FC = () => {
             <Form.Label><span className='badge bg-secondary text-white'>Z Start</span></Form.Label>
             <Form.Control
               type="text"
-              value={botConfig.config.minerCords.zStart}
+              value={botConfig.minerCords.zStart}
               onChange={handleChangePosMiner}
             />
           </Form.Group>
@@ -212,7 +214,7 @@ export const MinerJob: React.FC = () => {
             <Form.Label><span className='badge bg-primary text-white'>X End</span></Form.Label>
             <Form.Control
               type="text"
-              value={botConfig.config.minerCords.xEnd}
+              value={botConfig.minerCords.xEnd}
               onChange={handleChangePosMiner}
             />
           </Form.Group>
@@ -221,7 +223,7 @@ export const MinerJob: React.FC = () => {
             <Form.Label><span className='badge bg-warning text-dark'>Y End</span></Form.Label>
             <Form.Control
               type="text"
-              value={botConfig.config.minerCords.yEnd}
+              value={botConfig.minerCords.yEnd}
               onChange={handleChangePosMiner}
             />
           </Form.Group>
@@ -230,7 +232,7 @@ export const MinerJob: React.FC = () => {
             <Form.Label><span className='badge bg-secondary text-white'>Z End</span></Form.Label>
             <Form.Control
               type="text"
-              value={botConfig.config.minerCords.zEnd}
+              value={botConfig.minerCords.zEnd}
               onChange={handleChangePosMiner}
             />
           </Form.Group>

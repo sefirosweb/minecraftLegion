@@ -5,7 +5,7 @@ import React, { useContext } from 'react';
 import { useChangeConfig } from '@/hooks/useChangeConfig';
 
 export const BreederJob: React.FC = () => {
-  const botConfig = useContext(BotSelectedContext);
+  const { botConfig } = useContext(BotSelectedContext);
   const changeConfig = useChangeConfig()
 
   const handleInsertNewFarmArea = () => {
@@ -32,7 +32,7 @@ export const BreederJob: React.FC = () => {
           <Form.Label>Feed every seconds</Form.Label>
           <Form.Control
             type="text"
-            value={botConfig.config.farmAnimalSeconds}
+            value={botConfig.farmAnimalSeconds}
             onChange={(e) => handleUpdateAnimal('seconds', e.target.value)}
           />
         </Form.Group>
@@ -44,7 +44,7 @@ export const BreederJob: React.FC = () => {
           <Form.Label>Cow</Form.Label>
           <Form.Control
             type="text"
-            value={botConfig.config.farmAnimal.cow}
+            value={botConfig.farmAnimal.cow}
             onChange={(e) => handleUpdateAnimal('cow', e.target.value)}
           />
         </Form.Group>
@@ -53,7 +53,7 @@ export const BreederJob: React.FC = () => {
           <Form.Label>Sheep</Form.Label>
           <Form.Control
             type="text"
-            value={botConfig.config.farmAnimal.sheep}
+            value={botConfig.farmAnimal.sheep}
             onChange={(e) => handleUpdateAnimal('sheep', e.target.value)}
           />
         </Form.Group>
@@ -62,27 +62,25 @@ export const BreederJob: React.FC = () => {
           <Form.Label>Chicken</Form.Label>
           <Form.Control
             type="text"
-            value={botConfig.config.farmAnimal.chicken}
+            value={botConfig.farmAnimal.chicken}
             onChange={(e) => handleUpdateAnimal('chicken', e.target.value)}
           />
         </Form.Group>
 
-        <Form.Group as={Col} sm="4" md="3" lg="2"
-          controlId="validationCustomHorse">
+        <Form.Group as={Col} sm="4" md="3" lg="2" controlId="validationCustomHorse">
           <Form.Label>Horse</Form.Label>
           <Form.Control
             type="text"
-            value={botConfig.config.farmAnimal.horse}
+            value={botConfig.farmAnimal.horse}
             onChange={(e) => handleUpdateAnimal('horse', e.target.value)}
           />
         </Form.Group>
 
-        <Form.Group as={Col} sm="4" md="3" lg="2"
-          controlId="validationCustomDonkey">
+        <Form.Group as={Col} sm="4" md="3" lg="2" controlId="validationCustomDonkey">
           <Form.Label>Donkey</Form.Label>
           <Form.Control
             type="text"
-            value={botConfig.config.farmAnimal.donkey}
+            value={botConfig.farmAnimal.donkey}
             onChange={(e) => handleUpdateAnimal('donkey', e.target.value)}
           />
         </Form.Group>
@@ -91,7 +89,7 @@ export const BreederJob: React.FC = () => {
           <Form.Label>Llama</Form.Label>
           <Form.Control
             type="text"
-            value={botConfig.config.farmAnimal.llama}
+            value={botConfig.farmAnimal.llama}
             onChange={(e) => handleUpdateAnimal('llama', e.target.value)}
           />
         </Form.Group>
@@ -100,7 +98,7 @@ export const BreederJob: React.FC = () => {
           <Form.Label>Fox</Form.Label>
           <Form.Control
             type="text"
-            value={botConfig.config.farmAnimal.fox}
+            value={botConfig.farmAnimal.fox}
             onChange={(e) => handleUpdateAnimal('fox', e.target.value)}
           />
         </Form.Group>
@@ -109,7 +107,7 @@ export const BreederJob: React.FC = () => {
           <Form.Label>Bee</Form.Label>
           <Form.Control
             type="text"
-            value={botConfig.config.farmAnimal.bee}
+            value={botConfig.farmAnimal.bee}
             onChange={(e) => handleUpdateAnimal('bee', e.target.value)}
           />
         </Form.Group>
@@ -118,7 +116,7 @@ export const BreederJob: React.FC = () => {
           <Form.Label>Panda</Form.Label>
           <Form.Control
             type="text"
-            value={botConfig.config.farmAnimal.panda}
+            value={botConfig.farmAnimal.panda}
             onChange={(e) => handleUpdateAnimal('panda', e.target.value)}
           />
         </Form.Group>
@@ -127,7 +125,7 @@ export const BreederJob: React.FC = () => {
           <Form.Label>Wolf</Form.Label>
           <Form.Control
             type="text"
-            value={botConfig.config.farmAnimal.wolf}
+            value={botConfig.farmAnimal.wolf}
             onChange={(e) => handleUpdateAnimal('wolf', e.target.value)}
           />
         </Form.Group>
@@ -136,7 +134,7 @@ export const BreederJob: React.FC = () => {
           <Form.Label>Cat</Form.Label>
           <Form.Control
             type="text"
-            value={botConfig.config.farmAnimal.cat}
+            value={botConfig.farmAnimal.cat}
             onChange={(e) => handleUpdateAnimal('cat', e.target.value)}
           />
         </Form.Group>
@@ -145,7 +143,7 @@ export const BreederJob: React.FC = () => {
           <Form.Label>Rabbit</Form.Label>
           <Form.Control
             type="text"
-            value={botConfig.config.farmAnimal.rabbit}
+            value={botConfig.farmAnimal.rabbit}
             onChange={(e) => handleUpdateAnimal('rabbit', e.target.value)}
           />
         </Form.Group>
@@ -154,7 +152,7 @@ export const BreederJob: React.FC = () => {
           <Form.Label>Pig</Form.Label>
           <Form.Control
             type="text"
-            value={botConfig.config.farmAnimal.pig}
+            value={botConfig.farmAnimal.pig}
             onChange={(e) => handleUpdateAnimal('pig', e.target.value)}
           />
         </Form.Group>
@@ -163,7 +161,7 @@ export const BreederJob: React.FC = () => {
           <Form.Label>Turtle</Form.Label>
           <Form.Control
             type="text"
-            value={botConfig.config.farmAnimal.turtle}
+            value={botConfig.farmAnimal.turtle}
             onChange={(e) => handleUpdateAnimal('turtle', e.target.value)}
           />
         </Form.Group>
@@ -173,7 +171,7 @@ export const BreederJob: React.FC = () => {
       <Row className="mb-3">
         <Col>
           <h4>Insert new farm area</h4>
-          {botConfig.config.farmAreas.map((farmArea, index) => (
+          {botConfig.farmAreas.map((farmArea, index) => (
             <FarmArea key={index} id={index} farmArea={farmArea} />
           ))}
         </Col>

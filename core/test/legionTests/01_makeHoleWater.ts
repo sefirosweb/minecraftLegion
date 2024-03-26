@@ -25,7 +25,7 @@ describe('01 Mining in water', function () {
       zEnd: 11,
       orientation: "x+",
       reverse: false,
-      tunel: "vertically",
+      tunnel: "vertically",
       world: "overworld"
     }
 

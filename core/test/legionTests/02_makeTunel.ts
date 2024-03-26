@@ -3,7 +3,7 @@ import { bot } from '../hooks'
 import { defaultConfig } from 'base-types'
 import _ from 'lodash'
 
-describe('02 Make basic tunel', function () {
+describe('02 Make basic tunnel', function () {
   let xStart = -15
   let yStart = -60
   let zStart = -9
@@ -21,7 +21,7 @@ describe('02 Make basic tunel', function () {
     zEnd: -12,
     orientation: "x-",
     reverse: false,
-    tunel: "horizontally",
+    tunnel: "horizontally",
     world: "overworld"
   }
 

@@ -4,7 +4,7 @@ import React, { useContext } from 'react';
 import { useChangeConfig } from '@/hooks/useChangeConfig';
 
 export const SorterJob: React.FC = () => {
-  const botConfig = useContext(BotSelectedContext);
+  const { botConfig } = useContext(BotSelectedContext);
   const changeConfig = useChangeConfig()
   const handleInsertNewChestArea = () => {
     changeConfig('insertNewChestArea', '')
@@ -15,7 +15,7 @@ export const SorterJob: React.FC = () => {
       <div className='row'>
         <div className='col-12'>
           <h4>Insert chest area</h4>
-          {botConfig.config.chestAreas.map((chestArea, index) => (
+          {botConfig.chestAreas.map((chestArea, index) => (
             <ChestArea key={index} id={index} chestArea={chestArea} />
           ))}
         </div>

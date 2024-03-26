@@ -5,7 +5,7 @@ import { BotSelectedContext } from "./ConfigurationContext";
 import { useChangeConfig } from '@/hooks/useChangeConfig';
 
 export const FarmerJob: React.FC = () => {
-  const botConfig = useContext(BotSelectedContext);
+  const { botConfig } = useContext(BotSelectedContext);
   const changeConfig = useChangeConfig()
 
   const handleInsertNewPlantArea = () => {
@@ -17,7 +17,7 @@ export const FarmerJob: React.FC = () => {
       <Row className='mb-3'>
         <Col>
           <h4>Insert areas and type of plant for harvest</h4>
-          {botConfig.config.plantAreas.map((plantArea, index) => (
+          {botConfig.plantAreas.map((plantArea, index) => (
             <HarvestArea key={index} id={index} plantArea={plantArea} />
           ))}
         </Col>

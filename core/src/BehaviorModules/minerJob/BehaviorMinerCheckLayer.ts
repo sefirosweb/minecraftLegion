@@ -107,7 +107,7 @@ export default class BehaviorMinerCheckLayer implements StateBehavior {
         this.next()
 
         if (
-          this.minerCords.tunel === 'vertically' &&
+          this.minerCords.tunnel === 'vertically' &&
           (
             (this.xCurrent === this.xEnd && this.zCurrent === this.zEnd) ||
             (this.xCurrent === this.xStart && this.zCurrent === this.zStart) ||
@@ -232,7 +232,7 @@ export default class BehaviorMinerCheckLayer implements StateBehavior {
     this.yEnd = this.minerCords.yStart > this.minerCords.yEnd ? this.minerCords.yEnd : this.minerCords.yStart
 
     this.yStart++
-    if (this.minerCords.tunel === 'horizontally') {
+    if (this.minerCords.tunnel === 'horizontally') {
       this.yEnd--
     }
 
@@ -270,19 +270,19 @@ export default class BehaviorMinerCheckLayer implements StateBehavior {
 
     let temp
 
-    if (this.minerCords.reverse && this.minerCords.tunel === 'vertically' && (this.minerCords.orientation === 'x+' || this.minerCords.orientation === 'x-')) {
+    if (this.minerCords.reverse && this.minerCords.tunnel === 'vertically' && (this.minerCords.orientation === 'x+' || this.minerCords.orientation === 'x-')) {
       temp = this.xStart
       this.xStart = this.xEnd
       this.xEnd = temp
     }
 
-    if (this.minerCords.reverse && this.minerCords.tunel === 'vertically' && (this.minerCords.orientation === 'z+' || this.minerCords.orientation === 'z-')) {
+    if (this.minerCords.reverse && this.minerCords.tunnel === 'vertically' && (this.minerCords.orientation === 'z+' || this.minerCords.orientation === 'z-')) {
       temp = this.zStart
       this.zStart = this.zEnd
       this.zEnd = temp
     }
 
-    if (this.minerCords.tunel === 'vertically') {
+    if (this.minerCords.tunnel === 'vertically') {
       if (this.xStart > this.xEnd) {
         this.xStart++
         this.xEnd--
@@ -313,7 +313,7 @@ export default class BehaviorMinerCheckLayer implements StateBehavior {
     if (this.blocksToFind.includes(block.name) ||
       (
         this.floorBlocksToFind.includes(block.name) &&
-        this.minerCords.tunel === 'horizontally' &&
+        this.minerCords.tunnel === 'horizontally' &&
         (this.minerCords.yStart - 1) === this.yCurrent
       )
     ) {

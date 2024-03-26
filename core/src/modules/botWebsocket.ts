@@ -72,19 +72,6 @@ const connect = async () => {
   socket.on('changeConfig', (config) => {
     const setConfigurations: Record<string, (...args: any) => void> = {}
 
-    setConfigurations['insertNewChest'] = () => {
-      const chests = bot.config.chests
-      const chest: Chest = {
-        name: 'Input chest name',
-        type: 'withdraw',
-        position: new Vec3(0, 0, 0),
-        dimension: 'overworld',
-        items: []
-      }
-      chests.push(chest)
-      bot.config.chests = chests
-    }
-
     setConfigurations['job'] = (value) => {
       bot.config.job = value
     }
@@ -124,14 +111,6 @@ const connect = async () => {
       bot.config.canPlaceBlocks = value
     }
 
-    setConfigurations['firstPickUpItemsFromKnownChests'] = (value) => {
-      bot.config.firstPickUpItemsFromKnownChests = value
-    }
-
-    setConfigurations['canCraftItemWithdrawChest'] = (value) => {
-      bot.config.canCraftItemWithdrawChest = value
-    }
-
     setConfigurations['mode'] = (value) => {
       bot.config.mode = value
     }
@@ -140,55 +119,12 @@ const connect = async () => {
       bot.config.distance = value
     }
 
-    setConfigurations['insertItemToBeReady'] = (value) => {
-      const itemsToBeReady = bot.config.itemsToBeReady
-      itemsToBeReady.push({
-        name: value.name,
-        quantity: value.quantity
-      })
-
-      bot.config.itemsToBeReady = itemsToBeReady
-    }
-
     setConfigurations['deleteItemToBeReady'] = (value) => {
       const itemsToBeReady = bot.config.itemsToBeReady
       itemsToBeReady.splice(value, 1)
       bot.config.itemsToBeReady = itemsToBeReady
     }
 
-    setConfigurations['insertItemCanBeEat'] = () => {
-      const itemsCanBeEat = bot.config.itemsCanBeEat
-      itemsCanBeEat.push(config.value.name)
-      bot.config.itemsCanBeEat = itemsCanBeEat
-    }
-
-    setConfigurations['deleteItemCanBeEat'] = (value) => {
-      const itemsCanBeEat = bot.config.itemsCanBeEat
-      itemsCanBeEat.splice(value, 1)
-      bot.config.itemsCanBeEat = itemsCanBeEat
-    }
-
-    setConfigurations['moveItemCanBeEatNext'] = (value) => {
-      const itemsCanBeEat = bot.config.itemsCanBeEat
-      const index = value
-      if (itemsCanBeEat.length > index + 1) {
-        const temp = itemsCanBeEat[index]
-        itemsCanBeEat[index] = itemsCanBeEat[index + 1]
-        itemsCanBeEat[index + 1] = temp
-        bot.config.itemsCanBeEat = itemsCanBeEat
-      }
-    }
-
-    setConfigurations['moveItemCanBeEatPrev'] = (value) => {
-      const itemsCanBeEat = bot.config.itemsCanBeEat
-      const index = value
-      if (index > 0) {
-        const temp = itemsCanBeEat[index]
-        itemsCanBeEat[index] = itemsCanBeEat[index - 1]
-        itemsCanBeEat[index - 1] = temp
-        bot.config.itemsCanBeEat = itemsCanBeEat
-      }
-    }
 
     setConfigurations['addPatrol'] = (value) => {
       const patrol = bot.config.patrol
@@ -271,14 +207,6 @@ const connect = async () => {
       bot.config.patrol = patrol
     }
 
-    setConfigurations['changeTunnel'] = (value: string) => {
-      const minerCords = bot.config.minerCords
-      if (value === "horizontally" || value === "vertically") {
-        minerCords.tunel = value
-      }
-      bot.config.minerCords = minerCords
-    }
-
     setConfigurations['changeOrientation'] = (value: string) => {
       const minerCords = bot.config.minerCords
       if (value === 'x+' || value === 'x-' || value === 'z+' || value === 'z-') {
@@ -310,54 +238,6 @@ const connect = async () => {
       bot.config.minerCords = minerCords
     }
 
-    setConfigurations['insertNewChest'] = () => {
-      const chests = bot.config.chests
-      chests.push({
-        name: 'Input chest name',
-        type: 'withdraw',
-        position: new Vec3(0, 0, 0),
-        items: [],
-        dimension: 'overworld'
-      })
-      bot.config.chests = chests
-    }
-
-    setConfigurations['deleteChest'] = (value) => {
-      const chests = bot.config.chests
-      chests.splice(value, 1)
-      bot.config.chests = chests
-    }
-
-    setConfigurations['changeChestType'] = (value) => {
-      const chests = bot.config.chests
-      chests[value.chestId].type = value.value
-      bot.config.chests = chests
-    }
-
-    setConfigurations['changeChestName'] = (value) => {
-      const chests = bot.config.chests
-      chests[value.chestId].name = value.value
-      bot.config.chests = chests
-    }
-
-    setConfigurations['changeChestPos'] = (value: { chestId: number, coord: string, pos: string }) => {
-      const { chestId, coord, pos } = value
-      const chests = bot.config.chests
-
-      if (coord === "x" || coord === "y" || coord === "z") {
-        chests[chestId].position[coord] = parseInt(pos)
-      }
-
-      if (
-        coord === "dimension" &&
-        (pos === 'overworld' || pos === 'the_nether' || pos === 'the_end')
-      ) {
-        chests[chestId].dimension = pos
-      }
-
-      bot.config.chests = chests
-    }
-
     setConfigurations['changeChestPosMaster'] = (value) => {
       const findMaster = bot.nearestEntity(
         (e) =>
@@ -373,43 +253,6 @@ const connect = async () => {
       // @ts-ignore https://github.com/PrismarineJS/mineflayer/pull/2963
       chests[value.chestId].dimension = bot.game.dimension
       bot.config.chests = chests
-    }
-
-    setConfigurations['insertItemInChest'] = (value) => {
-      const chests = bot.config.chests
-      chests[value.chestId].items.push({
-        name: value.name,
-        quantity: value.quantity
-      })
-      bot.config.chests = chests
-    }
-
-    setConfigurations['removeItemFromChest'] = (value) => {
-      const chests = bot.config.chests
-      chests[value.chestId].items.splice(value.itemIndex, 1)
-      bot.config.chests = chests
-    }
-
-    setConfigurations['moveChestNext'] = (value) => {
-      const chests = bot.config.chests
-      const index = value
-      if (chests.length > index + 1) {
-        const temp = chests[index]
-        chests[index] = chests[index + 1]
-        chests[index + 1] = temp
-        bot.config.chests = chests
-      }
-    }
-
-    setConfigurations['moveChestPrev'] = (value) => {
-      const chests = bot.config.chests
-      const index = value
-      if (index > 0) {
-        const temp = chests[index]
-        chests[index] = chests[index - 1]
-        chests[index - 1] = temp
-        bot.config.chests = chests
-      }
     }
 
     setConfigurations['insertNewPlantArea'] = () => {
@@ -519,8 +362,8 @@ const connect = async () => {
     sendConfig()
   })
 
-  socket.on('getConfig', () => {
-    sendConfig()
+  socket.on('getConfig', (data, response) => {
+    response(bot.config);
   })
 
   webSocketQueue.resume()

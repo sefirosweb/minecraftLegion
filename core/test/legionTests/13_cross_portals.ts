@@ -34,7 +34,7 @@ describe('12 Cross the portals', function () {
       zEnd: -3,
       orientation: "x+",
       reverse: false,
-      tunel: "vertically",
+      tunnel: "vertically",
       world: "the_nether"
     }
 
@@ -99,7 +99,7 @@ describe('12 Cross the portals', function () {
       zEnd: -3,
       orientation: "x+",
       reverse: false,
-      tunel: "vertically",
+      tunnel: "vertically",
       world: "the_end"
     }
 

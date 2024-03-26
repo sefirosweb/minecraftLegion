@@ -1,4 +1,4 @@
-import { debugMode } from "@/config";
+import { log } from "@/config";
 import { findBotBySocketId } from "@/libs/botStore";
 import { socketVariables } from "@/libs/socketVariables";
 import { io } from "@/server";
@@ -12,7 +12,7 @@ export default (socket: Socket) => {
     socket.on("sendAction", (data) => {
         let bot: BotsConnected | undefined;
 
-        if (debugMode) console.log(data);
+        log(data);
 
         switch (data.action) {
             case "action":
@@ -62,10 +62,6 @@ export default (socket: Socket) => {
 
             case "sendDisconnect":
                 io.to(data.socketId).emit("sendDisconnect", data.value);
-                break;
-
-            case "getConfig":
-                io.to(data.socketId).emit("getConfig", socket.id);
                 break;
 
             case "sendConfig":

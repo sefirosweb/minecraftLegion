@@ -15,6 +15,9 @@ export const listenPort = parseInt(process.env.WEB_SERVER_PORT)
 export const adminPassword = process.env.WEB_SERVER_PASSWORD
 export const debugMode = process.env.DEBUG_MODE === "true" ? true : false
 export const secretToken = process.env.SECRET_TOKEN
+export const log = (message: string) => {
+  if (debugMode) console.log(message)
+}
 
 export const config: ConfigEnviorementVariables = {
   listenPort,

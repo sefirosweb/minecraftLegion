@@ -28,14 +28,14 @@ export const ConfigureBotLayout: React.FC = () => {
 
 
           <Link to='/dashboard' className="me-2">
-            <Button className="mb-1">
+            <Button className="mb-1" variant="secondary">
               Dashboard
             </Button>
           </Link>
 
 
-          <Button onClick={updateReloadButton} variant='danger' className="mb-1">
-            Reload
+          <Button onClick={updateReloadButton} variant='success' className="mb-1">
+            Save
           </Button>
 
         </Col>
@@ -62,7 +62,7 @@ export const ConfigureBotLayout: React.FC = () => {
           </Row>
           <Row>
             <Col>
-              <Card className='py-4 px-5'>
+              <Card className='py-2 px-2 py-sm-4 px-sm-5'>
                 <Suspense fallback={<LoadingPage />}>
                   <Outlet />
                 </Suspense>

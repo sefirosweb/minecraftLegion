@@ -14,7 +14,7 @@ describe('01 Make hole in liquid & lava', function () {
     zEnd: -10,
     orientation: "x+",
     reverse: false,
-    tunel: "vertically",
+    tunnel: "vertically",
     world: "overworld"
   }
 

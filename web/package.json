@@ -28,7 +28,7 @@
     "url": "https://github.com/sefirosweb/minecraftLegionWebClient/issues"
   },
   "dependencies": {
-    "@tanstack/react-query": "^5.28.4",
+    "@tanstack/react-query": "^5.28.6",
     "axios": "^1.6.8",
     "base-types": "file:../base-types/base-types-1.0.0.tgz",
     "bootstrap": "^5.3.3",
@@ -42,19 +42,21 @@
     "react-select": "^5.8.0",
     "request": "^2.88.2",
     "socket.io-client": "^4.7.5",
+    "uuid": "^9.0.1",
     "vec3": "^0.1.10"
   },
   "devDependencies": {
     "@tanstack/react-query-devtools": "^5.28.6",
     "@types/lodash": "^4.17.0",
-    "@types/react": "^18.2.67",
+    "@types/react": "^18.2.69",
     "@types/react-dom": "^18.2.22",
+    "@types/uuid": "^9.0.8",
     "@vitejs/plugin-react-swc": "^3.6.0",
     "lodash": "^4.17.21",
     "react-icons": "^5.0.1",
     "sass": "^1.72.0",
     "typescript": "^5.4.3",
-    "vite": "^5.2.2",
+    "vite": "^5.2.4",
     "zustand": "^4.5.2"
   }
 }

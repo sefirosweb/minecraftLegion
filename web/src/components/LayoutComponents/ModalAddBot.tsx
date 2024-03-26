@@ -62,26 +62,18 @@ export const ModalAddBot: React.FC<Props> = (props) => {
         </Modal.Header>
 
         <Modal.Body>
-          <Row>
-            <Col>
-              <div className='form-group'>
-
-                <Form.Group>
-                  <Form.Label>Bot Name</Form.Label>
-                  <Form.Control type='text' onChange={changeBotName} value={botName} ref={inputBotName} />
-                </Form.Group>
-                <Form.Group>
-                  <Form.Label>Password</Form.Label>
-                  <Form.Control type='text' onChange={changeBotPassword} value={botPassword} />
-                  <Form.Text className='text-muted'>
-                    No put password on open server when is not requiered
-                  </Form.Text>
-                </Form.Group>
-
-              </div>
-            </Col>
-          </Row>
-
+          <Form.Group controlId='nameBotForm'>
+            <Form.Label>Bot Name</Form.Label>
+            <Form.Control type='text' onChange={changeBotName} value={botName} ref={inputBotName} />
+          </Form.Group>
+          <Form.Group controlId='passwordBotForm'>
+            <Form.Label>Password</Form.Label>
+            <Form.Control type='text' onChange={changeBotPassword} value={botPassword} disabled />
+            <Form.Text className='text-muted'>
+              No put password on open server when is not requiered. <br />
+              <label className='text-danger'>Currently is disabled, must be used enviorement variable password</label>
+            </Form.Text>
+          </Form.Group>
         </Modal.Body>
 
         <Modal.Footer>

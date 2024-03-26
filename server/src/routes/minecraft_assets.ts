@@ -29,6 +29,7 @@ router.get('/:block/:version?', (req, res) => {
         const base64Image = mcAssets.textureContent[block].texture.replace(/^data:image\/png;base64,/, '');
 
         const img = Buffer.from(base64Image, 'base64');
+        res.setHeader('Cache-Control', 'public, max-age=86400');
         res.writeHead(200, {
             'Content-Type': 'image/png',
             'Content-Length': img.length

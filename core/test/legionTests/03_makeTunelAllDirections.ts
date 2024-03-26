@@ -3,7 +3,7 @@ import { bot } from '../hooks'
 import { defaultConfig } from 'base-types'
 import _ from 'lodash'
 
-describe('03 Make tunel in all directions', function () {
+describe('03 Make tunnel in all directions', function () {
 
   before(async () => {
     await bot.test.resetState()
@@ -35,7 +35,7 @@ describe('03 Make tunel in all directions', function () {
       zEnd: 0,
       orientation: "x+",
       reverse: false,
-      tunel: "horizontally",
+      tunnel: "horizontally",
       world: "overworld"
     }
 
@@ -69,7 +69,7 @@ describe('03 Make tunel in all directions', function () {
       zEnd: 0,
       orientation: "x-",
       reverse: true,
-      tunel: "horizontally",
+      tunnel: "horizontally",
       world: "overworld"
     }
 
@@ -105,7 +105,7 @@ describe('03 Make tunel in all directions', function () {
       zEnd: 6,
       orientation: "z+",
       reverse: true,
-      tunel: "horizontally",
+      tunnel: "horizontally",
       world: "overworld"
     }
 
@@ -140,7 +140,7 @@ describe('03 Make tunel in all directions', function () {
       zEnd: -6,
       orientation: "z-",
       reverse: true,
-      tunel: "horizontally",
+      tunnel: "horizontally",
       world: "overworld"
     }
 

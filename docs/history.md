@@ -27,8 +27,8 @@
 * Fixed big bugs in minerJob
 * Fixed bug with movements and is optimized
 * Update mineflayer to 3.11.1
-* Adding version 2.0 of tunel, now is better making tunels, avoid lava and water with new logic
-* Adding support for prevent the gravel and sand when making tunels
+* Adding version 2.0 of tunnel, now is better making tunnels, avoid lava and water with new logic
+* Adding support for prevent the gravel and sand when making tunnels
 * Fixed bug with commands
 
 ## 1.2.0

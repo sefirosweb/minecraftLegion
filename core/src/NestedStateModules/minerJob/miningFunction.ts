@@ -128,7 +128,7 @@ function miningFunction(bot: Bot, targets: LegionStateMachineTargets) {
   findItemsAndPickup.y = 363
 
   const saveCurrentLayer = () => {
-    const tunel = bot.config.minerCords.tunel
+    const tunnel = bot.config.minerCords.tunnel
     const orientation = bot.config.minerCords.orientation
     const world = bot.config.minerCords.world
     const reverse = bot.config.minerCords.reverse
@@ -144,14 +144,14 @@ function miningFunction(bot: Bot, targets: LegionStateMachineTargets) {
       zEnd: targets.minerJob.original.zEnd,
     }
 
-    if (tunel === 'horizontally') {
+    if (tunnel === 'horizontally') {
       if (orientation === 'z+' && newMineCords.zStart < newMineCords.zEnd) newMineCords.zStart++
       if (orientation === 'z-' && newMineCords.zStart < newMineCords.zEnd) newMineCords.zEnd--
       if (orientation === 'x+' && newMineCords.xStart < newMineCords.xEnd) newMineCords.xStart++
       if (orientation === 'x-' && newMineCords.xStart < newMineCords.xEnd) newMineCords.xEnd--
     }
 
-    if (tunel === 'vertically' && newMineCords.yStart < newMineCords.yEnd) {
+    if (tunnel === 'vertically' && newMineCords.yStart < newMineCords.yEnd) {
       newMineCords.yEnd--
     }
 
@@ -160,7 +160,7 @@ function miningFunction(bot: Bot, targets: LegionStateMachineTargets) {
 
     const mineCordsConfig: MineCordsConfig = {
       ...newMineCords,
-      tunel: tunel,
+      tunnel: tunnel,
       orientation: orientation,
       world: world,
       reverse: reverse
@@ -312,7 +312,7 @@ function miningFunction(bot: Bot, targets: LegionStateMachineTargets) {
         targets.minerJob.mineBlock = targets.position.clone()
 
         if (!nextLayer.minerCords) throw Error('Variable not defined nextLayer.minerCords')
-        if (nextLayer.minerCords.tunel === 'horizontally') {
+        if (nextLayer.minerCords.tunnel === 'horizontally') {
           if (!checkLayer.minerCords) throw Error('Variable not defined checkLayer.minerCords')
           targets.position.y = checkLayer.minerCords.yStart
           targets.position.dimension = bot.config.minerCords.world

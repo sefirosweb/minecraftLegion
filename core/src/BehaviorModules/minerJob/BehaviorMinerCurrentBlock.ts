@@ -81,19 +81,19 @@ export default class BehaviorMinerCurrentBlock implements StateBehavior {
 
     let temp
 
-    if (this.minerCords.reverse && this.minerCords.tunel === 'vertically' && (this.minerCords.orientation === 'x+' || this.minerCords.orientation === 'x-')) {
+    if (this.minerCords.reverse && this.minerCords.tunnel === 'vertically' && (this.minerCords.orientation === 'x+' || this.minerCords.orientation === 'x-')) {
       temp = this.xStart
       this.xStart = this.xEnd
       this.xEnd = temp
     }
 
-    if (this.minerCords.reverse && this.minerCords.tunel === 'vertically' && (this.minerCords.orientation === 'z+' || this.minerCords.orientation === 'z-')) {
+    if (this.minerCords.reverse && this.minerCords.tunnel === 'vertically' && (this.minerCords.orientation === 'z+' || this.minerCords.orientation === 'z-')) {
       temp = this.zStart
       this.zStart = this.zEnd
       this.zEnd = temp
     }
 
-    if (this.minerCords.tunel === 'vertically') {
+    if (this.minerCords.tunnel === 'vertically') {
       if (this.minerCords.orientation === 'z+' || this.minerCords.orientation === 'x-') {
         let temp = this.xStart
 
@@ -129,7 +129,7 @@ export default class BehaviorMinerCurrentBlock implements StateBehavior {
     }
 
 
-    if (this.minerCords.tunel === 'vertically') {
+    if (this.minerCords.tunnel === 'vertically') {
       return false
     }
 

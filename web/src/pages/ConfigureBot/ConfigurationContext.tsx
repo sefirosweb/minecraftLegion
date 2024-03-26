@@ -1,27 +1,45 @@
-import React, { createContext, useEffect } from 'react';
+import React, { createContext, useEffect, useState } from 'react';
 import { Button, Col, Row } from 'react-bootstrap';
 import { Link, Outlet, useParams } from "react-router-dom";
 import { useGetSelectedBot } from '@/hooks/useGetSelectedBot';
-import { useGetSocket } from '@/hooks/useGetSocket';
 import { RenderBotsOnlineList } from '@/components';
-import { useSendActionSocket } from '@/hooks/useSendActionSocket';
-import { Bot } from '@/types';
+import { useQuery } from '@tanstack/react-query';
+import axios from 'axios';
+import { Config } from 'base-types';
 
-export const BotSelectedContext = createContext<Bot>({} as Bot);
+
+export type BotSelectedContextType = {
+  botConfig: Config
+  setBotConfig: React.Dispatch<React.SetStateAction<Config | undefined>>
+  updateConfig: <K extends keyof Config>(configToChange: K, value: Config[K]) => void
+}
+
+export const BotSelectedContext = createContext<BotSelectedContextType>({} as BotSelectedContextType);
 
 export const ConfigurationContextProvider: React.FC = () => {
+  const [botConfig, setBotConfig] = useState<Config | undefined>(undefined)
+
   const { selectedSocketId } = useParams()
-  const socket = useGetSocket()
   const bot = useGetSelectedBot()
-  const sendAction = useSendActionSocket()
+
+  const { data: botConfigFromServer, isLoading } = useQuery<Config>({
+    enabled: bot?.socketId !== undefined,
+    queryKey: ['botConfig'],
+    queryFn: () => axios.get<Config>(`/api/get_bot_config/${bot?.socketId}`).then((response) => response.data),
+  })
 
   useEffect(() => {
-    const interval = setTimeout(() => {
-      sendAction("getBotsOnline", "")
-    });
-    return (() => clearInterval(interval))
-  }, [selectedSocketId, socket])
+    if (!botConfigFromServer) return
+    setBotConfig(botConfigFromServer)
+  }, [botConfigFromServer])
 
+  const updateConfig = <K extends keyof Config>(configToChange: K, value: Config[K]) => {
+    if (!botConfig) return
+    console.log('updateConfig', configToChange, value)
+    const newConfig = structuredClone(botConfig)
+    newConfig[configToChange] = value
+    setBotConfig(newConfig)
+  }
 
   if (selectedSocketId === undefined || bot === undefined) {
     return (
@@ -50,9 +68,14 @@ export const ConfigurationContextProvider: React.FC = () => {
     )
   }
 
+  if (isLoading || !botConfig) {
+    return (
+      <h2>Loading...</h2>
+    )
+  }
 
   return (
-    <BotSelectedContext.Provider value={bot}>
+    <BotSelectedContext.Provider value={{ botConfig, setBotConfig, updateConfig }}>
       <Outlet />
     </BotSelectedContext.Provider>
   )

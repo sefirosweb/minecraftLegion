@@ -1,56 +1,58 @@
 import React, { useContext } from 'react';
-import { Col, Row } from 'react-bootstrap'
+import { Col, Form, Row } from 'react-bootstrap'
 import { BotSelectedContext } from "./ConfigurationContext";
-import { useChangeConfig } from '@/hooks/useChangeConfig';
+import { isAgroType } from 'base-types';
 
 export const Combat: React.FC = () => {
-  const botConfig = useContext(BotSelectedContext);
-  const changeConfig = useChangeConfig()
+  const { botConfig, updateConfig } = useContext(BotSelectedContext);
 
-  const handleChangeMode = (event: React.ChangeEvent<HTMLInputElement>) => {
-    changeConfig('mode', event.target.value)
-  }
+  const handleChangeAgro = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value
+    if (!isAgroType(value)) return
+    updateConfig('mode', value)
+  };
 
-  const handleChangeDistance = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const distance = Number(event.target.value)
-    if (Number.isInteger(distance)) {
-      changeConfig('distance', distance)
+  const handleChangeDistance = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.value) {
+      updateConfig('distance', 0)
+      return
     }
+
+    const distance = parseInt(e.target.value)
+    console.log(distance)
+    if (isNaN(distance) || distance < 0) return
+    updateConfig('distance', distance)
   }
 
   return (
     <>
-      <Row className='mb-5'>
-        <Col xs={6}>
-          <form>
-
-
-            <fieldset className='form-group row'>
-              <legend className='col-form-label col-sm-4 float-sm-left pt-0'>Combat Mode?</legend>
-              <Col xs={8}>
-                <div className='form-check'>
-                  <input className='form-check-input' type='radio' name='combatMode' value='none' onChange={handleChangeMode} checked={botConfig.config.mode === 'none'} />
-                  <label className='form-check-label'>None</label>
-                </div>
-                <div className='form-check'>
-                  <input className='form-check-input' type='radio' name='combatMode' value='pve' onChange={handleChangeMode} checked={botConfig.config.mode === 'pve'} />
-                  <label className='form-check-label'>PVE</label>
-                </div>
-                <div className='form-check'>
-                  <input className='form-check-input' type='radio' name='combatMode' value='pvp' onChange={handleChangeMode} checked={botConfig.config.mode === 'pvp'} />
-                  <label className='form-check-label'>PVP</label>
-                </div>
-
-              </Col>
-            </fieldset>
-
-          </form>
+      <Row>
+        <Col xs={12} md={6} className='mb-3'>
+          <Form>
+            <Form.Label>Combat Mode?</Form.Label>
+            {['none', 'pve', 'pvp'].map((option) => (
+              <Form.Check
+                className="text-uppercase"
+                id={`${option}`}
+                key={`${option}`}
+                value={option}
+                label={option}
+                type="radio"
+                onChange={handleChangeAgro}
+                checked={botConfig.mode === option}
+              />
+            ))}
+          </Form>
         </Col>
-        <Col xs={3}>
-          <div className='form-group'>
-            <label>Distance for start combat?</label>
-            <input className='form-control' type='text' onChange={handleChangeDistance} value={botConfig.config.distance} />
-          </div>
+        <Col xs={12} md={6}>
+          <Form.Group>
+            <Form.Label>Combat Distance</Form.Label>
+            <Form.Control
+              type='number'
+              onChange={handleChangeDistance}
+              value={botConfig.distance}
+            />
+          </Form.Group>
         </Col>
       </Row>
     </>

@@ -5,6 +5,7 @@ import { FooterNav } from "./FooterNav";
 import React, { Suspense } from "react";
 import { LoadingPage } from "@/pages/LoadingPage";
 import { Container } from "react-bootstrap";
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
 export const Layout: React.FC = () => {
   useSocketSetup()
@@ -17,6 +18,7 @@ export const Layout: React.FC = () => {
           <Outlet />
         </Suspense>
       </Container>
+      <ReactQueryDevtools />
       <FooterNav />
     </>
   );

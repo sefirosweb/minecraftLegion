@@ -50,7 +50,7 @@ to finish commands
 - Guard
   - Do a patrol for look near enemies
 - Miner
-  - Make a tunel or hole
+  - Make a tunnel or hole
 - Farmer
   - Do placing plants and sapling trees
   - Potatoes, Carrots, Wheat, Melon, Pumpkin, Sweet berries..

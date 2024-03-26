@@ -1,103 +1,106 @@
 import React, { useContext, useState } from 'react'
-import { ItemsAviable } from './ItemsAviable'
-import { Trash } from '@/components'
+import { ItemImage, ItemWithImageOption, SingleValueWithImage, Trash } from '@/components'
 import { BotSelectedContext } from "./ConfigurationContext";
-import { useChangeConfig } from '@/hooks/useChangeConfig';
+import { Button, Col, Form, Row, Table } from 'react-bootstrap';
+import AsyncSelect from 'react-select/async';
+import { ItemOption, itemOptions } from '@/lib';
 
 export const ItemsToBeReady: React.FC = () => {
-  const botConfig = useContext(BotSelectedContext);
-  const [itemName, setItemName] = useState('')
-  const [quantity, setQuantity] = useState(1)
-
-  const changeConfig = useChangeConfig()
-
-  const handleQuantityChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = Number(event.target.value)
-    if (Number.isInteger(value)) {
-      setQuantity(value)
-    }
-  }
-
-  const handleItemChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setItemName(event.target.value)
-  }
+  const { botConfig, updateConfig } = useContext(BotSelectedContext);
+  const [itemName, setItemName] = useState<ItemOption | null>(null);
+  const [quantity, setQuantity] = useState('1')
 
   const handleInsertItem = () => {
-    if (itemName === '' || quantity === 0) {
-      return null
+    const qty = Number(quantity)
+    if (isNaN(qty) || qty <= 0 || !itemName) return
+
+    const itemsToBeReady = structuredClone(botConfig.itemsToBeReady)
+    const newItem = { name: itemName.value.name, quantity: qty }
+    const existingItemIndex = itemsToBeReady.findIndex(item => item.name === itemName.value.name)
+    if (existingItemIndex !== -1) {
+      itemsToBeReady[existingItemIndex] = newItem
+    } else {
+      itemsToBeReady.push(newItem)
     }
 
-    changeConfig('insertItemToBeReady', {
-      name: itemName,
-      quantity
-    })
+    updateConfig("itemsToBeReady", itemsToBeReady)
+
+    setItemName(null)
+    setQuantity('1')
   }
 
   const handleRemoveItem = (index: number) => {
-    changeConfig('deleteItemToBeReady', index)
+    const itemsToBeReady = structuredClone(botConfig.itemsToBeReady)
+    itemsToBeReady.splice(index, 1)
+    updateConfig("itemsToBeReady", itemsToBeReady)
   }
 
   return (
     <>
-      <div className='row'>
-        <div className='col-12'>
-          <label>
-            This is a minimun requeried for start bot to work,<br />
-            Example, Guard need a sword and shield, Miner need a 1 pickaxe
-          </label>
-        </div>
+      <div className='mb-3'>
+        This is a minimun requeried for start bot to work <br />
+        Example, Guard need a sword and shield, Miner need a 1 pickaxe
       </div>
 
-      <div className='row'>
-        <div className='col-6'>
-          <div className='form-group'>
-            <label htmlFor='inputItem'>Select Item</label>
-            <input className='form-control' type='text' list='itemsList' value={itemName} onChange={handleItemChange} />
-            <datalist id='itemsList'>
-              <ItemsAviable item={itemName} type="all" />
-            </datalist>
-          </div>
-        </div>
+      <Row className='mb-3 align-items-end '>
+        <Col xs={6}>
+          <Form.Group controlId='itemListToBeReadyForm'>
+            <Form.Label>Select Item</Form.Label>
 
-        <div className='col-2'>
-          <div className='form-group'>
-            <label>Quantity</label>
-            <input type='text' className='form-control' value={quantity} onChange={handleQuantityChange} />
-          </div>
-        </div>
+            <AsyncSelect
+              defaultOptions
+              components={{
+                Option: ItemWithImageOption,
+                SingleValue: SingleValueWithImage,
+              }}
+              isMulti={false}
+              loadOptions={itemOptions}
+              value={itemName}
+              getOptionLabel={(option) => option.label}
+              onChange={(e) => setItemName(e as ItemOption)} />
+          </Form.Group>
+        </Col>
 
-        <div className='col-2'>
-          <div className='form-group'>
-            <label>.</label>
-            <button className='form-control btn btn-primary' onClick={handleInsertItem}>Insert</button>
-          </div>
-        </div>
-      </div>
+        <Col xs={2}>
+          <Form.Group controlId='itemListToBeReadyQuantityForm'>
+            <Form.Label>Quantity</Form.Label>
+            <Form.Control type='number' value={quantity} onChange={(e) => setQuantity(e.target.value)} />
+          </Form.Group>
+        </Col>
 
-      <div className='row'>
-        <div className='col-12'>
+        <Col xs={2}>
+          <Button className='w-100' onClick={handleInsertItem}>Insert</Button>
+        </Col>
+      </Row>
 
-          <table className='table'>
-            <thead className='thead-dark'>
-              <tr>
-                <th scope='col'>#</th>
-                <th scope='col'>Item</th>
-                <th scope='col'>Quantity</th>
-                <th scope='col' />
+      <div className='mb-3'>
+        <Table responsive>
+          <thead>
+            <tr>
+              <th>Item</th>
+              <th>Quantity</th>
+              <th />
+            </tr>
+          </thead>
+          <tbody>
+            {botConfig.itemsToBeReady.map((item, index) => (
+              <tr key={index}>
+                <td>
+                  <div className="d-flex justify-content-between">
+                    <div>
+                      {item.name}
+                    </div>
+                    <div>
+                      <ItemImage alt={item.name ?? ''} name={item.name ?? ''} />
+                    </div>
+                  </div>
+                </td>
+                <td>{item.quantity}</td>
+                <td><Trash onClick={handleRemoveItem.bind(this, index)} /></td>
               </tr>
-            </thead>
-            <tbody>
-              {botConfig.config.itemsToBeReady.map((item, index) => (
-                <tr key={index}>
-                  <th scope='row'>{index}</th>
-                  <td>{item.name}</td>
-                  <td>{item.quantity}</td>
-                  <td><Trash onClick={handleRemoveItem.bind(this, index)} /></td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+            ))}
+          </tbody>
+        </Table>
       </div>
 
     </>

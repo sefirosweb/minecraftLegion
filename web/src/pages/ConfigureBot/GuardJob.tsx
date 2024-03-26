@@ -1,11 +1,12 @@
 import React, { useContext, useState } from "react";
-import { ArrowDown, ArrowUp, Trash, FormCheck } from "@/components";
+import { ArrowDown, ArrowUp, Trash } from "@/components";
 import { BotSelectedContext } from "./ConfigurationContext";
 import { useChangeConfig } from "@/hooks/useChangeConfig";
 import { useStore } from "@/hooks/useStore";
+import { Form } from "react-bootstrap";
 
 export const GuardJob: React.FC = () => {
-  const botConfig = useContext(BotSelectedContext);
+  const { botConfig } = useContext(BotSelectedContext);
   const master = useStore(state => state.master)
 
   const [x, setX] = useState("");
@@ -83,13 +84,12 @@ export const GuardJob: React.FC = () => {
     <>
       <div className="row">
         <div className="col-6">
-          <FormCheck
-            id={"helpFriends"}
-            onChange={() =>
-              sendConfig("helpFriends", !botConfig.config.helpFriends)
-            }
-            label={`Help Friend?`}
-            checked={botConfig.config.helpFriends}
+          <Form.Check
+            type="switch"
+            id="helpFriends"
+            label="Help Friend?"
+            checked={botConfig.helpFriends}
+            onChange={() => sendConfig("helpFriends", !botConfig.helpFriends)}
           />
         </div>
         <div className="col-3">
@@ -188,7 +188,7 @@ export const GuardJob: React.FC = () => {
               </tr>
             </thead>
             <tbody>
-              {botConfig.config.patrol.map((pos, index) => (
+              {botConfig.patrol.map((pos, index) => (
                 <tr key={index}>
                   <th scope="row">{index}</th>
                   <td>
@@ -199,7 +199,7 @@ export const GuardJob: React.FC = () => {
                     Z:{pos.z}
                   </td>
                   <td>
-                    <ArrowUp onClick={() => handleMovePosPrev(index)} />{" "}
+                    <ArrowUp onClick={() => handleMovePosPrev(index)} className="me-2" />
                     <ArrowDown onClick={() => handleMovePosPrev(index)} />
                   </td>
                   <td>

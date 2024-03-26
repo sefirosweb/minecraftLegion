@@ -21,7 +21,7 @@ describe('01 Basic Mining', function () {
     zEnd,
     orientation: "x+",
     reverse: false,
-    tunel: "vertically",
+    tunnel: "vertically",
     world: "overworld"
   }
 

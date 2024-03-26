@@ -48,7 +48,7 @@ export default class BehaviorMinerCurrentLayer implements StateBehavior {
       throw new Error('Not setted: this.minerCords === undefined')
     }
 
-    if (this.minerCords.tunel === 'vertically') {
+    if (this.minerCords.tunnel === 'vertically') {
       this.currentLayer = Math.max(this.minerCords.yStart, this.minerCords.yEnd)
       this.endLayer = Math.min(this.minerCords.yStart, this.minerCords.yEnd)
     } else {
@@ -79,16 +79,16 @@ export default class BehaviorMinerCurrentLayer implements StateBehavior {
       throw new Error('Not setted: this.minerCords === undefined || this.currentLayer === undefined || this.endLayer === undefined')
     }
 
-    if (this.minerCords.tunel === 'vertically' && this.currentLayer < this.endLayer) { this.isEndFinished = true }
+    if (this.minerCords.tunnel === 'vertically' && this.currentLayer < this.endLayer) { this.isEndFinished = true }
 
-    if (this.minerCords.tunel === 'horizontally' && this.currentLayer < this.endLayer &&
+    if (this.minerCords.tunnel === 'horizontally' && this.currentLayer < this.endLayer &&
       (
         this.minerCords.orientation === 'z-' ||
         this.minerCords.orientation === 'x-'
       )
     ) { this.isEndFinished = true }
 
-    if (this.minerCords.tunel === 'horizontally' && this.currentLayer > this.endLayer &&
+    if (this.minerCords.tunnel === 'horizontally' && this.currentLayer > this.endLayer &&
       (
         this.minerCords.orientation === 'z+' ||
         this.minerCords.orientation === 'x+'
@@ -102,14 +102,14 @@ export default class BehaviorMinerCurrentLayer implements StateBehavior {
     }
 
     switch (true) {
-      case this.minerCords.tunel === 'vertically':
+      case this.minerCords.tunnel === 'vertically':
         this.currentLayer--
         break
-      case this.minerCords.tunel === 'horizontally' &&
+      case this.minerCords.tunnel === 'horizontally' &&
         (this.minerCords.orientation === 'z-' || this.minerCords.orientation === 'x-'):
         this.currentLayer--
         break
-      case this.minerCords.tunel === 'horizontally' &&
+      case this.minerCords.tunnel === 'horizontally' &&
         (this.minerCords.orientation === 'z+' || this.minerCords.orientation === 'x+'):
         this.currentLayer++
         break
@@ -123,7 +123,7 @@ export default class BehaviorMinerCurrentLayer implements StateBehavior {
 
     const minerCoords = { ...this.minerCords }
 
-    if (this.minerCords.tunel === 'vertically') { // => Y Layer
+    if (this.minerCords.tunnel === 'vertically') { // => Y Layer
       minerCoords.xStart = this.minerCords.xStart
       minerCoords.xEnd = this.minerCords.xEnd
 
