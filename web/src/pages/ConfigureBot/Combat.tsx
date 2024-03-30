@@ -19,7 +19,6 @@ export const Combat: React.FC = () => {
     }
 
     const distance = parseInt(e.target.value)
-    console.log(distance)
     if (isNaN(distance) || distance < 0) return
     updateConfig('distance', distance)
   }

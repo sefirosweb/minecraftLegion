@@ -42,6 +42,7 @@
     "react-select": "^5.8.0",
     "request": "^2.88.2",
     "socket.io-client": "^4.7.5",
+    "toastr": "^2.1.4",
     "uuid": "^9.0.1",
     "vec3": "^0.1.10"
   },
@@ -50,6 +51,7 @@
     "@types/lodash": "^4.17.0",
     "@types/react": "^18.2.69",
     "@types/react-dom": "^18.2.22",
+    "@types/toastr": "^2.1.43",
     "@types/uuid": "^9.0.8",
     "@vitejs/plugin-react-swc": "^3.6.0",
     "lodash": "^4.17.21",

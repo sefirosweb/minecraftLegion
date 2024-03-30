@@ -125,23 +125,6 @@ const connect = async () => {
       bot.config.itemsToBeReady = itemsToBeReady
     }
 
-
-    setConfigurations['addPatrol'] = (value) => {
-      const patrol = bot.config.patrol
-      patrol.push(value)
-      bot.config.patrol = patrol
-    }
-
-    setConfigurations['removePatrol'] = (value) => {
-      const patrol = bot.config.patrol
-      patrol.splice(value, 1)
-      bot.config.patrol = patrol
-    }
-
-    setConfigurations['clearAllPositions'] = () => {
-      bot.config.patrol = []
-    }
-
     setConfigurations['copyPatrol'] = (value) => {
       const findMaster = bot.nearestEntity(
         (e) =>
@@ -161,28 +144,6 @@ const connect = async () => {
       } else {
         bot.removeListener('customEventPhysicTick', nextPointListener)
         isEventLoaded = false
-      }
-    }
-
-    setConfigurations['movePatrolNext'] = (value) => {
-      const patrol = bot.config.patrol
-      const index = value
-      if (patrol.length > index + 1) {
-        const temp = patrol[index]
-        patrol[index] = patrol[index + 1]
-        patrol[index + 1] = temp
-        bot.config.patrol = patrol
-      }
-    }
-
-    setConfigurations['movePatrolPrev'] = (value) => {
-      const patrol = bot.config.patrol
-      const index = value
-      if (index > 0) {
-        const temp = patrol[index]
-        patrol[index] = patrol[index - 1]
-        patrol[index - 1] = temp
-        bot.config.patrol = patrol
       }
     }
 
@@ -355,6 +316,23 @@ const connect = async () => {
 
   socket.on('getConfig', (data, response) => {
     response(bot.config);
+  })
+
+  socket.on('get_master_position', (data: { master: string }, response) => {
+    const { master } = data
+
+    const findMaster = bot.nearestEntity(
+      (e) =>
+        e.type === 'player' &&
+        e.username === master &&
+        e.displayName !== 'Armor Stand'
+    )
+    if (!findMaster) {
+      response({ error: 'Master not found' });
+      return
+    }
+
+    response({ pos: findMaster.position });
   })
 
   webSocketQueue.resume()
