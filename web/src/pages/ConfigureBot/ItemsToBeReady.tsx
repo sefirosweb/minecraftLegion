@@ -42,8 +42,8 @@ export const ItemsToBeReady: React.FC = () => {
         Example, Guard need a sword and shield, Miner need a 1 pickaxe
       </div>
 
-      <Row className='mb-3 align-items-end '>
-        <Col xs={6}>
+      <Row className='align-items-end '>
+        <Col md={6} className='mb-3'>
           <Form.Group controlId='itemListToBeReadyForm'>
             <Form.Label>Select Item</Form.Label>
 
@@ -61,14 +61,14 @@ export const ItemsToBeReady: React.FC = () => {
           </Form.Group>
         </Col>
 
-        <Col xs={2}>
+        <Col md={2} className='mb-3'>
           <Form.Group controlId='itemListToBeReadyQuantityForm'>
             <Form.Label>Quantity</Form.Label>
             <Form.Control type='number' value={quantity} onChange={(e) => setQuantity(e.target.value)} />
           </Form.Group>
         </Col>
 
-        <Col xs={2}>
+        <Col md={4} className='mb-3'>
           <Button className='w-100' onClick={handleInsertItem}>Insert</Button>
         </Col>
       </Row>
