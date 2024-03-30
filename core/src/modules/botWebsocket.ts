@@ -125,49 +125,6 @@ const connect = async () => {
       bot.config.itemsToBeReady = itemsToBeReady
     }
 
-    setConfigurations['copyPatrol'] = (value) => {
-      const findMaster = bot.nearestEntity(
-        (e) =>
-          e.type === 'player' &&
-          e.username === value &&
-          e.displayName !== 'Armor Stand'
-      )
-      if (!findMaster) {
-        return
-      }
-
-      if (!isEventLoaded) {
-        prevPoint = undefined
-        isEventLoaded = true
-        masterPointListener = findMaster
-        bot.on('customEventPhysicTick', nextPointListener)
-      } else {
-        bot.removeListener('customEventPhysicTick', nextPointListener)
-        isEventLoaded = false
-      }
-    }
-
-    setConfigurations['savePositionHasMaster'] = (value) => {
-      const findMaster = bot.nearestEntity(
-        (e) =>
-          e.type === 'player' &&
-          e.username === value &&
-          e.displayName !== 'Armor Stand'
-      )
-      if (!findMaster) {
-        return
-      }
-      const patrol = bot.config.patrol
-      patrol.push(
-        new Vec3(
-          Math.round(findMaster.position.x * 10) / 10,
-          Math.round(findMaster.position.y * 10) / 10,
-          Math.round(findMaster.position.z * 10) / 10
-        )
-      )
-      bot.config.patrol = patrol
-    }
-
     setConfigurations['changeOrientation'] = (value: string) => {
       const minerCords = bot.config.minerCords
       if (value === 'x+' || value === 'x-' || value === 'z+' || value === 'z-') {
@@ -335,6 +292,36 @@ const connect = async () => {
     response({ pos: findMaster.position });
   })
 
+  socket.on('start_copy_master_position', (data: { master: string, masterSocketId: string }, response) => {
+    const { master, masterSocketId: masterSocketIdSession } = data
+
+    const findMaster = bot.nearestEntity(
+      (e) =>
+        e.type === 'player' &&
+        e.username === master &&
+        e.displayName !== 'Armor Stand'
+    )
+    if (!findMaster) {
+      response({ error: 'Master not found' });
+      return
+    }
+
+    prevPoint = undefined
+    if (!isEventLoaded) {
+      isEventLoaded = true
+      masterPointListener = findMaster
+      masterSocketId = masterSocketIdSession
+      bot.on('customEventPhysicTick', nextPointListener)
+    } else {
+      bot.removeListener('customEventPhysicTick', nextPointListener)
+      isEventLoaded = false
+      masterSocketId = undefined
+      masterPointListener = undefined
+    }
+
+    response({ success: true, isCopingPatrol: isEventLoaded });
+  })
+
   webSocketQueue.resume()
 }
 
@@ -401,22 +388,24 @@ const getMasters = () => {
 let prevPoint: Vec3 | undefined
 let isEventLoaded = false
 let masterPointListener: Entity | undefined
+let masterSocketId: string | undefined
 const nextPointListener = () => {
   if (!masterPointListener) return
   const master = masterPointListener
 
   if (prevPoint === undefined || master.position.distanceTo(prevPoint) > 3) {
-    const patrol = bot.config.patrol
-    patrol.push(
-      new Vec3(
-        Math.round(master.position.x * 10) / 10,
-        Math.round(master.position.y * 10) / 10,
-        Math.round(master.position.z * 10) / 10
-      )
+    const pos = new Vec3(
+      Math.round(master.position.x * 10) / 10,
+      Math.round(master.position.y * 10) / 10,
+      Math.round(master.position.z * 10) / 10
     )
+
+    socket.emit('sendDirectMessage', masterSocketId, {
+      type: 'add_guard_position',
+      message: pos
+    });
+    console.log('Sent direct message:', master.position);
     prevPoint = master.position.clone()
-    bot.config.patrol = patrol
-    sendConfig()
   }
 }
 

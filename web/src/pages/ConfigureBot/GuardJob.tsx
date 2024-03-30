@@ -1,8 +1,7 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import toastr from 'toastr'
 import { ArrowDown, ArrowUp, Coords, Trash } from "@/components";
 import { BotSelectedContext } from "./ConfigurationContext";
-import { useChangeConfig } from "@/hooks/useChangeConfig";
 import { useStore } from "@/hooks/useStore";
 import { Button, Col, Form, Row, Table } from "react-bootstrap";
 import { Vec3 } from "vec3";
@@ -11,11 +10,11 @@ import { useGetSelectedBot } from "@/hooks/useGetSelectedBot";
 
 export const GuardJob: React.FC = () => {
   const { botConfig, updateConfig } = useContext(BotSelectedContext);
-  const master = useStore(state => state.master)
+  const [master, socket] = useStore(state => [state.master, state.socket])
   const [pos, setPos] = useState<Vec3 | undefined>(undefined);
   const [isLoading, setIsLoading] = useState(false);
   const bot = useGetSelectedBot()
-  const sendConfig = useChangeConfig()
+  const [isCopingPatrol, setIsCopingPatrol] = useState(false)
 
   const insertPost = () => {
     if (!pos) return;
@@ -78,8 +77,34 @@ export const GuardJob: React.FC = () => {
   };
 
   const copyPatrol = () => {
-    sendConfig("copyPatrol", master);
+    setIsLoading(true)
+    axios.post(`/api/start_copy_master_position`, {
+      socketId: bot?.socketId,
+      master: master,
+      masterSocketId: socket?.id
+    })
+      .then((response) => {
+        console.log(response.data)
+        setIsCopingPatrol(response.data.isCopingPatrol)
+      })
+      .catch((error) => {
+        toastr.error(error.response.data.error)
+      })
+      .finally(() => {
+        setIsLoading(false)
+      })
   };
+
+  useEffect(() => {
+    socket?.on('receiveDirectMessage', ({ type, message: pos }: { type: string, message: Vec3 }) => {
+      if (type !== 'add_guard_position') return
+      addNewPos(new Vec3(pos.x, pos.y, pos.z))
+    });
+
+    return () => {
+      socket?.off("receiveDirectMessage");
+    }
+  }, [addNewPos])
 
   return (
     <>
@@ -133,13 +158,15 @@ export const GuardJob: React.FC = () => {
         <Col lg={4} className="d-grid gap-1">
           <Button onClick={insertPost}>Insert</Button>
 
-          {botConfig.isCopingPatrol ? (
-            <Button variant="warning" onClick={copyPatrol}>Stop Copy</Button>
-          ) : (
-            <Button variant="success" onClick={copyPatrol}>Start Copy</Button>
-          )}
+          <Button
+            disabled={isLoading}
+            variant={isCopingPatrol ? 'warning' : 'success'} onClick={copyPatrol}
+          >
+            {isCopingPatrol ? 'Stop' : 'Start Copy'}
+          </Button>
+
         </Col>
-      </Row>
+      </Row >
 
 
       <Table responsive striped>

@@ -5,6 +5,7 @@ import portals from './portals'
 import chests from './chests'
 import get_bot_config from './get_bot_config'
 import get_master_position from './get_master_position'
+import start_copy_master_position from './start_copy_master_position'
 
 const router = express.Router()
 router.use(isAuthenticated)
@@ -16,6 +17,7 @@ router.use("/", portals)
 router.use("/", chests)
 router.use("/", get_bot_config)
 router.use("/", get_master_position)
+router.use("/", start_copy_master_position)
 
 router.use('/', (req, res, next) => next(createHttpError(404, "Endpoint not found")))
 router.use('/', (error: unknown, req: Request, res: Response, next: NextFunction) => {

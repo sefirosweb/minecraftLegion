@@ -4,6 +4,8 @@ import { useVerifyLoggedIn } from './useVerifyLoggedIn';
 import { Bot } from '@/types';
 import { useStore } from '@/hooks/useStore';
 
+const socket = io();
+
 export const useSocketSetup = () => {
     const verifyLoggedIn = useVerifyLoggedIn()
     const [
@@ -29,89 +31,84 @@ export const useSocketSetup = () => {
         ])
 
     useEffect(() => {
-        let tempSocket: Socket | undefined
-        const interval = setTimeout(() => {
-            console.log(`Conecting to server`);
-            const socket = io();
-            tempSocket = socket
-            setSocket(socket);
-            socket.on("connect", () => {
-                console.log(`Connected to`);
-                socket.emit('isWeb')
-            });
+        console.log(`Conecting to server`);
 
-            socket.on("connect_error", (err) => {
-                console.log(err.message)
-                verifyLoggedIn()
-                    .then(() => {
-                        setTimeout(() => {
-                            if (socket) {
-                                socket.connect();
-                            }
-                        }, 3000);
-                    })
-            });
+        setSocket(socket);
+        socket.on("connect", () => {
+            console.log(`Connected to`);
+            socket.emit('isWeb')
+        });
 
-            socket.on("disconnect", () => {
-                setBotsOnline([]);
-                setCoreConnected(false)
-            });
+        socket.on("connect_error", (err) => {
+            console.log(err.message)
+            verifyLoggedIn()
+                .then(() => {
+                    setTimeout(() => {
+                        if (socket) {
+                            socket.connect();
+                        }
+                    }, 3000);
+                })
+        });
 
-            socket.on("logs", (message) => {
-                addLog(message);
-            });
+        socket.on("disconnect", () => {
+            setBotsOnline([]);
+            setCoreConnected(false)
+        });
 
-            socket.on("botStatus", (data) => {
-                updateBotStatus(data);
-            });
+        socket.on("logs", (message) => {
+            addLog(message);
+        });
 
-            socket.on("mastersOnline", (data) => {
-                setMasters(data);
-            });
+        socket.on("botStatus", (data) => {
+            updateBotStatus(data);
+        });
 
-            socket.on("coreConnected", (connected: boolean) => {
-                setCoreConnected(connected);
-            });
+        socket.on("mastersOnline", (data) => {
+            setMasters(data);
+        });
 
-            socket.on("action", ({ type, value }) => {
-                if (type === "getChests") {
-                    setChests(value);
+        socket.on("coreConnected", (connected: boolean) => {
+            setCoreConnected(connected);
+        });
+
+        socket.on("action", ({ type, value }) => {
+            if (type === "getChests") {
+                setChests(value);
+            }
+            if (type === "getPortals") {
+                setPortals(value);
+            }
+        });
+
+
+        socket.on("botsOnline", (botsOnline: Array<Bot>) => {
+            const botsConnected = botsOnline.sort(function (a, b) {
+                if (a.name < b.name) {
+                    return -1;
                 }
+                return 0;
             });
 
-            socket.on("action", ({ type, value }) => {
-                if (type === "getPortals") {
-                    setPortals(value);
-                }
-            });
+            setBotsOnline(botsConnected);
+        });
 
-            socket.on("botsOnline", (botsOnline: Array<Bot>) => {
-                const botsConnected = botsOnline.sort(function (a, b) {
-                    if (a.name < b.name) {
-                        return -1;
-                    }
-                    return 0;
-                });
-
-                setBotsOnline(botsConnected);
-            });
-
-            socket.on("sendConfig", (data) => {
-                setConfig(data);
-            });
-
-        })
+        socket.on("sendConfig", (data) => {
+            setConfig(data);
+        });
 
         return () => {
-            clearInterval(interval)
-            if (tempSocket) {
-                console.log('remove socket')
-                console.log('Disconected from server')
-                tempSocket.off('connect_error');
-                tempSocket.disconnect()
-                tempSocket = undefined
-            }
-        };
+            socket.off("connect");
+            socket.off("connect_error");
+            socket.off("disconnect");
+            socket.off("logs");
+            socket.off("botStatus");
+            socket.off("mastersOnline");
+            socket.off("coreConnected");
+            socket.off("action");
+            socket.off("botsOnline");
+            socket.off("sendConfig");
+        }
 
     }, [])
 }
