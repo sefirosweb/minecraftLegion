@@ -1,10 +1,15 @@
-import React, { useState } from "react";
-import { ArrowDown, ArrowUp, Coords, ItemImage, ItemWithImageOption, SingleValueWithImage, Trash } from "@/components";
+import React, { useContext, useState } from "react";
 import { Button, Col, Form, Row, Table } from "react-bootstrap";
-import { Chest as TypeChest, isDepositType } from "base-types";
-import { Vec3 } from "vec3";
 import AsyncSelect from 'react-select/async';
+import axios from "axios";
+import { Vec3 } from "vec3";
+import toastr from 'toastr'
+import { ArrowDown, ArrowUp, Coords, ItemImage, ItemWithImageOption, SingleValueWithImage, Trash } from "@/components";
+import { Chest as TypeChest, isDepositType } from "base-types";
 import { ItemOption, itemOptions } from "@/lib";
+import { useStore } from "@/hooks/useStore";
+import { BotSelectedContext } from "../ConfigurationContext";
+
 
 type Props = {
   uuid: string
@@ -20,9 +25,12 @@ type Props = {
 
 export const Chest: React.FC<Props> = (props) => {
   const { uuid, chest, handleMovePosNext, handleMovePosPrev, disabledMoveNext, disabledMovePrev, handleDeleteChest, handleChangeChest } = props
+  const { bot } = useContext(BotSelectedContext);
+  const [master] = useStore(state => [state.master, state.socket])
 
   const [itemName, setItemName] = useState<ItemOption | null>(null);
   const [quantity, setQuantity] = useState("1");
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleInsertItemInChest = () => {
     const qty = Number(quantity)
@@ -78,7 +86,19 @@ export const Chest: React.FC<Props> = (props) => {
   }
 
   const handleCopyPositionMaster = () => {
-
+    setIsLoading(true)
+    axios.get(`/api/get_master_position/${bot?.socketId}/${master}`)
+      .then((response) => {
+        const pos = new Vec3(response.data.x, response.data.y, response.data.z).floor()
+        console.log(pos)
+        handleChangeChestPos(pos)
+      })
+      .catch((error) => {
+        toastr.error(error.response.data.error)
+      })
+      .finally(() => {
+        setIsLoading(false)
+      })
   };
 
   const renderSwitch = () => {

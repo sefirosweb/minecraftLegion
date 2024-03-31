@@ -18,20 +18,22 @@ export const Coords: React.FC<Props> = (props) => {
     const uuid = useMemo(() => uuidv4(), [])
 
     useEffect(() => {
-        const newVec3 = isNaN(parseInt(x)) || isNaN(parseInt(y)) || isNaN(parseInt(z)) ? undefined : new Vec3(parseInt(x), parseInt(y), parseInt(z))
-        if (!newVec3 && !coords) return
-        if (coords && newVec3 && newVec3.equals(coords)) return
+        const validAllValues = !isNaN(parseFloat(x)) && !isNaN(parseFloat(y)) && !isNaN(parseFloat(z))
+        if (!validAllValues) return
+        const newVec3 = new Vec3(parseFloat(x), parseFloat(y), parseFloat(z))
+        if (coords && coords.x === newVec3.x && coords.y === newVec3.y && coords.z === newVec3.z) return
         onChange(newVec3)
-    }, [x, y, z, onChange])
+    }, [x, y, z])
 
 
     useEffect(() => {
-        const newVec3 = isNaN(parseInt(x)) || isNaN(parseInt(y)) || isNaN(parseInt(z)) ? undefined : new Vec3(parseInt(x), parseInt(y), parseInt(z))
-        if (!newVec3 && !coords) return
-        if (coords && newVec3 && newVec3.equals(coords)) return
-        setX(coords?.x.toString() ?? '')
-        setY(coords?.y.toString() ?? '')
-        setZ(coords?.z.toString() ?? '')
+        const validAllValues = !isNaN(parseFloat(x)) && !isNaN(parseFloat(y)) && !isNaN(parseFloat(z))
+        if (!validAllValues) return
+        const newVec3 = new Vec3(parseFloat(x), parseFloat(y), parseFloat(z))
+       if (!coords || coords.x === newVec3.x && coords.y === newVec3.y && coords.z === newVec3.z) return
+        setX(coords.x.toString())
+        setY(coords.y.toString())
+        setZ(coords.z.toString())
     }, [coords])
 
 
