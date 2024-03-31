@@ -1,43 +1,55 @@
 import React, { Suspense, useContext } from "react";
 import { Button, Card, Col, Nav, Row } from 'react-bootstrap'
 import { Link, NavLink, Outlet } from 'react-router-dom'
+import toastr from 'toastr'
 import { RenderBotsOnlineList } from '@/components'
-import { useSendActionSocket } from "@/hooks/useSendActionSocket";
+// import { useSendActionSocket } from "@/hooks/useSendActionSocket";
 import { BotSelectedContext } from "./ConfigurationContext";
 import { LoadingPage } from "../LoadingPage";
+import axios from "axios";
 export const ConfigureBotLayout: React.FC = () => {
-  const botConfig = useContext(BotSelectedContext);
-  const sendAction = useSendActionSocket()
+  const { bot, botConfig } = useContext(BotSelectedContext);
+  // const sendAction = useSendActionSocket()
 
-  const updateReloadButton = () => {
-    sendAction('action', {
-      type: "reloadConfig",
-      value: "",
-    })
+  const handleSaveButton = () => {
+    // sendAction('action', {
+    //   type: "reloadConfig",
+    //   value: "",
+    // })
+    axios
+      .post(`/api/save_bot_config/${bot.socketId}`, { botConfig })
+      .then((response) => {
+        toastr.success('Config saved')
+      })
+      .catch((error) => {
+        toastr.error('Error saving config')
+      })
   }
 
   return (
     <>
-      <Row className="my-2">
+      <Row>
+        <Col xs={{ span: 12, order: 2 }} md={{ span: 9, order: 1 }} lg={10}>
+          <div className="d-flex align-items-end justify-content-between flex-wrap my-2">
 
-        <Col md={6} lg={7}>
-          <h2>Bot Configuration - {botConfig.name}</h2>
-        </Col>
+            <div className="me-3">
+              <h2>Bot Configuration - {bot.name}</h2>
+            </div>
 
-        <Col md={3}>
-
-
-          <Link to='/dashboard' className="me-2">
-            <Button className="mb-1" variant="secondary">
-              Dashboard
-            </Button>
-          </Link>
+            <div>
+              <Link to='/dashboard' className="me-2">
+                <Button className="mb-1" variant="secondary">
+                  Dashboard
+                </Button>
+              </Link>
 
 
-          <Button onClick={updateReloadButton} variant='success' className="mb-1">
-            Save
-          </Button>
+              <Button onClick={handleSaveButton} variant='success' className="mb-1">
+                Save
+              </Button>
 
+            </div>
+          </div>
         </Col>
       </Row>
 

@@ -3,6 +3,7 @@ import BehaviorMoveTo from '@/BehaviorModules/BehaviorMoveTo'
 import BehaviorSleep from '@/BehaviorModules/BehaviorSleep'
 import { LegionStateMachineTargets } from 'base-types'
 import { Bot } from 'mineflayer'
+import { Vec3 } from 'vec3'
 
 const goSleepFunction = function (bot: Bot, targets: LegionStateMachineTargets) {
   const start = new BehaviorIdle()
@@ -50,7 +51,7 @@ const goSleepFunction = function (bot: Bot, targets: LegionStateMachineTargets) 
       parent: start,
       child: goSleepArea,
       onTransition: () => {
-        targets.position = bot.config.sleepArea?.clone()
+        targets.position = bot.config.sleepArea?.clone() ?? new Vec3(0, 80, 0)
       },
       shouldTransition: () => true,
     }),

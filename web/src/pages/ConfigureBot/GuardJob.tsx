@@ -6,14 +6,12 @@ import { useStore } from "@/hooks/useStore";
 import { Button, Col, Form, Row, Table } from "react-bootstrap";
 import { Vec3 } from "vec3";
 import axios from "axios";
-import { useGetSelectedBot } from "@/hooks/useGetSelectedBot";
 
 export const GuardJob: React.FC = () => {
-  const { botConfig, updateConfig } = useContext(BotSelectedContext);
+  const { bot, botConfig, updateConfig } = useContext(BotSelectedContext);
   const [master, socket] = useStore(state => [state.master, state.socket])
   const [pos, setPos] = useState<Vec3 | undefined>(undefined);
   const [isLoading, setIsLoading] = useState(false);
-  const bot = useGetSelectedBot()
   const [isCopingPatrol, setIsCopingPatrol] = useState(false)
 
   const insertPost = () => {

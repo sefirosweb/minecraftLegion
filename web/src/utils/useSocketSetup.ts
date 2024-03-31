@@ -93,10 +93,6 @@ export const useSocketSetup = () => {
             setBotsOnline(botsConnected);
         });
 
-        socket.on("sendConfig", (data) => {
-            setConfig(data);
-        });
-
         return () => {
             socket.off("connect");
             socket.off("connect_error");
@@ -107,7 +103,6 @@ export const useSocketSetup = () => {
             socket.off("coreConnected");
             socket.off("action");
             socket.off("botsOnline");
-            socket.off("sendConfig");
         }
 
     }, [])

@@ -6,10 +6,12 @@ import { RenderBotsOnlineList } from '@/components';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { Config } from 'base-types';
+import { Bot } from '@/types';
 
 
 export type BotSelectedContextType = {
-  botConfig: Config
+  bot: Bot,
+  botConfig: Config,
   setBotConfig: React.Dispatch<React.SetStateAction<Config | undefined>>
   updateConfig: <K extends keyof Config>(configToChange: K, value: Config[K]) => void
 }
@@ -75,7 +77,7 @@ export const ConfigurationContextProvider: React.FC = () => {
   }
 
   return (
-    <BotSelectedContext.Provider value={{ botConfig, setBotConfig, updateConfig }}>
+    <BotSelectedContext.Provider value={{ bot, botConfig, setBotConfig, updateConfig }}>
       <Outlet />
     </BotSelectedContext.Provider>
   )

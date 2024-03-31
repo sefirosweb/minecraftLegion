@@ -1,10 +1,9 @@
 import { Socket } from 'socket.io-client'
-import type { BotFriends, BotwebsocketAction, Chest, Master, MineCords } from 'base-types'
+import type { BotFriends, BotwebsocketAction, Config, Master } from 'base-types'
 import { Vec3 } from 'vec3'
 
 import configBot from '@/config'
 
-import { isAnimal } from './animalType'
 import { Entity } from 'prismarine-entity'
 import { Bot } from 'mineflayer'
 import { connectBotToServer } from '@/modules/connectSocket'
@@ -69,19 +68,14 @@ const connect = async () => {
     masters = mastersOnline
   })
 
-  socket.on('changeConfig', (config) => {
-    const setConfigurations: Record<string, (...args: any) => void> = {}
- 
-    setConfigurations['saveFullConfig'] = (value) => {
-      bot.config = value
-    }
-
-    saveBotConfig()
-    sendConfig()
+  socket.on('getConfig', (_, response) => {
+    response(bot.config);
   })
 
-  socket.on('getConfig', (data, response) => {
-    response(bot.config);
+  socket.on('saveConfig', ({ botConfig }: { botConfig: Config }, response) => {
+    bot.config = botConfig
+    saveBotConfig()
+    response({ success: true });
   })
 
   socket.on('get_master_position', (data: { master: string }, response) => {
@@ -132,13 +126,6 @@ const connect = async () => {
   })
 
   webSocketQueue.resume()
-}
-
-const sendConfig = () => {
-  emit('sendAction', {
-    action: 'sendConfig',
-    value: bot.config
-  })
 }
 
 const sendAction = (action: string, value: any) => {

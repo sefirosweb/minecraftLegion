@@ -64,16 +64,6 @@ export default (socket: Socket) => {
                 io.to(data.socketId).emit("sendDisconnect", data.value);
                 break;
 
-            case "sendConfig":
-                data.value.socketId = socket.id;
-                io.to("web").emit("sendConfig", data.value);
-                break;
-
-            case "changeConfig":
-                data.value.fromSocketId = socket.id;
-                io.to(data.socketId).emit("changeConfig", data.value);
-                break;
-
             case "addMaster":
                 if (data.value === undefined || data.value === "") {
                     return;

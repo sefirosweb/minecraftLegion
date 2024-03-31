@@ -11,8 +11,6 @@ export const BotActionButtons: React.FC = () => {
   const navigate = useNavigate();
   const sendAction = useSendActionSocket()
   const selectedSocketId = useParams().selectedSocketId
-
-  const updateBotStatus = useStore(state => state.updateBotStatus)
   const master = useStore(state => state.master)
 
   const [chat, setChat] = useState("");
@@ -53,7 +51,6 @@ export const BotActionButtons: React.FC = () => {
       clearInterval(interval)
     }
   }, [bot])
-
 
   return (
     <>

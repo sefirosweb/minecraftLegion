@@ -7,7 +7,7 @@ import { BotSelectedContext } from "./ConfigurationContext";
 import { Config } from 'base-types';
 
 export const FullConfig: React.FC = () => {
-  const { botConfig, setBotConfig } = useContext(BotSelectedContext);
+  const { bot, botConfig, setBotConfig } = useContext(BotSelectedContext);
   const [jsonText, setJsonText] = useState(JSON.stringify(botConfig, null, 4))
   const editorRef = useRef<HTMLDivElement>(null);
   const jsoneditorRef = useRef<JSONEditor | null>(null);
@@ -45,7 +45,7 @@ export const FullConfig: React.FC = () => {
   }, [jsonText]);
 
   const downloadConfig = () => {
-    const filename = `test`
+    const filename = `${bot.name}_config`
     var element = document.createElement('a');
     element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(jsonText));
     element.setAttribute('download', `${filename}.json`);

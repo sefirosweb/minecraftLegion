@@ -5,7 +5,7 @@ import { io } from "@/server";
 
 const router = express.Router()
 
-router.get('/get_bot_config/:socketId', async (req, res, next) => {
+router.post('/save_bot_config/:socketId', async (req, res, next) => {
     const socketId = req.params.socketId
 
     const bot = socketVariables.botsConnected.find(bot => bot.socketId === socketId)
@@ -13,7 +13,9 @@ router.get('/get_bot_config/:socketId', async (req, res, next) => {
         return next(createHttpError(404, "Bot not found"))
     }
 
-    io.timeout(5000).to(bot.socketId).emitWithAck("getConfig", {})
+    const botConfig = req.body.botConfig
+
+    io.timeout(5000).to(bot.socketId).emitWithAck("saveConfig", { botConfig })
         .then((data) => {
             res.json(data[0])
         })
