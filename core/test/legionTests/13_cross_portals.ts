@@ -2,6 +2,7 @@ import { bot } from '../hooks'
 import { Jobs, Config, MineCordsConfig } from 'base-types'
 import { Vec3 } from 'vec3'
 import { defaultConfig } from 'base-types'
+import { v4 as uuidv4 } from 'uuid';
 import _ from 'lodash'
 
 describe('12 Cross the portals', function () {
@@ -50,6 +51,7 @@ describe('12 Cross the portals', function () {
       minerCords,
       chests: [
         {
+          uuid: uuidv4(),
           name: "Input chest name",
           type: "withdraw",
           position: new Vec3(-2, -35, 1),
@@ -115,6 +117,7 @@ describe('12 Cross the portals', function () {
       minerCords,
       chests: [
         {
+          uuid: uuidv4(),
           name: "Input chest name",
           type: "withdraw",
           position: new Vec3(-2, -35, 1),

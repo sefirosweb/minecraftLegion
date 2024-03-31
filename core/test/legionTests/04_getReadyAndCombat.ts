@@ -3,11 +3,13 @@ import { Jobs, Chest, Config } from 'base-types'
 import { Vec3 } from 'vec3'
 import botWebsocket from '@/modules/botWebsocket'
 import { defaultConfig } from 'base-types'
+import { v4 as uuidv4 } from 'uuid';
 import _ from 'lodash'
 
 describe('04 Get ready for combat', function () {
   const chests: Array<Chest> = [
     {
+      uuid: uuidv4(),
       name: "Input chest name",
       type: "withdraw",
       position: new Vec3(-3, -60, 2),
@@ -56,6 +58,7 @@ describe('04 Get ready for combat', function () {
       ]
     },
     {
+      uuid: uuidv4(),
       name: "Input chest name",
       type: "deposit",
       position: new Vec3(3, -60, 0),
@@ -76,6 +79,7 @@ describe('04 Get ready for combat', function () {
       ]
     },
     {
+      uuid: uuidv4(),
       name: "Input chest name",
       type: "depositAll",
       position: new Vec3(3, -60, -2),

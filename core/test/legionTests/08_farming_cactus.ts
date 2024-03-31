@@ -3,6 +3,7 @@ import inventoryModule from '@/modules/inventoryModule'
 import { bot } from '../hooks'
 import { Jobs, Config } from 'base-types'
 import { defaultConfig } from 'base-types'
+import { v4 as uuidv4 } from 'uuid';
 import _ from 'lodash'
 
 describe('08 Farming cactus', function () {
@@ -15,8 +16,10 @@ describe('08 Farming cactus', function () {
       itemsToBeReady: [],
       plantAreas: [
         {
+          uuid: uuidv4(),
           plant: "cactus",
           layer: {
+            uuid: uuidv4(),
             yLayer: -61,
             xStart: 10,
             zStart: 20,

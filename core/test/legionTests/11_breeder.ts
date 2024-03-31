@@ -1,6 +1,7 @@
 import { Jobs, Config } from 'base-types'
 import { bot } from '../hooks'
 import { defaultConfig } from 'base-types'
+import { v4 as uuidv4 } from 'uuid';
 import _ from 'lodash'
 
 const listOfAnimalstoFeed = [
@@ -63,6 +64,7 @@ describe('11 Breeder animals', function () {
     },
     farmAreas: [
       {
+        uuid: uuidv4(),
         xStart: 7,
         xEnd: -7,
         zStart: -7,

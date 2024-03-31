@@ -2,13 +2,16 @@ import inventoryModule from '@/modules/inventoryModule'
 import { bot } from '../hooks'
 import { Jobs, Config, PlantArea } from 'base-types'
 import { defaultConfig } from 'base-types'
+import { v4 as uuidv4 } from 'uuid';
 import _ from 'lodash'
 
 describe('09 General farming', function () {
   const plantAreas: Array<PlantArea> = [
     {
+      uuid: uuidv4(),
       plant: "pumpkin",
       layer: {
+        uuid: uuidv4(),
         yLayer: -61,
         xStart: 2,
         xEnd: 2,
@@ -17,8 +20,10 @@ describe('09 General farming', function () {
       }
     },
     {
+      uuid: uuidv4(),
       plant: "melon",
       layer: {
+        uuid: uuidv4(),
         yLayer: -61,
         xStart: 4,
         xEnd: 4,
@@ -27,8 +32,10 @@ describe('09 General farming', function () {
       }
     },
     {
+      uuid: uuidv4(),
       plant: "carrot",
       layer: {
+        uuid: uuidv4(),
         yLayer: -61,
         xStart: 6,
         xEnd: 6,
@@ -37,8 +44,10 @@ describe('09 General farming', function () {
       }
     },
     {
+      uuid: uuidv4(),
       plant: "potato",
       layer: {
+        uuid: uuidv4(),
         yLayer: -61,
         xStart: 7,
         xEnd: 7,
@@ -47,8 +56,10 @@ describe('09 General farming', function () {
       }
     },
     {
+      uuid: uuidv4(),
       plant: "beetroot",
       layer: {
+        uuid: uuidv4(),
         yLayer: -61,
         xStart: 8,
         xEnd: 8,
@@ -57,8 +68,10 @@ describe('09 General farming', function () {
       }
     },
     {
+      uuid: uuidv4(),
       plant: "wheat",
       layer: {
+        uuid: uuidv4(),
         yLayer: -61,
         xStart: 9,
         xEnd: 9,
@@ -67,8 +80,10 @@ describe('09 General farming', function () {
       }
     },
     {
+      uuid: uuidv4(),
       plant: "sweet_berries",
       layer: {
+        uuid: uuidv4(),
         yLayer: -61,
         xStart: 11,
         xEnd: 11,
@@ -77,8 +92,10 @@ describe('09 General farming', function () {
       }
     },
     {
+      uuid: uuidv4(),
       plant: "sugar_cane",
       layer: {
+        uuid: uuidv4(),
         yLayer: -61,
         xStart: 14,
         xEnd: 14,
