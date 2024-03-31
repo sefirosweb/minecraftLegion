@@ -71,55 +71,7 @@ const connect = async () => {
 
   socket.on('changeConfig', (config) => {
     const setConfigurations: Record<string, (...args: any) => void> = {}
-
-    setConfigurations['insertNewFarmArea'] = (value) => {
-      const farmAreas = bot.config.farmAreas
-      farmAreas.push({
-        yLayer: 0,
-        xStart: 0,
-        xEnd: 0,
-        zStart: 0,
-        zEnd: 0
-      })
-      bot.config.farmAreas = farmAreas
-    }
-
-    setConfigurations['changeFarmArea'] = (value) => {
-      const farmAreas = bot.config.farmAreas
-      farmAreas[value.id] = value.farmArea
-      bot.config.farmAreas = farmAreas
-    }
-
-    setConfigurations['deleteFarmArea'] = (value) => {
-      const farmAreas = bot.config.farmAreas
-      farmAreas.splice(value, 1)
-      bot.config.farmAreas = farmAreas
-    }
-
-    setConfigurations['changeAnimalValue'] = (data: {
-      animal: string,
-      value: string
-    }) => {
-      const { animal, value } = data
-      if (isAnimal(animal)) {
-        const farmAnimal = bot.config.farmAnimal
-        farmAnimal[animal] = parseInt(value)
-        bot.config.farmAnimal = farmAnimal
-      }
-    }
-
-    setConfigurations['insertNewChestArea'] = () => {
-      const chestArea = bot.config.chestAreas
-      chestArea.push({
-        yLayer: 0,
-        xStart: 0,
-        xEnd: 0,
-        zStart: 0,
-        zEnd: 0
-      })
-      bot.config.chestAreas = chestArea
-    }
-
+ 
     setConfigurations['changeChestArea'] = (value) => {
       const chestArea = bot.config.chestAreas
       chestArea[value.id] = value.chestArea

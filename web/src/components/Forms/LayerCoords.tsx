@@ -20,7 +20,15 @@ export const LayerCoords: React.FC<Props> = (props) => {
         const validAllValues = !isNaN(parseInt(yLayer)) && !isNaN(parseInt(xStart)) && !isNaN(parseInt(xEnd)) && !isNaN(parseInt(zStart)) && !isNaN(parseInt(zEnd))
         if (!validAllValues) return
         if (validAllValues && area && area.yLayer === parseInt(yLayer) && area.xStart === parseInt(xStart) && area.xEnd === parseInt(xEnd) && area.zStart === parseInt(zStart) && area.zEnd === parseInt(zEnd)) return
-        onChange({ yLayer: parseInt(yLayer), xStart: parseInt(xStart), xEnd: parseInt(xEnd), zStart: parseInt(zStart), zEnd: parseInt(zEnd) })
+        const newLayer: Layer = {
+            uuid: area.uuid,
+            yLayer: parseInt(yLayer),
+            xStart: parseInt(xStart),
+            xEnd: parseInt(xEnd),
+            zStart: parseInt(zStart),
+            zEnd: parseInt(zEnd)
+        }
+        onChange(newLayer)
     }, [yLayer, xStart, xEnd, zStart, zEnd, onChange])
 
     useEffect(() => {

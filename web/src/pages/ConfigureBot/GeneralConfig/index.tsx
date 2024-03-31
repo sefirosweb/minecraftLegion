@@ -19,7 +19,7 @@ export const GeneralConfig: React.FC = () => {
   return (
     <>
       <Row className="mb-4">
-        <Col xs={12} md={6} lg={4}>
+        <Col xs={12} md={6} lg={4} className="mb-3">
           <Form>
             {Object.values(Jobs).map((job) => (
               <Form.Check

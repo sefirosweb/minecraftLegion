@@ -13,6 +13,7 @@ export type Agro = 'none' | 'pve' | 'pvp'
 export type tunnelType = 'horizontally' | 'vertically'
 
 export type Layer = {
+    uuid: string,
     xStart: number,
     xEnd: number,
     zStart: number,
