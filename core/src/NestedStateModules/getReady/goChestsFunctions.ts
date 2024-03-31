@@ -84,7 +84,7 @@ export default (bot: Bot, targets: LegionStateMachineTargets) => {
       child: nextCheck,
       onTransition: () => {
         chestIndex = 0
-        chests = bot.config.chests
+        chests = structuredClone(bot.config.chests)
       },
       shouldTransition: () => !bot.config.firstPickUpItemsFromKnownChests
     }),
@@ -95,7 +95,7 @@ export default (bot: Bot, targets: LegionStateMachineTargets) => {
       name: 'Is enabled first pickup items from know chests',
       onTransition: () => {
         chestIndex = 0
-        chests = bot.config.chests
+        chests = structuredClone(bot.config.chests)
         targets.pickUpItems = findChestsToWithdraw(chests, targets.chests)
       },
       shouldTransition: () => bot.config.firstPickUpItemsFromKnownChests
