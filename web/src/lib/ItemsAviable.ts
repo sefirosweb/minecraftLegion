@@ -52,7 +52,7 @@ export const plantOptions = (inputValue: string): Promise<Array<ItemOption>> => 
     const filter = items
       .filter((i) =>
         plants.includes(i.name) &&
-        i.displayName.toLowerCase().includes(inputValue.toLowerCase())
+        (i.displayName.toLowerCase().includes(inputValue.toLowerCase()) || i.name.toLowerCase().includes(inputValue.toLowerCase()))
       )
       .slice(0, 10)
       .map((item) => ({ value: item, label: item.displayName }))
@@ -64,7 +64,7 @@ export const plantOptions = (inputValue: string): Promise<Array<ItemOption>> => 
 export const itemOptions = (inputValue: string): Promise<Array<ItemOption>> => {
   return new Promise((resolve) => {
     const filter = items
-      .filter((i) => i.displayName.toLowerCase().includes(inputValue.toLowerCase()))
+      .filter((i) => i.displayName.toLowerCase().includes(inputValue.toLowerCase()) || i.name.toLowerCase().includes(inputValue.toLowerCase()))
       .slice(0, 10)
       .map((item) => ({ value: item, label: item.displayName }))
 
@@ -75,7 +75,7 @@ export const itemOptions = (inputValue: string): Promise<Array<ItemOption>> => {
 export const foodsOptions = (inputValue: string): Promise<Array<FoodOption>> => {
   return new Promise((resolve) => {
     const filter = foods
-      .filter((i) => i.displayName.toLowerCase().includes(inputValue.toLowerCase()))
+      .filter((i) => i.displayName.toLowerCase().includes(inputValue.toLowerCase()) || i.name.toLowerCase().includes(inputValue.toLowerCase()))
       .slice(0, 10)
       .map((item) => ({ value: item, label: item.displayName }))
 
