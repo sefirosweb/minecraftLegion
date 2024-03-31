@@ -72,125 +72,6 @@ const connect = async () => {
   socket.on('changeConfig', (config) => {
     const setConfigurations: Record<string, (...args: any) => void> = {}
 
-    setConfigurations['job'] = (value) => {
-      bot.config.job = value
-    }
-
-    setConfigurations['pickUpItems'] = (value) => {
-      bot.config.pickUpItems = value
-    }
-
-    setConfigurations['helpFriends'] = (value) => {
-      bot.config.helpFriends = value
-    }
-
-    setConfigurations['allowSprinting'] = (value) => {
-      bot.config.allowSprinting = value
-    }
-
-    setConfigurations['canDig'] = (value) => {
-      bot.config.canDig = value
-    }
-
-    setConfigurations['canSleep'] = (value) => {
-      bot.config.canSleep = value
-    }
-
-    setConfigurations['sleepArea'] = (value: { coord: string, pos: string }) => {
-      const { coord, pos } = value
-      const sleepArea = bot.config.sleepArea || new Vec3(0, 0, 0,)
-
-      if (coord === "x" || coord === "y" || coord === "z") {
-        sleepArea[coord] = parseInt(pos)
-      }
-
-      bot.config.sleepArea = sleepArea
-    }
-
-    setConfigurations['canPlaceBlocks'] = (value) => {
-      bot.config.canPlaceBlocks = value
-    }
-
-    setConfigurations['mode'] = (value) => {
-      bot.config.mode = value
-    }
-
-    setConfigurations['distance'] = (value) => {
-      bot.config.distance = value
-    }
-
-    setConfigurations['deleteItemToBeReady'] = (value) => {
-      const itemsToBeReady = bot.config.itemsToBeReady
-      itemsToBeReady.splice(value, 1)
-      bot.config.itemsToBeReady = itemsToBeReady
-    }
-
-    setConfigurations['changeOrientation'] = (value: string) => {
-      const minerCords = bot.config.minerCords
-      if (value === 'x+' || value === 'x-' || value === 'z+' || value === 'z-') {
-        minerCords.orientation = value
-      }
-      bot.config.minerCords = minerCords
-    }
-
-    setConfigurations['changeWorldMiner'] = (value: string) => {
-      const minerCords = bot.config.minerCords
-      if (value === 'overworld' || value === 'the_nether' || value === 'the_end') {
-        minerCords.world = value
-      }
-      bot.config.minerCords = minerCords
-    }
-
-    setConfigurations['changeReverseModeMiner'] = (value: boolean) => {
-      const minerCords = bot.config.minerCords
-      minerCords.reverse = value
-      bot.config.minerCords = minerCords
-    }
-
-    setConfigurations['changeChestPosMaster'] = (value) => {
-      const findMaster = bot.nearestEntity(
-        (e) =>
-          e.type === 'player' &&
-          e.username === value.master
-      )
-      if (!findMaster) {
-        return
-      }
-
-      const chests = bot.config.chests
-      chests[value.chestId].position = findMaster.position.floored()
-      // @ts-ignore https://github.com/PrismarineJS/mineflayer/pull/2963
-      chests[value.chestId].dimension = bot.game.dimension
-      bot.config.chests = chests
-    }
-
-    setConfigurations['insertNewPlantArea'] = () => {
-      const plantAreas = bot.config.plantAreas
-      plantAreas.push({
-        layer: {
-          xEnd: 0,
-          xStart: 0,
-          yLayer: 0,
-          zEnd: 0,
-          zStart: 0
-        },
-        plant: ""
-      })
-      bot.config.plantAreas = plantAreas
-    }
-
-    setConfigurations['changePlantArea'] = (value) => {
-      const plantAreas = bot.config.plantAreas
-      plantAreas[value.id] = value.plantArea
-      bot.config.plantAreas = plantAreas
-    }
-
-    setConfigurations['deletePlantArea'] = (value) => {
-      const plantAreas = bot.config.plantAreas
-      plantAreas.splice(value, 1)
-      bot.config.plantAreas = plantAreas
-    }
-
     setConfigurations['insertNewFarmArea'] = (value) => {
       const farmAreas = bot.config.farmAreas
       farmAreas.push({
@@ -225,10 +106,6 @@ const connect = async () => {
         farmAnimal[animal] = parseInt(value)
         bot.config.farmAnimal = farmAnimal
       }
-    }
-
-    setConfigurations['randomFarmArea'] = (value) => {
-      bot.config.randomFarmArea = value
     }
 
     setConfigurations['insertNewChestArea'] = () => {

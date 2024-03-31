@@ -37,8 +37,9 @@ export type MineCordsConfig = MineCords & {
 }
 
 export type PlantArea = {
+    uuid: string,
+    plant: string,
     layer: Layer,
-    plant: string
 }
 
 export type GuardJob = {}
