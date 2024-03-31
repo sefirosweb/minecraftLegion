@@ -30,7 +30,7 @@
     "fs-extra": "^11.2.0"
   },
   "devDependencies": {
-    "minecraft-data": "^3.63.0",
+    "minecraft-data": "^3.64.1",
     "minecraft-wrap": "^1.5.1",
     "mineflayer": "^4.20.0",
     "mineflayer-pathfinder": "^2.4.5",
