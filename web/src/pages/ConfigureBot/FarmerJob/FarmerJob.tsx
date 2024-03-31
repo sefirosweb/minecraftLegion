@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { Button, Col, Row } from 'react-bootstrap'
 import { v4 as uuidv4 } from 'uuid';
 import { HarvestArea } from './HarvestArea'
-import { BotSelectedContext } from "./ConfigurationContext";
+import { BotSelectedContext } from "../ConfigurationContext";
 import { PlantArea } from 'base-types';
 
 export const FarmerJob: React.FC = () => {

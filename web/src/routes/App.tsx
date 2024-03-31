@@ -15,7 +15,7 @@ const ConfigurebotChests = lazy(() => import("@/pages/ConfigureBot/Chests/Config
 const Combat = lazy(() => import("@/pages/ConfigureBot/Combat").then((module) => ({ default: module.Combat })))
 const GuardJob = lazy(() => import("@/pages/ConfigureBot/GuardJob").then((module) => ({ default: module.GuardJob })))
 const MinerJob = lazy(() => import("@/pages/ConfigureBot/MinerJob").then((module) => ({ default: module.MinerJob })))
-const FarmerJob = lazy(() => import("@/pages/ConfigureBot/FarmerJob").then((module) => ({ default: module.FarmerJob })))
+const FarmerJob = lazy(() => import("@/pages/ConfigureBot/FarmerJob/FarmerJob").then((module) => ({ default: module.FarmerJob })))
 const BreederJob = lazy(() => import("@/pages/ConfigureBot/BreederJob").then((module) => ({ default: module.BreederJob })))
 const SorterJob = lazy(() => import("@/pages/ConfigureBot/SorterJob").then((module) => ({ default: module.SorterJob })))
 const ProcessList = lazy(() => import("@/pages/ConfigureBot/ProcessList").then((module) => ({ default: module.ProcessList })))
