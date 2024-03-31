@@ -1,7 +1,7 @@
 import { LayerCoords } from '@/components';
 import { Layer } from 'base-types';
 import React from 'react';
-import { Button, Col, Row } from 'react-bootstrap'
+import { Button } from 'react-bootstrap'
 
 type Props = {
   chestArea: Layer,
@@ -11,14 +11,6 @@ type Props = {
 
 export const ChestArea: React.FC<Props> = (props) => {
   const { chestArea, changeChestArea, deleteChestArea } = props
-
-  const handleChange = (type: keyof Layer, value: string) => {
-
-  }
-
-  const handleDeleteChestArea = () => {
-    // changeConfig('deleteChestArea', id)
-  }
 
   return (
     <div className='p-3 mb-3 border rounded'>

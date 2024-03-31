@@ -1,52 +1,93 @@
-import React, { useState, useEffect, useContext } from 'react'
+import React, { useState, useEffect, useContext, useRef } from 'react'
 import { Button, Col, Form, Row } from 'react-bootstrap'
-import { useGetSocket } from '@/hooks/useGetSocket';
+import JSONEditor, { JSONEditorOptions } from 'jsoneditor';
+import toastr from 'toastr'
+import 'jsoneditor/dist/jsoneditor.css';
 import { BotSelectedContext } from "./ConfigurationContext";
-import { useChangeConfig } from '@/hooks/useChangeConfig';
+import { Config } from 'base-types';
 
 export const FullConfig: React.FC = () => {
-  const botConfig = useContext(BotSelectedContext);
-  const selectedSocketId = botConfig.socketId
-
-  const [jsonText, setJsonText] = useState("")
-  const changeConfig = useChangeConfig()
+  const { botConfig, setBotConfig } = useContext(BotSelectedContext);
+  const [jsonText, setJsonText] = useState(JSON.stringify(botConfig, null, 4))
+  const editorRef = useRef<HTMLDivElement>(null);
+  const jsoneditorRef = useRef<JSONEditor | null>(null);
 
   useEffect(() => {
-    if (botConfig === undefined) return
-    const config = { ...botConfig.config }
-    setJsonText(JSON.stringify(config, null, 2))
-  }, [botConfig, selectedSocketId])
+    setJsonText(JSON.stringify(botConfig, null, 4))
+  }, [botConfig]);
 
-  if (botConfig === undefined) { return null }
+  useEffect(() => {
+    const options: JSONEditorOptions = {
+      onChange: () => {
+        if (!jsoneditorRef.current) return
+        const newBotConfig = JSON.parse(jsoneditorRef.current.getText()) as Config
+        setBotConfig(newBotConfig)
+      },
+    };
 
-  const download = () => {
-    const config = { ...botConfig.config }
-    const text = JSON.stringify(config, null, 2)
+    if (editorRef.current) {
+      jsoneditorRef.current = new JSONEditor(editorRef.current, options);
+      jsoneditorRef.current.set(JSON.parse(jsonText));
+      jsoneditorRef.current.expandAll();
+    }
 
-    const filename = `${botConfig.name}`
+    return () => {
+      if (jsoneditorRef.current) {
+        jsoneditorRef.current.destroy();
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    if (jsoneditorRef.current) {
+      jsoneditorRef.current.update(JSON.parse(jsonText));
+    }
+  }, [jsonText]);
+
+  const downloadConfig = () => {
+    const filename = `test`
     var element = document.createElement('a');
-    element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
-    element.setAttribute('download', filename);
+    element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(jsonText));
+    element.setAttribute('download', `${filename}.json`);
 
     element.style.display = 'none';
     document.body.appendChild(element);
-
     element.click();
-
     document.body.removeChild(element);
   }
 
-  const saveConfig = () => {
-
+  const uploadConfig = (event: React.ChangeEvent<HTMLInputElement>) => {
     try {
-      const fullConfig = JSON.parse(jsonText);
-      delete fullConfig.name;
+      const file = event.target.files?.[0];
+      if (!file) return
 
-      changeConfig('saveFullConfig', fullConfig)
-    } catch (e) {
-      return false;
+      if (file.type !== 'text/plain' && file.type !== 'application/json') {
+        throw new Error('Invalid file type');
+      }
+
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const text = e.target?.result?.toString();
+        if (!text) return
+
+        if (!jsoneditorRef.current) return
+
+        const newBotConfig = JSON.parse(text) as Config
+
+        if (!newBotConfig) {
+          throw new Error('Invalid JSON');
+        }
+
+        setBotConfig(newBotConfig)
+        event.target.value = '';
+        toastr.success('Config uploaded successfully')
+      };
+
+      reader.readAsText(file);
+    } catch (e: any) {
+      toastr.error(e.message || 'Error reading file')
     }
-  }
+  };
 
   return (
     <>
@@ -54,18 +95,19 @@ export const FullConfig: React.FC = () => {
         <Col>
           <Form>
             <h4>List of all events used by bot</h4>
-            <Button className='mb-3 me-3' onClick={download}>Download Config</Button>
-            <Button className='mb-3' variant='success' onClick={saveConfig}>Save Config</Button>
+            <div className='d-flex flex-wrap align-items-end mb-3 gap-3'>
 
-            <Form.Group className="mb-3" controlId="fullConfigInput">
-              <Form.Control
-                as="textarea"
-                rows={30}
-                value={jsonText}
-                onChange={(e) => setJsonText(e.target.value)}
-              />
-            </Form.Group>
+              <div>
+                <Button onClick={downloadConfig}>Download Config</Button>
+              </div>
 
+              <Form.Group controlId="upload">
+                <Form.Label>Upload Config</Form.Label>
+                <Form.Control type="file" onChange={uploadConfig} accept=".json,text/plain" />
+              </Form.Group>
+            </div>
+
+            <div id="jsoneditor" ref={editorRef}></div>
           </Form>
         </Col>
       </Row>

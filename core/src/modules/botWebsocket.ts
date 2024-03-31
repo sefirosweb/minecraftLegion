@@ -72,28 +72,8 @@ const connect = async () => {
   socket.on('changeConfig', (config) => {
     const setConfigurations: Record<string, (...args: any) => void> = {}
  
-    setConfigurations['changeChestArea'] = (value) => {
-      const chestArea = bot.config.chestAreas
-      chestArea[value.id] = value.chestArea
-      bot.config.chestAreas = chestArea
-    }
-
-    setConfigurations['deleteChestArea'] = (value) => {
-      const chestArea = bot.config.chestAreas
-      chestArea.splice(value, 1)
-      bot.config.chestAreas = chestArea
-    }
-
     setConfigurations['saveFullConfig'] = (value) => {
       bot.config = value
-    }
-
-
-    try {
-      setConfigurations[config.configToChange](config.value)
-    } catch (e) {
-      console.error('Error on saving configuration')
-      console.error(e)
     }
 
     saveBotConfig()
