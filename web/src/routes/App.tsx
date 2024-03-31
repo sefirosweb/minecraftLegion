@@ -9,7 +9,7 @@ const Dashboard = lazy(() => import("@/pages/Dashboard").then((module) => ({ def
 const Masterlist = lazy(() => import("@/pages/Masterlist").then((module) => ({ default: module.Masterlist })))
 const Chests = lazy(() => import("@/pages/Chests").then((module) => ({ default: module.Chests })))
 const Portals = lazy(() => import("@/pages/Portals").then((module) => ({ default: module.Portals })))
-const GeneralConfig = lazy(() => import("@/pages/ConfigureBot/GeneralConfig").then((module) => ({ default: module.GeneralConfig })))
+const GeneralConfig = lazy(() => import("@/pages/ConfigureBot/GeneralConfig/GeneralConfig").then((module) => ({ default: module.GeneralConfig })))
 const ItemsToBeReady = lazy(() => import("@/pages/ConfigureBot/ItemsToBeReady").then((module) => ({ default: module.ItemsToBeReady })))
 const ConfigurebotChests = lazy(() => import("@/pages/ConfigureBot/Chests/ConfigurebotChests").then((module) => ({ default: module.ConfigurebotChests })));
 const Combat = lazy(() => import("@/pages/ConfigureBot/Combat").then((module) => ({ default: module.Combat })))
