@@ -17,7 +17,7 @@ const GuardJob = lazy(() => import("@/pages/ConfigureBot/GuardJob").then((module
 const MinerJob = lazy(() => import("@/pages/ConfigureBot/MinerJob").then((module) => ({ default: module.MinerJob })))
 const FarmerJob = lazy(() => import("@/pages/ConfigureBot/FarmerJob/FarmerJob").then((module) => ({ default: module.FarmerJob })))
 const BreederJob = lazy(() => import("@/pages/ConfigureBot/BreederJob/BreederJob").then((module) => ({ default: module.BreederJob })))
-const SorterJob = lazy(() => import("@/pages/ConfigureBot/SorterJob").then((module) => ({ default: module.SorterJob })))
+const SorterJob = lazy(() => import("@/pages/ConfigureBot/SorterJob/SorterJob").then((module) => ({ default: module.SorterJob })))
 const ProcessList = lazy(() => import("@/pages/ConfigureBot/ProcessList").then((module) => ({ default: module.ProcessList })))
 const FullConfig = lazy(() => import("@/pages/ConfigureBot/FullConfig").then((module) => ({ default: module.FullConfig })))
 const ConfigureBotLayout = lazy(() => import("@/pages/ConfigureBot/ConfigureBotLayout").then((module) => ({ default: module.ConfigureBotLayout })));

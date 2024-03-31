@@ -44,7 +44,7 @@ export const LayerCoords: React.FC<Props> = (props) => {
 
     return (
         <Row>
-            <Form.Group controlId='yLayerForm' as={Col} sm="4" md="3" lg="2">
+            <Form.Group controlId={`yLayerForm_${area.uuid}`} as={Col} sm="4" md="3" lg="2">
                 <Form.Label><span className='badge bg-warning text-dark'>Y Layer</span></Form.Label>
                 <Form.Control
                     type="number"
@@ -54,7 +54,7 @@ export const LayerCoords: React.FC<Props> = (props) => {
                 />
             </Form.Group>
 
-            <Form.Group controlId='xStartForm' as={Col} sm="4" md="3" lg="2">
+            <Form.Group controlId={`xStartForm_${area.uuid}`} as={Col} sm="4" md="3" lg="2">
                 <Form.Label><span className='badge bg-primary text-white'>X Start</span></Form.Label>
                 <Form.Control
                     type="number"
@@ -64,7 +64,7 @@ export const LayerCoords: React.FC<Props> = (props) => {
                 />
             </Form.Group>
 
-            <Form.Group controlId='zStartForm' as={Col} sm="4" md="3" lg="2">
+            <Form.Group controlId={`zStartForm_${area.uuid}`} as={Col} sm="4" md="3" lg="2">
                 <Form.Label><span className='badge bg-secondary text-white'>Z Start</span></Form.Label>
                 <Form.Control
                     type="number"
@@ -74,7 +74,7 @@ export const LayerCoords: React.FC<Props> = (props) => {
                 />
             </Form.Group>
 
-            <Form.Group controlId='xEndForm' as={Col} sm="4" md="3" lg="2">
+            <Form.Group controlId={`xEndForm_${area.uuid}`} as={Col} sm="4" md="3" lg="2">
                 <Form.Label><span className='badge bg-primary text-white'>X End</span></Form.Label>
                 <Form.Control
                     type="number"
@@ -84,7 +84,7 @@ export const LayerCoords: React.FC<Props> = (props) => {
                 />
             </Form.Group>
 
-            <Form.Group controlId='zEndForm' as={Col} sm="4" md="3" lg="2">
+            <Form.Group controlId={`zEndForm_${area.uuid}`} as={Col} sm="4" md="3" lg="2">
                 <Form.Label><span className='badge bg-secondary text-white'>Z End</span></Form.Label>
                 <Form.Control
                     type="number"

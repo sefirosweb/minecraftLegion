@@ -14,6 +14,7 @@ export const FarmerJob: React.FC = () => {
       uuid: uuidv4(),
       plant: "",
       layer: {
+        uuid: uuidv4(),
         xEnd: 0,
         xStart: 0,
         yLayer: 0,
