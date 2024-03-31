@@ -93,72 +93,62 @@ export default class BehaviorWithdrawItemChest implements StateBehavior {
   }
 
   withdrawItem(container: Chest): Promise<void> {
-    return new Promise((resolve, reject) => {
-      if (this.items.length === 0) {
-        resolve()
-        return
-      }
-      const itemToWithdraw: ChestTransaction = this.items.shift() as ChestTransaction
+    if (this.items.length === 0) {
+      return Promise.resolve()
+    }
 
-      const foundItem = itemToWithdraw.id !== undefined
-        ? container.containerItems().find(i => i.type === itemToWithdraw.id)
-        : container.containerItems().find(i => itemToWithdraw.name && i.name.includes(itemToWithdraw.name))
+    const itemToWithdraw: ChestTransaction = this.items.shift() as ChestTransaction
+    if (itemToWithdraw.fromSlot !== undefined) {
+      return this.withdrawItemFromSlot(itemToWithdraw, container)
+    }
 
-      if (!foundItem) {
-        this.withdrawItem(container)
-          .then(() => {
-            resolve()
-          })
-          .catch(err => {
-            reject(err)
-          })
-        return
-      }
+    const foundItems = itemToWithdraw.id !== undefined
+      ? container.containerItems().filter(i => i.type === itemToWithdraw.id)
+      : container.containerItems().filter(i => itemToWithdraw.name && i.name.includes(itemToWithdraw.name))
 
-      const quantity = foundItem.count < itemToWithdraw.quantity ? foundItem.count : itemToWithdraw.quantity
+    if (foundItems.length === 0) {
+      return this.withdrawItem(container)
+    }
 
-      if (itemToWithdraw.fromSlot !== undefined) {
+    const totalItems = foundItems.reduce((acc, item) => acc + item.count, 0)
+    const quantity = totalItems < itemToWithdraw.quantity ? totalItems : itemToWithdraw.quantity
 
-        const options: TransferOptions = {
-          // @ts-ignore pending to fix from mineflater
-          windows: container,
-          itemType: foundItem.type,
-          metadata: null,
-          count: quantity,
-          sourceStart: itemToWithdraw.fromSlot,
-          sourceEnd: itemToWithdraw.fromSlot + 1,
-          destStart: container.inventoryStart,
-          destEnd: container.inventoryEnd
-        }
 
-        this.bot.transfer(options)
-          .then(() => {
-            this.withdrawItem(container)
-              .then(() => {
-                resolve()
-              })
-              .catch(err => {
-                reject(err)
-              })
-          })
-          .catch((err: Error) => {
-            reject(err)
-          })
-      } else {
-        container.withdraw(foundItem.type, null, quantity)
-          .then(() => {
-            this.withdrawItem(container)
-              .then(() => {
-                resolve()
-              })
-              .catch(err => {
-                reject(err)
-              })
-          })
-          .catch((err: Error) => {
-            reject(err)
-          })
-      }
-    })
+    return container.withdraw(foundItems[0].type, null, quantity)
+      .then(() => this.withdrawItem(container))
+      .catch((err: Error) => Promise.reject(err))
+  }
+
+  withdrawItemFromSlot(itemToWithdraw: ChestTransaction, container: Chest): Promise<void> {
+
+    if (itemToWithdraw.fromSlot === undefined) {
+      return Promise.reject(new Error('No slot to withdraw'))
+    }
+
+    const foundItem = itemToWithdraw.id !== undefined
+      ? container.containerItems().find(i => i.type === itemToWithdraw.id)
+      : container.containerItems().find(i => itemToWithdraw.name && i.name.includes(itemToWithdraw.name))
+
+    if (!foundItem) {
+      return this.withdrawItem(container)
+    }
+
+    const quantity = foundItem.count < itemToWithdraw.quantity ? foundItem.count : itemToWithdraw.quantity
+
+    const options: TransferOptions = {
+      // @ts-ignore pending to fix from mineflater
+      windows: container,
+      itemType: foundItem.type,
+      metadata: null,
+      count: quantity,
+      sourceStart: itemToWithdraw.fromSlot,
+      sourceEnd: itemToWithdraw.fromSlot + 1,
+      destStart: container.inventoryStart,
+      destEnd: container.inventoryEnd
+    }
+
+    return this.bot.transfer(options)
+      .then(() => this.withdrawItem(container))
+      .catch((err: Error) => Promise.reject(err))
   }
 }

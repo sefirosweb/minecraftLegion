@@ -51,7 +51,7 @@ const goSleepFunction = function (bot: Bot, targets: LegionStateMachineTargets) 
       parent: start,
       child: goSleepArea,
       onTransition: () => {
-        targets.position = bot.config.sleepArea?.clone() ?? new Vec3(0, 80, 0)
+        targets.position = bot.config.sleepArea?.clone()
       },
       shouldTransition: () => true,
     }),
