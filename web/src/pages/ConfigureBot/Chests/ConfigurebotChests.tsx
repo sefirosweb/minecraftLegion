@@ -5,6 +5,7 @@ import { Chest as ChestType, Item } from "base-types";
 import { Vec3 } from "vec3";
 import { v4 as uuidv4 } from 'uuid';
 import { Chest } from "./Chest";
+import axios from "axios";
 
 
 export const ConfigurebotChests: React.FC = () => {
@@ -84,7 +85,12 @@ export const ConfigurebotChests: React.FC = () => {
 
     newChests[index] = chest
     updateConfig("chests", newChests)
+  }
 
+  const handleCopyChestToAllBots = () => {
+    if (window.confirm("Are you sure you want to copy the chest configuration to all bots?")) {
+      axios.post(`/api/copy_chest_to_all_bots`, { chests: botConfig.chests })
+    }
   }
 
   return (
@@ -103,6 +109,10 @@ export const ConfigurebotChests: React.FC = () => {
         checked={botConfig.canCraftItemWithdrawChest}
         onChange={() => updateConfig("canCraftItemWithdrawChest", !botConfig.canCraftItemWithdrawChest)}
       />
+
+      <div className="mb-3">
+        <Button onClick={handleCopyChestToAllBots}>Copy chest configuration to all bots</Button>
+      </div>
 
       <Row>
         <Col>
