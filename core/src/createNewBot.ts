@@ -7,6 +7,9 @@ import mineflayerPathfinder from 'mineflayer-pathfinder'
 import hawkEye from 'minecrafthawkeye'
 import StartStateMachine from '@/NestedStateModules/startStateMachine'
 import injectBotConfig from "./modules/botConfig";
+import { Vec3 } from "vec3";
+import { Config, defaultConfig } from "base-types";
+import { cloneDeep } from 'lodash'
 
 export type Props = {
   botName?: string;
@@ -16,6 +19,7 @@ export type Props = {
   customStart?: boolean,
   version?: string
 }
+
 
 export const createNewBot = (props: Props): Bot => {
   const {
@@ -33,6 +37,36 @@ export const createNewBot = (props: Props): Bot => {
     port: port,
     version
   })
+
+  const botConfig = new Proxy(cloneDeep(defaultConfig), {
+    set: <K extends keyof Config>(target: Config, property: K, value: Config[K]) => {
+      if (typeof property === 'string') {
+
+        if (property === 'sleepArea') {
+          // @ts-ignore
+          value = !value || isNaN(parseFloat(value.x)) || isNaN(parseFloat(value.y)) || isNaN(parseFloat(value.z)) ? undefined : new Vec3(parseFloat(value.x), parseFloat(value.y), parseFloat(value.z))
+        }
+
+        if (property === 'patrol') {
+          // @ts-ignore
+          value = value.map(p => new Vec3(p.x, p.y, p.z));
+        }
+
+        if (property === 'chests') {
+          // @ts-ignore
+          value = value.map(c => ({
+            ...c,
+            position: new Vec3(c.position.x, c.position.y, c.position.z)
+          }))
+        }
+
+        target[property] = value;
+      }
+      return true;
+    }
+  });
+
+  bot.config = botConfig
 
   botWebsocket.loadBot(bot);
 

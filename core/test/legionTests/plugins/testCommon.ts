@@ -67,7 +67,7 @@ export default (bot: Bot) => {
     bot.chat('/kill @e[type=!player]')
     bot.chat('/gamerule doMobLoot true')
     bot.chat('/gamerule randomTickSpeed 20')
-    bot.config = defaultConfig
+    Object.assign(bot.config, defaultConfig)
     bot.emit('reloadBotConfig')
     await becomeCreative()
     await clearInventory()

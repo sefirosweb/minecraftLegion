@@ -8,7 +8,7 @@ import { Entity } from 'prismarine-entity'
 import { Bot } from 'mineflayer'
 import { connectBotToServer } from '@/modules/connectSocket'
 import { webSocketQueue } from './queues'
-import { fixConfigTypes, saveBotConfig } from './botConfig'
+import { saveBotConfig } from './botConfig'
 
 let socket: Socket
 let friends: Array<BotFriends> = []
@@ -73,7 +73,7 @@ const connect = async () => {
   })
 
   socket.on('saveConfig', ({ botConfig }: { botConfig: Config }, response) => {
-    bot.config = botConfig
+    Object.assign(bot.config, botConfig)
     saveBotConfig()
     response({ success: true });
   })

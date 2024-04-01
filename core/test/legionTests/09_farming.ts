@@ -139,7 +139,7 @@ describe('09 General farming', function () {
     bot.creative.stopFlying()
     bot.test.becomeSurvival()
 
-    bot.config = config
+    Object.assign(bot.config, config)
     bot.emit('reloadBotConfig')
   })
 

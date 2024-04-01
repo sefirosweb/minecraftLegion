@@ -47,7 +47,7 @@ describe('01 Make hole in liquid & lava', function () {
     bot.creative.stopFlying()
     bot.test.becomeSurvival()
 
-    bot.config = config
+    Object.assign(bot.config, config)
     bot.emit('reloadBotConfig')
   })
 

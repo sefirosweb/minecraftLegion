@@ -41,7 +41,7 @@ describe('01 Mining in water', function () {
       minerCords
     }
 
-    bot.config = config
+    Object.assign(bot.config, config)
     bot.emit('reloadBotConfig')
   })
 

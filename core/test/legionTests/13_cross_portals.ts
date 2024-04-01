@@ -20,7 +20,7 @@ describe('12 Cross the portals', function () {
 
     bot.creative.stopFlying()
     bot.test.becomeSurvival()
-    bot.config = defaultConfig
+    Object.assign(bot.config, defaultConfig)
     bot.emit('reloadBotConfig')
   })
 
@@ -67,7 +67,7 @@ describe('12 Cross the portals', function () {
     }
 
     bot.once('checkPortalsOnSpawn', async () => {
-      bot.config = config
+      Object.assign(bot.config, config)
       bot.emit('reloadBotConfig')
     })
 
@@ -76,7 +76,7 @@ describe('12 Cross the portals', function () {
       bot.once('spawn', async () => {
         bot.once('checkPortalsOnSpawn', async () => {
 
-          bot.config = defaultConfig
+          Object.assign(bot.config, defaultConfig)
           bot.emit('reloadBotConfig')
 
           setTimeout(() => {
@@ -134,14 +134,14 @@ describe('12 Cross the portals', function () {
 
 
     bot.once('checkPortalsOnSpawn', async () => {
-      bot.config = config
+      Object.assign(bot.config, config)
       bot.emit('reloadBotConfig')
     })
 
     return new Promise((resolve) => {
       bot.once('spawn', () => {
         bot.once('checkPortalsOnSpawn', async () => {
-          bot.config = defaultConfig
+          Object.assign(bot.config, defaultConfig)
           bot.emit('reloadBotConfig')
 
           setTimeout(() => {

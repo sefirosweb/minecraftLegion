@@ -47,7 +47,7 @@ describe('02 Make basic tunnel', function () {
     bot.creative.stopFlying()
     bot.test.becomeSurvival()
 
-    bot.config = config
+    Object.assign(bot.config, config)
     bot.emit('reloadBotConfig')
   })
 
@@ -71,7 +71,7 @@ describe('02 Make basic tunnel', function () {
       minerCords: newMinerCords
     }
 
-    bot.config = newConfig
+    Object.assign(bot.config, newConfig)
     bot.emit('reloadBotConfig')
     return new Promise((resolve) => {
       bot.once('finishedJob', () => resolve())
@@ -94,7 +94,7 @@ describe('02 Make basic tunnel', function () {
       minerCords: newMinerCords
     }
 
-    bot.config = newConfig
+    Object.assign(bot.config, newConfig)
     bot.emit('reloadBotConfig')
     return new Promise((resolve) => {
       bot.once('finishedJob', () => resolve())
@@ -117,7 +117,7 @@ describe('02 Make basic tunnel', function () {
       minerCords: newMinerCords
     }
 
-    bot.config = newConfig
+    Object.assign(bot.config, newConfig)
     bot.emit('reloadBotConfig')
     return new Promise((resolve) => {
       bot.once('finishedJob', () => resolve())

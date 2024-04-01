@@ -93,7 +93,7 @@ describe('11 Breeder animals', function () {
     bot.creative.stopFlying()
     bot.test.becomeSurvival()
 
-    bot.config = config
+    Object.assign(bot.config, config)
     bot.emit('reloadBotConfig')
   }
 
@@ -135,7 +135,7 @@ describe('11 Breeder animals', function () {
           }
 
           if (finished) {
-            bot.config = defaultConfig
+            Object.assign(bot.config, defaultConfig)
             bot.emit('reloadBotConfig')
             clearInterval(interval)
             resolve()

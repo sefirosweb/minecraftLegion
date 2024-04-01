@@ -75,7 +75,7 @@ describe('10 Butcher animals', function () {
     bot.creative.stopFlying()
     bot.test.becomeSurvival()
 
-    bot.config = config
+    Object.assign(bot.config, config)
     bot.emit('reloadBotConfig')
   }
 
@@ -125,7 +125,7 @@ describe('10 Butcher animals', function () {
           })
 
           if (foundAll) {
-            bot.config = defaultConfig
+            Object.assign(bot.config, defaultConfig)
             bot.emit('reloadBotConfig')
             clearInterval(intervalFeedCows)
             clearInterval(interval)

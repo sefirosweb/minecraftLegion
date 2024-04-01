@@ -51,7 +51,7 @@ describe('03 Make tunnel in all directions', function () {
       minerCords
     }
 
-    bot.config = config
+    Object.assign(bot.config, config)
     bot.emit('reloadBotConfig')
 
     return new Promise((resolve) => {
@@ -86,7 +86,7 @@ describe('03 Make tunnel in all directions', function () {
       minerCords
     }
 
-    bot.config = config
+    Object.assign(bot.config, config)
     bot.emit('reloadBotConfig')
 
 
@@ -122,7 +122,7 @@ describe('03 Make tunnel in all directions', function () {
       minerCords
     }
 
-    bot.config = config
+    Object.assign(bot.config, config)
     bot.emit('reloadBotConfig')
 
     return new Promise((resolve) => {
@@ -157,7 +157,7 @@ describe('03 Make tunnel in all directions', function () {
       minerCords
     }
 
-    bot.config = config
+    Object.assign(bot.config, config)
     bot.emit('reloadBotConfig')
 
     return new Promise((resolve) => {
