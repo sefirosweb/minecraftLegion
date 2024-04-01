@@ -6,6 +6,7 @@ import BehaviorLoadConfig from '@/BehaviorModules/BehaviorLoadConfig'
 import StartWork from '@/NestedStateModules/startWorkFunction'
 import Commands from '@/NestedStateModules/commandsFunction'
 import GoSleep from '@/NestedStateModules/goSleepFunction'
+import GoChestsFunctions from '@/NestedStateModules/getReady/goChestsFunctions'
 import { Bot } from 'mineflayer'
 
 function deathFunction(bot: Bot, targets: LegionStateMachineTargets) {
@@ -21,6 +22,10 @@ function deathFunction(bot: Bot, targets: LegionStateMachineTargets) {
   const commands = Commands(bot, targets)
   commands.x = 325
   commands.y = 263
+
+  const goChests = GoChestsFunctions(bot, targets)
+  goChests.x = 725
+  goChests.y = 413
 
   const playerEntity = new BehaviorGetPlayer(bot, targets)
   playerEntity.stateName = 'Search Player'
@@ -124,12 +129,15 @@ function deathFunction(bot: Bot, targets: LegionStateMachineTargets) {
 
     new StateTransition({ // 10
       parent: goSleep,
-      child: startWork,
+      child: goChests,
       shouldTransition: () => goSleep.isFinished() || targets.isNight === false
     }),
 
-
-
+    new StateTransition({ // 11
+      parent: goChests,
+      child: startWork,
+      shouldTransition: () => goChests.isFinished()
+    }),
   ]
 
   function reloadTrigger() {
