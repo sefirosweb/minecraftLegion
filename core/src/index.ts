@@ -5,8 +5,8 @@ import { connectCore } from "@/modules/connectSocket";
 const index = () => {
 
   const botsToStart: botType[] = [
-    { username: 'MinerTest' },
-    { username: 'MinerTestB' },
+    // { username: 'MinerTest' },
+    // { username: 'MinerTestB' },
     // { username: 'Type' },
 
     // { username: "MinerY1" },
