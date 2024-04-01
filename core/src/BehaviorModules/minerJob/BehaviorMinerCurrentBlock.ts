@@ -12,7 +12,7 @@ export default class BehaviorMinerCurrentBlock implements StateBehavior {
   isLayerFinished: boolean
   firstBlockOnLayer: boolean
 
-  blockInValidType: Array<string>
+  ignoredBlocksToMine: Array<string>
   minerCords: MineCordsConfig | undefined
 
   yCurrent: number | undefined
@@ -38,7 +38,7 @@ export default class BehaviorMinerCurrentBlock implements StateBehavior {
     this.targets = targets
     this.stateName = 'BehaviorMinerCurrentBlock'
 
-    this.blockInValidType = ['air', 'cave_air', 'lava', 'water', 'bubble_column', 'bedrock', 'torch', 'wall_torch', 'redstone_torch', 'redstone_wall_torch', 'soul_torch', 'soul_wall_torch', 'lantern']
+    this.ignoredBlocksToMine = ['air', 'cave_air', 'lava', 'water', 'bubble_column', 'bedrock', 'torch', 'wall_torch', 'redstone_torch', 'redstone_wall_torch', 'soul_torch', 'soul_wall_torch', 'lantern', 'snow']
 
     this.isLayerFinished = false
     this.isEndFinished = false
@@ -185,7 +185,7 @@ export default class BehaviorMinerCurrentBlock implements StateBehavior {
       return true
     }
 
-    const isValidBlockType = this.blockInValidType.find(b => b === block.name)
+    const isValidBlockType = this.ignoredBlocksToMine.find(b => b === block.name)
     if (isValidBlockType === undefined &&
       (
         allBlocks || ['sand', 'gravel'].includes(block.name)
