@@ -1,24 +1,22 @@
-import React, { Suspense, useContext } from "react";
-import { Button, Card, Col, Nav, Row } from 'react-bootstrap'
+import React, { Suspense, useContext, useState } from "react";
+import { Button, Card, Col, Modal, Nav, Row } from 'react-bootstrap'
 import { Link, NavLink, Outlet } from 'react-router-dom'
 import toastr from 'toastr'
 import { RenderBotsOnlineList } from '@/components'
-// import { useSendActionSocket } from "@/hooks/useSendActionSocket";
 import { BotSelectedContext } from "./ConfigurationContext";
 import { LoadingPage } from "../LoadingPage";
 import axios from "axios";
+import { useStore } from '@/hooks/useStore'
+
 export const ConfigureBotLayout: React.FC = () => {
-  const { bot, botConfig } = useContext(BotSelectedContext);
-  // const sendAction = useSendActionSocket()
+  const botsOnline = useStore(state => state.botsOnline)
+  const { bot, botConfig, setBotConfig } = useContext(BotSelectedContext);
+  const [showModal, setShowModal] = useState(false)
 
   const handleSaveButton = () => {
-    // sendAction('action', {
-    //   type: "reloadConfig",
-    //   value: "",
-    // })
     axios
       .post(`/api/save_bot_config/${bot.socketId}`, { botConfig })
-      .then((response) => {
+      .then(() => {
         toastr.success('Config saved')
       })
       .catch((error) => {
@@ -43,6 +41,9 @@ export const ConfigureBotLayout: React.FC = () => {
                 </Button>
               </Link>
 
+              <Button onClick={() => setShowModal(true)} variant='secondary' className="me-2 mb-1">
+                Copy config from other bot
+              </Button>
 
               <Button onClick={handleSaveButton} variant='success' className="mb-1">
                 Save
@@ -86,6 +87,37 @@ export const ConfigureBotLayout: React.FC = () => {
           <RenderBotsOnlineList />
         </Col>
       </Row>
+
+      <Modal
+        show={showModal}
+        onHide={() => setShowModal(false)}
+        backdrop="static"
+        keyboard={true}
+      >
+        <Modal.Header>
+          <Modal.Title>Select bot origin</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <div className="d-grid gap-2">
+            {botsOnline.map((bot) => (
+              <Button key={bot.socketId} onClick={() => {
+                axios
+                  .get(`/api/get_bot_config/${bot.socketId}`)
+                  .then((response) => {
+                    const config = response.data
+                    setBotConfig(config)
+                    setShowModal(false)
+                  })
+              }}>
+                {bot.name}
+              </Button>
+            ))}
+          </div>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShowModal(false)}>Close</Button>
+        </Modal.Footer>
+      </Modal>
     </>
   )
 }

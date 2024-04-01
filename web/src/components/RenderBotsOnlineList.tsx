@@ -12,9 +12,9 @@ export const RenderBotsOnlineList: React.FC = () => {
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        navigate("/dashboard");
-      }
+      // if (event.key === 'Escape') {
+        // navigate("/dashboard");
+      // }
     }
 
     window.addEventListener('keydown', handleKeyDown);
