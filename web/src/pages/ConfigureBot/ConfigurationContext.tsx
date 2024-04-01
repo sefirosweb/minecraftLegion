@@ -25,9 +25,9 @@ export const ConfigurationContextProvider: React.FC = () => {
   const bot = useGetSelectedBot()
 
   const { data: botConfigFromServer, isLoading } = useQuery<Config>({
-    enabled: bot?.socketId !== undefined,
-    queryKey: ['botConfig'],
-    queryFn: () => axios.get<Config>(`/api/get_bot_config/${bot?.socketId}`).then((response) => response.data),
+    enabled: selectedSocketId !== undefined,
+    queryKey: ['botConfig', selectedSocketId],
+    queryFn: () => axios.get<Config>(`/api/get_bot_config/${selectedSocketId}`).then((response) => response.data),
   })
 
   useEffect(() => {
