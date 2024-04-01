@@ -20,11 +20,12 @@ type Props = {
   disabledMovePrev: boolean
   handleDeleteChest: () => void
   handleChangeChest: (chest: TypeChest) => void
+  handleExcludeItemInChest: () => void
 }
 
 
 export const Chest: React.FC<Props> = (props) => {
-  const { uuid, chest, handleMovePosNext, handleMovePosPrev, disabledMoveNext, disabledMovePrev, handleDeleteChest, handleChangeChest } = props
+  const { uuid, chest, handleMovePosNext, handleMovePosPrev, disabledMoveNext, disabledMovePrev, handleDeleteChest, handleChangeChest, handleExcludeItemInChest } = props
   const { bot } = useContext(BotSelectedContext);
   const [master] = useStore(state => [state.master, state.socket])
 
@@ -34,7 +35,7 @@ export const Chest: React.FC<Props> = (props) => {
 
   const handleInsertItemInChest = () => {
     const qty = Number(quantity)
-    if (isNaN(qty) || qty <= 0 || !itemName) return
+    if (isNaN(qty) || qty < 0 || !itemName) return
 
     const newChest = structuredClone(chest)
     const item = newChest.items.find(item => item.name === itemName.value.name)
@@ -194,7 +195,10 @@ export const Chest: React.FC<Props> = (props) => {
 
         <Col xs={6} lg={2}>
           <div className="d-flex justify-content-center mt-3">
-            <Button onClick={handleInsertItemInChest}>Insert Item</Button>
+            <div className="d-grid gap-2">
+              {chest.type === 'depositAll' && <Button variant="secondary" size="sm" onClick={handleExcludeItemInChest}>Exclude items</Button>}
+              <Button size="sm" onClick={handleInsertItemInChest}>Insert Item</Button>
+            </div>
           </div>
         </Col>
       </Row>

@@ -1,7 +1,7 @@
 import { Button, Col, Form, ListGroup, Row } from "react-bootstrap";
 import React, { useContext } from "react";
 import { BotSelectedContext } from "../ConfigurationContext";
-import { Chest as ChestType } from "base-types";
+import { Chest as ChestType, Item } from "base-types";
 import { Vec3 } from "vec3";
 import { v4 as uuidv4 } from 'uuid';
 import { Chest } from "./Chest";
@@ -55,6 +55,38 @@ export const ConfigurebotChests: React.FC = () => {
     updateConfig("chests", newChests)
   }
 
+  const handleExcludeItemInChest = (index: number) => {
+    const newChests = structuredClone(chests)
+    const chest = newChests[index]
+    const chestsToAdd = newChests.filter(c => c.type !== 'depositAll')
+    const itemsToAdd = chestsToAdd.flatMap(c => c.items)
+    const itemsToAddUnique: Array<Item> = []
+
+    itemsToAdd.forEach(item => {
+      const index = itemsToAddUnique.findIndex(i => i.name === item.name)
+      if (index === -1) {
+        itemsToAddUnique.push(item)
+      } else {
+        if (itemsToAddUnique[index].quantity < item.quantity) {
+          itemsToAddUnique[index].quantity = item.quantity
+        }
+      }
+    })
+
+    itemsToAddUnique.forEach(item => {
+      const index = chest.items.findIndex(i => i.name === item.name)
+      if (index !== -1) {
+        chest.items[index].quantity = item.quantity
+      } else {
+        chest.items.push(item)
+      }
+    })
+
+    newChests[index] = chest
+    updateConfig("chests", newChests)
+
+  }
+
   return (
     <>
       <Form.Check
@@ -80,6 +112,7 @@ export const ConfigurebotChests: React.FC = () => {
             <ListGroup.Item variant="warning">Deposit: only the items selected</ListGroup.Item>
             <ListGroup.Item variant="danger">Deposit all: excluding item to deposit selected</ListGroup.Item>
             <ListGroup.Item variant="dark">(!) The priority of chest is important for deposit / withdraw items in order</ListGroup.Item>
+            <ListGroup.Item variant="dark">(!) Button "Exclude items" add all items from "witdrah" and "deposit" automatically, this is to avoid to deposit items in this chest when you want deposit the "rest" of items</ListGroup.Item>
           </ListGroup>
         </Col>
       </Row>
@@ -95,6 +128,7 @@ export const ConfigurebotChests: React.FC = () => {
           disabledMovePrev={index === 0}
           handleDeleteChest={() => handleDeleteChest(index)}
           handleChangeChest={(chest) => handleChangeChest(index, chest)}
+          handleExcludeItemInChest={() => handleExcludeItemInChest(index)}
         />
       ))}
 
