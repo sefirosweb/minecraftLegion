@@ -7,6 +7,20 @@ import _ from 'lodash'
 
 let bot: Bot
 
+export const fixConfigTypes = () => {
+  if (bot.config.sleepArea) {
+    bot.config.sleepArea = new Vec3(bot.config.sleepArea.x, bot.config.sleepArea.y, bot.config.sleepArea.z)
+  }
+
+  // Transform JSON raw data into Object types
+  bot.config.patrol = bot.config.patrol.map(p => new Vec3(p.x, p.y, p.z))
+  bot.config.chests = bot.config.chests.map(c => ({
+    ...c,
+    position: new Vec3(c.position.x, c.position.y, c.position.z)
+  }))
+
+}
+
 export default (_bot: Bot, botName: string) => {
   bot = _bot
 
@@ -28,23 +42,14 @@ export default (_bot: Bot, botName: string) => {
 
   bot.config = botConfig
 
-  if (bot.config.sleepArea) {
-    bot.config.sleepArea = new Vec3(bot.config.sleepArea.x, bot.config.sleepArea.y, bot.config.sleepArea.z)
-  }
-
-  // Transform JSON raw data into Object types
-  bot.config.patrol = bot.config.patrol.map(p => new Vec3(p.x, p.y, p.z))
-  bot.config.chests = bot.config.chests.map(c => ({
-    ...c,
-    position: new Vec3(c.position.x, c.position.y, c.position.z)
-  }))
-
   if (save) {
     saveBotConfig(botName)
   }
 }
 
 export const saveBotConfig = async (botName?: string) => {
+  fixConfigTypes()
+
   const dir = path.join(__dirname, '..', 'botConfig')
 
   try {

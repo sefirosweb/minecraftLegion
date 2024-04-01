@@ -8,7 +8,7 @@ import { Entity } from 'prismarine-entity'
 import { Bot } from 'mineflayer'
 import { connectBotToServer } from '@/modules/connectSocket'
 import { webSocketQueue } from './queues'
-import { saveBotConfig } from './botConfig'
+import { fixConfigTypes, saveBotConfig } from './botConfig'
 
 let socket: Socket
 let friends: Array<BotFriends> = []
