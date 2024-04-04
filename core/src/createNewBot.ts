@@ -36,7 +36,7 @@ export const createNewBot = (props: Props): Bot => {
     host: server,
     port: port,
     version,
-    checkTimeoutInterval: 1000 * 60 * 5,
+    checkTimeoutInterval: 10000 * 60 * 5,
   })
 
   const botConfig = new Proxy(cloneDeep(defaultConfig), {
