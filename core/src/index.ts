@@ -1,35 +1,19 @@
 import { botType } from "base-types";
 import { startBot } from "@/startBot";
 import { connectCore } from "@/modules/connectSocket";
+import { botsToStart as botsToStartEnv } from "@/config";
 
 const index = () => {
+  connectCore()
 
-  const botsToStart: botType[] = [
-    // { username: 'MinerTest' },
-    // { username: 'MinerTestB' },
-    // { username: 'Type' },
+  const botsToStart: botType[] = [];
 
-    // { username: "MinerY1" },
-    // { username: "MinerY2" },
-    // { username: "MinerY3" },
-    // { username: "MinerY4" },
-    // { username: "MinerY5" },
-    // { username: "MinerY6" },
-    // { username: "MinerY7" },
-    // { username: "MinerY8" },
-
-    // { username: "MinerX+" },
-    // { username: "MinerX-" },
-    // { username: "MinerZ+" },
-    // { username: "MinerZ-" },
-    // { username: 'Breeder' },
-    // { username: 'Guard1' },
-    // { username: 'Guard2' },
-    // { username: 'Guard3' },
-    // { username: 'Guard1' },
-    // { username: 'Guard2' },
-    // { username: 'Guard3' },
-  ];
+  if (botsToStartEnv) {
+    const botsToStartEnvArray = botsToStartEnv.split(',');
+    botsToStartEnvArray.forEach((bot) => {
+      botsToStart.push({ username: bot });
+    });
+  }
 
   let i = 0;
   function runNextBot() {
@@ -44,8 +28,6 @@ const index = () => {
   }
 
   runNextBot();
-
-  connectCore()
 };
 
 

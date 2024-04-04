@@ -29,6 +29,7 @@ export const webServerPassword = process.env.WEB_SERVER_PASSWORD
 export const debugMode = process.env.DEBUG_MODE && process.env.DEBUG_MODE === "true" ? true : false
 export const customStart = process.env.CUSTOM_START && process.env.CUSTOM_START === "true" ? true : false
 export const autoRestart = process.env.AUTO_RESTART && process.env.AUTO_RESTART === "true" ? true : false
+export const botsToStart = process.env.BOTS_TO_START
 
 const config: ConfigEnviorementVariables = {
   environment,
