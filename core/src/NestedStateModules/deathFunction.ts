@@ -86,13 +86,20 @@ function deathFunction(bot: Bot, targets: LegionStateMachineTargets) {
     }),
 
     new StateTransition({ // 6
+      parent: goChests,
+      child: playerEntity,
+      name: 'Player say: hi',
+      shouldTransition: () => true
+    }),
+
+    new StateTransition({
       parent: playerEntity,
       child: commands,
       name: 'Transfer to sub nestered commands',
       shouldTransition: () => true
     }),
 
-    new StateTransition({ // 7
+    new StateTransition({
       parent: commands,
       child: loadConfig,
       onTransition: () => {
@@ -102,7 +109,7 @@ function deathFunction(bot: Bot, targets: LegionStateMachineTargets) {
       shouldTransition: () => commands.isFinished()
     }),
 
-    new StateTransition({ // 8
+    new StateTransition({
       parent: loadConfig,
       child: startWork,
       onTransition: () => {
@@ -118,7 +125,7 @@ function deathFunction(bot: Bot, targets: LegionStateMachineTargets) {
       shouldTransition: () => true
     }),
 
-    new StateTransition({ // 9
+    new StateTransition({
       parent: startWork,
       child: goSleep,
       onTransition: () => {
@@ -127,17 +134,19 @@ function deathFunction(bot: Bot, targets: LegionStateMachineTargets) {
       shouldTransition: () => bot.config.canSleep === true && targets.triedToSleep === false && targets.isNight === true
     }),
 
-    new StateTransition({ // 10
+    new StateTransition({
       parent: goSleep,
       child: goChests,
       shouldTransition: () => goSleep.isFinished() || targets.isNight === false
     }),
 
-    new StateTransition({ // 11
+    new StateTransition({
       parent: goChests,
       child: startWork,
       shouldTransition: () => goChests.isFinished()
     }),
+
+
   ]
 
   function reloadTrigger() {
@@ -154,6 +163,7 @@ function deathFunction(bot: Bot, targets: LegionStateMachineTargets) {
     transitions[3].trigger()
     transitions[4].trigger()
     transitions[5].trigger()
+    transitions[6].trigger()
     botWebsocket.emitCombat(false)
   }
 
