@@ -127,11 +127,14 @@ export const DrawChest: React.FC<Props> = (props) => {
                             </Row>
                         ))}
                     </div>
-                    <Canvas
-                        draw={draw}
-                        width={352}
-                        height={chest.slots.length === 27 ? 150 : 260}
-                    />
+
+                    <div style={{ overflowX: 'auto' }}>
+                        <Canvas
+                            draw={draw}
+                            width={352}
+                            height={chest.slots.length === 27 ? 150 : 260}
+                        />
+                    </div>
 
                 </Card.Body>
             </Card>

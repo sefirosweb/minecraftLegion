@@ -2,7 +2,7 @@ import { log } from "@/config";
 import { findBotBySocketId } from "@/libs/botStore";
 import { socketVariables } from "@/libs/socketVariables";
 import { io } from "@/server";
-import { sendBotsOnline } from "@/socketEmit/sendBotsOnline";
+import { sendBotsOnline, sendChests } from "@/socketEmit";
 import { BotsConnected } from "base-types"
 import { Socket } from "socket.io";
 
@@ -99,11 +99,7 @@ export default (socket: Socket) => {
 
                 const newChests = data.value
                 setChests(newChests);
-
-                io.to("usersLoged").emit("action", {
-                    type: "getChests",
-                    value: newChests,
-                });
+                sendChests()
                 break;
 
             case "getChests":
@@ -117,10 +113,13 @@ export default (socket: Socket) => {
 
                 const newPortals = data.value;
                 setPortals(newPortals)
-                io.to("usersLoged").emit("action", {
-                    type: "getPortals",
-                    value: newPortals,
-                });
+                io
+                    .to("web")
+                    .to("bot")
+                    .emit("action", {
+                        type: "getPortals",
+                        value: newPortals,
+                    });
                 break;
 
             case "getPortals":

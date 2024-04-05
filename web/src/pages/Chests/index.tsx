@@ -1,27 +1,32 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Card, CardGroup } from "react-bootstrap";
-import { DrawChest } from "./DrawChest";
-import { useSendActionSocket } from "@/hooks/useSendActionSocket";
 import { Chests as ChestsType } from "base-types";
-import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
+import { useStore } from "@/hooks/useStore";
+import { DrawChest } from "./DrawChest";
 
 export const Chests: React.FC = () => {
-  const { data: chests } = useQuery({
-    queryKey: ['chests'],
-    queryFn: () => axios.get<{ chests: ChestsType }>('/api/chests').then((data) => data.data.chests),
-    refetchInterval: 2000,
-  })
+  const [chests, setChests] = useState<ChestsType>({});
+  const [socket] = useStore(state => [state.socket])
 
+  useEffect(() => {
+    socket?.on('action', ({ type, value }: { type: string, value: ChestsType }) => {
+      if (type !== 'getChests') return;
+      setChests(value)
+    });
 
-  const sendAction = useSendActionSocket()
+    socket?.emit('sendAction', {
+      action: 'getChests',
+      value: ''
+    });
 
-  const deleteChest = (key: string) => {
-    if (window.confirm("Confirm delete chest?") === true) {
-      const newChests = { ...chests }
-      delete newChests[key]
-      sendAction('setChests', newChests)
+    return () => {
+      socket?.off("action");
     }
+  }, [setChests])
+
+  const deleteChest = (uuid: string) => {
+    axios.delete(`/api/chest/${uuid}`)
   }
 
   return (
