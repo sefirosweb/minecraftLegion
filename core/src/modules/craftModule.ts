@@ -220,6 +220,32 @@ const craftModule = (bot: Bot) => {
     return itemsToReturn
   }
 
+  const checkIfItemIsOtherChest = (item: Item, allItemsToPickUp: Array<ChestTransaction>, sharedChests: Chests) => {
+    Object.entries(sharedChests)
+      .forEach(([chestIndex, chest]) => {
+        chest.slots.every((slot, slotIndex) => {
+          if (item.quantity === 0) return false
+          if (!slot) return true
+          if (slot.name !== item.name) return true
+          if (slot.count <= 0) return true;
+
+          const quantity = slot.count < item.quantity ? slot.count : item.quantity
+          item.quantity -= quantity
+          slot.count -= quantity
+
+          allItemsToPickUp.push({
+            fromChest: chestIndex,
+            fromSlot: slotIndex,
+            id: slot.type,
+            quantity
+          })
+
+        })
+      })
+
+    return 0;
+  }
+
   const getItemsToPickUpBatch = (InputItemsToCraft: Array<Item>, InputSharedChests: Chests): GetItemsToPickUpBatch => {
     const itemsToCraft = _.cloneDeep(InputItemsToCraft)
     let sharedChests: Chests = _.cloneDeep(InputSharedChests)
@@ -232,6 +258,9 @@ const craftModule = (bot: Bot) => {
 
     itemsToCraft.forEach(itemToCraft => {
       if (!itemToCraft.name) return
+
+      checkIfItemIsOtherChest(itemToCraft, allItemsToPickUp, sharedChests)
+      if (itemToCraft.quantity === 0) return
 
       const resultItemToPickup = getItemsToPickUp(
         itemToCraft.name,

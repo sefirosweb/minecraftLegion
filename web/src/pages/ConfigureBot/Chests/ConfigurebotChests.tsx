@@ -97,13 +97,6 @@ export const ConfigurebotChests: React.FC = () => {
     <>
       <Form.Check
         type="switch"
-        id="firstPickUpItemsFromKnownChests"
-        label="Use a memorized chest first?"
-        checked={botConfig.firstPickUpItemsFromKnownChests}
-        onChange={() => updateConfig("firstPickUpItemsFromKnownChests", !botConfig.firstPickUpItemsFromKnownChests)}
-      />
-      <Form.Check
-        type="switch"
         id="canCraftItemWithdrawChest"
         label='Craft item if it is possible?'
         checked={botConfig.canCraftItemWithdrawChest}

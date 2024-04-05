@@ -25,7 +25,6 @@ export default class BehaviorLoadConfig implements StateBehavior {
   plantAreas: Config['plantAreas']
   itemsCanBeEat: Config['itemsCanBeEat']
   itemsToBeReady: Config['itemsToBeReady']
-  firstPickUpItemsFromKnownChests: Config['firstPickUpItemsFromKnownChests']
 
   constructor(bot: Bot, targets: LegionStateMachineTargets) {
     this.bot = bot
@@ -47,8 +46,6 @@ export default class BehaviorLoadConfig implements StateBehavior {
     this.plantAreas = []
     this.itemsCanBeEat = []
     this.itemsToBeReady = []
-    this.firstPickUpItemsFromKnownChests = false
-
   }
 
   onStateEntered() {

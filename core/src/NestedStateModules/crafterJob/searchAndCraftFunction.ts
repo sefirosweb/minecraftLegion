@@ -22,7 +22,7 @@ export default (bot: Bot, targets: LegionStateMachineTargets) => {
   exit.y = 575
 
   const checkRecipes = new BehaviorIdle()
-  checkRecipes.stateName = 'checkRecipes'
+  checkRecipes.stateName = 'Check recipes and pickup items'
   checkRecipes.x = 625
   checkRecipes.y = 113
 
@@ -37,12 +37,12 @@ export default (bot: Bot, targets: LegionStateMachineTargets) => {
   checkMaterials.y = 350
 
   const checkPickUpItems = new BehaviorIdle()
-  checkPickUpItems.stateName = 'checkPickUpItems'
+  checkPickUpItems.stateName = 'Check if need pickup items'
   checkPickUpItems.x = 350
   checkPickUpItems.y = 213
 
   const checkCraftingTable = new BehaviorIdle()
-  checkCraftingTable.stateName = 'checkCraftingTable'
+  checkCraftingTable.stateName = 'Check need crafting table'
   checkCraftingTable.x = 125
   checkCraftingTable.y = 350
 
@@ -62,7 +62,7 @@ export default (bot: Bot, targets: LegionStateMachineTargets) => {
   goTable.y = 462
 
   const goTableToCraft = GoCraftingTableFunction(bot, targets)
-  goTableToCraft.stateName = 'Go to Craft'
+  goTableToCraft.stateName = 'Go to crafting table'
   goTableToCraft.x = 325
   goTableToCraft.y = 350
 
@@ -80,6 +80,15 @@ export default (bot: Bot, targets: LegionStateMachineTargets) => {
         itemsToPickUpBatch = getItemsToPickUpBatch(targets.craftItemBatch, nearChests())
       },
       shouldTransition: () => true
+    }),
+
+    new StateTransition({
+      parent: checkRecipes,
+      child: pickUpItems,
+      onTransition: () => {
+        targets.pickUpItems = itemsToPickUpBatch.itemToPickup
+      },
+      shouldTransition: () => itemsToPickUpBatch.itemToPickup.length > 0 && itemsToPickUpBatch.repicesUsed.length === 0
     }),
 
     new StateTransition({
@@ -122,7 +131,7 @@ export default (bot: Bot, targets: LegionStateMachineTargets) => {
     new StateTransition({
       parent: checkPickUpItems,
       child: pickUpItems,
-      shouldTransition: () => { return targets.pickUpItems.length > 0 }
+      shouldTransition: () => targets.pickUpItems.length > 0
     }),
 
     new StateTransition({

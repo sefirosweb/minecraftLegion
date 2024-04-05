@@ -5,7 +5,6 @@ import BehaviorDepositItemChest from '@/BehaviorModules/BehaviorDepositItemChest
 import BehaviorCheckItemsInInventory from '@/BehaviorModules/BehaviorCheckItemsInInventory'
 import BehaviorMoveTo from '@/BehaviorModules/BehaviorMoveTo'
 import chestModule from '@/modules/chestModule'
-import PickUpItems from '@/NestedStateModules/getReady/pickUpItems'
 import SearchAndCraftFunction from '@/NestedStateModules/crafterJob/searchAndCraftFunction'
 import { Chest, Item, LegionStateMachineTargets } from 'base-types'
 import { Bot } from 'mineflayer'
@@ -59,11 +58,6 @@ export default (bot: Bot, targets: LegionStateMachineTargets) => {
   depositItems.x = 525
   depositItems.y = 363
 
-  const pickUpItems = PickUpItems(bot, targets)
-  pickUpItems.stateName = 'Pick Up Items'
-  pickUpItems.x = 325
-  pickUpItems.y = 63
-
   const searchAndCraft = SearchAndCraftFunction(bot, targets);
   searchAndCraft.x = 75
   searchAndCraft.y = 363
@@ -75,36 +69,12 @@ export default (bot: Bot, targets: LegionStateMachineTargets) => {
   const transitions = [
     new StateTransition({
       parent: start,
-      child: loadConfig,
+      child: nextCheck,
+      onTransition: () => {
+        chestIndex = 0
+        chests = structuredClone(bot.config.chests)
+      },
       shouldTransition: () => true
-    }),
-
-    new StateTransition({
-      parent: loadConfig,
-      child: nextCheck,
-      onTransition: () => {
-        chestIndex = 0
-        chests = structuredClone(bot.config.chests)
-      },
-      shouldTransition: () => !bot.config.firstPickUpItemsFromKnownChests
-    }),
-
-    new StateTransition({
-      parent: loadConfig,
-      child: pickUpItems,
-      name: 'Is enabled first pickup items from know chests',
-      onTransition: () => {
-        chestIndex = 0
-        chests = structuredClone(bot.config.chests)
-        targets.pickUpItems = findChestsToWithdraw(chests, targets.chests)
-      },
-      shouldTransition: () => bot.config.firstPickUpItemsFromKnownChests
-    }),
-
-    new StateTransition({
-      parent: pickUpItems,
-      child: nextCheck,
-      shouldTransition: () => pickUpItems.isFinished()
     }),
 
     new StateTransition({
@@ -156,16 +126,8 @@ export default (bot: Bot, targets: LegionStateMachineTargets) => {
       parent: withdrawItems,
       child: checkCraftItem,
       onTransition: () => {
-        const itemInChest = chests[chestIndex].items
-
-        itemsToCraft = []
-
-        itemInChest.forEach(ic => {
-          if (ic.quantity > 0) {
-            itemsToCraft.push(ic)
-          }
-        });
-
+        //@ts-ignore
+        itemsToCraft = targets.items.filter(i => i.quantity > 0)
       },
       shouldTransition: () => withdrawItems.isFinished()
     }),

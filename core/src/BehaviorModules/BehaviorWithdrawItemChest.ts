@@ -19,6 +19,7 @@ export default class BehaviorWithdrawItemChest implements StateBehavior {
   isEndFinished: boolean
   timeLimit?: ReturnType<typeof setTimeout>
   items: Array<ChestTransaction>
+  itemIndex: number
 
   constructor(bot: Bot, targets: LegionStateMachineTargets) {
     this.active = false
@@ -28,11 +29,13 @@ export default class BehaviorWithdrawItemChest implements StateBehavior {
     this.isEndFinished = false
 
     this.items = []
+    this.itemIndex = 0
   }
 
   onStateEntered() {
     this.isEndFinished = false
-    this.items = [...this.targets.items]
+    this.items = this.targets.items
+    this.itemIndex = 0
     botWebsocket.log('Items to withdraw ' + JSON.stringify(this.items))
 
     this.timeLimit = setTimeout(() => {
@@ -93,11 +96,11 @@ export default class BehaviorWithdrawItemChest implements StateBehavior {
   }
 
   withdrawItem(container: Chest): Promise<void> {
-    if (this.items.length === 0) {
+    if (this.items.length === this.itemIndex) {
       return Promise.resolve()
     }
 
-    const itemToWithdraw: ChestTransaction = this.items.shift() as ChestTransaction
+    const itemToWithdraw: ChestTransaction = this.items[this.itemIndex] as ChestTransaction
     if (itemToWithdraw.fromSlot !== undefined) {
       return this.withdrawItemFromSlot(itemToWithdraw, container)
     }
@@ -107,6 +110,7 @@ export default class BehaviorWithdrawItemChest implements StateBehavior {
       : container.containerItems().filter(i => itemToWithdraw.name && i.name.includes(itemToWithdraw.name))
 
     if (foundItems.length === 0) {
+      this.itemIndex++
       return this.withdrawItem(container)
     }
 
@@ -115,7 +119,11 @@ export default class BehaviorWithdrawItemChest implements StateBehavior {
 
 
     return container.withdraw(foundItems[0].type, null, quantity)
-      .then(() => this.withdrawItem(container))
+      .then(() => {
+        this.items[this.itemIndex].quantity -= quantity
+        this.itemIndex++
+        return this.withdrawItem(container)
+      })
       .catch((err: Error) => Promise.reject(err))
   }
 
@@ -130,6 +138,7 @@ export default class BehaviorWithdrawItemChest implements StateBehavior {
       : container.containerItems().find(i => itemToWithdraw.name && i.name.includes(itemToWithdraw.name))
 
     if (!foundItem) {
+      this.itemIndex++
       return this.withdrawItem(container)
     }
 
@@ -148,7 +157,11 @@ export default class BehaviorWithdrawItemChest implements StateBehavior {
     }
 
     return this.bot.transfer(options)
-      .then(() => this.withdrawItem(container))
+      .then(() => {
+        this.items[this.itemIndex].quantity -= quantity
+        this.itemIndex++
+        return this.withdrawItem(container)
+      })
       .catch((err: Error) => Promise.reject(err))
   }
 }

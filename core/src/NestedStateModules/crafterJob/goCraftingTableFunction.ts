@@ -25,7 +25,7 @@ function goCraftingTableFunction(bot: Bot, targets: LegionStateMachineTargets) {
   checkCraftingTable.y = 113
 
   const goTable = new BehaviorMoveTo(bot, targets)
-  goTable.stateName = 'Go crafting table'
+  goTable.stateName = 'Move to crafting table'
   goTable.movements = targets.movements
   goTable.x = 325
   goTable.y = 213

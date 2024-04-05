@@ -110,7 +110,6 @@ export type Config = {
     itemsCanBeEat: Array<string>
     helpFriends: boolean
     randomFarmArea: boolean,
-    firstPickUpItemsFromKnownChests: boolean,
     patrol: Array<Vec3>
     chests: Array<Chest>
     plantAreas: Array<PlantArea>
@@ -353,7 +352,6 @@ export const defaultConfig: Config = {
     sleepArea: undefined,
     canPlaceBlocks: false,
     allowSprinting: false,
-    firstPickUpItemsFromKnownChests: true,
     canCraftItemWithdrawChest: true,
     itemsToBeReady: [
         {
