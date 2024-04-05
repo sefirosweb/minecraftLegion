@@ -54,6 +54,23 @@ export const DrawChest: React.FC<Props> = (props) => {
         }
     }
 
+    const groupedItems = [];
+    for (const slot in chest.slots) {
+        if (!chest.slots[slot]) continue;
+        const itemInfo = chest.slots[slot];
+        const index = groupedItems.findIndex((item) => item.name === itemInfo.name);
+        if (index === -1) {
+            groupedItems.push({
+                name: itemInfo.name,
+                count: itemInfo.count
+            })
+        } else {
+            groupedItems[index].count += itemInfo.count
+        }
+    }
+
+    groupedItems.sort((a, b) => a.name.localeCompare(b.name))
+
     return (
         <div>
             <Card className='m-3'>
@@ -94,10 +111,22 @@ export const DrawChest: React.FC<Props> = (props) => {
                         </Col>
                     </Row>
 
-                    {chest.slots.filter(i => i).map((i, key) =>
-                        <div key={key}>{i.name} x {i.count}</div>
-                    )}
-
+                    <div className="mb-2">
+                        {groupedItems.map((item, index) => (
+                            <Row key={index}>
+                                <Col>
+                                    <span>
+                                        {item.name}
+                                    </span>
+                                </Col>
+                                <Col >
+                                    <span>
+                                        {item.count}
+                                    </span>
+                                </Col>
+                            </Row>
+                        ))}
+                    </div>
                     <Canvas
                         draw={draw}
                         width={352}
