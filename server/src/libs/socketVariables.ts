@@ -1,5 +1,4 @@
 import { Socket } from "socket.io"
-import { sendMastersOnline } from '@/socketEmit/sendMastersOnline'
 import { findBotBySocket } from '@/libs/botStore'
 import { BotsConnected, Portals } from "base-types"
 
@@ -7,7 +6,6 @@ export type SocketProps = {
     botsConnected: Array<BotsConnected>
     masters: Array<string>
     findBotBySocket: (socket: Socket) => BotsConnected | undefined
-    sendMastersOnline: () => void
     chests: any
     setChests: (chests: any) => void
     portals: Portals
@@ -26,7 +24,6 @@ export const socketVariables: SocketProps = {
     masters: [],
     botsConnected: [],
     findBotBySocket,
-    sendMastersOnline,
     chests: {},
     setChests,
     portals: {

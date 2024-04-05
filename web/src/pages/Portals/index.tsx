@@ -1,15 +1,34 @@
-import axios from "axios";
 import { Card } from "react-bootstrap";
-import { CoordsTable } from "./CoordsTable";
 import { Portals as PortalsType } from "base-types";
-import { useQuery } from '@tanstack/react-query'
+import { useEffect, useState } from "react";
+import { useStore } from "@/hooks/useStore";
+import { CoordsTable } from "./CoordsTable";
 
 export const Portals: React.FC = () => {
-  const { data: portals } = useQuery({
-    queryKey: ['portals'],
-    queryFn: () => axios.get<{ portals: PortalsType }>('/api/portals').then((data) => data.data.portals),
-    refetchInterval: 5000,
-  })
+  const [portals, setPortals] = useState<PortalsType>({
+    overworld_to_the_end: [],
+    overworld_to_the_nether: [],
+    the_end_to_overworld: [],
+    the_nether_to_overworld: []
+  });
+
+  const [socket] = useStore(state => [state.socket])
+
+  useEffect(() => {
+    socket?.on('action', ({ type, value }: { type: string, value: PortalsType }) => {
+      if (type !== 'getPortals') return;
+      setPortals(value)
+    });
+
+    socket?.emit('sendAction', {
+      action: 'getPortals',
+      value: ''
+    });
+
+    return () => {
+      socket?.off("action");
+    }
+  }, [setPortals])
 
   return (
     <>

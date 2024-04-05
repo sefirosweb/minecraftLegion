@@ -2,12 +2,12 @@ import { log } from "@/config";
 import { findBotBySocketId } from "@/libs/botStore";
 import { socketVariables } from "@/libs/socketVariables";
 import { io } from "@/server";
-import { sendBotsOnline, sendChests } from "@/socketEmit";
+import { sendBotsOnline, sendChests, sendMastersOnline, sendPortals } from "@/socketEmit";
 import { BotsConnected } from "base-types"
 import { Socket } from "socket.io";
 
 export default (socket: Socket) => {
-    const { masters, sendMastersOnline, chests, setChests, portals, setPortals } = socketVariables
+    const { masters, chests, setChests, portals, setPortals } = socketVariables
 
     socket.on("sendAction", (data) => {
         let bot: BotsConnected | undefined;
@@ -20,13 +20,13 @@ export default (socket: Socket) => {
                 break;
 
             case "startStateMachine":
+                bot = findBotBySocketId(data.socketId)
+                if (!bot) return
+
                 io.to(data.socketId).emit("action", {
                     type: "startStateMachine",
                     value: data.value,
                 });
-
-                bot = findBotBySocketId(data.socketId)
-                if (!bot) return
 
                 bot.stateMachinePort = data.value.port;
                 sendBotsOnline()
@@ -34,26 +34,26 @@ export default (socket: Socket) => {
                 break;
 
             case "startInventory":
+                bot = findBotBySocketId(data.socketId)
+                if (!bot) return
+
                 io.to(data.socketId).emit("action", {
                     type: "startInventory",
                     value: data.value,
                 });
-
-                bot = findBotBySocketId(data.socketId)
-                if (!bot) return
 
                 bot.inventoryPort = data.value.port;
                 sendBotsOnline()
                 break;
 
             case "startViewer":
+                bot = findBotBySocketId(data.socketId)
+                if (!bot) return
+
                 io.to(data.socketId).emit("action", {
                     type: "startViewer",
                     value: data.value,
                 });
-
-                bot = findBotBySocketId(data.socketId)
-                if (!bot) return
 
                 bot.viewerPort = data.value.port;
                 sendBotsOnline()
@@ -113,13 +113,7 @@ export default (socket: Socket) => {
 
                 const newPortals = data.value;
                 setPortals(newPortals)
-                io
-                    .to("web")
-                    .to("bot")
-                    .emit("action", {
-                        type: "getPortals",
-                        value: newPortals,
-                    });
+                sendPortals()
                 break;
 
             case "getPortals":
