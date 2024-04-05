@@ -247,11 +247,11 @@ function commandsFunction(bot: Bot, targets: LegionStateMachineTargets) {
     if (item) {
       bot.tossStack(item)
         .then(() => {
-          setTimeout(dropAll)
+          setTimeout(dropAll, 250)
         })
         .catch(err => {
           console.log(err)
-          setTimeout(dropAll, 100)
+          setTimeout(dropAll, 250)
         })
     }
   }
