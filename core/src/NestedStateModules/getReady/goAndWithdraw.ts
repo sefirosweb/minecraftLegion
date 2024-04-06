@@ -1,7 +1,6 @@
 import { StateTransition, BehaviorIdle, NestedStateMachine } from 'mineflayer-statemachine'
-import BehaviorWithdrawItemChest from '@/BehaviorModules/BehaviorWithdrawItemChest'
-import BehaviorMoveTo from '@/BehaviorModules/BehaviorMoveTo'
-import {  LegionStateMachineTargets } from 'base-types'
+import { BehaviorWithdrawItemChest, BehaviorMoveTo } from '@/BehaviorModules'
+import { LegionStateMachineTargets } from 'base-types'
 import { Bot } from 'mineflayer'
 
 export default (bot: Bot, targets: LegionStateMachineTargets) => {

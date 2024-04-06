@@ -1,7 +1,6 @@
 import vec3 from 'vec3'
 import { StateTransition, BehaviorIdle, NestedStateMachine } from 'mineflayer-statemachine'
-import BehaviorcCheckItemsInChest from '@/BehaviorModules/sorterJob/BehaviorcCheckItemsInChest'
-import BehaviorMoveTo from '@/BehaviorModules/BehaviorMoveTo'
+import { BehaviorcCheckItemsInChest, BehaviorMoveTo } from '@/BehaviorModules'
 import { NewChestBlock, LegionStateMachineTargets } from 'base-types'
 import sorterJob from '@/modules/sorterJob'
 import inventoryModule from '@/modules/inventoryModule'

@@ -1,9 +1,5 @@
-import {
-  StateTransition,
-  BehaviorIdle,
-  NestedStateMachine
-} from 'mineflayer-statemachine'
-import BehaviorMoveTo from '@/BehaviorModules/BehaviorMoveTo'
+import { StateTransition, BehaviorIdle, NestedStateMachine } from 'mineflayer-statemachine'
+import { BehaviorMoveTo } from '@/BehaviorModules'
 import { LegionStateMachineTargets } from 'base-types'
 import { Block } from 'prismarine-block'
 import { Bot } from 'mineflayer'

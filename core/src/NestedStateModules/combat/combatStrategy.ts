@@ -1,6 +1,5 @@
 import { StateTransition, BehaviorIdle, NestedStateMachine, BehaviorFollowEntity } from 'mineflayer-statemachine'
-import BehaviorAttack from '@/BehaviorModules/combat/BehaviorAttack'
-import BehaviorLongAttack from '@/BehaviorModules/combat/BehaviorLongAttack'
+import { BehaviorAttack, BehaviorLongAttack } from '@/BehaviorModules'
 import { fakeVec3, LegionStateMachineTargets } from 'base-types'
 import { Entity } from 'prismarine-entity'
 import inventoryModule from '@/modules/inventoryModule'

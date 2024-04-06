@@ -10,7 +10,7 @@ import {
 import { Entity } from 'prismarine-entity'
 
 import botWebsocket from '@/modules/botWebsocket'
-import BehaviorAttack from '@/BehaviorModules/combat/BehaviorAttack'
+import { BehaviorAttack } from '@/BehaviorModules'
 import { LegionStateMachineTargets } from 'base-types'
 import { Bot } from 'mineflayer'
 

@@ -1,6 +1,5 @@
 import { StateTransition, BehaviorIdle, NestedStateMachine, BehaviorFollowEntity } from 'mineflayer-statemachine'
-import BehaviorAttack from '@/BehaviorModules/combat/BehaviorAttack'
-import BehaviorEquip from '@/BehaviorModules/BehaviorEquip'
+import { BehaviorAttack, BehaviorEquip } from '@/BehaviorModules'
 import { LegionStateMachineTargets } from 'base-types'
 import { Bot } from 'mineflayer'
 const rangeSword = 3

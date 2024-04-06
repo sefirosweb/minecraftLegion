@@ -8,7 +8,7 @@ import { StateBehavior } from 'mineflayer-statemachine'
 import { Block } from 'prismarine-block'
 import { Vec3 } from 'vec3'
 
-export default class BehaviorWithdrawItemChest implements StateBehavior {
+export class BehaviorWithdrawItemChest implements StateBehavior {
   active: boolean;
   readonly bot: Bot
   readonly targets: LegionStateMachineTargets

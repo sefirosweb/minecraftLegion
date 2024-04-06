@@ -4,7 +4,7 @@ import { Bot } from 'mineflayer';
 import { StateBehavior } from 'mineflayer-statemachine'
 import { Entity } from 'prismarine-entity'
 
-export default class BehaviorHelpFriend implements StateBehavior {
+export class BehaviorHelpFriend implements StateBehavior {
   active: boolean;
   readonly bot: Bot
   readonly targets: LegionStateMachineTargets

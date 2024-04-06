@@ -4,7 +4,7 @@ import botWebsocket from '@/modules/botWebsocket'
 import { StateBehavior } from "mineflayer-statemachine"
 import { Bot } from "mineflayer";
 import { GetMasterGrade } from "minecrafthawkeye";
-export default class BehaviorLongAttack implements StateBehavior {
+export class BehaviorLongAttack implements StateBehavior {
   active: boolean;
   readonly bot: Bot
   readonly targets: LegionStateMachineTargets

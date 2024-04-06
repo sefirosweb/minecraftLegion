@@ -14,7 +14,7 @@ type ItemWithHardness = Item & {
   hardness: number
 }
 
-export default class template implements StateBehavior {
+export class BehaviorDigAndPlaceBlock implements StateBehavior {
   active: boolean;
   readonly bot: Bot
   readonly targets: LegionStateMachineTargets

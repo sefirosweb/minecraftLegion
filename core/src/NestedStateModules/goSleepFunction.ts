@@ -1,6 +1,5 @@
 import { StateTransition, BehaviorIdle, NestedStateMachine } from 'mineflayer-statemachine'
-import BehaviorMoveTo from '@/BehaviorModules/BehaviorMoveTo'
-import BehaviorSleep from '@/BehaviorModules/BehaviorSleep'
+import { BehaviorMoveTo, BehaviorSleep } from '@/BehaviorModules'
 import { LegionStateMachineTargets } from 'base-types'
 import { Bot } from 'mineflayer'
 import { Vec3 } from 'vec3'

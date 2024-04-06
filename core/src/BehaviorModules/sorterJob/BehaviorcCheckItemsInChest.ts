@@ -6,7 +6,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { Bot, Dimension_V2 } from 'mineflayer';
 import _ from 'lodash';
 
-export default class BehaviorcCheckItemsInChest implements StateBehavior {
+export class BehaviorcCheckItemsInChest implements StateBehavior {
   active: boolean;
   readonly bot: Bot;
   readonly targets: LegionStateMachineTargets;

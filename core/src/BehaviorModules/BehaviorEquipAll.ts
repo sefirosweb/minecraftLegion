@@ -4,7 +4,7 @@ import botWebsocket from '@/modules/botWebsocket'
 import inventoryModule from '@/modules/inventoryModule'
 import { StateBehavior } from "mineflayer-statemachine"
 import { Bot } from "mineflayer";
-export default class BehaviorEquipAll implements StateBehavior {
+export class BehaviorEquipAll implements StateBehavior {
   active: boolean;
   readonly bot: Bot
   readonly targets: LegionStateMachineTargets

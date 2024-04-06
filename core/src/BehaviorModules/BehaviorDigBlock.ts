@@ -5,7 +5,7 @@ import digBlockModule from '@/modules/digBlockModule'
 import { Vec3 } from "vec3"
 import { StateBehavior } from "mineflayer-statemachine"
 import { Bot } from "mineflayer"
-export default class BehaviorDigBlock implements StateBehavior {
+export class BehaviorDigBlock implements StateBehavior {
   active: boolean;
   readonly bot: Bot
   readonly targets: LegionStateMachineTargets

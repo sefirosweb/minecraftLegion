@@ -1,13 +1,12 @@
 import { BotwebsocketAction, LegionStateMachineTargets, Master } from 'base-types'
 import { StateTransition, BehaviorIdle, NestedStateMachine } from 'mineflayer-statemachine'
-import BehaviorGetPlayer from '@/BehaviorModules/BehaviorGetPlayer'
 import botWebsocket from '@/modules/botWebsocket'
-import BehaviorLoadConfig from '@/BehaviorModules/BehaviorLoadConfig'
 import StartWork from '@/NestedStateModules/startWorkFunction'
 import Commands from '@/NestedStateModules/commandsFunction'
 import GoSleep from '@/NestedStateModules/goSleepFunction'
 import GoChestsFunctions from '@/NestedStateModules/getReady/goChestsFunctions'
 import { Bot } from 'mineflayer'
+import { BehaviorGetPlayer, BehaviorLoadConfig } from '@/BehaviorModules'
 
 function deathFunction(bot: Bot, targets: LegionStateMachineTargets) {
   const start = new BehaviorIdle()

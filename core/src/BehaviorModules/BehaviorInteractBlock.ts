@@ -2,7 +2,7 @@ import { LegionStateMachineTargets } from "base-types"
 import { Bot } from "mineflayer";
 import { StateBehavior } from "mineflayer-statemachine"
 
-export default class BehaviorInteractBlock implements StateBehavior {
+export class BehaviorInteractBlock implements StateBehavior {
   active: boolean;
   readonly bot: Bot
   readonly targets: LegionStateMachineTargets

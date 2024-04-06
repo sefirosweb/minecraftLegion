@@ -6,7 +6,7 @@ import {
 
 import { shuffle } from '@/modules/utils'
 import botWebsocket from '@/modules/botWebsocket'
-import BehaviorLoadConfig from '@/BehaviorModules/BehaviorLoadConfig'
+import { BehaviorLoadConfig } from '@/BehaviorModules'
 import { LegionStateMachineTargets, PlantArea } from 'base-types'
 import { plants } from '@/modules/plantType'
 import FarmingPlantsFunction from '@/NestedStateModules/farmerJob/farmingPlantsFunction'

@@ -2,7 +2,7 @@ import { LegionStateMachineTargets, MineCordsConfig } from 'base-types'
 import { Bot } from 'mineflayer';
 import { StateBehavior } from 'mineflayer-statemachine';
 import { Vec3 } from 'vec3'
-export default class BehaviorMinerCurrentBlock implements StateBehavior {
+export class BehaviorMinerCurrentBlock implements StateBehavior {
   active: boolean;
   readonly bot: Bot;
   readonly targets: LegionStateMachineTargets;

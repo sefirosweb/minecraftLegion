@@ -8,7 +8,7 @@ import { Bot, Chest, TransferOptions } from 'mineflayer'
 import { StateBehavior } from 'mineflayer-statemachine'
 import { Block } from 'prismarine-block'
 import { Vec3 } from 'vec3'
-export default class BehaviorDepositItemChest implements StateBehavior {
+export class BehaviorDepositItemChest implements StateBehavior {
   active: boolean;
   readonly bot: Bot
   readonly targets: LegionStateMachineTargets

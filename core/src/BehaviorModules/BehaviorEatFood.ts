@@ -6,7 +6,7 @@ import mcDataLoader from 'minecraft-data'
 import { StateBehavior } from "mineflayer-statemachine"
 import { Bot } from "mineflayer";
 
-export default class BehaviorEatFood implements StateBehavior {
+export class BehaviorEatFood implements StateBehavior {
   active: boolean;
   readonly bot: Bot
   readonly targets: LegionStateMachineTargets

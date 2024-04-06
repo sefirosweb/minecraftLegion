@@ -1,6 +1,6 @@
 import { LegionStateMachineTargets, Recipes, Recpie } from 'base-types'
 import { StateTransition, BehaviorIdle, NestedStateMachine } from 'mineflayer-statemachine'
-import BehaviorCraft from '@/BehaviorModules/BehaviorCraft'
+import { BehaviorCraft } from '@/BehaviorModules'
 import chestModule from '@/modules/chestModule'
 import craftModule, { GetItemsToPickUpBatch } from '@/modules/craftModule'
 import PickUpItems from '@/NestedStateModules/getReady/pickUpItems'

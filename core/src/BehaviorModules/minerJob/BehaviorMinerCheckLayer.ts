@@ -7,7 +7,7 @@ import { StateBehavior } from "mineflayer-statemachine";
 import { Block } from "prismarine-block";
 import { Bot } from "mineflayer";
 
-export default class BehaviorMinerCheckLayer implements StateBehavior {
+export class BehaviorMinerCheckLayer implements StateBehavior {
   active: boolean;
   readonly bot: Bot;
   readonly targets: LegionStateMachineTargets;

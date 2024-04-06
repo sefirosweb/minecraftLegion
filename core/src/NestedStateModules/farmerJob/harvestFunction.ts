@@ -3,10 +3,7 @@ import { Vec3 } from 'vec3'
 import { StateTransition, BehaviorIdle, NestedStateMachine } from 'mineflayer-statemachine'
 import { plants } from '@/modules/plantType'
 import botWebsocket from '@/modules/botWebsocket'
-import BehaviorDigBlock from '@/BehaviorModules/BehaviorDigBlock'
-import BehaviorEatFood from '@/BehaviorModules/BehaviorEatFood'
-import BehaviorInteractBlock from '@/BehaviorModules/BehaviorInteractBlock'
-import BehaviorMoveTo from '@/BehaviorModules/BehaviorMoveTo'
+import { BehaviorDigBlock, BehaviorEatFood, BehaviorInteractBlock, BehaviorMoveTo } from '@/BehaviorModules'
 import { LegionStateMachineTargets } from 'base-types'
 
 function harvestFunction(bot: Bot, targets: LegionStateMachineTargets) {

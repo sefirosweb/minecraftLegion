@@ -1,6 +1,6 @@
 import { StateTransition, BehaviorIdle, NestedStateMachine } from 'mineflayer-statemachine'
 import FeedAnimalFunction from '@/NestedStateModules/breederJob/feedAnimalFunction'
-import BehaviorLoadConfig from '@/BehaviorModules/BehaviorLoadConfig'
+import { BehaviorLoadConfig } from '@/BehaviorModules'
 import { Entity } from 'prismarine-entity'
 import { Bot } from 'mineflayer'
 import { LegionStateMachineTargets, animals } from 'base-types'

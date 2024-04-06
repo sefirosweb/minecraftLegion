@@ -5,7 +5,7 @@ import movementModule from '@/modules/movementModule'
 import { StateBehavior } from 'mineflayer-statemachine'
 import { Bot, Dimension, Dimension_V2 } from 'mineflayer'
 
-export default class BehaviorMoveTo implements StateBehavior {
+export class BehaviorMoveTo implements StateBehavior {
   active: boolean
   readonly bot: Bot
   readonly targets: LegionStateMachineTargets

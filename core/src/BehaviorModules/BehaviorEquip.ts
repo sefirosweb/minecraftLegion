@@ -5,7 +5,7 @@ import { Item as PrismarineItem } from 'prismarine-item';
 import { Bot, EquipmentDestination } from "mineflayer";
 import { StateBehavior } from "mineflayer-statemachine";
 
-export default class BehaviorEquip implements StateBehavior {
+export class BehaviorEquip implements StateBehavior {
   active: boolean;
   readonly bot: Bot
   readonly targets: LegionStateMachineTargets

@@ -5,7 +5,7 @@ import botWebsocket from '@/modules/botWebsocket'
 import { StateBehavior } from 'mineflayer-statemachine';
 import { Bot } from 'mineflayer';
 
-export default class BehaviorMinerCurrentLayer implements StateBehavior {
+export class BehaviorMinerCurrentLayer implements StateBehavior {
   active: boolean;
   readonly bot: Bot;
   readonly targets: LegionStateMachineTargets;

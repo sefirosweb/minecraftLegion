@@ -5,10 +5,7 @@ import {
   BehaviorIdle
 } from 'mineflayer-statemachine'
 
-import BehaviorCustomPlaceBlock from '@/BehaviorModules/BehaviorCustomPlaceBlock'
-import BehaviorFertilize from '@/BehaviorModules/BehaviorFertilize'
-import BehaviorMoveTo from '@/BehaviorModules/BehaviorMoveTo'
-import BehaviorCraft from '@/BehaviorModules/BehaviorCraft'
+import { BehaviorCustomPlaceBlock, BehaviorFertilize, BehaviorMoveTo, BehaviorCraft } from '@/BehaviorModules'
 import { plants, dirtCanBefertilized } from '@/modules/plantType'
 import { LegionStateMachineTargets } from 'base-types'
 import { Block } from 'prismarine-block'

@@ -5,7 +5,7 @@ import { Vec3 } from 'vec3'
 import { StateBehavior } from 'mineflayer-statemachine'
 import { Bot } from 'mineflayer'
 
-export default class BehaviorMoveToArray implements StateBehavior {
+export class BehaviorMoveToArray implements StateBehavior {
   readonly bot: Bot
   readonly targets: LegionStateMachineTargets
   stateName: string

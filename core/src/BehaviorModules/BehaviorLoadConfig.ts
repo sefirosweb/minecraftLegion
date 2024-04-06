@@ -2,7 +2,7 @@ import { StateBehavior } from "mineflayer-statemachine"
 import { Config, LegionStateMachineTargets, Jobs } from "base-types"
 import { Bot } from "mineflayer"
 // TODO delete this file
-export default class BehaviorLoadConfig implements StateBehavior {
+export class BehaviorLoadConfig implements StateBehavior {
   active: boolean
   readonly bot: Bot
   readonly targets: LegionStateMachineTargets

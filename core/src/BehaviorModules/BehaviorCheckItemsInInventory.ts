@@ -4,7 +4,7 @@ import inventoryModule from '@/modules/inventoryModule'
 import { Item as McItem } from "prismarine-item"
 import { StateBehavior } from "mineflayer-statemachine"
 import { Bot } from "mineflayer";
-export default class BehaviorCheckItemsInInventory implements StateBehavior {
+export class BehaviorCheckItemsInInventory implements StateBehavior {
   active: boolean;
   readonly bot: Bot
   readonly targets: LegionStateMachineTargets

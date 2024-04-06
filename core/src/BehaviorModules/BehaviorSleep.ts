@@ -2,7 +2,7 @@ import { LegionStateMachineTargets } from "base-types"
 import { Bot } from "mineflayer"
 import { StateBehavior } from "mineflayer-statemachine"
 
-export default class BehaviorFollowEntity implements StateBehavior {
+export class BehaviorSleep implements StateBehavior {
   active: boolean
 
   stateName: string = 'BehaviorSleep'
