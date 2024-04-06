@@ -1,5 +1,6 @@
 import { Dimension_V2 } from "mineflayer";
 import { Agro, Coordinates, DepositType, MineCords, tunnelType } from "./types";
+import { AnimalList } from "./animals";
 
 export const isDepositType = (value: any): value is DepositType => {
     return value === 'withdraw' || value === 'deposit' || value === 'depositAll';
@@ -24,4 +25,9 @@ export const isWorld = (value: any): value is Dimension_V2 => {
 export const isMineCoords = (value: string): value is keyof MineCords => {
     const typesMineCord: Array<string> = ['xStart', 'xEnd', 'yEnd', 'yStart', 'zEnd', 'zStart']
     return typesMineCord.includes(value)
+}
+
+export const isAnimal = (value: string): value is keyof typeof AnimalList => {
+    const animalListed = Object.keys(AnimalList)
+    return animalListed.includes(value)
 }

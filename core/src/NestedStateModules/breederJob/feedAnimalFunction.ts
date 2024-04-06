@@ -1,8 +1,7 @@
 import { StateTransition, BehaviorIdle, BehaviorFollowEntity, NestedStateMachine } from 'mineflayer-statemachine'
 import { Item } from 'prismarine-item';
 import { BehaviorEquip, BehaviorInteractEntity } from '@/BehaviorModules'
-import { isAnimal } from '@/modules/animalType'
-import { LegionStateMachineTargets, animals as animalType } from 'base-types'
+import { LegionStateMachineTargets, animals as animalType, isAnimal } from 'base-types'
 import { Bot } from 'mineflayer';
 
 function feedAnimalFunction(bot: Bot, targets: LegionStateMachineTargets) {
