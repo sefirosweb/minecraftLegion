@@ -5,7 +5,7 @@ import botWebsocket from "@/modules/botWebsocket";
 import mcDataLoader from 'minecraft-data'
 import mineflayerPathfinder from 'mineflayer-pathfinder'
 import hawkEye from 'minecrafthawkeye'
-import StartStateMachine from '@/NestedStateModules/startStateMachine'
+import StartStateMachine from '@/NestedStateModules/MainStateMachine'
 import injectBotConfig from "./modules/botConfig";
 import { Vec3 } from "vec3";
 import { Config, defaultConfig } from "base-types";

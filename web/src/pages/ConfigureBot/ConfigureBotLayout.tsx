@@ -1,28 +1,18 @@
 import React, { Suspense, useContext, useState } from "react";
 import { Button, Card, Col, Modal, Nav, Row } from 'react-bootstrap'
 import { Link, NavLink, Outlet } from 'react-router-dom'
-import toastr from 'toastr'
 import { RenderBotsOnlineList } from '@/components'
 import { BotSelectedContext } from "./ConfigurationContext";
 import { LoadingPage } from "../LoadingPage";
 import axios from "axios";
 import { useStore } from '@/hooks/useStore'
+import { SaveButton } from "./SaveButton";
 
 export const ConfigureBotLayout: React.FC = () => {
   const botsOnline = useStore(state => state.botsOnline)
-  const { bot, botConfig, setBotConfig } = useContext(BotSelectedContext);
+  const { bot, setBotConfig } = useContext(BotSelectedContext);
   const [showModal, setShowModal] = useState(false)
 
-  const handleSaveButton = () => {
-    axios
-      .post(`/api/save_bot_config/${bot.socketId}`, { botConfig })
-      .then(() => {
-        toastr.success('Config saved')
-      })
-      .catch((error) => {
-        toastr.error('Error saving config')
-      })
-  }
 
   return (
     <>
@@ -45,10 +35,7 @@ export const ConfigureBotLayout: React.FC = () => {
                 Copy config from other bot
               </Button>
 
-              <Button onClick={handleSaveButton} variant='success' className="mb-1">
-                Save
-              </Button>
-
+              <SaveButton />
             </div>
           </div>
         </Col>
