@@ -87,7 +87,11 @@ export default class BehaviorWithdrawItemChest implements StateBehavior {
             await sleep(500)
             this.isEndFinished = true
           })
-
+      })
+      .catch(async (err) => {
+        console.log(err)
+        await sleep(500)
+        this.isEndFinished = true
       })
   }
 
