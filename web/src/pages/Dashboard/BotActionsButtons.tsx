@@ -1,17 +1,24 @@
 import { useGetSelectedBot } from "@/hooks/useGetSelectedBot";
-import { useSendActionSocket } from "@/hooks/useSendActionSocket";
 import { useStore } from "@/hooks/useStore";
 import { Bot } from "@/types";
 import React, { ChangeEvent, KeyboardEvent, useEffect, useState } from "react";
 import { Button, Col, Row } from "react-bootstrap";
 import { useNavigate, useParams } from "react-router";
 
+
 export const BotActionButtons: React.FC = () => {
+  const selectedSocketId = useParams().selectedSocketId
   const bot = useGetSelectedBot() as Bot
   const navigate = useNavigate();
-  const sendAction = useSendActionSocket()
-  const selectedSocketId = useParams().selectedSocketId
-  const master = useStore(state => state.master)
+  const [master, socket] = useStore(state => [state.master, state.socket])
+
+  const sendAction = (action: string, value?: any) => {
+    socket?.emit("sendAction", {
+      action,
+      socketId: selectedSocketId,
+      value,
+    });
+  }
 
   const [chat, setChat] = useState("");
 

@@ -1,8 +1,9 @@
 import Modal from 'react-bootstrap/Modal'
 import Button from 'react-bootstrap/Button'
-import { Col, Form, Row } from 'react-bootstrap'
+import { Form } from 'react-bootstrap'
 import { FormEvent, useRef, useState } from 'react'
-import { useGetSocket } from '@/hooks/useGetSocket'
+import { useStore } from "@/hooks/useStore";
+
 
 type Props = {
   show: boolean,
@@ -14,7 +15,7 @@ export const ModalAddBot: React.FC<Props> = (props) => {
   const inputBotName = useRef<HTMLInputElement>(null)
   const [botName, setBotName] = useState('')
   const [botPassword, setBotPassword] = useState('')
-  const socket = useGetSocket()
+  const socket = useStore((state) => state.socket)
 
   const changeBotName = (e: React.ChangeEvent<HTMLInputElement>) => {
     setBotName(e.target.value.trim())

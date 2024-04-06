@@ -1,63 +1,18 @@
 import { log } from "@/config";
-import { findBotBySocketId } from "@/libs/botStore";
 import { socketVariables } from "@/libs/socketVariables";
 import { io } from "@/server";
-import { sendBotsOnline, sendChests, sendMastersOnline, sendPortals } from "@/socketEmit";
-import { BotsConnected } from "base-types"
+import { sendChests, sendMastersOnline, sendPortals } from "@/socketEmit";
 import { Socket } from "socket.io";
 
 export default (socket: Socket) => {
     const { masters, chests, setChests, portals, setPortals } = socketVariables
 
     socket.on("sendAction", (data) => {
-        let bot: BotsConnected | undefined;
-
         log(data);
 
         switch (data.action) {
             case "action":
                 io.to(data.socketId).emit("action", data.value);
-                break;
-
-            case "startStateMachine":
-                bot = findBotBySocketId(data.socketId)
-                if (!bot) return
-
-                io.to(data.socketId).emit("action", {
-                    type: "startStateMachine",
-                    value: data.value,
-                });
-
-                bot.stateMachinePort = data.value.port;
-                sendBotsOnline()
-
-                break;
-
-            case "startInventory":
-                bot = findBotBySocketId(data.socketId)
-                if (!bot) return
-
-                io.to(data.socketId).emit("action", {
-                    type: "startInventory",
-                    value: data.value,
-                });
-
-                bot.inventoryPort = data.value.port;
-                sendBotsOnline()
-                break;
-
-            case "startViewer":
-                bot = findBotBySocketId(data.socketId)
-                if (!bot) return
-
-                io.to(data.socketId).emit("action", {
-                    type: "startViewer",
-                    value: data.value,
-                });
-
-                bot.viewerPort = data.value.port;
-                sendBotsOnline()
-
                 break;
 
             case "sendDisconnect":

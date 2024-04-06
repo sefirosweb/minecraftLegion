@@ -1,12 +1,9 @@
-import { useGetSocket } from '@/hooks/useGetSocket';
-import { useStore } from '@/hooks/useStore';
 import React, { useState } from 'react'
 import { Form } from 'react-bootstrap';
-import { Socket } from 'socket.io-client';
+import { useStore } from "@/hooks/useStore";
 
 export const Masterlist: React.FC = () => {
-  const socket = useGetSocket() as Socket
-  const master = useStore(state => state.master)
+  const [socket, master] = useStore((state) => [state.socket, state.master])
 
   const setMaster = useStore(state => state.setMaster)
   const masters = useStore(state => state.masters)
@@ -28,7 +25,7 @@ export const Masterlist: React.FC = () => {
   }
 
   const handleSendMessageButton = () => {
-    socket.emit('sendAction', {
+    socket?.emit('sendAction', {
       action: 'addMaster',
       value: inputBox
     })
@@ -37,7 +34,7 @@ export const Masterlist: React.FC = () => {
 
   const handleRemoveMaster = (masterToDelete: string) => {
     if (masterToDelete === master) return
-    socket.emit('sendAction', {
+    socket?.emit('sendAction', {
       action: 'removeMaster',
       value: masterToDelete
     })

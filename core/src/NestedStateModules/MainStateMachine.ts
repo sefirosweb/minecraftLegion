@@ -13,37 +13,6 @@ import inventoryViewer from 'mineflayer-web-inventory'
 const startStateMachine = (bot: Bot) => {
   const { debugMode } = config
 
-  // const targets: LegionStateMachineTargets = {
-  // aListener: function (object, val) {
-  //   if (!debugMode) return
-  //   console.log(`Detected change ${object} value:`, val)
-  // },
-
-  // set position (val) {
-  //   this.positionVal = val
-  //   this.aListener('position', val)
-  // },
-  // get position () {
-  //   return this.positionVal
-  // },
-
-  // set entity (val) {
-  //   this.entityVal = val
-  //   this.aListener('entity', val)
-  // },
-  // get entity () {
-  //   return this.entityVal
-  // },
-
-  // set item (val) {
-  //   this.itemVal = val
-  //   this.aListener('item', val)
-  // },
-  // get item () {
-  //   return this.itemVal
-  // }
-  // }
-
   const movements = new mineflayerPathfinder.Movements(bot)
 
   const targets: LegionStateMachineTargets = {
@@ -198,7 +167,7 @@ const startStateMachine = (bot: Bot) => {
 
   if (debugMode) { // Only enable on debug mode
 
-    bot.on('newListener', () => {
+    const sentEvents = () => {
       const events = bot.eventNames()
       const eventsToSend: Array<string> = []
       events.forEach(event => {
@@ -206,16 +175,21 @@ const startStateMachine = (bot: Bot) => {
         eventsToSend.push(`${eventName}: ${bot.listenerCount(eventName)}`)
       })
       botWebsocket.emitEvents(eventsToSend)
+    }
+
+    botWebsocket.on('action', (action) => {
+      if (action.type !== 'getProcessList') return
+      console.log('actionactionaction', action.type)
+      // bot.on('newListener', () => {
+      // })
+    })
+
+    bot.on('newListener', () => {
+      sentEvents()
     })
 
     bot.on('removeListener', () => {
-      const events = bot.eventNames()
-      const eventsToSend: Array<string> = []
-      events.forEach(event => {
-        const eventName = (typeof event === 'string' ? event : event.toString()) as keyof BotEvents
-        eventsToSend.push(`${eventName}: ${bot.listenerCount(eventName)}`)
-      })
-      botWebsocket.emitEvents(eventsToSend)
+      sentEvents()
     })
 
     webserver = new StateMachineWebserver(bot, stateMachine, 4550)
@@ -277,14 +251,14 @@ const startStateMachine = (bot: Bot) => {
     }
   })
 
-  function getChests() {
+  const getChests = () => {
     botWebsocket.emit('sendAction', {
       action: 'getChests',
       value: ''
     })
   }
 
-  function getPortals() {
+  const getPortals = () => {
     botWebsocket.emit('sendAction', {
       action: 'getPortals',
       value: ''

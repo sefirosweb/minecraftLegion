@@ -70,10 +70,10 @@ export class BehaviorMoveTo implements StateBehavior {
 
   onStateExited() {
     this.bot.removeAllListeners('customEventPhysicTick')
-    this.isEndFinished = false
-    this.success = false
     this.bot.removeAllListeners('path_update')
     this.bot.removeAllListeners('goal_reached')
+    this.isEndFinished = false
+    this.success = false
     this.stopMoving()
     clearTimeout(this.timeLimit)
   }
@@ -82,14 +82,6 @@ export class BehaviorMoveTo implements StateBehavior {
     botWebsocket.log('[MoveTo] Target reached.')
     this.success = true
     this.isEndFinished = true
-  }
-
-  setMoveTarget(position: Vec3WithDimension) {
-    if (this.targets.position === position) {
-      return
-    }
-    this.targets.position = position
-    this.restart()
   }
 
   stopMoving() {
@@ -134,6 +126,7 @@ export class BehaviorMoveTo implements StateBehavior {
   }
 
   restart() {
+    console.log('restarting...')
     if (!this.active) {
       return
     }
