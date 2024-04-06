@@ -6,7 +6,7 @@ import movementModule from '@/modules/movementModule'
 import botWebsocket from '@/modules/botWebsocket'
 import mineflayerPathfinder from 'mineflayer-pathfinder'
 import { startPrismarineViewer } from '@/modules/viewer'
-import DeathFunction from '@/NestedStateModules/afterDeathFunction'
+import { afterDeathFunction } from '@/NestedStateModules/afterDeathFunction'
 import { StateTransition, BotStateMachine, StateMachineWebserver, BehaviorIdle, NestedStateMachine } from 'mineflayer-statemachine'
 import { getFreePort } from "@/modules/utils"
 
@@ -101,7 +101,7 @@ const startStateMachine = (bot: Bot) => {
   watiState.x = 125
   watiState.y = 313
 
-  const death = DeathFunction(bot, targets)
+  const death = afterDeathFunction(bot, targets)
   death.x = 425
   death.y = 213
 

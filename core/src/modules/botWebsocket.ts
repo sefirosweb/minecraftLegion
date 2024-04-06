@@ -9,6 +9,7 @@ import { Bot } from 'mineflayer'
 import { connectBotToServer } from '@/modules/connectSocket'
 import { webSocketQueue } from './queues'
 import { saveBotConfig } from './botConfig'
+import { afterDeathTransitions } from '@/NestedStateModules'
 
 let socket: Socket
 let friends: Array<BotFriends> = []
@@ -76,6 +77,7 @@ const connect = async () => {
     Object.assign(bot.config, botConfig)
     saveBotConfig()
     response({ success: true });
+    afterDeathTransitions[0].trigger()
   })
 
   socket.on('get_master_position', (data: { master: string }, response) => {

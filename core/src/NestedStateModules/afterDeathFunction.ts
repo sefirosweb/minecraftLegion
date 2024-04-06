@@ -8,7 +8,9 @@ import GoChestsFunctions from '@/NestedStateModules/getReady/goChestsFunctions'
 import { Bot } from 'mineflayer'
 import { BehaviorGetPlayer, BehaviorLoadConfig } from '@/BehaviorModules'
 
-function deathFunction(bot: Bot, targets: LegionStateMachineTargets) {
+export let afterDeathTransitions: Array<StateTransition> = []
+
+export const afterDeathFunction = (bot: Bot, targets: LegionStateMachineTargets): NestedStateMachine => {
   const start = new BehaviorIdle()
   start.stateName = 'Start'
   start.x = 125
@@ -16,7 +18,7 @@ function deathFunction(bot: Bot, targets: LegionStateMachineTargets) {
 
   const startWork = StartWork(bot, targets)
   startWork.x = 525
-  startWork.y = 413
+  startWork.y = 513
 
   const commands = Commands(bot, targets)
   commands.x = 325
@@ -40,7 +42,7 @@ function deathFunction(bot: Bot, targets: LegionStateMachineTargets) {
   goSleep.x = 725
   goSleep.y = 263
 
-  const transitions = [
+  afterDeathTransitions = [
     new StateTransition({ // 0
       parent: startWork,
       child: loadConfig,
@@ -140,28 +142,28 @@ function deathFunction(bot: Bot, targets: LegionStateMachineTargets) {
 
     new StateTransition({
       parent: goChests,
-      child: startWork,
+      child: loadConfig,
       shouldTransition: () => goChests.isFinished()
     }),
 
 
   ]
 
-  function reloadTrigger() {
+  const reloadTrigger = () => {
     targets.entity = undefined
     bot.stopDigging()
     bot.pathfinder.setGoal(null)
 
-    transitions[0].trigger()
-    transitions[1].trigger()
+    afterDeathTransitions[0].trigger()
+    afterDeathTransitions[1].trigger()
   }
 
-  function commandTrigger() {
+  const commandTrigger = () => {
     botWebsocket.log('sendStay')
-    transitions[3].trigger()
-    transitions[4].trigger()
-    transitions[5].trigger()
-    transitions[6].trigger()
+    afterDeathTransitions[3].trigger()
+    afterDeathTransitions[4].trigger()
+    afterDeathTransitions[5].trigger()
+    afterDeathTransitions[6].trigger()
     botWebsocket.emitCombat(false)
   }
 
@@ -196,9 +198,7 @@ function deathFunction(bot: Bot, targets: LegionStateMachineTargets) {
     }
   })
 
-  const nestedState = new NestedStateMachine(transitions, start)
+  const nestedState = new NestedStateMachine(afterDeathTransitions, start)
   nestedState.stateName = 'After death function'
   return nestedState
 }
-
-export default deathFunction
