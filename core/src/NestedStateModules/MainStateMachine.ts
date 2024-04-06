@@ -224,6 +224,7 @@ const startStateMachine = (bot: Bot) => {
     webserver = new StateMachineWebserver(bot, stateMachine, 4550)
     bot.stateMachinePort = webserver.port
     if (!webserver.isServerRunning()) {
+      console.log(`Started state machine web server at http://localhost:4550`)
       webserver.startServer()
     }
 
@@ -261,6 +262,7 @@ const startStateMachine = (bot: Bot) => {
           }
           if (typeof webserver.isServerRunning === 'function') {
             if (!webserver.isServerRunning()) {
+              console.log(`Started state machine web server at http://localhost:${port}`)
               webserver.startServer()
             }
             botWebsocket.log(`Started state machine web server at http://localhost:${port}`)

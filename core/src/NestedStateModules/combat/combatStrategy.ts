@@ -26,6 +26,7 @@ function combatStrategy(bot: Bot, targets: LegionStateMachineTargets) {
   const rangeFollowToShortAttack = 5
   const timeBowCountdown = 1550
 
+  const changeTargetEvery = 1000
   const timeMobCountdown = 7500
   let newTimeMobCountdown: number
 
@@ -71,7 +72,7 @@ function combatStrategy(bot: Bot, targets: LegionStateMachineTargets) {
 
   const getGrades = function () {
     // Of other enemies aproax, change target (Ex clipper)
-    if (Date.now() - newTargetColdDown > 1000) {
+    if (Date.now() - newTargetColdDown > changeTargetEvery) {
       const entity = bot.nearestEntity(filter)
       if (entity) {
         botWebsocket.log('Change Target => ' + entity.displayName + ' ' + JSON.stringify(entity.position))

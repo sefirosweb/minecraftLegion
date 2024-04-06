@@ -3,6 +3,8 @@ import { LegionStateMachineTargets } from "base-types"
 import inventoryModule from '@/modules/inventoryModule'
 import { StateBehavior } from "mineflayer-statemachine"
 import { Bot } from "mineflayer";
+
+const attackEvery = 600
 export class BehaviorAttack implements StateBehavior {
   active: boolean;
   readonly bot: Bot
@@ -34,7 +36,7 @@ export class BehaviorAttack implements StateBehavior {
 
   nextAttack() {
     const currentDate = Date.now()
-    if (currentDate - this.lastAttack > 500) {
+    if (currentDate - this.lastAttack > attackEvery) {
       this.lastAttack = currentDate
       return true
     }
