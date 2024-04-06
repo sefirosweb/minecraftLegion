@@ -1,4 +1,4 @@
-FROM node:21.7.1-bullseye as base
+FROM node:20.9.0-bullseye as base
 
 FROM base AS deps
 WORKDIR /app
