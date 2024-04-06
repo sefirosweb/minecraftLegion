@@ -11,7 +11,7 @@ import { GetMasterGrade, Weapons } from 'minecrafthawkeye'
 import { Bot } from 'mineflayer'
 import { Vec3 } from 'vec3'
 
-function combatFunction(bot: Bot, targets: LegionStateMachineTargets) {
+function combatStrategy(bot: Bot, targets: LegionStateMachineTargets) {
   const inventory = inventoryModule(bot)
   const { ignoreMobs, flyingMobs } = getClosestEnemy(bot, targets)
 
@@ -314,4 +314,4 @@ function combatFunction(bot: Bot, targets: LegionStateMachineTargets) {
   return nestedState
 }
 
-export default combatFunction
+export default combatStrategy

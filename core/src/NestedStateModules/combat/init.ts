@@ -1,10 +1,10 @@
 import { StateTransition, BehaviorIdle, NestedStateMachine } from 'mineflayer-statemachine'
 import BehaviorEatFood from '@/BehaviorModules/BehaviorEatFood'
 import { LegionStateMachineTargets } from 'base-types'
-import CombatFunction from '@/NestedStateModules/combat/combatFunction'
+import CombatFunction from '@/NestedStateModules/combat/combatStrategy'
 import { Bot } from 'mineflayer'
 
-function combatStrategyFunction(bot: Bot, targets: LegionStateMachineTargets) {
+function combat(bot: Bot, targets: LegionStateMachineTargets) {
   const start = new BehaviorIdle()
   start.stateName = 'Start'
   start.x = 125
@@ -59,4 +59,4 @@ function combatStrategyFunction(bot: Bot, targets: LegionStateMachineTargets) {
   return nestedState
 }
 
-export default combatStrategyFunction
+export default combat

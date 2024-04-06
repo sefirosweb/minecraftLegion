@@ -5,7 +5,7 @@ import getClosestEnemy from '@/modules/getClosestEnemy'
 import GetReadyFunction from '@/NestedStateModules/getReady/init'
 import BreederFunction from '@/NestedStateModules/breederJob/breederFunction'
 import SlaughterhouseFunction from '@/NestedStateModules/breederJob/slaughterhouseFunction'
-import CombatStrategyFunction from '@/NestedStateModules/combat/combatStrategyFunction'
+import CombatStrategyFunction from '@/NestedStateModules/combat/init'
 import FindItemsAndPickup from '@/NestedStateModules/findItemsAndPickup'
 import { Bot } from 'mineflayer'
 

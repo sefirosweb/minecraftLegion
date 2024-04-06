@@ -5,7 +5,7 @@ import getClosestEnemy from '@/modules/getClosestEnemy'
 import GoChestsFunctions from '@/NestedStateModules/getReady/goChestsFunctions'
 import FarmingFunction from '@/NestedStateModules/farmerJob/farmingFunction'
 import GetReadyFunction from '@/NestedStateModules/getReady/init'
-import CombatStrategyFunction from '@/NestedStateModules/combat/combatStrategyFunction'
+import CombatStrategyFunction from '@/NestedStateModules/combat/init'
 import { Bot } from 'mineflayer'
 
 export default (bot: Bot, targets: LegionStateMachineTargets) => {
