@@ -70,26 +70,25 @@ function deathFunction(bot: Bot, targets: LegionStateMachineTargets) {
     new StateTransition({ // 3
       parent: start,
       child: playerEntity,
-      name: 'Player say: hi'
+      name: '[3] Player say: hi'
     }),
 
     new StateTransition({ // 4
       parent: startWork,
       child: playerEntity,
-      name: 'Player say: hi'
+      name: '[4] Player say: hi'
     }),
 
     new StateTransition({ // 5
       parent: goSleep,
       child: playerEntity,
-      name: 'Player say: hi'
+      name: '[5] Player say: hi'
     }),
 
     new StateTransition({ // 6
       parent: goChests,
       child: playerEntity,
       name: 'Player say: hi',
-      shouldTransition: () => true
     }),
 
     new StateTransition({
