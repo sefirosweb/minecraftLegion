@@ -4,6 +4,17 @@ import path from 'path'
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  build: {
+    sourcemap: false,
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vendor: ['react', 'react-router-dom', 'react-dom'],
+          jsoneditor: ['jsoneditor'],
+        },
+      },
+    },
+  },
   server: {
     proxy: {
       '/api': 'http://localhost:4001',
