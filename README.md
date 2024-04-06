@@ -84,6 +84,8 @@ AUTO_RESTART=true
 ENVIRONMENT=prod
 ```
 
+To update the bot execute ```git pull``` and ```npm run build```
+
 4. Start all: `npm start`
 
 ## With docker
