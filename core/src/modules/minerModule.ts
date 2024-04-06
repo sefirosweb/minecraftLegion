@@ -1,10 +1,10 @@
 
 import { LegionStateMachineTargets } from "base-types"
 import { Vec3 } from 'vec3'
-import placeBlockModule from '@/modules/placeBlockModule'
+import { placeBlockModule } from '@/modules'
 import { Bot } from "mineflayer"
 
-const minerModule = (bot: Bot, targets: LegionStateMachineTargets) => {
+export const minerModule = (bot: Bot, targets: LegionStateMachineTargets) => {
   const blocksToBeRplaced = placeBlockModule(bot).blocksToBeRplaced
 
   const getSidesToCheck = (originalPosition: Vec3) => {
@@ -148,5 +148,3 @@ const minerModule = (bot: Bot, targets: LegionStateMachineTargets) => {
     getSidesToCheck
   }
 }
-
-export default minerModule

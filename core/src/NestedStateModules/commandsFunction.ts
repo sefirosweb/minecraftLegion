@@ -1,6 +1,6 @@
 import { StateTransition, BehaviorIdle, BehaviorFollowEntity, BehaviorLookAtEntity, NestedStateMachine } from 'mineflayer-statemachine'
 import { Vec3 } from 'vec3'
-import botWebsocket from '@/modules/botWebsocket'
+import { botWebsocket } from '@/modules'
 import { BotwebsocketAction, Coordinates, LegionStateMachineTargets, Master } from 'base-types'
 import { Entity } from 'prismarine-entity'
 import mineflayerPathfinder from 'mineflayer-pathfinder'

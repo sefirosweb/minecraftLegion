@@ -1,6 +1,5 @@
 import { Chests, ChestTransaction, Item, ItemRecipe, Recpie } from "base-types"
-import sorterJob from '@/modules/sorterJob'
-import inventoryModule from '@/modules/inventoryModule'
+import { findItemsInChests, inventoryModule } from '@/modules'
 import { Item as ItemMC } from "minecraft-data"
 import { Block } from "prismarine-block"
 import _ from 'lodash'
@@ -52,9 +51,8 @@ type GetItemsToPickUpRecursive = {
   recipedUsed: NonNullable<Recpie>
 }
 
-const craftModule = (bot: Bot) => {
+export const craftModule = (bot: Bot) => {
   const { getResumeInventory } = inventoryModule(bot)
-  const { findItemsInChests } = sorterJob()
 
   const getRecipes = (itemId: number, craftingTable: Block | null): Array<Recpie> => {
     const aviableRecipes = bot.recipesAll(itemId, null, craftingTable)
@@ -478,6 +476,3 @@ const craftModule = (bot: Bot) => {
     getCraftingTable
   }
 }
-
-
-export default craftModule

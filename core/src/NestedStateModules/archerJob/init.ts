@@ -1,15 +1,7 @@
 
-import {
-  StateTransition,
-  BehaviorIdle,
-  BehaviorFollowEntity,
-  NestedStateMachine,
-  BehaviorGetClosestEntity
-
-} from 'mineflayer-statemachine'
+import { StateTransition, BehaviorIdle, BehaviorFollowEntity, NestedStateMachine, BehaviorGetClosestEntity } from 'mineflayer-statemachine'
 import { Entity } from 'prismarine-entity'
-
-import botWebsocket from '@/modules/botWebsocket'
+import { botWebsocket } from '@/modules'
 import { BehaviorAttack } from '@/BehaviorModules'
 import { LegionStateMachineTargets } from 'base-types'
 import { Bot } from 'mineflayer'

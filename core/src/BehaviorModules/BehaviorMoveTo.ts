@@ -1,9 +1,8 @@
-import mineflayerPathfinder, { Movements } from 'mineflayer-pathfinder'
-import botWebsocket from '@/modules/botWebsocket'
-import { LegionStateMachineTargets, Vec3WithDimension } from 'base-types'
-import movementModule from '@/modules/movementModule'
-import { StateBehavior } from 'mineflayer-statemachine'
 import { Bot, Dimension, Dimension_V2 } from 'mineflayer'
+import mineflayerPathfinder, { Movements } from 'mineflayer-pathfinder'
+import { LegionStateMachineTargets, Vec3WithDimension } from 'base-types'
+import { movementModule, botWebsocket } from '@/modules'
+import { StateBehavior } from 'mineflayer-statemachine'
 
 export class BehaviorMoveTo implements StateBehavior {
   active: boolean

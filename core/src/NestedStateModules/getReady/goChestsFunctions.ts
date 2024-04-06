@@ -1,6 +1,6 @@
 import { StateTransition, BehaviorIdle, NestedStateMachine } from 'mineflayer-statemachine'
 import { BehaviorLoadConfig, BehaviorWithdrawItemChest, BehaviorDepositItemChest, BehaviorCheckItemsInInventory, BehaviorMoveTo } from '@/BehaviorModules'
-import chestModule from '@/modules/chestModule'
+import { chestModule } from '@/modules'
 import SearchAndCraftFunction from '@/NestedStateModules/crafterJob/searchAndCraftFunction'
 import { Chest, Item, LegionStateMachineTargets } from 'base-types'
 import { Bot } from 'mineflayer'

@@ -1,7 +1,7 @@
 import { StateTransition, BehaviorIdle, NestedStateMachine } from 'mineflayer-statemachine'
 import { BehaviorEatFood } from '@/BehaviorModules'
 import { LegionStateMachineTargets } from 'base-types'
-import getClosestEnemy from '@/modules/getClosestEnemy'
+import { getClosestEnemy } from '@/modules'
 import GoChestsFunctions from '@/NestedStateModules/getReady/goChestsFunctions'
 import FarmingFunction from '@/NestedStateModules/farmerJob/farmingFunction'
 import GetReadyFunction from '@/NestedStateModules/getReady/init'

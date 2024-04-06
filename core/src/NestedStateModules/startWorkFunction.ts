@@ -1,6 +1,6 @@
 import { StateTransition, BehaviorIdle, NestedStateMachine, BehaviorFollowEntity } from 'mineflayer-statemachine'
 import { DefaultBlockForPlace, Jobs, LegionStateMachineTargets } from 'base-types'
-import movementModule from '@/modules/movementModule'
+import { movementModule } from '@/modules'
 import GuardJob from '@/NestedStateModules/guardJob/init'
 import ArcherJob from '@/NestedStateModules/archerJob/init'
 import FarmerJob from '@/NestedStateModules/farmerJob/init'

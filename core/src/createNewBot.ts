@@ -1,12 +1,11 @@
 import mineflayer, { Bot } from "mineflayer";
 import customStartLoader from "@/custom_start/custom"
-
-import botWebsocket from "@/modules/botWebsocket";
+import { botWebsocket } from "@/modules";
 import mcDataLoader from 'minecraft-data'
 import mineflayerPathfinder from 'mineflayer-pathfinder'
 import hawkEye from 'minecrafthawkeye'
 import StartStateMachine from '@/NestedStateModules/MainStateMachine'
-import injectBotConfig from "./modules/botConfig";
+import { injectBotConfig } from "@/modules";
 import { Vec3 } from "vec3";
 import { Config, defaultConfig } from "base-types";
 import { cloneDeep } from 'lodash'

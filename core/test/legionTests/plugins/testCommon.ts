@@ -3,7 +3,6 @@ import { Vec3 } from 'vec3'
 
 import { sleep, onceWithCleanup } from '../../lib/promise_utils'
 
-import botConfigLoader from '@/modules/botConfig'
 import { TestBot as Bot, defaultConfig } from 'base-types'
 import { Block } from 'prismarine-block'
 import { Item } from 'prismarine-item'

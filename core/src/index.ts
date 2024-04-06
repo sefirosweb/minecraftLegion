@@ -1,6 +1,6 @@
 import { botType } from "base-types";
 import { startBot } from "@/startBot";
-import { connectCore } from "@/modules/connectSocket";
+import { connectCore } from "@/modules";
 import { botsToStart as botsToStartEnv } from "@/config";
 
 const index = () => {

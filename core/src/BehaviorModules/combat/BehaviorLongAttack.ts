@@ -1,6 +1,5 @@
 import { LegionStateMachineTargets } from "base-types"
-import inventoryModule from '@/modules/inventoryModule'
-import botWebsocket from '@/modules/botWebsocket'
+import { inventoryModule, botWebsocket } from '@/modules'
 import { StateBehavior } from "mineflayer-statemachine"
 import { Bot } from "mineflayer";
 import { GetMasterGrade } from "minecrafthawkeye";

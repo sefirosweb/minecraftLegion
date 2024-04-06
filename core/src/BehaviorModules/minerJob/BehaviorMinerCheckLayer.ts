@@ -1,7 +1,6 @@
 import { LegionStateMachineTargets, MineCordsConfig } from "base-types"
-
 import mineflayerPathfinder from 'mineflayer-pathfinder'
-import botWebsocket from '@/modules/botWebsocket'
+import { botWebsocket } from '@/modules'
 import { Vec3 } from 'vec3'
 import { StateBehavior } from "mineflayer-statemachine";
 import { Block } from "prismarine-block";

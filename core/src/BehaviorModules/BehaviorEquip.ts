@@ -1,6 +1,6 @@
 
 import { LegionStateMachineTargets } from "base-types"
-import botWebsocket from '@/modules/botWebsocket'
+import { botWebsocket } from '@/modules'
 import { Item as PrismarineItem } from 'prismarine-item';
 import { Bot, EquipmentDestination } from "mineflayer";
 import { StateBehavior } from "mineflayer-statemachine";

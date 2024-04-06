@@ -1,10 +1,10 @@
 
 import { BlockChest, Facing, ChestPosition, Item, ItemArmor } from "base-types"
-import { getSecondBlockPosition } from '@/modules/utils'
+import { getSecondBlockPosition } from '@/modules'
 import { Bot, EquipmentDestination, FindBlockOptions } from "mineflayer"
 import { Vec3 } from "vec3"
 
-const inventoryModule = (bot: Bot) => {
+export const inventoryModule = (bot: Bot) => {
 
   function countItemsInInventoryOrEquipped(item: string) {
     let currentItems = 0
@@ -239,6 +239,3 @@ const inventoryModule = (bot: Bot) => {
     equipHeldItem
   }
 }
-
-
-export default inventoryModule

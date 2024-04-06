@@ -1,8 +1,8 @@
 import { Jobs, Config } from 'base-types'
 import { bot } from '../hooks'
-import botWebsocket from '@/modules/botWebsocket'
 import { defaultConfig } from 'base-types'
 import _ from 'lodash'
+import { botWebsocket } from '@/modules'
 
 describe('11 Sorting items', function () {
   before(async () => {

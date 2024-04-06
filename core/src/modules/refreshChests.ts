@@ -2,11 +2,10 @@ import { ChestBlock, ChestProperty, LegionStateMachineTargets } from "base-types
 import { Bot, Chest, Dimension_V2 } from "mineflayer"
 import { Block } from "prismarine-block"
 import { Vec3 } from "vec3"
-import { getSecondBlockPosition } from "./utils"
-import botWebsocket from '@/modules/botWebsocket'
+import { botWebsocket, getSecondBlockPosition } from "@/modules"
 import { v4 as uuidv4 } from 'uuid';
 
-const refreshChest = (chestToOpen: Block, container: Chest, bot: Bot, targets: LegionStateMachineTargets) => {
+export const refreshChest = (chestToOpen: Block, container: Chest, bot: Bot, targets: LegionStateMachineTargets) => {
     const chest = Object.values(targets.chests).find(c => {
         const chestPosition = new Vec3(c.position.x, c.position.y, c.position.z)
         if (chestPosition.equals(chestToOpen.position)) return true
@@ -46,5 +45,3 @@ const refreshChest = (chestToOpen: Block, container: Chest, bot: Bot, targets: L
 
     botWebsocket.sendAction('setChests', targets.chests)
 }
-
-export default refreshChest

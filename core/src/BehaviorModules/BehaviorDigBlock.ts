@@ -1,10 +1,9 @@
 
-import { LegionStateMachineTargets } from 'base-types'
-import botWebsocket from '@/modules/botWebsocket'
-import digBlockModule from '@/modules/digBlockModule'
-import { Vec3 } from "vec3"
-import { StateBehavior } from "mineflayer-statemachine"
 import { Bot } from "mineflayer"
+import { Vec3 } from "vec3"
+import { LegionStateMachineTargets } from 'base-types'
+import { StateBehavior } from "mineflayer-statemachine"
+import { digBlockModule, botWebsocket } from '@/modules'
 export class BehaviorDigBlock implements StateBehavior {
   active: boolean;
   readonly bot: Bot

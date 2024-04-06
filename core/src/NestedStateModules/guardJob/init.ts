@@ -2,7 +2,7 @@ import { StateTransition, BehaviorIdle, NestedStateMachine, BehaviorFollowEntity
 import { BehaviorLoadConfig, BehaviorMoveToArray, BehaviorEatFood, BehaviorEquipAll, BehaviorFindItems, BehaviorHelpFriend, BehaviorMoveTo } from '@/BehaviorModules'
 import CombatStrategyFunction from '@/NestedStateModules/combat/init'
 import GetReadyFunction from '@/NestedStateModules/getReady/init'
-import getClosestEnemy from '@/modules/getClosestEnemy'
+import { getClosestEnemy } from '@/modules'
 import { LegionStateMachineTargets } from 'base-types'
 import { Bot } from 'mineflayer'
 

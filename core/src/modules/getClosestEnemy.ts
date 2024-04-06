@@ -1,12 +1,12 @@
 
 
 import { CustomEntity, LegionStateMachineTargets } from 'base-types'
-import botWebsocket from '@/modules/botWebsocket'
+import { botWebsocket } from '@/modules'
 import { Entity } from 'prismarine-entity'
 import mineflayerPathfinder from 'mineflayer-pathfinder'
 import { Bot } from 'mineflayer'
 
-const getClosestEnemy = (bot: Bot, targets: LegionStateMachineTargets) => {
+export const getClosestEnemy = (bot: Bot, targets: LegionStateMachineTargets) => {
   let entities: Array<CustomEntity> = []
   let currentEntity: number | undefined
 
@@ -157,5 +157,3 @@ const getClosestEnemy = (bot: Bot, targets: LegionStateMachineTargets) => {
     flyingMobs
   }
 }
-
-export default getClosestEnemy

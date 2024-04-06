@@ -1,9 +1,9 @@
 import mineflayerPathfinder, { Movements } from 'mineflayer-pathfinder'
-import botWebsocket from '@/modules/botWebsocket'
 import { LegionStateMachineTargets } from 'base-types'
 import { Vec3 } from 'vec3'
 import { StateBehavior } from 'mineflayer-statemachine'
 import { Bot } from 'mineflayer'
+import { botWebsocket } from '@/modules'
 
 export class BehaviorMoveToArray implements StateBehavior {
   readonly bot: Bot

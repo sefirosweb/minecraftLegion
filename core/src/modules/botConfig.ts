@@ -6,7 +6,7 @@ import _ from 'lodash'
 
 let bot: Bot
 
-export default (_bot: Bot, botName: string) => {
+export const injectBotConfig = (_bot: Bot, botName: string) => {
   bot = _bot
 
   const dir = path.join(__dirname, '..', 'botConfig')

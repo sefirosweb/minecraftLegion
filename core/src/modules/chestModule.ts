@@ -1,12 +1,10 @@
 
 import { Chest, Chests, Item, LegionStateMachineTargets } from "base-types"
-import sorterJob from '@/modules/sorterJob'
-import inventoryModule from '@/modules/inventoryModule'
+import { findItemsInChests, inventoryModule } from '@/modules'
 import _ from 'lodash'
 import { Bot, Dimension_V2 } from "mineflayer"
 
-const chestModule = (bot: Bot, targets: LegionStateMachineTargets) => {
-  const { findItemsInChests } = sorterJob()
+export const chestModule = (bot: Bot, targets: LegionStateMachineTargets) => {
   const { getResumeInventory } = inventoryModule(bot)
 
   const getItemsToWithdrawInChests = (InputChests: Array<Chest>): Array<Item> => {
@@ -61,5 +59,3 @@ const chestModule = (bot: Bot, targets: LegionStateMachineTargets) => {
     findChestsToWithdraw
   }
 }
-
-export default chestModule

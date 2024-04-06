@@ -1,8 +1,8 @@
-import botWebsocket from '@/modules/botWebsocket'
-import { BotFriends, EntityWithDistance, LegionStateMachineTargets } from 'base-types'
 import { Bot } from 'mineflayer';
-import { StateBehavior } from 'mineflayer-statemachine'
 import { Entity } from 'prismarine-entity'
+import { StateBehavior } from 'mineflayer-statemachine'
+import { BotFriends, EntityWithDistance, LegionStateMachineTargets } from 'base-types'
+import { botWebsocket } from '@/modules'
 
 export class BehaviorHelpFriend implements StateBehavior {
   active: boolean;

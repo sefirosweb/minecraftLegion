@@ -1,9 +1,9 @@
-import inventoryModule from '@/modules/inventoryModule'
 import { Jobs, Config, PlantArea } from 'base-types'
 import { bot } from '../hooks'
 import { defaultConfig } from 'base-types'
 import { v4 as uuidv4 } from 'uuid';
 import _ from 'lodash'
+import { inventoryModule } from '@/modules'
 
 describe('06 Wood cutter', function () {
   const plantAreas: Array<PlantArea> = [

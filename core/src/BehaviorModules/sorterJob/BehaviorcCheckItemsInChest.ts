@@ -1,10 +1,10 @@
-import botWebsocket from '@/modules/botWebsocket'
 import { ChestBlock, LegionStateMachineTargets } from 'base-types';
 import { StateBehavior } from 'mineflayer-statemachine';
 import vec3 from 'vec3'
 import { v4 as uuidv4 } from 'uuid';
 import { Bot, Dimension_V2 } from 'mineflayer';
 import _ from 'lodash';
+import { botWebsocket } from '@/modules'
 
 export class BehaviorcCheckItemsInChest implements StateBehavior {
   active: boolean;

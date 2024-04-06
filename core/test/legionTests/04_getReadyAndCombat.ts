@@ -1,7 +1,7 @@
 import { bot } from '../hooks'
 import { Jobs, Chest, Config } from 'base-types'
 import { Vec3 } from 'vec3'
-import botWebsocket from '@/modules/botWebsocket'
+import { botWebsocket } from '@/modules'
 import { defaultConfig } from 'base-types'
 import { v4 as uuidv4 } from 'uuid';
 import _ from 'lodash'

@@ -1,8 +1,5 @@
 
-import botWebsocket from '@/modules/botWebsocket'
-import digBlockModule from '@/modules/digBlockModule'
-import placeBlockModule from '@/modules/placeBlockModule'
-import inventoryModule from '@/modules/inventoryModule'
+import { placeBlockModule, inventoryModule, digBlockModule, botWebsocket } from '@/modules'
 import { Vec3 } from "vec3"
 import { StateBehavior } from "mineflayer-statemachine"
 import { LegionStateMachineTargets } from 'base-types'

@@ -6,7 +6,7 @@ import FindItemsAndPickup from '@/NestedStateModules/findItemsAndPickup'
 import mineflayerPathfinder, { Movements } from 'mineflayer-pathfinder'
 import { LegionStateMachineTargets, MineCords, MineCordsConfig } from 'base-types'
 import { Bot } from 'mineflayer'
-import { saveBotConfig } from '@/modules/botConfig'
+import { saveBotConfig } from '@/modules'
 
 const movingWhile = (bot: Bot, nextCurrentLayer: MineCords, movements: Movements) => {
   let x, y, z

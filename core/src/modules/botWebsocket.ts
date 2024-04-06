@@ -1,13 +1,10 @@
+import { Bot } from 'mineflayer'
 import { Socket } from 'socket.io-client'
 import type { BotFriends, BotwebsocketAction, Config, Master } from 'base-types'
 import { Vec3 } from 'vec3'
-
 import configBot from '@/config'
-
 import { Entity } from 'prismarine-entity'
-import { Bot } from 'mineflayer'
-import { connectBotToServer } from '@/modules/connectSocket'
-import { webSocketQueue } from './queues'
+import { webSocketQueue, connectBotToServer } from '@/modules'
 import { saveBotConfig } from './botConfig'
 import { afterDeathTransitions } from '@/NestedStateModules'
 
@@ -207,7 +204,7 @@ const nextPointListener = () => {
   }
 }
 
-const botWebsocketLoader = {
+export const botWebsocket = {
   loadBot,
   connect,
   on,
@@ -219,5 +216,3 @@ const botWebsocketLoader = {
   getMasters,
   sendAction
 }
-
-export default botWebsocketLoader

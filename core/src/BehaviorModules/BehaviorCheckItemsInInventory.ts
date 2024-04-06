@@ -1,6 +1,6 @@
 
 import { DepositType, LegionStateMachineTargets, Item } from "base-types"
-import inventoryModule from '@/modules/inventoryModule'
+import { inventoryModule } from '@/modules'
 import { Item as McItem } from "prismarine-item"
 import { StateBehavior } from "mineflayer-statemachine"
 import { Bot } from "mineflayer";

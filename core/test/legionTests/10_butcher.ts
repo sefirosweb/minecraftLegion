@@ -1,9 +1,9 @@
-import inventoryModule from '@/modules/inventoryModule'
 import { Jobs, Config } from 'base-types'
 import { bot } from '../hooks'
 import { defaultConfig } from 'base-types'
 import { v4 as uuidv4 } from 'uuid';
 import _ from 'lodash'
+import { inventoryModule } from '@/modules'
 
 const listOfAnimalstoFeed = [
   {

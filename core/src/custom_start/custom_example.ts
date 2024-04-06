@@ -1,5 +1,5 @@
 import { Entity } from 'prismarine-entity'
-import { sleep } from '@/modules/utils'
+import { sleep } from '@/modules'
 import mineflayerPathfinder from 'mineflayer-pathfinder'
 import { Bot } from 'mineflayer'
 

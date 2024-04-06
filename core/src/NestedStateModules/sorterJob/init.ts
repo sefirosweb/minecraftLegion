@@ -2,8 +2,7 @@ import vec3 from 'vec3'
 import { StateTransition, BehaviorIdle, NestedStateMachine } from 'mineflayer-statemachine'
 import { BehaviorcCheckItemsInChest, BehaviorMoveTo } from '@/BehaviorModules'
 import { NewChestBlock, LegionStateMachineTargets } from 'base-types'
-import sorterJob from '@/modules/sorterJob'
-import inventoryModule from '@/modules/inventoryModule'
+import { sortChests, calculateSlotsToSort, inventoryModule } from '@/modules'
 import DepositItemsInInventory from '@/NestedStateModules/sorterJob/depositItemsInInventory'
 import SortChestFunction from '@/NestedStateModules/sorterJob/sortChestFunction'
 import { Block } from 'prismarine-block'
@@ -11,7 +10,6 @@ import { Bot, Dimension_V2 } from 'mineflayer'
 
 const sorterJobFunction = (bot: Bot, targets: LegionStateMachineTargets) => {
   const { findChests } = inventoryModule(bot)
-  const { sortChests, calculateSlotsToSort } = sorterJob()
 
   const start = new BehaviorIdle()
   start.stateName = 'Start'

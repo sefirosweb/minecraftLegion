@@ -2,7 +2,7 @@ import { StateTransition, BehaviorIdle, NestedStateMachine, BehaviorFindInteract
 import { BehaviorDigBlock, BehaviorCustomPlaceBlock, BehaviorLoadConfig, BehaviorMoveTo } from '@/BehaviorModules'
 import { LegionStateMachineTargets } from 'base-types'
 import { Vec3 } from 'vec3'
-import placeBlockModule from '@/modules/placeBlockModule'
+import { placeBlockModule } from '@/modules'
 import { Bot } from 'mineflayer'
 
 function fillFunction(bot: Bot, targets: LegionStateMachineTargets) {

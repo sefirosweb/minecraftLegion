@@ -5,7 +5,7 @@ import { Block } from 'prismarine-block'
 import { Item } from 'prismarine-item';
 import { Bot } from "mineflayer";
 
-const digBlockModule = (bot: Bot) => {
+export const digBlockModule = (bot: Bot) => {
 
   const startDig = (block: Block): Promise<void> => {
     return new Promise((resolve, reject) => {
@@ -97,6 +97,3 @@ const digBlockModule = (bot: Bot) => {
     digBlock
   }
 }
-
-
-export default digBlockModule

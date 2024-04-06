@@ -1,7 +1,7 @@
 
 import { LegionStateMachineTargets } from "base-types"
-import botWebsocket from '@/modules/botWebsocket'
-import inventoryModule from '@/modules/inventoryModule'
+import { botWebsocket } from '@/modules'
+import { inventoryModule } from '@/modules'
 import { StateBehavior } from "mineflayer-statemachine"
 import { Bot } from "mineflayer";
 export class BehaviorEquipAll implements StateBehavior {

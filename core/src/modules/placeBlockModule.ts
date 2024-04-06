@@ -3,7 +3,7 @@ import { Vec3 } from 'vec3'
 import { Block } from 'prismarine-block'
 import { Bot } from 'mineflayer'
 
-const placeBlockModule = (bot: Bot) => {
+export const placeBlockModule = (bot: Bot) => {
   const blocksCanBeReplaced = ['air', 'cave_air', 'lava', 'water', 'bubble_column', 'seagrass', 'tall_seagrass', 'kelp_plant']
   const blocksToBeRplaced = ['kelp'].concat(blocksCanBeReplaced)
   let isJumping: boolean
@@ -178,5 +178,3 @@ const placeBlockModule = (bot: Bot) => {
     place
   }
 }
-
-export default placeBlockModule

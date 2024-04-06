@@ -1,14 +1,8 @@
-import {
-  StateTransition,
-  BehaviorIdle,
-  NestedStateMachine
-} from 'mineflayer-statemachine'
-
-import { shuffle } from '@/modules/utils'
-import botWebsocket from '@/modules/botWebsocket'
+import { StateTransition, BehaviorIdle, NestedStateMachine } from 'mineflayer-statemachine'
+import { shuffle, botWebsocket } from '@/modules'
 import { BehaviorLoadConfig } from '@/BehaviorModules'
 import { LegionStateMachineTargets, PlantArea } from 'base-types'
-import { plants } from '@/modules/plantType'
+import { plants } from '@/modules'
 import FarmingPlantsFunction from '@/NestedStateModules/farmerJob/farmingPlantsFunction'
 import FarmingTreesFunction from '@/NestedStateModules/farmerJob/farmingTreesFunction'
 import { Bot } from 'mineflayer'

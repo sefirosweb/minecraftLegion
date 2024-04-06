@@ -1,11 +1,10 @@
 
 import { LegionStateMachineTargets, Portals, PortalType, Vec3WithDimension, Vec3WithDistance } from "base-types"
-import botWebsocket from '@/modules/botWebsocket'
 import mineflayerPathfinder from 'mineflayer-pathfinder'
 import { Vec3 } from 'vec3'
 import { Bot, Dimension_V2 } from "mineflayer"
-import { lazyFind } from "./lazyFind"
 import _ from "lodash"
+import { botWebsocket, lazyFind } from '@/modules'
 
 const parseDestination = (origin: Dimension_V2, destination: Dimension_V2): keyof Portals => {
   if (origin === "overworld" && destination === "the_end") {
@@ -27,7 +26,7 @@ const parseDestination = (origin: Dimension_V2, destination: Dimension_V2): keyo
   return 'overworld_to_the_nether'
 }
 
-const movementModule = (bot: Bot, targets: LegionStateMachineTargets) => {
+export const movementModule = (bot: Bot, targets: LegionStateMachineTargets) => {
   const getNearestPortal = async (dimension: Dimension_V2, destination: Vec3WithDimension) => {
     const portalsFound = await findPortals(dimension)
     const portals: Array<Vec3WithDistance> = compareWithCurrentPortals(portalsFound, dimension)
@@ -227,5 +226,3 @@ const movementModule = (bot: Bot, targets: LegionStateMachineTargets) => {
     getAllBlocksExceptLeafs
   }
 }
-
-export default movementModule

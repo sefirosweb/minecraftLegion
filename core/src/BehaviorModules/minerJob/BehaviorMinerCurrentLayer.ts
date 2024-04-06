@@ -1,7 +1,7 @@
 
 import { LegionStateMachineTargets, MineCordsConfig } from 'base-types'
 
-import botWebsocket from '@/modules/botWebsocket'
+import { botWebsocket } from '@/modules'
 import { StateBehavior } from 'mineflayer-statemachine';
 import { Bot } from 'mineflayer';
 

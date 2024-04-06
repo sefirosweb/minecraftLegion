@@ -1,13 +1,11 @@
 
 
-import botWebsocket from '@/modules/botWebsocket'
-import refreshChest from '@/modules/refreshChests'
-import { sleep } from '@/modules/utils'
 import { ChestTransaction, Item, LegionStateMachineTargets } from 'base-types'
 import { Bot, Chest, TransferOptions } from 'mineflayer'
 import { StateBehavior } from 'mineflayer-statemachine'
 import { Block } from 'prismarine-block'
 import { Vec3 } from 'vec3'
+import { refreshChest, botWebsocket, sleep } from '@/modules'
 export class BehaviorDepositItemChest implements StateBehavior {
   active: boolean;
   readonly bot: Bot
