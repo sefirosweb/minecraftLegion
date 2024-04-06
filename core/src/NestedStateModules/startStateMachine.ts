@@ -1,4 +1,4 @@
-import { LegionStateMachineTargets, BotwebsocketAction } from "base-types"
+import { LegionStateMachineTargets } from "base-types"
 import { Bot, BotEvents } from "mineflayer"
 import { Vec3 } from "vec3"
 import config from '@/config'
@@ -6,7 +6,7 @@ import movementModule from '@/modules/movementModule'
 import botWebsocket from '@/modules/botWebsocket'
 import mineflayerPathfinder from 'mineflayer-pathfinder'
 import { startPrismarineViewer } from '@/modules/viewer'
-import DeathFunction from '@/NestedStateModules/deathFunction'
+import DeathFunction from '@/NestedStateModules/afterDeathFunction'
 import { StateTransition, BotStateMachine, StateMachineWebserver, BehaviorIdle, NestedStateMachine } from 'mineflayer-statemachine'
 import { getFreePort } from "@/modules/utils"
 
