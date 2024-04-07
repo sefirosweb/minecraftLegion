@@ -149,9 +149,9 @@ const startStateMachine = (bot: Bot) => {
   })
 
 
-  bot.on('spawn', () => {
-    checkPortalsOnSpawn()
-  })
+  /* bot.on('spawn', () => {
+     checkPortalsOnSpawn()
+   })*/
 
   bot.on('physicsTick', () => {
     bot.emit('customEventPhysicTick')
@@ -179,9 +179,7 @@ const startStateMachine = (bot: Bot) => {
 
     botWebsocket.on('action', (action) => {
       if (action.type !== 'getProcessList') return
-      console.log('actionactionaction', action.type)
-      // bot.on('newListener', () => {
-      // })
+      sentEvents()
     })
 
     bot.on('newListener', () => {
