@@ -124,16 +124,17 @@ const startStateMachine = (bot: Bot) => {
   const stateMachine = new BotStateMachine(bot, root)
 
   bot.on('death', function () {
+    bot.pathfinder.setGoal(null)
     bot.stopDigging()
     // Clear custom events when dies
     bot.removeAllListeners('customEventPhysicTick')
     bot.removeAllListeners('customEventChat')
     bot.removeAllListeners('customEventMove')
 
-    botWebsocket.log('trigger death')
+    botWebsocket.log('Bot died!')
     botWebsocket.emitCombat(false)
 
-    setTimeout(() => transitions[2].trigger(), 1000)
+    transitions[2].trigger()
   })
 
   bot.on('health', () => {
