@@ -36,9 +36,11 @@ export const ProcessList: React.FC = () => {
       <h4>List of all events used by bot</h4>
       <div className='border border-warning'>
         <ul>
-          {bot.events.map((e, i) => (
-            <li key={i}>{e}</li>
-          ))}
+          {bot.events
+            .sort((a, b) => a.localeCompare(b))
+            .map((e, i) => (
+              <li key={i}>{e}</li>
+            ))}
 
           {/* {events.map((e, i) => (
             <li key={i}>{e}</li>
