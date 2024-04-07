@@ -126,7 +126,6 @@ export class BehaviorMoveTo implements StateBehavior {
   }
 
   restart() {
-    console.log('restarting...')
     if (!this.active) {
       return
     }
