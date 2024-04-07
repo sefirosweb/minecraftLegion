@@ -58,12 +58,13 @@ export class BehaviorSleep implements StateBehavior {
     /****/
 
     // Pending issue
-    // https://github.com/PrismarineJS/mineflayer/issues/3349
-
+    
     this.bot.sleep(block)
-      .catch(err => {
-        /** HOTFIX until sleep() is fixed **/
-        console.log('clearing timeout')
+    .catch(err => {
+      /** HOTFIX until sleep() is fixed **/
+      console.log('clearing timeout')
+      // https://github.com/PrismarineJS/mineflayer/issues/3349
+        this.bot.removeAllListeners('sleep')
         clearTimeout(timeOutForsleep)
         /****/
 
