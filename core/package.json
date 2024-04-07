@@ -9,6 +9,9 @@
     "scripts": {
         "start": "nodemon src/index.ts --ignore botConfig/ --ignore custom_start/",
         "one": "nodemon --inspect=0.0.0.0:9229 src/start_bot.ts $1 $2",
+        "oneTest": "node --cpu-prof -r ts-node/register -r tsconfig-paths/register src/start_bot.ts $1 $2",
+        "oneTest1": "node --watch -r ts-node/register -r tsconfig-paths/register --trace-event-categories=v8,node.async_hooks src/start_bot.ts $1 $2",
+        "oneTest2": "NODE_DEBUG=* node -r ts-node/register -r tsconfig-paths/register src/start_bot.ts $1 $2",
         "test": "mocha -r tsconfig-paths/register -r ts-node/register -r test/hooks.ts --inspect=0.0.0.0:9229 --exit",
         "test:all": "npm run test 'test/legionTests/*.ts'",
         "test:from": "npm run test -- --grep '^0'${npm_config_start}'[0-9]*' test/legionTests/*",
