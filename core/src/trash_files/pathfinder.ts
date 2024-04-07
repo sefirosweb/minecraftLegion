@@ -1,7 +1,11 @@
+import { PartiallyComputedPath } from "mineflayer-pathfinder"
+
 const { Vec3 } = require('vec3')
 const mineflayer = require('mineflayer')
 const { Movements, goals, pathfinder } = require('mineflayer-pathfinder')
 
+// usage:
+// node -r ts-node/register src/trash_files/pathfinder.ts localhost 25565 Miner
 
 const bot = mineflayer.createBot({
   host: process.argv[2] ? process.argv[2] : 'localhost',
@@ -12,7 +16,7 @@ const bot = mineflayer.createBot({
 
 bot.loadPlugin(pathfinder)
 
-const path_update = (r) => {
+const path_update = (r: PartiallyComputedPath) => {
   if (r.status === 'noPath') { console.log('[MoveTo] No path to target!') }
 }
 
@@ -38,6 +42,7 @@ const startMoving = () => {
 }
 
 const start = () => {
+  bot.pathfinder.setGoal(null)
   bot.on('path_update', path_update)
   bot.on('goal_reached', goal_reached)
   startMoving()
