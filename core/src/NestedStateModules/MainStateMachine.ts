@@ -149,9 +149,9 @@ const startStateMachine = (bot: Bot) => {
   })
 
 
-  /* bot.on('spawn', () => {
-     checkPortalsOnSpawn()
-   })*/
+  bot.on('spawn', () => {
+    checkPortalsOnSpawn()
+  })
 
   bot.on('physicsTick', () => {
     bot.emit('customEventPhysicTick')
