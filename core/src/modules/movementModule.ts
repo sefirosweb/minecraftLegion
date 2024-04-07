@@ -71,6 +71,8 @@ export const movementModule = (bot: Bot, targets: LegionStateMachineTargets) => 
   }
 
   const checkPortalsOnSpawn = async () => {
+    // disabled
+    return;
     let portals: Array<Vec3> = []
     let dimension: Dimension_V2
     if (bot.game.dimension as Dimension_V2 === 'the_nether') {
