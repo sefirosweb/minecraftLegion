@@ -82,9 +82,8 @@ export const createNewBot = (props: Props): Bot => {
     console.log('\x1b[33m%s\x1b[0m', 'Injected pathfinder');
   });
 
-  bot.once("kicked", (reason: string) => {
-    const reasonDecoded = JSON.parse(reason);
-    console.log(reasonDecoded);
+  bot.once("kicked", (reason) => {
+    console.log(reason);
     process.exit();
   });
 
