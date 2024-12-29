@@ -27,7 +27,7 @@ type Props = {
 export const Chest: React.FC<Props> = (props) => {
   const { uuid, chest, handleMovePosNext, handleMovePosPrev, disabledMoveNext, disabledMovePrev, handleDeleteChest, handleChangeChest, handleExcludeItemInChest } = props
   const { bot } = useContext(BotSelectedContext);
-  const [master] = useStore(state => [state.master, state.socket])
+  const master = useStore(state => state.master)
 
   const [itemName, setItemName] = useState<ItemOption | null>(null);
   const [quantity, setQuantity] = useState("1");
@@ -222,7 +222,7 @@ export const Chest: React.FC<Props> = (props) => {
         <Coords coords={chest.position} onChange={handleChangeChestPos} />
       </Row>
 
-      <Button className="mb-3" onClick={handleCopyPositionMaster}>
+      <Button className="mb-3" onClick={handleCopyPositionMaster} disabled={isLoading}>
         Copy position same has master
       </Button>
 

@@ -7,35 +7,22 @@ import { useStore } from '@/hooks/useStore';
 const socket = io();
 
 export const useSocketSetup = () => {
+
     const verifyLoggedIn = useVerifyLoggedIn()
-    const [
-        setSocket,
-        setBotsOnline,
-        setCoreConnected,
-        addLog,
-        updateBotStatus,
-        setMasters,
-        setChests,
-        setPortals,
-        setConfig] =
-        useStore(state => [
-            state.setSocket,
-            state.setBotsOnline,
-            state.setCoreConnected,
-            state.addLog,
-            state.updateBotStatus,
-            state.setMasters,
-            state.setChests,
-            state.setPortals,
-            state.setConfig
-        ])
+    const setSocket = useStore(state => state.setSocket);
+    const setBotsOnline = useStore(state => state.setBotsOnline);
+    const setCoreConnected = useStore(state => state.setCoreConnected);
+    const addLog = useStore(state => state.addLog);
+    const updateBotStatus = useStore(state => state.updateBotStatus);
+    const setMasters = useStore(state => state.setMasters);
+    const setChests = useStore(state => state.setChests);
+    const setPortals = useStore(state => state.setPortals);
+    const setConfig = useStore(state => state.setConfig);
 
     useEffect(() => {
-        console.log(`Conecting to server`);
-
         setSocket(socket);
         socket.on("connect", () => {
-            console.log(`Connected to`);
+            console.log(`Connected`);
             socket.emit('isWeb')
         });
 
@@ -81,7 +68,6 @@ export const useSocketSetup = () => {
             }
         });
 
-
         socket.on("botsOnline", (botsOnline: Array<Bot>) => {
             const botsConnected = botsOnline.sort(function (a, b) {
                 if (a.name < b.name) {
@@ -105,5 +91,5 @@ export const useSocketSetup = () => {
             socket.off("botsOnline");
         }
 
-    }, [])
+    }, [setSocket, setBotsOnline, setCoreConnected, addLog, updateBotStatus, setMasters, setChests, setPortals, setConfig, verifyLoggedIn])
 }

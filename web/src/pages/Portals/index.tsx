@@ -12,7 +12,7 @@ export const Portals: React.FC = () => {
     the_nether_to_overworld: []
   });
 
-  const [socket] = useStore(state => [state.socket])
+  const socket = useStore(state => state.socket)
 
   useEffect(() => {
     socket?.on('action', ({ type, value }: { type: string, value: PortalsType }) => {

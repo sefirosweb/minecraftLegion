@@ -26,18 +26,18 @@
   },
   "homepage": "https://github.com/sefirosweb/minecraftLegion#readme",
   "dependencies": {
-    "dotenv": "^16.4.5",
+    "dotenv": "^16.4.7",
     "fs-extra": "^11.2.0"
   },
   "devDependencies": {
-    "minecraft-data": "^3.64.1",
+    "minecraft-data": "^3.80.0",
     "minecraft-wrap": "^1.5.1",
-    "mineflayer": "^4.20.0",
+    "mineflayer": "^4.23.0",
     "mineflayer-pathfinder": "^2.4.5",
     "mineflayer-statemachine": "^1.7.0",
-    "prismarine-block": "^1.17.1",
+    "prismarine-block": "^1.19.0",
     "prismarine-entity": "^2.4.0",
-    "prismarine-item": "^1.14.0",
+    "prismarine-item": "^1.15.0",
     "vec3": "^0.1.10"
   }
 }

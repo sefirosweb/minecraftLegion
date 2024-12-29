@@ -3,15 +3,11 @@ import { items, foods } from "@/utils/mcData";
 type ItemType = {
   id: number,
   name: string,
-  displayName: string,
   stackSize: number,
+  displayName: string,
 }
 
-type FoodType = {
-  id: number,
-  name: string,
-  stackSize: number,
-  displayName: string,
+type FoodType = ItemType &{
   foodPoints: number,
   saturation: number,
   effectiveQuality: number,

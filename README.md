@@ -142,3 +142,38 @@ There put all you need to do before bot starts, the function "starts" must be re
 - Add bodyguards
 
 Please keep calm. I'm working hard on this project :D
+
+# Develop
+
+1. Start devcontainer and open workspace
+
+2. Clone or download the repositorio 
+```bash 
+git clone https://github.com/sefirosweb/minecraftLegion.git && cd minecraftLegion/
+```
+3. Copy enviorement file 
+
+```bash 
+cp .env_example .env
+```
+
+4. Auto Install all the dependencies and build them 
+```bash
+npm run build
+```
+5. Start test server:
+```bash	
+npm run server
+```
+6. Start backend web server:
+```bash
+cd server && npm run start
+```
+7. Start frontend web server:
+```bash
+cd web && npm run dev
+```
+8. Start bot:
+```bash
+cd core && npm run one Guard
+```

@@ -10,7 +10,8 @@ export const BotActionButtons: React.FC = () => {
   const selectedSocketId = useParams().selectedSocketId
   const bot = useGetSelectedBot() as Bot
   const navigate = useNavigate();
-  const [master, socket] = useStore(state => [state.master, state.socket])
+  const master = useStore(state => state.master);
+  const socket = useStore(state => state.socket);
 
   const sendAction = (action: string, value?: any) => {
     socket?.emit("sendAction", {
@@ -53,7 +54,7 @@ export const BotActionButtons: React.FC = () => {
       if (!bot) {
         navigate("/dashboard");
       }
-    })
+    },200)
     return () => {
       clearInterval(interval)
     }
