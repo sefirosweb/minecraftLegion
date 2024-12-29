@@ -41,7 +41,7 @@ describe('01 Basic Mining', function () {
     await bot.test.resetState()
     bot.chat(`/give flatbot iron_pickaxe`)
     bot.chat(`/give flatbot diamond_shovel`)
-    bot.chat(`/give flatbot dirt 64`)
+    bot.chat(`/give flatbot dirt 128`)
     bot.chat(`/fill -9 -61 -9 -21 -61 -21 minecraft:lava`)
     bot.chat(`/fill ${xStart} ${yStart} ${zStart} ${xEnd} ${yEnd} ${zEnd} dirt`)
 
@@ -65,6 +65,10 @@ describe('01 Basic Mining', function () {
 
     Object.assign(bot.config, config)
     bot.emit('reloadBotConfig')
+
+    bot.once('death', () => {
+      throw new Error('Bot died')
+    })
   })
 
   it('Making a Hole X+ Normal', (): Promise<void> => {

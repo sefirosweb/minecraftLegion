@@ -1,5 +1,5 @@
-import React, { useContext } from 'react';
-import { Config, isCoordinates, isMineCoords, isWorld, istunnel } from 'base-types';
+import React, { useContext, useId } from 'react';
+import { Config, MineCords, isCoordinates, isMineCoords, isWorld, istunnel } from 'base-types';
 import { Col, Form, Row } from 'react-bootstrap'
 import HouseXYZ from '@/images/HouseXYZ.png'
 import { BotSelectedContext } from "./ConfigurationContext";
@@ -32,16 +32,15 @@ export const MinerJob: React.FC = () => {
     changeMinerConfig('reverse', mode)
   }
 
-  const handleChangePosMiner = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const pos = Number(event.target.value)
+  const updateChangePosMiner = <K extends keyof MineCords>(configToChange: K, e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const pos = Number(e.target.value)
 
-    if (!Number.isInteger(pos) && event.target.value !== '-') {
+    if (!Number.isInteger(pos) && e.target.value !== '-') {
       return null
     }
 
-    const coord = event.target.id
-    if (!isMineCoords(coord)) return
-    changeMinerConfig(coord, pos)
+    if (!isMineCoords(configToChange)) return
+    changeMinerConfig(configToChange, pos)
   }
 
   return (
@@ -123,30 +122,30 @@ export const MinerJob: React.FC = () => {
         <h5>Start Coords</h5>
         <Row>
 
-          <Form.Group as={Col} sm="4" md="3" lg="2" controlId="xStart">
+          <Form.Group as={Col} sm="4" md="3" lg="2" controlId={useId()}>
             <Form.Label><span className='badge bg-primary text-white'>X Start</span></Form.Label>
             <Form.Control
-              type="text"
+              type="number"
               value={botConfig.minerCords.xStart}
-              onChange={handleChangePosMiner}
+              onChange={(e) => updateChangePosMiner('xStart', e)}
             />
           </Form.Group>
 
-          <Form.Group as={Col} sm="4" md="3" lg="2" controlId="yStart">
+          <Form.Group as={Col} sm="4" md="3" lg="2" controlId={useId()}>
             <Form.Label><span className='badge bg-warning text-dark'>Y Start</span></Form.Label>
             <Form.Control
-              type="text"
+              type="number"
               value={botConfig.minerCords.yStart}
-              onChange={handleChangePosMiner}
+              onChange={(e) => updateChangePosMiner('yStart', e)}
             />
           </Form.Group>
 
-          <Form.Group as={Col} sm="4" md="3" lg="2" controlId="zStart">
+          <Form.Group as={Col} sm="4" md="3" lg="2" controlId={useId()}>
             <Form.Label><span className='badge bg-secondary text-white'>Z Start</span></Form.Label>
             <Form.Control
-              type="text"
+              type="number"
               value={botConfig.minerCords.zStart}
-              onChange={handleChangePosMiner}
+              onChange={(e) => updateChangePosMiner('zStart', e)}
             />
           </Form.Group>
         </Row >
@@ -156,30 +155,30 @@ export const MinerJob: React.FC = () => {
         <h5>End Coords</h5>
         <Row>
 
-          <Form.Group as={Col} sm="4" md="3" lg="2" controlId="xEnd">
+          <Form.Group as={Col} sm="4" md="3" lg="2" controlId={useId()}>
             <Form.Label><span className='badge bg-primary text-white'>X End</span></Form.Label>
             <Form.Control
-              type="text"
+              type="number"
               value={botConfig.minerCords.xEnd}
-              onChange={handleChangePosMiner}
+              onChange={(e) => updateChangePosMiner('xEnd', e)}
             />
           </Form.Group>
 
-          <Form.Group as={Col} sm="4" md="3" lg="2" controlId="yEnd">
+          <Form.Group as={Col} sm="4" md="3" lg="2" controlId={useId()}>
             <Form.Label><span className='badge bg-warning text-dark'>Y End</span></Form.Label>
             <Form.Control
-              type="text"
+              type="number"
               value={botConfig.minerCords.yEnd}
-              onChange={handleChangePosMiner}
+              onChange={(e) => updateChangePosMiner('yEnd', e)}
             />
           </Form.Group>
 
-          <Form.Group as={Col} sm="4" md="3" lg="2" controlId="zEnd">
+          <Form.Group as={Col} sm="4" md="3" lg="2" controlId={useId()}>
             <Form.Label><span className='badge bg-secondary text-white'>Z End</span></Form.Label>
             <Form.Control
-              type="text"
+              type="number"
               value={botConfig.minerCords.zEnd}
-              onChange={handleChangePosMiner}
+              onChange={(e) => updateChangePosMiner('zEnd', e)}
             />
           </Form.Group>
         </Row >
