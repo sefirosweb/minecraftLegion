@@ -8,7 +8,7 @@ export const ProcessList: React.FC = () => {
   const { bot } = useContext(BotSelectedContext);
 
   const { selectedSocketId } = useParams()
-  const [socket] = useStore(state => [state.socket])
+  const socket = useStore(state => state.socket)
   const [events, setEvents] = useState<string[]>([])
 
   useEffect(() => {

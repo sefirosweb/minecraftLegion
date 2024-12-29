@@ -1,4 +1,4 @@
-import { Routes, Route, Navigate, Router } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import { Authenticated } from "@/hooks/Authenticated";
 import { UnAuthenticated } from "@/hooks/UnAuthenticated";
 import { Login } from "@/pages/Login";

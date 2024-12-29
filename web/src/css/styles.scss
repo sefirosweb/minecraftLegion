@@ -1,4 +1,4 @@
-@import "bootstrap/dist/css/bootstrap.min.css";
-@import "toastr";
+@use "bootstrap/dist/css/bootstrap.min.css";
+@use "toastr";
 
-@import "./general.scss";
+@use "./general.scss";

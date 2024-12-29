@@ -3,11 +3,11 @@ import { ArrowDown, ArrowUp, ItemImage, ItemWithImageOption, SingleValueWithImag
 import { BotSelectedContext } from "../ConfigurationContext";
 import { Button, Col, Form, Row, Table } from "react-bootstrap";
 import AsyncSelect from 'react-select/async';
-import { FoodOption, foodsOptions } from "@/lib";
+import { ItemOption, foodsOptions } from "@/lib";
 
 export const ValidFood: React.FC = () => {
   const { botConfig, updateConfig } = useContext(BotSelectedContext);
-  const [itemName, setItemName] = useState<FoodOption | null>(null);
+  const [itemName, setItemName] = useState<ItemOption | null>(null);
 
   const handleInsertItem = () => {
     if (!itemName) {
@@ -66,7 +66,7 @@ export const ValidFood: React.FC = () => {
               loadOptions={foodsOptions}
               value={itemName}
               getOptionLabel={(option) => option.label}
-              onChange={(e) => setItemName(e as FoodOption)} />
+              onChange={(e) => setItemName(e)} />
           </Form.Group>
 
         </Col>

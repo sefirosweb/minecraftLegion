@@ -9,7 +9,8 @@ import axios from "axios";
 
 export const GuardJob: React.FC = () => {
   const { bot, botConfig, updateConfig } = useContext(BotSelectedContext);
-  const [master, socket] = useStore(state => [state.master, state.socket])
+  const master = useStore(state => state.master)
+  const socket = useStore(state => state.socket)
   const [pos, setPos] = useState<Vec3 | undefined>(undefined);
   const [isLoading, setIsLoading] = useState(false);
   const [isCopingPatrol, setIsCopingPatrol] = useState(false)

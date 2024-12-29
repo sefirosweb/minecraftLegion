@@ -43,7 +43,7 @@ type Store = {
 }
 
 
-export const useStore = create<Store>()((set, get) => ({
+export const useStore = create<Store>((set, get) => ({
     logs: [],
     setLogs: (logs) => set(() => ({ logs })),
     addLog: (newLog: Log) => set((state) => {

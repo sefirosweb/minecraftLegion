@@ -7,7 +7,7 @@ import { DrawChest } from "./DrawChest";
 
 export const Chests: React.FC = () => {
   const [chests, setChests] = useState<ChestsType>({});
-  const [socket] = useStore(state => [state.socket])
+  const socket = useStore(state => state.socket)
 
   useEffect(() => {
     socket?.on('action', ({ type, value }: { type: string, value: ChestsType }) => {
