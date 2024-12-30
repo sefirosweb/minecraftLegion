@@ -1,5 +1,5 @@
 import { BotwebsocketAction, LegionStateMachineTargets, Master } from 'base-types'
-import { StateTransition, BehaviorIdle, NestedStateMachine } from 'mineflayer-statemachine'
+import { StateTransition, BehaviorIdle, NestedStateMachine } from 'minecraftlegion-statemachine'
 import { botWebsocket } from '@/modules'
 import StartWork from '@/NestedStateModules/startWorkFunction'
 import Commands from '@/NestedStateModules/commandsFunction'

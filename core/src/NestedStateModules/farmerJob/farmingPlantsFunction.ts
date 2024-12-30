@@ -3,7 +3,7 @@ import {
   StateTransition,
   BehaviorIdle,
   NestedStateMachine
-} from 'mineflayer-statemachine'
+} from 'minecraftlegion-statemachine'
 import PlantFunction from '@/NestedStateModules/farmerJob/plantFunction'
 import HarvestFunction from '@/NestedStateModules/farmerJob/harvestFunction'
 import FindItemsAndPickup from '@/NestedStateModules/findItemsAndPickup'

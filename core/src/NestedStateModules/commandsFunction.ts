@@ -1,4 +1,4 @@
-import { StateTransition, BehaviorIdle, BehaviorFollowEntity, BehaviorLookAtEntity, NestedStateMachine } from 'mineflayer-statemachine'
+import { StateTransition, BehaviorIdle, BehaviorFollowEntity, BehaviorLookAtEntity, NestedStateMachine } from 'minecraftlegion-statemachine'
 import { Vec3 } from 'vec3'
 import { botWebsocket } from '@/modules'
 import { BotwebsocketAction, Coordinates, LegionStateMachineTargets, Master } from 'base-types'

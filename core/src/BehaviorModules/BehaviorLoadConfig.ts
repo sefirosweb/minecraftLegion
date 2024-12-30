@@ -1,4 +1,4 @@
-import { StateBehavior } from "mineflayer-statemachine"
+import { StateBehavior } from "minecraftlegion-statemachine"
 import { Config, LegionStateMachineTargets, Jobs } from "base-types"
 import { Bot } from "mineflayer"
 // TODO delete this file

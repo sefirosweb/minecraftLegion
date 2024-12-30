@@ -2,7 +2,7 @@
 import { LegionStateMachineTargets } from "base-types"
 import { Block } from 'prismarine-block'
 import { inventoryModule, botWebsocket } from '@/modules'
-import { StateBehavior } from "mineflayer-statemachine"
+import { StateBehavior } from "minecraftlegion-statemachine"
 import { Bot } from "mineflayer"
 export class BehaviorCraft implements StateBehavior {
   active: boolean;

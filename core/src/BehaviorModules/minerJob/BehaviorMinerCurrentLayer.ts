@@ -2,7 +2,7 @@
 import { LegionStateMachineTargets, MineCordsConfig } from 'base-types'
 
 import { botWebsocket } from '@/modules'
-import { StateBehavior } from 'mineflayer-statemachine';
+import { StateBehavior } from 'minecraftlegion-statemachine';
 import { Bot } from 'mineflayer';
 
 export class BehaviorMinerCurrentLayer implements StateBehavior {

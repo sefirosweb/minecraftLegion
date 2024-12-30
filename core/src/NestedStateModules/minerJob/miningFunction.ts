@@ -1,4 +1,4 @@
-import { StateTransition, BehaviorIdle, NestedStateMachine } from 'mineflayer-statemachine'
+import { StateTransition, BehaviorIdle, NestedStateMachine } from 'minecraftlegion-statemachine'
 import { BehaviorLoadConfig, BehaviorMinerCheckLayer, BehaviorMinerCurrentLayer, BehaviorMinerCurrentBlock, BehaviorGetReady, BehaviorDigBlock, BehaviorEatFood, BehaviorMoveTo, BehaviorDigAndPlaceBlock } from '@/BehaviorModules'
 import FillFunction from '@/NestedStateModules/minerJob/fillFunction'
 import FindItemsAndPickup from '@/NestedStateModules/findItemsAndPickup'

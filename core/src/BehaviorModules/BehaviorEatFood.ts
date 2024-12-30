@@ -3,7 +3,7 @@
 import { Food, LegionStateMachineTargets } from "base-types"
 import { botWebsocket } from '@/modules'
 import mcDataLoader from 'minecraft-data'
-import { StateBehavior } from "mineflayer-statemachine"
+import { StateBehavior } from "minecraftlegion-statemachine"
 import { Bot } from "mineflayer";
 
 export class BehaviorEatFood implements StateBehavior {

@@ -1,4 +1,4 @@
-import { StateTransition, BehaviorIdle, NestedStateMachine } from 'mineflayer-statemachine'
+import { StateTransition, BehaviorIdle, NestedStateMachine } from 'minecraftlegion-statemachine'
 import { BehaviorGetReady, BehaviorEquipAll } from '@/BehaviorModules'
 import GoChestsFunctions from '@/NestedStateModules/getReady/goChestsFunctions'
 import { LegionStateMachineTargets } from 'base-types'

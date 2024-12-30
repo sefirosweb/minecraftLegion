@@ -1,4 +1,4 @@
-import { StateTransition, BehaviorIdle, NestedStateMachine } from 'mineflayer-statemachine'
+import { StateTransition, BehaviorIdle, NestedStateMachine } from 'minecraftlegion-statemachine'
 import { shuffle, botWebsocket } from '@/modules'
 import { BehaviorLoadConfig } from '@/BehaviorModules'
 import { LegionStateMachineTargets, PlantArea } from 'base-types'

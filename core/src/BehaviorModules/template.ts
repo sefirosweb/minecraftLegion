@@ -1,6 +1,6 @@
 import { LegionStateMachineTargets } from "base-types"
 import { Bot } from "mineflayer";
-import { StateBehavior } from "mineflayer-statemachine"
+import { StateBehavior } from "minecraftlegion-statemachine"
 export default class template implements StateBehavior {
   active: boolean;
   readonly bot: Bot

@@ -1,7 +1,7 @@
 
 import { LegionStateMachineTargets, BlocksCanFertilize } from "base-types"
 import { Bot } from "mineflayer";
-import { StateBehavior } from "mineflayer-statemachine"
+import { StateBehavior } from "minecraftlegion-statemachine"
 import { Vec3 } from "vec3"
 export class BehaviorFertilize implements StateBehavior {
   active: boolean;

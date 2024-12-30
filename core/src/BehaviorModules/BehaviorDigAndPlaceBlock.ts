@@ -2,7 +2,7 @@
 import { Item, LegionStateMachineTargets, PositionsChecked } from "base-types"
 import { placeBlockModule, inventoryModule, minerModule, digBlockModule, botWebsocket } from '@/modules'
 import { Vec3 } from "vec3"
-import { StateBehavior } from "mineflayer-statemachine"
+import { StateBehavior } from "minecraftlegion-statemachine"
 import { Bot } from "mineflayer"
 
 type ItemWithHardness = Item & {

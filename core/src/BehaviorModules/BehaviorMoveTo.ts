@@ -2,7 +2,7 @@ import { Bot, Dimension, Dimension_V2 } from 'mineflayer'
 import mineflayerPathfinder, { Movements } from 'mineflayer-pathfinder'
 import { LegionStateMachineTargets, Vec3WithDimension } from 'base-types'
 import { movementModule, botWebsocket } from '@/modules'
-import { StateBehavior } from 'mineflayer-statemachine'
+import { StateBehavior } from 'minecraftlegion-statemachine'
 
 export class BehaviorMoveTo implements StateBehavior {
   active: boolean

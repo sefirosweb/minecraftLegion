@@ -3,7 +3,7 @@ import {
   StateTransition,
   BehaviorIdle,
   NestedStateMachine
-} from 'mineflayer-statemachine'
+} from 'minecraftlegion-statemachine'
 import { Entity } from 'prismarine-entity'
 import SlaughterFunction from '@/NestedStateModules/breederJob/slaughterFunction'
 import { Bot } from 'mineflayer'

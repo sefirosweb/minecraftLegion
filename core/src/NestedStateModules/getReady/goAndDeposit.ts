@@ -1,4 +1,4 @@
-import { StateTransition, BehaviorIdle, NestedStateMachine } from 'mineflayer-statemachine'
+import { StateTransition, BehaviorIdle, NestedStateMachine } from 'minecraftlegion-statemachine'
 import { BehaviorMoveTo, BehaviorDepositItemChest } from '@/BehaviorModules'
 import { LegionStateMachineTargets } from 'base-types'
 import { Bot } from 'mineflayer'

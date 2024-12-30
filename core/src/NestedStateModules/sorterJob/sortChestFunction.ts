@@ -1,6 +1,6 @@
 import { Bot } from 'mineflayer'
 import { LegionStateMachineTargets } from 'base-types'
-import { StateTransition, BehaviorIdle, NestedStateMachine } from 'mineflayer-statemachine'
+import { StateTransition, BehaviorIdle, NestedStateMachine } from 'minecraftlegion-statemachine'
 import { findItemsInChests, calculateSlotsToSort } from '@/modules'
 import PickUpItems from '@/NestedStateModules/getReady/pickUpItems'
 import DepositItems from '@/NestedStateModules/sorterJob/depositItems'

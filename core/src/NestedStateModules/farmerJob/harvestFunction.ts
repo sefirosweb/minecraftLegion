@@ -1,6 +1,6 @@
 import { Bot } from 'mineflayer'
 import { Vec3 } from 'vec3'
-import { StateTransition, BehaviorIdle, NestedStateMachine } from 'mineflayer-statemachine'
+import { StateTransition, BehaviorIdle, NestedStateMachine } from 'minecraftlegion-statemachine'
 import { plants, botWebsocket } from '@/modules'
 import { BehaviorDigBlock, BehaviorEatFood, BehaviorInteractBlock, BehaviorMoveTo } from '@/BehaviorModules'
 import { LegionStateMachineTargets } from 'base-types'

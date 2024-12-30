@@ -1,5 +1,5 @@
 import vec3 from 'vec3'
-import { StateTransition, BehaviorIdle, NestedStateMachine } from 'mineflayer-statemachine'
+import { StateTransition, BehaviorIdle, NestedStateMachine } from 'minecraftlegion-statemachine'
 import { BehaviorcCheckItemsInChest, BehaviorMoveTo } from '@/BehaviorModules'
 import { NewChestBlock, LegionStateMachineTargets } from 'base-types'
 import { sortChests, calculateSlotsToSort, inventoryModule } from '@/modules'

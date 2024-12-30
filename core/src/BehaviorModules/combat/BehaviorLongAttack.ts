@@ -1,6 +1,6 @@
 import { LegionStateMachineTargets } from "base-types"
 import { inventoryModule, botWebsocket } from '@/modules'
-import { StateBehavior } from "mineflayer-statemachine"
+import { StateBehavior } from "minecraftlegion-statemachine"
 import { Bot } from "mineflayer";
 import { GetMasterGrade } from "minecrafthawkeye";
 export class BehaviorLongAttack implements StateBehavior {

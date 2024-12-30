@@ -2,7 +2,7 @@
 import { LegionStateMachineTargets } from "base-types"
 import { botWebsocket } from '@/modules'
 import { inventoryModule } from '@/modules'
-import { StateBehavior } from "mineflayer-statemachine"
+import { StateBehavior } from "minecraftlegion-statemachine"
 import { Bot } from "mineflayer";
 export class BehaviorEquipAll implements StateBehavior {
   active: boolean;

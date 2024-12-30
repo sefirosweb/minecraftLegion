@@ -1,4 +1,4 @@
-import { StateTransition, BehaviorIdle, NestedStateMachine, BehaviorFindInteractPosition } from 'mineflayer-statemachine'
+import { StateTransition, BehaviorIdle, NestedStateMachine, BehaviorFindInteractPosition } from 'minecraftlegion-statemachine'
 import { BehaviorDigBlock, BehaviorCustomPlaceBlock, BehaviorLoadConfig, BehaviorMoveTo } from '@/BehaviorModules'
 import { LegionStateMachineTargets } from 'base-types'
 import { Vec3 } from 'vec3'

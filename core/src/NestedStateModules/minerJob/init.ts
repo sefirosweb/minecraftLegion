@@ -1,5 +1,5 @@
 import { LegionStateMachineTargets } from 'base-types'
-import { StateTransition, NestedStateMachine } from 'mineflayer-statemachine'
+import { StateTransition, NestedStateMachine } from 'minecraftlegion-statemachine'
 import { BehaviorEatFood } from '@/BehaviorModules'
 import { getClosestEnemy } from '@/modules'
 import GetReadyFunction from '@/NestedStateModules/getReady/init'

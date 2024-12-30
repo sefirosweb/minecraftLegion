@@ -1,5 +1,5 @@
 import { LegionStateMachineTargets, PendingTransaction } from 'base-types'
-import { StateTransition, BehaviorIdle, NestedStateMachine } from 'mineflayer-statemachine'
+import { StateTransition, BehaviorIdle, NestedStateMachine } from 'minecraftlegion-statemachine'
 import GoAndDeposit from '@/NestedStateModules/getReady/goAndDeposit'
 import { Bot } from 'mineflayer'
 

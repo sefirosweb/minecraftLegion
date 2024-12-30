@@ -2,7 +2,7 @@
 import { Bot } from "mineflayer"
 import { Vec3 } from "vec3"
 import { LegionStateMachineTargets } from 'base-types'
-import { StateBehavior } from "mineflayer-statemachine"
+import { StateBehavior } from "minecraftlegion-statemachine"
 import { digBlockModule, botWebsocket } from '@/modules'
 export class BehaviorDigBlock implements StateBehavior {
   active: boolean;

@@ -1,7 +1,7 @@
 import mineflayerPathfinder, { Movements } from 'mineflayer-pathfinder'
 import { LegionStateMachineTargets } from 'base-types'
 import { Vec3 } from 'vec3'
-import { StateBehavior } from 'mineflayer-statemachine'
+import { StateBehavior } from 'minecraftlegion-statemachine'
 import { Bot } from 'mineflayer'
 import { botWebsocket } from '@/modules'
 

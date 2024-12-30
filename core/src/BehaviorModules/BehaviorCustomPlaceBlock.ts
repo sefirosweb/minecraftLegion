@@ -1,7 +1,7 @@
 
 import { placeBlockModule, inventoryModule, digBlockModule, botWebsocket } from '@/modules'
 import { Vec3 } from "vec3"
-import { StateBehavior } from "mineflayer-statemachine"
+import { StateBehavior } from "minecraftlegion-statemachine"
 import { LegionStateMachineTargets } from 'base-types'
 import { Bot } from 'mineflayer'
 export class BehaviorCustomPlaceBlock implements StateBehavior {

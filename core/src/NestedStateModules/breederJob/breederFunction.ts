@@ -1,4 +1,4 @@
-import { StateTransition, BehaviorIdle, NestedStateMachine } from 'mineflayer-statemachine'
+import { StateTransition, BehaviorIdle, NestedStateMachine } from 'minecraftlegion-statemachine'
 import FeedAnimalFunction from '@/NestedStateModules/breederJob/feedAnimalFunction'
 import { BehaviorLoadConfig } from '@/BehaviorModules'
 import { Entity } from 'prismarine-entity'

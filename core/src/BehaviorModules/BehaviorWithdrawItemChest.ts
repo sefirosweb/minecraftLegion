@@ -2,7 +2,7 @@
 import { sleep, botWebsocket, refreshChest } from '@/modules'
 import { ChestTransaction, LegionStateMachineTargets } from 'base-types'
 import { Bot, Chest, TransferOptions } from 'mineflayer'
-import { StateBehavior } from 'mineflayer-statemachine'
+import { StateBehavior } from 'minecraftlegion-statemachine'
 import { Block } from 'prismarine-block'
 import { Vec3 } from 'vec3'
 

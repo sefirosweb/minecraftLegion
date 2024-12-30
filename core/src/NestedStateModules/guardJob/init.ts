@@ -1,4 +1,4 @@
-import { StateTransition, BehaviorIdle, NestedStateMachine, BehaviorFollowEntity } from 'mineflayer-statemachine'
+import { StateTransition, BehaviorIdle, NestedStateMachine, BehaviorFollowEntity } from 'minecraftlegion-statemachine'
 import { BehaviorLoadConfig, BehaviorMoveToArray, BehaviorEatFood, BehaviorEquipAll, BehaviorFindItems, BehaviorHelpFriend, BehaviorMoveTo } from '@/BehaviorModules'
 import CombatStrategyFunction from '@/NestedStateModules/combat/init'
 import GetReadyFunction from '@/NestedStateModules/getReady/init'

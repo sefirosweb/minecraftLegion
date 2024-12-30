@@ -1,7 +1,7 @@
 
 import { LegionStateMachineTargets } from "base-types"
 import { inventoryModule } from '@/modules'
-import { StateBehavior } from "mineflayer-statemachine"
+import { StateBehavior } from "minecraftlegion-statemachine"
 import { Bot } from "mineflayer";
 
 const attackEvery = 600

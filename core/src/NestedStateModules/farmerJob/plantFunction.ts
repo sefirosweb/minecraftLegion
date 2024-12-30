@@ -1,5 +1,5 @@
 import { Vec3 } from 'vec3'
-import { StateTransition, NestedStateMachine, BehaviorIdle } from 'mineflayer-statemachine'
+import { StateTransition, NestedStateMachine, BehaviorIdle } from 'minecraftlegion-statemachine'
 import { BehaviorCustomPlaceBlock, BehaviorFertilize, BehaviorMoveTo, BehaviorCraft } from '@/BehaviorModules'
 import { plants, dirtCanBefertilized } from '@/modules'
 import { LegionStateMachineTargets } from 'base-types'

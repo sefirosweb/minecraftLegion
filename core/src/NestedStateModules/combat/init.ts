@@ -1,4 +1,4 @@
-import { StateTransition, BehaviorIdle, NestedStateMachine } from 'mineflayer-statemachine'
+import { StateTransition, BehaviorIdle, NestedStateMachine } from 'minecraftlegion-statemachine'
 import { BehaviorEatFood } from '@/BehaviorModules'
 import { LegionStateMachineTargets } from 'base-types'
 import CombatFunction from '@/NestedStateModules/combat/combatStrategy'

@@ -9,6 +9,8 @@
 	"forwardPorts": [
 		25565,
 		5173,
+		4550,
+		4540,
 		4001
 	],
 	"customizations": {

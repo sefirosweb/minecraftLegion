@@ -1,4 +1,4 @@
-import { StateTransition, BehaviorIdle, BehaviorFollowEntity, NestedStateMachine } from 'mineflayer-statemachine'
+import { StateTransition, BehaviorIdle, BehaviorFollowEntity, NestedStateMachine } from 'minecraftlegion-statemachine'
 import { Item } from 'prismarine-item';
 import { BehaviorEquip, BehaviorInteractEntity } from '@/BehaviorModules'
 import { LegionStateMachineTargets, animals as animalType, isAnimal } from 'base-types'

@@ -1,4 +1,4 @@
-import { StateTransition, BehaviorIdle, NestedStateMachine } from 'mineflayer-statemachine'
+import { StateTransition, BehaviorIdle, NestedStateMachine } from 'minecraftlegion-statemachine'
 import { BehaviorLoadConfig, BehaviorWithdrawItemChest, BehaviorDepositItemChest, BehaviorCheckItemsInInventory, BehaviorMoveTo } from '@/BehaviorModules'
 import { chestModule } from '@/modules'
 import SearchAndCraftFunction from '@/NestedStateModules/crafterJob/searchAndCraftFunction'

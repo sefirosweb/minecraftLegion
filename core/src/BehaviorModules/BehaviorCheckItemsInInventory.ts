@@ -2,7 +2,7 @@
 import { DepositType, LegionStateMachineTargets, Item } from "base-types"
 import { inventoryModule } from '@/modules'
 import { Item as McItem } from "prismarine-item"
-import { StateBehavior } from "mineflayer-statemachine"
+import { StateBehavior } from "minecraftlegion-statemachine"
 import { Bot } from "mineflayer";
 export class BehaviorCheckItemsInInventory implements StateBehavior {
   active: boolean;

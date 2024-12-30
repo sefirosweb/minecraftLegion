@@ -1,5 +1,5 @@
 import { LegionStateMachineTargets } from "base-types"
-import { StateTransition, BehaviorIdle, NestedStateMachine } from 'mineflayer-statemachine'
+import { StateTransition, BehaviorIdle, NestedStateMachine } from 'minecraftlegion-statemachine'
 import { BehaviorFindItems, BehaviorLoadConfig, BehaviorMoveTo } from '@/BehaviorModules'
 import { Vec3 } from "vec3"
 import { Bot } from "mineflayer"

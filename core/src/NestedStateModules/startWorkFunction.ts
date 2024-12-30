@@ -1,4 +1,4 @@
-import { StateTransition, BehaviorIdle, NestedStateMachine, BehaviorFollowEntity } from 'mineflayer-statemachine'
+import { StateTransition, BehaviorIdle, NestedStateMachine, BehaviorFollowEntity } from 'minecraftlegion-statemachine'
 import { DefaultBlockForPlace, Jobs, LegionStateMachineTargets } from 'base-types'
 import { movementModule } from '@/modules'
 import GuardJob from '@/NestedStateModules/guardJob/init'

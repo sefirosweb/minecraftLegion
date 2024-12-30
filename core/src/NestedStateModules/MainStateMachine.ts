@@ -5,7 +5,7 @@ import config from '@/config'
 import { botWebsocket, getFreePort, movementModule, startPrismarineViewer } from '@/modules'
 import mineflayerPathfinder from 'mineflayer-pathfinder'
 import { afterDeathFunction } from '@/NestedStateModules/afterDeathFunction'
-import { StateTransition, BotStateMachine, StateMachineWebserver, BehaviorIdle, NestedStateMachine } from 'mineflayer-statemachine'
+import { StateTransition, BotStateMachine, StateMachineWebserver, BehaviorIdle, NestedStateMachine } from 'minecraftlegion-statemachine'
 
 // @ts-ignore
 import inventoryViewer from 'mineflayer-web-inventory'
