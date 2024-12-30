@@ -133,8 +133,8 @@ export class BehaviorMoveTo implements StateBehavior {
     this.startMoving()
   }
 
-  isFinished() {
-    return this.isEndFinished
+  isFinished(distance: number = 2) {
+    return this.bot.getControlState('jump') === false && (this.isEndFinished || this.distanceToTarget() < distance)
   }
 
   isSuccess() {

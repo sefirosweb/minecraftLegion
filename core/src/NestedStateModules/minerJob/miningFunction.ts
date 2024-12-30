@@ -348,9 +348,7 @@ function miningFunction(bot: Bot, targets: LegionStateMachineTargets) {
       onTransition: () => {
         targets.position = targets.minerJob.mineBlock
       },
-      shouldTransition: () =>
-        (moveToBlock.isFinished() || moveToBlock.distanceToTarget() < 2.5) &&
-        !bot.pathfinder.isMining()
+      shouldTransition: () => moveToBlock.isFinished(2.5) && !bot.pathfinder.isMining()
     }),
 
     new StateTransition({

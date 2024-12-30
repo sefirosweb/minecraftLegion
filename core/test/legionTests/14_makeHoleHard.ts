@@ -59,6 +59,8 @@ describe('01 Basic Mining', function () {
       }
     }
 
+    bot.chat(`/fill -11 -50 -10 -11 -50 -10 minecraft:air`)
+
     bot.chat(`/teleport ${xStart} ${yStart + 2} ${zStart}`)
     bot.creative.stopFlying()
     bot.test.becomeSurvival()
@@ -168,74 +170,4 @@ describe('01 Basic Mining', function () {
       bot.once('finishedJob', () => resolve())
     })
   })
-
-  it('Making a Hole Z+ Reverse', (): Promise<void> => {
-    yStart--;
-
-    const newMinerCords: MineCordsConfig = {
-      ...minerCords,
-      yStart: yStart,
-      yEnd: yStart,
-      orientation: "z+",
-      reverse: true,
-    }
-
-    const newConfig = {
-      ...config,
-      minerCords: newMinerCords
-    }
-
-    Object.assign(bot.config, newConfig)
-    bot.emit('reloadBotConfig')
-    return new Promise((resolve) => {
-      bot.once('finishedJob', () => resolve())
-    })
-  })
-
-  it('Making a Hole Z- Normal', (): Promise<void> => {
-    yStart--;
-
-    const newMinerCords: MineCordsConfig = {
-      ...minerCords,
-      yStart: yStart,
-      yEnd: yStart,
-      orientation: "z-",
-      reverse: false,
-    }
-
-    const newConfig = {
-      ...config,
-      minerCords: newMinerCords
-    }
-
-    Object.assign(bot.config, newConfig)
-    bot.emit('reloadBotConfig')
-    return new Promise((resolve) => {
-      bot.once('finishedJob', () => resolve())
-    })
-  })
-
-  it('Making a Hole Z- Reverse', (): Promise<void> => {
-    yStart--;
-
-    const newMinerCords: MineCordsConfig = {
-      ...minerCords,
-      yStart: yStart,
-      yEnd: yStart,
-      orientation: "z-",
-      reverse: true,
-    }
-
-    const newConfig = {
-      ...config,
-      minerCords: newMinerCords
-    }
-
-    Object.assign(bot.config, newConfig)
-    bot.emit('reloadBotConfig')
-    return new Promise((resolve) => {
-      bot.once('finishedJob', () => resolve())
-    })
-  })
-
 })

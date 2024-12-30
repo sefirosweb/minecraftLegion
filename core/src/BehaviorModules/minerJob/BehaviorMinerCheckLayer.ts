@@ -2,7 +2,7 @@ import { LegionStateMachineTargets, MineCordsConfig } from "base-types"
 import mineflayerPathfinder from 'mineflayer-pathfinder'
 import { botWebsocket } from '@/modules'
 import { Vec3 } from 'vec3'
-import { StateBehavior } from "mineflayer-statemachine";
+import { StateBehavior } from "minecraftlegion-statemachine";
 import { Block } from "prismarine-block";
 import { Bot } from "mineflayer";
 
@@ -117,24 +117,55 @@ export class BehaviorMinerCheckLayer implements StateBehavior {
           continue
         }
 
-        let block = this.getBlockType()
-        if (!block) {
-          botWebsocket.log(`Block: ${this.xCurrent} ${this.yCurrent} ${this.zCurrent} It is very far! I can't see the block, approaching the block to check it`)
-          botWebsocket.log('Area less than 200 blocks radius distance is recommended')
-          await this.moveToSeeBlock(this.xCurrent, this.yCurrent, this.zCurrent)
-          this.bot.removeAllListeners('customEventPhysicTick')
-          block = this.getBlockType()
+        if (this.xCurrent === undefined || this.yCurrent === undefined || this.zCurrent === undefined) {
+          throw new Error('No setted: this.xCurrent === undefined || this.yCurrent === undefined || this.zCurrent === undefined')
         }
+
+        const block = await this.getBlock(this.xCurrent, this.yCurrent, this.zCurrent)
 
         if (block === null) {
           throw new Error('Block is null')
         }
 
-        if (this.checkValidBlock(block)) {
+        const isValidBlock = await this.checkValidBlock(block)
+        if (isValidBlock) {
           resolve()
           return
         }
       } while (true)
+    })
+  }
+
+  getBlockType(x: number, y: number, z: number) {
+    const position = new Vec3(x, y, z)
+    return this.bot.blockAt(position)
+  }
+
+  async getBlock(x: number, y: number, z: number): Promise<Block> {
+    const block = await this.moveToSeeBlock(x, y, z)
+    this.bot.removeAllListeners('customEventPhysicTick')
+    return block
+  }
+
+  async moveToSeeBlock(x: number, y: number, z: number): Promise<Block> {
+    return new Promise((resolve) => {
+      const block = this.getBlockType(x, y, z)
+
+      if (block) {
+        resolve(block)
+      }
+
+      const goal = new mineflayerPathfinder.goals.GoalBlock(x, y, z)
+      this.bot.pathfinder.setMovements(this.targets.movements)
+      this.bot.pathfinder.setGoal(goal)
+
+      this.bot.on('customEventPhysicTick', () => {
+        const block = this.getBlockType(x, y, z)
+        if (block) {
+          this.bot.pathfinder.setGoal(null)
+          resolve(block)
+        }
+      })
     })
   }
 
@@ -207,15 +238,6 @@ export class BehaviorMinerCheckLayer implements StateBehavior {
     }
   }
 
-  getBlockType() {
-    if (this.xCurrent === undefined || this.yCurrent === undefined || this.zCurrent === undefined) {
-      throw new Error('No setted: this.xCurrent === undefined || this.yCurrent === undefined || this.zCurrent === undefined')
-    }
-
-    const position = new Vec3(this.xCurrent, this.yCurrent, this.zCurrent)
-    return this.bot.blockAt(position)
-  }
-
   setMinerCords(minerCords: MineCordsConfig) {
     this.isLayerFinished = false
     this.minerCords = minerCords
@@ -230,8 +252,8 @@ export class BehaviorMinerCheckLayer implements StateBehavior {
     this.yStart = this.minerCords.yStart > this.minerCords.yEnd ? this.minerCords.yStart : this.minerCords.yEnd
     this.yEnd = this.minerCords.yStart > this.minerCords.yEnd ? this.minerCords.yEnd : this.minerCords.yStart
 
-    this.yStart++
     if (this.minerCords.tunnel === 'horizontally') {
+      this.yStart++
       this.yEnd--
     }
 
@@ -304,18 +326,31 @@ export class BehaviorMinerCheckLayer implements StateBehavior {
     this.zCurrent = this.zStart
   }
 
-  checkValidBlock(block: Block) {
-    if (this.minerCords === undefined) {
-      throw new Error('No setted: this.minerCords === undefined')
-    }
+  checkHorizontally(minerCords: MineCordsConfig, block: Block): boolean {
+    if (this.blocksToFind.includes(block.name)) return true;
 
-    if (this.blocksToFind.includes(block.name) ||
-      (
-        this.floorBlocksToFind.includes(block.name) &&
-        this.minerCords.tunnel === 'horizontally' &&
-        (this.minerCords.yStart - 1) === this.yCurrent
-      )
-    ) {
+    if (!this.floorBlocksToFind.includes(block.name)) return false;
+    if (minerCords.yStart - 1 !== this.yCurrent) return false;
+
+    this.targets.position = block.position
+    this.foundLavaOrWater = true
+
+    return true
+  }
+
+  async checkVertically(block: Block): Promise<boolean> {
+    if (this.blocksToFind.includes(block.name)) {
+      this.targets.position = block.position
+      this.foundLavaOrWater = true
+      return true
+    };
+
+    if (!this.floorBlocksToFind.includes(block.name)) return false;
+    
+    // If bottom block is air and bottom also is air/water/lava
+    const bottomBlock = await this.getBlock(block.position.x, block.position.y - 1, block.position.z)
+
+    if (this.blocksToFind.includes(bottomBlock.name) || this.floorBlocksToFind.includes(bottomBlock.name)) {
       this.targets.position = block.position
       this.foundLavaOrWater = true
       return true
@@ -324,19 +359,17 @@ export class BehaviorMinerCheckLayer implements StateBehavior {
     return false
   }
 
-  moveToSeeBlock(x: number, y: number, z: number): Promise<void> {
-    return new Promise((resolve) => {
-      const goal = new mineflayerPathfinder.goals.GoalBlock(x, y, z)
-      this.bot.pathfinder.setMovements(this.targets.movements)
-      this.bot.pathfinder.setGoal(goal)
+  async checkValidBlock(block: Block) {
+    if (this.minerCords === undefined) {
+      throw new Error('No setted: this.minerCords === undefined')
+    }
 
-      this.bot.on('customEventPhysicTick', () => {
-        const block = this.getBlockType()
-        if (block) {
-          this.bot.pathfinder.setGoal(null)
-          resolve()
-        }
-      })
-    })
+    if (this.minerCords.tunnel === 'horizontally') {
+      return this.checkHorizontally(this.minerCords, block)
+    }
+
+    return this.checkVertically(block)
   }
+
+
 }

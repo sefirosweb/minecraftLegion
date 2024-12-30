@@ -103,9 +103,10 @@ function fillFunction(bot: Bot, targets: LegionStateMachineTargets) {
       },
       shouldTransition: () => {
         const block = targets.position ? bot.blockAt(targets.position.offset(0, 1, 0)) : null
-        return (moveToBlock.isFinished() || moveToBlock.distanceToTarget() < 2.5) &&
+        return moveToBlock.isFinished() &&
           block !== null && blocksCanBeReplaced.includes(block.name) &&
           !bot.pathfinder.isMining()
+        
       }
     }),
 
