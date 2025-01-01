@@ -52,7 +52,7 @@ bot.once('spawn', () => {
     BotStateMachine,
     BehaviorIdle,
     BehaviorMoveTo
-  } = require('mineflayer-statemachine')
+  } = require('minecraftlegion-statemachine')
   const targets = {}
 
   function walkFunction (bot, targets) {
