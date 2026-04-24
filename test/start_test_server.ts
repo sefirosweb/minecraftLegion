@@ -30,8 +30,20 @@ const MC_SERVER_JAR_DIR = process.env.MC_SERVER_JAR_DIR || path.join(__dirname, 
 const MC_SERVER_JAR = `${MC_SERVER_JAR_DIR}/minecraft_server.${version.minecraftVersion}.jar`
 const wrap = new Wrap(MC_SERVER_JAR, `${MC_SERVER_PATH}_${supportedVersion}`)
 
+const AUTO_OP_USERS = new Set(['flatbot', 'lordvivi'])
+const alreadyOpped = new Set<string>()
+
 wrap.on('line', (line: string) => {
     console.log(line)
+    const match = line.match(/INFO\]: (\S+) joined the game/)
+    if (!match) return
+    const username = match[1]
+    const key = username.toLowerCase()
+    if (AUTO_OP_USERS.has(key) && !alreadyOpped.has(key)) {
+        alreadyOpped.add(key)
+        wrap.writeServer(`op ${username}\n`)
+        console.log(`auto-op: granted op to ${username}`)
+    }
 })
 
 download(version.minecraftVersion, MC_SERVER_JAR, (err: Error) => {
@@ -49,11 +61,7 @@ download(version.minecraftVersion, MC_SERVER_JAR, (err: Error) => {
         }
 
         mc.ping(serverConection, () => {
-            setTimeout(() => {
-                console.log('pong')
-                wrap.writeServer('op flatbot\n')
-                wrap.writeServer('op Lordvivi\n')
-                            }, 10000);
+            console.log('pong')
         })
     })
 })
